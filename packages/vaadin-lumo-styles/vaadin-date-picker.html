@@ -14,12 +14,8 @@
         display: inline-flex;
         margin-top: 0;
         max-width: 100%;
-        width: var(--valo-date-picker-default-width, calc(var(--valo-size-m) * 5));
-      }
-
-      [part~="overlay"] {
-        border-radius: 6px;
-        box-shadow: 0 1px 4px 0 var(--valo-shade-30pct);
+        width: var(--valo-date-picker-default-width, var(--valo-text-field-default-width));
+        -webkit-tap-highlight-color: transparent;
       }
 
       [part="text-field"] {
@@ -27,18 +23,42 @@
         max-width: 100%;
       }
 
-      [part*="button"] {
-        cursor: pointer;
+      /* TODO icons should be replaced with correct Valo icons, which affects other styles here as well */
+
+      [part$="button"] {
+        padding: 2px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        font-size: 20px;
+        text-align: center;
+        color: var(--valo-contrast-40pct);
+        transition: 0.2s color;
+      }
+
+      [part$="button"]:hover {
+        color: var(--valo-contrast-70pct);
       }
 
       [part="toggle-button"] {
-        color: var(--valo-body-text-color);
-        opacity: 0.5;
+        order: -1;
       }
 
-      [part="toggle-button"]::before {
-        font-family: 'valo-icons';
+      /* Overlay width */
+
+      [part="overlay"] {
+        width: calc(var(--valo-size-m) * 10);
       }
+
+      :host([show-week-numbers]) [part="overlay"]:not([fullscreen]) {
+        width: calc(var(--valo-size-m) * 11);
+      }
+
+      [part="overlay"][fullscreen] {
+        width: 100vw;
+        height: 100vh;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -51,115 +71,131 @@
         -ms-user-select: none;
         -webkit-user-select: none;
         user-select: none;
-        --valo-month-calendar-date-font-size: var(--valo-font-size-m);
-        --valo-month-calendar-date-border-size: 4px;
-      }
-
-      [part~="date"] {
-        border-radius: 2px;
-        box-sizing: border-box;
+        font-size: var(--valo-font-size-m);
         color: var(--valo-body-text-color);
-        font-size: var(--valo-month-calendar-date-font-size);
-        padding: calc(var(--valo-month-calendar-date-font-size) / 2) 0;
-        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
+        text-align: center;
+        /* Make the currently focused month be roughly in the center of the overlay */
+        /* TODO expose the overlay max-height as a custom property, so it can be used in calc's */
+        /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
+         * will overlap the other, and the user can’t click on a date to select it. Using smaller
+         * offset for now, and compensating it in the scroll item height */
+        /*transform: translateY(calc(var(--valo-size-m) * 2));*/
+        transform: translateY(var(--valo-size-s));
       }
 
-      [part~="date"][today]:not([focused]) {
+      /* Disabled state */
+
+      :host([disabled]) {
+        color: var(--valo-disabled-text-color);
+        cursor: default;
+      }
+
+      /* Month header */
+
+      [part="month-header"] {
+        color: var(--valo-header-text-color);
+        font-size: var(--valo-font-size-l);
+        line-height: 1;
+        font-weight: 500;
+        margin-bottom: var(--valo-space-m);
+      }
+
+      /* Week days and numbers */
+
+      [part="weekdays"],
+      [part="weekday"],
+      [part="week-numbers"] {
+        font-size: var(--valo-font-size-xs);
+        line-height: 1;
+        color: var(--valo-tertiary-text-color);
+      }
+
+      [part="weekdays"] {
+        margin-bottom: var(--valo-space-s);
+      }
+
+      [part="week-numbers"] {
+        width: var(--valo-size-s);
+      }
+
+      /* Date and week number cells */
+
+      [part="date"],
+      [part="week-number"] {
+        box-sizing: border-box;
+        height: var(--valo-size-m);
+        line-height: var(--valo-size-m);
         position: relative;
       }
 
-      [part~="date"][today]:not([focused])::before {
-        background: var(--valo-primary-color);
-        border-radius: 100%;
-        bottom: 0;
-        content: '';
-        height: 26px;
-        left: 0;
-        margin: auto;
-        opacity: .3;
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 26px;
+      @media (pointer: coarse) {
+        [part="date"],
+        [part="week-number"] {
+          height: var(--valo-size-l);
+          line-height: var(--valo-size-l);
+        }
       }
 
-      [part~="date"][selected] {
-        background: var(--valo-primary-color);
-        border-radius: 6px;
-        border: var(--valo-month-calendar-date-border-size) solid var(--valo-base-color);
-        color: #fff;
-        font-weight: 600;
-        padding-top: calc(var(--valo-month-calendar-date-font-size) / 2 - var(--valo-month-calendar-date-border-size));
-        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
-      }
-
-      [part~="date"][disabled] {
-        cursor: default;
-        opacity: 0.9;
-      }
-
-      [part~="date"][today]:not([focused]):hover::before {
-        opacity: 0;
-      }
-
-      [part~="date"]:not(:empty):not([disabled]) {
+      [part="date"]:not(:empty) {
         cursor: pointer;
       }
 
-      [part~="weekday"],
-      [part~="date"],
-      [part~="week-number"] {
-        box-sizing: border-box;
-        text-align: center;
+      /* Today date */
+
+      [part="date"][today] {
+        color: var(--valo-primary-text-color);
       }
 
-      [part~="date"]:not([disabled]):hover,
-      [part~="date"][focused]:not([disabled]) {
-        background: var(--valo-primary-color);
-        border-radius: 6px;
-        border: var(--valo-month-calendar-date-border-size) solid var(--valo-base-color);
-        color: #fff;
-        padding-top: calc(var(--valo-month-calendar-date-font-size) / 2 - var(--valo-month-calendar-date-border-size));
-        height: calc(2 * var(--valo-month-calendar-date-font-size) + 2 * var(--valo-month-calendar-date-border-size) + 2px);
+      /* Focused date */
+
+      [part="date"][focused] {
+        color: var(--valo-primary-contrast-color);
       }
 
-      [part~="weekdays"] {
-        border-radius: 6px;
-        font-size: var(--valo-font-size-xs);
+      [part="date"][focused]::before,
+      [part="date"][selected]::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.8);
+        transition: 0.1s transform;
+        will-change: transform;
+        min-width: 2em;
+        min-height: 2em;
+        width: 80%;
+        height: 80%;
+        max-height: 100%;
+        max-width: 100%;
+        background-color: var(--valo-primary-color);
+        border-radius: var(--valo-border-radius);
       }
 
-      [part~="weekday"] {
-        color: var(--valo-disabled-text-color);
-        cursor: default;
-        font-weight: 100;
-        padding: 8px 0;
-        text-transform: none;
+      [part="date"][selected]:not([focused])::before {
+        content: none;
       }
 
-      [part~="weekday"]:not(:empty):not([disabled]):active {
-        border-radius: 2px;
+      :host([focused]) [part="date"][focused]::before {
+        transform: translate(-50%, -50%);
       }
 
-      [part~="week-numbers"] {
-        font-size: var(--valo-font-size-xs);
-        position: relative;
-      }
+      @media (pointer: coarse) {
+        [part="date"][focused]::before {
+          content: none;
+        }
 
-      [part~="week-number"] {
-        color: var(--valo-disabled-text-color);
-        cursor: default;
-        font-weight: 100;
-        position: relative;
-        transform: translateY(50%);
-      }
+        [part="date"][focused]:not([selected]) {
+          color: inherit;
+        }
 
-      [part~="month-header"] {
-        color: var(--valo-body-text-color);
-        cursor: default;
-        font-size: var(--valo-font-size-l);
-        font-weight: 500;
-        padding: 6px 0;
-        text-align: center;
+        [part="date"][today]:not([selected]) {
+          color: var(--valo-primary-text-color);
+        }
+
+        [part="date"][selected]::before {
+          content: "";
+        }
       }
     </style>
   </template>
@@ -168,82 +204,227 @@
   <template>
     <style>
       :host {
-        background-color: var(--valo-date-picker-overlay-background-color, var(--valo-base-color));
-        border-radius: 0 0 6px 6px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
+        background-color: var(--valo-base-color);
+        border-radius: var(--valo-overlay-border-radius);
+        box-shadow: var(--valo-overlay-box-shadow);
+        max-height: calc(var(--valo-size-m) * 14);
+
+        /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
+        background-image: linear-gradient(var(--valo-shade-5pct), var(--valo-shade-5pct));
+        background-size: 57px 100%;
+        background-position: top right;
+        background-repeat: no-repeat;
       }
 
-      [part~="years"] {
-        --vaadin-infinite-scroller-buffer-width: 90px;
-        background-color: var(--valo-contrast-20pct);
-        border-top-right-radius: 6px;
-        color: var(--valo-contrast-50pct);
-        cursor: pointer;
+      /* Month scroller */
+
+      [part="months"] {
+        /* TODO this property should support calc or measure the height from the DOM */
+        /*--vaadin-infinite-scroller-item-height: calc(var(--valo-size-l) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s));*/
+        --vaadin-infinite-scroller-item-height: 301px;
+        -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
+        mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
+        bottom: calc(var(--valo-size-m) + var(--valo-space-m));
+        height: auto;
       }
 
-      [part~="years"]::before {
-        border-left-color: var(--valo-base-color);
-        z-index: 1;
+      @media (pointer: coarse) {
+        :host {
+          max-height: calc(var(--valo-size-l) * 14);
+        }
+
+        [part="months"] {
+          /*--vaadin-infinite-scroller-item-height: calc(var(--valo-size-m) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s));*/
+          --vaadin-infinite-scroller-item-height: 349px;
+        }
       }
 
-      [part~="months"] {
-        --vaadin-infinite-scroller-item-height: 320px;
-      }
-
-      [part~="toolbar"] {
-        background-color: var(--valo-date-picker-overlay-toolbar-background-color, var(--valo-contrast-10pct));
-        border-radius: 0 0 6px 6px;
-        box-shadow: 0 -1px 0 0 var(--valo-shade-10pct);
-        padding: 14px 20px;
-      }
-
-      [part~="overlay-header"] {
-        background: #f7f6f2;
-        padding: 16px;
-        position: relative;
-      }
-
-      [part~="years-toggle-button"] {
-        background: transparent;
-      }
-
-      [part~="year-number"],
-      [part~="year-separator"] {
-        align-items: center;
-        display: flex;
-        height: 50%;
-        justify-content: center;
-        transform: translateY(-50%);
-      }
-
-      [part~="years"] [part~="year-number"][current] {
-        color: var(--valo-primary-color);
-      }
-
-      [part~="years"] [part~="year-separator"]::after {
-        color: var(--valo-contrast-50pct);
-        content: "\e903";
-        font-family: 'vaadin-date-picker-icons';
-        font-size: 4px;
-      }
-
-      [part~="month"][disabled] {
+      [part="month"][disabled] {
         opacity: 0.3;
       }
 
-      [part$="button"] {
+      /* Year scroller */
+
+      [part="years"] {
+        --vaadin-infinite-scroller-buffer-width: 97px;
+        width: 57px;
+        font-size: var(--valo-font-size-s);
         cursor: pointer;
+        box-shadow: inset 2px 0 4px 0 var(--valo-shade-5pct);
+        -webkit-mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
+        mask-image: linear-gradient(transparent, #000 35%, #000 65%, transparent);
       }
 
-    </style>
-  </template>
-</dom-module>
+      [part="year-number"],
+      [part="year-separator"]{
+        opacity: 0.5;
+        transition: 0.2s opacity;
+      }
 
-<dom-module id="valo-date-picker-buttons" theme-for="vaadin-button">
-  <template>
-    <style>
-      [part="button"] {
-        cursor: inherit;
+      [part="years"]:hover [part="year-number"],
+      [part="years"]:hover [part="year-separator"] {
+        opacity: 1;
+      }
+
+
+      /* TODO unsupported selector, should fix this in vaadin-date-picker that it adapts to the
+       * width of the year scroller */
+      #scrollers[desktop] [part="months"] {
+        right: 57px;
+      }
+
+      /* Year scroller position indicator */
+      [part="years"]::before {
+        border: none;
+        width: 1em;
+        height: 1em;
+        background-color: var(--valo-base-color);
+        transform: translate(-75%, -50%) rotate(45deg);
+        border-top-right-radius: calc(var(--valo-border-radius) / 2);
+        box-shadow: 2px -2px 6px 0 var(--valo-shade-5pct);
+        z-index: 1;
+      }
+
+      [part="year-number"],
+      [part="year-separator"] {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50%;
+        transform: translateY(-50%);
+      }
+
+      [part="years"] [part="year-separator"]::after {
+        color: var(--valo-disabled-text-color);
+        content: "•";
+      }
+
+      /* Current year */
+
+      [part="years"] [part="year-number"][current] {
+        color: var(--valo-primary-text-color);
+      }
+
+      /* Toolbar (footer) */
+
+      [part="toolbar"] {
+        padding: var(--valo-space-wide-s);
+        box-shadow: 0 -1px 0 0 var(--valo-contrast-10pct);
+        background-color: var(--valo-base-color);
+        position: absolute;
+        right: 57px;
+        left: 0;
+        bottom: 0;
+        border-bottom-left-radius: var(--valo-border-radius);
+      }
+
+      @supports (mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000)) {
+        [part="toolbar"] {
+          box-shadow: none;
+        }
+      }
+
+      /* Today and Cancel buttons */
+
+      /* TODO: Would be great if I could apply the "tertiary" theme from here instead of copying
+       * those styles */
+      /* TODO: It’s not possible to adjust the padding inside the buttons, so we have to use
+       * negative margins instead */
+      [part="toolbar"] [part$="button"] {
+        background-color: transparent;
+        margin: 0 calc(var(--valo-space-s) * -1);
+      }
+
+      [part="toolbar"] [part$="button"]:not([focused]) {
+        box-shadow: none;
+      }
+
+      [part="toolbar"] [part$="button"][active] {
+        color: var(--valo-body-text-color);
+      }
+
+      [part="toolbar"] [part$="button"][active]::before {
+        display: none;
+      }
+
+      /* Narrow viewport mode (fullscreen) */
+
+      :host([fullscreen]) {
+        max-height: none;
+        border-radius: 0;
+      }
+
+      [part="overlay-header"] {
+        padding: var(--valo-space-s);
+        margin-right: 57px;
+      }
+
+      /* TODO why is there a forced padding-bottom in the core styles */
+      [part="overlay-header"]:not([desktop]) {
+        padding: 0;
+      }
+
+      :host([fullscreen]) [part="toggle-button"],
+      :host([fullscreen]) [part="clear-button"],
+      [part="overlay-header"] [part="label"] {
+        display: none;
+      }
+
+      /* Very narrow screen (year scroller initially hidden) */
+
+      [part="years-toggle-button"] {
+        top: 0;
+        right: 0;
+        bottom: auto;
+        padding: var(--valo-space-s);
+        color: var(--valo-primary-text-color);
+        text-align: right;
+        flex: 1;
+      }
+
+      [part="years-toggle-button"]::after {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: var(--valo-base-color);
+        filter: blur(8px);
+      }
+
+      [part="years-toggle-button"]::before {
+        content: none;
+      }
+
+      /* TODO magic number (same as used for iron-media-query in vaadin-date-picker-overlay) */
+      @media screen and (max-width: 374px) {
+        :host {
+          background-image: none;
+        }
+
+        [part="years"] {
+          background-color: var(--valo-shade-5pct);
+        }
+
+        [part="overlay-header"] {
+          margin-right: 0;
+        }
+
+        :host(:not([years-visible])) [part="toolbar"] {
+          right: 0;
+        }
+
+        /* TODO make date-picker adapt to the width of the years part */
+        [part="years"] {
+          --vaadin-infinite-scroller-buffer-width: 90px;
+          width: 50px;
+        }
+
+        :host([years-visible]) [part="months"] {
+          padding-left: 50px;
+        }
       }
     </style>
   </template>

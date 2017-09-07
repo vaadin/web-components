@@ -33,24 +33,69 @@
     <h1>Date pickers</h1>
 
 
-    <h3 demo-section>Standard datepicker</h3>
+    <h3 demo-section>Label, placeholder and value</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-date-picker show-week-numbers min="2017-05-01" placeholder="Pick a date"></vaadin-date-picker>
+        <vaadin-date-picker label="Label" placeholder="Placeholder"></vaadin-date-picker>
+        <vaadin-date-picker label="Label" value="2017-01-31"></vaadin-date-picker>
       </template>
     </nice-demo-snippet>
 
-    <script>
+    <h3 demo-section>States</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-date-picker label="Enabled" value="2017-01-31"></vaadin-date-picker>
+        <vaadin-date-picker label="Disabled" value="2017-01-31" disabled></vaadin-date-picker>
+        <vaadin-date-picker label="Read only" value="2017-01-31" readonly></vaadin-date-picker>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Week numbers</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-date-picker show-week-numbers></vaadin-date-picker>
+      </template>
+    </nice-demo-snippet>
+
+    <div class="note">
+      <p>Week numbers only work for locales where the first day of the week is Monday.</p>
+    </div>
+
+    <h3 demo-section>Validation</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-date-picker required label="Required" placeholder="Choose a date" error-message="Please select a date"></vaadin-date-picker>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Minimum and maximum dates</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-date-picker label="Date" placeholder="Year 2017 only" min="2017-01-01" max="2017-12-31"></vaadin-date-picker>
+      </template>
+    </nice-demo-snippet>
+
+    <h2 demo-section>Custom properties</h2>
+
+    <dl class="custom-properties">
+      <dt>--valo-overlay-border-radius: <code>var(--valo-border-radius)</code></dt>
+    </dl>
+
+    <!-- This needs to be last on the page, otherwise the demo-sections are not parsed correct -->
+    <script type="text/javascript">
       window.addEventListener('WebComponentsReady', function() {
         // Async call needed here for IE11 compatibility.
         Polymer.Base.async(function() {
-          var datepicker = document.querySelector('vaadin-date-picker');
+          var datepicker = document.querySelector('vaadin-date-picker[show-week-numbers]');
           datepicker.set('i18n.firstDayOfWeek', 1);
         });
       });
     </script>
-
   </div>
 </body>
 </html>

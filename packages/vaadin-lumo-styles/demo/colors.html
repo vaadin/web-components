@@ -64,10 +64,7 @@
     </nice-demo-snippet>
     <div class="note warn">
       <h6>Browser compatibility</h6>
-      <p>The above example doesn’t work in IE11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors work in all supported browsers.</p>
-    </div>
-    <div class="note">
-      <p>You can toggle the light and dark variants from the theme selector in the menu.</p>
+      <p>The previous example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors work in all supported browsers.</p>
     </div>
 
 
@@ -104,8 +101,10 @@
     <h2 demo-section>Grayscale</h2>
     <p>These colors form the foundation for your application colors. The grayscale colors consist of 10 different shades of “black” and “white” (they are not necessarily pure grayscale, but tinted slightly with the theme primary color), each with a degree of transparency.</p>
 
+    <p>The grayscale colors are useful for dividing pages into sections with different backgrounds and borders, or used as text colors, for example.</p>
+
     <h4>Contrast</h4>
-    <p>There are properties to easily specify contrast colors that work automatically for both light and dark variations. For the light theme the contrast colors use “shades” and for the dark theme they use “tints”.</p>
+    <p>The theme defines properties for contrast colors that work automatically for both light and dark variations. For the light theme the contrast colors use “shades” and for the dark theme they use “tints”.</p>
     <nice-demo-snippet>
       <template slot="source">
         <span class="contrast-5pct">5%</span>
@@ -175,7 +174,7 @@
       </template>
     </nice-demo-snippet>
 
-    <h4>Tints</h4>
+    <h4>Tint</h4>
     <nice-demo-snippet class="black-5pct">
       <template slot="source">
         <span class="white-5pct">5%</span>
@@ -246,7 +245,7 @@
       </template>
     </nice-demo-snippet>
 
-    <h4>Shades</h4>
+    <h4>Shade</h4>
     <nice-demo-snippet>
       <template slot="source">
         <span class="black-5pct">5%</span>
@@ -318,7 +317,7 @@
 
 
     <h2 demo-section>Error/danger</h2>
-    <p>Usually a red color, used for things like error indicators, error messages and buttons that can cause permanent data loss. An accompanying contrast color is also defined.</p>
+    <p>Usually a red color, used for error indicators, error messages and buttons that can cause permanent data loss. An accompanying contrast color is also defined.</p>
     <nice-demo-snippet>
       <template slot="source">
         <span class="error-10pct">10%</span>
@@ -348,7 +347,7 @@
 
 
     <h2 demo-section>Success</h2>
-    <p>Usually a green color, used for things success messages and buttons that complete a certain task. An accompanying contrast color is also defined.</p>
+    <p>Usually a green color, used for success messages and buttons that complete a certain task. An accompanying contrast color is also defined.</p>
     <nice-demo-snippet>
       <template slot="source">
         <span class="success-10pct">10%</span>
@@ -378,10 +377,15 @@
 
 
     <h2 demo-section>Text</h2>
-    <p>The <code>--valo-base-color</code> is used as the default background for the app, and it always contrast with the body text color.</p>
+    <p>The following text colors are designed to have the desired contrast with the default background color, <code>--valo-base-color</code>.</p>
+
+    <div class="note">
+      <p>Note, that <code>--valo-primary-text-color</code> is not necessarily the same as <code>--valo-primary-color</code>. The same applies for the “error” and “success” colors as well.</p>
+    </div>
     <nice-demo-snippet>
       <template slot="source">
         <div class="base">
+          <div class="header-text">Header text</div>
           <div class="body-text">Normal text</div>
           <div class="secondary-text">Secondary text</div>
           <div class="tertiary-text">Tertiary text</div>
@@ -395,6 +399,10 @@
           <style>
             .base {
               background-color: var(--valo-base-color);
+            }
+
+            .header-text {
+              color: var(--valo-header-text-color);
             }
 
             .body-text {
@@ -505,6 +513,7 @@
 
     <h5>Text</h5>
     <dl class="custom-properties color">
+      <dt>--valo-header-text-color</dt>
       <dt>--valo-body-text-color</dt>
       <dt>--valo-secondary-text-color</dt>
       <dt>--valo-tertiary-text-color</dt>

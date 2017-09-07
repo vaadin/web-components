@@ -4,6 +4,18 @@
       /* TODO: document this and mention that it always needs to have a unit (i.e. '0px') */
       /* It is used in calc's which will be undefined if it is a unitless value */
       --valo-border-radius: 4px;
+
+      /* Shared overlay variables */
+      --valo-overlay-border-radius: var(--valo-border-radius);
+      --valo-overlay-box-shadow:
+          0 1px 4px 0 var(--valo-shade-30pct),
+          0 6px 14px -4px var(--valo-shade-40pct);
+    }
+
+    [theme~="dark"] {
+      --valo-overlay-box-shadow:
+          0 1px 4px 0 var(--valo-shade-60pct),
+          0 6px 14px -4px var(--valo-shade-80pct);
     }
   </style>
 </custom-style>

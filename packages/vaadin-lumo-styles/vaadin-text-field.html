@@ -57,7 +57,7 @@
         margin: 0;
         border: 0;
         border-radius: 0;
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 9 + var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 9);
         width: 100%;
         height: 100%;
         font-family: inherit;
@@ -98,7 +98,7 @@
         margin-bottom: var(--valo-space-xs);
         border-radius: var(--valo-text-field-border-radius, var(--valo-border-radius));
         background-color: var(--valo-contrast-5pct);
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6);
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
         transition: all 0.5s;
         font-weight: 500;
         position: relative;
@@ -206,7 +206,8 @@
         font-size: var(--valo-font-size-xs);
         line-height: var(--valo-line-height-xs);
         color: var(--valo-secondary-text-color);
-        transition: all 0.4s linear;
+        will-change: max-height;
+        transition: 0.4s max-height;
         max-height: 5em;
       }
 

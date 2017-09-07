@@ -89,10 +89,6 @@
       transition-duration: 0.05s;
     }
 
-    :host([active][theme~="tertiary"]) {
-      color: var(--valo-body-text-color);
-    }
-
     :host([active]:not([theme~="primary"]):not([theme~="tertiary"])) {
       box-shadow: 0 0 0 1px var(--valo-shade-5pct), 0 1px 1px 0 var(--valo-shade-10pct);
     }
@@ -117,6 +113,10 @@
 
     :host([theme~="tertiary"]) [part="button"] {
       padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
+    }
+
+    :host([active][theme~="tertiary"]) {
+      color: var(--valo-body-text-color);
     }
 
     /* Primary */

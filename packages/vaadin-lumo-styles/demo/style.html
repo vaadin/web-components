@@ -41,7 +41,7 @@
     <p>You can adjust the top level border radius, which affects many element themes directly.</p>
     <div class="note">
       <h6>Removing border radius</h6>
-      <p>If you want to set the border radius to 0, you need to specify a unit for it as well (i.e. <code>0px</code> or <code>0em</code>), as it is used in <code>calc</code>'s which will be undefined if <code>--valo-border-radius</code> is a unitless value.</p>
+      <p>If you want to set the border radius to zero, you need to specify a unit for it as well (i.e. <code>0px</code> or <code>0em</code>), as it is used in <code>calc</code> functions which will be undefined if <code>--valo-border-radius</code> is a unitless value.</p>
     </div>
 
     <nice-demo-snippet code-only>
@@ -61,6 +61,12 @@
     <h5>Border radius</h5>
     <dl class="custom-properties">
       <dt>--valo-border-radius</dt>
+      <dt>--valo-overlay-border-radius: <code>var(--valo-border-radius)</code></dt>
+    </dl>
+
+    <h5>Shadow</h5>
+    <dl class="custom-properties">
+      <dt>--valo-overlay-box-shadow</dt>
     </dl>
 
   </div>
