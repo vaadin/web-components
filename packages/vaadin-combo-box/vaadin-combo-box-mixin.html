@@ -658,10 +658,6 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _setOverlayItems(items) {
-      // TODO: There is something wrong with observers and using set function
-      // see here: https://github.com/Polymer/polymer/issues/3254
-      // As a workaround setting/notifying the observer with the value undefined helps
-      this.$.overlay.notifyPath('_items', undefined);
       this.$.overlay.set('_items', items);
 
       this.$.overlay.hidden = !this._hasItems(items);
