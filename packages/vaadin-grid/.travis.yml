@@ -18,8 +18,13 @@ before_script:
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
 
+env:
+  - TEST_SUITE=mobile
+  - TEST_SUITE=polyfilled
+  - TEST_SUITE=desktop
+
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs --expanded --verbose
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs:$TEST_SUITE --expanded --verbose
   #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
   #    npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
   #    gemini test test/visual;
