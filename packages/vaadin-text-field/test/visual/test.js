@@ -45,4 +45,11 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       .capture('password');
   });
 
+  gemini.suite('rtl', function(suite) {
+    suite
+      .setUrl('/rtl.html')
+      .setCaptureElements('#rtl')
+      .capture('rtl');
+  });
+
 });
