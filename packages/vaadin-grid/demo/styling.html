@@ -110,7 +110,7 @@
 
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
-            <vaadin-grid id="transparent-header" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
+            <vaadin-grid id="transparent-header" items="[[items]]" size="200">
               <template class="row-details">
                 <div class="details-cell">
                   <h1>Hi, I'm [[item.name.first]]</h1>
