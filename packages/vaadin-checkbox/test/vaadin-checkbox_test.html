@@ -56,6 +56,16 @@
         MockInteractions.downAndUp(vaadinCheckbox);
       });
 
+      it('should toggle on host click', () => {
+        vaadinCheckbox.click();
+
+        expect(vaadinCheckbox.checked).to.be.true;
+
+        vaadinCheckbox.click();
+
+        expect(vaadinCheckbox.checked).to.be.false;
+      });
+
       it('should bind checked to the native checkbox and vice versa', () => {
         vaadinCheckbox.checked = true;
         expect(nativeCheckbox.checked).to.be.eql(true);

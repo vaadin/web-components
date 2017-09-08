@@ -51,7 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <label part="wrapper" id="label" on-click="_handleClick">
+    <label part="wrapper" id="label">
       <input
         id="nativeCheckbox"
         type="checkbox"
@@ -160,6 +160,8 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this.setAttribute('role', 'checkbox');
+
+          this.addEventListener('click', this._handleClick.bind(this));
 
           this._addActiveListeners();
         }
