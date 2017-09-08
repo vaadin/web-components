@@ -33,50 +33,50 @@
         <dom-module id="vaadin-grid-gold-styles" theme-for="vaadin-grid">
           <template>
             <style>
-              :host {
+              :host([theme="my-grid-theme"]) {
                 border: 1px solid #dbdbdb;
               }
 
-              [part~="row"][odd] [part~="cell"] {
+              :host([theme="my-grid-theme"]) [part~="row"][odd] [part~="cell"] {
                 background: #f4f4f4;
               }
 
-              [part~="body-cell"] {
+              :host([theme="my-grid-theme"]) [part~="body-cell"] {
                 border-bottom: 1px solid #dbdbdb;
               }
 
-              [part~="footer-cell"] {
+              :host([theme="my-grid-theme"]) [part~="footer-cell"] {
                 border-top: 1px solid #dbdbdb;
               }
 
-              [part~="cell"] {
+              :host([theme="my-grid-theme"]) [part~="cell"] {
                 padding: 0 13px;
                 font: 300 16px/1.55 "Open Sans", sans-serif;
                 -webkit-font-smoothing: antialiased;
                 color: #373737;
               }
 
-              [part~="header-cell"] {
+              :host([theme="my-grid-theme"]) [part~="header-cell"] {
                 background: rgba(220, 208, 192, 0.9);
                 border-bottom: 1px solid rgba(244, 244, 244, 0.9);
                 min-height: 35px;
               }
 
-              [part~="resize-handle"] {
+              :host([theme="my-grid-theme"]) [part~="resize-handle"] {
                 border-color: rgba(244, 244, 244, 0.9);
               }
 
-              [part~="row"]:first-child [part~="footer-cell"]:not(empty) {
+              :host([theme="my-grid-theme"]) [part~="row"]:first-child [part~="footer-cell"]:not(empty) {
                 background: rgba(220, 208, 192, 0.9);
                 border-top: 1px solid rgba(244, 244, 244, 0.9);
                 min-height: 35px;
               }
 
-              [part~="body-cell"]:not([part~="details-cell"]) {
+              :host([theme="my-grid-theme"]) [part~="body-cell"]:not([part~="details-cell"]) {
                 height: 65px;
               }
 
-              [part~="cell"]:first-child {
+              :host([theme="my-grid-theme"]) [part~="cell"]:first-child {
                 padding: 0 8px;
               }
             </style>
@@ -110,7 +110,7 @@
 
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
-            <vaadin-grid id="transparent-header" items="[[items]]" size="200">
+            <vaadin-grid theme="my-grid-theme" id="transparent-header" items="[[items]]" size="200" on-active-item-changed="_activeItemChanged">
               <template class="row-details">
                 <div class="details-cell">
                   <h1>Hi, I'm [[item.name.first]]</h1>
