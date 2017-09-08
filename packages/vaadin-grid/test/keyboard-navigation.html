@@ -1033,6 +1033,8 @@
               scrollToEnd(grid);
 
               animationFrameFlush(function() {
+                tabToHeader();
+                tab();
                 tabToBody();
 
                 expect(grid.$.table.scrollTop).to.equal(0);
