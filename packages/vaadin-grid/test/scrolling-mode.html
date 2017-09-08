@@ -77,6 +77,8 @@
       });
 
       it('should only cancel wheel events when scrolling is possible - vertical', function() {
+        grid.style.fontSize = '12px';
+
         expect(wheel(0, -1).defaultPrevented).to.be.false;
         expect(wheel(0, 1).defaultPrevented).to.be.true;
 

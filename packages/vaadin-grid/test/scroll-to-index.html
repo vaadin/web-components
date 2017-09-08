@@ -54,20 +54,17 @@
             animationFrameFlush(done);
           });
 
-          it('should scroll to scaled index', function(done) {
+          it('should scroll to scaled index', function() {
             [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 77, 88, 100].forEach(function(percentage) {
               var index = Math.ceil((grid.size - 1) * percentage / 100);
+              grid.scrollToIndex(0);
               grid.scrollToIndex(index);
 
               if (percentage === 100) {
                 expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(index);
 
                 var table = grid.$.table;
-                listenOnce(table, 'scroll', function() {
-                  expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
-                  done();
-                });
-
+                expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
               } else {
                 expect(grid._vidxOffset + grid.firstVisibleIndex).to.equal(index);
               }
@@ -83,6 +80,14 @@
           it('should scroll to first index', function() {
             grid.scrollToIndex(-100);
             expect(grid._vidxOffset + grid.firstVisibleIndex).to.equal(0);
+          });
+
+          it('should set scroll position half-way', function() {
+            grid.scrollToIndex(grid.size / 2);
+            flushGrid(grid);
+            expect(grid.$.table.scrollTop).to.be.closeTo(
+              (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2, grid.$.table.scrollHeight / 20
+            );
           });
 
         });
