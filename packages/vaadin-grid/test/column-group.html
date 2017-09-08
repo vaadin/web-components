@@ -102,15 +102,6 @@
         expect(group.width).to.eql('calc(10% + 200px)');
       });
 
-      it('should stop template from a child from propagating', function() {
-        var spy = sinon.spy();
-        group.addEventListener('property-changed', spy);
-
-        columns[0].template = document.createElement('template');
-
-        expect(spy.callCount).to.eql(0);
-      });
-
       it('should get frozen when child column freezes', function() {
         columns[0].frozen = true;
 

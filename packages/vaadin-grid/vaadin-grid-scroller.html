@@ -186,11 +186,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _assignModels(itemSet) {
         this._iterateItems((pidx, vidx) => {
           var el = this._physicalItems[pidx];
-          if (vidx < this.size) {
-            el.removeAttribute('hidden');
-          } else {
-            el.setAttribute('hidden', '');
-          }
+          this._toggleAttribute('hidden', vidx >= this.size, el);
           this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
         }, itemSet);
       }
@@ -235,7 +231,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._vidxOffset = Math.round(offset - scale * this._virtualCount);
         } else {
           // Make sure user can always swipe/wheel scroll to the start and end
-          // TODO: causes a small jump in the scroll handle
           var oldOffset = this._vidxOffset || 0;
           var threshold = 1000;
           var maxShift = 100;

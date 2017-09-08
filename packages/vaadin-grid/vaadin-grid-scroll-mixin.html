@@ -4,27 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<dom-module id="vaadin-grid-table-table-scroll-styles">
-  <template>
-    <style>
-      #table {
-        position: relative;
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-        z-index: -2;
-      }
-
-      #scroller[ios] #table {
-        transform: none;
-      }
-
-      vaadin-grid-table[fixed-sections] #table {
-        transform: none;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-grid-table-scroll-styles">
   <template>
     <style>

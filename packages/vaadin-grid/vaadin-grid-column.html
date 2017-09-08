@@ -89,19 +89,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_footerTemplateChanged(footerTemplate)',
-        '_headerTemplateChanged(headerTemplate)',
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_stampBodyTemplate(template, _cells.*)', /* Same for header/footer templates */
+        '_stampBodyTemplate(template, _cells.*)',
         '_stampHeaderTemplate(headerTemplate, _headerCell)',
         '_stampFooterTemplate(footerTemplate, _footerCell)',
-        '_emptyCellsChanged(_emptyCells, _emptyCells.*)',
         '_resizableChanged(resizable, _headerCell)',
-        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)'
+        '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
       ];
     }
 
@@ -200,10 +198,6 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
-    _emptyCellsChanged(emptyCells, splices) {
-      // TODO: Needs empty content?
-    }
-
     _stampBodyTemplate(template, cells) {
       if (!template || !this._cells) {
         return;
@@ -224,7 +218,6 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    // TODO: DRY
     _stampHeaderTemplate(headerTemplate, headerCell) {
       if (!headerTemplate || !headerCell || headerCell._instance) {
         return;
@@ -262,14 +255,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
       return template;
-    }
-
-    _headerTemplateChanged(headerTemplate) {
-      // this.fire('property-changed', {path: 'headerTemplate', value: headerTemplate});
-    }
-
-    _footerTemplateChanged(footerTemplate) {
-      // this.fire('property-changed', {path: 'footerTemplate', value: footerTemplate});
     }
 
     _flexGrowChanged(flexGrow, headerCell, footerCell, cells) {
@@ -345,6 +330,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _hiddenChanged(hidden, headerCell, footerCell, cells) {
+      if (this.parentElement && this.parentElement._columnPropChanged) {
+        this.parentElement._columnPropChanged('hidden', hidden);
+      }
+
+      this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
+
+      if (hidden !== undefined && this._grid) {
+        this._grid._updateLastFrozen && this._grid._updateLastFrozen();
+        this._grid.notifyResize && this._grid.notifyResize();
+      }
+    }
+
   };
 </script>
 
@@ -402,37 +400,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         };
         return Object.assign(ownProperties, super.properties);
-      }
-
-      static get observers() {
-        return [
-          '_templateChanged(template)',
-          '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
-        ];
-      }
-
-      _templateChanged(template) {
-        // body cell templatizer needs to be attached so that `item-changed` and
-        // `template-instance-changed` events propagate to grid.
-        if (template && template.templatizer) {
-          // this.shadowRoot.appendChild(template.templatizer);
-        }
-
-        // don't bubble for optimisation
-        // this.fire('property-changed', {path: 'template', value: template}, {bubbles: false});
-      }
-
-      _hiddenChanged(hidden, headerCell, footerCell, cells) {
-        if (this.parentElement && this.parentElement._columnPropChanged) {
-          this.parentElement._columnPropChanged('hidden', hidden);
-        }
-
-        this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
-
-        if (hidden !== undefined && this._grid) {
-          this._grid._updateLastFrozen && this._grid._updateLastFrozen();
-          this._grid.notifyResize && this._grid.notifyResize();
-        }
       }
 
     }

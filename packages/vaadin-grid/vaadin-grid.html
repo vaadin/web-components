@@ -313,7 +313,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateRow(row, columnTree[columnTree.length - 1]);
         });
 
-        // TODO: DRY
         while (this.$.header.children.length < columnTree.length) {
           const headerRow = document.createElement('tr');
           headerRow.setAttribute('part', 'row');

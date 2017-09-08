@@ -96,10 +96,6 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        // listeners: {
-        //   'property-changed': '_columnPropChanged'
-        // },
-
         /** @private */
         connectedCallback() {
           super.connectedCallback();
@@ -163,8 +159,6 @@ This program is available under Apache License Version 2.0, available at https:/
             _rootColumns.forEach((column, index) => {
               column._order = order + ((index + 1) * scope);
             });
-
-            // this.fire('property-changed', {path: 'order', value: order});
           }
         }
 
@@ -176,8 +170,6 @@ This program is available under Apache License Version 2.0, available at https:/
           rootColumns.forEach(column => {
             column._reorderStatus = reorderStatus;
           });
-
-          // this.fire('property-changed', {path: 'reorderStatus', value: reorderStatus});
         }
 
         _groupResizableChanged(resizable, rootColumns) {
@@ -188,8 +180,6 @@ This program is available under Apache License Version 2.0, available at https:/
           rootColumns.forEach(column => {
             column.resizable = resizable;
           });
-
-          // this.fire('property-changed', {path: 'resizable', value: resizable});
         }
 
         _updateVisibleChildColumns(childColumns) {
@@ -205,7 +195,6 @@ This program is available under Apache License Version 2.0, available at https:/
             });
             this._updateVisibleChildColumns(childColumns);
           }
-          // this.fire('property-changed', {path: '_childColumns', value: childColumns});
         }
 
         _updateFlexAndWidth() {
@@ -272,9 +261,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-
-        // TODO: Refactor the duplicate methods with DynamicColumnsBehavior.
         _getChildColumns(el) {
+          // TODO: Drop legacy api
           return Polymer.dom(el).queryDistributedElements(
               'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
           );
