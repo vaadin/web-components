@@ -2,134 +2,32 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>vaadin-split-layout Basic Examples</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <title>vaadin-split-layout Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="common.html">
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 
-<body unresolved>
-  <div class="vertical-section-container centered">
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-    <demo-navigation></demo-navigation>
+  <link rel="import" href="split-layout-demo.html">
 
-    <h3>Horizontal Split Layout (Default)</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout>
-          <div>First content element</div>
-          <div>Second content element</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
+  <link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
+  <link rel="import" href="../../paper-styles/default-theme.html">
+  <link rel="import" href="../vaadin-split-layout.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
 
-    <h3>Vertical Split Layout</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout vertical>
-          <div>Top content element</div>
-          <div>Bottom content element</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h3>Layout Combination</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout>
-          <div>First content element</div>
-          <vaadin-split-layout vertical>
-            <div>Second content element</div>
-            <div>Third content element</div>
-          </vaadin-split-layout>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h3>Split Layout Element Height</h3>
-
-    <h4>Using Fixed Height</h4>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout style="height: 200px;">
-          <div>First content element</div>
-          <div>Second content element</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h4>Using Relative Height</h4>
-    <demo-snippet>
-      <template>
-        <div style="height: 200px;">
-          <vaadin-split-layout style="height: 100%;">
-            <div>First</div>
-            <div>Second</div>
-          </vaadin-split-layout>
-        </div>
-      </template>
-    </demo-snippet>
-
-    <h4>Using Flexbox Layout</h4>
-    <demo-snippet>
-      <template>
-        <div style="height: 160px; display: flex;">
-          <vaadin-split-layout style="flex: 1;">
-            <div>First</div>
-            <div>Second</div>
-          </vaadin-split-layout>
-        </div>
-      </template>
-    </demo-snippet>
-
-    <h3>Initial Splitter Position</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout>
-          <div style="width: 75%;">First</div>
-          <div style="width: 25%;">Second</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h3>Specifying Min- and Max- Sizes</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout>
-          <div style="min-width: 50px; max-width: 150px;">First</div>
-          <div>Second</div>
-        </vaadin-split-layout>
-      </template>
-    </demo-snippet>
-
-    <h3>Resize Notification for the Nested Elements</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-split-layout>
-          <div>First</div>
-          <custom-resizable>Second</custom-resizable>
-        </vaadin-split-layout>
-        <script>
-        window.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'custom-resizable',
-            behaviors: [
-              Polymer.IronResizableBehavior
-            ],
-            listeners: {
-              'iron-resize': '_onIronResize'
-            },
-            _onIronResize: function() {
-              console.log('Resized');
-            }
-          });
-        });
-        </script>
-      </template>
-    </demo-snippet>
-
-  </div>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

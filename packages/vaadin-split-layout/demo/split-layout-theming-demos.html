@@ -1,32 +1,18 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
-  <title>vaadin-split-layout Theming</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+<dom-module id="split-layout-theming-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-  <link rel="import" href="common.html">
-  <link rel="import" href="../../iron-icons/iron-icons.html">
-  <link rel="import" href="../../paper-button/paper-button.html">
+    </style>
 
-  <style>
-    [hidden] {
-      display: none;
-    }
-  </style>
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Themed Split Layout</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='split-layout-theming-demos-themed-split-layout'>
+      <template preserve-content>
         <dom-module id="vaadin-split-layout-styles" theme-for="vaadin-split-layout">
-          <template>
+          <template preserve-content>
             <style>
               [part~="splitter"] {
                 min-width: 5px;
@@ -70,9 +56,15 @@
       </dom-bind>
 
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
 
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class SplitLayoutThemingDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
+      static get is() { return 'split-layout-theming-demos'; }
+    }
+    customElements.define(SplitLayoutThemingDemos.is, SplitLayoutThemingDemos);
+  </script>
+</dom-module>

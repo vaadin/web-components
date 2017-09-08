@@ -1,0 +1,37 @@
+<dom-module id="split-layout-integration-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Google Maps</h3>
+    <vaadin-demo-snippet id='split-layout-integration-demos-google-maps'>
+      <template preserve-content>
+        <custom-style>
+          <style is="custom-style">
+            iframe {
+              width: 0;
+              border: none;
+            }
+          </style>
+        </custom-style>
+        <vaadin-split-layout style="height: 300px">
+          <iframe src="//maps.google.com/maps?q=Turku&amp;output=embed"></iframe>
+          <iframe src="//maps.google.com/maps?q=Malta&amp;output=embed"></iframe>
+        </vaadin-split-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+  </div>
+  </template>
+  <script>
+    class SplitLayoutIntegrationDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
+      static get is() { return 'split-layout-integration-demos'; }
+    }
+    customElements.define(SplitLayoutIntegrationDemos.is, SplitLayoutIntegrationDemos);
+  </script>
+</dom-module>
