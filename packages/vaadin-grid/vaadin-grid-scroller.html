@@ -107,8 +107,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.items = {length: Math.min(size, maxVirtualItems)};
         }
 
-        // Set scrollOffset to avoid scroll position resetting to 0 on _itemsChanged
-        this.scrollOffset = this._scrollTop;
         super._itemsChanged({path: 'items'});
 
         this._virtualCount = this.items.length || 0;
