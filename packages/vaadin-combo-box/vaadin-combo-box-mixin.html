@@ -392,10 +392,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _toggleElementChanged(toggleElement) {
-      toggleElement && toggleElement.addEventListener('click', (e) => {
-        this._toggle();
-        e.stopPropagation();
-      });
+      if (toggleElement) {
+        toggleElement.addEventListener('mousedown', (e) => {
+          e.preventDefault();
+        });
+
+        toggleElement.addEventListener('click', (e) => {
+          this._toggle();
+        });
+      }
     }
 
     /**

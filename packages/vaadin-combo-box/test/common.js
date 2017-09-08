@@ -19,6 +19,12 @@ const fire = (type, node, detail) => {
   return evt;
 };
 
+const fireMousedownMouseupClick = (node) => {
+  fire('mousedown', node);
+  fire('mouseup', node);
+  fire('click', node);
+};
+
 const describeSkipIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   if (bool) {
