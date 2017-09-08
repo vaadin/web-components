@@ -3,20 +3,32 @@ var argv = require('yargs').argv;
 module.exports = {
   testTimeout: 180 * 1000,
   registerHooks: function(context) {
-    var saucelabsPlatforms = [
-      'macOS 10.12/iphone@10.3',
+    const saucelabsPlatformsMobile = [
+      'macOS 10.12/iphone@10.3'
+    ];
+
+    const saucelabsPlatformsPolyfilled = [
       'Windows 10/microsoftedge@14',
-      // 'Windows 10/internet explorer@11',
+      // 'Windows 10/internet explorer@11'
+    ];
+
+    const saucelabsPlatformsDesktop = [
       'macOS 10.12/safari@10.0'
     ];
 
-    var cronPlatforms = [
+    const cronPlatforms = [
       'Windows 10/chrome@55',
       'Windows 10/firefox@54'
     ];
 
-    if (argv.env === 'saucelabs') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms.concat(cronPlatforms);
+    if (argv.env === 'saucelabs:mobile') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsMobile;
+
+    } else if (argv.env === 'saucelabs:polyfilled') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsPolyfilled;
+
+    } else if (argv.env === 'saucelabs:desktop') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsDesktop.concat(cronPlatforms);
 
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
