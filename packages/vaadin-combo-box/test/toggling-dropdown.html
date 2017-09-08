@@ -33,16 +33,8 @@
     let combobox;
     let comboboxLight;
 
-    function clickLabel() {
-      fire('click', combobox.inputElement.root.querySelector('label'));
-    }
-
-    function clickInput() {
-      fire('click', combobox.inputElement);
-    }
-
     function clickToggleIcon() {
-      fire('click', combobox._toggleElement);
+      fireMousedownMouseupClick(combobox._toggleElement);
     }
 
     function overlay() {
@@ -57,7 +49,7 @@
     describe('opening', () => {
       it('should open asynchronously by tapping label', done => {
         expect(combobox.opened).to.be.false;
-        clickLabel();
+        fireMousedownMouseupClick(combobox.inputElement.root.querySelector('label'));
         expect(combobox.opened).to.be.false;
 
         setTimeout(() => {
@@ -68,7 +60,7 @@
 
       it('should open asynchronously by clicking input', done => {
         expect(combobox.opened).to.be.false;
-        clickInput();
+        fireMousedownMouseupClick(combobox.inputElement);
         expect(combobox.opened).to.be.false;
 
         setTimeout(() => {

@@ -19,6 +19,7 @@
     "it": false,
     "fixture": false,
     "fire": false,
+    "fireMousedownMouseupClick": false,
     "System": false,
     "HTMLImports": false,
     "MockInteractions": false,

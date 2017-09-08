@@ -9,8 +9,6 @@
     "html"
   ],
   "globals": {
-    // TODO: remove when moving to ES6 vaadin -> Vaadin
-    "vaadin": false,
     "Vaadin": false,
     "Polymer": false,
     "CustomElements": false
