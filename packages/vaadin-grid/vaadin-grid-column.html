@@ -129,11 +129,13 @@ This program is available under Apache License Version 2.0, available at https:/
       super.disconnectedCallback();
 
       requestAnimationFrame(() => {
-        this._allCells.forEach(cell => {
-          if (cell._content.parentNode) {
-            cell._content.parentNode.removeChild(cell._content);
-          }
-        });
+        if (!this.parentNode) {
+          this._allCells.forEach(cell => {
+            if (cell._content.parentNode) {
+              cell._content.parentNode.removeChild(cell._content);
+            }
+          });
+        }
       });
 
       this._gridValue = undefined;

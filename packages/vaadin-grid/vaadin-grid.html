@@ -146,6 +146,13 @@ This program is available under Apache License Version 2.0, available at https:/
             value: function() {
               return typeof CSS !== 'undefined' && CSS.supports('(-ms-ime-align:auto)');
             }
+          },
+
+          _ie: {
+            type: Boolean,
+            value: function() {
+              return !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+            }
           }
         };
       }
