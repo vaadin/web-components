@@ -1,6 +1,6 @@
 {
   "name": "vaadin-valo-theme",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Valo is a customizable theme for Vaadin Elements",
   "main": "valo.html",
   "repository": "vaadin/vaadin-valo-theme",
