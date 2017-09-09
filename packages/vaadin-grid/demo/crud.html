@@ -120,7 +120,7 @@
                   this._first = item.name.first;
                   this._last = item.name.last;
 
-                  this.$.grid.querySelector('#first-' + e.model.index).focus();
+                  requestAnimationFrame(() => this.$.grid.querySelector('#first-' + e.model.index).focus());
                 },
 
                 _save: function(e) {

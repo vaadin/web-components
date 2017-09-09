@@ -213,6 +213,18 @@
         }, loadDebounceTime * 2);
       });
 
+      it('should update sub properties on clearCache', function() {
+        const data = [{value: 'foo'}];
+        grid.size = 1;
+        container.dataProvider = (params, cb) => {
+          cb(data);
+        };
+        expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo');
+        data[0].value = 'bar';
+        grid.clearCache();
+        expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('bar');
+      });
+
       it('should apply `loading` attribute to scroller', function(done) {
         container.dataProvider = function(params, callback) {
           expect(grid.$.scroller.hasAttribute('loading')).to.be.true;

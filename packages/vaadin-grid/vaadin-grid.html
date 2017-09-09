@@ -351,6 +351,10 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         Array.from(row.children).forEach((cell) => {
           if (cell._instance) {
+            if (cell._instance.item === item) {
+              // Force data system to pick up subproperty changes
+              cell._instance.item = {};
+            }
             cell._instance.item = item;
             cell._instance.__expanded__ = this._isExpanded(item);
             cell._instance.expanded = this._isExpanded(item);
