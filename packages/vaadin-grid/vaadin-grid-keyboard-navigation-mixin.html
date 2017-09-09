@@ -123,10 +123,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _ensureScrolledToIndex(index) {
+      const visibleItemsCount = this.lastVisibleIndex - this.firstVisibleIndex - 1;
+      if (index <= this.firstVisibleIndex) {
+        this.scrollToIndex(index);
+      } else if (index >= this.firstVisibleIndex + visibleItemsCount) {
+        this.scrollToIndex(index - visibleItemsCount);
+      }
+    }
+
     _onNavigationKeyDown(e, key) {
       e.preventDefault();
-
-      this.navigating = true;
 
       function indexOfChildElement(el) {
         return Array.prototype.indexOf.call(el.parentNode.children, el);
@@ -233,14 +240,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // Ensure correct vertical scroll position, destination row is visible
       if (activeRowGroup === this.$.items) {
-        if (dstRowIndex <= this.firstVisibleIndex) {
-          // Scroll up
-          this.scrollToIndex(dstRowIndex);
-        } else if (dstRowIndex >= this.lastVisibleIndex - 1) {
-          // Scroll down
-          this.scrollToIndex(dstRowIndex - visibleItemsCount);
-        }
+        this._ensureScrolledToIndex(dstRowIndex);
       }
+
+      // This has to be set after scrolling, otherwise it can be removed by
+      // `_preventScrollerRotatingCellFocus(item, index)` during scrolling.
+      this.navigating = true;
 
       const columnIndexByOrder = dstColumns.reduce((acc, col, i) => (acc[col._order] = i, acc), {});
       const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
@@ -265,7 +270,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // listener invocation gets updated _focusedItemIndex value.
         this._focusedItemIndex = dstRowIndex;
       }
-      this._focusCell(dstCell, activeRowGroup);
+      dstCell.focus();
     }
 
     _parseEventPath(path) {
@@ -295,7 +300,7 @@ This program is available under Apache License Version 2.0, available at https:/
           break;
       }
 
-      const {rowGroup, cell} = this._parseEventPath(e.composedPath());
+      const {cell} = this._parseEventPath(e.composedPath());
 
       if (this.interacting !== wantInteracting) {
         if (wantInteracting) {
@@ -310,7 +315,7 @@ This program is available under Apache License Version 2.0, available at https:/
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
-          this._focusCell(cell, rowGroup);
+          cell.focus();
           this.interacting = false;
           this.navigating = true;
         }
@@ -338,6 +343,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onTabKeyDown(e) {
       const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
+
+      if (focusTarget === this._itemsFocusable) {
+        const targetRow = this._itemsFocusable.parentNode;
+        this._ensureScrolledToIndex(this._focusedItemIndex);
+        if (targetRow.index !== this._focusedItemIndex) {
+          // The target row, which is about to be focused next, has been
+          // assigned with a new index since last focus, probably because of
+          // scrolling. Focus the row for the stored focused item index instead.
+          const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
+          const focusedItemRow = Array.from(this.$.items.children)
+              .filter(row => row.index === this._focusedItemIndex)[0];
+          if (focusedItemRow) {
+            e.preventDefault(); // avoid native focus jump, we are doing our own
+            focusedItemRow.children[columnIndex].focus();
+          }
+        }
+      }
+
       if (focusTarget === this.$.focusexit) {
         // The focus is about to exit the grid. We move the focus to the exit
         // to make it happen.
@@ -381,35 +404,20 @@ This program is available under Apache License Version 2.0, available at https:/
       this._detectInteracting(e);
 
       if (e.composedPath().indexOf(this.$.table) === 3) {
-        let cell = e.composedPath()[0];
-
-        // Prevent recursion from calling `this._focusCell`
-        if (!this._cellFocusIsInvoked) {
-          // Ensure correct vertical scrolling position
-          const row = cell.parentNode, rowGroup = row.parentNode;
-          if (rowGroup === this.$.items &&
-              (this._focusedItemIndex <= this.firstVisibleIndex ||
-                this._focusedItemIndex >= this.lastVisibleIndex)) {
-            // Scroll and restore focus after scrolling
-            const columnIndex = Array.from(row.children).indexOf(cell);
-            this.scrollToIndex(this._focusedItemIndex);
-            cell = Array.from(rowGroup.children)
-              .filter(el => el.index === this._focusedItemIndex)[0]
-              .children[columnIndex];
-            this._focusCell(cell);
-          }
-
-          // Ensure correct horizontal scrolling position
-          this._scrollHorizontallyToCell(cell);
-        } else {
-          this._detectFocusedItemIndex(e);
+        const cell = e.composedPath()[0];
+        const rowGroup = cell.parentNode.parentNode;
+        if (rowGroup === this.$.header) {
+          this._headerFocusable = cell;
+        } else if (rowGroup === this.$.items) {
+          this._itemsFocusable = cell;
+        } else if (rowGroup === this.$.footer) {
+          this._footerFocusable = cell;
         }
-
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
         cell._content.dispatchEvent(new CustomEvent('cell-focusin', {bubbles: false}));
-      } else {
-        this._detectFocusedItemIndex(e);
       }
+
+      this._detectFocusedItemIndex(e);
     }
 
     _onCellFocusOut(e) {
@@ -432,7 +440,7 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         // No focused cell content, focus the cell itself
         this.interacting = false;
-        this._focusCell(e.detail.cell);
+        e.detail.cell.focus();
       }
       this.navigating = false;
     }
@@ -487,21 +495,6 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.$.footer.firstElementChild) {
         this._footerFocusable = this.$.footer.firstElementChild.firstElementChild;
       }
-    }
-
-    _focusCell(cell, rowGroup, ignoreFocusInCellContent) {
-      const row = cell.parentNode;
-      rowGroup = rowGroup || row.parentNode;
-      if (rowGroup === this.$.header) {
-        this._headerFocusable = cell;
-      } else if (rowGroup === this.$.items) {
-        this._itemsFocusable = cell;
-      } else if (rowGroup === this.$.footer) {
-        this._footerFocusable = cell;
-      }
-      this._cellFocusIsInvoked = true;
-      cell.focus();
-      this._cellFocusIsInvoked = false;
     }
 
     _scrollHorizontallyToCell(dstCell) {
