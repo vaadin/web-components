@@ -292,18 +292,6 @@
           expect(sorterLast._order).to.equal(null);
         });
 
-        // This test is relevant for IE11 only
-        var IE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
-        if (IE) {
-          it('should handle virtual focus', function() {
-            var spy = sinon.spy(grid, 'focus');
-            sorterFirst.$.content.dispatchEvent(new CustomEvent('focus'));
-            expect(spy.called).to.be.true;
-            expect(grid.$.scroller._virtualFocus).to.equal(grid.$.scroller.$.header);
-            expect(grid.$.scroller.interacting).to.be.false;
-          });
-        }
-
         describe('array data provider', function() {
 
           it('should sort automatically', function() {

@@ -121,6 +121,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="newColumn">
+    <template>
+      <vaadin-grid-column>
+        <template>
+          [[index]]
+        </template>
+      <vaadin-grid-column>
+    </template>
+  </test-fixture>
+
   <script>
     function getVisualCellContent(section, row, col) {
       var cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
@@ -225,8 +235,8 @@
         dragOver(headerContent[0], headerContent[1]);
 
         var ghostRect = ghost.getBoundingClientRect();
-        expect(ghostRect.left).to.be.closeTo(110, 1);
-        expect(ghostRect.top).to.be.closeTo(0, 1);
+        expect(ghostRect.left).to.be.closeTo(grid._ie ? 118 : 110, 1);
+        expect(ghostRect.top).to.be.closeTo(grid._ie ? 8 : 0, 1);
       });
 
       it('should have the ghost visible again', function() {
@@ -344,9 +354,8 @@
 
         it('should set order to new column', function(done) {
           dragAndDropOver(headerContent[0], headerContent[1]);
-          var col = document.createElement('vaadin-grid-column');
-          col.innerHTML = '<template></template>';
-          Polymer.dom(grid).appendChild(col);
+          var col = fixture('newColumn');
+          grid.appendChild(col);
           animationFrameFlush(function() {
             expect(col._order).to.equal(50000000);
             done();

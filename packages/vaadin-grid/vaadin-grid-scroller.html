@@ -102,8 +102,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this._scrollTop = 0;
         }
         if (!Array.isArray(this.items)) {
-          // Edge seems to have the lowest maximum
-          const maxVirtualItems = this._edge ? 30000 : 100000;
+          // Edge/IE seems to have the lowest maximum
+          const maxVirtualItems = this._edge || this._ie ? 30000 : 100000;
           this.items = {length: Math.min(size, maxVirtualItems)};
         }
 
