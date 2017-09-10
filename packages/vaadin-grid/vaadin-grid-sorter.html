@@ -236,7 +236,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onClick(e) {
-          if (this.contains(this.getRootNode().activeElement)) {
+          const activeElement = this.getRootNode().activeElement;
+          if (this !== activeElement && this.contains(activeElement)) {
             // Some focusable content inside the sorter was clicked, do nothing.
             return;
           }
