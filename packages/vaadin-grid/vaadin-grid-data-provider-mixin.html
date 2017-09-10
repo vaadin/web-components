@@ -4,55 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<dom-module id="vaadin-grid-data-provider-themability-styles">
-  <template>
-    <style>
-
-      /* Anim */
-      @keyframes vaadin-grid-spin-360 {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-      @-webkit-keyframes vaadin-grid-spin-360 {
-        100% {
-          -webkit-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
-
-      #spinner {
-        border: 2px solid var(--primary-color, #03A9F4);
-        border-radius: 50%;
-        border-right-color: transparent;
-        border-top-color: transparent;
-        content: "";
-        height: 16px;
-        left: 50%;
-        margin-left: -8px;
-        margin-top: -8px;
-        position: absolute;
-        top: 50%;
-        width: 16px;
-        pointer-events: none;
-        opacity: 0;
-      }
-
-      :host([loading]) #spinner {
-        opacity: 1;
-        -webkit-animation: vaadin-grid-spin-360 400ms linear infinite;
-        animation: vaadin-grid-spin-360 400ms linear infinite;
-      }
-
-      :host([loading]) #items {
-        opacity: 0.5;
-      }
-
-    </style>
-  </template>
-</dom-module>
-
-
 <script>
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};
@@ -95,7 +46,10 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * `true` while data is being requested from the data provider.
          */
-        _loading: Boolean,
+        _loading: {
+          type: Boolean,
+          observer: '_loadingChanged'
+        },
 
         _cache: {
           type: Object,
@@ -116,6 +70,10 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
       this.addEventListener('item-changed', this._templateItemChanged.bind(this));
+    }
+
+    _loadingChanged(loading) {
+      this._toggleAttribute('loading', loading, this);
     }
 
     _templateItemChanged(e) {
