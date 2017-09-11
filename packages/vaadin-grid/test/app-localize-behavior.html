@@ -62,7 +62,7 @@
   <script>
 
     describe('app-localize-behavior', () => {
-      var container, column, grid;
+      let container, column, grid;
 
       beforeEach(function(done) {
         container = fixture('grid');
@@ -71,7 +71,7 @@
       });
 
       // Known error (missing Promise polyfill in webcomponentsjs lite v0)
-      var IE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+      const IE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
       if (!IE) {
         it('should localize', () => {
           expect(getHeaderCellContent(grid, 0, 0).innerText).to.equal('header');

@@ -37,7 +37,7 @@
 
   <script>
     describe('hidden grid', () => {
-      var container, grid;
+      let container, grid;
 
       beforeEach(() => {
         container = fixture('trivialGrid');
@@ -64,8 +64,8 @@
         });
 
         it('should measure header on appear', () => {
-          var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
-          var headerRect = grid.$.header.getBoundingClientRect();
+          const contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
+          const headerRect = grid.$.header.getBoundingClientRect();
         });
 
       });

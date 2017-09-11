@@ -51,7 +51,7 @@
   <script>
 
     describe('column', () => {
-      var container, column, grid;
+      let container, column, grid;
 
       beforeEach(() => {
         container = fixture('grid');
@@ -70,7 +70,7 @@
           it('should be bound to header cells', () => {
             column.flexGrow = 2;
 
-            var header = grid.$.header;
+            const header = grid.$.header;
 
             expect(getContainerCell(header, 0, 0).style.flexGrow).to.eql('3'); // colspan 2 + 1
             expect(getContainerCell(header, 1, 0).style.flexGrow).to.eql('2');
@@ -168,8 +168,8 @@
       describe('dom observing', () => {
 
         it('should pickup header template', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
@@ -179,8 +179,8 @@
         });
 
         it('should pickup footer template', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('footer');
 
           Polymer.dom(column).appendChild(template);
@@ -190,8 +190,8 @@
         });
 
         it('should pickup body template', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -200,10 +200,10 @@
         });
 
         it('should re-pickup header template', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('header');
-          var template2 = document.createElement('template');
+          const template2 = document.createElement('template');
           template2.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
@@ -215,9 +215,9 @@
         });
 
         it('should pickup new body template', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
-          var template2 = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
+          const template2 = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -229,8 +229,8 @@
         });
 
         it('should prepare template when added lazily', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -243,9 +243,9 @@
         });
 
         it('should prepare a new template when added lazily', () => {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
-          var template2 = document.createElement('template');
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
+          const template2 = document.createElement('template');
 
           column.appendChild(template);
           column._templateObserver.flush();

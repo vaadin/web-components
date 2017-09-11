@@ -25,7 +25,7 @@
 
   <script>
     describe('basic features', () => {
-      var grid;
+      let grid;
 
       beforeEach(() => {
         grid = fixture('default');
@@ -34,7 +34,7 @@
       });
 
       it('check physical item heights', () => {
-        var rowHeight = grid._physicalItems[0].offsetHeight;
+        const rowHeight = grid._physicalItems[0].offsetHeight;
 
         grid._physicalItems.forEach(item => expect(item.offsetHeight).to.equal(rowHeight));
       });
@@ -56,7 +56,7 @@
       });
 
       it('last visible index', () => {
-        var actualHeight = grid._physicalAverage;
+        const actualHeight = grid._physicalAverage;
         grid.scrollToIndex(2);
         expect(grid.lastVisibleIndex, Math.ceil(((grid._scrollTop + grid.offsetHeight) / actualHeight) - 1));
       });
@@ -72,9 +72,9 @@
 
         grid.scrollToIndex(99);
 
-        var rowHeight = getFirstVisibleItem(grid).offsetHeight;
-        var viewportHeight = grid.offsetHeight;
-        var itemsPerViewport = viewportHeight / rowHeight;
+        const rowHeight = getFirstVisibleItem(grid).offsetHeight;
+        const viewportHeight = grid.offsetHeight;
+        const itemsPerViewport = viewportHeight / rowHeight;
 
         expect(grid.firstVisibleIndex, Math.floor(grid.size - itemsPerViewport));
         grid.scrollToIndex(0);
@@ -100,7 +100,7 @@
 
       it('should not scroll when size changes', () => {
         grid.scrollToIndex(99);
-        var top = grid.$.table.scrollTop;
+        const top = grid.$.table.scrollTop;
 
         grid.size += 1;
 
@@ -127,7 +127,7 @@
           grid._scrollHandler();
           grid._debounceScrolling.flush();
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {
@@ -139,14 +139,14 @@
 
       it('reorder should not affect light dom', () => {
         grid.size = 1000;
-        var wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+        const wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
 
         [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(steps => {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
           grid._debounceScrolling.flush();
 
-          var newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+          const newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged
           expect(newWrappers).to.eql(wrappers);
         });
@@ -168,7 +168,7 @@
           grid._debounceScrolling.flush();
 
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {
@@ -182,8 +182,8 @@
       });
 
       it('should warn about missing imports', () => {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
@@ -195,8 +195,8 @@
       });
 
       it('should warn about missing imports after adding new content', () => {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
         grid.flushDebouncer('check-imports');
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
@@ -213,8 +213,8 @@
 
       it('should not warn about missing imports', done => {
         Polymer.Base.importHref('../vaadin-grid-sorter.html', () => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
           Polymer.dom.flush();

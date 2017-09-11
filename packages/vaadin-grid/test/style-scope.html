@@ -97,10 +97,10 @@
 
       describe('component', () => {
 
-        var component;
-        var wrapper;
-        var content;
-        var slider;
+        let component;
+        let wrapper;
+        let content;
+        let slider;
 
         beforeEach(() => {
           component = fixture('default');
@@ -132,15 +132,15 @@
       });
 
       describe('dom-bind', () => {
-        var grid;
+        let grid;
 
         beforeEach(() => grid = document.querySelector('#dom-bind-grid'));
 
         if (!Polymer.Settings.useShadow) {
           // Only test non-shadow
-          var scroller;
-          var table;
-          var body;
+          let scroller;
+          let table;
+          let body;
 
           beforeEach(() => {
             scroller = grid.$.scroller;
@@ -151,10 +151,10 @@
           });
 
           it('should not lose scope on reorder', done => {
-            var row = body.children[0];
+            const row = body.children[0];
 
-            var cell = row.querySelector('[part~="cell"]');
-            var content = cell._content.querySelector('.my-content');
+            const cell = row.querySelector('[part~="cell"]');
+            const content = cell._content.querySelector('.my-content');
 
             expect(window.getComputedStyle(content).color).to.equal('rgb(255, 0, 0)');
 
@@ -172,9 +172,9 @@
           });
 
           it('should not have vaadin-grid-table scope', () => {
-            var row = body.children[24];
-            var cell = row.querySelector('[part~="cell"]');
-            var content = cell._content.querySelector('.my-content');
+            const row = body.children[24];
+            const cell = row.querySelector('[part~="cell"]');
+            const content = cell._content.querySelector('.my-content');
             expect(content.classList.contains('vaadin-grid-table')).to.be.false;
           });
         }

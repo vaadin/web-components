@@ -9,8 +9,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <script>
-  var firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-  var defaultCellWidth = 100;
+  const firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+  const defaultCellWidth = 100;
 
   function flushGrid(grid) {
     grid._observer.flush();
@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getScrollbarWidth() {
     // Create the measurement node
-    var scrollDiv = document.createElement('div');
+    const scrollDiv = document.createElement('div');
     scrollDiv.style.width = '100px';
     scrollDiv.style.height = '100px';
     scrollDiv.style.overflow = 'scroll';
@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     scrollDiv.style.top = '-9999px';
     document.body.appendChild(scrollDiv);
     // Get the scrollbar width
-    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+    const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
 
     // Delete the DIV
     document.body.removeChild(scrollDiv);
@@ -57,11 +57,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function findElementInList(container, selector) {
-    var i = 0;
-    var children = container._children;
-    var ms = Polymer.DomApi.matchesSelector;
+    const children = container._children;
+    const ms = Polymer.DomApi.matchesSelector;
 
-    for (; i < children.length; i++) {
+    for (let i; i < children.length; i++) {
       if (children[i].nodeType === Node.ELEMENT_NODE && ms.call(children[i], selector)) {
         return children[i];
       }
@@ -70,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function listenOnce(element, eventName, callback) {
-    var listener = e => {
+    const listener = e => {
       element.removeEventListener(eventName, listener);
       callback(e);
     };
@@ -84,7 +83,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function buildDataSet(size) {
-    var data = [];
+    const data = [];
     while (data.length < size) {
       data.push(buildItem(data.length));
     }
@@ -103,10 +102,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function simulateScroll(config) {
-    var list = config.list;
-    var target = config.target;
-    var delay = config.delay || 1;
-    var contribution = Math.abs(config.contribution) || 10;
+    const list = config.list;
+    const target = config.target;
+    const delay = config.delay || 1;
+    let contribution = Math.abs(config.contribution) || 10;
     // scroll back up
     if (target < list.scrollTop) {
       contribution = -contribution;
@@ -114,8 +113,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     function scrollHandler() {
       setTimeout(() => {
-        var minScrollTop = 0;
-        var maxScrollTop = list.scrollHeight - list.offsetHeight;
+        const minScrollTop = 0;
+        const maxScrollTop = list.scrollHeight - list.offsetHeight;
 
         config.onScroll && config.onScroll();
 
@@ -141,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getFirstVisibleItem(grid) {
-    var visibleRows = getVisibleItems(grid);
+    const visibleRows = getVisibleItems(grid);
     if (visibleRows.length) {
       return visibleRows[0];
     }
@@ -149,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getLastVisibleItem(grid) {
-    var visibleRows = getVisibleItems(grid);
+    const visibleRows = getVisibleItems(grid);
     if (visibleRows.length) {
       return visibleRows.pop();
     }
@@ -158,8 +157,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function getVisibleItems(grid) {
     flushGrid(grid);
-    var rows = grid.$.items.children;
-    var visibleRows = [];
+    const rows = grid.$.items.children;
+    const visibleRows = [];
     for (var i = 0; i < rows.length; i++) {
       if (isVisible(rows[i])) {
         visibleRows.push(rows[i]);
@@ -170,10 +169,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // http://stackoverflow.com/a/15203639/1331425
   function isVisible(el) {
-    var top = el.offsetTop;
-    var left = el.offsetLeft;
-    var width = el.offsetWidth;
-    var height = el.offsetHeight;
+    let top = el.offsetTop;
+    let left = el.offsetLeft;
+    const width = el.offsetWidth;
+    const height = el.offsetHeight;
 
     while (el.offsetParent) {
       el = el.offsetParent;
@@ -190,11 +189,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function isFullOfItems(list) {
-    var listRect = list.getBoundingClientRect();
-    var listHeight = listRect.height - 1;
-    var item, y = listRect.top + 1;
+    const listRect = list.getBoundingClientRect();
+    const listHeight = listRect.height - 1;
+    let item, y = listRect.top + 1;
     // IE 10 & 11 doesn't render propertly :(
-    var badPixels = 0;
+    let badPixels = 0;
     while (y < listHeight) {
       item = document.elementFromPoint(listRect.left + 100, y);
 
@@ -210,15 +209,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function checkRepeatedItems(list) {
-    var listRect = list.getBoundingClientRect();
-    var listHeight = list.offsetHeight;
-    var listItems = {};
+    const listRect = list.getBoundingClientRect();
+    const listHeight = list.offsetHeight;
+    const listItems = {};
 
     return () => {
-      var itemKey;
-      var y = listRect.top;
+      let itemKey;
+      let y = listRect.top;
       while (y < listHeight) {
-        var item = document.elementFromPoint(listRect.left + 100, y + 2);
+        const item = document.elementFromPoint(listRect.left + 100, y + 2);
         itemKey = item.textContent || item.innerText;
 
         if (item.parentNode && item.parentNode._templateInstance) {
@@ -246,12 +245,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getHeaderCellContent(grid, row, col) {
-    var container = grid.$.header;
+    const container = grid.$.header;
     return getContainerCellContent(container, row, col);
   }
 
   function getBodyCellContent(grid, row, col) {
-    var container = grid.$.items;
+    const container = grid.$.items;
     return getContainerCellContent(container, row, col);
   }
 
@@ -260,8 +259,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function getContainerCell(container, row, col) {
-    var rows = getRows(container);
-    var cells = getRowCells(rows[row]);
+    const rows = getRows(container);
+    const cells = getRowCells(rows[row]);
     return cells[col];
   }
 
@@ -273,7 +272,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
       grid = grid.parentNode || grid.host;
     }
-    var sourceRect = source.getBoundingClientRect();
+    const sourceRect = source.getBoundingClientRect();
     fire('track', {
       x: sourceRect.left + sourceRect.width / 2 + 1,
       y: sourceRect.top,
@@ -286,7 +285,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   function dragOver(source, target, clientX) {
     dragStart(source);
-    var targetRect = target.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
     fire('track', {
       x: clientX || targetRect.left + targetRect.width / 2 + 1,
       y: targetRect.top,
@@ -310,18 +309,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function makeSoloTouchEvent(type, xy, node) {
-    var touches = [{
+    const touches = [{
       identifier: 0,
       target: node,
       clientX: xy.x,
       clientY: xy.y
     }];
-    var touchEventInit = {
+    const touchEventInit = {
       touches: touches,
       targetTouches: touches,
       changedTouches: touches
     };
-    var event = new CustomEvent(type, {bubbles: true, cancelable: true});
+    const event = new CustomEvent(type, {bubbles: true, cancelable: true});
     for (var property in touchEventInit) {
       event[property] = touchEventInit[property];
     }

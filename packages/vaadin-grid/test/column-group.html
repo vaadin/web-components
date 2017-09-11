@@ -64,8 +64,8 @@
   <script>
 
     describe('column group', () => {
-      var group;
-      var columns;
+      let group;
+      let columns;
       beforeEach(done => {
 
         group = fixture('group');
@@ -108,7 +108,7 @@
 
       // this test is aimed for Safari 9, see #552
       it('should propagate frozen from children when attached', () => {
-        var parent = group.parentElement;
+        const parent = group.parentElement;
         Polymer.dom(parent).removeChild(group);
 
         columns[0].frozen = true;
@@ -216,8 +216,8 @@
 
       describe('dom observing', () => {
         it('should pickup header template', () => {
-          var group = document.createElement('vaadin-grid-column-group');
-          var template = document.createElement('template');
+          const group = document.createElement('vaadin-grid-column-group');
+          const template = document.createElement('template');
           template.classList.add('header');
 
           Polymer.dom(group).appendChild(template);
@@ -231,8 +231,8 @@
         });
 
         it('should pickup footer template', () => {
-          var group = document.createElement('vaadin-grid-column-group');
-          var template = document.createElement('template');
+          const group = document.createElement('vaadin-grid-column-group');
+          const template = document.createElement('template');
           template.classList.add('footer');
 
           Polymer.dom(group).appendChild(template);
@@ -249,8 +249,8 @@
 
       describe('inheritance', () => {
         it('both, class and super observers, should be called', () => {
-          var superSpy = sinon.spy(group, '_resizableChanged');
-          var thisSpy = sinon.spy(group, '_groupResizableChanged');
+          const superSpy = sinon.spy(group, '_resizableChanged');
+          const thisSpy = sinon.spy(group, '_groupResizableChanged');
           group.resizable = true;
           expect(superSpy.called).to.be.true;
           expect(thisSpy.called).to.be.true;

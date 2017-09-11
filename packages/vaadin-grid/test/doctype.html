@@ -23,8 +23,8 @@
     describe('missing doctype', () => {
 
       it('should warn about doctype', () => {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
         fixture('default');
         console.warn = _warn;
         expect(spy.called).to.be.true;

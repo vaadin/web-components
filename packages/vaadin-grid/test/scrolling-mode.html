@@ -28,8 +28,8 @@
 
   <script>
     describe('scrolling mode', () => {
-      var fixedContainers;
-      var grid;
+      let fixedContainers;
+      let grid;
 
       beforeEach(() => {
         grid = fixture('default');
@@ -43,7 +43,7 @@
       }
 
       function wheel(deltaX, deltaY) {
-        var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+        const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
         e.deltaY = deltaY;
         e.deltaX = deltaX;
         getBodyCellContent(grid, 0, 0).dispatchEvent(e);
@@ -51,7 +51,7 @@
       }
 
       it('should have the right amount of scrollbars/scrollers', () => {
-        var scrollbars = 0;
+        let scrollbars = 0;
         scrollbars += window.getComputedStyle(grid.$.table).overflow === 'hidden' ? 0 : 1;
         scrollbars += window.getComputedStyle(grid.$.outerscroller).overflow === 'hidden' ? 0 : 1;
         expect(scrollbars).to.equal(getScrollbarWidth() > 0 ? 2 : 1);
@@ -95,7 +95,7 @@
         expect(wheel(-1, 0).defaultPrevented).to.be.false;
         expect(wheel(1, 0).defaultPrevented).to.be.true;
 
-        var table = grid.$.table;
+        const table = grid.$.table;
         table.scrollLeft = table.scrollWidth - table.offsetWidth;
         grid._previousMomentum = 0;
         grid._debouncerIgnoreNewWheel.flush();
@@ -118,8 +118,8 @@
       });
 
       it('should not throw on table wheel', () => {
-        var tableWheel = () => {
-          var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+        const tableWheel = () => {
+          const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
           e.deltaY = -1;
           e.deltaX = 0;
           grid.$.items.dispatchEvent(e);

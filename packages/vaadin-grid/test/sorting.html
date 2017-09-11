@@ -60,7 +60,7 @@
     describe('sorting', () => {
 
       describe('sorter', () => {
-        var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
+        let sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
         beforeEach(() => {
 
@@ -74,7 +74,7 @@
         });
 
         function clickSorter(sorter) {
-          var clickEvent = new CustomEvent('click', {bubbles: true, cancelable: true, composed: true});
+          const clickEvent = new CustomEvent('click', {bubbles: true, cancelable: true, composed: true});
           sorter.dispatchEvent(clickEvent);
           return clickEvent;
         }
@@ -160,7 +160,7 @@
           });
 
           it('should announce direction change', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
             sorter.direction = 'asc';
@@ -171,7 +171,7 @@
           });
 
           it('should announce order change', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
             sorter._order = 0;
@@ -182,7 +182,7 @@
           });
 
           it('should debounce direction and order changes', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
             sorter.direction = 'asc';
@@ -197,7 +197,7 @@
       });
 
       describe('sorter in cell content', () => {
-        var cellContent, sorter, announcer;
+        let cellContent, sorter, announcer;
 
         beforeEach(() => {
 
@@ -228,7 +228,7 @@
       });
 
       describe('grid', () => {
-        var grid, sorterFirst, sorterLast;
+        let grid, sorterFirst, sorterLast;
 
         beforeEach(done => {
 
@@ -254,13 +254,13 @@
         });
 
         it('should be clickable', () => {
-          var title = Polymer.dom(sorterFirst).querySelector('.title');
+          const title = Polymer.dom(sorterFirst).querySelector('.title');
           expect(window.getComputedStyle(title).cursor).to.equal('pointer');
         });
 
         it('should ignore sorter', () => {
           sorterFirst.direction = '';
-          var sortOrders = grid._mapSorters();
+          const sortOrders = grid._mapSorters();
           expect(sortOrders).to.have.length(1);
           expect(sortOrders[0].path).to.equal('last');
           expect(sortOrders[0].direction).to.equal('desc');
@@ -307,8 +307,8 @@
             sorterFirst.direction = null;
             sorterLast.direction = null;
             grid.items = buildDataSet(100);
-            var bodyRows = getRows(grid.$.items);
-            var cells = getRowCells(bodyRows[0]);
+            const bodyRows = getRows(grid.$.items);
+            const cells = getRowCells(bodyRows[0]);
             expect(cells[0]._instance.item).to.equal(grid.items[0]);
           });
 
@@ -424,8 +424,8 @@
           });
 
           it('should request with default sorting', () => {
-            var lastCall = grid.dataProvider.lastCall;
-            var params = lastCall.args[0];
+            const lastCall = grid.dataProvider.lastCall;
+            const params = lastCall.args[0];
             expect(params.sortOrders).to.eql([{
               path: 'last',
               direction: 'desc'
@@ -437,8 +437,8 @@
 
           it('should request new data on sort', () => {
             sorterFirst.direction = 'desc';
-            var lastCall = grid.dataProvider.lastCall;
-            var params = lastCall.args[0];
+            const lastCall = grid.dataProvider.lastCall;
+            const params = lastCall.args[0];
             expect(params.sortOrders).to.eql([{
               path: 'first',
               direction: 'desc'

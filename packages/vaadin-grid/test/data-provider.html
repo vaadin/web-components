@@ -77,9 +77,9 @@
   <script>
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
+      const table = grid.$.table;
 
-      var handler = () => {
+      const handler = () => {
         if (grid.$.table.scrollTop > 0) {
           table.scrollTop -= 2500;
         } else {
@@ -94,9 +94,9 @@
 
     function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
+      const table = grid.$.table;
 
-      var handler = () => {
+      const handler = () => {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
         } else {
@@ -110,8 +110,8 @@
     }
 
     describe('data-provider', () => {
-      var container, grid;
-      var loadDebounceTime = 100;
+      let container, grid;
+      const loadDebounceTime = 100;
 
       beforeEach(() => {
 
@@ -157,7 +157,7 @@
           simulateScrollToEnd(grid, () => {
             setTimeout(() => {
               // 9 is last page out of 100 items / 10 per page.
-              var pages = container.dataProvider.getCalls().map(call => call.args[0].page);
+              const pages = container.dataProvider.getCalls().map(call => call.args[0].page);
               expect(pages).to.contain.members([7, 8, 9]);
               done();
             }, loadDebounceTime);
@@ -173,7 +173,7 @@
             container.dataProvider.reset();
             simulateScrollToStart(grid, () => {
               setTimeout(() => {
-                var pages = container.dataProvider.getCalls().map(call => call.args[0].page);
+                const pages = container.dataProvider.getCalls().map(call => call.args[0].page);
                 expect(pages).not.to.contain(0);
                 done();
               }, loadDebounceTime);
@@ -192,7 +192,7 @@
 
         setTimeout(() => {
           expect(container.dataProvider.called).to.be.true;
-          var oldFirstItem = grid._cache[0];
+          const oldFirstItem = grid._cache[0];
           expect(oldFirstItem).to.be.ok;
 
           container.dataProvider.reset();
@@ -244,16 +244,16 @@
         expect(grid.lastVisibleIndex + grid._vidxOffset).to.equal(grid.size - 1);
 
         // Test actual last visible item
-        var rect = grid.getBoundingClientRect();
-        var scope = Polymer.Settings.useShadow ? grid.domHost.root : document;
-        var lastVisibleItem = scope.elementFromPoint(rect.left + 15, rect.bottom - 15);
+        const rect = grid.getBoundingClientRect();
+        const scope = Polymer.Settings.useShadow ? grid.domHost.root : document;
+        const lastVisibleItem = scope.elementFromPoint(rect.left + 15, rect.bottom - 15);
         expect(lastVisibleItem.innerText.trim()).to.equal('foo' + (grid.size - 1));
       });
     });
 
     describe('set manually', () => {
 
-      var grid;
+      let grid;
 
       beforeEach(() => {
 
@@ -262,8 +262,8 @@
       });
 
       it('should warn about missing size', () => {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
         grid._debouncerCheckSize.flush();
@@ -273,8 +273,8 @@
       });
 
       it('should not warn about missing size', () => {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
@@ -310,7 +310,7 @@
         grid.size = 10;
 
         for (var i = 0; i < grid.dataProvider.callCount; i++) {
-          var page = grid.dataProvider.getCall(i).args[0].page;
+          const page = grid.dataProvider.getCall(i).args[0].page;
           expect(page).to.be.above(-1);
         }
       });

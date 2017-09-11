@@ -51,8 +51,8 @@
   <script>
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
-      var listener = () => {
+      const table = grid.$.table;
+      const listener = () => {
         if (table.scrollTop > 0) {
           table.scrollTop -= 2000;
           grid._scrollHandler();
@@ -67,8 +67,8 @@
 
     function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
-      var listener = () => {
+      const table = grid.$.table;
+      const listener = () => {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
           grid._scrollHandler();
@@ -82,7 +82,7 @@
     }
 
     describe('scrolling', function() {
-      var container, grid;
+      let container, grid;
       this.timeout(300000);
 
       [100, 10000, 100000, 1000000].forEach((size) => {

@@ -57,7 +57,7 @@
 
   <script>
     describe('column resizing', () => {
-      var grid, headerCells, handle;
+      let grid, headerCells, handle;
 
       beforeEach(done => {
 
@@ -86,16 +86,16 @@
       });
 
       it('should display resize handle as top-most element', () => {
-        var rect = headerCells[1].getBoundingClientRect();
-        var scrollerRect = grid.$.scroller.getBoundingClientRect();
-        var x = rect.left + handle.offsetWidth / 4;
-        var y = rect.top + rect.height / 2;
+        const rect = headerCells[1].getBoundingClientRect();
+        const scrollerRect = grid.$.scroller.getBoundingClientRect();
+        const x = rect.left + handle.offsetWidth / 4;
+        const y = rect.top + rect.height / 2;
         expect(getElementFromPoint(grid, x, y)).to.equal(handle);
       });
 
       it('should resize on track', () => {
-        var options = {node: handle};
-        var rect = headerCells[0].getBoundingClientRect();
+        const options = {node: handle};
+        const rect = headerCells[0].getBoundingClientRect();
 
         fire('track', {state: 'start'}, options);
         fire('track', {state: 'track', x: rect.left + 200, y: 0}, options);
@@ -104,7 +104,7 @@
       });
 
       it('should not listen to track event on scroller', () => {
-        var scroller = grid.$.scroller;
+        const scroller = grid.$.scroller;
         fire('track', {state: 'start'}, {node: scroller});
         expect(scroller.getAttribute('column-resizing')).to.be.null;
       });
@@ -114,13 +114,13 @@
         grid._columnTree[0][0].frozen = true;
         grid._columnTree[0][0].resizable = false;
         grid._columnTree[0][1].resizable = true;
-        var table = grid.$.table;
+        const table = grid.$.table;
 
         listenOnce(table, 'scroll', () => {
-          var secondCell = getRowCells(getRows(grid.$.header)[0])[1];
-          var rect = secondCell.getBoundingClientRect();
-          var x = rect.right - 10;
-          var y = rect.top + rect.height / 2;
+          const secondCell = getRowCells(getRows(grid.$.header)[0])[1];
+          const rect = secondCell.getBoundingClientRect();
+          const x = rect.right - 10;
+          const y = rect.top + rect.height / 2;
           expect(getElementFromPoint(grid, x, y)).not.to.equal(secondCell.querySelector('[part~="resize-handle"]'));
           done();
         });
@@ -167,9 +167,9 @@
       });
 
       it('should notify resize on column resize', () => {
-        var spy = sinon.spy(grid, '_resizeHandler');
-        var options = {node: handle};
-        var rect = headerCells[0].getBoundingClientRect();
+        const spy = sinon.spy(grid, '_resizeHandler');
+        const options = {node: handle};
+        const rect = headerCells[0].getBoundingClientRect();
 
         fire('track', {state: 'start'}, options);
         fire('track', {state: 'track', x: rect.left + 200, y: 0}, options);
@@ -178,13 +178,13 @@
       });
 
       it('should prevent default mousedown action on resize handle', () => {
-        var event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
+        const event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
         handle.dispatchEvent(event);
         expect(event.defaultPrevented).to.be.true;
       });
 
       it('should allow default mousedown action on cells', () => {
-        var event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
+        const event = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
         headerCells[0].dispatchEvent(event);
         expect(event.defaultPrevented).to.be.false;
       });
@@ -192,7 +192,7 @@
     });
 
     describe('column group resizing', () => {
-      var grid;
+      let grid;
 
       beforeEach(done => {
 
@@ -212,7 +212,7 @@
       });
 
       it('should inherit resizable value from parent group', done => {
-        var newColumn = document.createElement('vaadin-grid-column');
+        const newColumn = document.createElement('vaadin-grid-column');
         Polymer.dom(grid._columnTree[0][0]).appendChild(newColumn);
         Polymer.dom.flush();
 
@@ -227,24 +227,24 @@
       });
 
       it('should have resizable false by default on column', () => {
-        var newColumn = document.createElement('vaadin-grid-column');
+        const newColumn = document.createElement('vaadin-grid-column');
 
         expect(newColumn.resizable).to.be.false;
       });
 
       it('should not have resizable by default on column group', () => {
-        var newColumn = document.createElement('vaadin-grid-column-group');
+        const newColumn = document.createElement('vaadin-grid-column-group');
 
         expect(newColumn.resizable).to.be.undefined;
       });
 
       it('should resize the child column', () => {
-        var headerRows = getRows(grid.$.header);
-        var handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+        const headerRows = getRows(grid.$.header);
+        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
-        var cell = getRowCells(headerRows[1])[1];
-        var rect = cell.getBoundingClientRect();
-        var options = {node: handle};
+        const cell = getRowCells(headerRows[1])[1];
+        const rect = cell.getBoundingClientRect();
+        const options = {node: handle};
         fire('track', {state: 'start'}, options);
         fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
 
@@ -253,12 +253,12 @@
 
       it('should resize the last non-hidden child column', () => {
         grid._columnTree[1][1].hidden = true;
-        var headerRows = getRows(grid.$.header);
-        var handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
+        const headerRows = getRows(grid.$.header);
+        const handle = getRowCells(headerRows[0])[0].querySelector('[part~="resize-handle"]');
 
-        var cell = getRowCells(headerRows[1])[0];
-        var rect = cell.getBoundingClientRect();
-        var options = {node: handle};
+        const cell = getRowCells(headerRows[1])[0];
+        const rect = cell.getBoundingClientRect();
+        const options = {node: handle};
         fire('track', {state: 'start'}, options);
         fire('track', {state: 'track', x: rect.right + 100, y: 0}, options);
 

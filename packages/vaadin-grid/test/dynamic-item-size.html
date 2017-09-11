@@ -40,7 +40,7 @@
   <script>
 
     describe('Dynamic item size', () => {
-      var scroller, grid;
+      let scroller, grid;
 
       beforeEach(() => {
         grid = fixture('default');
@@ -50,7 +50,7 @@
       });
 
       it('update size using item index', done => {
-        var firstItem = getFirstVisibleItem(grid);
+        const firstItem = getFirstVisibleItem(grid);
 
         expect(firstItem.offsetHeight).to.equal(20);
 

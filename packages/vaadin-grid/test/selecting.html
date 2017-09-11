@@ -58,9 +58,9 @@
   </test-fixture>
 
   <script>
-    var grid;
-    var rows;
-    var cachedItems;
+    let grid;
+    let rows;
+    let cachedItems;
 
     describe('selection', () => {
       beforeEach(() => {
@@ -79,14 +79,14 @@
       });
 
       it('should bind to cells', () => {
-        var cells = getRowCells(rows[0]);
+        const cells = getRowCells(rows[0]);
         expect(cells[0]._instance.selected).to.be.true;
         expect(cells[1]._instance.selected).to.be.true;
         expect(getRowCells(rows[1])[0]._instance.selected).to.be.false;
       });
 
       it('should reflect cell instance value', () => {
-        var cells = getRowCells(rows[0]);
+        const cells = getRowCells(rows[0]);
         cells[0]._instance.selected = false;
         expect(cells[0]._instance.selected).to.be.false;
         expect(grid.selectedItems).to.be.empty;
@@ -127,10 +127,10 @@
     });
 
     describe('multi selection column', () => {
-      var headerRows;
-      var firstHeaderCellContent, firstBodyCellContent;
-      var selectionColumn;
-      var selectAllCheckbox, firstBodyCheckbox;
+      let headerRows;
+      let firstHeaderCellContent, firstBodyCellContent;
+      let selectionColumn;
+      let selectAllCheckbox, firstBodyCheckbox;
 
       beforeEach(() => {
 
@@ -164,7 +164,7 @@
       });
 
       it('should add the item to selectedItems when row is clicked and auto-select is enabled', () => {
-        var cell = getRowCells(rows[1])[1];
+        const cell = getRowCells(rows[1])[1];
         cell.click();
 
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
@@ -172,13 +172,13 @@
 
       it('should remove the item from selectedItems when row is clicked and auto-select is enabled', () => {
         grid.selectItem(1);
-        var cell = getRowCells(rows[1])[1];
+        const cell = getRowCells(rows[1])[1];
         cell.click();
         expect(grid.selectedItems).to.eql([]);
       });
 
       it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', () => {
-        var cell = getRowCells(rows[1])[1];
+        const cell = getRowCells(rows[1])[1];
         cell.click();
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
         cell.click();
@@ -186,7 +186,7 @@
       });
 
       it('should have bound the body checkbox to selected items', () => {
-        var selectCheckbox = firstBodyCheckbox;
+        const selectCheckbox = firstBodyCheckbox;
 
         grid.push('selectedItems', cachedItems[0]);
 
@@ -256,13 +256,13 @@
       });
 
       it('should be possible to override the body template', () => {
-        var secondCell = getCellContent(getRowCells(rows[0])[1]);
+        const secondCell = getCellContent(getRowCells(rows[0])[1]);
 
         expect(secondCell.innerHTML).to.eql(secondCell.textContent);
       });
 
       it('should be possible to override the header template', () => {
-        var secondCell = getCellContent(getRowCells(headerRows[1])[1]);
+        const secondCell = getCellContent(getRowCells(headerRows[1])[1]);
 
         expect(secondCell.innerHTML).to.eql('header');
       });
@@ -345,8 +345,8 @@
         selectAllCheckbox.click();
         firstBodyCheckbox.checked = false;
 
-        var details = [];
-        var spy = sinon.spy( e => {
+        const details = [];
+        const spy = sinon.spy( e => {
           // event object gets reused so need to store the details before asserting.
           details.push(e.detail);
         });
@@ -361,8 +361,8 @@
 
       it('should select-all when all items are selected', () => {
         rows.forEach(row => {
-          var cellContent = getCellContent(getRowCells(row)[0]);
-          var checkbox = cellContent.children[0];
+          const cellContent = getCellContent(getRowCells(row)[0]);
+          const checkbox = cellContent.children[0];
           checkbox.checked = true;
         });
 
@@ -374,8 +374,8 @@
         selectAllCheckbox.click();
 
         rows.forEach(row => {
-          var cellContent = getCellContent(getRowCells(row)[0]);
-          var checkbox = cellContent.children[0];
+          const cellContent = getCellContent(getRowCells(row)[0]);
+          const checkbox = cellContent.children[0];
           checkbox.checked = false;
         });
 
@@ -388,7 +388,7 @@
 
         firstBodyCheckbox.checked = true;
 
-        var filter = grid.querySelector('#filter');
+        const filter = grid.querySelector('#filter');
         filter.value = 'foo';
         Polymer.Base.fire('input', {}, {node: filter});
 
@@ -401,7 +401,7 @@
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
 
-        var checkbox = getBodyCellContent(grid, 0, 0).firstElementChild;
+        const checkbox = getBodyCellContent(grid, 0, 0).firstElementChild;
         expect(() => checkbox.click()).not.to.throw(Error);
       });
     });

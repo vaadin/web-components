@@ -45,7 +45,7 @@
       ['small', 'large'].forEach(scale => {
 
         describe('Scroll: ' + scale, () => {
-          var grid;
+          let grid;
 
           beforeEach(done => {
             grid = fixture(scale);
@@ -56,14 +56,14 @@
 
           it('should scroll to scaled index', () => {
             [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 77, 88, 100].forEach(percentage => {
-              var index = Math.ceil((grid.size - 1) * percentage / 100);
+              const index = Math.ceil((grid.size - 1) * percentage / 100);
               grid.scrollToIndex(0);
               grid.scrollToIndex(index);
 
               if (percentage === 100) {
                 expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(index);
 
-                var table = grid.$.table;
+                const table = grid.$.table;
                 expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
               } else {
                 expect(grid._vidxOffset + grid.firstVisibleIndex).to.equal(index);
@@ -95,7 +95,7 @@
       });
 
       describe('other', () => {
-        var grid, scroller;
+        let grid, scroller;
 
         beforeEach(done => {
           grid = fixture('large');

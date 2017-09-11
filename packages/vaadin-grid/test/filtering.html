@@ -67,8 +67,8 @@
   <script>
 
     describe('filter', () => {
-      var filter;
-      var filterWrapper;
+      let filter;
+      let filterWrapper;
 
       beforeEach(() => {
 
@@ -96,7 +96,7 @@
           done();
         });
 
-        var input = filter.children[0];
+        const input = filter.children[0];
 
         input.value = 'foo';
         Polymer.Base.fire('input', {}, {node: input});
@@ -108,7 +108,7 @@
     }
 
     describe('filtering', () => {
-      var grid;
+      let grid;
 
       beforeEach(() => {
 
@@ -154,7 +154,7 @@
 
     describe('array data provider', () => {
 
-      var grid;
+      let grid;
 
       beforeEach(() => {
 
@@ -202,7 +202,7 @@
 
       it('should not filter if there is no data yet', () => {
 
-        var grid = fixture('grid');
+        const grid = fixture('grid');
         grid.size = 100;
         grid.dataProvider = (params, callback) => {
           // Don't provide any data

@@ -133,16 +133,16 @@
 
   <script>
     function getVisualCellContent(section, row, col) {
-      var cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
+      let cell = Array.from(section.querySelectorAll('[part~="cell"]:not([part~="details-cell"])')).pop();
       if (section.id === 'footer') {
         cell = Polymer.dom(section).querySelector('[part~="cell"]');
       }
-      var sectionRect = section.getBoundingClientRect();
-      var sectionBorder = parseInt(section.style.borderTopWidth || 0);
-      var cellWidth = cell.offsetWidth;
-      var cellHeight = cell.offsetHeight;
-      var x = sectionRect.left + (col * cellWidth) + cellWidth / 2;
-      var y = sectionRect.top + sectionBorder + (row * cellHeight) + cellHeight / 2;
+      const sectionRect = section.getBoundingClientRect();
+      const sectionBorder = parseInt(section.style.borderTopWidth || 0);
+      const cellWidth = cell.offsetWidth;
+      const cellHeight = cell.offsetHeight;
+      const x = sectionRect.left + (col * cellWidth) + cellWidth / 2;
+      const y = sectionRect.top + sectionBorder + (row * cellHeight) + cellHeight / 2;
       const grid = section.parentNode.parentNode.parentNode.host;
       return grid._cellFromPoint(x, y)._content;
     }
@@ -152,10 +152,10 @@
     }
 
     function getVisualColumnCellContents(grid, col) {
-      var scroller = grid.$.scroller;
-      var headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
-      var footerContent = getVisualCellContent(grid.$.footer, 0, col);
-      var bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) => getVisualCellContent(grid.$.items, rowIndex, col));
+      const scroller = grid.$.scroller;
+      const headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
+      const footerContent = getVisualCellContent(grid.$.footer, 0, col);
+      const bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) => getVisualCellContent(grid.$.items, rowIndex, col));
       return bodyContent.concat(headerContent).concat(footerContent);
     }
 
@@ -171,7 +171,7 @@
 
     describe('reordering simple grid', () => {
 
-      var grid, headerContent;
+      let grid, headerContent;
 
       beforeEach(done => {
 
@@ -179,7 +179,7 @@
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
         flush(() => {
-          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
+          const colCount = getRowCells(getRows(grid.$.header)[0]).length;
           headerContent = [];
           for (var i = 0; i < colCount; i++) {
             headerContent.push(getVisualHeaderCellContent(grid, 0, i));
@@ -195,13 +195,13 @@
 
       it('should indicate dragged cells', () => {
         dragStart(headerContent[0]);
-        var cell = getCellByCellContent(grid, headerContent[0]);
+        const cell = getCellByCellContent(grid, headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('dragging');
       });
 
       it('should clear reorder status on dragend', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
-        var cell = getCellByCellContent(grid, headerContent[0]);
+        const cell = getCellByCellContent(grid, headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('');
         expect(grid.hasAttribute('reordering')).to.be.false;
       });
@@ -213,22 +213,22 @@
 
       it('should have header cell content', () => {
         dragStart(headerContent[0]);
-        var ghost = grid.$.reorderghost;
+        const ghost = grid.$.reorderghost;
         expect(ghost.innerHTML).to.equal('1');
       });
 
       it('should not be accessible', () => {
         dragStart(headerContent[0]);
 
-        var ghost = grid.$.reorderghost;
+        const ghost = grid.$.reorderghost;
         expect(window.getComputedStyle(ghost).pointerEvents).to.equal('none');
       });
 
       it('should position ghost', () => {
-        var ghost = grid.$.reorderghost;
+        const ghost = grid.$.reorderghost;
         dragOver(headerContent[0], headerContent[1]);
 
-        var ghostRect = ghost.getBoundingClientRect();
+        const ghostRect = ghost.getBoundingClientRect();
         expect(ghostRect.left).to.be.closeTo(grid._ie ? 118 : 110, 1);
         expect(ghostRect.top).to.be.closeTo(grid._ie ? 8 : 0, 1);
       });
@@ -241,7 +241,7 @@
       });
 
       it('should not adjust outer-scroller z while reordering', () => {
-        var zIndex = window.getComputedStyle(grid.$.outerscroller).zIndex;
+        const zIndex = window.getComputedStyle(grid.$.outerscroller).zIndex;
         dragStart(headerContent[0]);
         grid._scrollHandler();
         expect(window.getComputedStyle(grid.$.outerscroller).zIndex).to.equal(zIndex);
@@ -249,24 +249,24 @@
 
       it('should prevent contextmenu while reordering', () => {
         dragStart(headerContent[0]);
-        var e = new CustomEvent('contextmenu', {cancelable: true, bubbles: true});
+        const e = new CustomEvent('contextmenu', {cancelable: true, bubbles: true});
         headerContent[0].dispatchEvent(e);
         expect(e.defaultPrevented).to.be.true;
       });
 
       it('should cancel touchmove', () => {
         dragStart(headerContent[0]);
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
+        const e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
         expect(e.defaultPrevented).to.be.true;
       });
 
       it('should not cancel touchmove', () => {
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
+        const e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
         expect(e.defaultPrevented).to.be.false;
       });
 
       it('should not cancel touchmove on resizer', () => {
-        var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
+        const e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
           getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
         expect(e.defaultPrevented).to.be.false;
       });
@@ -330,7 +330,7 @@
         });
 
         it('should update last-column attribute', () => {
-          var cell = getCellByCellContent(grid, headerContent[3]);
+          let cell = getCellByCellContent(grid, headerContent[3]);
           expect(cell.hasAttribute('last-column')).to.be.true;
 
           dragOver(headerContent[2], headerContent[3]);
@@ -341,14 +341,14 @@
         it('should update last-column attribute (details open)', () => {
           grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
-          var cell = getCellByCellContent(grid, headerContent[2]);
+          let cell = getCellByCellContent(grid, headerContent[2]);
           cell = getCellByCellContent(grid, headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
         it('should set order to new column', done => {
           dragAndDropOver(headerContent[0], headerContent[1]);
-          var col = fixture('newColumn');
+          const col = fixture('newColumn');
           grid.appendChild(col);
           animationFrameFlush(() => {
             expect(col._order).to.equal(50000000);
@@ -361,7 +361,7 @@
       describe('frozen columns', () => {
 
         beforeEach(() => {
-          var columns = Polymer.dom(grid).querySelectorAll('vaadin-grid-column');
+          const columns = Polymer.dom(grid).querySelectorAll('vaadin-grid-column');
           columns[0].frozen = true;
           columns[1].frozen = true;
         });
@@ -382,7 +382,7 @@
         });
 
         it('should update last-frozen while dragging', () => {
-          var cell = getCellByCellContent(grid, headerContent[0]);
+          const cell = getCellByCellContent(grid, headerContent[0]);
           expect(cell.hasAttribute('last-frozen')).to.be.false;
           dragOver(headerContent[0], headerContent[1]);
           expect(cell.hasAttribute('last-frozen')).to.be.true;
@@ -394,7 +394,7 @@
 
     describe('reordering grid with columns groups', () => {
 
-      var grid;
+      let grid;
 
       beforeEach(done => {
         grid = fixture('groups');
@@ -428,7 +428,7 @@
           getVisualHeaderCellContent(grid, 0, 0),
           getVisualHeaderCellContent(grid, 0, 3)
         );
-        var firstGroupCell = getVisualHeaderCellContent(grid, 0, 0);
+        const firstGroupCell = getVisualHeaderCellContent(grid, 0, 0);
         expect(firstGroupCell.innerText).to.equal('2');
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
@@ -465,7 +465,7 @@
 
     describe('reordering grid with different column widths', () => {
 
-      var grid, headerContent0, headerContent1, content0rect, content1rect;
+      let grid, headerContent0, headerContent1, content0rect, content1rect;
 
       beforeEach(done => {
         grid = fixture('differentWidths');
@@ -494,7 +494,7 @@
 
     describe('large column group', () => {
 
-      var grid;
+      let grid;
 
       beforeEach(done => {
 
@@ -512,7 +512,7 @@
 
     describe('reordering with draggable contents', () => {
 
-      var grid, visualColumnCellContents;
+      let grid, visualColumnCellContents;
 
       beforeEach(done => {
 
@@ -520,7 +520,7 @@
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
         flush(() => {
-          var colCount = getRowCells(getRows(grid.$.header)[0]).length;
+          const colCount = getRowCells(getRows(grid.$.header)[0]).length;
           visualColumnCellContents = [];
           for (var i = 0; i < colCount; i++) {
             visualColumnCellContents.push(getVisualColumnCellContents(grid, i));

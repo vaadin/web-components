@@ -47,7 +47,7 @@
 
   <script>
     describe('dynamic physical count', () => {
-      var scroller, grid;
+      let scroller, grid;
 
       beforeEach(() => {
         grid = fixture('default');
@@ -57,9 +57,9 @@
       });
 
       it('increase pool size', () => {
-        var lastItem = grid._physicalItems[grid.lastVisibleIndex];
-        var lastItemHeight = lastItem.offsetHeight;
-        var expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
+        const lastItem = grid._physicalItems[grid.lastVisibleIndex];
+        const lastItemHeight = lastItem.offsetHeight;
+        const expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
 
         expect(scroller.offsetHeight).to.equal(grid.offsetHeight);
         expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
@@ -94,7 +94,7 @@
       });
 
       it('should minimize increase pool iterations', () => {
-        var spy = sinon.spy(grid, '_increasePoolIfNeeded');
+        const spy = sinon.spy(grid, '_increasePoolIfNeeded');
         grid.style.height = '1000px';
         grid._resizeHandler();
         flushGrid(grid);

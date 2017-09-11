@@ -58,7 +58,7 @@
 
   <script>
     describe('array data provider', () => {
-      var grid, body;
+      let grid, body;
 
       function getContent(row, column) {
         return getCellContent(getCell(row, column)).innerText;
@@ -87,7 +87,7 @@
       });
 
       it('should have right amount of data', () => {
-        var bodyRows = getRows(body);
+        const bodyRows = getRows(body);
         expect(bodyRows).to.have.length(2);
       });
 
@@ -122,7 +122,7 @@
       });
 
       it('should not override custom data provider', () => {
-        var ds = grid.dataProvider = () => {};
+        const ds = grid.dataProvider = () => {};
         grid.items = [1, 2, 3];
         expect(grid.dataProvider).to.equal(ds);
       });
@@ -142,7 +142,7 @@
     });
 
     describe('invalid paths', () => {
-      var grid;
+      let grid;
 
       beforeEach(() => {
         grid = fixture('invalid-path');
@@ -157,13 +157,13 @@
       });
 
       describe('invalid sorters paths', () => {
-        var sorter;
+        let sorter;
 
         beforeEach(() => sorter = Polymer.dom(grid).querySelector('vaadin-grid-sorter'));
 
         it('should warn about invalid path with undefined parent property', () => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           sorter.path = 'foo.bar';
           click(sorter);
@@ -173,8 +173,8 @@
         });
 
         it('should not warn about undefined values with defined parent property', () => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           sorter.path = 'name.foo';
           click(sorter);
@@ -184,8 +184,8 @@
         });
 
         it('should not warn about invalid path without dots', () => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           sorter.path = 'foobar';
           click(sorter);
@@ -203,8 +203,8 @@
             }
           }];
 
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           sorter.path = 'name.last.foo';
           click(sorter);
@@ -215,13 +215,13 @@
       });
 
       describe('invalid filters paths', () => {
-        var filter;
+        let filter;
 
         beforeEach(() => filter = Polymer.dom(grid).querySelector('vaadin-grid-filter'));
 
         it('should warn about invalid path with undefined parent property', done => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
             Polymer.Base.async(() => {
@@ -235,8 +235,8 @@
         });
 
         it('should not warn about undefined values with defined parent property', done => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
             Polymer.Base.async(() => {
@@ -250,8 +250,8 @@
         });
 
         it('should not warn about invalid path without dots', done => {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
             Polymer.Base.async(() => {

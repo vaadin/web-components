@@ -103,13 +103,13 @@
       };
     }
 
-    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (!ios) {
       describe('keyboard navigation', () => {
-        var grid, focusable, scroller, header, footer, body;
+        let grid, focusable, scroller, header, footer, body;
         beforeEach(done => {
 
-          var fixtureElements = fixture('default');
+          const fixtureElements = fixture('default');
           grid = fixtureElements[0];
           focusable = fixtureElements[1];
 
@@ -142,9 +142,9 @@
         }
 
         function clickFirstBodyInput(rowIndex) {
-          var cell = getCell(rowIndex || 0, 1);
+          const cell = getCell(rowIndex || 0, 1);
 
-          var input = getCellContent(cell).children[0];
+          const input = getCellContent(cell).children[0];
           input.click();
           input.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
           input.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
@@ -220,8 +220,8 @@
         }
 
         function focusHeaderInput() {
-          var cell = grid.$.header.children[0].children[1];
-          var contents = getCellContent(cell);
+          const cell = grid.$.header.children[0].children[1];
+          const contents = getCellContent(cell);
 
           contents.children[0].click();
 
@@ -231,8 +231,8 @@
         }
 
         function focusFooterInput() {
-          var cell = grid.$.footer.children[0].children[1];
-          var contents = getCellContent(cell);
+          const cell = grid.$.footer.children[0].children[1];
+          const contents = getCellContent(cell);
 
           contents.children[0].click();
 
@@ -797,7 +797,7 @@
             });
 
             it('should set focused cell when tapping on details cell', () => {
-              var rowDetailsCell = findRowDetailsCell(body.children[0]);
+              const rowDetailsCell = findRowDetailsCell(body.children[0]);
               grid.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
 
               expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
@@ -807,7 +807,7 @@
               down();
 
               animationFrameFlush(() => {
-                var input = getCellContent(grid.shadowRoot.activeElement).children[0];
+                const input = getCellContent(grid.shadowRoot.activeElement).children[0];
                 input.focus = sinon.spy();
 
                 enter();
@@ -1133,8 +1133,8 @@
             });
 
             it('should click first cell child on space', () => {
-              var firstChild = getCellContent(header.children[0].children[2]).children[0];
-              var clickStub = sinon.stub(firstChild, 'click');
+              const firstChild = getCellContent(header.children[0].children[2]).children[0];
+              const clickStub = sinon.stub(firstChild, 'click');
 
               space();
 
@@ -1142,8 +1142,8 @@
             });
 
             it('should not click other cell children on space', () => {
-              var secondChild = getCellContent(header.children[0].children[2]).children[1];
-              var clickStub = sinon.stub(secondChild, 'click');
+              const secondChild = getCellContent(header.children[0].children[2]).children[1];
+              const clickStub = sinon.stub(secondChild, 'click');
 
               space();
 
@@ -1151,7 +1151,7 @@
             });
 
             it('should prevent default keydown action when clicking on space', () => {
-              var event = MockInteractions.keyboardEventFor('keydown', 32, [], ' ');
+              const event = MockInteractions.keyboardEventFor('keydown', 32, [], ' ');
 
               grid.dispatchEvent(event);
 
@@ -1159,9 +1159,9 @@
             });
 
             it('should not activate if synthetic click has default prevented', () => {
-              var firstBodyRowFirstChild = getCellContent(getRows(body)[0].children[2]).children[0];
+              const firstBodyRowFirstChild = getCellContent(getRows(body)[0].children[2]).children[0];
 
-              var spy = sinon.spy();
+              const spy = sinon.spy();
               listenOnce(firstBodyRowFirstChild, 'click', e => {
                 spy();
                 e.preventDefault();
@@ -1208,9 +1208,9 @@
           it('should focus on click', () => {
             clickItem(1);
 
-            var cell = getFirstCell(1);
-            var row = cell.parentElement;
-            var container = row.parentElement;
+            const cell = getFirstCell(1);
+            const row = cell.parentElement;
+            const container = row.parentElement;
 
             expect(cell.hasAttribute('focused')).to.equal.true;
             expect(row.hasAttribute('focused')).to.equal.true;
@@ -1227,12 +1227,12 @@
         });
 
         describe('interaction mode', () => {
-          var input;
+          let input;
 
           beforeEach(() => {
             clickItem(0);
 
-            var cell = getCell(0, 1);
+            const cell = getCell(0, 1);
             input = getCellContent(cell).children[0];
 
             sinon.stub(input, 'focus', e => {
@@ -1275,8 +1275,8 @@
           });
 
           it('should focus the first element when entering interaction mode with enter', () => {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
 
             right(); // focus the cell with input.
@@ -1287,8 +1287,8 @@
           });
 
           it('should exit interaction mode from focused single-line input with enter', () => {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.type = 'text';
 
             right(); // focus the cell with input.
@@ -1300,8 +1300,8 @@
           });
 
           it('should not exit interaction mode from focused non-single-line input with enter', () => {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.type = 'button';
 
             right(); // focus the cell with input.
@@ -1313,8 +1313,8 @@
           });
 
           it('should focus the first element when entering interaction mode with f2', () => {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
 
             right(); // focus the cell with input.
@@ -1334,8 +1334,8 @@
           });
 
           it('should focus the element with `focus-target` when entering interaction mode', () => {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
             input.parentElement.insertBefore(document.createElement('div'), input);
             input.setAttribute('focus-target', '');
@@ -1348,7 +1348,7 @@
           });
 
           it('should not navigate with arrow up when in interaction mode', () => {
-            var input = clickFirstBodyInput(1);
+            const input = clickFirstBodyInput(1);
 
             up(input);
             escape(input);
@@ -1358,7 +1358,7 @@
           });
 
           it('should not navigate with arrow down when in interaction mode', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             down(input);
             escape(input);
@@ -1369,7 +1369,7 @@
 
           it('should not navigate with arrow left when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             left(input);
             escape(input);
@@ -1379,7 +1379,7 @@
           });
 
           it('should not navigate with arrow right when in interaction mode', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             right(input);
             escape(input);
@@ -1390,7 +1390,7 @@
 
           it('should not navigate with home when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             home(input);
             escape(input);
@@ -1401,7 +1401,7 @@
 
           it('should not navigate with ctrl+home when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             ctrlHome(input);
             escape(input);
@@ -1411,7 +1411,7 @@
           });
 
           it('should not navigate with end when in interaction mode', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             end(input);
             escape(input);
@@ -1421,7 +1421,7 @@
           });
 
           it('should not navigate with ctrl+end when in interaction mode', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             ctrlEnd(input);
             escape(input);
@@ -1431,7 +1431,7 @@
           });
 
           it('should not navigate with page down when in interaction mode', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             pageDown(input);
             escape(input);
@@ -1441,7 +1441,7 @@
           });
 
           it('should not navigate with page up when in interaction mode', () => {
-            var input = clickFirstBodyInput(1);
+            const input = clickFirstBodyInput(1);
 
             pageUp(input);
             escape(input);
@@ -1452,7 +1452,7 @@
 
           it('should not activate on space when in interaction mode', () => {
             grid.activeItem = null;
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             space(input);
 
@@ -1468,7 +1468,7 @@
           });
 
           it('should exit interaction mode with F2', () => {
-            var input = getCellContent(getCell(0, 1)).children[0];
+            const input = getCellContent(getCell(0, 1)).children[0];
 
             right();
             f2();
@@ -1479,7 +1479,7 @@
           });
 
           it('should remove focus from cell when exiting interaction mode with F2', () => {
-            var input = getCellContent(getCell(0, 1)).children[0];
+            const input = getCellContent(getCell(0, 1)).children[0];
 
             right();
             enter();
@@ -1498,7 +1498,7 @@
           });
 
           it('should remove focus from cell with escape', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             escape(input); // revert to navigation first
 
@@ -1509,7 +1509,7 @@
           });
 
           it('should revert to navigation from interaction mode with escape', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             escape(input);
 
@@ -1517,7 +1517,7 @@
           });
 
           it('should revert to navigation from interaction mode with F2', () => {
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             f2(input);
 
@@ -1545,7 +1545,7 @@
         // TODO(platosha): reimplement these a11y features with native ARIA attributes
         describe.skip('a11y', () => {
           it('should move focus when focused cell is changed', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             footerTrap._primary.focus = spy;
             footerTrap._secondary.focus = spy;
 
@@ -1561,7 +1561,7 @@
           });
 
           it('should announce row number on body when navigating with keys', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             tabToHeader();
@@ -1573,7 +1573,7 @@
           });
 
           it('should announce selection using template variable', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             getCell(0, 0).instance.selected = true;
@@ -1584,7 +1584,7 @@
           });
 
           it('should announce deselection using template variable', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             grid.selectItem(grid.items[0]);
@@ -1598,7 +1598,7 @@
             tabToHeader();
             tab();
 
-            var id = getCell(0, 0)._cellContent.id;
+            const id = getCell(0, 0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
             footerTrap.async(() => {
@@ -1612,7 +1612,7 @@
             tabToHeader();
             tab();
 
-            var id = getFirstHeaderCell(0)._cellContent.id;
+            const id = getFirstHeaderCell(0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
             footerTrap.async(() => {
@@ -1649,7 +1649,7 @@
             tabToHeader();
             tab();
 
-            var visitedTargets = [];
+            let visitedTargets = [];
             visitedTargets.push(footerTrap.activeTarget); right();
             visitedTargets.push(footerTrap.activeTarget); left();
             visitedTargets.push(footerTrap.activeTarget); down();
@@ -1681,12 +1681,12 @@
         });
 
         describe('focus events on cell content', () => {
-          var cell;
+          let cell;
 
           beforeEach(() => cell = getCell(0, 0));
 
           it('should dispatch cell-focusin after cell focus', () => {
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusin', spy);
 
             tabToBody();
@@ -1697,7 +1697,7 @@
           it('should dispatch cell-focusout after cell blur', () => {
             tabToBody();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusout', spy);
 
             right();
@@ -1709,7 +1709,7 @@
             tabToBody();
             right();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusin', spy);
 
             left();
@@ -1720,7 +1720,7 @@
           it('should dispatch cell-focusout on keyboard navigation', () => {
             tabToBody();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusout', spy);
 
             right();

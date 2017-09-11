@@ -60,10 +60,10 @@
   </test-fixture>
 
   <script>
-    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     function wheel(target, deltaX, deltaY, ctrlKey) {
-      var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+      const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
       e.deltaX = deltaX;
       e.deltaY = deltaY;
       e.ctrlKey = ctrlKey;
@@ -72,11 +72,11 @@
     }
 
     describe('outer scroller', () => {
-      var grid;
-      var scroller;
-      var outerScroller;
-      var target;
-      var tableRect;
+      let grid;
+      let scroller;
+      let outerScroller;
+      let target;
+      let tableRect;
 
       beforeEach(done => {
 
@@ -100,23 +100,23 @@
 
       it('should cancel wheel event', () => {
         grid.style.fontSize = '12px';
-        var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1);
+        const e = wheel(getBodyCellContent(grid, 0, 0), 1, 1);
         expect(e.defaultPrevented).to.be.true;
       });
 
       it('should not cancel wheel event', () => {
-        var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1, true);
+        const e = wheel(getBodyCellContent(grid, 0, 0), 1, 1, true);
         expect(e.defaultPrevented).to.be.false;
       });
 
       it('should invoke onScroll synchronously', () => {
-        var spy = sinon.spy(grid, '_translateStationaryElements');
+        const spy = sinon.spy(grid, '_translateStationaryElements');
         outerScroller._syncScrollTarget();
         expect(spy.called).to.be.true;
       });
 
       it('should invoke frozen element translate handler', done => {
-        var spy = sinon.stub(grid, '_translateStationaryElements', () => {
+        const spy = sinon.stub(grid, '_translateStationaryElements', () => {
           spy.restore();
           done();
         });
@@ -124,7 +124,7 @@
       });
 
       it('should have the same size as the scroller', () => {
-        var outerRect = outerScroller.getBoundingClientRect();
+        const outerRect = outerScroller.getBoundingClientRect();
         expect(outerRect.left).to.eql(tableRect.left);
         expect(outerRect.right).to.eql(tableRect.right);
         expect(outerRect.top).to.eql(tableRect.top);
@@ -179,8 +179,8 @@
             makeMouseEvent('mousemove', {x: x, y: y}, scroller);
           }
 
-          var HAS_NEW_MOUSE = (() => {
-            var has = false;
+          const HAS_NEW_MOUSE = (() => {
+            let has = false;
             try {
               has = Boolean(new MouseEvent('x'));
             } catch (_) {
@@ -190,7 +190,7 @@
           })();
 
           function makeMouseEvent(type, xy, node) {
-            var props = {
+            const props = {
               bubbles: true,
               cancelable: true,
               clientX: xy.x,
@@ -198,7 +198,7 @@
               // Make this a primary input.
               buttons: 1 // http://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/buttons
             };
-            var e;
+            let e;
             if (HAS_NEW_MOUSE) {
               e = new MouseEvent(type, props);
             } else {
@@ -258,9 +258,9 @@
     });
 
     describe('content-only', () => {
-      var grid;
-      var scroller;
-      var outerScroller;
+      let grid;
+      let scroller;
+      let outerScroller;
 
       beforeEach(() => {
         grid = fixture('content-only');
@@ -272,15 +272,15 @@
       });
 
       it('should have the correct scrollHeight', () => {
-        var rows = getRows(grid.$.items);
-        var cells = getRowCells(rows[0]);
-        var expectedScrollHeight = cells[0].offsetHeight;
+        const rows = getRows(grid.$.items);
+        const cells = getRowCells(rows[0]);
+        const expectedScrollHeight = cells[0].offsetHeight;
         expect(outerScroller.scrollHeight).to.eql(expectedScrollHeight);
       });
     });
 
     describe('scrollable-content', () => {
-      var grid, scrollable;
+      let grid, scrollable;
 
       beforeEach(done => {
 
@@ -300,26 +300,26 @@
       });
 
       it('should not cancel wheel events for scrollable content', () => {
-        var e = wheel(scrollable, 0, 1);
+        const e = wheel(scrollable, 0, 1);
         expect(e.defaultPrevented).to.be.false;
       });
 
       it('should not scroll the grid', () => {
-        var scrollTop = grid.$.scroller._scrollTop;
-        var e = wheel(scrollable, 0, 1);
+        const scrollTop = grid.$.scroller._scrollTop;
+        const e = wheel(scrollable, 0, 1);
         expect(grid.$.scroller._scrollTop).to.equal(scrollTop);
       });
 
       it('should cancel wheel events for scrollable content (scrolled to end)', () => {
         scrollable.scrollTop = scrollable.scrollHeight;
-        var e = wheel(scrollable, 0, 1);
+        const e = wheel(scrollable, 0, 1);
         expect(e.defaultPrevented).to.be.true;
       });
 
       it('should scroll the grid (scrolled to end)', () => {
-        var scrollTop = grid._scrollTop;
+        const scrollTop = grid._scrollTop;
         scrollable.scrollTop = scrollable.scrollHeight;
-        var e = wheel(scrollable, 0, 100);
+        const e = wheel(scrollable, 0, 100);
         expect(grid._scrollTop).to.equal(scrollTop + 100);
       });
 
