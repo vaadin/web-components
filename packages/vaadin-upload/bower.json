@@ -45,7 +45,7 @@
     "mock-http-request": "philikon/MockHttpRequest#master",
     "paper-toast": "PolymerElements/paper-toast#1 - 2",
     "test-fixture": "PolymerElements/test-fixture#^3.0.0",
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.1.5",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
   },
   "variants": {
