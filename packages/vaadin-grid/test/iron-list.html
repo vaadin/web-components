@@ -27,10 +27,10 @@
   </test-fixture>
 
   <script>
-    describe('iron list', function() {
+    describe('iron list', () => {
       var grid, ironList;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default')[0];
         ironList = fixture('default')[1];
         grid.dataProvider = infiniteDataProvider;

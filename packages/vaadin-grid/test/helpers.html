@@ -49,7 +49,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function infiniteDataProvider(params, callback) {
-    callback(Array.apply(null, Array(params.pageSize)).map(function(item, index) {
+    callback(Array.apply(null, Array(params.pageSize)).map((item, index) => {
       return {
         value: 'foo' + (params.page * params.pageSize + index)
       };
@@ -70,7 +70,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function listenOnce(element, eventName, callback) {
-    var listener = function(e) {
+    var listener = e => {
       element.removeEventListener(eventName, listener);
       callback(e);
     };
@@ -113,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
 
     function scrollHandler() {
-      setTimeout(function() {
+      setTimeout(() => {
         var minScrollTop = 0;
         var maxScrollTop = list.scrollHeight - list.offsetHeight;
 
@@ -214,7 +214,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     var listHeight = list.offsetHeight;
     var listItems = {};
 
-    return function() {
+    return () => {
       var itemKey;
       var y = listRect.top;
       while (y < listHeight) {
@@ -339,9 +339,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   function flushColumns(grid) {
     Array.prototype
       .forEach.call(grid.querySelectorAll('vaadin-grid-column, vaadin-grid-column-group'),
-      function(col) {
-        col._templateObserver.flush();
-      });
+        col => col._templateObserver.flush());
   }
 
   function fire(type, detail, options) {

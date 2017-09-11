@@ -46,17 +46,17 @@
   </test-fixture>
 
   <script>
-    describe('dynamic physical count', function() {
+    describe('dynamic physical count', () => {
       var scroller, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         flushGrid(grid);
       });
 
-      it('increase pool size', function() {
+      it('increase pool size', () => {
         var lastItem = grid._physicalItems[grid.lastVisibleIndex];
         var lastItemHeight = lastItem.offsetHeight;
         var expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
@@ -65,7 +65,7 @@
         expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
       });
 
-      it('increase pool size after resizing the scroller', function() {
+      it('increase pool size after resizing the scroller', () => {
         grid.classList.add('small');
         grid.style.display = 'none';
 
@@ -78,7 +78,7 @@
         expect(grid._physicalItems.length).to.be.above(25);
       });
 
-      it('pool should not increase if the scroller has no size', function() {
+      it('pool should not increase if the scroller has no size', () => {
         grid.style.display = 'none';
         grid.style.height = '1000px';
 
@@ -93,7 +93,7 @@
         expect(grid._physicalCount).to.equal(25);
       });
 
-      it('should minimize increase pool iterations', function() {
+      it('should minimize increase pool iterations', () => {
         var spy = sinon.spy(grid, '_increasePoolIfNeeded');
         grid.style.height = '1000px';
         grid._resizeHandler();
@@ -108,7 +108,7 @@
         }
       });
 
-      it('should minimize physical count', function() {
+      it('should minimize physical count', () => {
         expect(grid._physicalCount).to.be.below(26);
         grid.style.height = '1000px';
         grid._resizeHandler();

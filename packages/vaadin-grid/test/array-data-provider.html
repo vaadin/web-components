@@ -57,7 +57,7 @@
   </test-fixture>
 
   <script>
-    describe('array data provider', function() {
+    describe('array data provider', () => {
       var grid, body;
 
       function getContent(row, column) {
@@ -68,10 +68,7 @@
         return getRowCells(getRows(body)[row])[column];
       }
 
-      beforeEach(function(done) {
-        // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
-
+      beforeEach(done => {
         grid = fixture('default');
         grid.items = [{
           name: {
@@ -89,17 +86,17 @@
         animationFrameFlush(done);
       });
 
-      it('should have right amount of data', function() {
+      it('should have right amount of data', () => {
         var bodyRows = getRows(body);
         expect(bodyRows).to.have.length(2);
       });
 
-      it('should have the right data', function() {
+      it('should have the right data', () => {
         expect(getContent(0, 0)).to.equal('foo');
         expect(getContent(1, 0)).to.equal('baz');
       });
 
-      it('should be observed for shift', function() {
+      it('should be observed for shift', () => {
         grid.unshift('items', {
           name: {
             first: 'a',
@@ -110,27 +107,27 @@
         expect(getContent(0, 0)).to.equal('a');
       });
 
-      it('should be observed for mutation', function() {
+      it('should be observed for mutation', () => {
         grid.set('items.0.name.first', 'new');
         expect(getContent(0, 0)).to.equal('new');
       });
 
-      it('should handle null', function() {
+      it('should handle null', () => {
         grid.items = null;
         expect(grid.size).to.equal(0);
       });
 
-      it('should set array data provider', function() {
+      it('should set array data provider', () => {
         expect(grid.dataProvider).to.equal(grid._arrayDataProvider);
       });
 
-      it('should not override custom data provider', function() {
-        var ds = grid.dataProvider = function() {};
+      it('should not override custom data provider', () => {
+        var ds = grid.dataProvider = () => {};
         grid.items = [1, 2, 3];
         expect(grid.dataProvider).to.equal(ds);
       });
 
-      it('should handle new array of same length', function() {
+      it('should handle new array of same length', () => {
         grid.items = [{
           name: {
             first: 'a'
@@ -144,10 +141,10 @@
       });
     });
 
-    describe('invalid paths', function() {
+    describe('invalid paths', () => {
       var grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('invalid-path');
 
         grid.items = [{
@@ -159,14 +156,14 @@
         flushGrid(grid);
       });
 
-      describe('invalid sorters paths', function() {
+      describe('invalid sorters paths', () => {
         var sorter;
 
-        beforeEach(function() {
+        beforeEach(() => {
           sorter = Polymer.dom(grid).querySelector('vaadin-grid-sorter');
         });
 
-        it('should warn about invalid path with undefined parent property', function() {
+        it('should warn about invalid path with undefined parent property', () => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
@@ -177,7 +174,7 @@
           expect(spy.called).to.be.true;
         });
 
-        it('should not warn about undefined values with defined parent property', function() {
+        it('should not warn about undefined values with defined parent property', () => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
@@ -188,7 +185,7 @@
           expect(spy.called).to.be.false;
         });
 
-        it('should not warn about invalid path without dots', function() {
+        it('should not warn about invalid path without dots', () => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
@@ -199,7 +196,7 @@
           expect(spy.called).to.be.false;
         });
 
-        it('should not warn about undefined values with defined parent property (long path)', function() {
+        it('should not warn about undefined values with defined parent property (long path)', () => {
           grid.items = [{
             name: {
               last: {
@@ -219,19 +216,19 @@
         });
       });
 
-      describe('invalid filters paths', function() {
+      describe('invalid filters paths', () => {
         var filter;
 
-        beforeEach(function() {
+        beforeEach(() => {
           filter = Polymer.dom(grid).querySelector('vaadin-grid-filter');
         });
 
-        it('should warn about invalid path with undefined parent property', function(done) {
+        it('should warn about invalid path with undefined parent property', done => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', function(e) {
-            Polymer.Base.async(function() {
+          filter.addEventListener('filter-changed', e => {
+            Polymer.Base.async(() => {
               console.warn = _warn;
               expect(spy.called).to.be.true;
               done();
@@ -241,12 +238,12 @@
           filter.path = 'foo.bar';
         });
 
-        it('should not warn about undefined values with defined parent property', function(done) {
+        it('should not warn about undefined values with defined parent property', done => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', function(e) {
-            Polymer.Base.async(function() {
+          filter.addEventListener('filter-changed', e => {
+            Polymer.Base.async(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;
               done();
@@ -256,12 +253,12 @@
           filter.path = 'name.foo';
         });
 
-        it('should not warn about invalid path without dots', function(done) {
+        it('should not warn about invalid path without dots', done => {
           var _warn = console.warn;
           var spy = console.warn = sinon.spy();
 
-          filter.addEventListener('filter-changed', function(e) {
-            Polymer.Base.async(function() {
+          filter.addEventListener('filter-changed', e => {
+            Polymer.Base.async(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;
               done();

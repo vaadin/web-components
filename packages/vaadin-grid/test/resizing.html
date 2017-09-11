@@ -37,13 +37,13 @@
 
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      HTMLImports.whenReady(() => {
         Polymer({
           is: 'test-component',
 
           properties: {
             dataProvider: {
-              value: function() {
+              value: () => {
                 return infiniteDataProvider;
               }
             }
@@ -60,26 +60,26 @@
   </test-fixture>
 
   <script>
-    describe('resizing', function() {
+    describe('resizing', () => {
 
-      describe('notifyResize', function() {
+      describe('notifyResize', () => {
         var grid, scroller;
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           grid = fixture('default').$.grid;
           grid.dataProvider = infiniteDataProvider;
-          listenOnce(grid, 'animationend', function() {
+          listenOnce(grid, 'animationend', () => {
             flushGrid(grid);
             done();
           });
         });
 
-        it('should align rows correctly', function() {
+        it('should align rows correctly', () => {
           var rows = getRows(grid.$.items);
           expect(rows[0].getBoundingClientRect().bottom).to.be.closeTo(rows[1].getBoundingClientRect().top, 1);
         });
 
-        it('should update header height', function() {
+        it('should update header height', () => {
           var _bottom = grid.$.header.getBoundingClientRect().bottom;
 
           grid.style.fontSize = '40px';
@@ -91,7 +91,7 @@
           expect(firstBodyRowRect.top).to.be.closeTo(_newBottom, 1);
         });
 
-        it('should update footer height', function() {
+        it('should update footer height', () => {
           grid.style.fontSize = '40px';
           grid.notifyResize();
           scrollToEnd(grid);
@@ -101,7 +101,7 @@
             .to.be.closeTo(grid.$.footer.getBoundingClientRect().top, 1);
         });
 
-        it('should update details row height', function() {
+        it('should update details row height', () => {
           grid.expandItem(grid._cache[0][0]);
           var bodyRows = getRows(grid.$.items);
           var cells = getRowCells(bodyRows[0]);
@@ -117,9 +117,9 @@
             .to.be.closeTo(bodyRows[1].getBoundingClientRect().top, 2);
         });
 
-        it('should align height with number of rows', function(done) {
+        it('should align height with number of rows', done => {
           grid.style.height = 'auto';
-          animationFrameFlush(function() {
+          animationFrameFlush(() => {
             var headerHeight = grid.$.header.clientHeight;
             var bodyHeight = grid.$.items.clientHeight;
             var footerHeight = grid.$.footer.clientHeight;

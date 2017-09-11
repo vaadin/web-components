@@ -25,22 +25,22 @@
   </test-fixture>
 
   <script>
-    describe('basic features', function() {
+    describe('basic features', () => {
       var scroller, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
       });
 
-      it('check physical item heights', function(done) {
+      it('check physical item heights', done => {
         var _error = console.error;
         var spy = console.error = sinon.spy();
-        Polymer.Base.importHref('../vaadin-grid.html', function() {
-          animationFrameFlush(function() {
+        Polymer.Base.importHref('../vaadin-grid.html', () => {
+          animationFrameFlush(() => {
             console.error = _error;
             expect(spy.called).to.be.false;
             done();

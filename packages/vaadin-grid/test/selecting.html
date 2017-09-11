@@ -62,8 +62,8 @@
     var rows;
     var cachedItems;
 
-    describe('selection', function() {
-      beforeEach(function() {
+    describe('selection', () => {
+      beforeEach(() => {
         grid = fixture('default');
 
         grid.dataProvider = infiniteDataProvider;
@@ -73,53 +73,53 @@
         rows = getRows(grid.$.items);
       });
 
-      it('should set selected attribute', function() {
+      it('should set selected attribute', () => {
         expect(rows[0].hasAttribute('selected')).to.be.true;
         expect(rows[1].hasAttribute('selected')).to.be.false;
       });
 
-      it('should bind to cells', function() {
+      it('should bind to cells', () => {
         var cells = getRowCells(rows[0]);
         expect(cells[0]._instance.selected).to.be.true;
         expect(cells[1]._instance.selected).to.be.true;
         expect(getRowCells(rows[1])[0]._instance.selected).to.be.false;
       });
 
-      it('should reflect cell instance value', function() {
+      it('should reflect cell instance value', () => {
         var cells = getRowCells(rows[0]);
         cells[0]._instance.selected = false;
         expect(cells[0]._instance.selected).to.be.false;
         expect(grid.selectedItems).to.be.empty;
       });
 
-      describe('selectedItems', function() {
-        it('should reflect changes', function() {
+      describe('selectedItems', () => {
+        it('should reflect changes', () => {
           grid.push('selectedItems', cachedItems[1]);
           expect(rows[1].hasAttribute('selected')).to.be.true;
         });
 
-        it('should notify', function(done) {
-          grid.addEventListener('selected-items-changed', function() {
+        it('should notify', done => {
+          grid.addEventListener('selected-items-changed', () => {
             done();
           });
           grid.selectedItems = [cachedItems[1]];
         });
       });
 
-      describe('select functions', function() {
-        it('should select item', function() {
+      describe('select functions', () => {
+        it('should select item', () => {
           expect(grid._isSelected(cachedItems[1])).to.be.false;
           grid.selectItem(cachedItems[1]);
           expect(grid._isSelected(cachedItems[1])).to.be.true;
         });
 
-        it('should deselect item', function() {
+        it('should deselect item', () => {
           expect(grid._isSelected(cachedItems[0])).to.be.true;
           grid.deselectItem(cachedItems[0]);
           expect(grid._isSelected(cachedItems[0])).to.be.false;
         });
 
-        it('should select multiple rows', function() {
+        it('should select multiple rows', () => {
           grid.selectItem(cachedItems[1]);
           grid.selectItem(cachedItems[2]);
           expect(grid._isSelected(cachedItems[1])).to.be.true;
@@ -128,15 +128,15 @@
       });
     });
 
-    describe('multi selection column', function() {
+    describe('multi selection column', () => {
       var headerRows;
       var firstHeaderCellContent, firstBodyCellContent;
       var selectionColumn;
       var selectAllCheckbox, firstBodyCheckbox;
 
-      beforeEach(function() {
+      beforeEach(() => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('multiselect');
 
@@ -158,30 +158,30 @@
         firstBodyCheckbox = firstBodyCellContent.children[0];
       });
 
-      it('should have a checkbox in the body cell', function() {
+      it('should have a checkbox in the body cell', () => {
         expect(firstBodyCheckbox.localName).to.eql('vaadin-checkbox');
       });
 
-      it('should select item when checkbox is checked', function() {
+      it('should select item when checkbox is checked', () => {
         firstBodyCheckbox.checked = true;
         expect(grid._isSelected(cachedItems[0])).to.be.true;
       });
 
-      it('should add the item to selectedItems when row is clicked and auto-select is enabled', function() {
+      it('should add the item to selectedItems when row is clicked and auto-select is enabled', () => {
         var cell = getRowCells(rows[1])[1];
         cell.click();
 
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
       });
 
-      it('should remove the item from selectedItems when row is clicked and auto-select is enabled', function() {
+      it('should remove the item from selectedItems when row is clicked and auto-select is enabled', () => {
         grid.selectItem(1);
         var cell = getRowCells(rows[1])[1];
         cell.click();
         expect(grid.selectedItems).to.eql([]);
       });
 
-      it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', function() {
+      it('should toggle the item in selectedItems when row is clicked and auto-select is enabled', () => {
         var cell = getRowCells(rows[1])[1];
         cell.click();
         expect(grid.selectedItems).to.eql([getCellContent(cell).textContent]);
@@ -189,7 +189,7 @@
         expect(grid.selectedItems).to.eql([]);
       });
 
-      it('should have bound the body checkbox to selected items', function() {
+      it('should have bound the body checkbox to selected items', () => {
         var selectCheckbox = firstBodyCheckbox;
 
         grid.push('selectedItems', cachedItems[0]);
@@ -197,22 +197,22 @@
         expect(selectCheckbox.checked).to.be.true;
       });
 
-      it('should have a select all checkbox in the header', function() {
+      it('should have a select all checkbox in the header', () => {
         expect(selectAllCheckbox.localName).to.eql('vaadin-checkbox');
       });
 
-      it('should set selectAll when header checkbox is clicked', function() {
+      it('should set selectAll when header checkbox is clicked', () => {
         selectAllCheckbox.click();
         expect(selectionColumn.selectAll).to.be.true;
       });
 
-      it('should select all items when select all is set', function() {
+      it('should select all items when select all is set', () => {
         selectionColumn.selectAll = true;
 
         expect(grid.selectedItems).to.eql(grid.items);
       });
 
-      it('should take filter into account when selecting all items', function() {
+      it('should take filter into account when selecting all items', () => {
         grid.items = [{value: 'foo'}, {value: 'bar'}];
         grid._filters = [{path: 'value', value: 'f'}];
 
@@ -221,7 +221,7 @@
         expect(grid.selectedItems).to.eql([grid.items[0]]);
       });
 
-      it('should deselect all items when select all is unset', function() {
+      it('should deselect all items when select all is unset', () => {
         selectionColumn.selectAll = true;
 
         selectionColumn.selectAll = false;
@@ -229,7 +229,7 @@
         expect(grid.selectedItems).to.be.empty;
       });
 
-      it('should set a copy of items when all items are selected', function() {
+      it('should set a copy of items when all items are selected', () => {
         selectionColumn.selectAll = true;
 
         grid.pop('selectedItems');
@@ -237,7 +237,7 @@
         expect(grid.items).not.to.eql(grid.selectedItems);
       });
 
-      it('should not set selection when data provider is used', function() {
+      it('should not set selection when data provider is used', () => {
         grid.items = undefined;
         grid.dataProvider = infiniteDataProvider;
 
@@ -246,48 +246,48 @@
         expect(grid.selectedItems).to.be.empty;
       });
 
-      it('should hide select all checkbox when data provider is used', function() {
+      it('should hide select all checkbox when data provider is used', () => {
         grid.items = undefined;
         grid.dataProvider = infiniteDataProvider;
 
         expect(selectAllCheckbox.hidden).to.be.true;
       });
 
-      it('should show select all checkbox when items is set', function() {
+      it('should show select all checkbox when items is set', () => {
         grid.items = ['foo'];
 
         expect(selectAllCheckbox.hidden).to.be.false;
       });
 
-      it('should be possible to override the body template', function() {
+      it('should be possible to override the body template', () => {
         var secondCell = getCellContent(getRowCells(rows[0])[1]);
 
         expect(secondCell.innerHTML).to.eql(secondCell.textContent);
       });
 
-      it('should be possible to override the header template', function() {
+      it('should be possible to override the header template', () => {
         var secondCell = getCellContent(getRowCells(headerRows[1])[1]);
 
         expect(secondCell.innerHTML).to.eql('header');
       });
 
-      it('should have grid reference also when column is nested inside a group', function() {
+      it('should have grid reference also when column is nested inside a group', () => {
         expect(grid._columnTree[1][2]._grid).to.eql(grid);
       });
 
-      it('should be unchecked when nothing is selected', function() {
+      it('should be unchecked when nothing is selected', () => {
         expect(selectAllCheckbox.indeterminate).not.to.be.ok;
         expect(selectAllCheckbox.checked).to.be.false;
       });
 
-      it('should have indeterminate when an item is selected', function() {
+      it('should have indeterminate when an item is selected', () => {
         firstBodyCheckbox.checked = true;
 
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
       // iOS needs both to show the indeterminate status
-      it('should have indeterminate and select-all when an item is selected', function() {
+      it('should have indeterminate and select-all when an item is selected', () => {
         expect(selectAllCheckbox.checked).to.be.false;
         expect(selectAllCheckbox.indeterminate).not.to.be.ok;
 
@@ -296,7 +296,7 @@
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
-      it('should have indeterminate true when an item is deselected', function() {
+      it('should have indeterminate true when an item is deselected', () => {
         selectAllCheckbox.click();
         expect(selectAllCheckbox.indeterminate).to.be.false;
 
@@ -304,14 +304,14 @@
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
-      it('should have indeterminate false if selectedItems contains all items, no matter the order', function() {
+      it('should have indeterminate false if selectedItems contains all items, no matter the order', () => {
         grid.set('selectedItems', ['baz', 'foo', 'bar', 'hi']);
 
         expect(selectionColumn.selectAll).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.false;
       });
 
-      it('should have select-all false if selectedItems does not contain all items', function() {
+      it('should have select-all false if selectedItems does not contain all items', () => {
         selectAllCheckbox.click();
         expect(selectionColumn.selectAll).to.be.true;
         expect(selectAllCheckbox.indeterminate).to.be.false;
@@ -321,13 +321,13 @@
         expect(selectAllCheckbox.indeterminate).to.be.true;
       });
 
-      it('should not have selectAll after selecting a single item', function() {
+      it('should not have selectAll after selecting a single item', () => {
         firstBodyCheckbox.checked = true;
 
         expect(selectionColumn.selectAll).to.be.false;
       });
 
-      it('should not have selectAll after deselecting a single item', function() {
+      it('should not have selectAll after deselecting a single item', () => {
         selectAllCheckbox.click();
 
         firstBodyCheckbox.checked = false;
@@ -335,7 +335,7 @@
         expect(selectionColumn.selectAll).to.be.false;
       });
 
-      it('should have selectAll after selecting all manually', function() {
+      it('should have selectAll after selecting all manually', () => {
         selectAllCheckbox.click();
         firstBodyCheckbox.checked = true;
 
@@ -345,12 +345,12 @@
         expect(selectAllCheckbox.indeterminate).to.be.false;
       });
 
-      it('should not reassign selectedItems array when selecting all manually', function() {
+      it('should not reassign selectedItems array when selecting all manually', () => {
         selectAllCheckbox.click();
         firstBodyCheckbox.checked = false;
 
         var details = [];
-        var spy = sinon.spy(function(e) {
+        var spy = sinon.spy( e => {
           // event object gets reused so need to store the details before asserting.
           details.push(e.detail);
         });
@@ -363,8 +363,8 @@
         expect(details[1].path).to.eql('selectedItems.length');
       });
 
-      it('should select-all when all items are selected', function() {
-        rows.forEach(function(row) {
+      it('should select-all when all items are selected', () => {
+        rows.forEach(row => {
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
           checkbox.checked = true;
@@ -374,10 +374,10 @@
         expect(selectAllCheckbox.indeterminate).to.be.false;
       });
 
-      it('should deselect-all when all items are deselected', function() {
+      it('should deselect-all when all items are deselected', () => {
         selectAllCheckbox.click();
 
-        rows.forEach(function(row) {
+        rows.forEach(row => {
           var cellContent = getCellContent(getRowCells(row)[0]);
           var checkbox = cellContent.children[0];
           checkbox.checked = false;
@@ -387,7 +387,7 @@
         expect(selectAllCheckbox.indeterminate).to.be.false;
       });
 
-      it('should update select all when filters change', function() {
+      it('should update select all when filters change', () => {
         grid.items = [{value: 'foo'}, {value: 'bar'}];
 
         firstBodyCheckbox.checked = true;
@@ -400,13 +400,13 @@
         expect(selectionColumn.selectAll).to.be.true;
       });
 
-      it('should not throw with data provider', function() {
+      it('should not throw with data provider', () => {
         grid.items = undefined;
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
 
         var checkbox = getBodyCellContent(grid, 0, 0).firstElementChild;
-        expect(function() {
+        expect(() => {
           checkbox.click();
         }).not.to.throw(Error);
       });

@@ -71,16 +71,16 @@
       return e;
     }
 
-    describe('outer scroller', function() {
+    describe('outer scroller', () => {
       var grid;
       var scroller;
       var outerScroller;
       var target;
       var tableRect;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('default');
 
@@ -93,31 +93,31 @@
         target = outerScroller.scrollTarget;
         tableRect = grid.$.table.getBoundingClientRect();
 
-        animationFrameFlush(function() {
+        animationFrameFlush(() => {
           outerScroller._syncingScrollTarget = false;
           outerScroller._syncingOuterScroller = false;
           done();
         });
       });
 
-      it('should cancel wheel event', function() {
+      it('should cancel wheel event', () => {
         grid.style.fontSize = '12px';
         var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1);
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should not cancel wheel event', function() {
+      it('should not cancel wheel event', () => {
         var e = wheel(getBodyCellContent(grid, 0, 0), 1, 1, true);
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should invoke onScroll synchronously', function() {
+      it('should invoke onScroll synchronously', () => {
         var spy = sinon.spy(grid, '_translateStationaryElements');
         outerScroller._syncScrollTarget();
         expect(spy.called).to.be.true;
       });
 
-      it('should invoke frozen element translate handler', function(done) {
+      it('should invoke frozen element translate handler', done => {
         var spy = sinon.stub(grid, '_translateStationaryElements', () => {
           spy.restore();
           done();
@@ -125,7 +125,7 @@
         outerScroller.scrollLeft = 1;
       });
 
-      it('should have the same size as the scroller', function() {
+      it('should have the same size as the scroller', () => {
         var outerRect = outerScroller.getBoundingClientRect();
         expect(outerRect.left).to.eql(tableRect.left);
         expect(outerRect.right).to.eql(tableRect.right);
@@ -133,28 +133,28 @@
         expect(outerRect.bottom).to.eql(tableRect.bottom);
       });
 
-      it('should have the same scrollHeight/scrollWidth as the target', function() {
+      it('should have the same scrollHeight/scrollWidth as the target', () => {
         expect(outerScroller.scrollHeight).to.eql(target.scrollHeight);
         expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
       });
 
-      it('should have correct scrollWidth with hidden columns', function() {
+      it('should have correct scrollWidth with hidden columns', () => {
         grid.querySelector('vaadin-grid-column').hidden = true;
         // Hide the table's sizer and rely on the cells to size properly
         grid.$.fixedsizer.hidden = true;
         expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
       });
 
-      describe('syncing with scroll target', function() {
+      describe('syncing with scroll target', () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           outerScroller._syncingScrollTarget = false;
           outerScroller._syncingOuterScroller = false;
         });
 
-        it('should scroll the target', function(done) {
-          outerScroller.addEventListener('scroll', function() {
-            animationFrameFlush(function() {
+        it('should scroll the target', done => {
+          outerScroller.addEventListener('scroll', () => {
+            animationFrameFlush(() => {
               expect(target.scrollLeft).to.equal(100);
               done();
             });
@@ -162,9 +162,9 @@
           outerScroller.scrollLeft = 100;
         });
 
-        it('should scroll the outer scroller', function(done) {
-          target.addEventListener('scroll', function() {
-            animationFrameFlush(function() {
+        it('should scroll the outer scroller', done => {
+          target.addEventListener('scroll', () => {
+            animationFrameFlush(() => {
               expect(outerScroller.scrollLeft).to.equal(100);
               done();
             });
@@ -175,13 +175,13 @@
       });
 
       if (!ios) {
-        describe('passtrough pointer events', function() {
+        describe('passtrough pointer events', () => {
 
           function move(x, y) {
             makeMouseEvent('mousemove', {x: x, y: y}, scroller);
           }
 
-          var HAS_NEW_MOUSE = (function() {
+          var HAS_NEW_MOUSE = (() => {
             var has = false;
             try {
               has = Boolean(new MouseEvent('x'));
@@ -226,8 +226,8 @@
             return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
           }
 
-          it('should passtrough pointer events', function(done) {
-            scroller.addEventListener('mousemove', function() {
+          it('should passtrough pointer events', done => {
+            scroller.addEventListener('mousemove', () => {
               expect(outerScrollerInUse()).to.be.false;
               done();
             });
@@ -235,16 +235,16 @@
             move(1, 1);
           });
 
-          it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', function(done) {
-            scroller.addEventListener('mousemove', function() {
+          it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', done => {
+            scroller.addEventListener('mousemove', () => {
               expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
               done();
             });
             move(tableRect.width, 1);
           });
 
-          it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', function(done) {
-            scroller.addEventListener('mousemove', function() {
+          it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', done => {
+            scroller.addEventListener('mousemove', () => {
               // TODO: @limonte revisit in future
               if (!firefox) { // firefox has the blinking issue here (current version is 50)
                 expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
@@ -259,12 +259,12 @@
 
     });
 
-    describe('content-only', function() {
+    describe('content-only', () => {
       var grid;
       var scroller;
       var outerScroller;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('content-only');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
@@ -273,7 +273,7 @@
         flushGrid(grid);
       });
 
-      it('should have the correct scrollHeight', function() {
+      it('should have the correct scrollHeight', () => {
         var rows = getRows(grid.$.items);
         var cells = getRowCells(rows[0]);
         var expectedScrollHeight = cells[0].offsetHeight;
@@ -281,12 +281,12 @@
       });
     });
 
-    describe('scrollable-content', function() {
+    describe('scrollable-content', () => {
       var grid, scrollable;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('scrollable-content');
 
@@ -300,29 +300,29 @@
           grid._observer.flush();
         }
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
-        animationFrameFlush(function() {
+        animationFrameFlush(() => {
           done();
         });
       });
 
-      it('should not cancel wheel events for scrollable content', function() {
+      it('should not cancel wheel events for scrollable content', () => {
         var e = wheel(scrollable, 0, 1);
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should not scroll the grid', function() {
+      it('should not scroll the grid', () => {
         var scrollTop = grid.$.scroller._scrollTop;
         var e = wheel(scrollable, 0, 1);
         expect(grid.$.scroller._scrollTop).to.equal(scrollTop);
       });
 
-      it('should cancel wheel events for scrollable content (scrolled to end)', function() {
+      it('should cancel wheel events for scrollable content (scrolled to end)', () => {
         scrollable.scrollTop = scrollable.scrollHeight;
         var e = wheel(scrollable, 0, 1);
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should scroll the grid (scrolled to end)', function() {
+      it('should scroll the grid (scrolled to end)', () => {
         var scrollTop = grid._scrollTop;
         scrollable.scrollTop = scrollable.scrollHeight;
         var e = wheel(scrollable, 0, 100);

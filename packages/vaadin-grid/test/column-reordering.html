@@ -162,8 +162,8 @@
     }
 
     function expectVisualOrder(grid, order) {
-      order.forEach(function(order, index) {
-        getVisualColumnCellContents(grid, index).forEach(function(content) {
+      order.forEach((order, index) => {
+        getVisualColumnCellContents(grid, index).forEach(content => {
           expect(parseInt(content.innerText)).to.equal(order);
         });
       });
@@ -173,18 +173,18 @@
       return grid._getCellByCellContent(cellContent);
     }
 
-    describe('reordering simple grid', function() {
+    describe('reordering simple grid', () => {
 
       var grid, headerContent;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
-        flush(function() {
+        flush(() => {
           var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           headerContent = [];
           for (var i = 0; i < colCount; i++) {
@@ -195,42 +195,42 @@
         });
       });
 
-      it('should have initial visual order', function() {
+      it('should have initial visual order', () => {
         expectVisualOrder(grid, [1, 2, 3, 4]);
       });
 
-      it('should indicate dragged cells', function() {
+      it('should indicate dragged cells', () => {
         dragStart(headerContent[0]);
         var cell = getCellByCellContent(grid, headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('dragging');
       });
 
-      it('should clear reorder status on dragend', function() {
+      it('should clear reorder status on dragend', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
         var cell = getCellByCellContent(grid, headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('');
         expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
-      it('should have a reorder ghost', function() {
+      it('should have a reorder ghost', () => {
         dragStart(headerContent[0]);
         expect(grid.$.reorderghost.style.visibility).to.equal('visible');
       });
 
-      it('should have header cell content', function() {
+      it('should have header cell content', () => {
         dragStart(headerContent[0]);
         var ghost = grid.$.reorderghost;
         expect(ghost.innerHTML).to.equal('1');
       });
 
-      it('should not be accessible', function() {
+      it('should not be accessible', () => {
         dragStart(headerContent[0]);
 
         var ghost = grid.$.reorderghost;
         expect(window.getComputedStyle(ghost).pointerEvents).to.equal('none');
       });
 
-      it('should position ghost', function() {
+      it('should position ghost', () => {
         var ghost = grid.$.reorderghost;
         dragOver(headerContent[0], headerContent[1]);
 
@@ -239,83 +239,83 @@
         expect(ghostRect.top).to.be.closeTo(grid._ie ? 8 : 0, 1);
       });
 
-      it('should have the ghost visible again', function() {
+      it('should have the ghost visible again', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
         dragStart(headerContent[0]);
         Polymer.dom.flush();
         expect(grid.$.reorderghost.style.visibility).to.equal('visible');
       });
 
-      it('should not adjust outer-scroller z while reordering', function() {
+      it('should not adjust outer-scroller z while reordering', () => {
         var zIndex = window.getComputedStyle(grid.$.outerscroller).zIndex;
         dragStart(headerContent[0]);
         grid._scrollHandler();
         expect(window.getComputedStyle(grid.$.outerscroller).zIndex).to.equal(zIndex);
       });
 
-      it('should prevent contextmenu while reordering', function() {
+      it('should prevent contextmenu while reordering', () => {
         dragStart(headerContent[0]);
         var e = new CustomEvent('contextmenu', {cancelable: true, bubbles: true});
         headerContent[0].dispatchEvent(e);
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should cancel touchmove', function() {
+      it('should cancel touchmove', () => {
         dragStart(headerContent[0]);
         var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
         expect(e.defaultPrevented).to.be.true;
       });
 
-      it('should not cancel touchmove', function() {
+      it('should not cancel touchmove', () => {
         var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should not cancel touchmove on resizer', function() {
+      it('should not cancel touchmove on resizer', () => {
         var e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
           getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should start reordering after 300ms after touchstart', function(done) {
+      it('should start reordering after 300ms after touchstart', done => {
         const rect = headerContent[0].getBoundingClientRect();
         makeSoloTouchEvent('touchstart', {x: rect.left, y: rect.top}, headerContent[0]);
-        setTimeout(function() {
+        setTimeout(() => {
           expect(grid.hasAttribute('reordering')).to.be.true;
           done();
         }, 500);
       });
 
-      it('should not start reordering after 300ms after touchstart', function(done) {
+      it('should not start reordering after 300ms after touchstart', done => {
         const rect = headerContent[0].getBoundingClientRect();
         makeSoloTouchEvent('touchstart', {x: rect.left, y: rect.top}, headerContent[0]);
         makeSoloTouchEvent('touchend', {x: 0, y: 0}, headerContent[0]);
-        setTimeout(function() {
+        setTimeout(() => {
           expect(grid.hasAttribute('reordering')).to.be.false;
           done();
         }, 500);
       });
 
-      it('should not start reordering on resize handle move', function() {
+      it('should not start reordering on resize handle move', () => {
         const handle = grid._getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
         dragStart(handle);
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
-      it('should start reordering on grid with no reorder allowed', function() {
+      it('should start reordering on grid with no reorder allowed', () => {
         grid.columnReorderingAllowed = false;
         dragStart(headerContent[0]);
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
 
-      describe('basic reordering', function() {
+      describe('basic reordering', () => {
 
-        it('should reorder the columns', function() {
+        it('should reorder the columns', () => {
           dragAndDropOver(headerContent[0], headerContent[1]);
           expectVisualOrder(grid, [2, 1]);
         });
 
-        it('should allow dropping over body cell of another column', function() {
+        it('should allow dropping over body cell of another column', () => {
           dragAndDropOver(
             headerContent[0],
             getVisualCellContent(grid.$.items, 0, 1)
@@ -323,19 +323,19 @@
           expectVisualOrder(grid, [2, 1]);
         });
 
-        it('should reorder the columns while dragging', function() {
+        it('should reorder the columns while dragging', () => {
           dragOver(headerContent[0], headerContent[1]);
           expectVisualOrder(grid, [2, 1]);
         });
 
-        it('should reorder multiple columns while dragging', function() {
+        it('should reorder multiple columns while dragging', () => {
           dragOver(headerContent[0], headerContent[1]);
           dragOver(headerContent[0], headerContent[3]);
           flushGrid(grid);
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
-        it('should update last-column attribute', function() {
+        it('should update last-column attribute', () => {
           var cell = getCellByCellContent(grid, headerContent[3]);
           expect(cell.hasAttribute('last-column')).to.be.true;
 
@@ -344,7 +344,7 @@
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
-        it('should update last-column attribute (details open)', function() {
+        it('should update last-column attribute (details open)', () => {
           grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
           var cell = getCellByCellContent(grid, headerContent[2]);
@@ -352,11 +352,11 @@
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
-        it('should set order to new column', function(done) {
+        it('should set order to new column', done => {
           dragAndDropOver(headerContent[0], headerContent[1]);
           var col = fixture('newColumn');
           grid.appendChild(col);
-          animationFrameFlush(function() {
+          animationFrameFlush(() => {
             expect(col._order).to.equal(50000000);
             done();
           });
@@ -364,30 +364,30 @@
 
       });
 
-      describe('frozen columns', function() {
+      describe('frozen columns', () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           var columns = Polymer.dom(grid).querySelectorAll('vaadin-grid-column');
           columns[0].frozen = true;
           columns[1].frozen = true;
         });
 
-        it('should allow reordering frozen columns', function() {
+        it('should allow reordering frozen columns', () => {
           dragAndDropOver(headerContent[0], headerContent[1]);
           expectVisualOrder(grid, [2, 1]);
         });
 
-        it('should not allow reordering frozen and non-frozen columns', function() {
+        it('should not allow reordering frozen and non-frozen columns', () => {
           dragAndDropOver(headerContent[1], headerContent[2]);
           expectVisualOrder(grid, [1, 2, 3, 4]);
         });
 
-        it('should not allow reordering non-frozen and frozen columns', function() {
+        it('should not allow reordering non-frozen and frozen columns', () => {
           dragAndDropOver(headerContent[3], headerContent[0]);
           expectVisualOrder(grid, [1, 2, 3, 4]);
         });
 
-        it('should update last-frozen while dragging', function() {
+        it('should update last-frozen while dragging', () => {
           var cell = getCellByCellContent(grid, headerContent[0]);
           expect(cell.hasAttribute('last-frozen')).to.be.false;
           dragOver(headerContent[0], headerContent[1]);
@@ -398,22 +398,22 @@
 
     });
 
-    describe('reordering grid with columns groups', function() {
+    describe('reordering grid with columns groups', () => {
 
       var grid;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         grid = fixture('groups');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
         animationFrameFlush(done);
       });
 
-      it('should have initial visual order', function() {
+      it('should have initial visual order', () => {
         expectVisualOrder(grid, [11, 12, 21, 22]);
       });
 
-      it('should reorder the sub-columns', function() {
+      it('should reorder the sub-columns', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 1, 0),
           getVisualHeaderCellContent(grid, 1, 1)
@@ -421,7 +421,7 @@
         expectVisualOrder(grid, [12, 11]);
       });
 
-      it('should not allow dragging columns between groups', function() {
+      it('should not allow dragging columns between groups', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 1, 1),
           getVisualHeaderCellContent(grid, 1, 2)
@@ -429,7 +429,7 @@
         expectVisualOrder(grid, [11, 12, 21, 22]);
       });
 
-      it('should reorder the groups', function() {
+      it('should reorder the groups', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 0, 0),
           getVisualHeaderCellContent(grid, 0, 3)
@@ -439,7 +439,7 @@
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
 
-      it('should allow dropping group over other groups column header', function() {
+      it('should allow dropping group over other groups column header', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 0, 0),
           getVisualHeaderCellContent(grid, 1, 3)
@@ -447,7 +447,7 @@
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
 
-      it('should allow dropping group over body cell of another group', function() {
+      it('should allow dropping group over body cell of another group', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 0, 0),
           getVisualCellContent(grid.$.items, 0, 3)
@@ -455,7 +455,7 @@
         expectVisualOrder(grid, [21, 22, 11, 12]);
       });
 
-      it('should maintain order of child columns on parent reorder', function() {
+      it('should maintain order of child columns on parent reorder', () => {
         dragAndDropOver(
           getVisualHeaderCellContent(grid, 1, 0),
           getVisualHeaderCellContent(grid, 1, 1)
@@ -469,15 +469,15 @@
 
     });
 
-    describe('reordering grid with different column widths', function() {
+    describe('reordering grid with different column widths', () => {
 
       var grid, headerContent0, headerContent1, content0rect, content1rect;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         grid = fixture('differentWidths');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
-        animationFrameFlush(function() {
+        animationFrameFlush(() => {
           headerContent0 = getContainerCell(grid.$.header, 0, 0);
           headerContent1 = getContainerCell(grid.$.header, 0, 1);
           content0rect = headerContent0.getBoundingClientRect();
@@ -486,25 +486,25 @@
         });
       });
 
-      it('should not reorder', function() {
+      it('should not reorder', () => {
         dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width);
         expect(headerContent1.getBoundingClientRect().left).to.equal(content1rect.left);
       });
 
-      it('should reorder', function() {
+      it('should reorder', () => {
         dragOver(headerContent0, headerContent1, content1rect.right - content0rect.width + 1);
         expect(headerContent1.getBoundingClientRect().left).not.to.equal(content1rect.left);
       });
 
     });
 
-    describe('large column group', function() {
+    describe('large column group', () => {
 
       var grid;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
@@ -512,24 +512,24 @@
         animationFrameFlush(done);
       });
 
-      it('should support over 10 child-columns in a group', function() {
+      it('should support over 10 child-columns in a group', () => {
         expectVisualOrder(grid, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
       });
 
     });
 
-    describe('reordering with draggable contents', function() {
+    describe('reordering with draggable contents', () => {
 
       var grid, visualColumnCellContents;
 
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         grid = fixture('draggableCellContent');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
-        flush(function() {
+        flush(() => {
           var colCount = getRowCells(getRows(grid.$.header)[0]).length;
           visualColumnCellContents = [];
           for (var i = 0; i < colCount; i++) {
@@ -539,22 +539,22 @@
         });
       });
 
-      it('should start reordering on header cell content', function() {
+      it('should start reordering on header cell content', () => {
         dragStart(visualColumnCellContents[0][1]);
         expect(grid.hasAttribute('reordering')).to.be.true;
       });
 
-      it('should not start reordering inside body cell content', function() {
+      it('should not start reordering inside body cell content', () => {
         dragStart(visualColumnCellContents[0][0].children[0]);
         expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
-      it('should not start reordering inside draggable header cell content', function() {
+      it('should not start reordering inside draggable header cell content', () => {
         dragStart(visualColumnCellContents[0][1].children[0]);
         expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
-      it('should not start reordering inside draggable footer cell content', function() {
+      it('should not start reordering inside draggable footer cell content', () => {
         dragStart(visualColumnCellContents[0][2].children[0]);
         expect(grid.hasAttribute('reordering')).to.be.false;
       });

@@ -30,7 +30,7 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
+      document.addEventListener('WebComponentsReady', () => {
         Polymer({
           is: 'x-grid'
         });
@@ -63,12 +63,12 @@
 
   <script>
 
-    describe('column group', function() {
+    describe('column group', () => {
       var group;
       var columns;
-      beforeEach(function(done) {
+      beforeEach(done => {
         // The before each block times out in CI with Firefox on Polymer 2
-        this.timeout(30000);
+
 
         group = fixture('group');
         columns = group.querySelectorAll('vaadin-grid-column');
@@ -76,40 +76,40 @@
         done();
       });
 
-      it('should sum child column flex-grow', function() {
+      it('should sum child column flex-grow', () => {
         expect(group.flexGrow).to.eql(3);
       });
 
-      it('should sum child column widths', function() {
+      it('should sum child column widths', () => {
         expect(group.width).to.eql('calc(20% + 200px)');
       });
 
-      it('should strip nested `calc` keywords', function() {
+      it('should strip nested `calc` keywords', () => {
         columns[0].width = 'calc(50% + 10px)';
 
         expect(group.width).to.eql('calc((50% + 10px) + 200px)');
       });
 
-      it('should react to child column flex-grow changes', function() {
+      it('should react to child column flex-grow changes', () => {
         columns[0].flexGrow = 3;
 
         expect(group.flexGrow).to.eql(5);
       });
 
-      it('should react to child column width changes', function() {
+      it('should react to child column width changes', () => {
         columns[0].width = '10%';
 
         expect(group.width).to.eql('calc(10% + 200px)');
       });
 
-      it('should get frozen when child column freezes', function() {
+      it('should get frozen when child column freezes', () => {
         columns[0].frozen = true;
 
         expect(group.frozen).to.be.true;
       });
 
       // this test is aimed for Safari 9, see #552
-      it('should propagate frozen from children when attached', function() {
+      it('should propagate frozen from children when attached', () => {
         var parent = group.parentElement;
         Polymer.dom(parent).removeChild(group);
 
@@ -121,7 +121,7 @@
         expect(group.frozen).to.be.true;
       });
 
-      it('should propagate frozen to child columns', function() {
+      it('should propagate frozen to child columns', () => {
         columns[0].frozen = false;
         group.frozen = true;
 
@@ -129,28 +129,28 @@
         expect(columns[1].frozen).to.be.true;
       });
 
-      it('should hide group column', function() {
+      it('should hide group column', () => {
         columns[0].hidden = true;
         columns[1].hidden = true;
 
         expect(group.hidden).to.be.true;
       });
 
-      it('should unhide group column', function() {
+      it('should unhide group column', () => {
         group.hidden = true;
         columns[0].hidden = false;
 
         expect(group.hidden).to.be.false;
       });
 
-      it('should not unhide other columns', function() {
+      it('should not unhide other columns', () => {
         group.hidden = true;
         columns[0].hidden = false;
 
         expect(columns[1].hidden).to.be.true;
       });
 
-      it('should propagate hidden to child columns', function() {
+      it('should propagate hidden to child columns', () => {
         columns[0].hidden = false;
         group.hidden = true;
 
@@ -159,7 +159,7 @@
         expect(group.hidden).to.be.true;
       });
 
-      it('should propagate hidden to child columns 2', function() {
+      it('should propagate hidden to child columns 2', () => {
         group.hidden = true;
         group.hidden = false;
 
@@ -168,7 +168,7 @@
         expect(group.hidden).to.be.false;
       });
 
-      it('should hide the group', function() {
+      it('should hide the group', () => {
         Polymer.dom(group).removeChild(columns[0]);
         Polymer.dom(group).removeChild(columns[1]);
         Polymer.dom.flush();
@@ -180,7 +180,7 @@
         expect(group.hidden).to.be.true;
       });
 
-      it('should unhide the group', function() {
+      it('should unhide the group', () => {
         group.removeChild(columns[0]);
         group.removeChild(columns[1]);
         group._observer.flush();
@@ -192,7 +192,7 @@
         expect(group.hidden).to.be.false;
       });
 
-      it('should not unhide the group', function() {
+      it('should not unhide the group', () => {
         group.removeChild(columns[0]);
         group.removeChild(columns[1]);
         group._observer.flush();
@@ -204,20 +204,20 @@
         expect(group.hidden).to.be.true;
       });
 
-      it('should calculate column group width after hiding a column', function() {
+      it('should calculate column group width after hiding a column', () => {
         columns[0].hidden = true;
 
         expect(group.width).to.eql('calc(200px)');
       });
 
-      it('should calculate column group flexGrow after hiding a column', function() {
+      it('should calculate column group flexGrow after hiding a column', () => {
         columns[0].hidden = true;
 
         expect(group.flexGrow).to.eql(2);
       });
 
-      describe('dom observing', function() {
-        it('should pickup header template', function() {
+      describe('dom observing', () => {
+        it('should pickup header template', () => {
           var group = document.createElement('vaadin-grid-column-group');
           var template = document.createElement('template');
           template.classList.add('header');
@@ -232,7 +232,7 @@
           expect(group.headerTemplate).to.eql(template);
         });
 
-        it('should pickup footer template', function() {
+        it('should pickup footer template', () => {
           var group = document.createElement('vaadin-grid-column-group');
           var template = document.createElement('template');
           template.classList.add('footer');
@@ -249,8 +249,8 @@
 
       });
 
-      describe('inheritance', function() {
-        it('both, class and super observers, should be called', function() {
+      describe('inheritance', () => {
+        it('both, class and super observers, should be called', () => {
           var superSpy = sinon.spy(group, '_resizableChanged');
           var thisSpy = sinon.spy(group, '_groupResizableChanged');
           group.resizable = true;

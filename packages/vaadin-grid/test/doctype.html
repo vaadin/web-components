@@ -20,9 +20,9 @@
   </test-fixture>
 
   <script>
-    describe('missing doctype', function() {
+    describe('missing doctype', () => {
 
-      it('should warn about doctype', function() {
+      it('should warn about doctype', () => {
         var _warn = console.warn;
         var spy = console.warn = sinon.spy();
         fixture('default');

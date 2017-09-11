@@ -35,11 +35,11 @@
   </test-fixture>
 
   <script>
-    describe('frozen columns', function() {
+    describe('frozen columns', () => {
       var grid;
       var columns;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('frozen-columns');
         grid.dataProvider = infiniteDataProvider;
         columns = grid.querySelectorAll('vaadin-grid-column');
@@ -47,7 +47,7 @@
         flushGrid(grid);
       });
 
-      it('should have last frozen only when there are frozen columns', function() {
+      it('should have last frozen only when there are frozen columns', () => {
         expect(columns[0]._lastFrozen).to.be.true;
 
         columns[0].frozen = false;
@@ -55,26 +55,26 @@
         expect(columns[0]._lastFrozen).to.be.false;
       });
 
-      ['header', 'body'].forEach(function(container) {
+      ['header', 'body'].forEach(container => {
 
-        describe(container, function() {
+        describe(container, () => {
 
           var containerElement;
           var containerRows;
 
-          beforeEach(function() {
+          beforeEach(() => {
             containerElement = grid.shadowRoot.querySelector(container === 'header' ? 'thead' : 'tbody');
             containerRows = getRows(containerElement);
           });
 
-          it('should have a frozen cell in a row', function() {
+          it('should have a frozen cell in a row', () => {
             var cells = getRowCells(containerRows[0]);
             expect(cells[0].hasAttribute('frozen')).to.be.true;
             expect(cells[1].hasAttribute('frozen')).not.to.be.true;
             expect(cells[2].hasAttribute('frozen')).not.to.be.true;
           });
 
-          it('should have the correct last-frozen cell in a row', function() {
+          it('should have the correct last-frozen cell in a row', () => {
             grid._columnTree[0][1].frozen = true;
             containerRows = getRows(containerElement);
             var cells = getRowCells(containerRows[0]);
@@ -83,13 +83,13 @@
             expect(cells[2].hasAttribute('last-frozen')).not.to.be.true;
           });
 
-          it('should not move while content scrolls horizontally', function(done) {
+          it('should not move while content scrolls horizontally', done => {
             var initialContainerRect = containerElement.getBoundingClientRect();
             var borderTopWidth = containerElement.style.borderTopWidth || '0';
             var containerTop = parseInt(borderTopWidth) + initialContainerRect.top + 2;
             var cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', function() {
+            grid.$.table.addEventListener('scroll', () => {
               expect(isVisible(cells[0])).to.equal(true);
               expect(isVisible(cells[2])).to.equal(true);
               done();
@@ -98,10 +98,10 @@
             grid.$.table.scrollLeft = defaultCellWidth;
           });
 
-          it('should update transforms when frozen columns decrease', function(done) {
+          it('should update transforms when frozen columns decrease', done => {
             var cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', function() {
+            grid.$.table.addEventListener('scroll', () => {
               expect(cells[0].style.transform).to.eql('translate(' + defaultCellWidth + 'px, 0px)');
 
               grid._columnTree[0][0].frozen = false;
@@ -115,10 +115,10 @@
 
           });
 
-          it('should update transforms when frozen columns increase', function(done) {
+          it('should update transforms when frozen columns increase', done => {
             var cells = getRowCells(containerRows[0]);
 
-            grid.$.table.addEventListener('scroll', function() {
+            grid.$.table.addEventListener('scroll', () => {
               expect(cells[1].style.transform).to.eql('');
 
               grid._columnTree[0][1].frozen = true;
@@ -132,7 +132,7 @@
 
           });
 
-          it('should have the correct last-frozen cell in a row with hidden columns', function() {
+          it('should have the correct last-frozen cell in a row with hidden columns', () => {
             grid._columnTree[0][1].frozen = grid._columnTree[0][2].frozen = true;
 
             containerRows = getRows(containerElement);

@@ -73,20 +73,20 @@
   </test-fixture>
 
   <script>
-    describe('rows', function() {
+    describe('rows', () => {
 
       var grid, header, rows, defaultHeight, wrappers;
 
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
         grid.dataProvider = infiniteDataProvider;
-        listenOnce(grid, 'animationend', function() {
+        listenOnce(grid, 'animationend', () => {
           flushGrid(grid);
 
           rows = getRows(grid.$.items);
           defaultHeight = getRows(header)[0].clientHeight;
 
-          wrappers = getRowCells(rows[0]).map(function(cell) {
+          wrappers = getRowCells(rows[0]).map(cell => {
             return getCellContent(cell);
           });
 
@@ -97,18 +97,18 @@
         header = grid.$.header;
       }
 
-      it('should have higher wrappers on each row cell', function(done) {
-        init('two-columns', function() {
+      it('should have higher wrappers on each row cell', done => {
+        init('two-columns', () => {
           wrappers[0].style.height = wrappers[0].clientHeight * 2 + 'px';
-          flush(function() {
+          flush(() => {
             expect(wrappers[1].clientHeight).to.equal(wrappers[0].clientHeight);
             done();
           });
         });
       });
 
-      it('should not misalign on resize (wheel)', function(done) {
-        init('default-content', function() {
+      it('should not misalign on resize (wheel)', done => {
+        init('default-content', () => {
           scrollToEnd(grid);
 
           // Simulate a wheel event that doesn't cause a scroll event
@@ -126,8 +126,8 @@
         });
       });
 
-      it('should update height when hiding columns', function(done) {
-        init('two-columns-uneven-content', function() {
+      it('should update height when hiding columns', done => {
+        init('two-columns-uneven-content', () => {
           grid.querySelectorAll('vaadin-grid-column')[0].hidden = true;
 
           // Flush row height and position calculations

@@ -57,14 +57,14 @@
   </test-fixture>
 
   <script>
-    describe('sorting', function() {
+    describe('sorting', () => {
 
-      describe('sorter', function() {
+      describe('sorter', () => {
         var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
-        beforeEach(function() {
+        beforeEach(() => {
           // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+
 
           sorter = fixture('sorter');
           title = sorter.querySelector('.title');
@@ -81,11 +81,11 @@
           return clickEvent;
         }
 
-        it('should have default direction', function() {
+        it('should have default direction', () => {
           expect(sorter.direction).to.equal(null);
         });
 
-        it('should toggle direction', function() {
+        it('should toggle direction', () => {
           clickSorter(sorter);
           expect(sorter.direction).to.equal('asc');
           clickSorter(sorter);
@@ -94,20 +94,20 @@
           expect(sorter.direction).to.equal(null);
         });
 
-        it('should not toggle on focusable click', function() {
+        it('should not toggle on focusable click', () => {
           button.focus();
           click(button);
           expect(sorter.direction).to.equal(null);
         });
 
-        it('should fire a sorter-changed event', function(done) {
-          sorter.addEventListener('sorter-changed', function() {
+        it('should fire a sorter-changed event', done => {
+          sorter.addEventListener('sorter-changed', () => {
             done();
           });
           sorter.direction = 'asc';
         });
 
-        it('should show order indicator', function() {
+        it('should show order indicator', () => {
           expect(orderIndicator.innerText).to.equal('');
           sorter._order = 0;
           expect(orderIndicator.innerText).to.equal('1');
@@ -115,7 +115,7 @@
           expect(orderIndicator.innerText).to.equal('5');
         });
 
-        it('should show direction indicator', function() {
+        it('should show direction indicator', () => {
           expect(sorter.getAttribute('direction')).to.equal(null);
           sorter.direction = 'asc';
           expect(sorter.getAttribute('direction')).to.equal('asc');
@@ -123,18 +123,18 @@
           expect(sorter.getAttribute('direction')).to.equal('desc');
         });
 
-        it('should have aria-hidden for indicator', function() {
+        it('should have aria-hidden for indicator', () => {
           expect(indicators.getAttribute('aria-hidden')).to.equal('true');
         });
 
-        it('should prevent default on click', function() {
+        it('should prevent default on click', () => {
           const clickEvent = clickSorter(sorter);
 
           expect(clickEvent.defaultPrevented).to.be.true;
         });
 
-        describe('announcer', function() {
-          it('should reflect direction', function() {
+        describe('announcer', () => {
+          it('should reflect direction', () => {
             expect(announcer.textContent).to.have.string('Unsorted');
             expect(announcer.textContent).to.not.have.string('Sorted');
 
@@ -151,7 +151,7 @@
             expect(announcer.textContent).to.not.have.string('ascending');
           });
 
-          it('should reflect order', function() {
+          it('should reflect order', () => {
             sorter.direction = 'asc';
 
             expect(announcer.textContent).to.not.have.string('Order');
@@ -163,7 +163,7 @@
             expect(announcer.textContent).to.have.string('Order 5');
           });
 
-          it('should announce direction change', function() {
+          it('should announce direction change', () => {
             var spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
@@ -174,7 +174,7 @@
             expect(spy.callCount).to.eql(1);
           });
 
-          it('should announce order change', function() {
+          it('should announce order change', () => {
             var spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
@@ -185,7 +185,7 @@
             expect(spy.callCount).to.eql(1);
           });
 
-          it('should debounce direction and order changes', function() {
+          it('should debounce direction and order changes', () => {
             var spy = sinon.spy();
             sorter.addEventListener('iron-announce', spy);
 
@@ -200,29 +200,29 @@
         });
       });
 
-      describe('sorter in cell content', function() {
+      describe('sorter in cell content', () => {
         var cellContent, sorter, announcer;
 
-        beforeEach(function() {
+        beforeEach(() => {
           // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+
 
           cellContent = fixture('sorter-in-cell-content');
           sorter = cellContent.querySelector('vaadin-grid-sorter');
           announcer = sorter.shadowRoot.querySelector('#announcer');
         });
 
-        it('should have aria-hidden state on announcer by default', function() {
+        it('should have aria-hidden state on announcer by default', () => {
           expect(announcer.getAttribute('aria-hidden')).to.equal('true');
         });
 
-        it('should not have aria-hidden state on announcer after cell content receives focus', function() {
+        it('should not have aria-hidden state on announcer after cell content receives focus', () => {
           cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
 
           expect(announcer.getAttribute('aria-hidden')).to.equal('false');
         });
 
-        it('should have aria-hidden state on announcer after cell content looses focus', function(done) {
+        it('should have aria-hidden state on announcer after cell content looses focus', done => {
           cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
           cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
 
@@ -233,15 +233,15 @@
         });
       });
 
-      describe('grid', function() {
+      describe('grid', () => {
         var grid, sorterFirst, sorterLast;
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+
 
           grid = fixture('grid');
-          flush(function() {
+          flush(() => {
             sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
             sorterLast = getHeaderCellContent(grid, 0, 1).querySelector('vaadin-grid-sorter');
 
@@ -261,12 +261,12 @@
           });
         });
 
-        it('should be clickable', function() {
+        it('should be clickable', () => {
           var title = Polymer.dom(sorterFirst).querySelector('.title');
           expect(window.getComputedStyle(title).cursor).to.equal('pointer');
         });
 
-        it('should ignore sorter', function() {
+        it('should ignore sorter', () => {
           sorterFirst.direction = '';
           var sortOrders = grid._mapSorters();
           expect(sortOrders).to.have.length(1);
@@ -274,27 +274,27 @@
           expect(sortOrders[0].direction).to.equal('desc');
         });
 
-        it('should show order indicators', function() {
+        it('should show order indicators', () => {
           expect(sorterFirst._order).to.equal(1);
           expect(sorterLast._order).to.equal(0);
         });
 
-        it('should not show order indicators for one sorter', function() {
+        it('should not show order indicators for one sorter', () => {
           sorterLast.direction = '';
           expect(sorterFirst._order).to.equal(null);
           expect(sorterLast._order).to.equal(null);
         });
 
-        it('should not show order indicators', function() {
+        it('should not show order indicators', () => {
           sorterFirst.direction = null;
           sorterLast.direction = null;
           expect(sorterFirst._order).to.equal(null);
           expect(sorterLast._order).to.equal(null);
         });
 
-        describe('array data provider', function() {
+        describe('array data provider', () => {
 
-          it('should sort automatically', function() {
+          it('should sort automatically', () => {
             expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
             expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('bar');
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('foo');
@@ -304,14 +304,14 @@
             expect(getBodyCellContent(grid, 2, 1).innerText).to.equal('bar');
           });
 
-          it('should sort automatically on sort', function() {
+          it('should sort automatically on sort', () => {
             sorterFirst.direction = null;
             expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
             expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('bar');
           });
 
-          it('should not sort the items if sorter directions are not defined', function() {
+          it('should not sort the items if sorter directions are not defined', () => {
             sorterFirst.direction = null;
             sorterLast.direction = null;
             grid.items = buildDataSet(100);
@@ -320,7 +320,7 @@
             expect(cells[0]._instance.item).to.equal(grid.items[0]);
           });
 
-          it('should sort empty values', function() {
+          it('should sort empty values', () => {
             grid.items = [{
               first: 'foo',
               last: 'bar'
@@ -337,7 +337,7 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
           });
 
-          it('should sort null values', function() {
+          it('should sort null values', () => {
             grid.items = [{
               first: 'foo',
               last: 'bar'
@@ -354,7 +354,7 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
           });
 
-          it('should sort undefined values', function() {
+          it('should sort undefined values', () => {
             grid.items = [{
               first: 'foo',
               last: 'bar'
@@ -371,7 +371,7 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('');
           });
 
-          it('should sort NaN values', function() {
+          it('should sort NaN values', () => {
             grid.items = [{
               first: 'foo',
               last: 'bar'
@@ -388,7 +388,7 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('NaN');
           });
 
-          it('should sort numbers correctly', function() {
+          it('should sort numbers correctly', () => {
             grid.items = [{
               first: 1
             }, {
@@ -402,7 +402,7 @@
             expect(getBodyCellContent(grid, 2, 0).innerText).to.equal('11');
           });
 
-          it('should sort dates correctly', function() {
+          it('should sort dates correctly', () => {
             grid.items = [{
               first: 1,
               last: new Date(2000, 1, 2)
@@ -424,14 +424,14 @@
 
         });
 
-        describe('data provider', function() {
+        describe('data provider', () => {
 
-          beforeEach(function() {
+          beforeEach(() => {
             grid.dataProvider = sinon.spy(grid.dataProvider);
             grid.clearCache();
           });
 
-          it('should request with default sorting', function() {
+          it('should request with default sorting', () => {
             var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
             expect(params.sortOrders).to.eql([{
@@ -443,7 +443,7 @@
             }]);
           });
 
-          it('should request new data on sort', function() {
+          it('should request new data on sort', () => {
             sorterFirst.direction = 'desc';
             var lastCall = grid.dataProvider.lastCall;
             var params = lastCall.args[0];
@@ -456,7 +456,7 @@
             }]);
           });
 
-          it('should request new data on change in existing sorters', function() {
+          it('should request new data on change in existing sorters', () => {
             grid.dataProvider.reset();
             sorterLast.direction = 'asc';
             expect(grid.dataProvider.called).to.be.true;
@@ -464,20 +464,20 @@
 
         });
 
-        describe('single column sorting', function() {
-          beforeEach(function() {
+        describe('single column sorting', () => {
+          beforeEach(() => {
             grid.multiSort = false;
             grid.dataProvider = sinon.spy(grid.dataProvider);
           });
 
-          it('should only using single sorter', function() {
+          it('should only using single sorter', () => {
             grid.dataProvider.reset();
             sorterFirst.direction = 'desc';
 
             expect(grid.dataProvider.args[1][0].sortOrders.length).to.eql(1);
           });
 
-          it('should remove order from sorters', function() {
+          it('should remove order from sorters', () => {
             // initial order before multiSort was set
             expect(sorterLast._order).to.eql(0);
             expect(sorterFirst._order).to.eql(1);
@@ -488,7 +488,7 @@
             expect(sorterLast._order).to.be.null;
           });
 
-          it('should remove direction from previous sorter', function() {
+          it('should remove direction from previous sorter', () => {
             sorterFirst.direction = 'desc';
 
             sorterLast.direction = 'desc';

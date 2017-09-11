@@ -27,11 +27,11 @@
   </test-fixture>
 
   <script>
-    describe('scrolling mode', function() {
+    describe('scrolling mode', () => {
       var fixedContainers;
       var grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         fixedContainers = !!navigator.userAgent.match(/Edge/) && grid._scrollbarWidth === 0;
@@ -50,25 +50,25 @@
         return e;
       }
 
-      it('should have the right amount of scrollbars/scrollers', function() {
+      it('should have the right amount of scrollbars/scrollers', () => {
         var scrollbars = 0;
         scrollbars += window.getComputedStyle(grid.$.table).overflow === 'hidden' ? 0 : 1;
         scrollbars += window.getComputedStyle(grid.$.outerscroller).overflow === 'hidden' ? 0 : 1;
         expect(scrollbars).to.equal(getScrollbarWidth() > 0 ? 2 : 1);
       });
 
-      it('should/should not have fixed container elements depending on scrolling mode', function() {
+      it('should/should not have fixed container elements depending on scrolling mode', () => {
         expect(isFixed(grid.$.items)).to.equal(fixedContainers);
         expect(isFixed(grid.$.header)).to.equal(fixedContainers);
       });
 
-      it('should have correct scroll bounds on all scroll modes', function() {
+      it('should have correct scroll bounds on all scroll modes', () => {
         expect(grid.$.outerscroller.scrollHeight).to.be.above(grid.clientHeight);
         expect(grid.$.table.scrollHeight).to.equal(grid.$.outerscroller.scrollHeight);
         expect(grid.$.table.scrollWidth).to.equal(grid.$.outerscroller.scrollWidth);
       });
 
-      it('should not have the table transformed with fixed containers', function() {
+      it('should not have the table transformed with fixed containers', () => {
         // This is to ensure that a fixed body/header/footer are not positioned
         // in relation to the table element but it's parent
         if (fixedContainers) {
@@ -76,7 +76,7 @@
         }
       });
 
-      it('should only cancel wheel events when scrolling is possible - vertical', function() {
+      it('should only cancel wheel events when scrolling is possible - vertical', () => {
         grid.style.fontSize = '12px';
 
         expect(wheel(0, -1).defaultPrevented).to.be.false;
@@ -91,7 +91,7 @@
         expect(wheel(0, -1).defaultPrevented).to.be.true;
       });
 
-      it('should only cancel wheel events when scrolling is possible - horizontal', function() {
+      it('should only cancel wheel events when scrolling is possible - horizontal', () => {
         expect(wheel(-1, 0).defaultPrevented).to.be.false;
         expect(wheel(1, 0).defaultPrevented).to.be.true;
 
@@ -104,21 +104,21 @@
         expect(wheel(-1, 0).defaultPrevented).to.be.true;
       });
 
-      it('should not prevent wheel events when scrolled to max', function() {
+      it('should not prevent wheel events when scrolled to max', () => {
         scrollToEnd(grid);
         flushGrid(grid);
         expect(wheel(0, 1).defaultPrevented).to.be.false;
         expect(wheel(0, 1).defaultPrevented).to.be.false;
       });
 
-      it('should prevent default during cancel period', function() {
+      it('should prevent default during cancel period', () => {
         wheel(1, 0);
         wheel(-1, 0);
         expect(wheel(-100, 0).defaultPrevented).to.be.true;
       });
 
-      it('should not throw on table wheel', function() {
-        var tableWheel = function() {
+      it('should not throw on table wheel', () => {
+        var tableWheel = () => {
           var e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
           e.deltaY = -1;
           e.deltaX = 0;
@@ -127,7 +127,7 @@
         expect(tableWheel).to.not.throw(Error);
       });
 
-      it('should have proper height', function() {
+      it('should have proper height', () => {
         expect(grid.scrollHeight - grid.clientHeight).to.equal(0);
       });
 

@@ -39,17 +39,17 @@
 
   <script>
 
-    describe('Dynamic item size', function() {
+    describe('Dynamic item size', () => {
       var scroller, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         flushGrid(grid);
       });
 
-      it('update size using item index', function(done) {
+      it('update size using item index', done => {
         var firstItem = getFirstVisibleItem(grid);
 
         expect(firstItem.offsetHeight).to.equal(20);
