@@ -31,23 +31,25 @@
       </vaadin-grid>
     </template>
     <script>
-      class XGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
-        static get is() {
-          return 'x-grid';
+      window.addEventListener('WebComponentsReady', function() {
+        class XGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+          static get is() {
+            return 'x-grid';
+          }
+          static get properties() {
+            return {
+              language: {
+                value: 'en'
+              }
+            };
+          }
+          ready() {
+            super.ready();
+            this.loadResources('locales.json');
+          }
         }
-        static get properties() {
-          return {
-            language: {
-              value: 'en'
-            }
-          };
-        }
-        ready() {
-          super.ready();
-          this.loadResources('locales.json');
-        }
-      }
-      window.customElements.define(XGrid.is, XGrid);
+        window.customElements.define(XGrid.is, XGrid);
+      });
     </script>
   </dom-module>
 

@@ -51,31 +51,40 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
-        Polymer({
-          is: 'x-grid',
-
-          properties: {
-            parentProp: String,
-            parentPath: {
-              type: Object,
-              value: () => {
-                return {
-                  foo: 'foo'
-                };
+      window.addEventListener('WebComponentsReady', function() {
+        class XGrid extends Polymer.Element {
+          static get is() {
+            return 'x-grid';
+          }
+          static get properties() {
+            return {
+              parentProp: String,
+              parentPath: {
+                type: Object,
+                value: function() {
+                  return {
+                    foo: 'foo'
+                  };
+                }
+              },
+              dataProvider: {
+                value: function() {
+                  return infiniteDataProvider;
+                }
               }
-            },
-            dataProvider: {
-              value: () => infiniteDataProvider
-            }
-          },
-
-          _format: value => 'foo' + value,
-
-          _valueChanged: () => this.valueChanged = true,
-
-          _invalidChanged: () => this.invalidChanged = true,
-        });
+            };
+          }
+          _format(value) {
+            return 'foo' + value;
+          }
+          _valueChanged() {
+            this.valueChanged = true;
+          }
+          _invalidChanged() {
+            this.invalidChanged = true;
+          }
+        }
+        window.customElements.define(XGrid.is, XGrid);
       });
     </script>
   </dom-module>
