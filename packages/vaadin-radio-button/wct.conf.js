@@ -6,8 +6,7 @@ module.exports = {
       'macOS 10.12/iphone@10.3',
       'macOS 10.12/ipad@10.3',
       'Windows 10/microsoftedge@15',
-      // Temporary disabled till the issue will be found.
-      // 'Windows 10/internet explorer@11',
+      'Windows 10/internet explorer@11',
       'macOS 10.12/safari@10.0'
     ];
 
