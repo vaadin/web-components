@@ -39,13 +39,13 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           _grid: Object
-        }
+        };
       }
 
       static get observers() {
         return [
           '_templateInstancesChanged(_templateInstances.*, _parentPathValues.*)'
-        ]
+        ];
       }
 
       constructor() {
@@ -87,6 +87,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             forwardHostProp: function(prop, value) {
               this._forwardParentProp(prop, value);
+
+              if (this._templateInstances) {
+                this._templateInstances.forEach(function(inst) {
+                  inst.notifyPath(prop, value);
+                }, this);
+              }
             },
 
             notifyInstanceProp: function(inst, prop, value) {
@@ -128,7 +134,6 @@ This program is available under Apache License Version 2.0, available at https:/
           inst.set(prop, value);
         }, this);
       }
-
 
       _templateInstancesChanged(t, p) {
         var index, count;
