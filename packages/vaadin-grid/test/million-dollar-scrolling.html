@@ -81,10 +81,11 @@
       table.scrollTop += 2500;
     }
 
-    describe('scrolling', () => {
+    describe('scrolling', function() {
       var container, grid;
+      this.timeout(300000);
 
-      [100, 10000, 100000, 1000000].forEach(size => {
+      [100, 10000, 100000, 1000000].forEach((size) => {
         describe(size + ' items', () => {
           beforeEach(done => {
             container = fixture('table');
@@ -118,26 +119,24 @@
             });
           });
 
-          it('should be able to manually scroll to start', function(done) {
+          it('should be able to manually scroll to start', done => {
             const index = ~~(20000 / grid.$.table.scrollHeight * grid.size);
             grid.scrollToIndex(index);
-            this.timeout(1000000);
 
             simulateScrollToStart(grid, () => {
               expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.contain('item0');
               done();
             });
-          }.bind(this));
+          });
 
-          it('should be able to manually scroll to end', function(done) {
+          it('should be able to manually scroll to end', done => {
             grid.$.table.scrollTop = grid.$.table.scrollHeight - 20000;
-            this.timeout(1000000);
 
             simulateScrollToEnd(grid, () => {
               expect(getCellContent(getLastVisibleItem(grid)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
-          }.bind(this));
+          });
 
         });
       });
