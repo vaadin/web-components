@@ -43,6 +43,7 @@
     "sugar": "^2.0.0",
     "vaadin-button": "^1.0.0",
     "vaadin-themes": "vaadin/vaadin-themes",
+    "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5"
   }
 }
