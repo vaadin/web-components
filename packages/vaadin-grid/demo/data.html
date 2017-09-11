@@ -48,10 +48,12 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-array-data-example',
-
-                ready: function() {
+              class XArrayDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-array-data-example';
+                }
+                ready() {
+                  super.ready();
                   var items = [];
 
                   for (var i = 0; i < 100; i++) {
@@ -60,7 +62,8 @@
 
                   this.items = items;
                 }
-              });
+              }
+              window.customElements.define(XArrayDataExample.is, XArrayDataExample);
             });
           </script>
         </dom-module>
@@ -105,10 +108,13 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-dynamic-data-example',
+              class XDynamicDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-dynamic-data-example';
+                }
+                ready() {
+                  super.ready();
 
-                ready: function() {
                   var items = [];
 
                   for (var i = 0; i < 10; i++) {
@@ -116,16 +122,17 @@
                   }
 
                   this.items = items;
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                },
+                }
 
-                _remove: function() {
+                _remove() {
                   this.pop('items');
                 }
-              });
+              }
+              window.customElements.define(XDynamicDataExample.is, XDynamicDataExample);
             });
           </script>
         </dom-module>
@@ -175,10 +182,13 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-dynamic-height-example',
+              class XDynamicHeightExample extends Polymer.Element {
+                static get is() {
+                  return 'x-dynamic-height-example';
+                }
+                ready() {
+                  super.ready();
 
-                ready: function() {
                   var items = [];
 
                   for (var i = 0; i < 5; i++) {
@@ -186,16 +196,17 @@
                   }
 
                   this.items = items;
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                },
+                }
 
-                _remove: function() {
+                _remove() {
                   this.pop('items');
                 }
-              });
+              }
+              window.customElements.define(XDynamicHeightExample.is, XDynamicHeightExample);
             });
           </script>
         </dom-module>
@@ -237,10 +248,12 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-remote-data-example',
-
-                ready: function() {
+              class XRemoteDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-remote-data-example';
+                }
+                ready() {
+                  super.ready();
                   this.size = 200;
                   this.dataProvider = function(params, callback) {
                     var xhr = new XMLHttpRequest();
@@ -252,8 +265,8 @@
                     xhr.send();
                   };
                 }
-
-              });
+              }
+              window.customElements.define(XRemoteDataExample.is, XRemoteDataExample);
             });
           </script>
         </dom-module>

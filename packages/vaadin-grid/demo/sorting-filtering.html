@@ -122,10 +122,13 @@
           </template>
           <script>
             addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-remote-sorting-example',
+              class XRemoteSortingExample extends Polymer.Element {
+                static get is() {
+                  return 'x-remote-sorting-example';
+                }
+                ready() {
+                  super.ready();
 
-                ready: function() {
                   var grid = this.$.grid;
 
                   grid.size = 200;
@@ -148,7 +151,8 @@
                     xhr.send();
                   };
                 }
-              });
+              }
+              window.customElements.define(XRemoteSortingExample.is, XRemoteSortingExample);
             });
           </script>
         </dom-module>
@@ -250,10 +254,13 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-remote-filtering-example',
+              class XRemoteFilteringExample extends Polymer.Element {
+                static get is() {
+                  return 'x-remote-filtering-example';
+                }
 
-                ready: function() {
+                ready() {
+                  super.ready();
                   var grid = this.$.grid;
 
                   grid.size = 200;
@@ -282,7 +289,8 @@
                     xhr.send();
                   };
                 }
-              });
+              }
+              window.customElements.define(XRemoteFilteringExample.is, XRemoteFilteringExample);
             });
           </script>
         </dom-module>

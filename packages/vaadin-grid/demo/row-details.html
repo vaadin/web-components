@@ -151,13 +151,16 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'bind-expanded-items',
+              class BindExpandedItems extends Polymer.Element {
+                static get is() {
+                  return 'bind-expanded-items';
+                }
 
                 _onActiveItemChanged: function(e) {
                   this.$.grid.expandedItems = [e.detail.value];
                 }
-              });
+              }
+              window.customElements.define(BindExpandedItems.is, BindExpandedItems);
             });
           </script>
         </dom-module>

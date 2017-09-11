@@ -169,15 +169,19 @@
       </template>
       <script>
         window.addEventListener('WebComponentsReady', function() {
-          Polymer({
-            is: 'x-app',
-
-            properties: {
-              items: {
-                value: window.users.results
-              }
+          class XApp extends Polymer.Element {
+            static get is() {
+              return 'x-app';
             }
-          });
+            static get properties() {
+              return {
+                items: {
+                  value: window.users.results
+                }
+              };
+            }
+          }
+          window.customElements.define(XApp.is, XApp);
         });
     </script>
     </dom-module>
