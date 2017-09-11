@@ -35,6 +35,6 @@
     "paper-input": "^2.0.0",
     "test-fixture": "^3.0.0",
     "vaadin-text-field": "^1.0.0",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^6.1.5"
   }
 }
