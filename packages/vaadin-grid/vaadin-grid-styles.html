@@ -141,18 +141,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /* Sizer styles */
-      #outersizer {
+      .sizer {
         display: flex;
         position: relative;
         width: 100%;
         visibility: hidden;
       }
 
-      #outersizer [part~="details-cell"] {
+      .sizer [part~="details-cell"] {
         display: none;
       }
 
-      #outersizer [part~="cell"] {
+      .sizer [part~="cell"] {
         display: block;
         flex-shrink: 0;
         line-height: 0;
@@ -160,26 +160,48 @@ This program is available under Apache License Version 2.0, available at https:/
         margin-top: -1em;
       }
 
-      #outersizer [part~="cell"][hidden] {
+      .sizer [part~="cell"][hidden] {
         display: none;
       }
 
-      #outersizer [part~="cell"] {
+      .sizer [part~="cell"] {
         height: 0 !important;
         padding: 0 !important;
       }
 
-      #outersizer [part~="cell"]::before {
+      .sizer [part~="cell"]::before {
         content: "-";
       }
 
-      #outersizer [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+      .sizer [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         display: none;
       }
 
+      /* Fixed mode (Tablet Edge) */
       #fixedsizer {
-        /* TODO: fix */
+        position: absolute;
+      }
+
+      :not([edge][no-scrollbars]) #fixedsizer {
         display: none;
+      }
+
+      [edge][no-scrollbars] {
+        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
+        a containing block. The object acts as a containing block for fixed positioned descendants. */
+        transform: translateZ(0);
+        overflow: hidden;
+      }
+
+      [edge][no-scrollbars] #header,
+      [edge][no-scrollbars] #footer {
+        position: fixed;
+      }
+
+      [edge][no-scrollbars] #items {
+        position: fixed;
+        width: 100%;
+        will-change: transform;
       }
     </style>
   </template>

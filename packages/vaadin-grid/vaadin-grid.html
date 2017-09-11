@@ -28,12 +28,9 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" loading$=[[_loading]]>
+    <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" loading$=[[_loading]] edge$="[[_edge]]">
       <table id="table" role="application grid">
-        <caption>
-          <!-- TODO: Implement -->
-          <div id="fixedsizer"></div>
-        </caption>
+        <caption id="fixedsizer" class="sizer" part="row"></caption>
         <thead id="header" role="rowgroup"></thead>
         <tbody id="items" role="rowgroup"></tbody>
         <tfoot id="footer" role="rowgroup"></tfoot>
@@ -43,7 +40,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <vaadin-grid-outer-scroller id="outerscroller"
           scroll-target="[[scrollTarget]]"
           scroll-handler="[[_this]]">
-        <div id="outersizer" part='row' style$="top: [[_estScrollHeight]]px"></div>
+        <div id="outersizer" class="sizer" part="row"></div>
       </vaadin-grid-outer-scroller>
     </div>
 
@@ -217,7 +214,7 @@ This program is available under Apache License Version 2.0, available at https:/
           cell._vacant = true;
         });
         row.innerHTML = '';
-        if (row.id !== 'outersizer') {
+        if (row.id !== 'outersizer' && row.id !== 'fixedsizer') {
           row.hidden = true;
         }
         columns.forEach((column, index) => {
@@ -337,8 +334,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
         });
 
-        // Sizer row
+        // Sizer rows
         this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
+        this._updateRow(this.$.fixedsizer, columnTree[columnTree.length - 1]);
 
         this._resizeHandler();
         this._frozenCellsChanged();

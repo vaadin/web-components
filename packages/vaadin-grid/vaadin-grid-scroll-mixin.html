@@ -4,30 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<dom-module id="vaadin-grid-table-scroll-styles">
-  <template>
-    <style>
-      vaadin-grid-table[fixed-sections] {
-        /* Any value other than ‘none’ for the transform results in the creation of both a stacking context and
-        a containing block. The object acts as a containing block for fixed positioned descendants. */
-        transform: translateZ(0);
-        overflow: hidden;
-      }
-
-      vaadin-grid-table[fixed-sections] vaadin-grid-table-header,
-      vaadin-grid-table[fixed-sections] vaadin-grid-table-footer {
-        position: fixed;
-      }
-
-      vaadin-grid-table[fixed-sections] vaadin-grid-table-body#items {
-        position: fixed;
-        width: 100%;
-        will-change: transform;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <script>
   window.Vaadin = window.Vaadin || {};
   Vaadin.Grid = Vaadin.Grid || {};
@@ -39,12 +15,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get properties() {
       return {
-
-        fixedSections: {
-          type: Boolean,
-          reflectToAttribute: true,
-          computed: '_hasFixedSections(_scrollbarWidth)'
-        },
 
         // Cached array of frozen cells
         _frozenCells: {
@@ -78,6 +48,12 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
+    static get observers() {
+      return [
+        '_scrollHeightUpdated(_estScrollHeight)'
+      ];
+    }
+
     ready() {
       super.ready();
       this.scrollTarget = this.$.table;
@@ -88,10 +64,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._rowWithFocusedElement = e.composedPath()[itemsIndex - 1];
       });
       this.$.items.addEventListener('focusout', () => this._rowWithFocusedElement = undefined);
-    }
-
-    _hasFixedSections(scrollbarWidth) {
-      return navigator.userAgent.match(/Edge/) && scrollbarWidth === 0;
     }
 
     _onWheel(e) {
@@ -230,7 +202,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _translateStationaryElements() {
-      if (this.fixedSections) {
+      if (this._edge && !this._scrollbarWidth) {
+        // Fixed mode (Tablet Edge)
         this.$.items.style.transform =
         this._getTranslate(-this._scrollLeft || 0, -this._scrollTop || 0);
 
@@ -248,6 +221,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _getTranslate(x, y) {
       return 'translate(' + x + 'px,' + y + 'px)';
+    }
+
+    _scrollHeightUpdated(_estScrollHeight) {
+      this.$.outersizer.style.top = this.$.fixedsizer.style.top = _estScrollHeight + 'px';
     }
 
   };
