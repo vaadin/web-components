@@ -4,23 +4,16 @@ language: node_js
 node_js: 8.0
 
 cache:
-  yarn: true
   directories:
     - node_modules
 
 addons:
-  apt:
-    sources:
-      - sourceline: 'deb https://dl.yarnpkg.com/debian/ stable main'
-        key_url: 'https://dl.yarnpkg.com/debian/pubkey.gpg'
-    packages:
-      - yarn
   firefox: latest
   google-chrome: latest
 
 install:
-  - yarn
-  - polymer install
+  - npm install
+  - bower install
 
 before_script:
   - gulp lint
