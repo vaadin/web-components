@@ -35,10 +35,11 @@
     "test-fixture": "^3.0.0",
     "vaadin-text-field": "^1.0.0",
     "webcomponentsjs": "^1.0.1",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "resolutions": {
-    "vaadin-themable-mixin": "propagate-theme"
+    "vaadin-themable-mixin": "propagate-theme",
+    "web-component-tester": "^6.1.5"
   }
 }
