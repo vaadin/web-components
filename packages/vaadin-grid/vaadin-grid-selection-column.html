@@ -6,22 +6,25 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="../vaadin-checkbox/vaadin-checkbox.html">
 
 <dom-module id="vaadin-grid-selection-column">
   <template>
     <template class="header" id="defaultHeaderTemplate">
-      <input aria-label="Select All" hidden$="[[_selectAllHidden]]" type="checkbox" on-click="_onSelectAll" checked="[[_isChecked(selectAll, _indeterminate)]]"
-        indeterminate="[[_indeterminate]]" />
+      <vaadin-checkbox aria-label="Select All" hidden$="[[_selectAllHidden]]" on-click="_onSelectAll"
+        checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]">
+      </vaadin-checkbox>
     </template>
     <template id="defaultBodyTemplate">
-      <input aria-label="Select Row" type="checkbox" checked="{{selected::change}}" />
+      <vaadin-checkbox aria-label="Select Row" checked="{{selected}}">
+      </vaadin-checkbox>
     </template>
   </template>
 
   <script>
   {
     /**
-     * `vaadin-grid-selection-column` is a helper element for the `vaadin-grid` that provides default templates 
+     * `vaadin-grid-selection-column` is a helper element for the `vaadin-grid` that provides default templates
      * and functionality for the selection.
      * With it the user can select rows using checkboxes displayed in a column.
      *
@@ -179,7 +182,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // Return true if array `a` contains all the items in `b`
       // We need this when sorting or to preserve selection after filtering.
       _arrayContains(a, b) {
-        for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++); // eslint-disable-line 
+        for (var i = 0; a && b && b[i] && a.indexOf(b[i]) >= 0; i++); // eslint-disable-line
         return i == b.length;
       }
 
