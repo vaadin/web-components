@@ -13,6 +13,7 @@
 ```
 <custom-element-demo height="550">
   <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-date-picker.html">
     <next-code-block></next-code-block>
   </template>
