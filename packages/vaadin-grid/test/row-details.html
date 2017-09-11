@@ -79,16 +79,12 @@
         }
 
         beforeEach(done => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
 
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
           Polymer.dom.flush();
           bodyRows = getRows(grid.$.items);
-          animationFrameFlush(() => {
-            done();
-          });
+          animationFrameFlush(() => done());
         });
 
         function collapseRow(index) {
@@ -172,16 +168,12 @@
           items.push({details: [1, 2, 3, 4]});
         }
 
-        beforeEach(() => {
-          grid = fixture('repeat');
-        });
+        beforeEach(() => grid = fixture('repeat'));
 
         it('should have correct height', done => {
           grid.expandItem(items[0]);
 
-          grid.dataProvider = (params, callback) => {
-            callback(items);
-          };
+          grid.dataProvider = (params, callback) => callback(items);
           flushGrid(grid);
 
           animationFrameFlush(() => {

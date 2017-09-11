@@ -79,8 +79,6 @@
       var tableRect;
 
       beforeEach(done => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('default');
 
@@ -285,8 +283,6 @@
       var grid, scrollable;
 
       beforeEach(done => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('scrollable-content');
 
@@ -300,9 +296,7 @@
           grid._observer.flush();
         }
         scrollable = getBodyCellContent(grid, 0, 0).firstElementChild;
-        animationFrameFlush(() => {
-          done();
-        });
+        animationFrameFlush(() => done());
       });
 
       it('should not cancel wheel events for scrollable content', () => {

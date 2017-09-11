@@ -155,17 +155,13 @@
       var scroller = grid.$.scroller;
       var headerContent = getVisualCellContent(grid.$.header, getRows(grid.$.header).length - 1, col);
       var footerContent = getVisualCellContent(grid.$.footer, 0, col);
-      var bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) => {
-        return getVisualCellContent(grid.$.items, rowIndex, col);
-      });
+      var bodyContent = Array.from(grid.$.items.children).map((row, rowIndex) => getVisualCellContent(grid.$.items, rowIndex, col));
       return bodyContent.concat(headerContent).concat(footerContent);
     }
 
     function expectVisualOrder(grid, order) {
       order.forEach((order, index) => {
-        getVisualColumnCellContents(grid, index).forEach(content => {
-          expect(parseInt(content.innerText)).to.equal(order);
-        });
+        getVisualColumnCellContents(grid, index).forEach(content => expect(parseInt(content.innerText)).to.equal(order));
       });
     }
 
@@ -178,8 +174,6 @@
       var grid, headerContent;
 
       beforeEach(done => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
@@ -503,8 +497,6 @@
       var grid;
 
       beforeEach(done => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('largegroup');
         grid.dataProvider = infiniteDataProvider;
@@ -523,8 +515,6 @@
       var grid, visualColumnCellContents;
 
       beforeEach(done => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('draggableCellContent');
         grid.dataProvider = infiniteDataProvider;

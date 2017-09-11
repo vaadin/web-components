@@ -108,8 +108,6 @@
       describe('keyboard navigation', () => {
         var grid, focusable, scroller, header, footer, body;
         beforeEach(done => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
 
           var fixtureElements = fixture('default');
           grid = fixtureElements[0];
@@ -1685,9 +1683,7 @@
         describe('focus events on cell content', () => {
           var cell;
 
-          beforeEach(() => {
-            cell = getCell(0, 0);
-          });
+          beforeEach(() => cell = getCell(0, 0));
 
           it('should dispatch cell-focusin after cell focus', () => {
             var spy = sinon.spy();

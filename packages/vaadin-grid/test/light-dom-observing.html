@@ -41,9 +41,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
-        Polymer({is: 'grid-wrapper'});
-      });
+      HTMLImports.whenReady(() => Polymer({is: 'grid-wrapper'}));
     </script>
   </dom-module>
 
@@ -363,9 +361,7 @@
 
         // Assign the slot to the <grid-wrapper> children.
         if (wrapper) {
-          Array.from(wrapper.children).forEach(wrapperChild => {
-            wrapperChild.setAttribute('slot', options && options.inGroup ? 'group' : 'grid');
-          });
+          Array.from(wrapper.children).forEach(wrapperChild => wrapperChild.setAttribute('slot', options && options.inGroup ? 'group' : 'grid'));
         }
 
         scroller = grid.$.scroller;
@@ -415,8 +411,6 @@
       describe('generic operations', () => {
         describe('columns inside grid', () => {
           beforeEach(done => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('columns');
             flushGrid(grid);
@@ -531,8 +525,6 @@
 
         describe('groups inside grid', () => {
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('plain-groups');
           });
@@ -568,8 +560,6 @@
           var firstGroup;
 
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('nested-groups');
             firstGroup = Polymer.dom(grid).querySelector('vaadin-grid-column-group');
@@ -643,14 +633,10 @@
       describe('dom-repeat', () => {
         var columns;
 
-        beforeEach(() => {
-          columns = 'a b c'.split(' ');
-        });
+        beforeEach(() => columns = 'a b c'.split(' '));
 
         describe('columns inside grid', () => {
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('dom-repeat-columns', {columns: columns});
           });
@@ -660,8 +646,6 @@
 
         describe('columns inside group', () => {
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('dom-repeat-columns-in-group', {columns: columns});
           });
@@ -671,8 +655,6 @@
 
         describe('groups inside grid', () => {
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('dom-repeat-groups', {columns: columns});
           });
@@ -682,8 +664,6 @@
 
         describe('groups inside group', () => {
           beforeEach(() => {
-            // The before each block times out in CI with Firefox on Polymer 2
-
 
             init('dom-repeat-groups-in-group', {columns: columns});
           });
@@ -718,8 +698,6 @@
           describe('children mutations', () => {
             describe('with columns', () => {
               beforeEach(() => {
-                // The before each block times out in CI with Firefox on Polymer 2
-
 
                 init('effective-children-columns', {inGroup: inGroup});
               });
@@ -763,8 +741,6 @@
               var firstGroup;
 
               beforeEach(() => {
-                // The before each block times out in CI with Firefox on Polymer 2
-
 
                 init('effective-children-groups', {inGroup: inGroup});
                 firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
@@ -808,8 +784,6 @@
             var firstGroup;
 
             beforeEach(() => {
-              // The before each block times out in CI with Firefox on Polymer 2
-
 
               init('effective-children-groups', {inGroup: inGroup});
               firstGroup = Polymer.dom(wrapper).querySelector('vaadin-grid-column-group');
@@ -875,13 +849,9 @@
           });
         }
 
-        describe('of grid', () => {
-          shouldSupportEffectiveChildren(false);
-        });
+        describe('of grid', () => shouldSupportEffectiveChildren(false));
 
-        describe('of group', () => {
-          shouldSupportEffectiveChildren(true);
-        });
+        describe('of group', () => shouldSupportEffectiveChildren(true));
       });
     });
   </script>

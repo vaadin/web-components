@@ -66,23 +66,15 @@
               }
             },
             dataProvider: {
-              value: () => {
-                return infiniteDataProvider;
-              }
+              value: () => infiniteDataProvider
             }
           },
 
-          _format: value => {
-            return 'foo' + value;
-          },
+          _format: value => 'foo' + value,
 
-          _valueChanged: () => {
-            this.valueChanged = true;
-          },
+          _valueChanged: () => this.valueChanged = true,
 
-          _invalidChanged: () => {
-            this.invalidChanged = true;
-          },
+          _invalidChanged: () => this.invalidChanged = true,
         });
       });
     </script>
@@ -122,9 +114,7 @@
       });
 
       it('should not fire an event when a focusable element is clicked', done => {
-        grid.addEventListener('cell-activate', e => {
-          done('Should not come here!');
-        });
+        grid.addEventListener('cell-activate', e => done('Should not come here!'));
 
         var input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
         input.focus();
@@ -166,9 +156,7 @@
       });
 
       describe('using parent properties inside templates', () => {
-        beforeEach(() => {
-          container.parentProp = 'foobar';
-        });
+        beforeEach(() => container.parentProp = 'foobar');
 
         it('should bind inside cell templates', () => {
           expect(getCellContent(getCell(grid, 0)).textContent).to.contain('foobar');
@@ -217,9 +205,7 @@
       });
 
       describe('using parent paths inside templates', () => {
-        beforeEach(() => {
-          container.set('parentPath.foo', 'bar');
-        });
+        beforeEach(() => container.set('parentPath.foo', 'bar'));
 
         it('should bind inside cell templates', () => {
           expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');

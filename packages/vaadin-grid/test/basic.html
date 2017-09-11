@@ -36,9 +36,7 @@
       it('check physical item heights', () => {
         var rowHeight = grid._physicalItems[0].offsetHeight;
 
-        grid._physicalItems.forEach(item => {
-          expect(item.offsetHeight).to.equal(rowHeight);
-        });
+        grid._physicalItems.forEach(item => expect(item.offsetHeight).to.equal(rowHeight));
       });
 
       it('check visible item count', () => {

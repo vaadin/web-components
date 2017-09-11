@@ -56,9 +56,7 @@
 
           properties: {
             dataProvider: {
-              value: () => {
-                return infiniteDataProvider;
-              }
+              value: () => infiniteDataProvider
             }
           }
 
@@ -136,9 +134,7 @@
       describe('dom-bind', () => {
         var grid;
 
-        beforeEach(() => {
-          grid = document.querySelector('#dom-bind-grid');
-        });
+        beforeEach(() => grid = document.querySelector('#dom-bind-grid'));
 
         if (!Polymer.Settings.useShadow) {
           // Only test non-shadow

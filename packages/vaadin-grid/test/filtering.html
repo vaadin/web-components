@@ -71,17 +71,13 @@
       var filterWrapper;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         filterWrapper = fixture('filter');
         filter = filterWrapper.$.filter;
       });
 
       it('should fire `filter-changed` on value change', done => {
-        filter.addEventListener('filter-changed', e => {
-          done();
-        });
+        filter.addEventListener('filter-changed', e => done());
 
         filter.value = 'foo';
       });
@@ -90,9 +86,7 @@
         filter.value = 'foo';
         filter._debouncerFilterChanged.flush();
 
-        filter.addEventListener('filter-changed', e => {
-          done();
-        });
+        filter.addEventListener('filter-changed', e => done());
         filter.path = 'bar';
       });
 
@@ -110,17 +104,13 @@
     });
 
     function flushFilters(grid) {
-      Polymer.dom(grid).querySelectorAll('vaadin-grid-filter').forEach(filter => {
-        filter._debouncerFilterChanged.flush();
-      });
+      Polymer.dom(grid).querySelectorAll('vaadin-grid-filter').forEach(filter => filter._debouncerFilterChanged.flush());
     }
 
     describe('filtering', () => {
       var grid;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('grid');
         flushGrid(grid);
@@ -137,9 +127,7 @@
       });
 
       it('should have default inputs', () => {
-        grid._filters.forEach(filter => {
-          expect(filter.$.filter.clientHeight).to.be.greaterThan(0);
-        });
+        grid._filters.forEach(filter => expect(filter.$.filter.clientHeight).to.be.greaterThan(0));
       });
 
       it('should pass filters to dataProvider', done => {
@@ -169,8 +157,6 @@
       var grid;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('grid');
         flushGrid(grid);

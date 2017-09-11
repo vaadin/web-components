@@ -63,8 +63,6 @@
         var sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
 
         beforeEach(() => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
 
           sorter = fixture('sorter');
           title = sorter.querySelector('.title');
@@ -101,9 +99,7 @@
         });
 
         it('should fire a sorter-changed event', done => {
-          sorter.addEventListener('sorter-changed', () => {
-            done();
-          });
+          sorter.addEventListener('sorter-changed', () => done());
           sorter.direction = 'asc';
         });
 
@@ -204,8 +200,6 @@
         var cellContent, sorter, announcer;
 
         beforeEach(() => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
 
           cellContent = fixture('sorter-in-cell-content');
           sorter = cellContent.querySelector('vaadin-grid-sorter');
@@ -237,8 +231,6 @@
         var grid, sorterFirst, sorterLast;
 
         beforeEach(done => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
 
           grid = fixture('grid');
           flush(() => {

@@ -215,36 +215,25 @@
       }
 
       describe('No templates', () => {
-        beforeEach(() => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
-
-          init('no-headers');
-        });
+        beforeEach(() => init('no-headers'));
 
         it('should have empty header', () => {
           var cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
-          cells.forEach(cell => {
-            expect(cell._instance).to.be.not.ok;
-          });
+          cells.forEach(cell => expect(cell._instance).to.be.not.ok);
         });
 
         it('should have empty footer', () => {
           var cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
 
-          cells.forEach(cell => {
-            expect(cell._instance).to.be.not.ok;
-          });
+          cells.forEach(cell => expect(cell._instance).to.be.not.ok);
         });
 
         it('should have no visible header rows', () => {
           expect(headerRows).not.to.be.empty;
 
-          headerRows.forEach(row => {
-            expect(row.hidden).to.be.true;
-          });
+          headerRows.forEach(row => expect(row.hidden).to.be.true);
         });
 
       });
@@ -253,9 +242,6 @@
         var extraColumn;
 
         beforeEach(() => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
-
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
           init('onecolumnonegroup');
@@ -298,16 +284,12 @@
         });
 
         it('should have the right content', () => {
-          [0, 1, 2].forEach(index => {
-            expect(getHeaderCellContent(1, index)).to.equal('header-' + index);
-          });
+          [0, 1, 2].forEach(index => expect(getHeaderCellContent(1, index)).to.equal('header-' + index));
           expect(getHeaderCellContent(0, 1)).to.equal('group-0');
         });
 
         it('should have the right body template', () => {
-          [0, 1, 2].forEach(index => {
-            expect(getBodyCellContent(0, index)).to.equal('body-' + index);
-          });
+          [0, 1, 2].forEach(index => expect(getBodyCellContent(0, index)).to.equal('body-' + index));
         });
 
         it('should have a frozen column', () => {
@@ -322,15 +304,11 @@
         });
 
         it('should have no hidden header rows', () => {
-          headerRows.forEach(row => {
-            expect(row.hidden).to.be.false;
-          });
+          headerRows.forEach(row => expect(row.hidden).to.be.false);
         });
 
         it('should have no visible footer rows', () => {
-          footerRows.forEach(row => {
-            expect(row.hidden).to.be.true;
-          });
+          footerRows.forEach(row => expect(row.hidden).to.be.true);
         });
 
         it('should have visible footer rows after adding extra column', () => {
@@ -353,9 +331,6 @@
 
       describe('Nested groups', () => {
         beforeEach(done => {
-          // The before each block times out in CI with Firefox on Polymer 2
-
-
           //  | group-0             | group-1                                  |          |
           //  |           |         | group-2            | group-3             |          |
           //  |           |         |          |         | header-4 | header-5 | header-6 |
@@ -420,9 +395,7 @@
             [0, 1],
             [1, 2], [1, 3],
             [2, 2], [2, 3], [2, 4], [2, 5]
-          ].forEach(a => {
-            expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          });
+          ].forEach(a => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
         });
 
         it('frozen in a group should propagate frozen attribute up and down in footers', () => {
@@ -430,9 +403,7 @@
             [0, 2], [0, 3], [0, 4], [0, 5],
             [1, 2], [1, 3],
             [2, 1]
-          ].forEach(a => {
-            expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          });
+          ].forEach(a => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
         });
 
         it('should have last row fully visible when scrolled to end', done => {

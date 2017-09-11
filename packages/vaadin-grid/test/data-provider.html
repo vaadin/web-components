@@ -114,8 +114,6 @@
       var loadDebounceTime = 100;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         container = fixture('table');
         grid = container.$.grid;
@@ -159,9 +157,7 @@
           simulateScrollToEnd(grid, () => {
             setTimeout(() => {
               // 9 is last page out of 100 items / 10 per page.
-              var pages = container.dataProvider.getCalls().map(call => {
-                return call.args[0].page;
-              });
+              var pages = container.dataProvider.getCalls().map(call => call.args[0].page);
               expect(pages).to.contain.members([7, 8, 9]);
               done();
             }, loadDebounceTime);
@@ -177,9 +173,7 @@
             container.dataProvider.reset();
             simulateScrollToStart(grid, () => {
               setTimeout(() => {
-                var pages = container.dataProvider.getCalls().map(call => {
-                  return call.args[0].page;
-                });
+                var pages = container.dataProvider.getCalls().map(call => call.args[0].page);
                 expect(pages).not.to.contain(0);
                 done();
               }, loadDebounceTime);
@@ -216,9 +210,7 @@
       it('should update sub properties on clearCache', () => {
         const data = [{value: 'foo'}];
         grid.size = 1;
-        container.dataProvider = (params, cb) => {
-          cb(data);
-        };
+        container.dataProvider = (params, cb) => cb(data);
         expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo');
         data[0].value = 'bar';
         grid.clearCache();
@@ -230,9 +222,7 @@
           expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
 
           // prevent done from being multiple times.
-          grid.debounce('done', () => {
-            done();
-          });
+          grid.debounce('done', () => done());
         };
       });
 
@@ -266,8 +256,6 @@
       var grid;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('grid');
         flushGrid(grid);

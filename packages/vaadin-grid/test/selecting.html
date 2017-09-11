@@ -99,9 +99,7 @@
         });
 
         it('should notify', done => {
-          grid.addEventListener('selected-items-changed', () => {
-            done();
-          });
+          grid.addEventListener('selected-items-changed', () => done());
           grid.selectedItems = [cachedItems[1]];
         });
       });
@@ -135,8 +133,6 @@
       var selectAllCheckbox, firstBodyCheckbox;
 
       beforeEach(() => {
-        // The before each block times out in CI with Firefox on Polymer 2
-
 
         grid = fixture('multiselect');
 
@@ -406,9 +402,7 @@
         grid.size = 1;
 
         var checkbox = getBodyCellContent(grid, 0, 0).firstElementChild;
-        expect(() => {
-          checkbox.click();
-        }).not.to.throw(Error);
+        expect(() => checkbox.click()).not.to.throw(Error);
       });
     });
   </script>
