@@ -64,7 +64,7 @@
       // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
       const nativeFocus = HTMLElement.prototype.focus;
       let fakeFocusCurrentTarget;
-      HTMLElement.prototype.focus = () => {
+      HTMLElement.prototype.focus = function() {
         const dispatchMockFocusEvent = function(type, bubbles, target, relatedTarget) {
           if (!target) {
             return;

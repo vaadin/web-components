@@ -31,23 +31,23 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', () => {
-        Polymer({
-          is: 'x-grid',
-
-          behaviors: [Polymer.AppLocalizeBehavior],
-
-          properties: {
+      class XGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+        static get is() {
+          return 'x-grid';
+        }
+        static get properties() {
+          return {
             language: {
               value: 'en'
             }
-          },
-
-          attached: () => {
-            this.loadResources('locales.json');
-          }
-        });
-      });
+          };
+        }
+        ready() {
+          super.ready();
+          this.loadResources('locales.json');
+        }
+      }
+      window.customElements.define(XGrid.is, XGrid);
     </script>
   </dom-module>
 
@@ -62,12 +62,10 @@
     describe('app-localize-behavior', () => {
       var container, column, grid;
 
-      beforeEach(done => {
+      beforeEach(function(done) {
         container = fixture('grid');
         grid = container.$.grid;
-        container.addEventListener('app-localize-resources-loaded', () => {
-          done();
-        });
+        container.addEventListener('app-localize-resources-loaded', () => done());
       });
 
       // Known error (missing Promise polyfill in webcomponentsjs lite v0)
