@@ -94,11 +94,11 @@
 
             </vaadin-grid>
             <div id="pages">
-              <button on-tap="_prev">&lt;</button>
+              <button on-click="_prev">&lt;</button>
               <template is="dom-repeat" items="[[pages]]">
-                <button on-tap="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
+                <button on-click="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
               </template>
-              <button on-tap="_next">&gt;</button>
+              <button on-click="_next">&gt;</button>
             </div>
           </template>
           <script>
