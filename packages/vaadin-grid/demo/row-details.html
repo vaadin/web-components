@@ -156,7 +156,7 @@
                   return 'bind-expanded-items';
                 }
 
-                _onActiveItemChanged: function(e) {
+                _onActiveItemChanged(e) {
                   this.$.grid.expandedItems = [e.detail.value];
                 }
               }

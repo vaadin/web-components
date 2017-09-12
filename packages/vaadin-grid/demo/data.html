@@ -54,7 +54,7 @@
                 }
                 ready() {
                   super.ready();
-                  var items = [];
+                  const items = [];
 
                   for (var i = 0; i < 100; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
@@ -115,7 +115,7 @@
                 ready() {
                   super.ready();
 
-                  var items = [];
+                  const items = [];
 
                   for (var i = 0; i < 10; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
@@ -189,7 +189,7 @@
                 ready() {
                   super.ready();
 
-                  var items = [];
+                  const items = [];
 
                   for (var i = 0; i < 5; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
@@ -256,11 +256,11 @@
                   super.ready();
                   this.size = 200;
                   this.dataProvider = function(params, callback) {
-                    var xhr = new XMLHttpRequest();
+                    const xhr = new XMLHttpRequest();
                     xhr.onload = function() {
                       callback(JSON.parse(xhr.responseText).result);
                     };
-                    var index = params.page * params.pageSize;
+                    const index = params.page * params.pageSize;
                     xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
                     xhr.send();
                   };

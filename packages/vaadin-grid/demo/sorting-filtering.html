@@ -129,18 +129,18 @@
                 ready() {
                   super.ready();
 
-                  var grid = this.$.grid;
+                  const grid = this.$.grid;
 
                   grid.size = 200;
 
                   grid.dataProvider = function(params, callback) {
-                    var xhr = new XMLHttpRequest();
+                    const xhr = new XMLHttpRequest();
                     xhr.onload = function() {
                       callback(JSON.parse(xhr.responseText).result);
                     };
 
-                    var index = params.page * params.pageSize;
-                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+                    const index = params.page * params.pageSize;
+                    let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
                     params.sortOrders.forEach(function(sort) {
@@ -261,14 +261,14 @@
 
                 ready() {
                   super.ready();
-                  var grid = this.$.grid;
+                  const grid = this.$.grid;
 
                   grid.size = 200;
 
                   grid.dataProvider = function(params, callback) {
-                    var xhr = new XMLHttpRequest();
+                    const xhr = new XMLHttpRequest();
                     xhr.onload = function() {
-                      var response = JSON.parse(xhr.responseText);
+                      const response = JSON.parse(xhr.responseText);
 
                       // Number of items changes after filtering. We need
                       // to update the grid size based on server response.
@@ -277,8 +277,8 @@
                       callback(response.result);
                     };
 
-                    var index = params.page * params.pageSize;
-                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+                    const index = params.page * params.pageSize;
+                    let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
                     params.filters.forEach(function(filter) {

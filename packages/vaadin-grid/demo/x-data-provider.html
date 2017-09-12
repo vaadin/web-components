@@ -23,9 +23,9 @@
             dataProvider: {
               notify: true,
               value: function() {
-                var _this = this;
+                const _this = this;
                 return function(params, callback) {
-                  var items = Array.apply( null, { length: params.pageSize } ).map(function(item, index) {
+                  const items = Array.apply( null, { length: params.pageSize } ).map(function(item, index) {
                     return window.getJSON('http://randomuser.me?index=' + (index + params.page * params.pageSize));
                   });
                   _this.loading = true;
@@ -80,14 +80,14 @@
 (function() {
   window.getJSON = function(url, callback) {
     if (url.indexOf('randomuser.me') > -1) {
-      var index = parseInt(getParameterByName(url, 'index') || 0);
+      const index = parseInt(getParameterByName(url, 'index') || 0);
       return JSON.parse(JSON.stringify(users.results[index % users.results.length])); //clone object
     }
   };
 
   function getParameterByName(url, name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
       results = regex.exec(url);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }

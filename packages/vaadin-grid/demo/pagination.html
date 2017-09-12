@@ -149,8 +149,8 @@
                     });
                   }
 
-                  var start = page * this.$.grid.pageSize;
-                  var end = (page + 1) * this.$.grid.pageSize;
+                  const start = page * this.$.grid.pageSize;
+                  const end = (page + 1) * this.$.grid.pageSize;
                   this.$.grid.items = items.slice(start, end);
                 }
               }

@@ -117,7 +117,7 @@
               }
 
               _edit(e) {
-                var item = e.model.item;
+                const item = e.model.item;
                 this.editing = item;
 
                 this._first = item.name.first;
@@ -127,7 +127,7 @@
               }
 
               _save(e) {
-                var item = e.model.item;
+                const item = e.model.item;
                 item.name.first = this._first;
                 item.name.last = this._last;
 
@@ -155,7 +155,7 @@
               }
 
               _remove(e) {
-                var index = this.items.indexOf(e.model.item);
+                const index = this.items.indexOf(e.model.item);
                 this.items.splice(index, 1);
 
                 this.$.grid.clearCache();
