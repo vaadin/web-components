@@ -72,11 +72,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       var table = this.$.table;
-      var momentum = Math.abs(e.deltaX) + Math.abs(e.deltaY);
 
-      if (this._canScroll(table, e.deltaX, e.deltaY)) {
+      var deltaY = e.deltaY;
+      if (e.deltaMode === 1) {
+        // Mode 1 == scrolling by lines instead of pixels
+        deltaY *= this._physicalAverage;
+      }
+
+      var momentum = Math.abs(e.deltaX) + Math.abs(deltaY);
+
+      if (this._canScroll(table, e.deltaX, deltaY)) {
         e.preventDefault();
-        table.scrollTop += e.deltaY;
+        table.scrollTop += deltaY;
         table.scrollLeft += e.deltaX;
         this._scrollHandler();
         this._hasResidualMomentum = true;
