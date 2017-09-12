@@ -1,5 +1,5 @@
-rootUrl: http://127.0.0.1:8080/components/vaadin-button/test/visual/
-gridUrl: http://127.0.0.1:4444/wd/hub
+rootUrl: http://localhost:8080/components/vaadin-button/test/visual/
+gridUrl: http://localhost:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 
 system:
