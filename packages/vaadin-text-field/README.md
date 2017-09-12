@@ -13,16 +13,17 @@
 ```
 <custom-element-demo>
   <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-text-field.html">
+    <link rel="import" href="vaadin-password-field.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-text-field>
-  ...
-</vaadin-text-field>
+<vaadin-text-field label="Username"></vaadin-text-field>
+<vaadin-password-field label="Password"></vaadin-password-field>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="200" alt="Screenshot of vaadin-text-field">](https://vaadin.com/elements/-/element/vaadin-text-field)
