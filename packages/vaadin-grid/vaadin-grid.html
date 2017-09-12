@@ -72,6 +72,22 @@ This program is available under Apache License Version 2.0, available at https:/
      * `details-cell` | Row details cell in the internal table
      * `resize-handle` | Handle for resizing the columns
      *
+     * The following state attributes are exposed for styling:
+     *
+     * Attribute    | Description | Part name
+     * -------------|-------------|------------
+     * `loading` | Set when the grid is loading data from data provider | :host
+     * `interacting` | Keyboad navigation in interaction mode | :host
+     * `navigating` | Keyboad navigation in navigation mode | :host
+     * `reordering` | Set when the grid's columns are being reordered | :host
+     * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
+     * `frozen` | Frozen cell | cell
+     * `last-frozen` | Last frozen cell | cell
+     * `last-column` | Last visible cell on a row | cell
+     * `selected` | Selected row | row
+     * `odd` | Odd row | row
+     *
+     *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
      * @mixes Vaadin.Grid.DataProviderMixin
