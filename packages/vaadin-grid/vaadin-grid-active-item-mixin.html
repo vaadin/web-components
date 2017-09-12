@@ -47,9 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _activeItemChanged() {
       if (this.$.scroller._physicalItems) {
-        this.$.scroller._physicalItems.forEach(row => {
-          this._updateItem(row, row.item);
-        });
+        this.$.scroller._physicalItems.forEach(row => this._updateItem(row, row.item));
       }
     }
   };

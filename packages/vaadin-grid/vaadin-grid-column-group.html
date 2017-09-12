@@ -151,14 +151,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
             const _rootColumns = rootColumns.slice(0);
             if (_rootColumns[0] && _rootColumns[0]._order) {
-              _rootColumns.sort((a, b) => {
-                return a._order - b._order;
-              });
+              _rootColumns.sort((a, b) => a._order - b._order);
             }
 
-            _rootColumns.forEach((column, index) => {
-              column._order = order + ((index + 1) * scope);
-            });
+            _rootColumns.forEach((column, index) => column._order = order + ((index + 1) * scope));
           }
         }
 
@@ -167,9 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          rootColumns.forEach(column => {
-            column._reorderStatus = reorderStatus;
-          });
+          rootColumns.forEach(column => column._reorderStatus = reorderStatus);
         }
 
         _groupResizableChanged(resizable, rootColumns) {
@@ -177,22 +171,16 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          rootColumns.forEach(column => {
-            column.resizable = resizable;
-          });
+          rootColumns.forEach(column => column.resizable = resizable);
         }
 
         _updateVisibleChildColumns(childColumns) {
-          this._visibleChildColumns = Array.prototype.filter.call(childColumns, col => {
-            return !col.hidden;
-          });
+          this._visibleChildColumns = Array.prototype.filter.call(childColumns, col => !col.hidden);
         }
 
         _childColumnsChanged(childColumns) {
           if (!this._autoHidden && this.hidden) {
-            Array.prototype.forEach.call(childColumns, column => {
-              column.hidden = true;
-            });
+            Array.prototype.forEach.call(childColumns, column => column.hidden = true);
             this._updateVisibleChildColumns(childColumns);
           }
         }
@@ -203,16 +191,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (this._visibleChildColumns.length) {
-            this._setWidth('calc(' + Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => {
-              return prev += ' + ' + (curr.width || '0px').replace('calc', '');
-            }, '').substring(3) + ')');
+            this._setWidth('calc(' + Array.prototype
+              .reduce.call(this._visibleChildColumns, (prev, curr) => prev += ' + ' + (curr.width || '0px')
+              .replace('calc', ''), '')
+              .substring(3) + ')');
           } else {
             this._setWidth('0px');
           }
 
-          this._setFlexGrow(Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => {
-            return prev + curr.flexGrow;
-          }, 0));
+          this._setFlexGrow(Array.prototype.reduce.call(this._visibleChildColumns, (prev, curr) => prev + curr.flexGrow, 0));
         }
 
         _groupFrozenChanged(frozen, rootColumns) {
@@ -222,18 +209,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Don’t propagate the default `false` value.
           if (frozen !== false) {
-            Array.from(rootColumns).forEach(col => {
-              col.frozen = frozen;
-            });
+            Array.from(rootColumns).forEach(col => col.frozen = frozen);
           }
         }
 
         _groupHiddenChanged(hidden, rootColumns) {
           if (rootColumns && !this._preventHiddenCascade) {
             this._ignoreVisibleChildColumns = true;
-            rootColumns.forEach(column => {
-              column.hidden = hidden;
-            });
+            rootColumns.forEach(column => column.hidden = hidden);
             this._ignoreVisibleChildColumns = false;
           }
 
@@ -271,9 +254,8 @@ This program is available under Apache License Version 2.0, available at https:/
         _addNodeObserver() {
           // TODO: Drop legacy api
           this._observer = Polymer.dom(this).observeNodes(info => {
-            const isColumnElement = node => {
-              return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
-            };
+            const isColumnElement =
+              node => (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
 
             if (info.addedNodes.filter(isColumnElement).length > 0 ||
               info.removedNodes.filter(isColumnElement).length > 0) {

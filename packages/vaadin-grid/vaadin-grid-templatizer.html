@@ -61,7 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       createInstance() {
         this._ensureTemplatized();
-        var instance = new this._TemplateClass({});
+        const instance = new this._TemplateClass({});
         this.addInstance(instance);
 
         return instance;
@@ -75,7 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       removeInstance(instance) {
-        var index = this._templateInstances.indexOf(instance);
+        const index = this._templateInstances.indexOf(instance);
         this.splice('_templateInstances', index, 1);
       }
 
@@ -89,9 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
               this._forwardParentProp(prop, value);
 
               if (this._templateInstances) {
-                this._templateInstances.forEach(inst => {
-                  inst.notifyPath(prop, value);
-                });
+                this._templateInstances.forEach(inst => inst.notifyPath(prop, value));
               }
             },
 
@@ -101,7 +99,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 return;
               }
 
-              var originalProp = `__${prop}__`;
+              const originalProp = `__${prop}__`;
 
               // Notify for only user-action changes, not for scrolling updates. E. g.,
               // if `expanded` is different from `__expanded__`, which was set during render.
@@ -118,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 });
               }
 
-              var gridCallback = `_${prop}InstanceChangedCallback`;
+              const gridCallback = `_${prop}InstanceChangedCallback`;
               if (this._grid && this._grid[gridCallback]) {
                 this._grid[gridCallback](inst, value);
               }
@@ -130,13 +128,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _forwardParentProp(prop, value) {
         this._parentPathValues[prop] = value;
-        this._templateInstances.forEach(inst => {
-          inst.set(prop, value);
-        });
+        this._templateInstances.forEach(inst => inst.set(prop, value));
       }
 
       _templateInstancesChanged(t, p) {
-        var index, count;
+        let index, count;
         if (t.path === '_templateInstances') {
           // Iterate all instances
           index = 0;

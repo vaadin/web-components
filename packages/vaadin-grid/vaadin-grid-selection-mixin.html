@@ -39,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _templateInstanceChangedSelection(e) {
       if (e.detail.prop === 'selected') {
-        var item = e.detail.inst.item;
+        const item = e.detail.inst.item;
         (this._isSelected(item) ? this.deselectItem : this.selectItem).call(this, item);
 
         this.dispatchEvent(new CustomEvent('iron-announce', {
@@ -80,7 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     deselectItem(item) {
       item = this._takeItem(item);
-      var index = this.selectedItems.indexOf(item);
+      const index = this.selectedItems.indexOf(item);
       if (index > -1) {
         this.splice('selectedItems', index, 1);
       }
@@ -94,7 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     _toggleItem(item) {
       item = this._takeItem(item);
-      var index = this.selectedItems.indexOf(item);
+      const index = this.selectedItems.indexOf(item);
       if (index === -1) {
         this.selectItem(item);
       } else {
@@ -119,9 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
         Array.from(this.$.items.children).forEach(row => {
           const selected = this._isSelected(row._item);
           this._toggleAttribute('selected', selected, row);
-          Array.from(row.children).forEach(cell => {
-            cell._instance.selected = selected;
-          });
+          Array.from(row.children).forEach(cell => cell._instance.selected = selected);
         });
       }
     }

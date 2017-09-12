@@ -128,32 +128,24 @@ This program is available under Apache License Version 2.0, available at https:/
           this._debouncerLoad,
           Polymer.Async.timeOut.after(100),
           () => {
-            uncachedPages.forEach(i => {
-              this._loadPage(i);
-            });
+            uncachedPages.forEach(i => this._loadPage(i));
           });
       }
     }
 
     _cachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => {
-        return this._cache !== undefined && this._cache[page] !== undefined;
-      });
+      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] !== undefined);
     }
 
     _uncachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => {
-        return this._cache !== undefined && this._cache[page] === undefined;
-      });
+      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] === undefined);
     }
 
     _eagerlyLoadPages() {
       const pages = this._cachedPagesForPhysicalItems().slice(0);
 
       if (pages.length > 0) {
-        pages.sort((a, b) => {
-          return a > b;
-        });
+        pages.sort((a, b) => a > b);
 
         const prev = Math.max(0, pages[0] - 1);
         const next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));

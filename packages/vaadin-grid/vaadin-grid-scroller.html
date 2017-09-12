@@ -126,7 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._physicalTop = 0;
         }
 
-        var y = this._physicalTop;
+        let y = this._physicalTop;
         this._iterateItems((pidx, vidx) => {
           this._physicalItems[pidx].style.transform = `translateY(${y}px)`;
           y += this._physicalSizes[pidx];
@@ -158,9 +158,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const fragment = document.createDocumentFragment();
         const physicalItems = this._createScrollerRows(size);
 
-        physicalItems.forEach(inst => {
-          fragment.appendChild(inst);
-        });
+        physicalItems.forEach(inst => fragment.appendChild(inst));
         this._getRowTarget().appendChild(fragment);
 
         // Weird hack needed to get Safari to actually distribute slots
@@ -183,14 +181,14 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _assignModels(itemSet) {
         this._iterateItems((pidx, vidx) => {
-          var el = this._physicalItems[pidx];
+          const el = this._physicalItems[pidx];
           this._toggleAttribute('hidden', vidx >= this.size, el);
           this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
         }, itemSet);
       }
 
       _scrollHandler() {
-        var delta = this.$.table.scrollTop - this._scrollPosition;
+        const delta = this.$.table.scrollTop - this._scrollPosition;
         super._scrollHandler();
         const oldOffset = this._vidxOffset;
         if (this._maxScrollTop && this._virtualCount < this.size) {
@@ -224,14 +222,14 @@ This program is available under Apache License Version 2.0, available at https:/
             this._noScale = false;
             return;
           }
-          var scale = this.$.table.scrollTop / (this.$.table.scrollHeight - this.$.table.offsetHeight);
-          var offset = scale * this.size;
+          const scale = this.$.table.scrollTop / (this.$.table.scrollHeight - this.$.table.offsetHeight);
+          const offset = scale * this.size;
           this._vidxOffset = Math.round(offset - scale * this._virtualCount);
         } else {
           // Make sure user can always swipe/wheel scroll to the start and end
-          var oldOffset = this._vidxOffset || 0;
-          var threshold = 1000;
-          var maxShift = 100;
+          const oldOffset = this._vidxOffset || 0;
+          const threshold = 1000;
+          const maxShift = 100;
           // At start
           if (this._scrollTop === 0) {
             this._vidxOffset = 0;
@@ -246,7 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._noScale = true;
           }
           // At end
-          var maxOffset = this.size - this._virtualCount;
+          const maxOffset = this.size - this._virtualCount;
           if (this._scrollTop >= this._maxScrollTop && this._maxScrollTop > 0) {
             this._vidxOffset = maxOffset;
             if (oldOffset !== this._vidxOffset) {
