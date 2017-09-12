@@ -34,7 +34,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      HTMLImports.whenReady(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -50,10 +50,10 @@
 
   <script>
 
-    describe('column', function() {
-      var container, column, grid;
+    describe('column', () => {
+      let container, column, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         container = fixture('grid');
         grid = container.$.grid;
         grid.dataProvider = infiniteDataProvider;
@@ -61,70 +61,70 @@
         flushGrid(grid);
       });
 
-      describe('properties', function() {
-        describe('flex', function() {
-          it('should have default value', function() {
+      describe('properties', () => {
+        describe('flex', () => {
+          it('should have default value', () => {
             expect(column.flexGrow).to.eql(1);
           });
 
-          it('should be bound to header cells', function() {
+          it('should be bound to header cells', () => {
             column.flexGrow = 2;
 
-            var header = grid.$.header;
+            const header = grid.$.header;
 
             expect(getContainerCell(header, 0, 0).style.flexGrow).to.eql('3'); // colspan 2 + 1
             expect(getContainerCell(header, 1, 0).style.flexGrow).to.eql('2');
           });
 
-          it('should be bound to row cells', function() {
+          it('should be bound to row cells', () => {
             column.flexGrow = 2;
 
             expect(getContainerCell(grid.$.items, 0, 0).style.flexGrow).to.eql('2');
           });
 
-          it('should be bound to footer cells', function() {
+          it('should be bound to footer cells', () => {
             column.flexGrow = 2;
 
             expect(getContainerCell(grid.$.footer, 0, 0).style.flexGrow).to.eql('2');
           });
         });
 
-        describe('width', function() {
-          it('should have default width', function() {
+        describe('width', () => {
+          it('should have default width', () => {
             expect(column.width).to.eql('100px');
           });
 
-          it('should be bound to header cells', function() {
+          it('should be bound to header cells', () => {
             column.width = '20%';
 
             expect(getContainerCell(grid.$.header, 0, 0).style.width).to.eql('calc(20% + 100px)');
           });
 
-          it('should be bound to row cells', function() {
+          it('should be bound to row cells', () => {
             column.width = '200px';
 
             expect(getContainerCell(grid.$.items, 0, 0).style.width).to.eql('200px');
           });
 
-          it('should be bound to footer cells', function() {
+          it('should be bound to footer cells', () => {
             column.width = '200px';
 
             expect(getContainerCell(grid.$.footer, 0, 0).style.width).to.eql('200px');
           });
         });
 
-        describe('hidden', function() {
-          it('should default to undefined', function() {
+        describe('hidden', () => {
+          it('should default to undefined', () => {
             expect(column.hidden).to.eql(undefined);
           });
 
-          it('should not be bound to column-group header cells', function() {
+          it('should not be bound to column-group header cells', () => {
             column.hidden = true;
 
             expect(getContainerCell(grid.$.header, 0, 0).style.display).to.eql('');
           });
 
-          it('should bind colSpan to column-group header cells', function() {
+          it('should bind colSpan to column-group header cells', () => {
             expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(2);
 
             column.hidden = true;
@@ -132,19 +132,19 @@
             expect(getContainerCell(grid.$.header, 0, 0).colSpan).to.eql(1);
           });
 
-          it('should not be bound to column header cells', function() {
+          it('should not be bound to column header cells', () => {
             column.hidden = true;
 
             expect(window.getComputedStyle(getContainerCell(grid.$.header, 1, 0)).display).to.eql('none');
           });
 
-          it('should be bound to row cells', function() {
+          it('should be bound to row cells', () => {
             column.hidden = true;
 
             expect(window.getComputedStyle(getContainerCell(grid.$.items, 0, 0)).display).to.eql('none');
           });
 
-          it('should be bound to footer cells', function() {
+          it('should be bound to footer cells', () => {
             column.hidden = true;
 
             expect(window.getComputedStyle(getContainerCell(grid.$.footer, 0, 0)).display).to.eql('none');
@@ -152,24 +152,24 @@
         });
       });
 
-      describe('cell template', function() {
-        it('should read template from light DOM', function() {
+      describe('cell template', () => {
+        it('should read template from light DOM', () => {
           expect(getCellContent(getContainerCell(grid.$.items, 0, 0)).textContent).to.contain('cell');
         });
       });
 
-      describe('header templates', function() {
-        it('should read templates from light DOM', function() {
+      describe('header templates', () => {
+        it('should read templates from light DOM', () => {
           expect(getHeaderCellContent(grid, 0, 0).textContent).to.contain('group header1');
           expect(getHeaderCellContent(grid, 1, 0).textContent).to.contain('header1');
         });
       });
 
-      describe('dom observing', function() {
+      describe('dom observing', () => {
 
-        it('should pickup header template', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+        it('should pickup header template', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
@@ -178,9 +178,9 @@
           expect(column.headerTemplate).to.eql(template);
         });
 
-        it('should pickup footer template', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+        it('should pickup footer template', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('footer');
 
           Polymer.dom(column).appendChild(template);
@@ -189,9 +189,9 @@
           expect(column.footerTemplate).to.eql(template);
         });
 
-        it('should pickup body template', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+        it('should pickup body template', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -199,11 +199,11 @@
           expect(column.template).to.eql(template);
         });
 
-        it('should re-pickup header template', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+        it('should re-pickup header template', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
           template.classList.add('header');
-          var template2 = document.createElement('template');
+          const template2 = document.createElement('template');
           template2.classList.add('header');
 
           Polymer.dom(column).appendChild(template);
@@ -214,10 +214,10 @@
           expect(column.headerTemplate).to.eql(template2);
         });
 
-        it('should pickup new body template', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
-          var template2 = document.createElement('template');
+        it('should pickup new body template', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
+          const template2 = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -228,9 +228,9 @@
           expect(column.template).to.eql(template2);
         });
 
-        it('should prepare template when added lazily', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
+        it('should prepare template when added lazily', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
 
           Polymer.dom(column).appendChild(template);
           column._templateObserver.flush();
@@ -242,10 +242,10 @@
           expect(column.template).to.eql(template);
         });
 
-        it('should prepare a new template when added lazily', function() {
-          var column = document.createElement('vaadin-grid-column');
-          var template = document.createElement('template');
-          var template2 = document.createElement('template');
+        it('should prepare a new template when added lazily', () => {
+          const column = document.createElement('vaadin-grid-column');
+          const template = document.createElement('template');
+          const template2 = document.createElement('template');
 
           column.appendChild(template);
           column._templateObserver.flush();

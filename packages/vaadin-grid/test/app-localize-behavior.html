@@ -31,22 +31,24 @@
       </vaadin-grid>
     </template>
     <script>
-      document.addEventListener('WebComponentsReady', function() {
-        Polymer({
-          is: 'x-grid',
-
-          behaviors: [Polymer.AppLocalizeBehavior],
-
-          properties: {
-            language: {
-              value: 'en'
-            }
-          },
-
-          attached: function() {
+      window.addEventListener('WebComponentsReady', function() {
+        class XGrid extends Polymer.mixinBehaviors([Polymer.AppLocalizeBehavior], Polymer.Element) {
+          static get is() {
+            return 'x-grid';
+          }
+          static get properties() {
+            return {
+              language: {
+                value: 'en'
+              }
+            };
+          }
+          ready() {
+            super.ready();
             this.loadResources('locales.json');
           }
-        });
+        }
+        window.customElements.define(XGrid.is, XGrid);
       });
     </script>
   </dom-module>
@@ -59,21 +61,19 @@
 
   <script>
 
-    describe('app-localize-behavior', function() {
-      var container, column, grid;
+    describe('app-localize-behavior', () => {
+      let container, column, grid;
 
       beforeEach(function(done) {
         container = fixture('grid');
         grid = container.$.grid;
-        container.addEventListener('app-localize-resources-loaded', function() {
-          done();
-        });
+        container.addEventListener('app-localize-resources-loaded', () => done());
       });
 
       // Known error (missing Promise polyfill in webcomponentsjs lite v0)
-      var IE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+      const IE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
       if (!IE) {
-        it('should localize', function() {
+        it('should localize', () => {
           expect(getHeaderCellContent(grid, 0, 0).innerText).to.equal('header');
         });
       }

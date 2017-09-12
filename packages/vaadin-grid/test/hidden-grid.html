@@ -36,36 +36,36 @@
   </test-fixture>
 
   <script>
-    describe('hidden grid', function() {
-      var container, grid;
+    describe('hidden grid', () => {
+      let container, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         container = fixture('trivialGrid');
         grid = container.firstElementChild;
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
       });
 
-      it('should be hidden', function() {
+      it('should be hidden', () => {
         expect(grid.offsetWidth).to.equal(0);
         expect(grid.offsetHeight).to.equal(0);
       });
 
-      describe('revealed', function(done) {
+      describe('revealed', done => {
 
-        beforeEach(function(done) {
+        beforeEach(done => {
           listenOnce(grid, 'animationend', () => flush(done));
           container.removeAttribute('hidden');
         });
 
-        it('should have content on appear', function() {
+        it('should have content on appear', () => {
           expect(grid.isAttached).to.be.true;
           expect(getBodyCellContent(grid, 0, 0).textContent).to.equal('0');
         });
 
-        it('should measure header on appear', function() {
-          var contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
-          var headerRect = grid.$.header.getBoundingClientRect();
+        it('should measure header on appear', () => {
+          const contentRect = getBodyCellContent(grid, 0, 0).getBoundingClientRect();
+          const headerRect = grid.$.header.getBoundingClientRect();
         });
 
       });

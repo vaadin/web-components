@@ -46,26 +46,26 @@
   </test-fixture>
 
   <script>
-    describe('dynamic physical count', function() {
-      var scroller, grid;
+    describe('dynamic physical count', () => {
+      let scroller, grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         scroller = grid.$.scroller;
         flushGrid(grid);
       });
 
-      it('increase pool size', function() {
-        var lastItem = grid._physicalItems[grid.lastVisibleIndex];
-        var lastItemHeight = lastItem.offsetHeight;
-        var expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
+      it('increase pool size', () => {
+        const lastItem = grid._physicalItems[grid.lastVisibleIndex];
+        const lastItemHeight = lastItem.offsetHeight;
+        const expectedFinalItem = Math.ceil(grid.offsetHeight / grid._physicalAverage) - 1;
 
         expect(scroller.offsetHeight).to.equal(grid.offsetHeight);
         expect(getCellContent(lastItem).textContent).to.equal(String(expectedFinalItem));
       });
 
-      it('increase pool size after resizing the scroller', function() {
+      it('increase pool size after resizing the scroller', () => {
         grid.classList.add('small');
         grid.style.display = 'none';
 
@@ -78,7 +78,7 @@
         expect(grid._physicalItems.length).to.be.above(25);
       });
 
-      it('pool should not increase if the scroller has no size', function() {
+      it('pool should not increase if the scroller has no size', () => {
         grid.style.display = 'none';
         grid.style.height = '1000px';
 
@@ -93,8 +93,8 @@
         expect(grid._physicalCount).to.equal(25);
       });
 
-      it('should minimize increase pool iterations', function() {
-        var spy = sinon.spy(grid, '_increasePoolIfNeeded');
+      it('should minimize increase pool iterations', () => {
+        const spy = sinon.spy(grid, '_increasePoolIfNeeded');
         grid.style.height = '1000px';
         grid._resizeHandler();
         flushGrid(grid);
@@ -108,7 +108,7 @@
         }
       });
 
-      it('should minimize physical count', function() {
+      it('should minimize physical count', () => {
         expect(grid._physicalCount).to.be.below(26);
         grid.style.height = '1000px';
         grid._resizeHandler();

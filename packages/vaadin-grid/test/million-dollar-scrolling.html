@@ -34,7 +34,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      HTMLImports.whenReady(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -51,8 +51,8 @@
   <script>
     function simulateScrollToStart(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
-      var listener = function() {
+      const table = grid.$.table;
+      const listener = () => {
         if (table.scrollTop > 0) {
           table.scrollTop -= 2000;
           grid._scrollHandler();
@@ -67,8 +67,8 @@
 
     function simulateScrollToEnd(grid, done) {
       // make sure not over scroll more than the delta threshold limit of 10k.
-      var table = grid.$.table;
-      var listener = function() {
+      const table = grid.$.table;
+      const listener = () => {
         if (table.scrollTop < table.scrollHeight - table.clientHeight - 1) {
           table.scrollTop += 2500;
           grid._scrollHandler();
@@ -82,11 +82,12 @@
     }
 
     describe('scrolling', function() {
-      var container, grid;
+      let container, grid;
+      this.timeout(300000);
 
-      [100, 10000, 100000, 1000000].forEach(function(size) {
-        describe(size + ' items', function() {
-          beforeEach(function(done) {
+      [100, 10000, 100000, 1000000].forEach((size) => {
+        describe(size + ' items', () => {
+          beforeEach(done => {
             container = fixture('table');
             grid = container.$.grid;
             grid.dataProvider = infiniteDataProvider;
@@ -94,14 +95,14 @@
             flushGrid(grid);
             grid.$.table.scrollTop = grid.$.table.scrollHeight;
             grid._scrollHandler();
-            setTimeout(function() {
+            setTimeout(() => {
               grid.$.table.scrollTop = 0;
               grid._scrollHandler();
               done();
             }, 50);
           });
 
-          it('should be able to scroll to half-way', function() {
+          it('should be able to scroll to half-way', () => {
             grid._scrollHandler();
             grid.$.table.scrollTop = (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2;
 
@@ -111,29 +112,27 @@
             expect(getFirstCell(grid)._instance.index).to.be.closeTo(grid.size / 2, 20);
           });
 
-          it('should be able to scroll to end', function(done) {
-            scrollToEnd(grid, function() {
+          it('should be able to scroll to end', done => {
+            scrollToEnd(grid, () => {
               expect(getCellContent(getLastVisibleItem(grid)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });
           });
 
-          it('should be able to manually scroll to start', function(done) {
+          it('should be able to manually scroll to start', done => {
             const index = ~~(20000 / grid.$.table.scrollHeight * grid.size);
             grid.scrollToIndex(index);
-            this.timeout(1000000);
 
-            simulateScrollToStart(grid, function() {
+            simulateScrollToStart(grid, () => {
               expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.contain('item0');
               done();
             });
           });
 
-          it('should be able to manually scroll to end', function(done) {
+          it('should be able to manually scroll to end', done => {
             grid.$.table.scrollTop = grid.$.table.scrollHeight - 20000;
-            this.timeout(1000000);
 
-            simulateScrollToEnd(grid, function() {
+            simulateScrollToEnd(grid, () => {
               expect(getCellContent(getLastVisibleItem(grid)).textContent).to.contain('item' + (grid.size - 1));
               done();
             });

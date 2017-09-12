@@ -175,8 +175,8 @@
   </template>
 
   <script>
-    describe('column groups', function() {
-      var grid, scroller, header, body, footer, headerRows, footerRows, bodyRows;
+    describe('column groups', () => {
+      let grid, scroller, header, body, footer, headerRows, footerRows, bodyRows;
 
       function getFooterCellContent(row, col) {
         return getCellContent(getFooterCell(row, col)).textContent.trim();
@@ -214,48 +214,34 @@
         flushGrid(grid);
       }
 
-      describe('No templates', function() {
-        beforeEach(function() {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+      describe('No templates', () => {
+        beforeEach(() => init('no-headers'));
 
-          init('no-headers');
-        });
-
-        it('should have empty header', function() {
-          var cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
+        it('should have empty header', () => {
+          const cells = Polymer.dom(header).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
-          cells.forEach(function(cell) {
-            expect(cell._instance).to.be.not.ok;
-          });
+          cells.forEach(cell => expect(cell._instance).to.be.not.ok);
         });
 
-        it('should have empty footer', function() {
-          var cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
+        it('should have empty footer', () => {
+          const cells = Polymer.dom(footer).querySelectorAll('[part~="cell"]');
           expect(cells).not.to.be.empty;
 
-          cells.forEach(function(cell) {
-            expect(cell._instance).to.be.not.ok;
-          });
+          cells.forEach(cell => expect(cell._instance).to.be.not.ok);
         });
 
-        it('should have no visible header rows', function() {
+        it('should have no visible header rows', () => {
           expect(headerRows).not.to.be.empty;
 
-          headerRows.forEach(function(row) {
-            expect(row.hidden).to.be.true;
-          });
+          headerRows.forEach(row => expect(row.hidden).to.be.true);
         });
 
       });
 
-      describe('1 column 1 group', function() {
-        var extraColumn;
+      describe('1 column 1 group', () => {
+        let extraColumn;
 
-        beforeEach(function() {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
+        beforeEach(() => {
           //  |          | group-0             |
           //  | header-0 | header-1 | header-2 |
           init('onecolumnonegroup');
@@ -267,82 +253,73 @@
           }
         });
 
-        it('the group header cell should adapt to changes of child columns', function() {
-          var cellGroup0 = getHeaderCell(0, 1);
-          var cellHeader1 = getHeaderCell(1, 1);
+        it('the group header cell should adapt to changes of child columns', () => {
+          const cellGroup0 = getHeaderCell(0, 1);
+          const cellHeader1 = getHeaderCell(1, 1);
 
           expect(cellGroup0.style.flexGrow).to.equal('2');
           cellHeader1._column.flexGrow = 3;
           expect(cellGroup0.style.flexGrow).to.equal('4');
         });
 
-        it('should set colSpan to spanned header cells', function() {
-          var cell = getHeaderCell(0, 1);
+        it('should set colSpan to spanned header cells', () => {
+          const cell = getHeaderCell(0, 1);
 
           expect(cell.colSpan).to.eql(2);
         });
 
-        it('should not set colSpan to non-spanned header cells', function() {
-          var cell = getHeaderCell(0, 0);
+        it('should not set colSpan to non-spanned header cells', () => {
+          const cell = getHeaderCell(0, 0);
 
           expect(cell.hasAttribute('colspan')).to.be.false;
         });
 
-        it('should have right amount of rows', function() {
+        it('should have right amount of rows', () => {
           expect(headerRows).to.have.length(2);
         });
 
-        it('should have right amount of columns', function() {
+        it('should have right amount of columns', () => {
           expect(getRowCells(headerRows[0])).to.have.length(2);
           expect(getRowCells(headerRows[1])).to.have.length(3);
         });
 
-        it('should have the right content', function() {
-          [0, 1, 2].forEach(function(index) {
-            expect(getHeaderCellContent(1, index)).to.equal('header-' + index);
-          });
+        it('should have the right content', () => {
+          [0, 1, 2].forEach(index => expect(getHeaderCellContent(1, index)).to.equal('header-' + index));
           expect(getHeaderCellContent(0, 1)).to.equal('group-0');
         });
 
-        it('should have the right body template', function() {
-          [0, 1, 2].forEach(function(index) {
-            expect(getBodyCellContent(0, index)).to.equal('body-' + index);
-          });
+        it('should have the right body template', () => {
+          [0, 1, 2].forEach(index => expect(getBodyCellContent(0, index)).to.equal('body-' + index));
         });
 
-        it('should have a frozen column', function() {
+        it('should have a frozen column', () => {
           expect(getHeaderCell(0, 0).hasAttribute('frozen')).to.be.true;
           expect(getHeaderCell(1, 0).hasAttribute('frozen')).to.be.true;
         });
 
-        it('should have a frozen group', function() {
+        it('should have a frozen group', () => {
           expect(getHeaderCell(0, 1).hasAttribute('frozen')).to.be.true;
           expect(getHeaderCell(1, 1).hasAttribute('frozen')).to.be.true;
           expect(getHeaderCell(1, 2).hasAttribute('frozen')).to.be.true;
         });
 
-        it('should have no hidden header rows', function() {
-          headerRows.forEach(function(row) {
-            expect(row.hidden).to.be.false;
-          });
+        it('should have no hidden header rows', () => {
+          headerRows.forEach(row => expect(row.hidden).to.be.false);
         });
 
-        it('should have no visible footer rows', function() {
-          footerRows.forEach(function(row) {
-            expect(row.hidden).to.be.true;
-          });
+        it('should have no visible footer rows', () => {
+          footerRows.forEach(row => expect(row.hidden).to.be.true);
         });
 
-        it('should have visible footer rows after adding extra column', function() {
+        it('should have visible footer rows after adding extra column', () => {
           Polymer.dom(grid).appendChild(extraColumn);
           flushGrid(grid);
 
           expect(getRows(footer)[0].hidden).to.be.false;
           expect(getRows(footer)[1].hidden).to.be.true;
-          this.timeout(100000000);
         });
 
-        it('should not have visible footer rows after removing extra column', function() {
+        it('should not have visible footer rows after removing extra column', () => {
           Polymer.dom(grid).appendChild(extraColumn);
           Polymer.dom.flush();
           Polymer.dom(grid).removeChild(extraColumn);
@@ -352,11 +329,8 @@
       });
 
 
-      describe('Nested groups', function() {
-        beforeEach(function(done) {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
-
+      describe('Nested groups', () => {
+        beforeEach(done => {
           //  | group-0             | group-1                                  |          |
           //  |           |         | group-2            | group-3             |          |
           //  |           |         |          |         | header-4 | header-5 | header-6 |
@@ -368,21 +342,21 @@
           animationFrameFlush(done);
         });
 
-        it('should have a border below the header', function() {
-          var cells = header.querySelectorAll('[part~="cell"]');
-          var cellOnLastRow = cells[cells.length - 1];
+        it('should have a border below the header', () => {
+          const cells = header.querySelectorAll('[part~="cell"]');
+          const cellOnLastRow = cells[cells.length - 1];
 
           expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
         });
 
-        it('should have a border above the footer', function() {
-          var cells = footer.querySelectorAll('[part~="cell"]');
-          var cellOnFirstRow = cells[0];
+        it('should have a border above the footer', () => {
+          const cells = footer.querySelectorAll('[part~="cell"]');
+          const cellOnFirstRow = cells[0];
 
           expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
         });
 
-        it('should have right content in header', function() {
+        it('should have right content in header', () => {
           expect(getHeaderCellContent(0, 0)).to.equal('group-0');
           expect(getHeaderCellContent(0, 1)).to.equal('group-1');
           expect(getHeaderCellContent(1, 2)).to.equal('group-2');
@@ -392,7 +366,7 @@
           expect(getHeaderCellContent(2, 6)).to.equal('header-6');
         });
 
-        it('should have right content in footer but reversed', function() {
+        it('should have right content in footer but reversed', () => {
           expect(getFooterCellContent(0, 4)).to.equal('footer-4');
           expect(getFooterCellContent(0, 5)).to.equal('footer-5');
           expect(getFooterCellContent(0, 6)).to.equal('footer-6');
@@ -402,71 +376,67 @@
           expect(getFooterCellContent(2, 1)).to.equal('group-1');
         });
 
-        it('should have cell content wrappers in all header cells', function() {
-          Polymer.dom(header).querySelectorAll('[part~="cell"]').forEach(function(a) {
-            var content = getCellContent(a);
+        it('should have cell content wrappers in all header cells', () => {
+          Polymer.dom(header).querySelectorAll('[part~="cell"]').forEach(a => {
+            const content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
-        it('should have cell content wrappers in all footer cells', function() {
-          Polymer.dom(footer).querySelectorAll('[part~="cell"]').forEach(function(a) {
-            var content = getCellContent(a);
+        it('should have cell content wrappers in all footer cells', () => {
+          Polymer.dom(footer).querySelectorAll('[part~="cell"]').forEach(a => {
+            const content = getCellContent(a);
             expect(content.localName).to.equal('vaadin-grid-cell-content');
           });
         });
 
-        it('frozen in a group should propagate frozen attribute up and down in headers', function() {
+        it('frozen in a group should propagate frozen attribute up and down in headers', () => {
           [
             [0, 1],
             [1, 2], [1, 3],
             [2, 2], [2, 3], [2, 4], [2, 5]
-          ].forEach(function(a) {
-            expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          });
+          ].forEach(a => expect(getHeaderCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
         });
 
-        it('frozen in a group should propagate frozen attribute up and down in footers', function() {
+        it('frozen in a group should propagate frozen attribute up and down in footers', () => {
           [
             [0, 2], [0, 3], [0, 4], [0, 5],
             [1, 2], [1, 3],
             [2, 1]
-          ].forEach(function(a) {
-            expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true;
-          });
+          ].forEach(a => expect(getFooterCell(a[0], a[1]).hasAttribute('frozen')).to.be.true);
         });
 
-        it('should have last row fully visible when scrolled to end', function(done) {
+        it('should have last row fully visible when scrolled to end', done => {
           scrollToEnd(grid);
 
-          animationFrameFlush(function() {
+          animationFrameFlush(() => {
             bodyRows = getRows(body);
-            var lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
-            var footerTop = footer.getBoundingClientRect().top;
+            const lastRowBottom = bodyRows[bodyRows.length - 1].getBoundingClientRect().bottom;
+            const footerTop = footer.getBoundingClientRect().top;
             expect(lastRowBottom).to.be.closeTo(footerTop, 2);
             done();
           });
         });
       });
 
-      describe('hidden group', function() {
+      describe('hidden group', () => {
 
-        it('should hide children', function(done) {
+        it('should hide children', done => {
           init('hidden-group');
 
-          flush(function() {
+          flush(() => {
             expect(grid.querySelector('vaadin-grid-column').hidden).to.be.true;
             expect(grid.querySelector('vaadin-grid-column-group').hidden).to.be.true;
             done();
           });
         });
 
-        it('should hide self', function(done) {
+        it('should hide self', done => {
           init('hidden-column');
 
-          flush(function() {
+          flush(() => {
             expect(grid.querySelector('vaadin-grid-column-group').hidden).not.to.be.true;
-            var columns = grid.querySelectorAll('vaadin-grid-column');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
             expect(columns[0].hidden).to.be.true;
             expect(columns[1].hidden).not.to.be.true;
             done();

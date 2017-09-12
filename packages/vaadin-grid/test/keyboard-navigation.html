@@ -103,15 +103,13 @@
       };
     }
 
-    var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     if (!ios) {
-      describe('keyboard navigation', function() {
-        var grid, focusable, scroller, header, footer, body;
-        beforeEach(function(done) {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+      describe('keyboard navigation', () => {
+        let grid, focusable, scroller, header, footer, body;
+        beforeEach(done => {
 
-          var fixtureElements = fixture('default');
+          const fixtureElements = fixture('default');
           grid = fixtureElements[0];
           focusable = fixtureElements[1];
 
@@ -144,9 +142,9 @@
         }
 
         function clickFirstBodyInput(rowIndex) {
-          var cell = getCell(rowIndex || 0, 1);
+          const cell = getCell(rowIndex || 0, 1);
 
-          var input = getCellContent(cell).children[0];
+          const input = getCellContent(cell).children[0];
           input.click();
           input.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
           input.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
@@ -222,8 +220,8 @@
         }
 
         function focusHeaderInput() {
-          var cell = grid.$.header.children[0].children[1];
-          var contents = getCellContent(cell);
+          const cell = grid.$.header.children[0].children[1];
+          const contents = getCellContent(cell);
 
           contents.children[0].click();
 
@@ -233,8 +231,8 @@
         }
 
         function focusFooterInput() {
-          var cell = grid.$.footer.children[0].children[1];
-          var contents = getCellContent(cell);
+          const cell = grid.$.footer.children[0].children[1];
+          const contents = getCellContent(cell);
 
           contents.children[0].click();
 
@@ -285,18 +283,18 @@
           return root.querySelectorAll('[tabindex]:not([tabindex="-1"])');
         }
 
-        describe('navigation mode', function() {
-          it('should not be in navigation mode by default', function() {
+        describe('navigation mode', () => {
+          it('should not be in navigation mode by default', () => {
             expect(grid.navigating).to.be.false;
           });
 
-          it('should not enable navigation mode when cell is clicked', function() {
+          it('should not enable navigation mode when cell is clicked', () => {
             clickFirstHeaderCell();
 
             expect(grid.navigating).to.be.false;
           });
 
-          it('should disable navigation mode when blurred', function() {
+          it('should disable navigation mode when blurred', () => {
             clickFirstHeaderCell();
             grid.navigating = true;
 
@@ -305,14 +303,14 @@
             expect(grid.navigating).to.be.false;
           });
 
-          it('should enable navigation mode when tabbed into header', function() {
+          it('should enable navigation mode when tabbed into header', () => {
             // simulating tabbing into header
             tabToHeader();
 
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode when tabbed inside header', function() {
+          it('should enable navigation mode when tabbed inside header', () => {
             clickFirstHeaderCell();
 
             tab();
@@ -320,14 +318,14 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode when tabbed into footer', function() {
+          it('should enable navigation mode when tabbed into footer', () => {
             // simulating tabbing into header
             shiftTabToFooter();
 
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode when tabbed inside footer', function() {
+          it('should enable navigation mode when tabbed inside footer', () => {
             clickFirstFooterCell();
 
             tab();
@@ -335,7 +333,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode with page down', function() {
+          it('should enable navigation mode with page down', () => {
             clickItem(0);
 
             pageDown();
@@ -343,7 +341,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode with page up', function() {
+          it('should enable navigation mode with page up', () => {
             clickItem(0);
 
             pageUp();
@@ -351,7 +349,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode with home', function() {
+          it('should enable navigation mode with home', () => {
             clickItem(0);
 
             home();
@@ -359,7 +357,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should enable navigation mode with end', function() {
+          it('should enable navigation mode with end', () => {
             clickItem(0);
 
             end();
@@ -368,8 +366,8 @@
           });
         });
 
-        describe('navigating with tab', function() {
-          beforeEach(function() {
+        describe('navigating with tab', () => {
+          beforeEach(() => {
             grid.navigating = true;
 
             if (Polymer.Element) {
@@ -377,7 +375,7 @@
             }
           });
 
-          it('should have single tabbable cell in every section', function() {
+          it('should have single tabbable cell in every section', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             expect(tabbableElements.length).to.equal(4);
             expect(tabbableElements[0].parentNode.parentNode).to.equal(grid.$.header);
@@ -386,24 +384,24 @@
             expect(tabbableElements[3]).to.equal(grid.$.focusexit);
           });
 
-          it('should have tabindex 1 on tabbable cells', function() {
+          it('should have tabindex 1 on tabbable cells', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             expect(tabbableElements[0].tabIndex).to.equal(1);
             expect(tabbableElements[1].tabIndex).to.equal(1);
             expect(tabbableElements[2].tabIndex).to.equal(1);
           });
 
-          it('should have a focus exit as the very last child', function() {
+          it('should have a focus exit as the very last child', () => {
             expect(grid.$.focusexit).to.be.ok;
             expect(grid.$.focusexit.tabIndex).to.equal(0);
             expect(grid.shadowRoot.lastElementChild).to.equal(grid.$.focusexit);
           });
 
-          it('should be possible to tab through the grid', function() {
+          it('should be possible to tab through the grid', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
 
             let keydownEvent;
-            const listener = (e) => keydownEvent = e;
+            const listener = e => keydownEvent = e;
             grid.$.scroller.addEventListener('keydown', listener);
 
             // assuming grid has been tabbed into.
@@ -422,11 +420,11 @@
             grid.$.scroller.removeEventListener('keydown', listener);
           });
 
-          it('should be possible to shift-tab through grid', function() {
+          it('should be possible to shift-tab through grid', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
 
             let keydownEvent;
-            const listener = (e) => keydownEvent = e;
+            const listener = e => keydownEvent = e;
             grid.$.scroller.addEventListener('keydown', listener);
 
             // assuming grid has been tabbed into.
@@ -445,12 +443,12 @@
             grid.$.scroller.removeEventListener('keydown', listener);
           });
 
-          it('should be possible to exit grid with tab', function() {
+          it('should be possible to exit grid with tab', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             tabbableElements[2].focus(); // focus footer cell
 
             let keydownEvent;
-            listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => keydownEvent = e);
+            listenOnce(grid.shadowRoot.activeElement, 'keydown', e => keydownEvent = e);
             tab();
 
             // Expect programmatic focus on focus exit element
@@ -459,7 +457,7 @@
             expect(keydownEvent.defaultPrevented).to.be.false;
           });
 
-          it('should be possible to enter grid with shift+tab', function() {
+          it('should be possible to enter grid with shift+tab', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
 
             // focusin on focusexit element — same as shift+tab from below the grid
@@ -471,28 +469,28 @@
             expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
           });
 
-          it('should set native focus to header on header cell click', function() {
+          it('should set native focus to header on header cell click', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickFirstHeaderCell();
 
             expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[0]);
           });
 
-          it('should set native focus to body on body cell click', function() {
+          it('should set native focus to body on body cell click', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickItem(0);
 
             expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
           });
 
-          it('should set native focus to footer on footer cell click', function() {
+          it('should set native focus to footer on footer cell click', () => {
             const tabbableElements = getTabbableElements(grid.shadowRoot);
             clickFirstFooterCell();
 
             expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
           });
 
-          it('should move header tabbable cell when navigating with keys', function() {
+          it('should move header tabbable cell when navigating with keys', () => {
             tabToHeader();
 
             right();
@@ -500,7 +498,7 @@
             expect(getTabbableElements(header)[0]).to.equal(header.children[0].children[1]);
           });
 
-          it('should move body tabbable cell when navigating with keys', function() {
+          it('should move body tabbable cell when navigating with keys', () => {
             tabToBody();
 
             right();
@@ -508,7 +506,7 @@
             expect(getTabbableElements(body)[0]).to.equal(body.children[0].children[1]);
           });
 
-          it('should move footer tabbable cell when navigating with keys', function() {
+          it('should move footer tabbable cell when navigating with keys', () => {
             shiftTabToFooter();
 
             right();
@@ -517,8 +515,8 @@
           });
         });
 
-        describe('navigating with keys', function() {
-          it('should enable navigation mode on down', function() {
+        describe('navigating with keys', () => {
+          it('should enable navigation mode on down', () => {
             clickItem(0);
 
             down();
@@ -526,7 +524,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should navigate on down when navigation mode is off', function() {
+          it('should navigate on down when navigation mode is off', () => {
             clickItem(0);
 
             down();
@@ -534,7 +532,7 @@
             expect(getFocusedRowIndex()).to.equal(1);
           });
 
-          it('should enable navigation mode on up', function() {
+          it('should enable navigation mode on up', () => {
             clickItem(0);
 
             up();
@@ -542,7 +540,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should navigate on up when navigation mode is off', function() {
+          it('should navigate on up when navigation mode is off', () => {
             clickItem(1);
 
             up();
@@ -550,7 +548,7 @@
             expect(getFocusedRowIndex()).to.equal(0);
           });
 
-          it('should enable navigation mode on left', function() {
+          it('should enable navigation mode on left', () => {
             clickItem(0);
 
             left();
@@ -558,7 +556,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should navigate on left when navigation mode is off', function() {
+          it('should navigate on left when navigation mode is off', () => {
             getCellContent(getRows(body)[0].children[1]).click();
 
             left();
@@ -566,7 +564,7 @@
             expect(getFocusedCellIndex()).to.equal(0);
           });
 
-          it('should enable navigation mode on right', function() {
+          it('should enable navigation mode on right', () => {
             clickItem(0);
 
             right();
@@ -574,7 +572,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should navigate on right when navigation mode is off', function() {
+          it('should navigate on right when navigation mode is off', () => {
             clickItem(0);
 
             right();
@@ -582,7 +580,7 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should focus cell below with down', function() {
+          it('should focus cell below with down', () => {
             clickItem(0);
 
             down();
@@ -591,7 +589,7 @@
             expect(getFocusedCellIndex()).to.equal(0);
           });
 
-          it('should focus cell above with up', function() {
+          it('should focus cell above with up', () => {
             clickItem(0);
             down();
 
@@ -601,7 +599,7 @@
             expect(getFocusedCellIndex()).to.equal(0);
           });
 
-          it('should focus cell left with left', function() {
+          it('should focus cell left with left', () => {
             clickItem(0);
             right();
 
@@ -611,7 +609,7 @@
             expect(getFocusedRowIndex()).to.equal(0);
           });
 
-          it('should focus cell right with right', function() {
+          it('should focus cell right with right', () => {
             clickItem(0);
 
             right();
@@ -620,8 +618,8 @@
             expect(getFocusedRowIndex()).to.equal(0);
           });
 
-          describe('with hidden columns', function() {
-            it('should skip over hidden column with right arrow', function() {
+          describe('with hidden columns', () => {
+            it('should skip over hidden column with right arrow', () => {
               grid._columnTree[0][1].hidden = true;
               getCellContent(body.children[0].children[0]).click();
 
@@ -630,7 +628,7 @@
               expect(getFocusedCellIndex()).to.equal(2);
             });
 
-            it('should skip over hidden column with left arrow', function() {
+            it('should skip over hidden column with left arrow', () => {
               grid._columnTree[0][1].hidden = true;
               getCellContent(body.children[0].children[0]).click();
               right();
@@ -640,7 +638,7 @@
               expect(getFocusedCellIndex()).to.equal(0);
             });
 
-            it('should not navigate to hidden column with left arrow', function() {
+            it('should not navigate to hidden column with left arrow', () => {
               grid._columnTree[0][0].hidden = true;
               getCellContent(body.children[0].children[1]).click();
 
@@ -649,7 +647,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should not navigate to hidden column with right arrow', function() {
+            it('should not navigate to hidden column with right arrow', () => {
               grid._columnTree[0][2].hidden = true;
               getCellContent(body.children[0].children[0]).click();
 
@@ -659,7 +657,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should not navigate to hidden column with end', function() {
+            it('should not navigate to hidden column with end', () => {
               grid._columnTree[0][0].hidden = true;
               getCellContent(body.children[0].children[1]).click();
 
@@ -668,7 +666,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should not navigate to hidden column with home', function() {
+            it('should not navigate to hidden column with home', () => {
               grid._columnTree[0][2].hidden = true;
               getCellContent(body.children[0].children[0]).click();
 
@@ -678,8 +676,8 @@
             });
           });
 
-          describe('with row details', function() {
-            beforeEach(function() {
+          describe('with row details', () => {
+            beforeEach(() => {
               grid.expandItem(grid.items[0]);
 
               tabToBody();
@@ -689,7 +687,7 @@
               return scope.querySelector('[part~="details-cell"]');
             }
 
-            it('should not navigate to row details with right arrow', function() {
+            it('should not navigate to row details with right arrow', () => {
               right(); // index 1
               right(); // index 2
 
@@ -699,21 +697,21 @@
               expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
             });
 
-            it('should not navigate to row details with end', function() {
+            it('should not navigate to row details with end', () => {
               end();
 
               expect(getFocusedCellIndex()).to.equal(2);
               expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.not.equal(grid.shadowRoot.activeElement);
             });
 
-            it('should navigate to row details with down arrow', function() {
+            it('should navigate to row details with down arrow', () => {
               down();
 
               expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
               expect(getFocusedRowIndex()).to.equal(0);
             });
 
-            it('should navigate from row details with down arrow', function() {
+            it('should navigate from row details with down arrow', () => {
               down();
 
               down();
@@ -723,7 +721,7 @@
               expect(getFocusedCellIndex()).to.equal(0);
             });
 
-            it('should preserve the focused cell index while navigating through details', function() {
+            it('should preserve the focused cell index while navigating through details', () => {
               right();
               down();
 
@@ -733,7 +731,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should not navigate right while in details', function() {
+            it('should not navigate right while in details', () => {
               down();
 
               right();
@@ -743,7 +741,7 @@
               expect(getFocusedCellIndex()).to.equal(0);
             });
 
-            it('should not navigate to end while in details', function() {
+            it('should not navigate to end while in details', () => {
               down();
 
               end();
@@ -753,7 +751,7 @@
               expect(getFocusedCellIndex()).to.equal(0);
             });
 
-            it('should not navigate left while in details', function() {
+            it('should not navigate left while in details', () => {
               right();
               down();
 
@@ -764,7 +762,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should not navigate to home while in details', function() {
+            it('should not navigate to home while in details', () => {
               right();
               down();
 
@@ -775,7 +773,7 @@
               expect(getFocusedCellIndex()).to.equal(1);
             });
 
-            it('should navigate to row details with arrow up', function() {
+            it('should navigate to row details with arrow up', () => {
               down();
               down();
 
@@ -786,7 +784,7 @@
               expect(getFocusedCellIndex()).to.not.equal(0);
             });
 
-            it('should navigate from row details with arrow up', function() {
+            it('should navigate from row details with arrow up', () => {
               down();
               down();
               up();
@@ -798,18 +796,18 @@
               expect(getFocusedCellIndex()).to.equal(0);
             });
 
-            it('should set focused cell when tapping on details cell', function() {
-              var rowDetailsCell = findRowDetailsCell(body.children[0]);
+            it('should set focused cell when tapping on details cell', () => {
+              const rowDetailsCell = findRowDetailsCell(body.children[0]);
               grid.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
 
               expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
             });
 
-            it('should focus on the first element inside details with enter', function(done) {
+            it('should focus on the first element inside details with enter', done => {
               down();
 
-              animationFrameFlush(function() {
-                var input = getCellContent(grid.shadowRoot.activeElement).children[0];
+              animationFrameFlush(() => {
+                const input = getCellContent(grid.shadowRoot.activeElement).children[0];
                 input.focus = sinon.spy();
 
                 enter();
@@ -820,7 +818,7 @@
             });
           });
 
-          it('should focus first cell with home', function() {
+          it('should focus first cell with home', () => {
             clickItem(0);
             right();
 
@@ -829,7 +827,7 @@
             expect(getFocusedCellIndex()).to.equal(0);
           });
 
-          it('should focus first cell on first row with ctrl+home', function() {
+          it('should focus first cell on first row with ctrl+home', () => {
             clickItem(0);
             right();
 
@@ -839,7 +837,7 @@
             expect(getFocusedRowIndex()).to.equal(0);
           });
 
-          it('should focus last cell with end', function() {
+          it('should focus last cell with end', () => {
             clickItem(0);
 
             end();
@@ -848,7 +846,7 @@
           });
 
 
-          it('should focus last cell on last row with ctrl+end', function() {
+          it('should focus last cell on last row with ctrl+end', () => {
             clickItem(0);
 
             ctrlEnd();
@@ -857,7 +855,7 @@
             expect(getFocusedRowIndex()).to.equal(1);
           });
 
-          it('should focus to last row element after scrolling to end', function() {
+          it('should focus to last row element after scrolling to end', () => {
             grid.items = undefined;
             grid.size = 200;
             grid.dataProvider = infiniteDataProvider;
@@ -869,12 +867,12 @@
             expect(grid.shadowRoot.activeElement.parentNode.index).to.equal(grid.items.length - 1);
           });
 
-          describe('horizontal scrolling', function() {
-            beforeEach(function() {
+          describe('horizontal scrolling', () => {
+            beforeEach(() => {
               grid.style.width = '100px'; // column default min width is 100px
             });
 
-            it('should scroll cells visible with right arrow on header', function() {
+            it('should scroll cells visible with right arrow on header', () => {
               clickFirstHeaderCell();
               down();
 
@@ -883,7 +881,7 @@
               expect(grid.$.table.scrollLeft).to.be.at.least(100);
             });
 
-            it('should scroll cells visible with right arrow on body', function() {
+            it('should scroll cells visible with right arrow on body', () => {
               clickItem(0);
               down();
 
@@ -892,7 +890,7 @@
               expect(grid.$.table.scrollLeft).to.be.at.least(100);
             });
 
-            it('should scroll cells visible with right arrow on footer', function() {
+            it('should scroll cells visible with right arrow on footer', () => {
               clickFirstFooterCell();
               down();
 
@@ -901,7 +899,7 @@
               expect(grid.$.table.scrollLeft).to.be.at.least(100);
             });
 
-            it('should scroll cells visible with left arrow on header', function() {
+            it('should scroll cells visible with left arrow on header', () => {
               clickFirstHeaderCell();
               down();
               right();
@@ -911,7 +909,7 @@
               expect(grid.$.table.scrollLeft).to.equal(0);
             });
 
-            it('should scroll cells visible with left arrow on body', function() {
+            it('should scroll cells visible with left arrow on body', () => {
               clickItem(0);
               down();
               right();
@@ -921,7 +919,7 @@
               expect(grid.$.table.scrollLeft).to.equal(0);
             });
 
-            it('should scroll cells visible with home', function() {
+            it('should scroll cells visible with home', () => {
               clickItem(0);
               grid.$.table.scrollLeft = 999999999;
 
@@ -930,7 +928,7 @@
               expect(grid.$.table.scrollLeft).to.equal(0);
             });
 
-            it('should scroll cells visible with end', function() {
+            it('should scroll cells visible with end', () => {
               clickItem(0);
 
               end();
@@ -938,7 +936,7 @@
               expect(grid.$.table.scrollLeft).to.equal(grid.$.table.scrollWidth - grid.$.table.clientWidth);
             });
 
-            it('should scroll cell visible under from frozen cells with left arrow', function(done) {
+            it('should scroll cell visible under from frozen cells with left arrow', done => {
               grid.style.width = '200px'; // column default min width is 100px
               grid.style.border = 'none';
               grid._columnTree[0][0].frozen = true;
@@ -947,14 +945,14 @@
               right();
               right();
 
-              grid.async(function() {
+              grid.async(() => {
                 left();
                 expect(grid.$.table.scrollLeft).to.equal(0);
                 done();
               });
             });
 
-            it('should scroll cells visible with left arrow on footer', function() {
+            it('should scroll cells visible with left arrow on footer', () => {
               clickFirstFooterCell();
               down();
               right();
@@ -965,8 +963,8 @@
             });
           });
 
-          describe('vertical scrolling', function() {
-            beforeEach(function(done) {
+          describe('vertical scrolling', () => {
+            beforeEach(done => {
               grid.items = undefined;
               grid.size = 200;
               grid.dataProvider = infiniteDataProvider;
@@ -974,7 +972,7 @@
               animationFrameFlush(done);
             });
 
-            it('should scroll rows visible with up arrow', function() {
+            it('should scroll rows visible with up arrow', () => {
               clickItem(0);
               grid.scrollToIndex(100);
 
@@ -983,7 +981,7 @@
               expect(grid.$.table.scrollTop).to.equal(0);
             });
 
-            it('should scroll rows visible with down arrow', function() {
+            it('should scroll rows visible with down arrow', () => {
               clickItem(grid.lastVisibleIndex);
 
               down();
@@ -991,7 +989,7 @@
               expect(grid.$.table.scrollTop).to.be.above(0);
             });
 
-            it('should scroll to the first row with ctrl+home', function() {
+            it('should scroll to the first row with ctrl+home', () => {
               clickItem(0);
 
               scrollToEnd(grid);
@@ -1000,7 +998,7 @@
               expect(grid.$.table.scrollTop).to.equal(0);
             });
 
-            it('should scroll to the last row with ctrl+end', function() {
+            it('should scroll to the last row with ctrl+end', () => {
               clickItem(0);
 
               ctrlEnd();
@@ -1008,7 +1006,7 @@
               expect(grid.$.table.scrollTop).to.equal(grid.$.table.scrollHeight - grid.$.table.clientHeight);
             });
 
-            it('should scroll down one page with page down', function() {
+            it('should scroll down one page with page down', () => {
               clickItem(0);
 
               pageDown();
@@ -1017,11 +1015,11 @@
               expect(getFocusedRowIndex()).to.equal(grid.lastVisibleIndex - 1);
             });
 
-            it('should scroll up one page with page up', function(done) {
+            it('should scroll up one page with page up', done => {
               clickItem(0);
               pageDown();
 
-              grid.async(function() {
+              grid.async(() => {
                 pageUp();
 
                 expect(getFocusedRowIndex()).to.equal(0);
@@ -1029,10 +1027,10 @@
               });
             });
 
-            it('should scroll the focused item visible when focus is set to body', function(done) {
+            it('should scroll the focused item visible when focus is set to body', done => {
               scrollToEnd(grid);
 
-              animationFrameFlush(function() {
+              animationFrameFlush(() => {
                 tabToHeader();
                 tab();
                 tabToBody();
@@ -1043,8 +1041,8 @@
               });
             });
 
-            describe('rotating focus indicator prevention', function() {
-              it('should hide navigation mode when a focused row goes off screen', function() {
+            describe('rotating focus indicator prevention', () => {
+              it('should hide navigation mode when a focused row goes off screen', () => {
                 clickItem(0);
                 right();
 
@@ -1055,7 +1053,7 @@
                 expect(grid.navigating).to.be.false;
               });
 
-              it('should reveal navigation mode when a focused row is back on screen', function() {
+              it('should reveal navigation mode when a focused row is back on screen', () => {
                 clickItem(0);
                 right();
                 grid.scrollToIndex(100);
@@ -1068,8 +1066,8 @@
           });
         });
 
-        describe('activating items', function() {
-          it('should activate on space', function() {
+        describe('activating items', () => {
+          it('should activate on space', () => {
             tabToBody();
 
             space();
@@ -1077,7 +1075,7 @@
             expect(grid.activeItem).to.equal('foo');
           });
 
-          it('should activate item another on space', function() {
+          it('should activate item another on space', () => {
             clickItem(0);
             tab();
 
@@ -1087,7 +1085,7 @@
             expect(grid.activeItem).to.equal('bar');
           });
 
-          it('should deactive item on space', function() {
+          it('should deactive item on space', () => {
             clickItem(0); // activates first item on click
             tab();
 
@@ -1096,17 +1094,17 @@
             expect(grid.activeItem).to.be.null;
           });
 
-          it('should be null by default', function() {
+          it('should be null by default', () => {
             expect(grid.activeItem).to.be.null;
           });
 
-          it('should activate on click', function() {
+          it('should activate on click', () => {
             clickItem(0);
 
             expect(grid.activeItem).to.equal('foo');
           });
 
-          it('should activate another on click', function() {
+          it('should activate another on click', () => {
             clickItem(0);
 
             clickItem(1);
@@ -1114,7 +1112,7 @@
             expect(grid.activeItem).to.equal('bar');
           });
 
-          it('should deactive on click', function() {
+          it('should deactive on click', () => {
             clickItem(0);
 
             clickItem(0);
@@ -1122,49 +1120,49 @@
             expect(grid.activeItem).to.be.null;
           });
 
-          it('should not activate when clicking on a native input', function() {
+          it('should not activate when clicking on a native input', () => {
             clickFirstBodyInput(0);
 
             expect(grid.activeItem).to.be.null;
           });
 
-          describe('space click shortcut', function() {
-            beforeEach(function() {
+          describe('space click shortcut', () => {
+            beforeEach(() => {
               header.children[0].children[1].focus();
               right();
             });
 
-            it('should click first cell child on space', function() {
-              var firstChild = getCellContent(header.children[0].children[2]).children[0];
-              var clickStub = sinon.stub(firstChild, 'click');
+            it('should click first cell child on space', () => {
+              const firstChild = getCellContent(header.children[0].children[2]).children[0];
+              const clickStub = sinon.stub(firstChild, 'click');
 
               space();
 
               expect(clickStub.called).to.be.true;
             });
 
-            it('should not click other cell children on space', function() {
-              var secondChild = getCellContent(header.children[0].children[2]).children[1];
-              var clickStub = sinon.stub(secondChild, 'click');
+            it('should not click other cell children on space', () => {
+              const secondChild = getCellContent(header.children[0].children[2]).children[1];
+              const clickStub = sinon.stub(secondChild, 'click');
 
               space();
 
               expect(clickStub.called).to.be.false;
             });
 
-            it('should prevent default keydown action when clicking on space', function() {
-              var event = MockInteractions.keyboardEventFor('keydown', 32, [], ' ');
+            it('should prevent default keydown action when clicking on space', () => {
+              const event = MockInteractions.keyboardEventFor('keydown', 32, [], ' ');
 
               grid.dispatchEvent(event);
 
               expect(event.defaultPrevented).to.be.true;
             });
 
-            it('should not activate if synthetic click has default prevented', function() {
-              var firstBodyRowFirstChild = getCellContent(getRows(body)[0].children[2]).children[0];
+            it('should not activate if synthetic click has default prevented', () => {
+              const firstBodyRowFirstChild = getCellContent(getRows(body)[0].children[2]).children[0];
 
-              var spy = sinon.spy();
-              listenOnce(firstBodyRowFirstChild, 'click', function(e) {
+              const spy = sinon.spy();
+              listenOnce(firstBodyRowFirstChild, 'click', e => {
                 spy();
                 e.preventDefault();
               });
@@ -1182,8 +1180,8 @@
           });
         });
 
-        describe('keyboard focus', function() {
-          it('should have focused first cell in header by default', function() {
+        describe('keyboard focus', () => {
+          it('should have focused first cell in header by default', () => {
             expect(grid.shadowRoot.activeElement).to.be.null;
 
             tabToHeader();
@@ -1191,7 +1189,7 @@
             expect(grid.shadowRoot.activeElement).to.equal(header.children[0].children[0]);
           });
 
-          it('should have focused first cell in body by default', function() {
+          it('should have focused first cell in body by default', () => {
             expect(grid.shadowRoot.activeElement).to.be.null;
 
             tabToBody();
@@ -1199,7 +1197,7 @@
             expect(grid.shadowRoot.activeElement).to.equal(body.children[0].children[0]);
           });
 
-          it('should have focused first cell in footer by default', function() {
+          it('should have focused first cell in footer by default', () => {
             expect(grid.shadowRoot.activeElement).to.be.null;
 
             shiftTabToFooter();
@@ -1207,20 +1205,20 @@
             expect(grid.shadowRoot.activeElement).to.equal(footer.children[0].children[0]);
           });
 
-          it('should focus on click', function() {
+          it('should focus on click', () => {
             clickItem(1);
 
-            var cell = getFirstCell(1);
-            var row = cell.parentElement;
-            var container = row.parentElement;
+            const cell = getFirstCell(1);
+            const row = cell.parentElement;
+            const container = row.parentElement;
 
             expect(cell.hasAttribute('focused')).to.equal.true;
             expect(row.hasAttribute('focused')).to.equal.true;
             expect(container.hasAttribute('focused')).to.equal.true;
           });
 
-          it('should not throw an error when switching focus between body and header', function() {
-            expect(function() {
+          it('should not throw an error when switching focus between body and header', () => {
+            expect(() => {
               clickItem(1);
               getRowCells(getRows(grid.$.header)[0])[0].click();
               clickItem(0);
@@ -1228,23 +1226,23 @@
           });
         });
 
-        describe('interaction mode', function() {
-          var input;
+        describe('interaction mode', () => {
+          let input;
 
-          beforeEach(function() {
+          beforeEach(() => {
             clickItem(0);
 
-            var cell = getCell(0, 1);
+            const cell = getCell(0, 1);
             input = getCellContent(cell).children[0];
 
-            sinon.stub(input, 'focus', function(e) {
+            sinon.stub(input, 'focus', e => {
               Polymer.Base.fire('focus', {}, {
                 node: input
               });
             });
           });
 
-          it('should enter interaction mode with enter', function() {
+          it('should enter interaction mode with enter', () => {
             right();
 
             enter();
@@ -1252,7 +1250,7 @@
             expect(grid.interacting).to.be.true;
           });
 
-          it('should exit interaction mode when blurred', function() {
+          it('should exit interaction mode when blurred', () => {
             grid.interacting = true;
 
             focusable.focus();
@@ -1260,7 +1258,7 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should exit interaction mode when tabbed into', function() {
+          it('should exit interaction mode when tabbed into', () => {
             grid.interacting = true;
 
             tabToHeader();
@@ -1268,7 +1266,7 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should exit interaction mode when shift-tabbed into', function() {
+          it('should exit interaction mode when shift-tabbed into', () => {
             grid.interacting = true;
 
             shiftTabToFooter();
@@ -1276,9 +1274,9 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should focus the first element when entering interaction mode with enter', function() {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+          it('should focus the first element when entering interaction mode with enter', () => {
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
 
             right(); // focus the cell with input.
@@ -1288,9 +1286,9 @@
             expect(input.focus.callCount).to.equal(1);
           });
 
-          it('should exit interaction mode from focused single-line input with enter', function() {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+          it('should exit interaction mode from focused single-line input with enter', () => {
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.type = 'text';
 
             right(); // focus the cell with input.
@@ -1301,9 +1299,9 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should not exit interaction mode from focused non-single-line input with enter', function() {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+          it('should not exit interaction mode from focused non-single-line input with enter', () => {
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.type = 'button';
 
             right(); // focus the cell with input.
@@ -1314,9 +1312,9 @@
             expect(grid.interacting).to.be.true;
           });
 
-          it('should focus the first element when entering interaction mode with f2', function() {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+          it('should focus the first element when entering interaction mode with f2', () => {
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
 
             right(); // focus the cell with input.
@@ -1325,7 +1323,7 @@
             expect(input.focus.callCount).to.equal(1);
           });
 
-          it('should focus the next input element when tabbing in interaction mode', function() {
+          it('should focus the next input element when tabbing in interaction mode', () => {
             right(); // focus the cell with input.
             enter();
 
@@ -1335,9 +1333,9 @@
             expect(grid._itemsFocusable).to.equal(getCell(0, 1));
           });
 
-          it('should focus the element with `focus-target` when entering interaction mode', function() {
-            var cell = getCell(0, 1);
-            var input = getCellContent(cell).children[0];
+          it('should focus the element with `focus-target` when entering interaction mode', () => {
+            const cell = getCell(0, 1);
+            const input = getCellContent(cell).children[0];
             input.focus = sinon.spy();
             input.parentElement.insertBefore(document.createElement('div'), input);
             input.setAttribute('focus-target', '');
@@ -1349,8 +1347,8 @@
             expect(input.focus.callCount).to.equal(1);
           });
 
-          it('should not navigate with arrow up when in interaction mode', function() {
-            var input = clickFirstBodyInput(1);
+          it('should not navigate with arrow up when in interaction mode', () => {
+            const input = clickFirstBodyInput(1);
 
             up(input);
             escape(input);
@@ -1359,8 +1357,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with arrow down when in interaction mode', function() {
-            var input = clickFirstBodyInput(0);
+          it('should not navigate with arrow down when in interaction mode', () => {
+            const input = clickFirstBodyInput(0);
 
             down(input);
             escape(input);
@@ -1369,9 +1367,9 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with arrow left when in interaction mode', function() {
+          it('should not navigate with arrow left when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             left(input);
             escape(input);
@@ -1380,8 +1378,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with arrow right when in interaction mode', function() {
-            var input = clickFirstBodyInput(0);
+          it('should not navigate with arrow right when in interaction mode', () => {
+            const input = clickFirstBodyInput(0);
 
             right(input);
             escape(input);
@@ -1390,9 +1388,9 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with home when in interaction mode', function() {
+          it('should not navigate with home when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             home(input);
             escape(input);
@@ -1401,9 +1399,9 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with ctrl+home when in interaction mode', function() {
+          it('should not navigate with ctrl+home when in interaction mode', () => {
             right();
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             ctrlHome(input);
             escape(input);
@@ -1412,8 +1410,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with end when in interaction mode', function() {
-            var input = clickFirstBodyInput(0);
+          it('should not navigate with end when in interaction mode', () => {
+            const input = clickFirstBodyInput(0);
 
             end(input);
             escape(input);
@@ -1422,8 +1420,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with ctrl+end when in interaction mode', function() {
-            var input = clickFirstBodyInput(0);
+          it('should not navigate with ctrl+end when in interaction mode', () => {
+            const input = clickFirstBodyInput(0);
 
             ctrlEnd(input);
             escape(input);
@@ -1432,8 +1430,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with page down when in interaction mode', function() {
-            var input = clickFirstBodyInput(0);
+          it('should not navigate with page down when in interaction mode', () => {
+            const input = clickFirstBodyInput(0);
 
             pageDown(input);
             escape(input);
@@ -1442,8 +1440,8 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not navigate with page up when in interaction mode', function() {
-            var input = clickFirstBodyInput(1);
+          it('should not navigate with page up when in interaction mode', () => {
+            const input = clickFirstBodyInput(1);
 
             pageUp(input);
             escape(input);
@@ -1452,16 +1450,16 @@
             expect(getFocusedCellIndex()).to.equal(1);
           });
 
-          it('should not activate on space when in interaction mode', function() {
+          it('should not activate on space when in interaction mode', () => {
             grid.activeItem = null;
-            var input = clickFirstBodyInput(0);
+            const input = clickFirstBodyInput(0);
 
             space(input);
 
             expect(grid.activeItem).to.be.null;
           });
 
-          it('should enter interaction mode with F2', function() {
+          it('should enter interaction mode with F2', () => {
             right();
 
             f2();
@@ -1469,8 +1467,8 @@
             expect(grid.interacting).to.be.true;
           });
 
-          it('should exit interaction mode with F2', function() {
-            var input = getCellContent(getCell(0, 1)).children[0];
+          it('should exit interaction mode with F2', () => {
+            const input = getCellContent(getCell(0, 1)).children[0];
 
             right();
             f2();
@@ -1480,8 +1478,8 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should remove focus from cell when exiting interaction mode with F2', function() {
-            var input = getCellContent(getCell(0, 1)).children[0];
+          it('should remove focus from cell when exiting interaction mode with F2', () => {
+            const input = getCellContent(getCell(0, 1)).children[0];
 
             right();
             enter();
@@ -1491,7 +1489,7 @@
             expect(document.activeElement).to.not.equal(input);
           });
 
-          it('should exit interaction mode with escape', function() {
+          it('should exit interaction mode with escape', () => {
             grid.interacting = true;
 
             escape();
@@ -1499,8 +1497,8 @@
             expect(grid.interacting).to.be.false;
           });
 
-          it('should remove focus from cell with escape', function() {
-            var input = clickFirstBodyInput(0);
+          it('should remove focus from cell with escape', () => {
+            const input = clickFirstBodyInput(0);
 
             escape(input); // revert to navigation first
 
@@ -1510,16 +1508,16 @@
             expect(grid.navigating).to.be.false;
           });
 
-          it('should revert to navigation from interaction mode with escape', function() {
-            var input = clickFirstBodyInput(0);
+          it('should revert to navigation from interaction mode with escape', () => {
+            const input = clickFirstBodyInput(0);
 
             escape(input);
 
             expect(grid.navigating).to.be.true;
           });
 
-          it('should revert to navigation from interaction mode with F2', function() {
-            var input = clickFirstBodyInput(0);
+          it('should revert to navigation from interaction mode with F2', () => {
+            const input = clickFirstBodyInput(0);
 
             f2(input);
 
@@ -1527,7 +1525,7 @@
             expect(grid.navigating).to.be.true;
           });
 
-          it('should cancel navigation mode with escape', function() {
+          it('should cancel navigation mode with escape', () => {
             grid.navigating = true;
             grid.interacting = false;
 
@@ -1537,7 +1535,7 @@
             expect(grid.navigating).to.be.false;
           });
 
-          it('should enter interaction mode when cell contents are focused', function() {
+          it('should enter interaction mode when cell contents are focused', () => {
             clickFirstBodyInput(0);
 
             expect(grid.interacting).to.be.true;
@@ -1545,9 +1543,9 @@
         });
 
         // TODO(platosha): reimplement these a11y features with native ARIA attributes
-        describe.skip('a11y', function() {
-          it('should move focus when focused cell is changed', function() {
-            var spy = sinon.spy();
+        describe.skip('a11y', () => {
+          it('should move focus when focused cell is changed', () => {
+            const spy = sinon.spy();
             footerTrap._primary.focus = spy;
             footerTrap._secondary.focus = spy;
 
@@ -1556,14 +1554,14 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it('should set announce target when virtual focus changes', function() {
+          it('should set announce target when virtual focus changes', () => {
             tabToHeader();
 
             expect(footerTrap.activeTarget).not.to.be.empty;
           });
 
-          it('should announce row number on body when navigating with keys', function() {
-            var spy = sinon.spy();
+          it('should announce row number on body when navigating with keys', () => {
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             tabToHeader();
@@ -1574,8 +1572,8 @@
             expect(spy.args[0][0].detail.text).to.equal('Row 1 of 2');
           });
 
-          it('should announce selection using template variable', function() {
-            var spy = sinon.spy();
+          it('should announce selection using template variable', () => {
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             getCell(0, 0).instance.selected = true;
@@ -1585,8 +1583,8 @@
             expect(spy.args[0][0].detail.text).to.equal('Selected Row 1 of 2');
           });
 
-          it('should announce deselection using template variable', function() {
-            var spy = sinon.spy();
+          it('should announce deselection using template variable', () => {
+            const spy = sinon.spy();
             grid.addEventListener('iron-announce', spy);
 
             grid.selectItem(grid.items[0]);
@@ -1596,35 +1594,35 @@
             expect(spy.args[0][0].detail.text).to.equal('Deselected Row 1 of 2');
           });
 
-          it('should announce focused cell when focused', function(done) {
+          it('should announce focused cell when focused', done => {
             tabToHeader();
             tab();
 
-            var id = getCell(0, 0)._cellContent.id;
+            const id = getCell(0, 0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
-            footerTrap.async(function() {
+            footerTrap.async(() => {
               expect(footerTrap._primary.getAttribute('aria-labelledby') +
                 footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
               done();
             });
           });
 
-          it('should announce header cell when body cell is focused', function(done) {
+          it('should announce header cell when body cell is focused', done => {
             tabToHeader();
             tab();
 
-            var id = getFirstHeaderCell(0)._cellContent.id;
+            const id = getFirstHeaderCell(0)._cellContent.id;
             expect(id).to.match(/vaadin-grid-cell-content-\d+/);
 
-            footerTrap.async(function() {
+            footerTrap.async(() => {
               expect(footerTrap._primary.getAttribute('aria-labelledby') +
                 footerTrap._secondary.getAttribute('aria-labelledby')).to.contain(id);
               done();
             });
           });
 
-          it('should not refocus the trap while navigating', function() {
+          it('should not refocus the trap while navigating', () => {
             tabToHeader();
             tab();
 
@@ -1647,11 +1645,11 @@
             expect(footerTrap.focus.callCount).to.equal(1);
           });
 
-          it('should change activeTarget in the trap while navigating', function() {
+          it('should change activeTarget in the trap while navigating', () => {
             tabToHeader();
             tab();
 
-            var visitedTargets = [];
+            let visitedTargets = [];
             visitedTargets.push(footerTrap.activeTarget); right();
             visitedTargets.push(footerTrap.activeTarget); left();
             visitedTargets.push(footerTrap.activeTarget); down();
@@ -1664,7 +1662,7 @@
             visitedTargets.push(footerTrap.activeTarget); pageUp();
 
             // Extract unique values
-            visitedTargets = visitedTargets.reduce(function(acc, val) {
+            visitedTargets = visitedTargets.reduce((acc, val) => {
               if (acc.indexOf(val) === -1) {
                 acc.push(val);
               }
@@ -1675,22 +1673,20 @@
           });
 
           if (window.Polymer && Polymer.Settings.useNativeShadow) {
-            it('should have tabbable elements in the light DOM', function() {
+            it('should have tabbable elements in the light DOM', () => {
               expect(footerTrap.querySelector('.primary')).not.to.be.null;
               expect(footerTrap.querySelector('.secondary')).not.to.be.null;
             });
           }
         });
 
-        describe('focus events on cell content', function() {
-          var cell;
+        describe('focus events on cell content', () => {
+          let cell;
 
-          beforeEach(function() {
-            cell = getCell(0, 0);
-          });
+          beforeEach(() => cell = getCell(0, 0));
 
-          it('should dispatch cell-focusin after cell focus', function() {
-            var spy = sinon.spy();
+          it('should dispatch cell-focusin after cell focus', () => {
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusin', spy);
 
             tabToBody();
@@ -1698,10 +1694,10 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it('should dispatch cell-focusout after cell blur', function() {
+          it('should dispatch cell-focusout after cell blur', () => {
             tabToBody();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusout', spy);
 
             right();
@@ -1709,11 +1705,11 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it('should dispatch cell-focusin on keyboard navigation', function() {
+          it('should dispatch cell-focusin on keyboard navigation', () => {
             tabToBody();
             right();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusin', spy);
 
             left();
@@ -1721,10 +1717,10 @@
             expect(spy.callCount).to.equal(1);
           });
 
-          it('should dispatch cell-focusout on keyboard navigation', function() {
+          it('should dispatch cell-focusout on keyboard navigation', () => {
             tabToBody();
 
-            var spy = sinon.spy();
+            const spy = sinon.spy();
             cell._content.addEventListener('cell-focusout', spy);
 
             right();

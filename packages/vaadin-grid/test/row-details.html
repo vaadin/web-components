@@ -36,7 +36,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(function() {
+      HTMLImports.whenReady(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -68,56 +68,52 @@
   </test-fixture>
 
   <script>
-    describe('row details', function() {
-      var grid;
-      var bodyRows;
+    describe('row details', () => {
+      let grid;
+      let bodyRows;
 
-      describe('simple', function() {
+      describe('simple', () => {
 
         function expandRow(index) {
           grid.expandItem(grid._cache[0][index]);
         }
 
-        beforeEach(function(done) {
-          // The before each block times out in CI with Firefox on Polymer 2
-          this.timeout(30000);
+        beforeEach(done => {
 
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
           Polymer.dom.flush();
           bodyRows = getRows(grid.$.items);
-          animationFrameFlush(function() {
-            done();
-          });
+          animationFrameFlush(() => done());
         });
 
         function collapseRow(index) {
           grid.collapseItem(grid._cache[0][index]);
         }
 
-        it('should expand a row', function() {
-          var cells = getRowCells(bodyRows[1]);
+        it('should expand a row', () => {
+          const cells = getRowCells(bodyRows[1]);
           expect(cells[1].hidden).to.be.true;
           expandRow(1);
           expect(cells[1].hidden).to.be.false;
         });
 
-        it('should collapse a row', function() {
+        it('should collapse a row', () => {
           expandRow(1);
           collapseRow(1);
           expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
         });
 
-        it('should stamp the details template', function() {
+        it('should stamp the details template', () => {
           expandRow(1);
-          var cells = getRowCells(bodyRows[1]);
+          const cells = getRowCells(bodyRows[1]);
           expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
         });
 
-        it('should have correct bounds', function() {
+        it('should have correct bounds', () => {
           expandRow(1);
-          var cells = getRowCells(bodyRows[1]);
-          var bounds = cells[1].getBoundingClientRect();
+          const cells = getRowCells(bodyRows[1]);
+          const bounds = cells[1].getBoundingClientRect();
           expect(bounds.top).to.be.closeTo(cells[0].getBoundingClientRect().bottom, 1);
           expect(bounds.left).to.equal(cells[0].getBoundingClientRect().left);
           expect(bounds.right).to.equal(grid.$.items.getBoundingClientRect().right);
@@ -125,14 +121,14 @@
           expect(bounds.height).to.be.above(10);
         });
 
-        it('should hide the details cell', function() {
+        it('should hide the details cell', () => {
           expandRow(1);
-          var row = bodyRows[1];
+          const row = bodyRows[1];
           scrollToEnd(grid);
           expect(getRowCells(row)[1].hidden).to.be.true;
         });
 
-        it('should add details to fixed cells cache', function() {
+        it('should add details to fixed cells cache', () => {
           expandRow(1);
 
           flushGrid(grid);
@@ -142,50 +138,46 @@
         });
       });
 
-      describe('inside a parent scope', function() {
+      describe('inside a parent scope', () => {
 
-        beforeEach(function() {
+        beforeEach(() => {
           grid = fixture('with-scope').$.grid;
           grid.items = ['foo', 'bar', 'baz'];
           flushGrid(grid);
           bodyRows = getRows(grid.$.items);
         });
 
-        it('should have the correct index on details template', function() {
+        it('should have the correct index on details template', () => {
           // expand item 0
           grid.expandItem('foo');
 
           // expand item 1
           grid.expandItem('bar');
 
-          var firstRowCells = getRowCells(bodyRows[0]);
-          var secondRowCells = getRowCells(bodyRows[1]);
+          const firstRowCells = getRowCells(bodyRows[0]);
+          const secondRowCells = getRowCells(bodyRows[1]);
           expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
           expect(getCellContent(secondRowCells[1]).textContent.trim()).to.equal('1-details');
         });
       });
 
-      describe('repeat', function() {
+      describe('repeat', () => {
 
-        var items = [];
+        const items = [];
         for (var i = 0; i < 50; i++) {
           items.push({details: [1, 2, 3, 4]});
         }
 
-        beforeEach(function() {
-          grid = fixture('repeat');
-        });
+        beforeEach(() => grid = fixture('repeat'));
 
-        it('should have correct height', function(done) {
+        it('should have correct height', done => {
           grid.expandItem(items[0]);
 
-          grid.dataProvider = function(params, callback) {
-            callback(items);
-          };
+          grid.dataProvider = (params, callback) => callback(items);
           flushGrid(grid);
 
           animationFrameFlush(() => {
-            var row = getRows(grid.$.items)[0];
+            const row = getRows(grid.$.items)[0];
             expect(row.offsetHeight).to.be.above(70);
             done();
           });

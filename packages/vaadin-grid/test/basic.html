@@ -24,30 +24,28 @@
   </test-fixture>
 
   <script>
-    describe('basic features', function() {
-      var grid;
+    describe('basic features', () => {
+      let grid;
 
-      beforeEach(function() {
+      beforeEach(() => {
         grid = fixture('default');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
       });
 
-      it('check physical item heights', function() {
-        var rowHeight = grid._physicalItems[0].offsetHeight;
+      it('check physical item heights', () => {
+        const rowHeight = grid._physicalItems[0].offsetHeight;
 
-        grid._physicalItems.forEach(function(item) {
-          expect(item.offsetHeight).to.equal(rowHeight);
-        });
+        grid._physicalItems.forEach(item => expect(item.offsetHeight).to.equal(rowHeight));
       });
 
-      it('check visible item count', function() {
+      it('check visible item count', () => {
         grid.size = 10;
         flushGrid(grid);
         expect(Polymer.dom(grid.root).querySelectorAll('tbody tr:not([hidden])').length).to.eql(10);
       });
 
-      it('first visible index', function() {
+      it('first visible index', () => {
         expect(grid.firstVisibleIndex).to.equal(0);
         grid.scroll(0, grid._physicalAverage * 50);
         grid._scrollHandler();
@@ -57,13 +55,13 @@
         expect(grid.firstVisibleIndex);
       });
 
-      it('last visible index', function() {
-        var actualHeight = grid._physicalAverage;
+      it('last visible index', () => {
+        const actualHeight = grid._physicalAverage;
         grid.scrollToIndex(2);
         expect(grid.lastVisibleIndex, Math.ceil(((grid._scrollTop + grid.offsetHeight) / actualHeight) - 1));
       });
 
-      it('scroll to index', function() {
+      it('scroll to index', () => {
         grid.size = 100;
 
         grid.scrollToIndex(30);
@@ -74,9 +72,9 @@
 
         grid.scrollToIndex(99);
 
-        var rowHeight = getFirstVisibleItem(grid).offsetHeight;
-        var viewportHeight = grid.offsetHeight;
-        var itemsPerViewport = viewportHeight / rowHeight;
+        const rowHeight = getFirstVisibleItem(grid).offsetHeight;
+        const viewportHeight = grid.offsetHeight;
+        const itemsPerViewport = viewportHeight / rowHeight;
 
         expect(grid.firstVisibleIndex, Math.floor(grid.size - itemsPerViewport));
         grid.scrollToIndex(0);
@@ -88,21 +86,21 @@
         expect(grid.firstVisibleIndex).to.equal(99);
       });
 
-      it('scroll to top', function() {
+      it('scroll to top', () => {
         grid.scrollToIndex(99);
         grid.scroll(0, 0);
         expect(grid._scrollTop).to.equal(0);
       });
 
-      it('scroll to a given scrollTop', function() {
+      it('scroll to a given scrollTop', () => {
         grid.scrollToIndex(99);
         grid.scroll(0, 500);
         expect(grid.$.table.scrollTop).to.equal(500);
       });
 
-      it('should not scroll when size changes', function() {
+      it('should not scroll when size changes', () => {
         grid.scrollToIndex(99);
-        var top = grid.$.table.scrollTop;
+        const top = grid.$.table.scrollTop;
 
         grid.size += 1;
 
@@ -110,7 +108,7 @@
         expect(top).to.be.greaterThan(0);
       });
 
-      it('reset items', function() {
+      it('reset items', () => {
         grid.size = 100;
 
         expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('0');
@@ -122,14 +120,14 @@
         expect(getCellContent(getFirstVisibleItem(grid)).textContent).to.equal('0');
       });
 
-      it('reorder rows', function() {
+      it('reorder rows', () => {
         grid.size = 1000;
-        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(steps => {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
           grid._debounceScrolling.flush();
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {
@@ -139,16 +137,16 @@
         });
       });
 
-      it('reorder should not affect light dom', function() {
+      it('reorder should not affect light dom', () => {
         grid.size = 1000;
-        var wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+        const wrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
 
-        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(steps => {
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
           grid._debounceScrolling.flush();
 
-          var newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
+          const newWrappers = Polymer.dom(grid).querySelectorAll('vaadin-grid-cell-content');
           // Expect the light dom order unchanged
           expect(newWrappers).to.eql(wrappers);
         });
@@ -160,17 +158,17 @@
         window.top && window.top.focus();
         window.focus();
       }
-      (window.document.hasFocus() ? it : it.skip)('reorder should keep focused row', function() {
+      (window.document.hasFocus() ? it : it.skip)('reorder should keep focused row', () => {
         grid.size = 1000;
         getCell(grid, 10).focus();
-        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(function(steps) {
+        [1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144].forEach(steps => {
           const activeElement = grid.shadowRoot.activeElement;
           grid.$.table.scrollTop = 5000 + grid._physicalAverage * steps;
           grid._scrollHandler();
           grid._debounceScrolling.flush();
 
           // Expect the physical rows to be in order after scrolling
-          var rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
+          const rows = Polymer.dom(grid.$.items).querySelectorAll('tr');
 
           rows.forEach((row, index) => {
             if (index > 0) {
@@ -183,9 +181,9 @@
         });
       });
 
-      it('should warn about missing imports', function() {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+      it('should warn about missing imports', () => {
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
@@ -196,9 +194,9 @@
         expect(spy.callCount).to.equal(1);
       });
 
-      it('should warn about missing imports after adding new content', function() {
-        var _warn = console.warn;
-        var spy = console.warn = sinon.spy();
+      it('should warn about missing imports after adding new content', () => {
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
         grid.flushDebouncer('check-imports');
 
         Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
@@ -213,10 +211,10 @@
         expect(spy.called).to.be.true;
       });
 
-      it('should not warn about missing imports', function(done) {
-        Polymer.Base.importHref('../vaadin-grid-sorter.html', function() {
-          var _warn = console.warn;
-          var spy = console.warn = sinon.spy();
+      it('should not warn about missing imports', done => {
+        Polymer.Base.importHref('../vaadin-grid-sorter.html', () => {
+          const _warn = console.warn;
+          const spy = console.warn = sinon.spy();
 
           Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
           Polymer.dom.flush();
