@@ -238,7 +238,7 @@
           Polymer.dom(grid).appendChild(column);
           grid._observer.flush();
 
-          expect(template.templatizer._templatizerTemplate).to.eql(template);
+          expect(template.templatizer.template).to.eql(template);
           expect(column.template).to.eql(template);
         });
 
@@ -257,7 +257,7 @@
           column.appendChild(template2);
           column._templateObserver.flush();
 
-          expect(template2.templatizer._templatizerTemplate).to.eql(template2);
+          expect(template2.templatizer.template).to.eql(template2);
           expect(column.template).to.eql(template2);
         });
       });
