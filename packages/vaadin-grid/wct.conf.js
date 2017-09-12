@@ -30,6 +30,10 @@ module.exports = {
     } else if (argv.env === 'saucelabs:desktop') {
       context.options.plugins.sauce.browsers = saucelabsPlatformsDesktop.concat(cronPlatforms);
 
+    } else if (argv.env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = cronPlatforms.concat(saucelabsPlatformsDesktop)
+        .concat(saucelabsPlatformsMobile).concat(saucelabsPlatformsPolyfilled);
+
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
 

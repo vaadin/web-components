@@ -133,7 +133,8 @@
         }, loadDebounceTime);
       });
 
-      it('should call dataprovider multiple times to load all items', done => {
+      // FIXME: flaky
+      it.skip('should call dataprovider multiple times to load all items', done => {
         container.dataProvider.reset();
         grid.style.fontSize = '12px';
         grid.pageSize = 10;
