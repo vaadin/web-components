@@ -89,9 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         const parentProperty = path.replace(/\.[^\.]*$/, ''); // a.b.c -> a.b
         if (Polymer.Base.get(parentProperty, items[0]) === undefined) {
-          console.warn(
-            'Path "' + path + '" used for ' + action + ' does not exist in all of the items, ' + action + ' is disabled.'
-          );
+          console.warn(`Path "${path}" used for ${action} does not exist in all of the items, ${action} is disabled.`);
           result = false;
         }
       }

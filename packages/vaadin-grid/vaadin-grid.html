@@ -226,9 +226,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         const contentsFragment = document.createDocumentFragment();
 
-        Array.from(row.children).forEach(cell => {
-          cell._vacant = true;
-        });
+        Array.from(row.children).forEach(cell => cell._vacant = true);
         row.innerHTML = '';
         if (row.id !== 'outersizer' && row.id !== 'fixedsizer') {
           row.hidden = true;
@@ -322,9 +320,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _columnTreeChanged(columnTree, splices) {
-        Array.from(this.$.items.children).forEach(row => {
-          this._updateRow(row, columnTree[columnTree.length - 1]);
-        });
+        Array.from(this.$.items.children).forEach(row => this._updateRow(row, columnTree[columnTree.length - 1]));
 
         while (this.$.header.children.length < columnTree.length) {
           const headerRow = document.createElement('tr');
@@ -342,13 +338,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.footer.removeChild(this.$.footer.firstElementChild);
         }
 
-        Array.from(this.$.header.children).forEach((headerRow, index) => {
-          this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1);
-        });
+        Array.from(this.$.header.children)
+          .forEach((headerRow, index) => this._updateRow(headerRow, columnTree[index], 'header', index === columnTree.length - 1));
 
-        Array.from(this.$.footer.children).forEach((footerRow, index) => {
-          this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0);
-        });
+        Array.from(this.$.footer.children)
+          .forEach((footerRow, index) => this._updateRow(footerRow, columnTree[columnTree.length - 1 - index], 'footer', index === 0));
 
         // Sizer rows
         this._updateRow(this.$.outersizer, columnTree[columnTree.length - 1]);
@@ -389,9 +383,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _updateHeaderFooterMetrics() {
-        var headerHeight = this.$.header.clientHeight + 'px';
-        var footerHeight = this.$.footer.clientHeight + 'px';
-        [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(function(element) {
+        const headerHeight = this.$.header.clientHeight + 'px';
+        const footerHeight = this.$.footer.clientHeight + 'px';
+        [this.$.outersizer, this.$.fixedsizer, this.$.items].forEach(element => {
           element.style.borderTopWidth = headerHeight;
           element.style.borderBottomWidth = footerHeight;
         });

@@ -106,7 +106,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _prepareHeaderTemplate() {
-        var headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || this.$.defaultHeaderTemplate);
+        const headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || this.$.defaultHeaderTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
 
@@ -114,7 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _prepareBodyTemplate() {
-        var template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)') || this.$.defaultBodyTemplate);
+        const template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)') || this.$.defaultBodyTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
 
@@ -139,12 +139,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this._grid.removeEventListener('filter-changed', this._boundOnSelectedItemsChanged);
           this._grid.removeEventListener('selected-items-changed', this._boundOnSelectedItemsChanged);
 
-          var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
           if (isSafari && window.ShadyDOM && this.parentElement) {
             // Detach might have beem caused by order change.
             // Shady on safari doesn't restore isAttached so we'll need to do it manually.
-            var parent = this.parentElement;
-            var nextSibling = this.nextElementSibling;
+            const parent = this.parentElement;
+            const nextSibling = this.nextElementSibling;
             parent.removeChild(this);
             if (nextSibling) {
               parent.insertBefore(this, nextSibling);
@@ -196,9 +196,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onActiveItemChanged(e) {
-        var activeItem = e.detail.value;
+        const activeItem = e.detail.value;
         if (this.autoSelect) {
-          var item = activeItem || this._previousActiveItem;
+          const item = activeItem || this._previousActiveItem;
           if (item) {
             this._grid._toggleItem(item);
           }

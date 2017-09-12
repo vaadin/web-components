@@ -202,9 +202,7 @@ This program is available under Apache License Version 2.0, available at https:/
       ghost.innerText = cell._content.innerText;
       const style = window.getComputedStyle(cell);
       ['boxSizing', 'display', 'width', 'height', 'background', 'alignItems', 'padding', 'border', 'flex-direction', 'overflow']
-        .forEach(propertyName => {
-          ghost.style[propertyName] = style[propertyName];
-        });
+        .forEach(propertyName => ghost.style[propertyName] = style[propertyName]);
       return ghost;
     }
 
@@ -214,17 +212,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       // Set order numbers to top-level columns
-      columnTree[0].forEach((column, index) => {
-        column._order = (index + 1) * this._orderBaseScope;
-      });
+      columnTree[0].forEach((column, index) => column._order = (index + 1) * this._orderBaseScope);
     }
 
     _setSiblingsReorderStatus(column, status) {
-      Array.from(column.parentNode.children).filter(child => {
-        return /column/.test(child.localName) && this._isSwapAllowed(child, column);
-      }).forEach(sibling => {
-        sibling._reorderStatus = status;
-      });
+      Array.from(column.parentNode.children)
+        .filter(child => /column/.test(child.localName) && this._isSwapAllowed(child, column))
+        .forEach(sibling => sibling._reorderStatus = status);
     }
 
     _autoScroller() {
@@ -255,9 +249,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isSwappableByPosition(targetColumn, clientX) {
-      const targetCell = Array.prototype.filter.call(this.$.header.querySelectorAll('[part~="cell"]'), cell => {
-        return cell._column === targetColumn;
-      })[0];
+      const targetCell = 
+        Array.prototype.filter.call(this.$.header.querySelectorAll('[part~="cell"]'), cell => cell._column === targetColumn)[0];
       const sourceCellRect = this.$.header.querySelector('[reorder-status=dragging]').getBoundingClientRect();
       const targetRect = targetCell.getBoundingClientRect();
       if (targetRect.left > sourceCellRect.left) {
