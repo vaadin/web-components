@@ -6,7 +6,9 @@
 
 # &lt;vaadin-combo-box&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-combo-box/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-combo-box/3.0.0-alpha3/demo/)
+|
+[API documentation ↗](https://cdn.vaadin.com/vaadin-combo-box/3.0.0-alpha3/#/elements/vaadin-combo-box)
 
 [&lt;vaadin-combo-box&gt;](https://vaadin.com/elements/-/element/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
