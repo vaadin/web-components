@@ -40,6 +40,12 @@
     <p>The additional theme styles can be applied together, with the exception of styles inside a single section which are mutually exclusive.</p>
     <p>For example, you can combine the <code>primary</code> style with the <code>small</code>, <code>icon</code> and <code>success</code> styles, but you can’t combine <code>primary</code> with <code>tertiary</code> or <code>success</code> with <code>danger</code>.</p>
 
+    <!-- Workaround for #4 (the first vaadin-button inside a nice-demo-snippet on the page gets weird colors) -->
+    <nice-demo-snippet style="display: none;">
+      <template slot="source">
+        <vaadin-button>Dummy</vaadin-button>
+      </template>
+    </nice-demo-snippet>
 
     <h3 demo-section>Types</h3>
 
