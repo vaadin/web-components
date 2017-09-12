@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>Tests</title>
   <script>
+    const ie = !!window.MSStream;
+    const ios = !ie && /iPad|iPhone|iPod/.test(navigator.userAgent);
     WCT = {
       mochaOptions: {
-        timeout: 30000
+        timeout: ios || ie ? 40000 : 30000
       }
     };
   </script>
