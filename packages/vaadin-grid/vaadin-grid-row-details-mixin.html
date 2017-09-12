@@ -44,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this._rowDetailsTemplate = this.querySelector('template.row-details');
       if (this._rowDetailsTemplate) {
-        var templatizer = new Vaadin.GridTemplatizer();
+        var templatizer = new Vaadin.Grid.Templatizer();
         templatizer._grid = this;
         templatizer.dataHost = this.dataHost;
         templatizer.template = this._rowDetailsTemplate;

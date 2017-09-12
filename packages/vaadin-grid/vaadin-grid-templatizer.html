@@ -89,9 +89,9 @@ This program is available under Apache License Version 2.0, available at https:/
               this._forwardParentProp(prop, value);
 
               if (this._templateInstances) {
-                this._templateInstances.forEach(function(inst) {
+                this._templateInstances.forEach(inst => {
                   inst.notifyPath(prop, value);
-                }, this);
+                });
               }
             },
 
@@ -130,9 +130,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _forwardParentProp(prop, value) {
         this._parentPathValues[prop] = value;
-        this._templateInstances.forEach(function(inst) {
+        this._templateInstances.forEach(inst => {
           inst.set(prop, value);
-        }, this);
+        });
       }
 
       _templateInstancesChanged(t, p) {
@@ -148,11 +148,11 @@ This program is available under Apache License Version 2.0, available at https:/
         } else {
           return;
         }
-        Object.keys(this._parentPathValues || {}).forEach(function(keyName) {
+        Object.keys(this._parentPathValues || {}).forEach(keyName => {
           for (var i = index; i < index + count; i++) {
             this._templateInstances[i].set(keyName, this._parentPathValues[keyName]);
           }
-        }, this);
+        });
       }
 
     }
@@ -163,6 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @namespace Vaadin
      */
     window.Vaadin = window.Vaadin || {};
-    Vaadin.GridTemplatizer = GridTemplatizer;
+    window.Vaadin.Grid = window.Vaadin.Grid || {};
+    Vaadin.Grid.Templatizer = GridTemplatizer;
   }
 </script>
