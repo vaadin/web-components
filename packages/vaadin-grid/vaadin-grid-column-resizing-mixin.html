@@ -6,42 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
-<dom-module id="vaadin-grid-column-resizing-styles">
-  <template>
-    <style>
-      [part~="resize-handle"] {
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        cursor: col-resize;
-        z-index: 1;
-      }
-
-      [part~="resize-handle"]::before {
-        position: absolute;
-        content: "";
-        height: 100%;
-        width: 35px;
-        transform: translateX(-50%);
-      }
-
-      [lastcolumn] [part~="resize-handle"]::before,
-      [last-frozen] [part~="resize-handle"]::before {
-        width: 18px;
-        transform: translateX(-100%);
-      }
-
-      #scroller[column-resizing] {
-        -ms-user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <script>
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};

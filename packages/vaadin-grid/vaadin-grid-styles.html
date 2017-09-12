@@ -6,8 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-grid-styles">
   <template>
-    <style include="vaadin-grid-column-resizing-styles"></style>
-    <style include="vaadin-grid-column-reordering-styles"></style>
     <style>
       @keyframes vaadin-grid-appear {
         to {
@@ -138,6 +136,61 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [ios][scrolling] #outerscroller {
         z-index: 0;
+      }
+
+      /* Reordering styles */
+      :host([reordering]) [part~="cell"] ::slotted(vaadin-grid-cell-content),
+      #scroller[no-content-pointer-events] [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        pointer-events: none;
+      }
+
+      #reorderghost {
+        visibility: hidden;
+        position: fixed;
+        opacity: 0.5;
+        pointer-events: none;
+      }
+
+      :host([reordering]) {
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      :host([reordering]) #outerscroller {
+        -webkit-overflow-scrolling: auto !important;
+      }
+
+      /* Resizing styles */
+      [part~="resize-handle"] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        cursor: col-resize;
+        z-index: 1;
+      }
+
+      [part~="resize-handle"]::before {
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 35px;
+        transform: translateX(-50%);
+      }
+
+      [lastcolumn] [part~="resize-handle"]::before,
+      [last-frozen] [part~="resize-handle"]::before {
+        width: 18px;
+        transform: translateX(-100%);
+      }
+
+      #scroller[column-resizing] {
+        -ms-user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
       }
 
       /* Sizer styles */

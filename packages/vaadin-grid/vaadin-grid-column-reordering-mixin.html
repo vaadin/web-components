@@ -6,35 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
-<dom-module id="vaadin-grid-column-reordering-styles">
-  <template>
-    <style>
-      :host([reordering]) [part~="cell"] ::slotted(vaadin-grid-cell-content),
-      #scroller[no-content-pointer-events] [part~="cell"] ::slotted(vaadin-grid-cell-content) {
-        pointer-events: none;
-      }
-
-      #reorderghost {
-        visibility: hidden;
-        position: fixed;
-        opacity: 0.5;
-        pointer-events: none;
-      }
-
-      :host([reordering]) {
-        -ms-user-select: none;
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-
-      :host([reordering]) #outerscroller {
-        -webkit-overflow-scrolling: auto !important;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <script>
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};
