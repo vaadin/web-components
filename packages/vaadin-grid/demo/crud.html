@@ -49,7 +49,7 @@
             <div style="margin-bottom: 20px">
               <input id="firstname" placeholder="First Name">
               <input id="lastname" placeholder="Last Name">
-              <button on-tap="_add">Add</button>
+              <button on-click="_add">Add</button>
             </div>
 
             <vaadin-grid id="grid" items="[[items]]">
@@ -78,10 +78,10 @@
               <vaadin-grid-column>
                 <template>
                   <div style="display: flex">
-                    <button hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]">Edit</button>
-                    <button hidden="[[editing]]" on-tap="_remove">Remove</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-tap="_save" focus-target$="[[editing]]">Save</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel">Cancel</button>
+                    <button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</button>
+                    <button hidden="[[editing]]" on-click="_remove">Remove</button>
+                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</button>
+                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</button>
                   </div>
                 </template>
               </vaadin-grid-column>
@@ -90,30 +90,33 @@
           </template>
           <script>
             window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-crud',
-
-                properties: {
-                  editing: Object
-                },
-
-                ready: function() {
+              class XCrud extends Polymer.Element {
+                static get is() {
+                  return 'x-crud';
+                }
+                static get properties() {
+                  return {
+                    editing: Object
+                  };
+                }
+                ready() {
+                  super.ready();
                   this.editing = null;
-                },
+                }
 
-                _storeFirst: function(e) {
+                _storeFirst(e) {
                   this._first = e.target.value;
-                },
+                }
 
-                _storeLast: function(e) {
+                _storeLast(e) {
                   this._last = e.target.value;
-                },
+                }
 
-                _isEditing: function(editing, item) {
+                _isEditing(editing, item) {
                   return item === editing;
-                },
+                }
 
-                _edit: function(e) {
+                _edit(e) {
                   var item = e.model.item;
                   this.editing = item;
 
@@ -121,9 +124,9 @@
                   this._last = item.name.last;
 
                   requestAnimationFrame(() => this.$.grid.querySelector('#first-' + e.model.index).focus());
-                },
+                }
 
-                _save: function(e) {
+                _save(e) {
                   var item = e.model.item;
                   item.name.first = this._first;
                   item.name.last = this._last;
@@ -131,15 +134,15 @@
                   this.editing = null;
 
                   this.$.grid.clearCache();
-                },
+                }
 
-                _cancel: function() {
+                _cancel() {
                   this.editing = null;
 
                   this.$.grid.clearCache();
-                },
+                }
 
-                _add: function(e) {
+                _add(e) {
                   if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
                     this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
                     this.$.grid.clearCache();
@@ -149,15 +152,16 @@
                   } else {
                     alert('First Name and Last Name required');
                   }
-                },
+                }
 
-                _remove: function(e) {
+                _remove(e) {
                   var index = this.items.indexOf(e.model.item);
                   this.items.splice(index, 1);
 
                   this.$.grid.clearCache();
                 }
-              });
+              }
+              window.customElements.define(XCrud.is, XCrud);
             });
           </script>
         </dom-module>

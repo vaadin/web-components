@@ -150,14 +150,17 @@
 
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'bind-expanded-items',
+            window.addEventListener('WebComponentsReady', () => {
+              class BindExpandedItems extends Polymer.Element {
+                static get is() {
+                  return 'bind-expanded-items';
+                }
 
-                _onActiveItemChanged: function(e) {
+                _onActiveItemChanged(e) {
                   this.$.grid.expandedItems = [e.detail.value];
                 }
-              });
+              }
+              window.customElements.define(BindExpandedItems.is, BindExpandedItems);
             });
           </script>
         </dom-module>

@@ -94,62 +94,66 @@
 
             </vaadin-grid>
             <div id="pages">
-              <button on-tap="_prev">&lt;</button>
+              <button on-click="_prev">&lt;</button>
               <template is="dom-repeat" items="[[pages]]">
-                <button on-tap="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
+                <button on-click="_select" selected$="[[_isSelected(page, item)]]">[[item]]</button>
               </template>
-              <button on-tap="_next">&gt;</button>
+              <button on-click="_next">&gt;</button>
             </div>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-pagination',
-
-                properties: {
-                  items: Array,
-                  page: Number,
-                  pages: Array
-                },
-
-                ready: function() {
+            window.addEventListener('WebComponentsReady', () => {
+              class XPagination extends Polymer.Element {
+                static get is() {
+                  return 'x-pagination';
+                }
+                static get properties() {
+                  return {
+                    items: Array,
+                    page: Number,
+                    pages: Array
+                  };
+                }
+                static get observers() {
+                  return ['_itemsChanged(items, page)'];
+                }
+                ready() {
+                  super.ready();
                   this.page = 0;
-                },
+                }
 
-                observers: ['_itemsChanged(items, page)'],
-
-                _isSelected: function(page, item) {
+                _isSelected(page, item) {
                   return page === item - 1;
-                },
+                }
 
-                _select: function(e) {
+                _select(e) {
                   this.page = e.model.item - 1;
-                },
+                }
 
-                _next: function() {
+                _next() {
                   this.page = Math.min(this.pages.length - 1, this.page + 1);
-                },
+                }
 
-                _prev: function() {
+                _prev() {
                   this.page = Math.max(0, this.page - 1);
-                },
+                }
 
-                _itemsChanged: function(items, page) {
+                _itemsChanged(items, page) {
                   if (items === undefined || page === undefined) {
                     return;
                   }
 
                   if (!this.pages) {
-                    this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
-                      return index + 1;
-                    });
+                    this.pages = Array
+                      .apply(null, {length: Math.ceil(items.length / this.$.grid.pageSize)}).map((item, index) => index + 1);
                   }
 
-                  var start = page * this.$.grid.pageSize;
-                  var end = (page + 1) * this.$.grid.pageSize;
+                  const start = page * this.$.grid.pageSize;
+                  const end = (page + 1) * this.$.grid.pageSize;
                   this.$.grid.items = items.slice(start, end);
                 }
-              });
+              }
+              window.customElements.define(XPagination.is, XPagination);
             });
           </script>
         </dom-module>

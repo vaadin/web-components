@@ -47,12 +47,14 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-array-data-example',
-
-                ready: function() {
-                  var items = [];
+            window.addEventListener('WebComponentsReady', () => {
+              class XArrayDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-array-data-example';
+                }
+                ready() {
+                  super.ready();
+                  const items = [];
 
                   for (var i = 0; i < 100; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
@@ -60,7 +62,8 @@
 
                   this.items = items;
                 }
-              });
+              }
+              window.customElements.define(XArrayDataExample.is, XArrayDataExample);
             });
           </script>
         </dom-module>
@@ -104,28 +107,32 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-dynamic-data-example',
+            window.addEventListener('WebComponentsReady', () => {
+              class XDynamicDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-dynamic-data-example';
+                }
+                ready() {
+                  super.ready();
 
-                ready: function() {
-                  var items = [];
+                  const items = [];
 
                   for (var i = 0; i < 10; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
                   }
 
                   this.items = items;
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                },
+                }
 
-                _remove: function() {
+                _remove() {
                   this.pop('items');
                 }
-              });
+              }
+              window.customElements.define(XDynamicDataExample.is, XDynamicDataExample);
             });
           </script>
         </dom-module>
@@ -174,28 +181,32 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-dynamic-height-example',
+            window.addEventListener('WebComponentsReady', () => {
+              class XDynamicHeightExample extends Polymer.Element {
+                static get is() {
+                  return 'x-dynamic-height-example';
+                }
+                ready() {
+                  super.ready();
 
-                ready: function() {
-                  var items = [];
+                  const items = [];
 
                   for (var i = 0; i < 5; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
                   }
 
                   this.items = items;
-                },
+                }
 
-                _add: function() {
+                _add() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                },
+                }
 
-                _remove: function() {
+                _remove() {
                   this.pop('items');
                 }
-              });
+              }
+              window.customElements.define(XDynamicHeightExample.is, XDynamicHeightExample);
             });
           </script>
         </dom-module>
@@ -236,24 +247,24 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-remote-data-example',
-
-                ready: function() {
+            window.addEventListener('WebComponentsReady', () => {
+              class XRemoteDataExample extends Polymer.Element {
+                static get is() {
+                  return 'x-remote-data-example';
+                }
+                ready() {
+                  super.ready();
                   this.size = 200;
-                  this.dataProvider = function(params, callback) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                      callback(JSON.parse(xhr.responseText).result);
-                    };
-                    var index = params.page * params.pageSize;
+                  this.dataProvider = (params, callback) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.onload = () => callback(JSON.parse(xhr.responseText).result);
+                    const index = params.page * params.pageSize;
                     xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
                     xhr.send();
                   };
                 }
-
-              });
+              }
+              window.customElements.define(XRemoteDataExample.is, XRemoteDataExample);
             });
           </script>
         </dom-module>

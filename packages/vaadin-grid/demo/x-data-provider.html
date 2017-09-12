@@ -3,86 +3,90 @@
 
 <dom-module id="x-data-provider">
   <script>
-    window.addEventListener('WebComponentsReady', function() {
-      Polymer({
-        is: 'x-data-provider',
-
-        properties: {
-
-          loading: {
-            type: Boolean,
-            notify: true
-          },
-
-          delay: {
-            type: Number,
-            value: 0
-          },
-
-          dataProvider: {
-            notify: true,
-            value: function() {
-              var _this = this;
-              return function(params, callback) {
-                var items = Array.apply( null, { length: params.pageSize } ).map(function(item, index) {
-                  return window.getJSON('http://randomuser.me?index=' + (index + params.page * params.pageSize));
-                });
-                _this.loading = true;
-                setTimeout(function() {
-                  callback(items);
-                  _this.loading = false;
-                }, _this.delay);
-              };
-            }
-          }
+    window.addEventListener('WebComponentsReady', () => {
+      class XDataProvider extends Polymer.Element {
+        static get is() {
+          return 'x-data-provider';
         }
-      });
+        static get properties() {
+          return {
+            loading: {
+              type: Boolean,
+              notify: true
+            },
+
+            delay: {
+              type: Number,
+              value: 0
+            },
+
+            dataProvider: {
+              notify: true,
+              value: () => {
+                const _this = this;
+                return (params, callback) => {
+                  const items = Array.apply(null, {length: params.pageSize})
+                    .map((item, index) => window.getJSON('http://randomuser.me?index=' + (index + params.page * params.pageSize)));
+                  _this.loading = true;
+                  setTimeout(() => {
+                    callback(items);
+                    _this.loading = false;
+                  }, _this.delay);
+                };
+              }
+            }
+          };
+        }
+      }
+      window.customElements.define(XDataProvider.is, XDataProvider);
     });
   </script>
 </dom-module>
 
 <dom-module id="x-array-data-provider">
   <script>
-    window.addEventListener('WebComponentsReady', function() {
-      Polymer({
-        is: 'x-array-data-provider',
-
-        properties: {
-          size: {
-            type: Number,
-            value: null
-          },
-
-          items: {
-            notify: true,
-            computed: '_computeItems(size)'
-          }
-        },
-
-        _computeItems: function(size) {
+    window.addEventListener('WebComponentsReady', () => {
+      class XArrayDataProvider extends Polymer.Element {
+        static get is() {
+          return 'x-array-data-provider';
+        }
+        static get properties() {
+          return {
+            size: {
+              type: Number,
+              value: null
+            },
+            items: {
+              notify: true,
+              computed: '_computeItems(size)'
+            }
+          };
+        }
+        _computeItems(size) {
           if (size !== null) {
             return window.users.results.slice(0, size);
           } else {
             return window.users.results;
           }
         }
-      });
+      }
+      window.customElements.define(XArrayDataProvider.is, XArrayDataProvider);
     });
   </script>
 </dom-module>
 
 <script>
-(function() {
-  window.getJSON = function(url, callback) {
+(() => {
+  window.getJSON = (url, callback) => {
     if (url.indexOf('randomuser.me') > -1) {
-      var index = parseInt(getParameterByName(url, 'index') || 0);
+      const index = parseInt(getParameterByName(url, 'index') || 0);
       return JSON.parse(JSON.stringify(users.results[index % users.results.length])); //clone object
     }
   };
 
   function getParameterByName(url, name) {
     name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+    const regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
       results = regex.exec(url);
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
   }

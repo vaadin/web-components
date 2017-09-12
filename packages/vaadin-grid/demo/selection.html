@@ -62,20 +62,23 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-selection',
-
-                properties: {
-                  activeItem: {
-                    observer: '_activeItemChanged'
-                  }
-                },
-
-                _activeItemChanged: function(item) {
+            window.addEventListener('WebComponentsReady', () => {
+              class XSelection extends Polymer.Element {
+                static get is() {
+                  return 'x-selection';
+                }
+                static get properties() {
+                  return {
+                    activeItem: {
+                      observer: '_activeItemChanged'
+                    }
+                  };
+                }
+                _activeItemChanged(item) {
                   this.$.grid.selectedItems = item ? [item] : [];
                 }
-              });
+              }
+              window.customElements.define(XSelection.is, XSelection);
             });
           </script>
         </dom-module>
@@ -223,50 +226,54 @@
             </vaadin-grid>
           </template>
           <script>
-          window.addEventListener('WebComponentsReady', function() {
-            Polymer({
-              is: 'dataprovider-select-all',
-
-              properties: {
-                inverted: {
-                  type: Boolean,
-                  value: false
-                },
-                indeterminate: {
-                  type: Boolean,
-                  value: false
-                }
-              },
-
-              observers: ['_resetSelection(inverted)'],
-
-              _resetSelection: function(inverted) {
+          window.addEventListener('WebComponentsReady', () => {
+            class DataproviderSelectAll extends Polymer.Element {
+              static get is() {
+                return 'dataprovider-select-all';
+              }
+              static get properties() {
+                return {
+                  inverted: {
+                    type: Boolean,
+                    value: false
+                  },
+                  indeterminate: {
+                    type: Boolean,
+                    value: false
+                  }
+                };
+              }
+              static get observers() {
+                return ['_resetSelection(inverted)'];
+              }
+              _resetSelection(inverted) {
                 this.$.grid.selectedItems = [];
                 this.indeterminate = false;
-              },
+              }
 
-              _invert: function(e) {
+              _invert(e) {
                 this.inverted = !this.inverted;
-              },
+              }
 
-                // iOS needs indeterminated + checked at the same time
-              _isChecked: function(inverted, indeterminate) {
+              // iOS needs indeterminated + checked at the same time
+              _isChecked(inverted, indeterminate) {
                 return indeterminate || inverted;
-              },
+              }
 
-              _selectItem: function(e) {
+              _selectItem(e) {
                 if (e.target.checked === this.inverted) {
                   this.$.grid.deselectItem(e.model.item);
                 } else {
                   this.$.grid.selectItem(e.model.item);
                 }
                 this.indeterminate = this.$.grid.selectedItems.length > 0;
-              },
+              }
 
-              _isSelected: function(inverted, selected) {
+              _isSelected(inverted, selected) {
                 return inverted != selected;
               }
-            });
+            }
+            window.customElements.define(DataproviderSelectAll.is, DataproviderSelectAll);
           });
           </script>
         </dom-module>
@@ -337,29 +344,32 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
-              Polymer({
-                is: 'x-space-action',
-
-                properties: {
-                  activeItem: {
-                    observer: '_activeItemChanged'
-                  }
-                },
-
-                _alert: function(e) {
+            window.addEventListener('WebComponentsReady', () => {
+              class XSpaceAction extends Polymer.Element {
+                static get is() {
+                  return 'x-space-action';
+                }
+                static get properties() {
+                  return {
+                    activeItem: {
+                      observer: '_activeItemChanged'
+                    }
+                  };
+                }
+                _alert(e) {
                   alert(e.target.textContent + ' clicked');
-                },
+                }
 
-                _alertAndPreventDefault: function(e) {
+                _alertAndPreventDefault(e) {
                   e.preventDefault();
                   this._alert(e);
-                },
+                }
 
-                _activeItemChanged: function(item) {
+                _activeItemChanged(item) {
                   this.$.grid.selectedItems = item ? [item] : [];
                 }
-              });
+              }
+              window.customElements.define(XSpaceAction.is, XSpaceAction);
             });
           </script>
         </dom-module>
