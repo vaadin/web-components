@@ -11,10 +11,11 @@
 
 <!--
 ```
-<custom-element-demo>
+<custom-element-demo height="150">
   <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-form-layout.html">
-    <link rel="import" href="vaadin-text-field.html">
+    <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
