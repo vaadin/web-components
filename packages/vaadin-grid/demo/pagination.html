@@ -102,7 +102,7 @@
             </div>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XPagination extends Polymer.Element {
                 static get is() {
                   return 'x-pagination';
@@ -144,9 +144,8 @@
                   }
 
                   if (!this.pages) {
-                    this.pages = Array.apply( null, {length: Math.ceil(items.length / this.$.grid.pageSize)} ).map(function(item, index) {
-                      return index + 1;
-                    });
+                    this.pages = Array
+                      .apply(null, {length: Math.ceil(items.length / this.$.grid.pageSize)}).map((item, index) => index + 1);
                   }
 
                   const start = page * this.$.grid.pageSize;

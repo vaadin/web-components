@@ -121,7 +121,7 @@
             </vaadin-grid>
           </template>
           <script>
-            addEventListener('WebComponentsReady', function() {
+            addEventListener('WebComponentsReady', () => {
               class XRemoteSortingExample extends Polymer.Element {
                 static get is() {
                   return 'x-remote-sorting-example';
@@ -133,19 +133,15 @@
 
                   grid.size = 200;
 
-                  grid.dataProvider = function(params, callback) {
+                  grid.dataProvider = (params, callback) => {
                     const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                      callback(JSON.parse(xhr.responseText).result);
-                    };
+                    xhr.onload = () => callback(JSON.parse(xhr.responseText).result);
 
                     const index = params.page * params.pageSize;
                     let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
-                    params.sortOrders.forEach(function(sort) {
-                      url += '&orders[]=' + sort.path + ' ' + sort.direction;
-                    });
+                    params.sortOrders.forEach(sort => url += '&orders[]=' + sort.path + ' ' + sort.direction);
 
                     xhr.open('GET', url, true);
                     xhr.send();
@@ -253,7 +249,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XRemoteFilteringExample extends Polymer.Element {
                 static get is() {
                   return 'x-remote-filtering-example';
@@ -265,9 +261,9 @@
 
                   grid.size = 200;
 
-                  grid.dataProvider = function(params, callback) {
+                  grid.dataProvider = (params, callback) => {
                     const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
+                    xhr.onload = () => {
                       const response = JSON.parse(xhr.responseText);
 
                       // Number of items changes after filtering. We need
@@ -281,9 +277,7 @@
                     let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
-                    params.filters.forEach(function(filter) {
-                      url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
-                    });
+                    params.filters.forEach(filter => url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value));
 
                     xhr.open('GET', url, true);
                     xhr.send();

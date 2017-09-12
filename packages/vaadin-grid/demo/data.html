@@ -47,7 +47,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XArrayDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-array-data-example';
@@ -107,7 +107,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XDynamicDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-dynamic-data-example';
@@ -181,7 +181,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XDynamicHeightExample extends Polymer.Element {
                 static get is() {
                   return 'x-dynamic-height-example';
@@ -247,7 +247,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addEventListener('WebComponentsReady', () => {
               class XRemoteDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-remote-data-example';
@@ -255,11 +255,9 @@
                 ready() {
                   super.ready();
                   this.size = 200;
-                  this.dataProvider = function(params, callback) {
+                  this.dataProvider = (params, callback) => {
                     const xhr = new XMLHttpRequest();
-                    xhr.onload = function() {
-                      callback(JSON.parse(xhr.responseText).result);
-                    };
+                    xhr.onload = () => callback(JSON.parse(xhr.responseText).result);
                     const index = params.page * params.pageSize;
                     xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
                     xhr.send();

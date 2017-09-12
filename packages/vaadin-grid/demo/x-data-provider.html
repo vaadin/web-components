@@ -3,7 +3,7 @@
 
 <dom-module id="x-data-provider">
   <script>
-    window.addEventListener('WebComponentsReady', function() {
+    window.addEventListener('WebComponentsReady', () => {
       class XDataProvider extends Polymer.Element {
         static get is() {
           return 'x-data-provider';
@@ -22,14 +22,13 @@
 
             dataProvider: {
               notify: true,
-              value: function() {
+              value: () => {
                 const _this = this;
-                return function(params, callback) {
-                  const items = Array.apply( null, { length: params.pageSize } ).map(function(item, index) {
-                    return window.getJSON('http://randomuser.me?index=' + (index + params.page * params.pageSize));
-                  });
+                return (params, callback) => {
+                  const items = Array.apply(null, {length: params.pageSize})
+                    .map((item, index) => window.getJSON('http://randomuser.me?index=' + (index + params.page * params.pageSize)));
                   _this.loading = true;
-                  setTimeout(function() {
+                  setTimeout(() => {
                     callback(items);
                     _this.loading = false;
                   }, _this.delay);
@@ -46,7 +45,7 @@
 
 <dom-module id="x-array-data-provider">
   <script>
-    window.addEventListener('WebComponentsReady', function() {
+    window.addEventListener('WebComponentsReady', () => {
       class XArrayDataProvider extends Polymer.Element {
         static get is() {
           return 'x-array-data-provider';
@@ -77,8 +76,8 @@
 </dom-module>
 
 <script>
-(function() {
-  window.getJSON = function(url, callback) {
+(() => {
+  window.getJSON = (url, callback) => {
     if (url.indexOf('randomuser.me') > -1) {
       const index = parseInt(getParameterByName(url, 'index') || 0);
       return JSON.parse(JSON.stringify(users.results[index % users.results.length])); //clone object
