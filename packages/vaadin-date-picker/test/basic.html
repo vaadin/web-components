@@ -320,6 +320,14 @@
           datepicker.close();
         });
 
+        it('should match the parent width', () => {
+          var container = fixture('datepicker-wrapped').querySelector('div');
+          var datepickerWrapped = container.querySelector('vaadin-date-picker');
+          container.style.width = '120px';
+          datepickerWrapped.style.width = '100%';
+          expect(datepickerWrapped.$.input.clientWidth).to.equal(120);
+        });
+
       });
 
       describe('value property formats', () => {
