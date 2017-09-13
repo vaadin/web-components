@@ -17,10 +17,39 @@ This program is available under Apache License Version 2.0, available at https:/
    * @memberof Vaadin
    * @mixes Vaadin.ComboBoxDropdownMixin
    */
-  Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends Vaadin.ComboBoxDropdownMixin(subclass) {
+  Vaadin.ComboBoxMixin = subclass => class VaadinComboBoxMixinElement extends subclass {
 
     static get properties() {
       return {
+        /**
+         * True if the dropdown is open, false otherwise.
+         */
+        opened: {
+          type: Boolean,
+          notify: true,
+          value: false,
+          reflectToAttribute: true,
+          observer: '_openedChanged'
+        },
+
+        /**
+         * Set to true to disable this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        /**
+         * When present, it specifies that the element field is read-only.
+         */
+        readonly: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+
         /**
          * A full set of items to filter the visible options from.
          * The items can be of either `String` or `Object` type.
@@ -203,6 +232,41 @@ This program is available under Apache License Version 2.0, available at https:/
       this.$.overlay.addEventListener('vaadin-overlay-touch-start', this._onOverlayTouchStart.bind(this));
     }
 
+    /**
+     * Opens the dropdown list.
+     */
+    open() {
+      // Prevent _open() being called when input is disabled or read-only
+      if (!this.disabled && !this.readonly) {
+        this.opened = true;
+      }
+    }
+
+    /**
+     * Closes the dropdown list.
+     */
+    close() {
+      this.opened = false;
+    }
+
+    _openedChanged(value, old) {
+      // Prevent _close() being called when opened is set to its default value (false).
+      if (old === undefined) {
+        return;
+      }
+
+      if (this.opened) {
+        // For touch devices, we don't want to popup virtual keyboard on touch devices unless input
+        // is explicitly focused by the user.
+        if (!this.$.overlay.touchDevice) {
+          // Check to see if there is a focused property and if it's already true.
+          if (!this.focused) {
+            this.focus();
+          }
+        }
+      }
+    }
+
     _onBlur() {
       if (!this._closeOnBlurIsPrevented) {
         this.close();
@@ -224,7 +288,11 @@ This program is available under Apache License Version 2.0, available at https:/
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
       } else if (path.indexOf(this.inputElement) !== -1) {
-        this._openAsync();
+        if (path.indexOf(this._toggleElement) > -1 && this.opened) {
+          this.close();
+        } else {
+          this.open();
+        }
       }
 
       this._closeOnBlurIsPrevented = false;
@@ -367,39 +435,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    /**
-     * Opening and closing related functionality
-     */
-
-    /**
-     * Opens the dropdown list asynchronously.
-     */
-    _openAsync() {
-      // Needed for MS Edge. Otherwise, it does not pop the virtual keyboard up
-      // when tapping the combobox that has non-empty value.
-      Polymer.Async.microTask.run(() => this.open());
-    }
-
-    /**
-     * Opens and closes the dropdown list.
-     */
-    _toggle() {
-      if (this.opened) {
-        this.close();
-      } else {
-        this.open();
-      }
-    }
-
     _toggleElementChanged(toggleElement) {
       if (toggleElement) {
-        toggleElement.addEventListener('mousedown', (e) => {
-          e.preventDefault();
-        });
-
-        toggleElement.addEventListener('click', (e) => {
-          this._toggle();
-        });
+        // Don't blur the input on toggle mousedown
+        toggleElement.addEventListener('mousedown', e => e.preventDefault());
       }
     }
 

@@ -24,8 +24,8 @@
     let input;
     let valueChangedSpy, selectedItemChangedSpy, selectionChangedSpy, changeSpy;
 
-    function dispatchTap(elm) {
-      elm.dispatchEvent(new CustomEvent('tap', {
+    function dispatchClick(elm) {
+      elm.dispatchEvent(new CustomEvent('click', {
         bubbles: true
       }));
     }
@@ -48,85 +48,26 @@
       combobox.addEventListener('change', changeSpy);
     });
 
-    it('should stop tap events from bubbling outside the overlay', () => {
-      const tapSpy = sinon.spy();
-      document.addEventListener('tap', tapSpy);
-      combobox.$.overlay._selector.dispatchEvent(new CustomEvent('tap', {
+    it('should stop click events from bubbling outside the overlay', () => {
+      const clickSpy = sinon.spy();
+      document.addEventListener('click', clickSpy);
+      combobox.$.overlay._selector.dispatchEvent(new CustomEvent('click', {
         bubbles: true
       }));
-      document.removeEventListener('tap', tapSpy);
-      expect(tapSpy.calledOnce).not.to.be.true;
+      document.removeEventListener('click', clickSpy);
+      expect(clickSpy.calledOnce).not.to.be.true;
     });
 
-    it('should fire `selection-changed` when tapped on an item', () => {
+    it('should fire `selection-changed` when clicked on an item', () => {
       combobox.opened = true;
       Polymer.flush();
 
-      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('tap', {
+      combobox.$.overlay._selector.querySelector('vaadin-combo-box-item').dispatchEvent(new CustomEvent('click', {
         bubbles: true
       }));
 
       expect(selectionChangedSpy.calledOnce).to.be.true;
       expect(selectionChangedSpy.args[0][0].detail.item).to.eql(combobox.items[0]);
-    });
-
-    it('should fire `selection-changed` in short touch gestures', done => {
-      combobox.opened = true;
-
-      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
-
-      setTimeout(() => {
-        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        dispatchTap(firstItem);
-
-        expect(selectionChangedSpy.calledOnce).to.be.true;
-        done();
-      }, 200);
-    });
-
-    it('should not fire `selection-changed` in long touch gestures', done => {
-      combobox.opened = true;
-
-      MockTouchInteractions.touchstart(combobox.$.overlay._scroller);
-
-      setTimeout(() => {
-        const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        dispatchTap(firstItem);
-
-        expect(selectionChangedSpy.calledOnce).to.be.false;
-        done();
-      }, 350);
-    });
-
-    it('should not fire `selection-changed` after scrolling for grace period of 300ms', done => {
-      // We need more items to increase scroller
-      const items = [];
-      for (let i = 1; i < 50; i++) {
-        items.push(i);
-      }
-      combobox.items = items;
-
-      // open the combo box, and move the scroll
-      combobox.opened = true;
-
-      function listener() {
-        // Ensure the listener is invoked only once. Otherwise, `done()` might
-        // be called multiple times, which produces error for the test.
-        combobox.$.overlay._scroller.removeEventListener('scroll', listener);
-
-        setTimeout(() => {
-          const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-          dispatchTap(firstItem);
-
-          expect(selectionChangedSpy.calledOnce).to.be.false;
-          done();
-        }, 200);
-      }
-
-      // Scroll start could delay, for example, with full SD polyfill
-      combobox.$.overlay._scroller.addEventListener('scroll', listener);
-
-      combobox.$.overlay._selector.scrollToIndex(20);
     });
 
     it('should fire `selection-changed` after the scrolling grace period', done => {
@@ -145,7 +86,7 @@
 
         setTimeout(() => {
           const firstItem = combobox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-          dispatchTap(firstItem);
+          dispatchClick(firstItem);
 
           expect(selectionChangedSpy.calledOnce).to.be.true;
           done();
@@ -305,7 +246,7 @@
       }, 1);
     });
 
-    it('should clear the selection when tapping on the icon', () => {
+    it('should clear the selection when clicking on the icon', () => {
       combobox.open();
 
       fire('click', clearIcon);

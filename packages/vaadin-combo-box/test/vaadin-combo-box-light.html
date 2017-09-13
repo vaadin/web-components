@@ -84,7 +84,7 @@
         comboBox.items = ['foo', 'bar', 'baz'];
       });
 
-      it('should toggle overlay by tapping toggle element', () => {
+      it('should toggle overlay by clicking toggle element', () => {
         comboBox._toggleElement.dispatchEvent(new CustomEvent('click', {bubbles: true}));
         expect(comboBox.opened).to.be.true;
 
