@@ -1,27 +1,104 @@
+<link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="font-icons.html">
+
 <dom-module id="valo-combo-box" theme-for="vaadin-combo-box">
   <template>
     <style>
-      :host {
-        display: inline-flex;
-        padding: 0;
+      [part="text-field"] {
+        display: block;
+        max-width: 100%;
       }
 
-      [part="clear-button"],
-      [part="toggle-button"] {
-        cursor: pointer;
+      [part$="button"] {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 24px;
+        text-align: center;
+        color: var(--valo-contrast-40pct);
+        transition: 0.2s color;
+      }
+
+      [part$="button"]:hover {
+        color: var(--valo-contrast-70pct);
+      }
+
+      [part$="button"]::before {
+        font-family: "valo-icons";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e905";
+      }
+
+      [part="clear-button"]::before {
+        content: "\e907";
+      }
+
+      /* Read-only */
+
+      :host([readonly]) [part="toggle-button"] {
+        display: none;
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-vaadin-overlay" theme-for="vaadin-overlay">
+<!-- TODO should have some way of just affecting combo box overlay (either a specific element of a class on the host) -->
+<dom-module id="valo-combo-box-overlay" theme-for="vaadin-overlay">
   <template>
     <style>
       :host {
-        background-color: var(--valo-vaadin-overlay-background-color, var(--valo-base-color));
-        border-radius: 6px;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+        padding: var(--vaadin-combo-box-overlay-padding, var(--valo-space-xs));
+        /* TODO should not be needed, fix it in the combo box default styles/theme, make it
+         * possible to override it somehow */
+        box-shadow: var(--valo-overlay-box-shadow) !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-combo-box-item" theme-for="vaadin-combo-box-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        min-height: var(--valo-size-m);
+        padding: var(--valo-space-xs) var(--valo-space-m) var(--valo-space-xs) calc(var(--valo-space-xs) * 2 + 24px);
+        box-sizing: border-box;
+        line-height: var(--valo-line-height-s);
+        border-radius: var(--valo-border-radius);
+        cursor: pointer;
+        white-space: nowrap;
+        position: relative;
+      }
+
+      :host([focused]) {
+        background-color: var(--valo-primary-color-10pct);
+      }
+
+      @media (pointer: coarse) {
+        :host {
+          min-height: var(--valo-size-l);
+        }
+
+        :host([focused]) {
+          background-color: transparent;
+        }
+      }
+
+      :host([selected])::before {
+        position: absolute;
+        content: "\e902";
+        font-family: valo-icons;
+        font-size: 24px;
+        width: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: var(--valo-space-xs);
+        color: var(--valo-secondary-text-color);
       }
     </style>
   </template>
