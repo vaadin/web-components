@@ -33,6 +33,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _cancelTimer: function() {
         if (this._timerId) {
           clearTimeout(this._timerId);
+          delete this._fired;
         }
       },
 
@@ -53,6 +54,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const ct = e.changedTouches[0];
           if (!e.shiftKey) {
             if (this.info._ios) {
+              this._fired = true;
               this.fire(t, ct.clientX, ct.clientY);
             }
 
@@ -72,7 +74,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       },
 
-      touchend: function() {
+      touchend: function(e) {
+        if (this._fired) {
+          e.preventDefault();
+        }
         this._cancelTimer();
       },
 

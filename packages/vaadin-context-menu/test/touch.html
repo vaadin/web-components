@@ -108,6 +108,16 @@
           });
         });
 
+        it('should preventDefault on touch-end after long-touch', done => {
+          makeSoloTouchEvent('touchstart', null, target);
+
+          listenOnce(menu, 'opened-changed', () => {
+            const e = makeSoloTouchEvent('touchend', null, target);
+            expect(e.defaultPrevented).to.be.true;
+            done();
+          });
+        });
+
         it('should not open on normal tap', done => {
           makeSoloTouchEvent('touchstart', null, menu.listenOn);
 
@@ -119,6 +129,16 @@
             expect(menu.opened).to.eql(false);
             done();
           }, 1000);
+        });
+
+        it('should not preventDefault on touch-end after normal tap', done => {
+          makeSoloTouchEvent('touchstart', null, target);
+
+          setTimeout(() => {
+            const e = makeSoloTouchEvent('touchend', null, target);
+            expect(e.defaultPrevented).to.be.false;
+            done();
+          }, 100);
         });
 
         it('should not stop `tap` bubbling in the middle of a long touch', done => {
