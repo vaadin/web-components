@@ -1,36 +1,25 @@
-<link rel="import" href="color.html">
-<link rel="import" href="font-icons.html">
-<link rel="import" href="sizing-and-spacing.html">
-<link rel="import" href="style.html">
-<link rel="import" href="typography.html">
 <link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-overlay.html">
 <link rel="import" href="vaadin-button.html">
-
+<link rel="import" href="font-icons.html">
 
 <dom-module id="valo-date-picker" theme-for="vaadin-date-picker">
   <template>
     <style>
       :host {
-        display: inline-flex;
-        margin-top: 0;
-        max-width: 100%;
-        width: var(--valo-date-picker-default-width, var(--valo-text-field-default-width));
         -webkit-tap-highlight-color: transparent;
       }
 
       [part="text-field"] {
-        flex: 1;
+        display: block;
         max-width: 100%;
       }
 
-      /* TODO icons should be replaced with correct Valo icons, which affects other styles here as well */
-
       [part$="button"] {
-        padding: 2px;
-        width: 20px;
-        height: 20px;
-        line-height: 20px;
-        font-size: 20px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 24px;
         text-align: center;
         color: var(--valo-contrast-40pct);
         transition: 0.2s color;
@@ -40,8 +29,20 @@
         color: var(--valo-contrast-70pct);
       }
 
+      [part$="button"]::before {
+        font-family: "valo-icons";
+      }
+
       [part="toggle-button"] {
         order: -1;
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e908";
+      }
+
+      [part="clear-button"]::before {
+        content: "\e907";
       }
 
       /* Overlay width */
@@ -204,9 +205,6 @@
   <template>
     <style>
       :host {
-        background-color: var(--valo-base-color);
-        border-radius: var(--valo-overlay-border-radius);
-        box-shadow: var(--valo-overlay-box-shadow);
         max-height: calc(var(--valo-size-m) * 14);
 
         /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
