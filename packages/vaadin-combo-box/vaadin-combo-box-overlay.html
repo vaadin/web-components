@@ -156,6 +156,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._scroller.setAttribute('unselectable', 'on');
         }
 
+        this.$.dropdown.$.overlay.addEventListener('touchstart', sourceEvent => {
+          const evt = new CustomEvent('vaadin-overlay-touch-start', {detail: {sourceEvent: sourceEvent}});
+          this.dispatchEvent(evt);
+        });
+
         // Prevent blurring the input when clicking inside the overlay.
         this.$.dropdown.$.overlay.addEventListener('mousedown', e => e.preventDefault());
       }
