@@ -74,20 +74,20 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.table.scrollTop = index / this.size * (this.$.table.scrollHeight - this.$.table.offsetHeight);
         this._scrollHandler();
 
-        if (this._maxScrollTop && this._virtualCount < this.size) {
+        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this.size) {
           this._adjustVirtualIndexOffset(1000000);
         }
 
-        super.scrollToIndex(index - this._vidxOffset);
+        this._accessIronListAPI(() => super.scrollToIndex(index - this._vidxOffset));
         this._scrollHandler();
 
         // Ensure scroll position
-        if (this.firstVisibleIndex !== index - this._vidxOffset) {
-          super.scrollToIndex(index - this._vidxOffset);
+        if (this._firstVisibleIndex !== index - this._vidxOffset) {
+          this._accessIronListAPI(() => super.scrollToIndex(index - this._vidxOffset));
         }
 
         // This is a hack to get around offset issues when scrolling to bottom.
-        if (this._vidxOffset + this.lastVisibleIndex === this.size - 1) {
+        if (this._vidxOffset + this._lastVisibleIndex === this.size - 1) {
           this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
           this._scrollHandler();
         }
@@ -95,7 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _sizeChanged(size) {
-        const fvi = this.firstVisibleIndex;
+        const fvi = this._firstVisibleIndex;
         if (this.items && size < this.items.length) {
           // Size was reduced, scroll to 0 first
           this._scrollTop = 0;
@@ -106,12 +106,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this.items = {length: Math.min(size, maxVirtualItems)};
         }
 
-        super._itemsChanged({path: 'items'});
+        this._accessIronListAPI(() => super._itemsChanged({path: 'items'}));
 
         this._virtualCount = Math.min(this.items.length, size) || 0;
 
         if (this._scrollTop === 0) {
-          this.scrollToIndex(Math.min(size - 1, fvi));
+          this._accessIronListAPI(() => this.scrollToIndex(Math.min(size - 1, fvi)));
         }
         this._assignModels();
       }
@@ -148,7 +148,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const viewportCovered = this._physicalCount * this._physicalAverage >= this._viewportHeight * 3;
           // Don't increase the pool if there's enough rows. This is to avoid an eternal loop.
           if (!viewportCovered) {
-            super._increasePoolIfNeeded(count);
+            this._accessIronListAPI(() => super._increasePoolIfNeeded(count));
           }
         }
       }
@@ -188,9 +188,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _scrollHandler() {
         const delta = this.$.table.scrollTop - this._scrollPosition;
-        super._scrollHandler();
+        this._accessIronListAPI(super._scrollHandler);
         const oldOffset = this._vidxOffset;
-        if (this._maxScrollTop && this._virtualCount < this.size) {
+        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this.size) {
           this._adjustVirtualIndexOffset(delta);
         }
         if (this._vidxOffset !== oldOffset) {
@@ -259,6 +259,91 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      ready() {
+        super.ready();
+      }
+
+      _accessIronListAPI(cb, asynchronous) {
+        this._warnPrivateAPIAccessAsyncEnabled = false;
+
+        this._debouncerWarnPrivateAPIAccess = Polymer.Debouncer.debounce(
+          this._debouncerWarnPrivateAPIAccess,
+            Polymer.Async.animationFrame,
+            () => Polymer.RenderStatus.afterNextRender(this, () => {
+              if (!this._debouncerWarnPrivateAPIAccess.isActive()) {
+                this._warnPrivateAPIAccessAsyncEnabled = true
+              }
+            }));
+        return cb.apply(this);
+      }
+
+      _warnPrivateAPIAccess(apiName) {
+        if (this._warnPrivateAPIAccessAsyncEnabled) {
+          console.warn(`Accessing private API (${apiName})!`);
+        }
+      }
+
+      _render() {
+        this._accessIronListAPI(super._render);
+      }
+
+      get _firstVisibleIndex() { return this._accessIronListAPI(() => super.firstVisibleIndex); }
+      get _lastVisibleIndex() { return this._accessIronListAPI(() => super.lastVisibleIndex); }
+
+      get firstVisibleIndex() { this._warnPrivateAPIAccess('firstVisibleIndex'); return super.firstVisibleIndex; }
+      set firstVisibleIndex(value) { this._warnPrivateAPIAccess('firstVisibleIndex'); super.firstVisibleIndex = value; }
+
+      get lastVisibleIndex() { this._warnPrivateAPIAccess('lastVisibleIndex'); return super.lastVisibleIndex; }
+      set lastVisibleIndex(value) { this._warnPrivateAPIAccess('lastVisibleIndex'); super.lastVisibleIndex = value; }
+
+      get maxPhysicalCount() { this._warnPrivateAPIAccess('maxPhysicalCount'); return super.maxPhysicalCount; }
+      set maxPhysicalCount(value) { this._warnPrivateAPIAccess('maxPhysicalCount'); super.maxPhysicalCount = value; }
+
+      get grid() { this._warnPrivateAPIAccess('grid');}
+      set grid(value) { this._warnPrivateAPIAccess('grid');}
+
+      get as() { this._warnPrivateAPIAccess('as');}
+      set as(value) { this._warnPrivateAPIAccess('as');}
+
+      get indexAs() { this._warnPrivateAPIAccess('indexAs');}
+      set indexAs(value) { this._warnPrivateAPIAccess('indexAs');}
+
+      get selectedAs() { this._warnPrivateAPIAccess('selectedAs');}
+      set selectedAs(value) { this._warnPrivateAPIAccess('selectedAs');}
+
+      get selectionEnabled() { this._warnPrivateAPIAccess('selectionEnabled');}
+      set selectionEnabled(value) { this._warnPrivateAPIAccess('selectionEnabled');}
+
+      get selectedItem() { this._warnPrivateAPIAccess('selectedItem');}
+      set selectedItem(value) { this._warnPrivateAPIAccess('selectedItem');}
+
+      get multiSelection() { this._warnPrivateAPIAccess('multiSelection');}
+      set multiSelection(value) { this._warnPrivateAPIAccess('multiSelection');}
+
+      get scrollOffset() { this._warnPrivateAPIAccess('scrollOffset'); return super.scrollOffset; }
+      set scrollOffset(value) { this._warnPrivateAPIAccess('scrollOffset'); super.scrollOffset = value; }
+
+      updateViewportBoundaries() { this._warnPrivateAPIAccess('updateViewportBoundaries'); super.updateViewportBoundaries.apply(this, arguments); }
+
+      updateSizeForItem() { this._warnPrivateAPIAccess('updateSizeForItem'); super.updateSizeForItem.apply(this, arguments); }
+
+      updateSizeForIndex() { this._warnPrivateAPIAccess('updateSizeForIndex'); super.updateSizeForIndex.apply(this, arguments); }
+
+      scrollToItem() { this._warnPrivateAPIAccess('scrollToItem');}
+
+      selectItem() { this._warnPrivateAPIAccess('selectItem');}
+
+      selectIndex() { this._warnPrivateAPIAccess('selectIndex');}
+
+      deselectItem() { this._warnPrivateAPIAccess('deselectItem');}
+
+      deselectIndex() { this._warnPrivateAPIAccess('deselectIndex');}
+
+      toggleSelectionForItem() { this._warnPrivateAPIAccess('toggleSelectionForItem');}
+
+      toggleSelectionForIndex() { this._warnPrivateAPIAccess('toggleSelectionForIndex');}
+
+      clearSelection() { this._warnPrivateAPIAccess('clearSelection');}
     }
 
     customElements.define(GridScrollerElement.is, GridScrollerElement);

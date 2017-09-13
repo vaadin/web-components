@@ -124,10 +124,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _ensureScrolledToIndex(index) {
-      const visibleItemsCount = this.lastVisibleIndex - this.firstVisibleIndex - 1;
-      if (index <= this.firstVisibleIndex) {
+      const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
+      if (index <= this._firstVisibleIndex) {
         this.scrollToIndex(index);
-      } else if (index >= this.firstVisibleIndex + visibleItemsCount) {
+      } else if (index >= this._firstVisibleIndex + visibleItemsCount) {
         this.scrollToIndex(index - visibleItemsCount);
       }
     }
@@ -139,7 +139,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return Array.prototype.indexOf.call(el.parentNode.children, el);
       }
 
-      const visibleItemsCount = this.lastVisibleIndex - this.firstVisibleIndex - 1;
+      const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
 
       let dx = 0, dy = 0;
       switch (key) {
@@ -503,7 +503,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (this.$.items.firstElementChild) {
         const firstVisibleIndexRow = Array.from(this.$.items.children)
-          .filter(row => row.index === this.firstVisibleIndex)[0];
+          .filter(row => row.index === this._firstVisibleIndex)[0];
         if (firstVisibleIndexRow) {
           this._itemsFocusable = firstVisibleIndexRow.firstElementChild;
         }
