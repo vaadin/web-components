@@ -1,32 +1,20 @@
-<!doctype html>
-<html>
+<dom-module id="grid-data-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    </style>
 
-  <title>vaadin-grid – Assigning Data</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="../../paper-button/paper-button.html">
-  <link rel="import" href="../vaadin-grid-selection-column.html">
-
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-    <demo-navigation></demo-navigation>
 
     <h3>Assigning Array Data</h3>
     <p>An array of objects can be assigned to the <code>items</code> property.</p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='grid-data-demos-assigning-array-data'>
+      <template preserve-content>
         <x-array-data-example></x-array-data-example>
         <dom-module id="x-array-data-example">
-          <template>
+          <template preserve-content>
             <vaadin-grid aria-label="Array Data Example" items="[[items]]">
 
               <vaadin-grid-column width="50px" flex-grow="0">
@@ -47,7 +35,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', () => {
+            window.addDemoReadyListener('#grid-data-demos-assigning-array-data', function(document) {
               class XArrayDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-array-data-example';
@@ -68,17 +56,18 @@
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Dynamic Array Data</h3>
     <p>
       The <code>items</code> property can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/model-data#array-mutation" target="_blank">Polymer's array mutation methods</a>.
     </p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='grid-data-demos-dynamic-array-data'>
+      <template preserve-content>
         <x-dynamic-data-example></x-dynamic-data-example>
         <dom-module id="x-dynamic-data-example">
-          <template>
+          <template preserve-content>
             <style>
               paper-button {
                 margin-bottom: 20px;
@@ -107,7 +96,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', () => {
+            window.addDemoReadyListener('#grid-data-demos-dynamic-array-data', function(document) {
               class XDynamicDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-dynamic-data-example';
@@ -137,18 +126,19 @@
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Dynamic Height</h3>
     <p>
       Setting <code>height: auto</code> will make <code>&lt;vaadin-grid&gt;</code> grow
       and shrink in height depending on the number of rows.
     </p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='grid-data-demos-dynamic-height'>
+      <template preserve-content>
         <x-dynamic-height-example></x-dynamic-height-example>
         <dom-module id="x-dynamic-height-example">
-          <template>
+          <template preserve-content>
             <style>
               vaadin-grid {
                 height: auto;
@@ -181,7 +171,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', () => {
+            window.addDemoReadyListener('#grid-data-demos-dynamic-height', function(document) {
               class XDynamicHeightExample extends Polymer.Element {
                 static get is() {
                   return 'x-dynamic-height-example';
@@ -211,7 +201,8 @@
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Assigning Remote/Function Data</h3>
     <p>
@@ -222,11 +213,11 @@
       <b>Note:</b> <code>size</code> must be also set to reflect
       the number of items in the data set.
     </p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='grid-data-demos-assigning-remotefunction-data'>
+      <template preserve-content>
         <x-remote-data-example></x-remote-data-example>
         <dom-module id="x-remote-data-example">
-          <template>
+          <template preserve-content>
             <vaadin-grid aria-label="Remote Data Example" data-provider="[[dataProvider]]" size="[[size]]">
 
               <vaadin-grid-column width="50px" flex-grow="0">
@@ -247,7 +238,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', () => {
+            window.addDemoReadyListener('#grid-data-demos-assigning-remotefunction-data', function(document) {
               class XRemoteDataExample extends Polymer.Element {
                 static get is() {
                   return 'x-remote-data-example';
@@ -269,9 +260,15 @@
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
   </div>
-</body>
 
-</html>
+  </template>
+  <script>
+    class GridDataDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() { return 'grid-data-demos'; }
+    }
+    customElements.define(GridDataDemos.is, GridDataDemos);
+  </script>
+</dom-module>

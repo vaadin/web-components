@@ -42,10 +42,10 @@
     "iron-icon": "PolymerElements/iron-icon#^v2.0.0",
     "paper-styles": "PolymerElements/paper-styles#^v2.0.0",
     "iron-component-page": "^3.0.0",
-    "elements-demo-resources": "v2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
     "app-localize-behavior": "^v2.0.0",
-    "iron-list": "^v2.0.4"
+    "iron-list": "^v2.0.4",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "dependencies": {
     "polymer": "^2.0.0",
@@ -53,10 +53,11 @@
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^v2.0.0",
     "iron-a11y-keys-behavior": "^v2.0.0",
     "iron-a11y-announcer": "^v2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.2",
+    "vaadin-themable-mixin": "#propagate-theme",
     "vaadin-checkbox": "^1.0.0"
   },
   "resolutions": {
-    "iron-doc-viewer": "^3.0.0"
+    "iron-doc-viewer": "^3.0.0",
+    "vaadin-themable-mixin": "propagate-theme"
   }
 }
