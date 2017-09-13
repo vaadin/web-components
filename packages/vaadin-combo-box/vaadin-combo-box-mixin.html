@@ -117,6 +117,17 @@ This program is available under Apache License Version 2.0, available at https:/
           value: false
         },
 
+        /**
+        * True when the input field has focus.
+        */
+        focused: {
+          type: Boolean,
+          value: false,
+          readOnly: true,
+          reflectToAttribute: true,
+          notify: true
+        },
+
         _focusedIndex: {
           type: Number,
           value: -1
@@ -217,6 +228,16 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
 
+      this.addEventListener('focusin', e => {
+        this._setFocused(true);
+      });
+      this.addEventListener('focusout', e => {
+        this._setFocused(false);
+        if (!this._closeOnBlurIsPrevented) {
+          this.close();
+        }
+      });
+
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
 
@@ -263,12 +284,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.focus();
           }
         }
-      }
-    }
-
-    _onBlur() {
-      if (!this._closeOnBlurIsPrevented) {
-        this.close();
       }
     }
 
