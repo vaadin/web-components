@@ -21,16 +21,6 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
       .capture('default');
   });
 
-  gemini.suite('control-state', function(suite) {
-    suite
-      .setUrl('/control-state.html')
-      .setCaptureElements('#focus-ring')
-      .capture('control-state-focused')
-      .capture('control-state-focus-ring', function(actions, find) {
-        actions.sendKeys(gemini.TAB);
-      });
-  });
-
   gemini.suite('styling', function(suite) {
     suite
       .setUrl('styling.html')
