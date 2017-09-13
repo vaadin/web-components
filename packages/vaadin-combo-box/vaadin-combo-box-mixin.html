@@ -199,6 +199,8 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('vaadin-combo-box-dropdown-opened', this._onOpened.bind(this));
       this.addEventListener('keydown', this._onKeyDown.bind(this));
       this.addEventListener('click', this._onClick.bind(this));
+
+      this.$.overlay.addEventListener('vaadin-overlay-touch-start', this._onOverlayTouchStart.bind(this));
     }
 
     _onBlur() {
@@ -207,14 +209,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _onOverlayClick(event) {
-      if (this.$.overlay.touchDevice && event.target !== this.$.overlay._scroller) {
-        // On touch devices, blur the input on touch start inside the overlay, in order to hide
-        // the virtual keyboard. But don't close the overlay on this blur.
-        this._closeOnBlurIsPrevented = true;
-        this.inputElement.blur();
-        this._closeOnBlurIsPrevented = false;
-      }
+    _onOverlayTouchStart(event) {
+      // On touch devices, blur the input on touch start inside the overlay, in order to hide
+      // the virtual keyboard. But don't close the overlay on this blur.
+      this._closeOnBlurIsPrevented = true;
+      this.inputElement.blur();
+      this._closeOnBlurIsPrevented = false;
     }
 
     _onClick(e) {
