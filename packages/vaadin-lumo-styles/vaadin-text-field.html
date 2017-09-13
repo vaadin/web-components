@@ -107,6 +107,9 @@
       }
 
       @media (hover: hover) {
+        :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="label"] {
+          color: var(--valo-body-text-color);
+        }
         :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
           background-color: var(--valo-contrast-10pct);
         }
@@ -114,7 +117,7 @@
 
       :host([focused]:not([readonly])) [part="input-field"] {
         background-color: var(--valo-base-color);
-        box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 1px 4px 1px var(--valo-shade-10pct);
+        box-shadow: 0 0 0 1px var(--valo-contrast-10pct), 0 1px 4px 1px var(--valo-shade-10pct);
       }
 
       :host([focus-ring]) [part="input-field"] {
@@ -144,7 +147,7 @@
       :host([focused]:not([focus-ring]):not([readonly])) [part="input-field"]::after {
         opacity: 0;
         transform: scaleX(1);
-        transition: transform 0.2s, opacity 1s;
+        transition: transform 0.15s, opacity 1s;
       }
 
       /* Disabled style */
