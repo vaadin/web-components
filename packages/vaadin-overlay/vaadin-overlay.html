@@ -103,6 +103,11 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true
           },
 
+
+          /**
+           * When true move focus to the first focusable element in the overlay,
+           * or to the overlay if there are no focusable elements.
+           */
           focusTrap: {
             type: Boolean,
             value: false
@@ -311,11 +316,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _setFocus(index, increment) {
         if (!this.focusTrap) {
-          this._focusedElement = this.$.content;
-          return this.$.content.focus();
+          return;
         }
 
         const focusableElements = this._getFocusableElements();
+
         // search for visible elements and select the next possible match
         for (let i = 0; i < focusableElements.length; i++) {
           index = index + increment;
@@ -336,6 +341,10 @@ This program is available under Apache License Version 2.0, available at https:/
             return el.focus();
           }
         }
+
+        // fallback if there are no focusable elements
+        this._focusedElement = this.$.content;
+        this.$.content.focus();
       }
 
       // borrowed from jqeury $(elem).is(':visible') implementation
