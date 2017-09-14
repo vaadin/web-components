@@ -228,7 +228,7 @@
       it('should close the overlay when focus is lost', () => {
         combobox.open();
 
-        fire('blur', combobox.inputElement);
+        fire('focusout', combobox.inputElement);
 
         expect(combobox.opened).to.equal(false);
       });
