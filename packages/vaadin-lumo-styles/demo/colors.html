@@ -46,17 +46,26 @@
     <h1>Colors</h1>
     <p>The theme defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
 
-    <p>If you are not importing any element themes, and want to use these colors, you need to import them manually.</p>
+    <h3 id="importing">Importing the style module</h3>
+
+    <p>If you are not importing any element themes, and want to use these colors, you need to import the style module explicitly.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <link rel="import" href="path/to/bower_components/vaadin-valo-theme/color.html">
+        <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
       </template>
     </nice-demo-snippet>
 
     <h2 demo-section>Light and dark themes</h2>
     <p>Each color has two variations: the default variation which is used for the light theme, and another variation used for the dark theme.</p>
+    <p><a href="#importing">You need to import</a> and include the “valo-colors” style module before you can use the dark theme. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
+    <p>For example, if you want to apply the dark colors for the whole app, include it in the global scope (e.g. index.html). Or if you want to apply the dark colors inside a shadow root, include it inside that shadow DOM template.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Include the color style module -->
+        <custom-style>
+          <style include="valo-colors"></style>
+        </custom-style>
+
         <div theme="dark">
           <!-- Everything inside this div will get use the dark color theme -->
         </div>
