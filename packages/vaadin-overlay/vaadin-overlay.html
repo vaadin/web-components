@@ -103,6 +103,10 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true
           },
 
+
+          /**
+           * When true move focus to the first focusable element in the overlay.
+           */
           focusTrap: {
             type: Boolean,
             value: false
@@ -311,11 +315,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _setFocus(index, increment) {
         if (!this.focusTrap) {
-          this._focusedElement = this.$.content;
-          return this.$.content.focus();
+          return;
         }
 
         const focusableElements = this._getFocusableElements();
+
         // search for visible elements and select the next possible match
         for (let i = 0; i < focusableElements.length; i++) {
           index = index + increment;
