@@ -109,11 +109,11 @@
 
       describe('_tabPressed and focus-ring', () => {
         var focus = () => {
-          customElement.dispatchEvent(new CustomEvent('focus'));
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
         };
 
         var blur = () => {
-          customElement.dispatchEvent(new CustomEvent('blur'));
+          focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
         };
 
         it('should set and unset _tabPressed when press TAB', () => {
@@ -197,11 +197,12 @@
       describe('focus and autofocus', () => {
         it('should not set focused attribute on host click', () => {
           customElement.click();
-          expect(customElement.focused).to.be.undefined;
+          expect(customElement.focused).to.be.equal(false);
         });
 
         it('should set focused attribute on host mousedown', () => {
           customElement.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
           expect(customElement.focused).to.be.true;
         });
 
@@ -212,7 +213,7 @@
 
           customElement.$.input.dispatchEvent(e);
 
-          expect(customElement.focused).to.be.undefined;
+          expect(customElement.focused).to.be.equal(false);
 
           customElement.$.input.removeEventListener('mousedown', preventDefaultListener);
         });
