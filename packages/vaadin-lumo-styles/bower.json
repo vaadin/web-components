@@ -31,11 +31,11 @@
   "devDependencies": {
     "web-component-tester": "^6.0.0",
     "vaadin-grid": "vaadin/vaadin-grid#4.0-preview",
-    "vaadin-text-field": "vaadin/vaadin-text-field#>=1.1.0-alpha3",
+    "vaadin-text-field": "vaadin/vaadin-text-field#>=1.1.0-alpha4",
     "vaadin-button": "vaadin/vaadin-button#>=1.0.0-beta1",
     "vaadin-checkbox": "vaadin/vaadin-checkbox#>=1.0.0-alpha1",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#>=2.0.0-alpha2",
-    "vaadin-combo-box": "vaadin/vaadin-combo-box#>=3.0.0-alpha2",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#>=3.0.0-alpha3",
     "vaadin-form-layout": "vaadin/vaadin-form-layout#^1.0.0",
     "iron-ajax": "PolymerElements/iron-ajax#^2.0.2",
     "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles",
