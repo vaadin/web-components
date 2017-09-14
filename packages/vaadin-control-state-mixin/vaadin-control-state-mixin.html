@@ -57,6 +57,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         focused: {
           type: Boolean,
+          value: false,
           notify: true,
           readOnly: true,
           observer: '_focusedChanged',
@@ -92,15 +93,30 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
 
-      this.addEventListener('blur', () => this._setFocused(false));
+      this.addEventListener('focusin', (e) => {
+        if (e.composedPath()[0] === this.focusElement) {
+          this._setFocused(true);
+        }
+      });
+      this.addEventListener('focusout', (e) => {
+        if (e.composedPath()[0] === this.focusElement) {
+          this._setFocused(false);
+        }
+      });
 
-      this.addEventListener('mousedown', e => !e.defaultPrevented && this._focus(e));
+      this.addEventListener('mousedown', e => {
+        if (!e.defaultPrevented) {
+          this._focus(e);
+          e.preventDefault();
+        }
+      });
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
           // Flag is checked in _focus event handler.
           this._isShiftTabbing = true;
           HTMLElement.prototype.focus.apply(this);
+          this._setFocused(false);
           // Event handling in IE is asynchronous and the flag is removed asynchronously as well
           setTimeout(() => this._isShiftTabbing = false, 0);
         }
@@ -163,7 +179,6 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
 
-      this._setFocused(!this.disabled);
       this.focusElement.focus();
     }
 
@@ -173,6 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     focus() {
       this.focusElement.focus();
+      this._setFocused(true);
     }
 
     /**
@@ -182,12 +198,12 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     blur() {
       this.focusElement.blur();
+      this._setFocused(false);
     }
 
     _disabledChanged(disabled) {
       this.focusElement.disabled = disabled;
       if (disabled) {
-        this._setFocused(false);
         this.blur();
         this._previousTabIndex = this.tabindex;
         this.tabindex = -1;
