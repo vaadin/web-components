@@ -35,6 +35,7 @@
 
     <h1>Combo boxes</h1>
 
+    <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text fields</a>.</p>
 
     <h3 demo-section>Label, placeholder and value</h3>
 
@@ -97,14 +98,27 @@
       </template>
     </nice-demo-snippet>
 
-    <h2 demo-section>Custom properties</h2>
+
+    <hr>
+
+
+    <h2 demo-section>Styling API</h2>
+
+    <h3>Custom properties</h3>
 
     <dl class="custom-properties">
       <dt>--valo-overlay-border-radius: <code>var(--valo-border-radius)</code></dt>
       <dt>--vaadin-combo-box-overlay-padding</dt>
     </dl>
 
-    <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text fields</a>.</p>
+    <h3>Shadow parts and states</h3>
+
+    <p>See the API documentation for:</p>
+    <ul>
+      <li><a href="https://new.vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement">vaadin-combo-box</a></li>
+      <li><a href="https://new.vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxItemElement">vaadin-combo-box-item</a></li>
+      <li><a href="https://new.vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxOverlayElement">vaadin-combo-box-overlay</a></li>
+    </ul>
 
     <!-- This needs to be last on the page, otherwise the demo-sections are not parsed correctly -->
     <script type="text/javascript">
@@ -117,7 +131,6 @@
                            {name:"Kristina Howard", email: "kristina.howard@example.org"},
                            {name:"Sebastian Harris", email: "sebastian.harris@example.org"}];
             combo.itemLabelPath = 'name';
-            combo.opened = true;
           }
         });
       });
