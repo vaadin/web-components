@@ -201,22 +201,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._afterScroll();
       }
 
-      _createFocusBackfillItem() {
-        // Ignore
-      }
-
-      _multiSelectionChanged() {
-        // Ignore
-      }
-
-      clearSelection() {
-        // Ignore
-      }
-
-      _itemsChanged() {
-        // Ignore
-      }
-
       _adjustVirtualIndexOffset(delta) {
         if (Math.abs(delta) > 10000) {
           if (this._noScale) {
@@ -261,10 +245,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      ready() {
-        super.ready();
-      }
-
       _accessIronListAPI(cb, asynchronous) {
         this._warnPrivateAPIAccessAsyncEnabled = false;
 
@@ -273,12 +253,13 @@ This program is available under Apache License Version 2.0, available at https:/
             Polymer.Async.animationFrame,
             () => Polymer.RenderStatus.afterNextRender(this, () => {
               if (!this._debouncerWarnPrivateAPIAccess.isActive()) {
-                this._warnPrivateAPIAccessAsyncEnabled = true
+                this._warnPrivateAPIAccessAsyncEnabled = true;
               }
             }));
         return cb.apply(this);
       }
 
+      /* Warn when iron-list APIs are being accessed directly */
       _warnPrivateAPIAccess(apiName) {
         if (this._warnPrivateAPIAccessAsyncEnabled) {
           console.warn(`Accessing private API (${apiName})!`);
@@ -289,67 +270,49 @@ This program is available under Apache License Version 2.0, available at https:/
         this._accessIronListAPI(super._render);
       }
 
-      get _firstVisibleIndex() { return this._accessIronListAPI(() => super.firstVisibleIndex); }
-      get _lastVisibleIndex() { return this._accessIronListAPI(() => super.lastVisibleIndex); }
+      _createFocusBackfillItem() { /* Ignore */ }
+      _multiSelectionChanged() { /* Ignore */ }
+      clearSelection() { /* Ignore */ }
+      _itemsChanged() { /* Ignore */ }
+      _manageFocus() { /* Ignore */ }
+      _removeFocusedItem() { /* Ignore */ }
 
+      get _firstVisibleIndex() {
+        return this._accessIronListAPI(() => super.firstVisibleIndex);
+      }
+      get _lastVisibleIndex() {
+        return this._accessIronListAPI(() => super.lastVisibleIndex);
+      }
       _scrollToIndex(index) {
         this._accessIronListAPI(() => this.scrollToIndex(index));
       }
-
-      get firstVisibleIndex() { this._warnPrivateAPIAccess('firstVisibleIndex'); return super.firstVisibleIndex; }
-      set firstVisibleIndex(value) { this._warnPrivateAPIAccess('firstVisibleIndex'); super.firstVisibleIndex = value; }
-
-      get lastVisibleIndex() { this._warnPrivateAPIAccess('lastVisibleIndex'); return super.lastVisibleIndex; }
-      set lastVisibleIndex(value) { this._warnPrivateAPIAccess('lastVisibleIndex'); super.lastVisibleIndex = value; }
-
-      get maxPhysicalCount() { this._warnPrivateAPIAccess('maxPhysicalCount'); return super.maxPhysicalCount; }
-      set maxPhysicalCount(value) { this._warnPrivateAPIAccess('maxPhysicalCount'); super.maxPhysicalCount = value; }
-
-      get grid() { this._warnPrivateAPIAccess('grid');}
-      set grid(value) { this._warnPrivateAPIAccess('grid');}
-
-      get as() { this._warnPrivateAPIAccess('as');}
-      set as(value) { this._warnPrivateAPIAccess('as');}
-
-      get indexAs() { this._warnPrivateAPIAccess('indexAs');}
-      set indexAs(value) { this._warnPrivateAPIAccess('indexAs');}
-
-      get selectedAs() { this._warnPrivateAPIAccess('selectedAs');}
-      set selectedAs(value) { this._warnPrivateAPIAccess('selectedAs');}
-
-      get selectionEnabled() { this._warnPrivateAPIAccess('selectionEnabled');}
-      set selectionEnabled(value) { this._warnPrivateAPIAccess('selectionEnabled');}
-
-      get selectedItem() { this._warnPrivateAPIAccess('selectedItem');}
-      set selectedItem(value) { this._warnPrivateAPIAccess('selectedItem');}
-
-      get multiSelection() { this._warnPrivateAPIAccess('multiSelection');}
-      set multiSelection(value) { this._warnPrivateAPIAccess('multiSelection');}
-
-      get scrollOffset() { this._warnPrivateAPIAccess('scrollOffset'); return super.scrollOffset; }
-      set scrollOffset(value) { this._warnPrivateAPIAccess('scrollOffset'); super.scrollOffset = value; }
-
-      updateViewportBoundaries() { this._warnPrivateAPIAccess('updateViewportBoundaries'); super.updateViewportBoundaries.apply(this, arguments); }
-
-      updateSizeForItem() { this._warnPrivateAPIAccess('updateSizeForItem'); super.updateSizeForItem.apply(this, arguments); }
-
-      updateSizeForIndex() { this._warnPrivateAPIAccess('updateSizeForIndex'); super.updateSizeForIndex.apply(this, arguments); }
-
-      scrollToItem() { this._warnPrivateAPIAccess('scrollToItem');}
-
-      selectItem() { this._warnPrivateAPIAccess('selectItem');}
-
-      selectIndex() { this._warnPrivateAPIAccess('selectIndex');}
-
-      deselectItem() { this._warnPrivateAPIAccess('deselectItem');}
-
-      deselectIndex() { this._warnPrivateAPIAccess('deselectIndex');}
-
-      toggleSelectionForItem() { this._warnPrivateAPIAccess('toggleSelectionForItem');}
-
-      toggleSelectionForIndex() { this._warnPrivateAPIAccess('toggleSelectionForIndex');}
-
-      clearSelection() { this._warnPrivateAPIAccess('clearSelection');}
+      get firstVisibleIndex() {
+        this._warnPrivateAPIAccess('firstVisibleIndex'); return super.firstVisibleIndex;
+      }
+      set firstVisibleIndex(value) {
+        this._warnPrivateAPIAccess('firstVisibleIndex'); super.firstVisibleIndex = value;
+      }
+      get lastVisibleIndex() {
+        this._warnPrivateAPIAccess('lastVisibleIndex'); return super.lastVisibleIndex;
+      }
+      set lastVisibleIndex(value) {
+        this._warnPrivateAPIAccess('lastVisibleIndex'); super.lastVisibleIndex = value;
+      }
+      get maxPhysicalCount() {
+        this._warnPrivateAPIAccess('maxPhysicalCount'); return super.maxPhysicalCount;
+      }
+      set maxPhysicalCount(value) {
+        this._warnPrivateAPIAccess('maxPhysicalCount'); super.maxPhysicalCount = value;
+      }
+      get scrollOffset() {
+        this._warnPrivateAPIAccess('scrollOffset'); return super.scrollOffset;
+      }
+      set scrollOffset(value) {
+        this._warnPrivateAPIAccess('scrollOffset'); super.scrollOffset = value;
+      }
+      updateViewportBoundaries() {
+        this._warnPrivateAPIAccess('updateViewportBoundaries'); super.updateViewportBoundaries.apply(this, arguments);
+      }
     }
 
     customElements.define(GridScrollerElement.is, GridScrollerElement);
