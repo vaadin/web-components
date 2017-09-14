@@ -61,6 +61,8 @@ This program is available under Apache License Version 2.0, available at https:/
       * @private
       */
       scrollToIndex(index) {
+        this._warnPrivateAPIAccess('scrollToIndex');
+
         if (index > 0) {
           this._pendingScrollToIndex = null;
         }
@@ -111,7 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._virtualCount = Math.min(this.items.length, size) || 0;
 
         if (this._scrollTop === 0) {
-          this._accessIronListAPI(() => this.scrollToIndex(Math.min(size - 1, fvi)));
+          this._accessIronListAPI(() => this._scrollToIndex(Math.min(size - 1, fvi)));
         }
         this._assignModels();
       }
@@ -132,7 +134,7 @@ This program is available under Apache License Version 2.0, available at https:/
         });
 
         if (rePosition) {
-          this.scrollToIndex(0);
+          this._scrollToIndex(0);
         }
       }
 
@@ -289,6 +291,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       get _firstVisibleIndex() { return this._accessIronListAPI(() => super.firstVisibleIndex); }
       get _lastVisibleIndex() { return this._accessIronListAPI(() => super.lastVisibleIndex); }
+
+      _scrollToIndex(index) {
+        this._accessIronListAPI(() => this.scrollToIndex(index));
+      }
 
       get firstVisibleIndex() { this._warnPrivateAPIAccess('firstVisibleIndex'); return super.firstVisibleIndex; }
       set firstVisibleIndex(value) { this._warnPrivateAPIAccess('firstVisibleIndex'); super.firstVisibleIndex = value; }

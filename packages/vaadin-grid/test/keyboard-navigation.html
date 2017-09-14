@@ -997,7 +997,7 @@
 
           it('should scroll rows visible with up arrow', () => {
             clickItem(0);
-            grid.scrollToIndex(100);
+            grid._scrollToIndex(100);
 
             up();
 
@@ -1005,7 +1005,7 @@
           });
 
           it('should scroll rows visible with down arrow', () => {
-            clickItem(grid.lastVisibleIndex);
+            clickItem(grid._lastVisibleIndex);
 
             down();
 
@@ -1034,8 +1034,8 @@
 
             pageDown();
 
-            expect(grid.lastVisibleIndex).to.be.gt(1); // sanity check
-            expect(getFocusedRowIndex()).to.equal(grid.lastVisibleIndex - 1);
+            expect(grid._lastVisibleIndex).to.be.gt(1); // sanity check
+            expect(getFocusedRowIndex()).to.equal(grid._lastVisibleIndex - 1);
           });
 
           it('should scroll up one page with page up', done => {
@@ -1071,7 +1071,7 @@
 
               expect(grid.navigating).to.be.true;
 
-              grid.scrollToIndex(100);
+              grid._scrollToIndex(100);
 
               expect(grid.navigating).to.be.false;
             });
@@ -1079,9 +1079,9 @@
             it('should reveal navigation mode when a focused row is back on screen', () => {
               clickItem(0);
               right();
-              grid.scrollToIndex(100);
+              grid._scrollToIndex(100);
 
-              grid.scrollToIndex(0);
+              grid._scrollToIndex(0);
 
               expect(grid.navigating).to.be.true;
             });

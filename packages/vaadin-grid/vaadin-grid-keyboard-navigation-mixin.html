@@ -126,9 +126,9 @@ This program is available under Apache License Version 2.0, available at https:/
     _ensureScrolledToIndex(index) {
       const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
       if (index <= this._firstVisibleIndex) {
-        this.scrollToIndex(index);
+        this._scrollToIndex(index);
       } else if (index >= this._firstVisibleIndex + visibleItemsCount) {
-        this.scrollToIndex(index - visibleItemsCount);
+        this._scrollToIndex(index - visibleItemsCount);
       }
     }
 

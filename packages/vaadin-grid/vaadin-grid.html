@@ -470,7 +470,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         Polymer.RenderStatus.afterNextRender(this.$.header, () => {
           if (this._pendingScrollToIndex) {
-            this.scrollToIndex(this._pendingScrollToIndex);
+            this._scrollToIndex(this._pendingScrollToIndex);
           }
         });
       }
