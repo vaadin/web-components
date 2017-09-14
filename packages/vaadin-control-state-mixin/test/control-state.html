@@ -108,11 +108,11 @@
       });
 
       describe('_tabPressed and focus-ring', () => {
-        var focus = () => {
+        var focusin = () => {
           focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
         };
 
-        var blur = () => {
+        var focusout = () => {
           focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
         };
 
@@ -139,17 +139,17 @@
 
         it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9);
-          focus();
+          focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          blur();
+          focusout();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
         it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9, 'shift');
-          focus();
+          focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          blur();
+          focusout();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
@@ -197,7 +197,7 @@
       describe('focus and autofocus', () => {
         it('should not set focused attribute on host click', () => {
           customElement.click();
-          expect(customElement.focused).to.be.equal(false);
+          expect(customElement.focused).to.be.false;
         });
 
         it('should set focused attribute on host mousedown', () => {
@@ -213,7 +213,7 @@
 
           customElement.$.input.dispatchEvent(e);
 
-          expect(customElement.focused).to.be.equal(false);
+          expect(customElement.focused).to.be.false;
 
           customElement.$.input.removeEventListener('mousedown', preventDefaultListener);
         });
