@@ -125,6 +125,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.autofocus && !this.focused) {
         window.requestAnimationFrame(() => {
           this._focus();
+          this._setFocused(true);
           this.setAttribute('focus-ring', '');
         });
       }
