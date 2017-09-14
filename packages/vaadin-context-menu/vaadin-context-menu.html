@@ -10,39 +10,44 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-contextmenu-event.html">
 <link rel="import" href="vaadin-device-detector.html">
 
-<dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-overlay">
+<dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-context-menu-overlay">
   <template>
-    <style include="vaadin-overlay-default-theme">
-      :host(:not([phone])) {
-        box-shadow:
-          0 6px 10px 0 rgba(0, 0, 0, 0.14),
-          0 1px 18px 0 rgba(0, 0, 0, 0.12),
-          0 3px 5px -1px rgba(0, 0, 0, 0.4);
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
       }
 
       :host([phone]) {
-        width: 100vw;
-        height: 100vh;
-        padding: 24px;
-        box-sizing: border-box;
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
         left: 0 !important;
-        top: auto !important;
-        bottom: 0;
-        display: flex;
-        align-items: flex-end;
+        padding: 24px;
+        align-items: stretch;
+        justify-content: flex-end;
       }
 
       :host([phone]) [part="content"] {
         /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
-        width: 100%;
-      }
-
-      :host(:not([phone])) [part="backdrop"] {
-        background: transparent;
       }
     </style>
   </template>
+</dom-module>
+
+<dom-module id="vaadin-context-menu-overlay">
+  <script>
+    {
+      class VaadinContextMenuOverlayElement extends Vaadin.OverlayElement {
+        static get is() {
+          return 'vaadin-context-menu-overlay';
+        }
+      }
+
+      customElements.define(VaadinContextMenuOverlayElement.is, VaadinContextMenuOverlayElement);
+    }
+  </script>
 </dom-module>
 
 <dom-module id="vaadin-context-menu">
@@ -57,12 +62,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-device-detector phone="{{_phone}}"></vaadin-device-detector>
 
-    <vaadin-overlay id="overlay"
-        theme="vaadin-context-menu-overlay"
+    <vaadin-context-menu-overlay id="overlay"
         on-opened-changed="_onOverlayOpened"
-        with-backdrop
+        with-backdrop="[[_phone]]"
         phone$="[[_phone]]">
-    </vaadin-overlay>
+    </vaadin-context-menu-overlay>
   </template>
   <script>
     if (!Polymer.Element) {
