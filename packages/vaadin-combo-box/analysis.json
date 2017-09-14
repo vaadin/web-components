@@ -4939,11 +4939,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 26,
+                  "line": 25,
                   "column": 8
                 },
                 "end": {
-                  "line": 32,
+                  "line": 31,
                   "column": 9
                 }
               },
@@ -5004,11 +5004,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 56,
+                  "line": 55,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 57,
                   "column": 9
                 }
               },
@@ -5025,11 +5025,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 66,
+                  "line": 65,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 68,
                   "column": 9
                 }
               },
@@ -5047,11 +5047,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 75,
                   "column": 8
                 },
                 "end": {
-                  "line": 78,
+                  "line": 77,
                   "column": 9
                 }
               },
@@ -5068,11 +5068,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 94,
+                  "line": 93,
                   "column": 9
                 }
               },
@@ -5093,11 +5093,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 99,
+                  "line": 98,
                   "column": 8
                 },
                 "end": {
-                  "line": 99,
+                  "line": 98,
                   "column": 35
                 }
               },
@@ -5114,11 +5114,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 105,
+                  "line": 104,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 9
                 }
               },
@@ -5138,11 +5138,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 115,
+                  "line": 114,
                   "column": 8
                 },
                 "end": {
-                  "line": 118,
+                  "line": 117,
                   "column": 9
                 }
               },
@@ -5160,11 +5160,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 120,
+                  "line": 119,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 122,
                   "column": 9
                 }
               },
@@ -5182,11 +5182,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 8
                 },
                 "end": {
-                  "line": 132,
+                  "line": 131,
                   "column": 9
                 }
               },
@@ -5206,11 +5206,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 137,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -5229,11 +5229,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 153,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -5251,11 +5251,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 166,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 169,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -5273,11 +5273,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 177,
                   "column": 9
                 }
               },
@@ -5296,11 +5296,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 183,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 185,
                   "column": 9
                 }
               },
@@ -5318,11 +5318,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 193,
+                  "line": 192,
                   "column": 9
                 }
               },
@@ -5339,11 +5339,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 8
                 },
                 "end": {
-                  "line": 195,
+                  "line": 194,
                   "column": 30
                 }
               },
@@ -5360,11 +5360,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 196,
+                  "line": 195,
                   "column": 8
                 },
                 "end": {
-                  "line": 196,
+                  "line": 195,
                   "column": 29
                 }
               },
@@ -5381,11 +5381,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 198,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 198,
+                  "line": 197,
                   "column": 34
                 }
               },
@@ -5402,11 +5402,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 200,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 200,
+                  "line": 199,
                   "column": 40
                 }
               },
@@ -5423,11 +5423,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 201,
                   "column": 8
                 },
                 "end": {
-                  "line": 202,
+                  "line": 201,
                   "column": 46
                 }
               },
@@ -5697,11 +5697,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 237,
+                  "line": 236,
                   "column": 4
                 },
                 "end": {
-                  "line": 242,
+                  "line": 241,
                   "column": 5
                 }
               },
@@ -5716,11 +5716,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 247,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 249,
+                  "line": 248,
                   "column": 5
                 }
               },
@@ -5735,11 +5735,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 251,
+                  "line": 250,
                   "column": 4
                 },
                 "end": {
-                  "line": 267,
+                  "line": 266,
                   "column": 5
                 }
               },
@@ -5761,11 +5761,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 269,
+                  "line": 268,
                   "column": 4
                 },
                 "end": {
-                  "line": 273,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -5780,11 +5780,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 275,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 281,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -5803,11 +5803,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 283,
+                  "line": 282,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 297,
                   "column": 5
                 }
               },
@@ -5826,11 +5826,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 304,
+                  "line": 303,
                   "column": 4
                 },
                 "end": {
-                  "line": 324,
+                  "line": 323,
                   "column": 5
                 }
               },
@@ -5849,11 +5849,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 326,
+                  "line": 325,
                   "column": 4
                 },
                 "end": {
-                  "line": 328,
+                  "line": 327,
                   "column": 5
                 }
               },
@@ -5875,11 +5875,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 330,
+                  "line": 329,
                   "column": 4
                 },
                 "end": {
-                  "line": 332,
+                  "line": 331,
                   "column": 5
                 }
               },
@@ -5898,11 +5898,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 334,
+                  "line": 333,
                   "column": 4
                 },
                 "end": {
-                  "line": 340,
+                  "line": 339,
                   "column": 5
                 }
               },
@@ -5921,11 +5921,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 342,
+                  "line": 341,
                   "column": 4
                 },
                 "end": {
-                  "line": 351,
+                  "line": 350,
                   "column": 5
                 }
               },
@@ -5940,11 +5940,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 353,
+                  "line": 352,
                   "column": 4
                 },
                 "end": {
-                  "line": 367,
+                  "line": 366,
                   "column": 5
                 }
               },
@@ -5959,11 +5959,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 369,
+                  "line": 368,
                   "column": 4
                 },
                 "end": {
-                  "line": 380,
+                  "line": 379,
                   "column": 5
                 }
               },
@@ -5978,11 +5978,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 382,
+                  "line": 381,
                   "column": 4
                 },
                 "end": {
-                  "line": 398,
+                  "line": 397,
                   "column": 5
                 }
               },
@@ -6004,11 +6004,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 400,
+                  "line": 399,
                   "column": 4
                 },
                 "end": {
-                  "line": 404,
+                  "line": 403,
                   "column": 5
                 }
               },
@@ -6023,11 +6023,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 406,
+                  "line": 405,
                   "column": 4
                 },
                 "end": {
-                  "line": 411,
+                  "line": 410,
                   "column": 5
                 }
               },
@@ -6042,11 +6042,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 413,
+                  "line": 412,
                   "column": 4
                 },
                 "end": {
-                  "line": 422,
+                  "line": 421,
                   "column": 5
                 }
               },
@@ -6065,11 +6065,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 424,
+                  "line": 423,
                   "column": 4
                 },
                 "end": {
-                  "line": 435,
+                  "line": 434,
                   "column": 5
                 }
               },
@@ -6088,11 +6088,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 437,
+                  "line": 436,
                   "column": 4
                 },
                 "end": {
-                  "line": 442,
+                  "line": 441,
                   "column": 5
                 }
               },
@@ -6111,11 +6111,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 447,
+                  "line": 446,
                   "column": 4
                 },
                 "end": {
-                  "line": 459,
+                  "line": 458,
                   "column": 5
                 }
               },
@@ -6130,11 +6130,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 464,
+                  "line": 463,
                   "column": 4
                 },
                 "end": {
-                  "line": 469,
+                  "line": 468,
                   "column": 5
                 }
               },
@@ -6149,11 +6149,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 471,
+                  "line": 470,
                   "column": 4
                 },
                 "end": {
-                  "line": 492,
+                  "line": 491,
                   "column": 5
                 }
               },
@@ -6168,11 +6168,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 494,
+                  "line": 493,
                   "column": 4
                 },
                 "end": {
-                  "line": 529,
+                  "line": 528,
                   "column": 5
                 }
               },
@@ -6187,11 +6187,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 534,
+                  "line": 533,
                   "column": 4
                 },
                 "end": {
-                  "line": 540,
+                  "line": 539,
                   "column": 5
                 }
               },
@@ -6210,11 +6210,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 542,
+                  "line": 541,
                   "column": 4
                 },
                 "end": {
-                  "line": 556,
+                  "line": 555,
                   "column": 5
                 }
               },
@@ -6233,11 +6233,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 558,
+                  "line": 557,
                   "column": 4
                 },
                 "end": {
-                  "line": 565,
+                  "line": 564,
                   "column": 5
                 }
               },
@@ -6262,11 +6262,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 567,
+                  "line": 566,
                   "column": 4
                 },
                 "end": {
-                  "line": 571,
+                  "line": 570,
                   "column": 5
                 }
               },
@@ -6285,11 +6285,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 573,
+                  "line": 572,
                   "column": 4
                 },
                 "end": {
-                  "line": 580,
+                  "line": 579,
                   "column": 5
                 }
               },
@@ -6304,11 +6304,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 582,
+                  "line": 581,
                   "column": 4
                 },
                 "end": {
-                  "line": 588,
+                  "line": 587,
                   "column": 5
                 }
               },
@@ -6323,11 +6323,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 590,
+                  "line": 589,
                   "column": 4
                 },
                 "end": {
-                  "line": 619,
+                  "line": 618,
                   "column": 5
                 }
               },
@@ -6346,11 +6346,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 621,
+                  "line": 620,
                   "column": 4
                 },
                 "end": {
-                  "line": 641,
+                  "line": 640,
                   "column": 5
                 }
               },
@@ -6369,11 +6369,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 643,
+                  "line": 642,
                   "column": 4
                 },
                 "end": {
-                  "line": 648,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -6388,11 +6388,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 650,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 665,
+                  "line": 664,
                   "column": 5
                 }
               },
@@ -6417,11 +6417,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 667,
+                  "line": 666,
                   "column": 4
                 },
                 "end": {
-                  "line": 684,
+                  "line": 683,
                   "column": 5
                 }
               },
@@ -6446,11 +6446,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 686,
+                  "line": 685,
                   "column": 4
                 },
                 "end": {
-                  "line": 696,
+                  "line": 695,
                   "column": 5
                 }
               },
@@ -6472,11 +6472,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 698,
+                  "line": 697,
                   "column": 4
                 },
                 "end": {
-                  "line": 703,
+                  "line": 702,
                   "column": 5
                 }
               },
@@ -6495,11 +6495,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 705,
+                  "line": 704,
                   "column": 4
                 },
                 "end": {
-                  "line": 707,
+                  "line": 706,
                   "column": 5
                 }
               },
@@ -6518,11 +6518,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 709,
+                  "line": 708,
                   "column": 4
                 },
                 "end": {
-                  "line": 719,
+                  "line": 718,
                   "column": 5
                 }
               },
@@ -6544,11 +6544,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 726,
+                  "line": 725,
                   "column": 4
                 },
                 "end": {
-                  "line": 728,
+                  "line": 727,
                   "column": 5
                 }
               },
@@ -6570,11 +6570,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 730,
+                  "line": 729,
                   "column": 4
                 },
                 "end": {
-                  "line": 741,
+                  "line": 740,
                   "column": 5
                 }
               },
@@ -6593,11 +6593,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 749,
+                  "line": 748,
                   "column": 4
                 },
                 "end": {
-                  "line": 751,
+                  "line": 750,
                   "column": 5
                 }
               },
@@ -6620,11 +6620,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 758,
+                  "line": 757,
                   "column": 4
                 },
                 "end": {
-                  "line": 762,
+                  "line": 761,
                   "column": 5
                 }
               },
@@ -6643,11 +6643,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 773,
+                  "line": 772,
                   "column": 4
                 },
                 "end": {
-                  "line": 791,
+                  "line": 790,
                   "column": 5
                 }
               },
@@ -6662,11 +6662,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 793,
+                  "line": 792,
                   "column": 4
                 },
                 "end": {
-                  "line": 800,
+                  "line": 799,
                   "column": 5
                 }
               },
@@ -6681,11 +6681,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 802,
+                  "line": 801,
                   "column": 4
                 },
                 "end": {
-                  "line": 809,
+                  "line": 808,
                   "column": 5
                 }
               },
@@ -6700,11 +6700,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 811,
+                  "line": 810,
                   "column": 4
                 },
                 "end": {
-                  "line": 813,
+                  "line": 812,
                   "column": 5
                 }
               },
@@ -6723,11 +6723,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 815,
+                  "line": 814,
                   "column": 4
                 },
                 "end": {
-                  "line": 817,
+                  "line": 816,
                   "column": 5
                 }
               },
@@ -6963,11 +6963,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 26,
+                  "line": 25,
                   "column": 8
                 },
                 "end": {
-                  "line": 32,
+                  "line": 31,
                   "column": 9
                 }
               },
@@ -7013,11 +7013,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 56,
+                  "line": 55,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 57,
                   "column": 9
                 }
               },
@@ -7031,11 +7031,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 66,
+                  "line": 65,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 68,
                   "column": 9
                 }
               },
@@ -7049,11 +7049,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 75,
                   "column": 8
                 },
                 "end": {
-                  "line": 78,
+                  "line": 77,
                   "column": 9
                 }
               },
@@ -7067,11 +7067,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 94,
+                  "line": 93,
                   "column": 9
                 }
               },
@@ -7085,11 +7085,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 105,
+                  "line": 104,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 9
                 }
               },
@@ -7103,11 +7103,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 115,
+                  "line": 114,
                   "column": 8
                 },
                 "end": {
-                  "line": 118,
+                  "line": 117,
                   "column": 9
                 }
               },
@@ -7121,11 +7121,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 8
                 },
                 "end": {
-                  "line": 132,
+                  "line": 131,
                   "column": 9
                 }
               },
@@ -7139,11 +7139,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 137,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -7157,11 +7157,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 153,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -7175,11 +7175,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 166,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 169,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -7193,11 +7193,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 177,
                   "column": 9
                 }
               },
@@ -7211,11 +7211,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 183,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 185,
                   "column": 9
                 }
               },
@@ -7229,11 +7229,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 193,
+                  "line": 192,
                   "column": 9
                 }
               },
@@ -7511,11 +7511,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 26,
+                  "line": 25,
                   "column": 8
                 },
                 "end": {
-                  "line": 32,
+                  "line": 31,
                   "column": 9
                 }
               },
@@ -7534,11 +7534,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 37,
+                  "line": 36,
                   "column": 8
                 },
                 "end": {
-                  "line": 41,
+                  "line": 40,
                   "column": 9
                 }
               },
@@ -7554,11 +7554,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 46,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 50,
+                  "line": 49,
                   "column": 9
                 }
               },
@@ -7574,11 +7574,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 56,
+                  "line": 55,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 57,
                   "column": 9
                 }
               },
@@ -7593,11 +7593,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 66,
+                  "line": 65,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 68,
                   "column": 9
                 }
               },
@@ -7613,11 +7613,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 75,
                   "column": 8
                 },
                 "end": {
-                  "line": 78,
+                  "line": 77,
                   "column": 9
                 }
               },
@@ -7632,11 +7632,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 94,
+                  "line": 93,
                   "column": 9
                 }
               },
@@ -7655,11 +7655,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 99,
+                  "line": 98,
                   "column": 8
                 },
                 "end": {
-                  "line": 99,
+                  "line": 98,
                   "column": 35
                 }
               },
@@ -7674,11 +7674,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 105,
+                  "line": 104,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 9
                 }
               },
@@ -7696,11 +7696,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 115,
+                  "line": 114,
                   "column": 8
                 },
                 "end": {
-                  "line": 118,
+                  "line": 117,
                   "column": 9
                 }
               },
@@ -7716,11 +7716,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 120,
+                  "line": 119,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 122,
                   "column": 9
                 }
               },
@@ -7736,11 +7736,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 8
                 },
                 "end": {
-                  "line": 132,
+                  "line": 131,
                   "column": 9
                 }
               },
@@ -7758,11 +7758,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -7779,11 +7779,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -7799,11 +7799,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 169,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -7819,11 +7819,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 177,
                   "column": 9
                 }
               },
@@ -7840,11 +7840,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 185,
                   "column": 9
                 }
               },
@@ -7860,11 +7860,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 191,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 193,
+                  "line": 192,
                   "column": 9
                 }
               },
@@ -7879,11 +7879,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 8
                 },
                 "end": {
-                  "line": 195,
+                  "line": 194,
                   "column": 30
                 }
               },
@@ -7898,11 +7898,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 196,
+                  "line": 195,
                   "column": 8
                 },
                 "end": {
-                  "line": 196,
+                  "line": 195,
                   "column": 29
                 }
               },
@@ -7917,11 +7917,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 198,
+                  "line": 197,
                   "column": 34
                 }
               },
@@ -7936,11 +7936,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 200,
+                  "line": 199,
                   "column": 40
                 }
               },
@@ -7955,11 +7955,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 202,
+                  "line": 201,
                   "column": 8
                 },
                 "end": {
-                  "line": 202,
+                  "line": 201,
                   "column": 46
                 }
               },
@@ -7975,11 +7975,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 216,
                   "column": 4
                 },
                 "end": {
-                  "line": 232,
+                  "line": 231,
                   "column": 5
                 }
               },
@@ -7992,11 +7992,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 236,
                   "column": 4
                 },
                 "end": {
-                  "line": 242,
+                  "line": 241,
                   "column": 5
                 }
               },
@@ -8009,11 +8009,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 249,
+                  "line": 248,
                   "column": 5
                 }
               },
@@ -8026,11 +8026,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 250,
                   "column": 4
                 },
                 "end": {
-                  "line": 267,
+                  "line": 266,
                   "column": 5
                 }
               },
@@ -8050,11 +8050,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 268,
                   "column": 4
                 },
                 "end": {
-                  "line": 273,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -8067,11 +8067,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 281,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -8088,11 +8088,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 283,
+                  "line": 282,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 297,
                   "column": 5
                 }
               },
@@ -8109,11 +8109,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 304,
+                  "line": 303,
                   "column": 4
                 },
                 "end": {
-                  "line": 324,
+                  "line": 323,
                   "column": 5
                 }
               },
@@ -8130,11 +8130,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 326,
+                  "line": 325,
                   "column": 4
                 },
                 "end": {
-                  "line": 328,
+                  "line": 327,
                   "column": 5
                 }
               },
@@ -8154,11 +8154,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 330,
+                  "line": 329,
                   "column": 4
                 },
                 "end": {
-                  "line": 332,
+                  "line": 331,
                   "column": 5
                 }
               },
@@ -8175,11 +8175,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 334,
+                  "line": 333,
                   "column": 4
                 },
                 "end": {
-                  "line": 340,
+                  "line": 339,
                   "column": 5
                 }
               },
@@ -8196,11 +8196,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 342,
+                  "line": 341,
                   "column": 4
                 },
                 "end": {
-                  "line": 351,
+                  "line": 350,
                   "column": 5
                 }
               },
@@ -8213,11 +8213,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 353,
+                  "line": 352,
                   "column": 4
                 },
                 "end": {
-                  "line": 367,
+                  "line": 366,
                   "column": 5
                 }
               },
@@ -8230,11 +8230,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 369,
+                  "line": 368,
                   "column": 4
                 },
                 "end": {
-                  "line": 380,
+                  "line": 379,
                   "column": 5
                 }
               },
@@ -8247,11 +8247,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 382,
+                  "line": 381,
                   "column": 4
                 },
                 "end": {
-                  "line": 398,
+                  "line": 397,
                   "column": 5
                 }
               },
@@ -8271,11 +8271,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 400,
+                  "line": 399,
                   "column": 4
                 },
                 "end": {
-                  "line": 404,
+                  "line": 403,
                   "column": 5
                 }
               },
@@ -8288,11 +8288,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 406,
+                  "line": 405,
                   "column": 4
                 },
                 "end": {
-                  "line": 411,
+                  "line": 410,
                   "column": 5
                 }
               },
@@ -8305,11 +8305,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 413,
+                  "line": 412,
                   "column": 4
                 },
                 "end": {
-                  "line": 422,
+                  "line": 421,
                   "column": 5
                 }
               },
@@ -8326,11 +8326,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 424,
+                  "line": 423,
                   "column": 4
                 },
                 "end": {
-                  "line": 435,
+                  "line": 434,
                   "column": 5
                 }
               },
@@ -8347,11 +8347,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 437,
+                  "line": 436,
                   "column": 4
                 },
                 "end": {
-                  "line": 442,
+                  "line": 441,
                   "column": 5
                 }
               },
@@ -8368,11 +8368,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 447,
+                  "line": 446,
                   "column": 4
                 },
                 "end": {
-                  "line": 459,
+                  "line": 458,
                   "column": 5
                 }
               },
@@ -8385,11 +8385,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 464,
+                  "line": 463,
                   "column": 4
                 },
                 "end": {
-                  "line": 469,
+                  "line": 468,
                   "column": 5
                 }
               },
@@ -8402,11 +8402,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 471,
+                  "line": 470,
                   "column": 4
                 },
                 "end": {
-                  "line": 492,
+                  "line": 491,
                   "column": 5
                 }
               },
@@ -8419,11 +8419,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 494,
+                  "line": 493,
                   "column": 4
                 },
                 "end": {
-                  "line": 529,
+                  "line": 528,
                   "column": 5
                 }
               },
@@ -8436,11 +8436,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 534,
+                  "line": 533,
                   "column": 4
                 },
                 "end": {
-                  "line": 540,
+                  "line": 539,
                   "column": 5
                 }
               },
@@ -8457,11 +8457,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 542,
+                  "line": 541,
                   "column": 4
                 },
                 "end": {
-                  "line": 556,
+                  "line": 555,
                   "column": 5
                 }
               },
@@ -8478,11 +8478,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 558,
+                  "line": 557,
                   "column": 4
                 },
                 "end": {
-                  "line": 565,
+                  "line": 564,
                   "column": 5
                 }
               },
@@ -8505,11 +8505,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 567,
+                  "line": 566,
                   "column": 4
                 },
                 "end": {
-                  "line": 571,
+                  "line": 570,
                   "column": 5
                 }
               },
@@ -8526,11 +8526,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 573,
+                  "line": 572,
                   "column": 4
                 },
                 "end": {
-                  "line": 580,
+                  "line": 579,
                   "column": 5
                 }
               },
@@ -8543,11 +8543,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 582,
+                  "line": 581,
                   "column": 4
                 },
                 "end": {
-                  "line": 588,
+                  "line": 587,
                   "column": 5
                 }
               },
@@ -8560,11 +8560,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 590,
+                  "line": 589,
                   "column": 4
                 },
                 "end": {
-                  "line": 619,
+                  "line": 618,
                   "column": 5
                 }
               },
@@ -8581,11 +8581,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 621,
+                  "line": 620,
                   "column": 4
                 },
                 "end": {
-                  "line": 641,
+                  "line": 640,
                   "column": 5
                 }
               },
@@ -8602,11 +8602,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 643,
+                  "line": 642,
                   "column": 4
                 },
                 "end": {
-                  "line": 648,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -8619,11 +8619,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 650,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 665,
+                  "line": 664,
                   "column": 5
                 }
               },
@@ -8646,11 +8646,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 667,
+                  "line": 666,
                   "column": 4
                 },
                 "end": {
-                  "line": 684,
+                  "line": 683,
                   "column": 5
                 }
               },
@@ -8673,11 +8673,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 686,
+                  "line": 685,
                   "column": 4
                 },
                 "end": {
-                  "line": 696,
+                  "line": 695,
                   "column": 5
                 }
               },
@@ -8697,11 +8697,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 698,
+                  "line": 697,
                   "column": 4
                 },
                 "end": {
-                  "line": 703,
+                  "line": 702,
                   "column": 5
                 }
               },
@@ -8718,11 +8718,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 705,
+                  "line": 704,
                   "column": 4
                 },
                 "end": {
-                  "line": 707,
+                  "line": 706,
                   "column": 5
                 }
               },
@@ -8739,11 +8739,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 709,
+                  "line": 708,
                   "column": 4
                 },
                 "end": {
-                  "line": 719,
+                  "line": 718,
                   "column": 5
                 }
               },
@@ -8763,11 +8763,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 726,
+                  "line": 725,
                   "column": 4
                 },
                 "end": {
-                  "line": 728,
+                  "line": 727,
                   "column": 5
                 }
               },
@@ -8787,11 +8787,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 730,
+                  "line": 729,
                   "column": 4
                 },
                 "end": {
-                  "line": 741,
+                  "line": 740,
                   "column": 5
                 }
               },
@@ -8808,11 +8808,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 749,
+                  "line": 748,
                   "column": 4
                 },
                 "end": {
-                  "line": 751,
+                  "line": 750,
                   "column": 5
                 }
               },
@@ -8833,11 +8833,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 758,
+                  "line": 757,
                   "column": 4
                 },
                 "end": {
-                  "line": 762,
+                  "line": 761,
                   "column": 5
                 }
               },
@@ -8854,11 +8854,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 773,
+                  "line": 772,
                   "column": 4
                 },
                 "end": {
-                  "line": 791,
+                  "line": 790,
                   "column": 5
                 }
               },
@@ -8871,11 +8871,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 793,
+                  "line": 792,
                   "column": 4
                 },
                 "end": {
-                  "line": 800,
+                  "line": 799,
                   "column": 5
                 }
               },
@@ -8888,11 +8888,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 802,
+                  "line": 801,
                   "column": 4
                 },
                 "end": {
-                  "line": 809,
+                  "line": 808,
                   "column": 5
                 }
               },
@@ -8905,11 +8905,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 811,
+                  "line": 810,
                   "column": 4
                 },
                 "end": {
-                  "line": 813,
+                  "line": 812,
                   "column": 5
                 }
               },
@@ -8926,11 +8926,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 815,
+                  "line": 814,
                   "column": 4
                 },
                 "end": {
-                  "line": 817,
+                  "line": 816,
                   "column": 5
                 }
               },
@@ -8947,11 +8947,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 19,
+              "line": 18,
               "column": 2
             },
             "end": {
-              "line": 846,
+              "line": 845,
               "column": 3
             }
           },
@@ -8963,11 +8963,11 @@
               "description": "True if the dropdown is open, false otherwise.",
               "sourceRange": {
                 "start": {
-                  "line": 26,
+                  "line": 25,
                   "column": 8
                 },
                 "end": {
-                  "line": 32,
+                  "line": 31,
                   "column": 9
                 }
               },
@@ -8979,11 +8979,11 @@
               "description": "Set to true to disable this element.",
               "sourceRange": {
                 "start": {
-                  "line": 37,
+                  "line": 36,
                   "column": 8
                 },
                 "end": {
-                  "line": 41,
+                  "line": 40,
                   "column": 9
                 }
               },
@@ -8995,11 +8995,11 @@
               "description": "When present, it specifies that the element field is read-only.",
               "sourceRange": {
                 "start": {
-                  "line": 46,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 50,
+                  "line": 49,
                   "column": 9
                 }
               },
@@ -9011,11 +9011,11 @@
               "description": "A full set of items to filter the visible options from.\nThe items can be of either `String` or `Object` type.",
               "sourceRange": {
                 "start": {
-                  "line": 56,
+                  "line": 55,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 57,
                   "column": 9
                 }
               },
@@ -9027,11 +9027,11 @@
               "description": "If `true`, the user can input a value that is not present in the items list.\n`value` property will be set to the input value in this case.\nAlso, when `value` is set programmatically, the input value will be set\nto reflect that value.",
               "sourceRange": {
                 "start": {
-                  "line": 66,
+                  "line": 65,
                   "column": 8
                 },
                 "end": {
-                  "line": 69,
+                  "line": 68,
                   "column": 9
                 }
               },
@@ -9043,11 +9043,11 @@
               "description": "A subset of items, filtered based on the user input. Filtered items\ncan be assigned directly to omit the internal filtering functionality.\nThe items can be of either `String` or `Object` type.",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 75,
                   "column": 8
                 },
                 "end": {
-                  "line": 78,
+                  "line": 77,
                   "column": 9
                 }
               },
@@ -9059,11 +9059,11 @@
               "description": "The `String` value for the selected item of the combo box. Provides\nthe value for `iron-form`.\n\nWhen there’s no item selected, the value is an empty string.\n\nUse `selectedItem` property to get the raw selected item from\nthe `items` array.",
               "sourceRange": {
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 94,
+                  "line": 93,
                   "column": 9
                 }
               },
@@ -9075,11 +9075,11 @@
               "description": "A read-only property indicating whether this combo box has a value\nselected or not. It can be used for example in styling of the component.",
               "sourceRange": {
                 "start": {
-                  "line": 105,
+                  "line": 104,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 9
                 }
               },
@@ -9091,11 +9091,11 @@
               "description": "When set to `true`, a loading spinner is displayed on top of the list of options.",
               "sourceRange": {
                 "start": {
-                  "line": 115,
+                  "line": 114,
                   "column": 8
                 },
                 "end": {
-                  "line": 118,
+                  "line": 117,
                   "column": 9
                 }
               },
@@ -9107,11 +9107,11 @@
               "description": "Filtering string the user has typed into the input field.",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 8
                 },
                 "end": {
-                  "line": 132,
+                  "line": 131,
                   "column": 9
                 }
               },
@@ -9123,11 +9123,11 @@
               "description": "The selected item from the `items` array.",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -9139,11 +9139,11 @@
               "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.\n\nWhen using item templates, the property is still needed because it is used\nfor filtering, and for displaying the selected item value in the input box.",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -9155,11 +9155,11 @@
               "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 169,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -9171,11 +9171,11 @@
               "description": "Returns a reference to the native input element.",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 177,
                   "column": 9
                 }
               },
@@ -9187,11 +9187,11 @@
               "description": "Set to true to mark the input as required.",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 185,
                   "column": 9
                 }
               },
@@ -9203,11 +9203,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 191,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 193,
+                  "line": 192,
                   "column": 9
                 }
               },
