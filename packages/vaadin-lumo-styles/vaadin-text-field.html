@@ -198,13 +198,11 @@
 
       :host([invalid]) [part="input-field"] {
         background-color: var(--valo-error-color-10pct);
-        box-shadow: 0 0 0 1px var(--valo-error-color-10pct);
       }
 
       /* Error message */
 
       [part="error-message"] {
-        margin-top: var(--valo-space-xs);
         margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
         font-size: var(--valo-font-size-xs);
         line-height: var(--valo-line-height-xs);
@@ -214,11 +212,17 @@
         max-height: 5em;
       }
 
+      /* Margin that doesn’t reserve space when there’s no error message*/
+      [part="error-message"]::before {
+        content: "";
+        display: block;
+        height: var(--valo-space-xs);
+      }
+
       [part="error-message"][hidden] {
         display: block;
         max-height: 0;
         overflow: hidden;
-        margin: 0;
       }
 
       /* Small theme */
