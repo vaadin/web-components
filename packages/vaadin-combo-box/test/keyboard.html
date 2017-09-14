@@ -277,15 +277,15 @@
         document.body.removeEventListener('click', listener);
       });
 
-      it('tap event should not be propagated', () => {
-        const listener = document.body.addEventListener('tap', () => {
-          throw new Error('Tap event was propagated to body');
+      it('click event should not be propagated', () => {
+        const listener = document.body.addEventListener('click', () => {
+          throw new Error('Click event was propagated to body');
         });
 
         comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
-          .dispatchEvent(new CustomEvent('tap', {composed: true, bubbles: true}));
+          .dispatchEvent(new CustomEvent('click', {composed: true, bubbles: true}));
 
-        document.body.removeEventListener('tap', listener);
+        document.body.removeEventListener('click', listener);
       });
 
       it('should cancel typing with escape', () => {
