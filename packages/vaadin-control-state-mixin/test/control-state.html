@@ -108,12 +108,12 @@
       });
 
       describe('_tabPressed and focus-ring', () => {
-        var focus = () => {
-          customElement.dispatchEvent(new CustomEvent('focus'));
+        var focusin = () => {
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
         };
 
-        var blur = () => {
-          customElement.dispatchEvent(new CustomEvent('blur'));
+        var focusout = () => {
+          focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
         };
 
         it('should set and unset _tabPressed when press TAB', () => {
@@ -139,17 +139,17 @@
 
         it('should set the focus-ring attribute when TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9);
-          focus();
+          focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          blur();
+          focusout();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
         it('should set the focus-ring attribute when SHIFT+TAB is pressed and focus is received', () => {
           MockInteractions.keyDownOn(document.body, 9, 'shift');
-          focus();
+          focusin();
           expect(customElement.hasAttribute('focus-ring')).to.be.true;
-          blur();
+          focusout();
           expect(customElement.hasAttribute('focus-ring')).to.be.false;
         });
 
@@ -197,11 +197,11 @@
       describe('focus and autofocus', () => {
         it('should not set focused attribute on host click', () => {
           customElement.click();
-          expect(customElement.focused).to.be.undefined;
+          expect(customElement.focused).to.be.false;
         });
 
-        it('should set focused attribute on host mousedown', () => {
-          customElement.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
+        it('should set focused attribute on focusin event dispatched', () => {
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
           expect(customElement.focused).to.be.true;
         });
 
@@ -212,7 +212,7 @@
 
           customElement.$.input.dispatchEvent(e);
 
-          expect(customElement.focused).to.be.undefined;
+          expect(customElement.focused).to.be.false;
 
           customElement.$.input.removeEventListener('mousedown', preventDefaultListener);
         });
