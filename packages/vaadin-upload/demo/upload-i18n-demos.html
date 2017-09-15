@@ -1,40 +1,19 @@
-<!doctype html>
+<dom-module id="upload-i18n-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-<!--
-title: Examples
-order: 0
-layout: page
--->
+    </style>
 
-<!--
-@license
-Copyright (c) 2016 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-upload I18n Examples</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
-  <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../../iron-icons/iron-icons.html">
-</head>
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>I18n</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-i18n-demos-i18n'>
+      <template preserve-content>
         <vaadin-upload id="ru"></vaadin-upload>
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-i18n-demos-i18n', function(document) {
             var upload = document.querySelector('vaadin-upload#ru');
             upload.i18n = {
               dropFiles: {
@@ -74,14 +53,15 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Custom progress status</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-i18n-demos-custom-progress-status'>
+      <template preserve-content>
         <vaadin-upload id="shortTime"></vaadin-upload>
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-i18n-demos-custom-progress-status', function(document) {
             var upload = document.querySelector('vaadin-upload#shortTime');
 
             upload.set('i18n.formatTime', function(seconds, split) {
@@ -101,7 +81,13 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class UploadI18nDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
+      static get is() { return 'upload-i18n-demos'; }
+    }
+    customElements.define(UploadI18nDemos.is, UploadI18nDemos);
+  </script>
+</dom-module>

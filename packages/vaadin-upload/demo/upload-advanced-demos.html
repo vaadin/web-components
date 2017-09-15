@@ -1,37 +1,16 @@
-<!doctype html>
+<dom-module id="upload-advanced-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-<!--
-title: Examples
-order: 0
-layout: page
--->
+    </style>
 
-<!--
-@license
-Copyright (c) 2016 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-upload Advanced Examples</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
-  <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../../iron-icons/iron-icons.html">
-</head>
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Custom File List</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-file-list'>
+      <template preserve-content>
         <dom-bind>
           <template is="dom-bind">
             <vaadin-upload id="fileEventsDemo" files="{{files}}">
@@ -50,15 +29,16 @@ This program is available under Apache License Version 2.0, available at https:/
           </template>
         </dom-bind>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Customizing the Upload Request</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-customizing-the-upload-request'>
+      <template preserve-content>
         <vaadin-upload id="requestDemo"></vaadin-upload>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-advanced-demos-customizing-the-upload-request', function(document) {
             var upload1 = document.querySelector('vaadin-upload#requestDemo');
 
             upload1.addEventListener('upload-before', function(event) {
@@ -89,15 +69,16 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Sending Files Without Wrapping in FormData</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-sending-files-without-wrapping-in-formdata'>
+      <template preserve-content>
         <vaadin-upload id="rawDemo"></vaadin-upload>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-advanced-demos-sending-files-without-wrapping-in-formdata', function(document) {
             var upload2 = document.querySelector('vaadin-upload#rawDemo');
 
             upload2.addEventListener('upload-request', function(event) {
@@ -107,15 +88,16 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Custom Reaction on Server Response</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-reaction-on-server-response'>
+      <template preserve-content>
         <vaadin-upload id="responseDemo"></vaadin-upload>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-advanced-demos-custom-reaction-on-server-response', function(document) {
             var upload3 = document.querySelector('vaadin-upload#responseDemo');
 
             upload3.addEventListener('upload-response', function(event) {
@@ -128,17 +110,18 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Pre-Filling the File List in Advance</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-pre-filling-the-file-list-in-advance'>
+      <template preserve-content>
         <vaadin-upload id="preFill" accept="application/pdf">
           <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
           <span slot="drop-label">Drop your favourite Novels here</span>
         </vaadin-upload>
         <script>
-          document.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-advanced-demos-pre-filling-the-file-list-in-advance', function(document) {
             var upload = document.querySelector('vaadin-upload#preFill');
             upload.files = [
               {name: 'Don Quixote.pdf', progress: 100, complete: true},
@@ -148,15 +131,16 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Custom Upload Button</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-upload-button'>
+      <template preserve-content>
         <button-events-demo></button-events-demo>
 
         <dom-module id="button-events-demo">
-          <template>
+          <template preserve-content>
             <style>
               vaadin-upload {
                 --vaadin-upload-buttons-primary: {
@@ -180,17 +164,18 @@ This program is available under Apache License Version 2.0, available at https:/
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Manual Upload Trigger</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='upload-advanced-demos-manual-upload-trigger'>
+      <template preserve-content>
         <vaadin-upload id="manualUpload" no-auto></vaadin-upload>
         <br>
         <button id="uploadButton">Start Upload(s)</button>
 
         <script>
-          document.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#upload-advanced-demos-manual-upload-trigger', function(document) {
             var upload = document.querySelector('vaadin-upload#manualUpload');
             var uploadButton = document.getElementById('uploadButton');
 
@@ -206,7 +191,13 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class UploadAdvancedDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
+      static get is() { return 'upload-advanced-demos'; }
+    }
+    customElements.define(UploadAdvancedDemos.is, UploadAdvancedDemos);
+  </script>
+</dom-module>

@@ -1,126 +1,34 @@
 <!doctype html>
-
-<!--
-title: Examples
-order: 0
-layout: page
--->
-
-<!--
-@license
-Copyright (c) 2016 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
--->
 <html>
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-upload Basic Examples</title>
-
+  <title>vaadin-upload Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
+
+  <link rel="import" href="upload-demo.html">
+
   <link rel="import" href="../../iron-icon/iron-icon.html">
   <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../paper-styles/default-theme.html">
+  <script src="../../mock-http-request/lib/mock.js"></script>
+  <link rel="import" href="../vaadin-upload.html">
   <link rel="import" href="../../paper-toast/paper-toast.html">
-</head>
-<body unresolved>
-  <div class="vertical-section-container centered">
 
-    <demo-navigation></demo-navigation>
-
-    <h3>Basic Usage</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload></vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Upload Request Properties</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload
-            target="serverUrl"
-            method="POST"
-            timeout="300000"
-            headers="{'X-Custom-Header': 'value'}"
-            form-data-name="my-attachment">
-        </vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Disabling Drag & Drop and Picking Multiple Files in the File Dialog</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload nodrop max-files="1"></vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Custom Color Scheme and Container Styles</h3>
-    <demo-snippet>
-      <template>
-        <style is="custom-style">
-          vaadin-upload.thick-border {
-            --primary-color: #396;
-            --dark-primary-color: #063;
-            --light-primary-color: #6c9;
-            --error-color: darkred;
-
-            border: 2px solid #ccc;
-            padding: 14px;
-            background: #eee;
-            border-radius: 0;
-          }
-
-          vaadin-upload.thick-border[dragover] {
-            border-color: #396;
-          }
-        </style>
-
-        <vaadin-upload class="thick-border"></vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Custom Drop Label</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload>
-          <iron-icon slot="drop-label-icon" icon="cloud-upload"></iron-icon>
-          <span slot="drop-label">Drop files to the cloud...</span>
-        </vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Single File Upload</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload max-files="1"></vaadin-upload>
-      </template>
-    </demo-snippet>
-
-    <h3>Setting Restrictions on Files to Upload</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-upload id="rejectEventDemo" max-files="3" accept="application/pdf" max-file-size="1000000">
-          <span slot="drop-label">Up to 3 PDF files, 1 MB each</span>
-        </vaadin-upload>
-
-        <paper-toast id="rejectToast"></paper-toast>
-
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var upload = document.querySelector('vaadin-upload#rejectEventDemo');
-            var toast = document.querySelector('paper-toast#rejectToast');
-
-            upload.addEventListener('file-reject', function(event) {
-              toast.text = event.detail.file.name + ' error: ' + event.detail.error;
-              toast.open();
-            });
-          });
-        </script>
-      </template>
-    </demo-snippet>
-  </div>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

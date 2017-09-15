@@ -35,10 +35,10 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#1 - 2",
     "paper-progress": "PolymerElements/paper-progress#1 - 2",
     "paper-ripple": "PolymerElements/paper-ripple#1 - 2",
-    "paper-styles": "PolymerElements/paper-styles#1 - 2"
+    "paper-styles": "PolymerElements/paper-styles#1 - 2",
+    "vaadin-themable-mixin": "#theme-custom-prop"
   },
   "devDependencies": {
-    "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",
     "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#1 - 2",
@@ -46,7 +46,8 @@
     "paper-toast": "PolymerElements/paper-toast#1 - 2",
     "test-fixture": "PolymerElements/test-fixture#^3.0.0",
     "web-component-tester": "Polymer/web-component-tester#^6.1.5",
-    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "variants": {
     "1.x": {
@@ -77,6 +78,7 @@
     }
   },
   "resolutions": {
-    "webcomponentsjs": "^1.0"
+    "webcomponentsjs": "^1.0",
+    "vaadin-themable-mixin": "theme-custom-prop"
   }
 }
