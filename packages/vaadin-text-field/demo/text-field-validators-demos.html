@@ -1,28 +1,20 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset='utf-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1' />
-  <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<dom-module id="text-field-validators-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-  <title>vaadin-text-field Custom Validators</title>
+    </style>
 
-  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
-  <link rel='import' href='common.html'>
-</head>
-
-<body unresolved>
-  <div class='vertical-section-container centered'>
-
-    <demo-navigation></demo-navigation>
 
     <h3>Synchronous Custom Validator</h3>
 
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
       then override the <code>checkValidity()</code> method to validate the user's input</p>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='text-field-validators-demos-synchronous-custom-validator'>
+      <template preserve-content>
         <style>
           employee-role-text-field {
             padding: 10px;
@@ -49,7 +41,7 @@
         </employee-role-text-field>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#text-field-validators-demos-synchronous-custom-validator', function(document) {
             class EmployeeRole extends Vaadin.TextFieldElement {
               static get is() {
                 return 'employee-role-text-field';
@@ -64,7 +56,8 @@
         </script>
 
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Asynchronous Custom Validator</h3>
 
@@ -72,8 +65,8 @@
       then override the <code>checkValidity()</code> to make your asynchronous validation,
       and finally set the <code>invalid</code> flag appropriately in the callback.</p>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='text-field-validators-demos-asynchronous-custom-validator'>
+      <template preserve-content>
         <style>
           chemical-element-text-field {
             width: 500px;
@@ -107,7 +100,7 @@
         </chemical-element-text-field>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#text-field-validators-demos-asynchronous-custom-validator', function(document) {
             class ChemicalElement extends Vaadin.TextFieldElement {
               static get is() {
                 return 'chemical-element-text-field';
@@ -135,7 +128,7 @@
         </script>
 
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
 
   <dom-module id='iron-ajax'>
@@ -276,5 +269,11 @@
     </script>
   </dom-module>
 
-</body>
-</html>
+  </template>
+  <script>
+    class TextFieldValidatorsDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() { return 'text-field-validators-demos'; }
+    }
+    customElements.define(TextFieldValidatorsDemos.is, TextFieldValidatorsDemos);
+  </script>
+</dom-module>

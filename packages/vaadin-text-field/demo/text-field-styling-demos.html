@@ -1,20 +1,12 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<dom-module id="text-field-styling-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-  <title>vaadin-text-field Styling Examples</title>
+    </style>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Styling</h3>
 
@@ -30,10 +22,10 @@
       it targets.</b>
     </p>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='text-field-styling-demos-styling'>
+      <template preserve-content>
         <dom-module id="text-field-styles" theme-for="vaadin-text-field">
-          <template>
+          <template preserve-content>
             <style>
               :host([theme="my-theme"]) {
                 display: block;
@@ -100,7 +92,13 @@
         <vaadin-text-field theme="my-theme" label="Text field"></vaadin-text-field>
         <vaadin-text-field theme="my-theme" label="Numbers only" pattern="[0-9]*" error-message="Only numbers allowed for this text field"></vaadin-text-field>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
-</body>
-</html>
+  </template>
+  <script>
+    class TextFieldStylingDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() { return 'text-field-styling-demos'; }
+    }
+    customElements.define(TextFieldStylingDemos.is, TextFieldStylingDemos);
+  </script>
+</dom-module>
