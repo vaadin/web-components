@@ -38,8 +38,11 @@
       needs. Because it’s based on Web Components and Polymer, the styling is done a bit
       differently than for a traditional web page.</p>
 
-    <p>Depending on your needs, there are different options how to customize any element’s styles
-      and theme.</p>
+    <p>The main difference is that Web Components use <b>shadow DOM, which prevents you from styling
+      the internals of the components with global CSS</b>, which is the usual way.</p>
+
+    <p>Depending on your needs, there are different options how to customize the styles and theme of
+      an element.</p>
 
     <hr>
 
@@ -158,7 +161,8 @@
     <h4 class="subtitle">Theme modules</h4>
 
     <p>When you can’t accomplish the styling you want using the CSS custom properties provided by
-      the theme, you can create new theme modules to add low level CSS for any element.</p>
+      the theme, and <b>you want to style the internals of an element freely</b>, you can create new theme
+      modules to add low level CSS for any element.</p>
 
     <h3>Defining a theme module</h3>
 
@@ -168,7 +172,10 @@
 
     <nice-demo-snippet code-only>
       <template slot="source">
-        <dom-module id="theme-module-name" theme-for="my-element">
+        <!-- You can place the dom-module element in a separate HTML import file,
+             or directly in your index.html -->
+
+        <dom-module id="my-theme-module" theme-for="my-element">
           <template>
             <style>
               /* Styles for my-element */
@@ -177,6 +184,11 @@
         </dom-module>
       </template>
     </nice-demo-snippet>
+
+    <div class="note">
+      <h6>Module ID</h6>
+      <p>The <code>id</code> attribute of the theme module should be unique. You can also re-use an existing id if you want to override it completely.</p>
+    </div>
 
     <p>The <code>theme-for</code> attribute specifies the element (read: Web Component) that the
       styles in the theme module will affect. The value can be a space separated list of element names, and can contain wildcard element names as well.</p>
@@ -215,7 +227,7 @@
     <h6>Example: Styling text field’s focused and invalid states</h6>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <dom-module id="my-button-theme" theme-for="vaadin-button">
+        <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
           <template>
             <style>
               :host([invalid]) [part="input-field"] {
