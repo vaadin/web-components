@@ -93,16 +93,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
 
-      this.addEventListener('focusin', (e) => {
-        if (e.composedPath()[0] === this.focusElement) {
-          this._setFocused(true);
-        }
-      });
-      this.addEventListener('focusout', (e) => {
-        if (e.composedPath()[0] === this.focusElement) {
-          this._setFocused(false);
-        }
-      });
+      this.addEventListener('focusin', e => e.composedPath()[0] === this.focusElement && this._setFocused(true));
+      this.addEventListener('focusout', e => e.composedPath()[0] === this.focusElement && this._setFocused(false));
 
       this.addEventListener('mousedown', e => {
         if (!e.defaultPrevented) {
