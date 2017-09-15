@@ -53,11 +53,11 @@
     "iron-scroll-target-behavior": "PolymerElements/iron-scroll-target-behavior#^v2.0.0",
     "iron-a11y-keys-behavior": "^v2.0.0",
     "iron-a11y-announcer": "^v2.0.0",
-    "vaadin-themable-mixin": "#propagate-theme",
+    "vaadin-themable-mixin": "#theme-custom-prop",
     "vaadin-checkbox": "^1.0.0"
   },
   "resolutions": {
     "iron-doc-viewer": "^3.0.0",
-    "vaadin-themable-mixin": "propagate-theme"
+    "vaadin-themable-mixin": "theme-custom-prop"
   }
 }
