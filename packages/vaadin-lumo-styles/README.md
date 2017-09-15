@@ -6,6 +6,10 @@
 
 `vaadin-valo-theme` is customizable theme for the [Vaadin Core Elements](https://vaadin.com/elements).
 
+## Demos and documentation
+
+Links to demos and documentation can be found from the [release notes](https://github.com/vaadin/vaadin-valo-theme/releases).
+
 
 ## Running demos and tests in browser
 
