@@ -19,7 +19,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
     </style>
-    <vaadin-overlay id="overlay" opened="[[opened]]" template="{{template}}">
+    <vaadin-overlay id="overlay" opened="[[opened]]" template="{{template}}" style="align-items: stretch;">
       <slot></slot>
     </vaadin-overlay>
   </template>
@@ -225,6 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.overlay.style.transform = `translate3d(${this._translateX}px, ${this._translateY}px, 0)`;
 
         this.$.overlay.style.width = this.positionTarget.clientWidth + 'px';
+        this.$.overlay.style.justifyContent = this.alignedAbove ? 'flex-end' : 'flex-start';
 
         // TODO: fire only when position actually changes changes
         this.dispatchEvent(new CustomEvent('position-changed'));
