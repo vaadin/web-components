@@ -63,7 +63,9 @@
   </template>
   <script>
     class SplitLayoutThemingDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
-      static get is() { return 'split-layout-theming-demos'; }
+      static get is() {
+        return 'split-layout-theming-demos';
+      }
     }
     customElements.define(SplitLayoutThemingDemos.is, SplitLayoutThemingDemos);
   </script>

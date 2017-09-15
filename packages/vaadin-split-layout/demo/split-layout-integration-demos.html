@@ -30,7 +30,9 @@
   </template>
   <script>
     class SplitLayoutIntegrationDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
-      static get is() { return 'split-layout-integration-demos'; }
+      static get is() {
+        return 'split-layout-integration-demos';
+      }
     }
     customElements.define(SplitLayoutIntegrationDemos.is, SplitLayoutIntegrationDemos);
   </script>

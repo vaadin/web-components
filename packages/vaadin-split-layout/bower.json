@@ -21,7 +21,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
-    "vaadin-themable-mixin": "#propagate-theme"
+    "vaadin-themable-mixin": "^1.2.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -34,7 +34,6 @@
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "resolutions": {
-    "vaadin-themable-mixin": "propagate-theme",
     "webcomponentsjs": "^v1.0.0-rc.11"
   }
 }
