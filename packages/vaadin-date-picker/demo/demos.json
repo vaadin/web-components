@@ -1,0 +1,37 @@
+{
+  "name": "Vaadin Date Picker",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "date-picker-basic-demos",
+    "src": "date-picker-basic-demos.html",
+    "meta": {
+      "title": "vaadin-date-picker Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Advanced Usage",
+    "url": "date-picker-advanced-demos",
+    "src": "date-picker-advanced-demos.html",
+    "meta": {
+      "title": "vaadin-date-picker Advanced Usage",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Theming",
+    "url": "date-picker-theming-demos",
+    "src": "date-picker-theming-demos.html",
+    "meta": {
+      "title": "vaadin-date-picker Theming Example",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
