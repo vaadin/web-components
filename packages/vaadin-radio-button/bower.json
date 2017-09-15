@@ -27,7 +27,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-control-state-mixin": "^1.0.0",
-    "vaadin-themable-mixin": "#propagate-theme"
+    "vaadin-themable-mixin": "#theme-custom-prop"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -35,10 +35,11 @@
     "iron-form": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "vaadin-button": "^1.0.0-beta3",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "resolutions": {
-    "vaadin-themable-mixin": "propagate-theme"
+    "web-component-tester": "^6.1.5",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   }
 }
