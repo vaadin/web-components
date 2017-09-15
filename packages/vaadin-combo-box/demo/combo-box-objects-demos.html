@@ -1,32 +1,23 @@
-<!doctype html>
-<html>
+<dom-module id="combo-box-objects-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    </style>
 
-  <title>vaadin-combo-box Object Items Examples</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-    <demo-navigation></demo-navigation>
 
     <h3>Default Label and Value</h3>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='combo-box-objects-demos-default-label-and-value'>
+      <template preserve-content>
         <vaadin-combo-box id="numbers-box" label="Number"></vaadin-combo-box>
         <p>Selected item: <span id="selected-item"></span>.</p>
         <p>Value: <span id="value"></span>.</p>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#combo-box-objects-demos-default-label-and-value', function(document) {
             var combobox = document.querySelector('#numbers-box');
             combobox.items = [
               {label: 'One', value: 1},
@@ -46,18 +37,19 @@
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Setting Label and Value Path</h3>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='combo-box-objects-demos-setting-label-and-value-path'>
+      <template preserve-content>
         <vaadin-combo-box id="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
         <p>Selected element name: <span id="element-name"></span>.</p>
         <p>Value: <span id="element-value"></span>.</p>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#combo-box-objects-demos-setting-label-and-value-path', function(document) {
             var combobox = document.querySelector('#elements-box');
 
             // elementsJson is an Array of Objects. Item object format:
@@ -76,18 +68,19 @@
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Object Items with the Same Value</h3>
 
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='combo-box-objects-demos-object-items-with-the-same-value'>
+      <template preserve-content>
         <vaadin-combo-box id="country-synonyms-box" label="Element"></vaadin-combo-box>
         <p>Selected Item: <span id="country-selected-item"></span>.</p>
         <p>Value: <span id="country-value"></span>.</p>
 
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#combo-box-objects-demos-object-items-with-the-same-value', function(document) {
             var countrySynonymsBox = document.querySelector('#country-synonyms-box');
 
             countrySynonymsBox.items = [
@@ -108,9 +101,15 @@
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
 
   </div>
-</body>
 
-</html>
+  </template>
+  <script>
+    class ComboBoxObjectsDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() { return 'combo-box-objects-demos'; }
+    }
+    customElements.define(ComboBoxObjectsDemos.is, ComboBoxObjectsDemos);
+  </script>
+</dom-module>

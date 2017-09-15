@@ -1,131 +1,40 @@
 <!doctype html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-combo-box Basic Examples</title>
-
+  <title>vaadin-combo-box Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="common.html">
-
-  <link rel="import" href="../../iron-form/iron-form.html">
-  <link rel="import" href="../../paper-button/paper-button.html">
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 
-<body unresolved>
-  <div class="vertical-section-container centered">
-    <demo-navigation></demo-navigation>
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-    <h3>Configuring the Combo Box</h3>
+  <link rel="import" href="combo-box-demo.html">
 
-    <demo-snippet>
-      <template>
-        <vaadin-combo-box id="demo1-1" label="Element"></vaadin-combo-box>
-        <vaadin-combo-box id="demo1-2" label="Disabled" disabled></vaadin-combo-box>
-        <vaadin-combo-box id="demo1-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var combobox1 = document.querySelector('#demo1-1');
-            var combobox2 = document.querySelector('#demo1-2');
-            var combobox3 = document.querySelector('#demo1-3');
-            combobox1.items = combobox2.items = combobox3.items = elements;
-          });
-        </script>
-      </template>
-    </demo-snippet>
+  <link rel="import" href="../vaadin-combo-box-light.html">
+  <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
+  <link rel="import" href="../../paper-input/paper-input.html">
+  <link rel="import" href="../../paper-styles/default-theme.html">
+  <link rel="import" href="../../vaadin-button/vaadin-button.html">
+  <link rel="import" href="../vaadin-combo-box.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
+  <link rel="import" href="../../paper-item/all-imports.html">
 
-    <h3>TabIndex</h3>
-
-    <demo-snippet>
-      <template>
-        <vaadin-combo-box tabindex="4" placeholder="TabIndex 4"></vaadin-combo-box>
-        <vaadin-combo-box tabindex="3" placeholder="TabIndex 3"></vaadin-combo-box>
-        <vaadin-combo-box tabindex="2" placeholder="TabIndex 2 disabled" disabled></vaadin-combo-box>
-        <vaadin-combo-box tabindex="1" placeholder="TabIndex 1"></vaadin-combo-box>
-      </template>
-    </demo-snippet>
-
-    <h3>Selecting a Value</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-combo-box id="demo2" label="Element"></vaadin-combo-box>
-        <p>Selected value: <span id="selected-value"></span>.</p>
-
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var combobox = document.querySelector('#demo2');
-            combobox.items = elements;
-
-            combobox.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value').innerHTML = combobox.value;
-            });
-            combobox.value = 'Carbon';
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Using as a Form Field</h3>
-    <demo-snippet>
-      <template>
-        <iron-form>
-          <form method="post">
-            <vaadin-combo-box name="name" required error-message="This field is required"></vaadin-combo-box>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var form = document.querySelector('iron-form');
-            var combobox = form.querySelector('vaadin-combo-box');
-            combobox.items = elements;
-
-            form.addEventListener('iron-form-submit', function() {
-              alert('Form submitted with name: ' + form.serializeForm().name);
-              return false;
-            });
-
-            var button = document.querySelector('vaadin-button');
-            button.addEventListener('click', function() {
-              form.submit();
-            });
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-    <h3>Change Event</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-combo-box id="changeEventDemo"></vaadin-combo-box>
-        <paper-button id="setRandomValue" raised>Set random value</paper-button>
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var combobox = document.querySelector('#changeEventDemo');
-            combobox.items = elements;
-
-            combobox.addEventListener('change', function(e) {
-              if (combobox.value) {
-                alert('User selected value ' + combobox.value);
-              } else {
-                alert('User has cleared the value');
-              }
-            });
-
-            document.querySelector('#setRandomValue').addEventListener('click', function() {
-              combobox.value = combobox.items[Math.floor(Math.random() * combobox.items.length)];
-            });
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
-  </div>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
-
 </html>
