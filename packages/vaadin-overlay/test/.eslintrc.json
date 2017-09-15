@@ -2,6 +2,7 @@
   "globals": {
     "WCT": false,
     "describe": false,
+    "afterEach": false,
     "beforeEach": false,
     "fixture": false,
     "it": false,

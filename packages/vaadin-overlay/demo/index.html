@@ -80,6 +80,92 @@
         </script>
       </template>
     </demo-snippet>
+
+    <h3>Content Scrolling</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="overlay-scrollable"
+            style="
+              max-width: 300px;
+              max-height: 300px;
+            ">
+          <p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos totam nulla consequuntur? Iste!</p>
+          <p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo accusamus corrupti atque dolore corrupti?</p>
+          <p>Elit ipsam error fuga voluptatum voluptates distinctio quod? Porro provident laborum et soluta enim nam blanditiis provident nulla eum eaque eius vel earum. Officiis quaerat voluptas quidem perspiciatis omnis ipsa.</p>
+          <p>Adipisicing nisi autem quod blanditiis officia blanditiis, cum. Ratione eius quia explicabo molestias iste maiores quas quod. Quia doloribus quis eius laboriosam cupiditate maxime non dignissimos adipisci unde exercitationem deserunt.</p>
+          <p>Lorem voluptate impedit qui tenetur molestiae nemo. Repellat sit repellat ratione distinctio laborum aut et numquam repellendus et dolorem aliquam molestiae voluptatum voluptas, possimus! Quaerat animi odit consequatur tempore ea.</p>
+        </vaadin-overlay>
+
+        <vaadin-button onclick="document.getElementById('overlay-scrollable').opened = true">
+          Show scrollable overlay
+        </vaadin-button>
+      </template>
+    </demo-snippet>
+
+    <h3>Positioning and Sizing With Inline Styles</h3>
+    <p>Default position and size: constrained to fit in the viewport, centering the content.</p>
+    <p>To customize, applying inline styles to the overlay in the following steps:</p>
+    <ol>
+      <li>
+        <p>
+          Customize constraints with <code>left</code>, <code>top</code>,
+          <code>right</code>, <code>bottom</code>, code in any combination. Default
+          values: <code>0</code> or small theme-defined offsets from the viewport.
+        </p>
+        <p>
+          <strong>Note:</strong> avoid setting <code>0</code> or
+          <code>auto</code> manually, leave unset to use a theme-defined
+          default viewport offset instead.
+        </p>
+        <p>
+          In addition, <code>max-width</code> and <code>max-height</code> are
+          also available, unset by default.
+        </p>
+      </li>
+      <li>
+        <p>
+          Align or stretch the content of the constrained overlay using
+          <code>align-items</code> and <code>justify-content</code>. Default
+          values are <code>center</code>.
+        </p>
+      </li>
+    </ol>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay>I am next to the pointer</vaadin-overlay>
+        <vaadin-button id="button-overlay-pointer">Show the overlay next to click</vaadin-button>
+        <script>
+          document.getElementById('button-overlay-pointer').addEventListener('click', event => {
+            const overlay = event.target.previousElementSibling;
+            overlay.style = `
+              left: ${event.clientX}px;
+              top: ${event.clientY}px;
+              align-items: start;
+              justify-content: start;
+            `;
+            overlay.opened = true;
+          });
+        </script>
+
+        <vaadin-overlay>I am below the button</vaadin-overlay>
+        <vaadin-button id="button-overlay-below">Show the overlay below me</vaadin-button>
+        <script>
+          document.getElementById('button-overlay-below').addEventListener('click', event => {
+            const overlay = event.target.previousElementSibling;
+            const rect = event.target.getBoundingClientRect();
+            overlay.style = `
+              top: ${rect.bottom}px;
+              left: ${rect.left}px;
+              right: ${document.documentElement.clientWidth - rect.right}px;
+              align-items: stretch;
+              justify-content: start;
+            `;
+            overlay.opened = true;
+          });
+        </script>
+
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>

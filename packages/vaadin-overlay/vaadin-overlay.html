@@ -12,10 +12,17 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-overlay-default-theme">
   <template>
     <style>
+      :host {
+        /* Make nice gaps inside viewport */
+        top: 8px;
+        right: 8px;
+        left: 8px;
+        bottom: 8px;
+      }
+
       [part="content"] {
         background: #fff;
-        -webkit-overflow-scrolling: touch;
-        overflow: auto;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       }
     </style>
   </template>
@@ -27,10 +34,33 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         z-index: 200;
         position: fixed;
+
+        /*
+          Despite of what the names say, <vaadin-overlay> is just a container
+          for position/sizing/alignment. The actual overlay is the content part.
+        */
+
+        /*
+          Default position constraints: the entire viewport. Note: themes can
+          override this to introduce gaps between the overlay and the viewport.
+        */
         top: 0;
+        right: 0;
+        bottom: 0;
         left: 0;
-        pointer-events: auto;
-        overflow: hidden;
+
+        /* Use flexbox alignment for the content part. */
+        display: flex;
+        flex-direction: column; /* makes dropdowns sizing easier */
+        /* Align to center by default. */
+        align-items: center;
+        justify-content: center;
+
+        /* Allow centering when max-width/max-height applies. */
+        margin: auto;
+
+        /* The host is not clickable, only the content is. */
+        pointer-events: none;
       }
 
       :host(:not([opened])) {
@@ -38,7 +68,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="content"] {
-        max-height: 100%;
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+        pointer-events: auto;
+        max-width: 100%; /* prevents overflowing the host in MSIE 11 */
       }
 
       [part="backdrop"] {
@@ -50,6 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
         left: 0;
         bottom: 0;
         right: 0;
+        pointer-events: auto;
       }
     </style>
 
@@ -213,7 +247,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
-        if (this._mouseDownInside || this._mouseUpInside) {
+        if (event.composedPath().indexOf(this.$.content) !== -1 ||
+            this._mouseDownInside || this._mouseUpInside) {
+          this._mouseDownInside = false;
+          this._mouseUpInside = false;
           return;
         }
 
