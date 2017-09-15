@@ -74,7 +74,9 @@
   </template>
   <script>
     class FormLayoutStylingDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
-      static get is() { return 'form-layout-styling-demos'; }
+      static get is() {
+        return 'form-layout-styling-demos';
+      }
     }
     customElements.define(FormLayoutStylingDemos.is, FormLayoutStylingDemos);
   </script>

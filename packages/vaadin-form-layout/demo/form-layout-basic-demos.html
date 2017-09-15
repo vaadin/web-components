@@ -388,7 +388,9 @@
   </template>
   <script>
     class FormLayoutBasicDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
-      static get is() { return 'form-layout-basic-demos'; }
+      static get is() {
+        return 'form-layout-basic-demos';
+      }
     }
     customElements.define(FormLayoutBasicDemos.is, FormLayoutBasicDemos);
   </script>
