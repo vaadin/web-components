@@ -17,6 +17,22 @@
 </script>
 <link rel="import" href="../../elements-demo-resources/demo-navigation.html">
 
+<dom-module id="date-picker-styles-date-picker-demo" theme-for="vaadin-date-picker">
+  <template preserve-content>
+    <style include="vaadin-date-picker-default-theme">
+      :host([theme="my-datepicker"]) {
+        font-family: 'Cabin', sans-serif;
+        width: 250px;
+        max-width: 100%;
+        --theme: "my-datepicker";
+      }
+
+      :host([theme="my-datepicker"]) [part="text-field"] {
+        max-width: 100%;
+      }
+    </style>
+  </template>
+</dom-module>
 <dom-module id="text-field-styles-date-picker-demo" theme-for="vaadin-text-field">
   <template preserve-content>
     <style include="vaadin-text-field-default-theme">
@@ -69,21 +85,6 @@
 
       :host([theme="my-datepicker"]) [part~="button"]:focus {
         outline: none;
-      }
-    </style>
-  </template>
-</dom-module>
-<dom-module id="date-picker-styles-date-picker-demo" theme-for="vaadin-date-picker">
-  <template preserve-content>
-    <style include="vaadin-date-picker-default-theme">
-      :host([theme="my-datepicker"]) {
-        font-family: 'Cabin', sans-serif;
-        width: 250px;
-        max-width: 100%;
-      }
-
-      :host([theme="my-datepicker"]) [part="text-field"] {
-        max-width: 100%;
       }
     </style>
   </template>

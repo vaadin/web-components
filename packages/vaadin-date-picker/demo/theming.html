@@ -19,6 +19,23 @@
     <h3>Themed Date Picker</h3>
     <demo-snippet>
       <template>
+        <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
+          <template>
+            <style include="vaadin-date-picker-default-theme">
+              :host([theme="my-datepicker"]) {
+                font-family: 'Cabin', sans-serif;
+                width: 250px;
+                max-width: 100%;
+                /* Apply this theme to all themable children */
+                --theme: "my-datepicker";
+              }
+
+              :host([theme="my-datepicker"]) [part="text-field"] {
+                max-width: 100%;
+              }
+            </style>
+          </template>
+        </dom-module>
         <dom-module id="text-field-styles" theme-for="vaadin-text-field">
           <template>
             <style>
@@ -75,22 +92,6 @@
             </style>
           </template>
         </dom-module>
-        <dom-module id="date-picker-styles" theme-for="vaadin-date-picker">
-          <template>
-            <style include="vaadin-date-picker-default-theme">
-              :host([theme="my-datepicker"]) {
-                font-family: 'Cabin', sans-serif;
-                width: 250px;
-                max-width: 100%;
-              }
-
-              :host([theme="my-datepicker"]) [part="text-field"] {
-                max-width: 100%;
-              }
-            </style>
-          </template>
-        </dom-module>
-
         <dom-module id="month-calendar-styles" theme-for="vaadin-month-calendar">
           <template>
             <style include="vaadin-month-calendar-default-theme">
