@@ -48,7 +48,7 @@
 
     <h3 id="importing">Importing the style module</h3>
 
-    <p>If you are not importing any element themes, and want to use these colors, you need to import the style module explicitly.</p>
+    <p>If you are not importing any component themes, and want to use these colors, you need to import the style module explicitly.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
         <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
@@ -56,18 +56,23 @@
     </nice-demo-snippet>
 
     <h2 demo-section>Light and dark themes</h2>
+    <p>The theme has a dark color variation available out of the box.</p>
     <p>Each color has two variations: the default variation which is used for the light theme, and another variation used for the dark theme.</p>
     <p><a href="#importing">You need to import</a> and include the “valo-colors” style module before you can use the dark theme. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
     <p>For example, if you want to apply the dark colors for the whole app, include it in the global scope (e.g. index.html). Or if you want to apply the dark colors inside a shadow root, include it inside that shadow DOM template.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Import the colors (this is done implicitly by all component themes) -->
+        <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
+
         <!-- Include the color style module -->
+        <!-- This will set the background and text color for this style scope -->
         <custom-style>
           <style include="valo-colors"></style>
         </custom-style>
 
         <div theme="dark">
-          <!-- Everything inside this div will get use the dark color theme -->
+          <!-- Everything inside this div will use the dark color theme -->
         </div>
       </template>
     </nice-demo-snippet>
@@ -108,7 +113,7 @@
 
 
     <h2 demo-section>Grayscale</h2>
-    <p>These colors form the foundation for your application colors. The grayscale colors consist of 10 different shades of “black” and “white” (they are not necessarily pure grayscale, but tinted slightly with the theme primary color), each with a degree of transparency.</p>
+    <p>These colors form the foundation for your application colors. The grayscale colors consist of 10 different shades of “black” and “white”, each with a degree of transparency. They are not necessarily pure grayscale, but tinted slightly with the theme primary color</p>
 
     <p>The grayscale colors are useful for dividing pages into sections with different backgrounds and borders, or used as text colors, for example.</p>
 
@@ -388,9 +393,6 @@
     <h2 demo-section>Text</h2>
     <p>The following text colors are designed to have the desired contrast with the default background color, <code>--valo-base-color</code>.</p>
 
-    <div class="note">
-      <p>Note, that <code>--valo-primary-text-color</code> is not necessarily the same as <code>--valo-primary-color</code>. The same applies for the “error” and “success” colors as well.</p>
-    </div>
     <nice-demo-snippet>
       <template slot="source">
         <div class="base">
@@ -445,6 +447,9 @@
         </custom-style>
       </template>
     </nice-demo-snippet>
+    <div class="note">
+      <p>Note, that <code>--valo-primary-text-color</code> is not necessarily the same as <code>--valo-primary-color</code>. The same applies for the “error” and “success” colors as well.</p>
+    </div>
 
 
     <hr>

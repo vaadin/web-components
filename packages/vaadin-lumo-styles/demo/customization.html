@@ -38,24 +38,38 @@
       needs. Because it’s based on Web Components and Polymer, the styling is done a bit
       differently than for a traditional web page.</p>
 
-    <p>The main difference is that Web Components use <b>shadow DOM, which prevents you from styling
-      the internals of the components with global CSS</b>, which is the usual way.</p>
+    <p>The main difference is that Web Components use <b>shadow DOM</b>, which prevents you from styling
+      the internals of the components with global CSS because a shadow DOM introduces its own
+      <b>style scope</b>.</p>
 
-    <p>Depending on your needs, there are different options how to customize the styles and theme of
-      an element.</p>
+    <h3 demo-section>What is a “style scope”?</h3>
+
+    <p>A style scope is a part of the DOM hierarhcy, where the styles placed inside it can only
+      affect the elements inside that same part of the hiearchy.</p>
+
+    <p>The global scope is the default, and all external stylesheets (i.e.
+      <code>&lt;link rel="stylesheet"&gt;</code>) and <code>&lt;style&gt;</code> elements placed in
+      the <code>index.html</code> end up.</p>
+
+    <p>Each shadow DOM introduces their own style scope, and <b>global styles will not affect the
+      elements inside it</b>. And vice-versa, styles inside a shadow DOM will not affect the elements
+      in the global scope (or in other shadow DOMs).</p>
+
 
     <hr>
+
 
     <h2 demo-section>Common use cases</h2>
     <h4 class="subtitle">Built-in theme variations</h4>
 
     <p>For common use cases, Valo offers many built-in theme variations you can apply to individual
-      element instances. For example, there is a “primary” theme for buttons, and a ”small” theme
+      component instances. For example, there is a “primary” theme for buttons, and a ”small” theme
       text-fields.</p>
 
-    <p>The built-in variations are applied using the <code>theme</code> attribute, and they work in any style scope:</p>
+    <p>The built-in variations are applied using the <code>theme</code> attribute, and <b>they work
+      in any style scope</b>:</p>
 
-    <h6>Example: making a button more prominent</h6>
+    <h6>Example: making a button more prominent using built-in variations</h6>
 
     <nice-demo-snippet code-only>
       <template slot="source">
@@ -63,10 +77,15 @@
       </template>
     </nice-demo-snippet>
 
-    <p>The build-in variations of each component are documented in each element’s documentation page,
-      where you can also view the source code how to apply them. See
-      <a href="http://127.0.0.1:8000/components/vaadin-valo-theme/demo/buttons.html#colors">Button’s color variations</a>
+    <p>The built-in variations are documented per component, including source code examples how to
+      apply them. See <a href="http://127.0.0.1:8000/components/vaadin-valo-theme/demo/buttons.html#colors">Button’s color variations</a>
       for example.</p>
+
+
+    <h3>Light and dark themes</h3>
+
+    <p>Read more about light and dark themes from the
+      <a href="colors.html#light-and-dark-themes">colors documentation</a>.</p>
 
 
     <hr>
@@ -75,14 +94,13 @@
     <h2 demo-section>Small adjustments</h2>
     <h4 class="subtitle">CSS custom properties</h4>
 
-    <p>Valo defines global and element specific
+    <p>Valo defines global and component specific
       <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
       that you can use to make smaller adjustments to the theme.</p>
 
     <p>The pages under the “Style guide” section (<a href="colors.html">Colors</a> for example) list
-      the custom properties that affect all elements. Element specific custom properties are listed
-
-      at the end of each element’s documentation page. See
+      the custom properties that affect all elements. Component specific custom properties are listed
+      at the end of each component’s documentation page. See
       <a href="http://127.0.0.1:8000/components/vaadin-valo-theme/demo/buttons.html#custom-properties">Button’s custom properties</a>
       for example.</p>
 
@@ -97,10 +115,11 @@
         <a href="compatibility.html">cross-browser compatility</a>.</p>
     </div>
 
-    <h6>Example: changing the border radius of all elements it affects</h6>
+    <h6>Example: changing the border radius of all elements with a global style</h6>
 
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
         <custom-style>
           <style>
             html {
@@ -113,13 +132,14 @@
 
     <h3>Scoped changes</h3>
 
-    <p>If you wish to adjust the border radius for <code>vaadin-button</code> specifically, you can
+    <p>If you wish to adjust the border radius for <code>vaadin-button</code> specifically, for example, you can
       do the following:</p>
 
-    <h6>Example: Changing the border radius of one element using a common custom property</h6>
+    <h6>Example: Changing the border radius of one component using a common custom property</h6>
 
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- This needs to be in the same style scope as the vaadin-button -->
         <custom-style>
           <style>
             vaadin-button {
@@ -130,19 +150,18 @@
       </template>
     </nice-demo-snippet>
 
-    <p>But, there’s a catch – you need to place this <code>&lt;style&gt;</code> element in the same
-      style scope (i.e. shadow DOM) as the button you are trying to style. Normal CSS selectors,
-      like the <code>vaadin-button</code> tag selector here, will not affect elements inside other
-      style scopes (i.e. they are not able to style elements across shadow DOM boundaries).</p>
+    <p>This only works if the styles are placed in the same <a href="#what-is-a-style-scope-">style scope</a>
+      as the buttons you want to style.</p>
 
     <p>To work around this limitation, we can target the button specific
-      <code>--valo-button-border-radius</code> custom property instead, and we can apply that in the
-      top level scope as well:</p>
+      <code>--valo-button-border-radius</code> custom property instead, and apply that in the
+      global scope:</p>
 
-    <h6>Example: Changing the border radius of one element using an element specific custom property</h6>
+    <h6>Example: Changing the border radius of one component using a component specific custom property in the global style scope</h6>
 
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
         <custom-style>
           <style>
             html {
@@ -161,8 +180,8 @@
     <h4 class="subtitle">Theme modules</h4>
 
     <p>When you can’t accomplish the styling you want using the CSS custom properties provided by
-      the theme, and <b>you want to style the internals of an element freely</b>, you can create new theme
-      modules to add low level CSS for any element.</p>
+      the theme, and you want to <b>style the internals of an element freely</b>, you can create new
+      theme modules to add <b>low level CSS for any element</b>.</p>
 
     <h3>Defining a theme module</h3>
 
@@ -172,9 +191,7 @@
 
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- You can place the dom-module element in a separate HTML import file,
-             or directly in your index.html -->
-
+        <!-- Add directly to index.html or use a separate HTML import -->
         <dom-module id="my-theme-module" theme-for="my-element">
           <template>
             <style>
@@ -187,17 +204,21 @@
 
     <div class="note">
       <h6>Module ID</h6>
-      <p>The <code>id</code> attribute of the theme module should be unique. You can also re-use an existing id if you want to override it completely.</p>
+      <p>The <code>id</code> attribute of the theme module should be unique. You can also re-use an
+        existing id if you want to override a previously defined/imported module.</p>
     </div>
 
-    <p>The <code>theme-for</code> attribute specifies the element (read: Web Component) that the
-      styles in the theme module will affect. The value can be a space separated list of element names, and can contain wildcard element names as well.</p>
+    <h3><code>theme-for</code> attribute</h3>
+
+    <p>The <code>theme-for</code> attribute specifies the custom element (read: Web Component) that
+      the styles in the theme module will affect. The value can be a space separated list of element
+      names, and can contain wildcard element names as well.</p>
 
     <p>Examples of valid <code>theme-for</code> attribute values:</p>
     <ul>
-      <li>vaadin-button</li>
-      <li>vaadin-overlay vaadin-date-picker-overlay</li>
-      <li>vaadin-*</li>
+      <li><code>"vaadin-button"</code></li>
+      <li><code>"vaadin-overlay vaadin-date-picker-overlay"</code></li>
+      <li><code>"vaadin-*"</code></li>
     </ul>
 
     <h3>Writing styles in a theme module</h3>
@@ -208,6 +229,7 @@
 
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
         <dom-module id="my-button-theme" theme-for="vaadin-button">
           <template>
             <style>
@@ -222,18 +244,24 @@
 
     <h4>Supported selectors</h4>
 
-    <p>In addition to the <code>:host</code> selector, the only other supported selectors inside a theme module are ones that target the documented “shadow parts” of the element. You can still write more complex selectors, which rely on any of the state attributes applied on the host or parts.</p>
+    <p>In addition to the <code>:host</code> selector, the only other supported selectors inside a
+      theme module are ones that target the documented “shadow parts” (i.e. elements inside a shadow
+      DOM with a <code>part</code> attribute) of the element. You can still write more complex
+      selectors, which rely on any of the state attributes applied on the host or parts.</p>
 
     <h6>Example: Styling text field’s focused and invalid states</h6>
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
         <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
           <template>
             <style>
+              /* Styles for the "input-field" part when the text-field is invalid */
               :host([invalid]) [part="input-field"] {
                 ...
               }
 
+              /* Styles for the "input-field" part when the text-field is focused but not readonly */
               :host([focused]:not([readonly])) [part="input-field"] {
                 ...
               }
@@ -243,26 +271,33 @@
       </template>
     </nice-demo-snippet>
 
-    <p>You can find links to the shadow parts documentation at the end of each element’s styling API documentation. See <a href="buttons.html#styling-api">vaadin-button</a> for example.</p>
+    <p>You can find links to the shadow parts documentation at the end of each element’s styling API
+      documentation. See <a href="buttons.html#styling-api">vaadin-button</a> for example.</p>
 
     <h3>Theme modules are global</h3>
 
     <p>When creating a theme module for an element, the styles in that theme module will apply to
-      all instances of that element. The styles are always “global” in that sense and can’t be scoped by default with anything.</p>
+      all instances of that element. The styles are always “global” in that sense and can’t be
+      scoped by default with anything.</p>
 
     <h4>Scoping styles in a theme module</h4>
 
     <p>There are two ways to scope the styles that you write in a theme module.</p>
 
     <ol>
-      <li><b>Expose new custom properties</b><br>This is the recommened first option for simple situations. If you end up exposing more than a handful of properties, you should consider the second option.</li>
-      <li><b>Use scoping selectors</b><br>This approach is actually what is used by the built-in theme variations (i.e. <code>theme</code> attribute). The downside of this approach is that you end up adding the styles to all instances, even though only some of them need those styles.</li>
+      <li><b>Expose new custom properties</b><br>This is the recommened first option for simple
+        situations. If you end up exposing more than a handful of properties, you should consider
+        the second option.</li>
+      <li><b>Use scoping selectors</b><br>This approach is used by the built-in
+        theme variations (i.e. <code>theme</code> attribute). The downside of this approach is that
+        you end up adding the styles to all instances, even though only some instances will need those
+        styles.</li>
     </ol>
 
     <h6>Example: Exposing new custom properties</h6>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Define the theme module -->
+        <!-- Define the theme module (in index.html or in a separate HTML import)-->
         <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
           <template>
             <style>
@@ -291,7 +326,7 @@
     <h6>Example: Use scoping selectors</h6>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Define the theme module -->
+        <!-- Define the theme module (in index.html or in a separate HTML import)-->
         <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
           <template>
             <style>
@@ -315,8 +350,8 @@
 
     <h3>Define theme modules before importing elements</h3>
 
-    <p>As with the built-in element themes, theme modules should be defined before the corresponding elements are imported to make
-      sure they are loaded by the elements.</p>
+    <p>As with the built-in element themes, theme modules should be defined before the corresponding
+      elements are imported to make sure they are loaded by the elements.</p>
 
   </div>
 </body>

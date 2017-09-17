@@ -40,12 +40,39 @@
       </template>
     </nice-demo-snippet>
 
+    <h2 demo-section>Global style modules</h2>
+    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope (e.g. index.html). It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
+    <p>If needed, you can include the style module in any other <a href="customization.html#what-is-a-style-scope-">style scope</a> as well.</p>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
+        <custom-style>
+          <style include="valo-typography">
+            /* The <style> tag needs to be non-empty for IE11 */
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet class="headers">
+      <template slot="source">
+        <h1>Header 1</h1>
+        <h2>Header 2</h2>
+        <h3>Header 3</h3>
+        <h4>Header 4</h4>
+        <h5>Header 5</h5>
+        <h6>Header 6</h6>
+      </template>
+    </nice-demo-snippet>
+
     <h2 demo-section>Font family</h2>
     <p>The system font stack is used by default: Segoe UI on Windows; Roboto on Android and Chrome OS; San Francisco on macOS and iOS; Ubuntu on Ubuntu Linux. On other systems, Helvetica, Arial are used as fallbacks.</p>
     <p>You can apply or change the font family using the <code>--valo-font-family</code> custom property.</p>
 
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
         <custom-style>
           <style>
             html {
@@ -105,31 +132,6 @@
       </template>
     </nice-demo-snippet>
     -->
-
-    <h2 demo-section>Global style modules</h2>
-    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope. It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
-    <p>If needed, you can include the style module in any other style scopes (i.e. shadow roots) as well.</p>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <custom-style>
-          <style include="valo-typography">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-      </template>
-    </nice-demo-snippet>
-
-    <nice-demo-snippet class="headers">
-      <template slot="source">
-        <h1>Header 1</h1>
-        <h2>Header 2</h2>
-        <h3>Header 3</h3>
-        <h4>Header 4</h4>
-        <h5>Header 5</h5>
-        <h6>Header 6</h6>
-      </template>
-    </nice-demo-snippet>
 
 
     <hr>
