@@ -33,16 +33,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Styling",
-    "url": "text-field-styling-demos",
-    "src": "text-field-styling-demos.html",
-    "meta": {
-      "title": "vaadin-text-field Styling Examples",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }
