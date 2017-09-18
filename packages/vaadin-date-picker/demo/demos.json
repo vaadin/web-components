@@ -22,16 +22,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Theming",
-    "url": "date-picker-theming-demos",
-    "src": "date-picker-theming-demos.html",
-    "meta": {
-      "title": "vaadin-date-picker Theming Example",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }
