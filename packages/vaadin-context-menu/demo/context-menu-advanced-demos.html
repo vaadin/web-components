@@ -194,7 +194,9 @@
   </template>
   <script>
     class ContextMenuAdvancedDemos extends DemoReadyEventEmitter(ContextMenuDemo(Polymer.Element)) {
-      static get is() { return 'context-menu-advanced-demos'; }
+      static get is() {
+        return 'context-menu-advanced-demos';
+      }
     }
     customElements.define(ContextMenuAdvancedDemos.is, ContextMenuAdvancedDemos);
   </script>
