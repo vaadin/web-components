@@ -175,6 +175,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       constructor() {
         super();
+        this._boundMouseDownListener = this._mouseDownListener.bind(this);
+        this._boundMouseUpListener = this._mouseUpListener.bind(this);
         this._boundOutsideClickListener = this._outsideClickListener.bind(this);
         this._boundKeydownListener = this._keydownListener.bind(this);
 
@@ -193,9 +195,6 @@ This program is available under Apache License Version 2.0, available at https:/
         super.ready();
 
         this._observer.flush();
-
-        this.addEventListener('mousedown', e => this._mouseDownInside = e.composedPath().indexOf(this.$.content) >= 0);
-        this.addEventListener('mouseup', e => this._mouseUpInside = e.composedPath().indexOf(this.$.content) >= 0);
       }
 
       _setTemplateFromNodes(nodes) {
@@ -236,6 +235,14 @@ This program is available under Apache License Version 2.0, available at https:/
             window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
           }
         }
+      }
+
+      _mouseDownListener(event) {
+        this._mouseDownInside = event.composedPath().indexOf(this.$.content) >= 0;
+      }
+
+      _mouseUpListener(event) {
+        this._mouseUpInside = event.composedPath().indexOf(this.$.content) >= 0;
       }
 
       /**
@@ -304,6 +311,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
 
+          document.addEventListener('mousedown', this._boundMouseDownListener);
+          document.addEventListener('mouseup', this._boundMouseUpListener);
           document.addEventListener('click', this._boundOutsideClickListener, true);
           document.addEventListener('keydown', this._boundKeydownListener);
 
@@ -323,6 +332,8 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
         } else if (this._placeholder) {
+          document.removeEventListener('mousedown', this._boundMouseDownListener);
+          document.removeEventListener('mouseup', this._boundMouseUpListener);
           document.removeEventListener('click', this._boundOutsideClickListener, true);
           document.removeEventListener('keydown', this._boundKeydownListener);
 
