@@ -285,7 +285,9 @@
   </template>
   <script>
     class GridSortingFilteringDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-sorting-filtering-demos'; }
+      static get is() {
+        return 'grid-sorting-filtering-demos';
+      }
     }
     customElements.define(GridSortingFilteringDemos.is, GridSortingFilteringDemos);
   </script>

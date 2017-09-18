@@ -155,7 +155,9 @@
   </template>
   <script>
     class GridPaginationDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-pagination-demos'; }
+      static get is() {
+        return 'grid-pagination-demos';
+      }
     }
     customElements.define(GridPaginationDemos.is, GridPaginationDemos);
   </script>

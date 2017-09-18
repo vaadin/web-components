@@ -163,7 +163,9 @@
   </template>
   <script>
     class GridRowDetailsDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-row-details-demos'; }
+      static get is() {
+        return 'grid-row-details-demos';
+      }
     }
     customElements.define(GridRowDetailsDemos.is, GridRowDetailsDemos);
   </script>

@@ -267,7 +267,9 @@
   </template>
   <script>
     class GridDataDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-data-demos'; }
+      static get is() {
+        return 'grid-data-demos';
+      }
     }
     customElements.define(GridDataDemos.is, GridDataDemos);
   </script>

@@ -163,7 +163,9 @@
   </template>
   <script>
     class GridCrudDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-crud-demos'; }
+      static get is() {
+        return 'grid-crud-demos';
+      }
     }
     customElements.define(GridCrudDemos.is, GridCrudDemos);
   </script>

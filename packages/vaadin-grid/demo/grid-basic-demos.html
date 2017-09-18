@@ -127,7 +127,9 @@
   </template>
   <script>
     class GridBasicDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
-      static get is() { return 'grid-basic-demos'; }
+      static get is() {
+        return 'grid-basic-demos';
+      }
     }
     customElements.define(GridBasicDemos.is, GridBasicDemos);
   </script>

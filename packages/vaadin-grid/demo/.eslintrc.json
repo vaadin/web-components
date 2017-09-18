@@ -1,0 +1,9 @@
+{
+  "rules": {
+  },
+  "globals": {
+    "GridDemo": false,
+   "DemoReadyEventEmitter":false 
+
+  }
+}
