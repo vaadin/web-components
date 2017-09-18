@@ -102,7 +102,9 @@
   </template>
   <script>
     class ProgressBarThemingDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
-      static get is() { return 'progress-bar-theming-demos'; }
+      static get is() {
+        return 'progress-bar-theming-demos';
+      }
     }
     customElements.define(ProgressBarThemingDemos.is, ProgressBarThemingDemos);
   </script>

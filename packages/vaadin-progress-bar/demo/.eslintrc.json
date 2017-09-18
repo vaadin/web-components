@@ -1,0 +1,9 @@
+{
+  "rules": {
+  },
+  "globals": {
+    "ProgressBarDemo": false,
+   "DemoReadyEventEmitter":false 
+
+  }
+}

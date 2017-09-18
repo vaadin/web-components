@@ -51,7 +51,9 @@
   </template>
   <script>
     class ProgressBarBasicDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
-      static get is() { return 'progress-bar-basic-demos'; }
+      static get is() {
+        return 'progress-bar-basic-demos';
+      }
     }
     customElements.define(ProgressBarBasicDemos.is, ProgressBarBasicDemos);
   </script>
