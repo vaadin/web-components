@@ -24,11 +24,12 @@
   <script>
 
     describe('validate', function() {
-      let iform, tf;
+      let iform, tf, input;
 
       beforeEach(function(done) {
         iform = fixture('default');
         tf = iform.querySelector('vaadin-text-field');
+        input = tf.focusElement;
         animationFrameFlush(() => {
           HTMLImports.whenReady(done);
         });
@@ -85,8 +86,8 @@
         describe('user action', function() {
 
           function userSetValue(value) {
-            tf.$.input.value = value;
-            tf.$.input.dispatchEvent(new CustomEvent('input'));
+            input.value = value;
+            input.dispatchEvent(new CustomEvent('input'));
           }
 
           it('should prevent invalid pattern', function() {

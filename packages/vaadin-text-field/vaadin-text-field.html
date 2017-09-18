@@ -64,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
       }
 
-      .container {
+      .vaadin-text-field-container {
         display: flex;
         flex-direction: column;
         position: relative;
@@ -92,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     </style>
 
-    <div class="container">
+    <div class="vaadin-text-field-container">
 
       <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
 
@@ -100,7 +100,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <slot name="prefix"></slot>
 
-        <input id="input" part="value"
+        <input part="value"
           autocomplete$="[[autocomplete]]"
           autocorrect$="[[autocorrect]]"
           autofocus$="[[autofocus]]"
@@ -324,12 +324,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.input;
+          return this.root.querySelector('[part=value]');
         }
 
         _onInput(e) {
           if (this.preventInvalidInput) {
-            const input = this.$.input;
+            const input = this.focusElement;
             if (input.value.length > 0 && !this.checkValidity()) {
               input.value = this.value || '';
             }
@@ -369,7 +369,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Returns true if the current input value satisfies all constraints (if any)
          */
         checkValidity() {
-          return this.$.input.checkValidity();
+          return this.focusElement.checkValidity();
         }
 
         ready() {
