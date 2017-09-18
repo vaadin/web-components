@@ -167,7 +167,9 @@
   </template>
   <script>
     class DatePickerBasicDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
-      static get is() { return 'date-picker-basic-demos'; }
+      static get is() {
+        return 'date-picker-basic-demos';
+      }
     }
     customElements.define(DatePickerBasicDemos.is, DatePickerBasicDemos);
   </script>
