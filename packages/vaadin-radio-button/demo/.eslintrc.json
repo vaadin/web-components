@@ -3,7 +3,6 @@
   },
   "globals": {
     "RadioButtonDemo": false,
-   "DemoReadyEventEmitter":false 
-
+    "DemoReadyEventEmitter": false
   }
 }
