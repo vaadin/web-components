@@ -51,7 +51,7 @@
           <div class="output"></div>
         </iron-form>
         <script>
-          window.addEventListener('WebComponentsReady', function() {
+          window.addDemoReadyListener('#radio-button-group-demos-radio-group-with-iron-form', function(document) {
             test_form = document.getElementById('test_form');
             test_form.addEventListener('iron-form-submit', function(event) {
               this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
@@ -65,7 +65,9 @@
   </template>
   <script>
     class RadioButtonGroupDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
-      static get is() { return 'radio-button-group-demos'; }
+      static get is() {
+        return 'radio-button-group-demos';
+      }
     }
     customElements.define(RadioButtonGroupDemos.is, RadioButtonGroupDemos);
   </script>

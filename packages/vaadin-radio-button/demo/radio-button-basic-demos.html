@@ -37,7 +37,9 @@
   </template>
   <script>
     class RadioButtonBasicDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
-      static get is() { return 'radio-button-basic-demos'; }
+      static get is() {
+        return 'radio-button-basic-demos';
+      }
     }
     customElements.define(RadioButtonBasicDemos.is, RadioButtonBasicDemos);
   </script>
