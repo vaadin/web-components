@@ -139,12 +139,12 @@
 
         if (touchDevice) {
           it('should not focus input on dropdown open', () => {
-            expect(combobox.inputElement.focused).to.be.undefined;
+            expect(combobox.inputElement.focused).to.equal(false);
           });
 
           it('should not refocus the input field when closed from icon', () => {
             clickToggleIcon();
-            expect(combobox.inputElement.focused).to.be.undefined;
+            expect(combobox.inputElement.focused).to.equal(false);
           });
         } else {
           it('should focus input on dropdown open', done => {
