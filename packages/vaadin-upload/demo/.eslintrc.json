@@ -3,6 +3,15 @@
     "no-console": 0
   },
   "globals": {
+    "UploadDemo": false,
+    "UploadI18nDemos": false
+
+    "UploadDemo": false,
+    "UploadAdvancedDemos": false
+
+    "UploadDemo": false,
+    "UploadBasicDemos": false
+
     "MockHttpRequest": false
   }
 }
