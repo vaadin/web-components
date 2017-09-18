@@ -3,7 +3,6 @@
   },
   "globals": {
     "GridDemo": false,
-   "DemoReadyEventEmitter":false 
-
+    "DemoReadyEventEmitter": false
   }
 }
