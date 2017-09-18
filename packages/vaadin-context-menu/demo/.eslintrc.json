@@ -5,8 +5,7 @@
   },
   "globals": {
     "ContextMenuDemo": false,
-   "DemoReadyEventEmitter":false 
-
+    "DemoReadyEventEmitter": false,
     "getItems": false,
     "getNewItem": false
   }
