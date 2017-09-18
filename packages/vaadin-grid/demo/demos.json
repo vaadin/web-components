@@ -88,16 +88,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Styling",
-    "url": "grid-styling-demos",
-    "src": "grid-styling-demos.html",
-    "meta": {
-      "title": "vaadin-grid – Styling: Transparent Header",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }
