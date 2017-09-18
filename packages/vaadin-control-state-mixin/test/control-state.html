@@ -205,6 +205,12 @@
           expect(customElement.focused).to.be.true;
         });
 
+        it('should not set focused attribute on focusin event dispatched when disabled', () => {
+          customElement.disabled = true;
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          expect(customElement.focused).to.be.false;
+        });
+
         it('should not set focused attribute on host mousedown with default prevented', () => {
           const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
           const preventDefaultListener = (e) => e.preventDefault();
