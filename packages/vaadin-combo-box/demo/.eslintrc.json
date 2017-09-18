@@ -4,8 +4,7 @@
   },
   "globals": {
     "ComboBoxDemo": false,
-   "DemoReadyEventEmitter":false 
-
+    "DemoReadyEventEmitter": false,
     "elements": false,
     "users": false,
     "elementsJson": false,
