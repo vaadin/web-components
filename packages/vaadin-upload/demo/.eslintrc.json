@@ -4,13 +4,7 @@
   },
   "globals": {
     "UploadDemo": false,
-    "UploadI18nDemos": false
-
-    "UploadDemo": false,
-    "UploadAdvancedDemos": false
-
-    "UploadDemo": false,
-    "UploadBasicDemos": false
+   "DemoReadyEventEmitter":false 
 
     "MockHttpRequest": false
   }

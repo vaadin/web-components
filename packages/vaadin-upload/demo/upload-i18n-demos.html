@@ -86,7 +86,9 @@
   </template>
   <script>
     class UploadI18nDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
-      static get is() { return 'upload-i18n-demos'; }
+      static get is() {
+        return 'upload-i18n-demos';
+      }
     }
     customElements.define(UploadI18nDemos.is, UploadI18nDemos);
   </script>
