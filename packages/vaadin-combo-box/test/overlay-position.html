@@ -164,7 +164,7 @@
 
         comboBox.open();
 
-        expect(Math.round(dropContentRect().left)).to.equal(Math.round(inputContentRect().left));
+        expect(Math.round(dropContentRect().left)).to.be.closeTo(Math.round(inputContentRect().left), 1);
 
         expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
       });
