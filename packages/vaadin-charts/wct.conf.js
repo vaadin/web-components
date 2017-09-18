@@ -1,41 +1,26 @@
+var argv = require('yargs').argv;
+
 module.exports = {
-    verbose: false,
-    testTimeout: 6 * 60 * 1000,
-    plugins: {
-        sauce: {
-            'disabled': true,
-            'browsers': [
-                {
-                    'browserName': 'MicrosoftEdge',
-                    'platform': 'Windows 10',
-                    'version': '14.14393'
-                },
-                {
-                    'browserName': 'Internet Explorer',
-                    'platform': 'Windows 7',
-                    'version': '11'
-                },
-                {
-                    'browserName': 'Chrome',
-                    'platform': 'Windows 10',
-                    'version': '56.0'
-                },
-                {
-                    'browserName': 'Firefox',
-                    'platform': 'Windows 10',
-                    'version': '50.0'
-                },
-                {
-                    'browserName': 'safari',
-                    'platform': 'OS X 10.11',
-                    'version': '10.0'
-                },
-                {
-                    'browserName': 'safari',
-                    'platform': 'OS X 10.11',
-                    'version': '9.0'
-                }
-            ]
-        }
+  registerHooks: function(context) {
+    var saucelabsPlatforms = [
+      'macOS 10.12/iphone@10.3',
+      'macOS 10.12/ipad@10.3',
+      'Windows 10/microsoftedge@15',
+      'Windows 10/internet explorer@11',
+      'macOS 10.12/safari@10.0'
+    ];
+
+    var cronPlatforms = [
+      'Android/chrome',
+      'Windows 10/chrome@59',
+      'Windows 10/firefox@54'
+    ];
+
+    if (argv.env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+
+    } else if (argv.env === 'saucelabs-cron') {
+      context.options.plugins.sauce.browsers = cronPlatforms;
     }
-}
+  }
+};

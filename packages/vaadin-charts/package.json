@@ -1,27 +1,44 @@
 {
   "name": "vaadin-charts",
-  "version": "5.0.0",
+  "version": "5.0.0-preview",
+  "description": "vaadin-charts",
+  "main": "vaadin-chart.html",
   "repository": "vaadin/vaadin-charts",
-  "devDependencies": {
-    "bower": "^1.4.1",
-    "config": "^1.13.0",
-    "del": "^1.2.0",
-    "es6-shim": "^0.35.0",
-    "fbjs": "^0.8.2",
-    "gulp": "^3.8.11",
-    "gulp-bower": "0.0.10",
-    "gulp-delete-lines": "0.0.7",
-    "gulp-jsbeautifier": "^1.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-replace": "^0.5.3",
-    "gulp-rsync": "0.0.5",
-    "gulp-util": "^3.0.4",
-    "gulp-vulcanize": "^6.0.0",
-    "gulp-zip": "^3.2.0",
-    "lodash": "^3.9.1",
-    "web-component-tester": "^6.1.5"
+  "keywords": [
+    "Vaadin",
+    "vaadin-charts",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "SEE LICENSE IN LICENSE.txt",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-charts/issues"
   },
+  "homepage": "https://vaadin.com/charts",
   "scripts": {
-    "test": " wct --plugin sauce test/ framework-test/"
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^4.0.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^3.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^4.0.0",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^5.0.0",
+    "lighthouse": "~1.6.5",
+    "polymer-cli": "^1.2.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.1.5",
+    "yargs": "latest"
+  },
+  "greenkeeper": {
+    "ignore": [
+      "lighthouse"
+    ]
   }
 }

@@ -1,18 +1,20 @@
 {
   "name": "vaadin-charts",
-  "description": "Vaadin Charts Web Components",
+  "homepage": "https://vaadin.com/charts",
   "authors": [
     "Vaadin Ltd"
   ],
+  "description": "vaadin-charts",
+  "main": "vaadin-chart.html",
   "keywords": [
-    "web-component",
-    "web-components",
-    "polymer",
-    "vaadin",
+    "Vaadin",
+    "vaadin-chart",
     "charts",
-    "highcharts"
+    "highcharts",
+    "web-components",
+    "web-component",
+    "polymer"
   ],
-  "main": "vaadin-charts.html",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-charts/master/LICENSE.txt",
   "repository": {
     "type": "git",
@@ -22,34 +24,20 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "framework-test",
     "test",
-    "demo",
-    "index.html"
+    "gulpfile.js",
+    "package-lock.json",
+    "wct.conf.js"
   ],
   "dependencies": {
-    "highcharts": "highcharts/highcharts-dist#v4.2.6",
-    "polymer": "Polymer/polymer#^2.0.0",
-    "vaadin-license-checker": "vaadin/license-checker#^1.0.0",
-    "iron-resizable-behavior": "^2.0.0"
+    "polymer": "^2.0.0",
+    "vaadin-themable-mixin": "^1.0.0"
   },
   "devDependencies": {
-    "google-code-prettify": "*",
-    "iron-selector": "PolymerElements/iron-selector#^2.0.0",
-    "iron-ajax": "PolymerElements/iron-ajax#^2.0.0",
-    "iron-doc-viewer": "PolymerElements/iron-doc-viewer#^2.0.0",
-    "iron-menu-behavior": "PolymerElements/iron-menu-behavior#^2.0.0",
-    "iron-pages": "PolymerElements/iron-pages#^2.0.0",
-    "paper-tabs": "PolymerElements/paper-tabs#^2.0.0",
-    "web-component-tester": "^6.1.5",
-    "jquery": "^2.2.2",
-    "webcomponentsjs": "^v1.0.0",
-    "vaadin-grid": "^3.0.0"
-  },
-  "resolutions": {
-    "polymer": "^2.0.0",
-    "webcomponentsjs": "^v1.0.0",
-    "iron-resizable-behavior": "^2.0.0",
-    "iron-ajax": "^2.0.0"
+    "elements-demo-resources": "^2.0.0",
+    "iron-component-page": "^3.0.0",
+    "iron-demo-helpers": "^2.0.0",
+    "webcomponentsjs": "^1.0.0",
+    "web-component-tester": "^6.1.5"
   }
 }

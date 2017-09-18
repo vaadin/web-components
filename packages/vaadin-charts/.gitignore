@@ -1,9 +1,4 @@
 .DS_Store
-.idea
-*.iml
 bower_components
 node_modules
-node
-target
-config/local.json
-framework-test/react/bundle.js
+build
