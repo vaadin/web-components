@@ -42,7 +42,7 @@
     "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
     "iron-test-helpers": "PolymerElements/iron-test-helpers#1 - 2",
-    "mock-http-request": "philikon/MockHttpRequest#master",
+    "mock-http-request": "abuinitski/MockHttpRequest#npm_fix",
     "paper-toast": "PolymerElements/paper-toast#1 - 2",
     "test-fixture": "PolymerElements/test-fixture#^3.0.0",
     "web-component-tester": "Polymer/web-component-tester#^6.1.5",
