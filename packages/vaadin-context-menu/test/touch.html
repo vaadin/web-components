@@ -84,8 +84,8 @@
       it('should align to bottom of the viewport', done => {
         listenOnce(menu, 'opened-changed', () => {
           const styles = window.getComputedStyle(menu.$.overlay);
-          expect(styles.bottom).to.eql('0px');
-          expect(styles.transform).not.to.contain('translate');
+          expect(styles.alignItems).to.eql('stretch');
+          expect(styles.justifyContent).to.eql('flex-end');
           done();
         });
 
