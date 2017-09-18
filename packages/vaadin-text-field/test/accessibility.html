@@ -44,7 +44,7 @@
 
         beforeEach(function() {
           tf = fixture('default');
-          input = tf.$.input;
+          input = tf.focusElement;
           label = tf.root.querySelector('[part=label]');
         });
 
@@ -78,10 +78,11 @@
       });
 
       describe('error', function() {
-        let tf, err;
+        let tf, err, input;
 
         beforeEach(function() {
           tf = fixture('error-fixture');
+          input = tf.focusElement;
           err = tf.root.querySelector('[part=error-message]');
         });
 
@@ -105,12 +106,12 @@
         });
 
         it('should not have aria-describedby attribute if valid', function() {
-          expect(tf.$.input.hasAttribute('aria-describedby')).to.be.false;
+          expect(input.hasAttribute('aria-describedby')).to.be.false;
         });
 
         it('should have aria-describedby attribute when invalid', function() {
           tf.validate();
-          expect(tf.$.input.getAttribute('aria-describedby')).to.equal(err.id);
+          expect(input.getAttribute('aria-describedby')).to.equal(err.id);
         });
 
         it('should have appropriate aria-live attribute', function() {
@@ -125,7 +126,7 @@
         beforeEach(function() {
           tf = fixture('invalid-fixture');
           err = tf.root.querySelector('[part=error-message]');
-          input = tf.$.input;
+          input = tf.focusElement;
         });
 
         it('should show the error if initially invalid', function() {
