@@ -1,0 +1,8 @@
+{
+  "rules": {
+  },
+  "globals": {
+    "CheckboxDemo": false,
+    "DemoReadyEventEmitter": false
+  }
+}
