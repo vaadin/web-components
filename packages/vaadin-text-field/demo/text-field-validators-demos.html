@@ -272,7 +272,9 @@
   </template>
   <script>
     class TextFieldValidatorsDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
-      static get is() { return 'text-field-validators-demos'; }
+      static get is() {
+        return 'text-field-validators-demos';
+      }
     }
     customElements.define(TextFieldValidatorsDemos.is, TextFieldValidatorsDemos);
   </script>

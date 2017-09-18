@@ -97,7 +97,9 @@
   </template>
   <script>
     class TextFieldStylingDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
-      static get is() { return 'text-field-styling-demos'; }
+      static get is() {
+        return 'text-field-styling-demos';
+      }
     }
     customElements.define(TextFieldStylingDemos.is, TextFieldStylingDemos);
   </script>

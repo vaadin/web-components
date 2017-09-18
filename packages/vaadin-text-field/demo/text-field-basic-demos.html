@@ -190,7 +190,9 @@
   </template>
   <script>
     class TextFieldBasicDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
-      static get is() { return 'text-field-basic-demos'; }
+      static get is() {
+        return 'text-field-basic-demos';
+      }
     }
     customElements.define(TextFieldBasicDemos.is, TextFieldBasicDemos);
   </script>
