@@ -112,7 +112,9 @@
   </template>
   <script>
     class ComboBoxAdvancedDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-      static get is() { return 'combo-box-advanced-demos'; }
+      static get is() {
+        return 'combo-box-advanced-demos';
+      }
     }
     customElements.define(ComboBoxAdvancedDemos.is, ComboBoxAdvancedDemos);
   </script>

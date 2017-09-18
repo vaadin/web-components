@@ -109,7 +109,9 @@
   </template>
   <script>
     class ComboBoxFilteringDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
-      static get is() { return 'combo-box-filtering-demos'; }
+      static get is() {
+        return 'combo-box-filtering-demos';
+      }
     }
     customElements.define(ComboBoxFilteringDemos.is, ComboBoxFilteringDemos);
   </script>
