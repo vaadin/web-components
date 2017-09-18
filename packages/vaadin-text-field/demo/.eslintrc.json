@@ -1,8 +1,7 @@
 {
   "globals": {
     "TextFieldDemo": false,
-   "DemoReadyEventEmitter":false 
-
+    "DemoReadyEventEmitter":false,
     "VaadinTextFieldElement": false
   }
 }
