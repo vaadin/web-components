@@ -265,6 +265,55 @@
         });
       });
 
+      describe('mouseup after contextmenu event opening', () => {
+        // On some platforms, contextmenu event is dispatched right on
+        // mousedown, before mouseup. If the contextmenu event opens
+        // the overlay, then one contextmenu-related mouseup event also occurs.
+
+        it('should close on outside click after mouseup inside', () => {
+          // assume the overlay was opened on contextmenu event
+          mouseup(content);
+
+          mousedown(parent);
+          mouseup(parent);
+          click(parent);
+
+          expect(overlay.opened).to.be.false;
+        });
+
+        it('should close on outside click after mouseup outside', () => {
+          // assume the overlay was opened on contextmenu event,
+          // but this time the cursor was moved outside before mouseup
+          mouseup(parent);
+
+          mousedown(parent);
+          mouseup(parent);
+          click(parent);
+
+          expect(overlay.opened).to.be.false;
+        });
+
+        it('should not close on inside click after mouseup inside', () => {
+          mouseup(content);
+
+          mousedown(content);
+          mouseup(content);
+          click(content);
+
+          expect(overlay.opened).to.be.true;
+        });
+
+        it('should not close on outside click after mouseup outside', () => {
+          mouseup(parent);
+
+          mousedown(content);
+          mouseup(content);
+          click(content);
+
+          expect(overlay.opened).to.be.true;
+        });
+      });
+
       it('should not close on backdrop click if vaadin-overlay-outside-click event was canceled', () => {
         overlay.addEventListener('vaadin-overlay-outside-click', e => {
           e.preventDefault();
