@@ -36,7 +36,7 @@
     "paper-progress": "PolymerElements/paper-progress#1 - 2",
     "paper-ripple": "PolymerElements/paper-ripple#1 - 2",
     "paper-styles": "PolymerElements/paper-styles#1 - 2",
-    "vaadin-themable-mixin": "#theme-custom-prop"
+    "vaadin-themable-mixin": "^1.2.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#1 - 2",
