@@ -3,57 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-button Basic Examples</title>
-
+  <title>vaadin-button Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
+
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+  </style>
 </head>
 
-<body unresolved>
-  <div class="vertical-section-container centered">
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-    <demo-navigation></demo-navigation>
+  <link rel="import" href="button-demo.html">
 
-    <h3>Default button</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-button onclick="console.log('clicked')">Vaadin Button</vaadin-button>
-      </template>
-    </demo-snippet>
+  <link rel="import" href="../../paper-styles/default-theme.html">
+  <link rel="import" href="../vaadin-button.html">
 
-    <h3>Button with autofocus</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-button autofocus>
-          <img src="vaadin-logo.svg">
-        </vaadin-button>
-      </template>
-    </demo-snippet>
-
-    <h3>Button with Accessible Label</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-button aria-label="Click Me">Accessible</vaadin-button>
-      </template>
-    </demo-snippet>
-
-    <h3>Buttons with custom tabindex</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-button tabindex="3">3</vaadin-button>
-        <vaadin-button tabindex="2">2</vaadin-button>
-        <vaadin-button tabindex="1">1</vaadin-button>
-      </template>
-    </demo-snippet>
-
-    <h3>Disabled button</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-button disabled>Disabled</vaadin-button>
-      </template>
-    </demo-snippet>
-  </div>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

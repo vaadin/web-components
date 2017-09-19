@@ -1,0 +1,8 @@
+{
+  "rules": {
+  },
+  "globals": {
+    "ButtonDemo": false,
+    "DemoReadyEventEmitter": false
+  }
+}

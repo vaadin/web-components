@@ -1,0 +1,15 @@
+{
+  "name": "Vaadin Button",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "button-basic-demos",
+    "src": "button-basic-demos.html",
+    "meta": {
+      "title": "vaadin-button Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
