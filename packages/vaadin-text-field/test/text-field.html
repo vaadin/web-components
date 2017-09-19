@@ -119,12 +119,6 @@
 
       if (!window.ShadyDOM) {
         describe('label', function() {
-          it('should focus the internal input on mousedown', function() {
-            const label = textField.root.querySelector('[part="label"]');
-            label.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
-            expect(textField.focused).to.be.true;
-          });
-
           it('should not update focused property on click if disabled', function() {
             textField.disabled = true;
             const label = textField.root.querySelector('[part="label"]');
