@@ -1,0 +1,65 @@
+<dom-module id="checkbox-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Default Checkbox</h3>
+    <vaadin-demo-snippet id='checkbox-basic-demos-default-checkbox'>
+      <template preserve-content>
+        <vaadin-checkbox checked>
+          Make my profile visible
+        </vaadin-checkbox>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Checkbox with Custom Accessible Label</h3>
+    <vaadin-demo-snippet id='checkbox-basic-demos-checkbox-with-custom-accessible-label'>
+      <template preserve-content>
+        <vaadin-checkbox aria-label="Click Me">Accessible</vaadin-checkbox>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Checkboxes with Custom Tabindex</h3>
+    <vaadin-demo-snippet id='checkbox-basic-demos-checkboxes-with-custom-tabindex'>
+      <template preserve-content>
+        <div><vaadin-checkbox tabindex="1">1</vaadin-checkbox></div>
+        <div><vaadin-checkbox tabindex="3">3</vaadin-checkbox></div>
+        <div><vaadin-checkbox tabindex="2">2</vaadin-checkbox></div>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Disabled Checkbox</h3>
+    <vaadin-demo-snippet id='checkbox-basic-demos-disabled-checkbox'>
+      <template preserve-content>
+        <vaadin-checkbox disabled>Disabled</vaadin-checkbox>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>
+      <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes" target="_blank" rel="noopener">Indeterminate Checkbox</a>
+      (when checkbox is neither checked nor unchecked)
+    </h3>
+    <vaadin-demo-snippet id='checkbox-basic-demos-disabled-checkbox'>
+      <template preserve-content>
+        <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class CheckboxBasicDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
+      static get is() {
+        return 'checkbox-basic-demos';
+      }
+    }
+    customElements.define(CheckboxBasicDemos.is, CheckboxBasicDemos);
+  </script>
+</dom-module>

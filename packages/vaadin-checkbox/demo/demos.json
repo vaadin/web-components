@@ -1,0 +1,15 @@
+{
+  "name": "Vaadin Checkbox",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "checkbox-basic-demos",
+    "src": "checkbox-basic-demos.html",
+    "meta": {
+      "title": "vaadin-checkbox Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
