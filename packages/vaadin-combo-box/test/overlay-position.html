@@ -118,27 +118,24 @@
         expect(dropContentRect().width).to.be.closeTo(inputContentRect().width, 1);
       });
 
-      if (!ios) {
-        // Skipped till solution will be found.
-        it('should be below the input box', () => {
-          comboBox.open();
+      it('should be below the input box', () => {
+        comboBox.open();
 
-          expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
-        });
+        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
+      });
 
-        it('should position correctly if items are populated after opening', done => {
-          comboBox.items = [];
-          comboBox.open();
+      it('should position correctly if items are populated after opening', done => {
+        comboBox.items = [];
+        comboBox.open();
 
+        setTimeout(() => {
+          comboBox.items = [1, 2, 3];
           setTimeout(() => {
-            comboBox.items = [1, 2, 3];
-            setTimeout(() => {
-              expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
-              done();
-            }, 1);
+            expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
+            done();
           }, 1);
-        });
-      }
+        }, 1);
+      });
 
       it('should notify resize on items change', () => {
         const spy = sinon.spy();
