@@ -93,7 +93,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
 
-      this.addEventListener('focusin', e => e.composedPath()[0] === this.focusElement && this._setFocused(true));
+      this.addEventListener('focusin', e => e.composedPath()[0] === this.focusElement && !this.disabled && this._setFocused(true));
       this.addEventListener('focusout', e => e.composedPath()[0] === this.focusElement && this._setFocused(false));
 
       this.addEventListener('mousedown', e => {
@@ -114,7 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
 
-      if (this.autofocus && !this.focused) {
+      if (this.autofocus && !this.focused && !this.disabled) {
         window.requestAnimationFrame(() => {
           this._focus();
           this._setFocused(true);
@@ -180,6 +180,10 @@ This program is available under Apache License Version 2.0, available at https:/
      * @private
      */
     focus() {
+      if (this.disabled) {
+        return;
+      }
+
       this.focusElement.focus();
       this._setFocused(true);
     }
