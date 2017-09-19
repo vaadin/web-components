@@ -11,6 +11,27 @@
 
 <body>
 
+  <dom-module id="test-wrapper">
+    <template>
+      <test-element id="testElement"></test-element>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class TestWrapper extends Vaadin.ControlStateMixin(Polymer.Element) {
+          static get is() {
+            return 'test-wrapper';
+          }
+
+          get focusElement() {
+            return this.$.testElement;
+          }
+        }
+
+        customElements.define('test-wrapper', TestWrapper);
+      });
+    </script>
+  </dom-module>
+
   <dom-module id="test-element">
     <template>
       <input id="input">
@@ -36,6 +57,12 @@
   <test-fixture id="default">
     <template>
       <test-element></test-element>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="wrapper">
+    <template>
+      <test-wrapper></test-wrapper>
     </template>
   </test-fixture>
 
@@ -247,6 +274,29 @@
           expect(customElement._focus.callCount).to.eql(1);
         });
       });
+    });
+
+    describe('focused with nested focusable elements', () => {
+      let customElementWrapper, customElement, focusElement;
+
+      beforeEach(() => {
+        customElementWrapper = fixture('wrapper');
+        customElement = customElementWrapper.focusElement;
+        focusElement = customElement.focusElement;
+      });
+
+      it('should set focused attribute on focusin event dispatched from an element inside focusElement', () => {
+        focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.true;
+      });
+
+      it('should remove focused attribute on focusout event dispatched from an element inside focusElement', () => {
+        focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.true;
+        focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.false;
+      });
+
     });
   </script>
 </body>
