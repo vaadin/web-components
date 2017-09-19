@@ -355,6 +355,20 @@
         click(parent);
       });
 
+      it('should have a click lisneter', () => {
+        // Having at least one mouse event listener is needed for iOS
+        // to enable mouse events dispatching.
+
+        sinon.spy(Vaadin.OverlayElement.prototype, 'addEventListener');
+        const overlay = document.createElement('vaadin-overlay');
+        document.body.appendChild(overlay);
+
+        expect(Vaadin.OverlayElement.prototype.addEventListener.calledWith('click')).to.be.true;
+
+        document.body.removeChild(overlay);
+        Vaadin.OverlayElement.prototype.addEventListener.restore();
+      });
+
       it('should allow pointer events on the content while skipping on the host', () => {
         expect(window.getComputedStyle(content).pointerEvents).to.equal('auto');
         expect(window.getComputedStyle(overlay).pointerEvents).to.equal('none');
