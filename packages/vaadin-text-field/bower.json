@@ -37,7 +37,5 @@
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.1"
   },
-  "resolutions": {
-    "vaadin-themable-mixin": "^1.1.0"
-  }
+  "resolutions": {}
 }
