@@ -56,7 +56,9 @@
   </template>
   <script>
     class CheckboxBasicDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
-      static get is() { return 'checkbox-basic-demos'; }
+      static get is() {
+        return 'checkbox-basic-demos';
+      }
     }
     customElements.define(CheckboxBasicDemos.is, CheckboxBasicDemos);
   </script>
