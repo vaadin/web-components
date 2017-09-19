@@ -61,6 +61,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /* The host is not clickable, only the content is. */
         pointer-events: none;
+
+        /* Remove tap highlight on touch devices. */
+        -webkit-tap-highlight-color: transparent;
       }
 
       :host(:not([opened])) {
@@ -72,6 +75,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
         pointer-events: auto;
         max-width: 100%; /* prevents overflowing the host in MSIE 11 */
+        -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
       }
 
       [part="backdrop"] {
