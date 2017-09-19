@@ -14,6 +14,7 @@
   <dom-module id="test-element">
     <template>
       <input id="input">
+      <input id="secondInput">
     </template>
     <script>
       document.addEventListener('WebComponentsReady', () => {
@@ -46,12 +47,13 @@
 
   <script>
     describe('control-state behavior', () => {
-      var customElement, focusElement;
+      var customElement, focusElement, secondFocusableElement;
 
       beforeEach(() => {
         customElement = fixture('default');
         // Need the shadow dom be rendered before getting the internal element reference
         focusElement = customElement.focusElement;
+        secondFocusableElement = customElement.$.secondInput;
       });
 
       describe('tabindex', () => {
@@ -208,6 +210,11 @@
         it('should not set focused attribute on focusin event dispatched when disabled', () => {
           customElement.disabled = true;
           focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          expect(customElement.focused).to.be.false;
+        });
+
+        it('should not set focused attribute on focusin event dispatched from other focusable element inside component', () => {
+          secondFocusableElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
           expect(customElement.focused).to.be.false;
         });
 
