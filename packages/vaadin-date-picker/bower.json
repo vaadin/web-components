@@ -46,7 +46,5 @@
     "web-component-tester": "^6.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
-  "resolutions": {
-    "vaadin-themable-mixin": "^1.1.0"
-  }
+  "resolutions": {}
 }
