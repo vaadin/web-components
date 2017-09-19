@@ -11,9 +11,31 @@
 
 <body>
 
+  <dom-module id="test-wrapper">
+    <template>
+      <test-element id="testElement"></test-element>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class TestWrapper extends Vaadin.ControlStateMixin(Polymer.Element) {
+          static get is() {
+            return 'test-wrapper';
+          }
+
+          get focusElement() {
+            return this.$.testElement;
+          }
+        }
+
+        customElements.define('test-wrapper', TestWrapper);
+      });
+    </script>
+  </dom-module>
+
   <dom-module id="test-element">
     <template>
       <input id="input">
+      <input id="secondInput">
     </template>
     <script>
       document.addEventListener('WebComponentsReady', () => {
@@ -38,6 +60,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="wrapper">
+    <template>
+      <test-wrapper></test-wrapper>
+    </template>
+  </test-fixture>
+
   <test-fixture id="autofocus">
     <template>
       <test-element autofocus></test-element>
@@ -46,12 +74,13 @@
 
   <script>
     describe('control-state behavior', () => {
-      var customElement, focusElement;
+      var customElement, focusElement, secondFocusableElement;
 
       beforeEach(() => {
         customElement = fixture('default');
         // Need the shadow dom be rendered before getting the internal element reference
         focusElement = customElement.focusElement;
+        secondFocusableElement = customElement.$.secondInput;
       });
 
       describe('tabindex', () => {
@@ -211,6 +240,11 @@
           expect(customElement.focused).to.be.false;
         });
 
+        it('should not set focused attribute on focusin event dispatched from other focusable element inside component', () => {
+          secondFocusableElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          expect(customElement.focused).to.be.false;
+        });
+
         it('should not set focused attribute on host mousedown with default prevented', () => {
           const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
           const preventDefaultListener = (e) => e.preventDefault();
@@ -240,6 +274,29 @@
           expect(customElement._focus.callCount).to.eql(1);
         });
       });
+    });
+
+    describe('focused with nested focusable elements', () => {
+      let customElementWrapper, customElement, focusElement;
+
+      beforeEach(() => {
+        customElementWrapper = fixture('wrapper');
+        customElement = customElementWrapper.focusElement;
+        focusElement = customElement.focusElement;
+      });
+
+      it('should set focused attribute on focusin event dispatched from an element inside focusElement', () => {
+        focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.true;
+      });
+
+      it('should remove focused attribute on focusout event dispatched from an element inside focusElement', () => {
+        focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.true;
+        focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+        expect(customElementWrapper.focused).to.be.false;
+      });
+
     });
   </script>
 </body>
