@@ -52,8 +52,8 @@
         </iron-form>
         <script>
           window.addDemoReadyListener('#radio-button-group-demos-radio-group-with-iron-form', function(document) {
-            test_form = document.getElementById('test_form');
-            test_form.addEventListener('iron-form-submit', function(event) {
+            var testForm = document.getElementById('test_form');
+            testForm.addEventListener('iron-form-submit', function(event) {
               this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
             });
           });
