@@ -1,0 +1,6 @@
+{
+  "globals": {
+    "DemoReadyEventEmitter": false,
+    "DialogDemo": false
+  }
+}
