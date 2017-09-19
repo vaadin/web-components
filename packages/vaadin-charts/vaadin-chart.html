@@ -8,15 +8,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<script src="../highcharts/highcharts.js"></script>
 
 <dom-module id="vaadin-chart">
   <template>
     <style>
-      :host {
-        display: inline-block;
+       :host {
+        display: block;
       }
     </style>
-    <slot></slot>
+    <div id="chart"></div>
   </template>
 
   <script>
@@ -44,6 +45,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get properties() {
           return {
           };
+        }
+
+        constructor() {
+          super();
+          this._baseConfig = {
+            credits: {
+              enabled: false
+            },
+          };
+        }
+
+
+        connectedCallback() {
+          super.connectedCallback();
+          Highcharts.chart(this.$.chart, this._baseConfig);
         }
       }
 

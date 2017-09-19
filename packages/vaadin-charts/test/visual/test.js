@@ -14,11 +14,11 @@ gemini.suite('vaadin-charts', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
+  gemini.suite('empty-chart', function(suite) {
     suite
       .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .setCaptureElements('vaadin-chart')
+      .capture('empty-chart');
   });
 
 });
