@@ -78,7 +78,6 @@
     }
   },
   "resolutions": {
-    "webcomponentsjs": "^1.0",
-    "vaadin-themable-mixin": "^1.1.0"
+    "webcomponentsjs": "^1.0"
   }
 }
