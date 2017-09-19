@@ -106,6 +106,11 @@ This program is available under Apache License Version 2.0, available at https:/
           overlayVerticalOffset: {
             type: Number,
             value: 0
+          },
+
+          inputElement: {
+            type: Element,
+            readOnly: true
           }
         };
       }
@@ -116,20 +121,22 @@ This program is available under Apache License Version 2.0, available at https:/
         this._clearElement = this.querySelector('.clear-button');
       }
 
+      get focused() {
+        return this.getRootNode().activeElement === this.inputElement;
+      }
+
       connectedCallback() {
         super.connectedCallback();
         const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
         this._setInputElement(this.querySelector(cssSelector));
         this._revertInputValue();
         this.listen(this.inputElement, 'input', '_inputValueChanged');
-        this.listen(this.inputElement, 'blur', '_onBlur');
         this._preventInputBlur();
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
         this.unlisten(this.inputElement, 'input', '_inputValueChanged');
-        this.unlisten(this.inputElement, 'blur', '_onBlur');
         this._restoreInputBlur();
       }
 

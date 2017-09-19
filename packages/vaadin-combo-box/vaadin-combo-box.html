@@ -69,7 +69,6 @@ This program is available under Apache License Version 2.0, available at https:/
         autofocus="[[autofocus]]"
         inputmode="[[inputmode]]"
 
-        on-blur="_onBlur"
         on-change="_stopPropagation"
         on-input="_inputValueChanged"
       >
@@ -250,17 +249,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             size: {
               type: Number
-            },
-
-            /**
-             * True when the input field has focus.
-             */
-            focused: {
-              type: Boolean,
-              value: false,
-              readOnly: true,
-              reflectToAttribute: true,
-              notify: true
             }
           };
         }
@@ -283,10 +271,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          // 2.0 does not support nested syntax for listeners
-          this.$.input.addEventListener('focused-changed', this._onInputContainerFocusedChanged.bind(this));
 
-          this._setInputElement(this.$.input);
           this._bindableInput = this.$.input;
           this._nativeInput = this.$.input.focusElement;
           this._toggleElement = this.$.toggleButton;
@@ -322,11 +307,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        /**
-         * Sets focus on the input field.
-         */
-        focus() {
-          this.inputElement.focus();
+        get inputElement() {
+          return this.$.input;
         }
 
         /**
@@ -335,17 +317,6 @@ This program is available under Apache License Version 2.0, available at https:/
         get focusElement() {
           // inputElement might not be defined on property changes before ready.
           return this.inputElement || this;
-        }
-
-        /**
-         * Removes focus from the input field.
-         */
-        blur() {
-          this.inputElement && this.inputElement.blur();
-        }
-
-        _onInputContainerFocusedChanged(e) {
-          this._setFocused(e.detail.value);
         }
       }
 

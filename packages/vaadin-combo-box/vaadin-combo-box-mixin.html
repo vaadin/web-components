@@ -168,14 +168,6 @@ This program is available under Apache License Version 2.0, available at https:/
           value: 'value'
         },
 
-        /**
-         * Returns a reference to the native input element.
-         * @deprecated will be dropped in 3.0
-         */
-        inputElement: {
-          type: HTMLElement,
-          readOnly: true
-        },
 
         /**
          * Set to true to mark the input as required.
@@ -216,6 +208,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
+
+      this.addEventListener('focusout', e => {
+        if (!this._closeOnBlurIsPrevented) {
+          this.close();
+        }
+      });
 
       this._lastCommittedValue = this.value;
       Polymer.IronA11yAnnouncer.requestAvailability();
@@ -263,12 +261,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.focus();
           }
         }
-      }
-    }
-
-    _onBlur() {
-      if (!this._closeOnBlurIsPrevented) {
-        this.close();
       }
     }
 
