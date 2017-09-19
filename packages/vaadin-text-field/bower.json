@@ -34,10 +34,10 @@
   },
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.2.0",
+    "vaadin-themable-mixin": "^1.1.0",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^1.0.1"
   },
   "resolutions": {
-    "vaadin-themable-mixin": "theme-custom-prop"
+    "vaadin-themable-mixin": "^1.1.0"
   }
 }
