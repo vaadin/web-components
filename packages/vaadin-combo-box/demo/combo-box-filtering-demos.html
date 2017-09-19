@@ -1,0 +1,118 @@
+<dom-module id="combo-box-filtering-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Remote Data Source</h3>
+    <vaadin-demo-snippet id='combo-box-filtering-demos-remote-data-source'>
+      <template preserve-content>
+        <dom-bind>
+          <template is="dom-bind">
+            <my-ajax url="http://example.org/?filter=[[filter]]" handle-as="json" last-response="{{response}}" loading="{{loading}}" debounce-duration="500" auto>
+            </my-ajax>
+
+            <vaadin-combo-box filtered-items="[[response]]" filter="{{filter}}" loading="[[loading]]">
+            </vaadin-combo-box>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+    <dom-module id="my-ajax">
+      <template>
+        <style>
+           :host {
+            display: block;
+          }
+        </style>
+
+      </template>
+      <script>
+        window.addDemoReadyListener('#combo-box-filtering-demos-remote-data-source', function(document) {
+          Polymer({
+            is: 'my-ajax',
+
+            properties: {
+              url: {
+                type: String,
+                observer: '_urlChanged'
+              },
+
+              lastResponse: {
+                type: Object,
+                notify: true
+              },
+
+              loading: {
+                type: Boolean,
+                notify: true
+              },
+
+              debounceDuration: Number
+            },
+
+            _urlChanged: function(url) {
+              var urlParts = url.split('?filter=');
+              var filter = urlParts[1];
+
+              this.loading = true;
+
+              var urlJob = Polymer.Debouncer.debounce(urlJob, Polymer.Async.timeOut.after(this.debounceDuration), () => {
+                this.loading = false;
+                this.lastResponse = elements.filter(function(el) {
+                  return el.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+                });
+              });
+            }
+          });
+        });
+      </script>
+    </dom-module>
+
+
+    <h3>Custom Filtering</h3>
+
+    <vaadin-demo-snippet id='combo-box-filtering-demos-custom-filtering'>
+      <template preserve-content>
+        <custom-filter></custom-filter>
+        <dom-module id="custom-filter">
+          <template preserve-content>
+            <vaadin-combo-box filtered-items="[[items]]" on-filter-changed="_filterChanged">
+            </vaadin-combo-box>
+          </template>
+          <script>
+            window.addDemoReadyListener('#combo-box-filtering-demos-custom-filtering', function(document) {
+              Polymer({
+                is: 'custom-filter',
+
+                properties: {
+                  items: Array,
+                },
+
+                _filterChanged: function(e) {
+                  // case-sensitive starts-with filtering
+                  this.items = elements.filter(function(el) {
+                    return el.indexOf(e.detail.value) === 0;
+                  });
+                }
+              });
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class ComboBoxFilteringDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'combo-box-filtering-demos';
+      }
+    }
+    customElements.define(ComboBoxFilteringDemos.is, ComboBoxFilteringDemos);
+  </script>
+</dom-module>
