@@ -20,10 +20,10 @@
   </style>
 </custom-style>
 
-<dom-module id="valo-overlay" theme-for="vaadin-overlay vaadin-date-picker-overlay">
+<dom-module id="valo-overlay" theme-for="vaadin-overlay">
   <template>
     <style>
-      :host {
+      [part="content"] {
         background-color: var(--valo-base-color);
         border-radius: var(--valo-overlay-border-radius, var(--valo-border-radius));
         box-shadow: var(--valo-overlay-box-shadow);
@@ -35,12 +35,8 @@
       @keyframes vaadin-overlay-enter {
         0% {
           opacity: 0;
+          transform: translateY(-4px);
         }
-      }
-
-      /* TODO remove this from the default theme for overlay */
-      [part="content"] {
-        background-color: transparent !important;
       }
     </style>
   </template>

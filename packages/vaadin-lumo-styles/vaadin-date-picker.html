@@ -205,6 +205,14 @@
   <template>
     <style>
       :host {
+        /* TODO should use vaadin-overlay styles eventually, now just copy pasted from there */
+        background-color: var(--valo-base-color);
+        border-radius: var(--valo-overlay-border-radius, var(--valo-border-radius));
+        box-shadow: var(--valo-overlay-box-shadow);
+        box-sizing: border-box;
+        animation: 0.2s vaadin-overlay-enter;
+        font-family: var(--valo-font-family);
+
         max-height: calc(var(--valo-size-m) * 14);
 
         /* Background for the year scroller, placed here as we are using a mask image on the actual years part */
