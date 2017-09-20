@@ -3,6 +3,8 @@
     "no-console": 0
   },
   "globals": {
+    "UploadDemo": false,
+    "DemoReadyEventEmitter":false,
     "MockHttpRequest": false
   }
 }

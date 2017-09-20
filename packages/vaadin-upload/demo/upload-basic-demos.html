@@ -1,0 +1,118 @@
+<dom-module id="upload-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-basic-usage'>
+      <template preserve-content>
+        <vaadin-upload></vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Upload Request Properties</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-upload-request-properties'>
+      <template preserve-content>
+        <vaadin-upload
+            target="serverUrl"
+            method="POST"
+            timeout="300000"
+            headers="{'X-Custom-Header': 'value'}"
+            form-data-name="my-attachment">
+        </vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Disabling Drag & Drop and Picking Multiple Files in the File Dialog</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-disabling-drag--drop-and-picking-multiple-files-in-the-file-dialog'>
+      <template preserve-content>
+        <vaadin-upload nodrop max-files="1"></vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom Color Scheme and Container Styles</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-custom-color-scheme-and-container-styles'>
+      <template preserve-content>
+        <style is="custom-style">
+          vaadin-upload.thick-border {
+            --primary-color: #396;
+            --dark-primary-color: #063;
+            --light-primary-color: #6c9;
+            --error-color: darkred;
+
+            border: 2px solid #ccc;
+            padding: 14px;
+            background: #eee;
+            border-radius: 0;
+          }
+
+          vaadin-upload.thick-border[dragover] {
+            border-color: #396;
+          }
+        </style>
+
+        <vaadin-upload class="thick-border"></vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom Drop Label</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-custom-drop-label'>
+      <template preserve-content>
+        <vaadin-upload>
+          <iron-icon slot="drop-label-icon" icon="cloud-upload"></iron-icon>
+          <span slot="drop-label">Drop files to the cloud...</span>
+        </vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Single File Upload</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-single-file-upload'>
+      <template preserve-content>
+        <vaadin-upload max-files="1"></vaadin-upload>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Setting Restrictions on Files to Upload</h3>
+    <vaadin-demo-snippet id='upload-basic-demos-setting-restrictions-on-files-to-upload'>
+      <template preserve-content>
+        <vaadin-upload id="rejectEventDemo" max-files="3" accept="application/pdf" max-file-size="1000000">
+          <span slot="drop-label">Up to 3 PDF files, 1 MB each</span>
+        </vaadin-upload>
+
+        <paper-toast id="rejectToast"></paper-toast>
+
+        <script>
+          window.addDemoReadyListener('#upload-basic-demos-setting-restrictions-on-files-to-upload', function(document) {
+            var upload = document.querySelector('vaadin-upload#rejectEventDemo');
+            var toast = document.querySelector('paper-toast#rejectToast');
+
+            upload.addEventListener('file-reject', function(event) {
+              toast.text = event.detail.file.name + ' error: ' + event.detail.error;
+              toast.open();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class UploadBasicDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
+      static get is() {
+        return 'upload-basic-demos';
+      }
+    }
+    customElements.define(UploadBasicDemos.is, UploadBasicDemos);
+  </script>
+</dom-module>

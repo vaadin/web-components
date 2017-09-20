@@ -1,0 +1,95 @@
+<dom-module id="upload-i18n-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>I18n</h3>
+    <vaadin-demo-snippet id='upload-i18n-demos-i18n'>
+      <template preserve-content>
+        <vaadin-upload id="ru"></vaadin-upload>
+        <script>
+          window.addDemoReadyListener('#upload-i18n-demos-i18n', function(document) {
+            var upload = document.querySelector('vaadin-upload#ru');
+            upload.i18n = {
+              dropFiles: {
+                one: 'Перетащите файл сюда...',
+                many: 'Перетащите файлы сюда...'
+              },
+              addFiles: {
+                one: 'Выбрать файл',
+                many: 'Добавить файлы'
+              },
+              cancel: 'Отменить',
+              error: {
+                tooManyFiles: 'Слишком много файлов.',
+                fileIsTooBig: 'Слишком большой файл.',
+                incorrectFileType: 'Некорректный тип файла.'
+              },
+              uploading: {
+                status: {
+                  connecting: 'Соединение...',
+                  stalled: 'Загрузка застопорилась.',
+                  processing: 'Обработка файла...'
+                },
+                remainingTime: {
+                  prefix: 'оставшееся время: ',
+                  unknown: 'оставшееся время неизвестно'
+                },
+                error: {
+                  serverUnavailable: 'Сервер недоступен',
+                  unexpectedServerError: 'Неожиданная ошибка сервера',
+                  forbidden: 'Загрузка запрещена'
+                }
+              },
+              units: {
+                size: ['Б', 'Кбайт', 'Мбайт', 'Гбайт', 'Тбайт', 'Пбайт', 'Эбайт', 'Збайт', 'Ибайт']
+              }
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom progress status</h3>
+    <vaadin-demo-snippet id='upload-i18n-demos-custom-progress-status'>
+      <template preserve-content>
+        <vaadin-upload id="shortTime"></vaadin-upload>
+        <script>
+          window.addDemoReadyListener('#upload-i18n-demos-custom-progress-status', function(document) {
+            var upload = document.querySelector('vaadin-upload#shortTime');
+
+            upload.set('i18n.formatTime', function(seconds, split) {
+              return split
+                .map(function(number, i) {
+                  return {number: number, unit: ['s', 'min', 'h', 'd'][i]};
+                })
+                .reverse()
+                .filter(function(value) {
+                  return value.number > 0;
+                })
+                .map(function(value) {
+                  return value.number + ' ' + value.unit;
+                })
+                .join(' ');
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class UploadI18nDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
+      static get is() {
+        return 'upload-i18n-demos';
+      }
+    }
+    customElements.define(UploadI18nDemos.is, UploadI18nDemos);
+  </script>
+</dom-module>

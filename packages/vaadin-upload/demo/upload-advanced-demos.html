@@ -1,0 +1,205 @@
+<dom-module id="upload-advanced-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Custom File List</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-file-list'>
+      <template preserve-content>
+        <dom-bind>
+          <template is="dom-bind">
+            <vaadin-upload id="fileEventsDemo" files="{{files}}">
+              <div slot="file-list">
+                <h4>Files</h4>
+                <ul>
+                  <template is="dom-repeat" items="{{files}}" as="file">
+                    <li>
+                      <strong>[[file.name]]</strong>
+                      [[file.status]]
+                    </li>
+                  </template>
+                </ul>
+              </div>
+            </vaadin-upload>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Customizing the Upload Request</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-customizing-the-upload-request'>
+      <template preserve-content>
+        <vaadin-upload id="requestDemo"></vaadin-upload>
+
+        <script>
+          window.addDemoReadyListener('#upload-advanced-demos-customizing-the-upload-request', function(document) {
+            var upload1 = document.querySelector('vaadin-upload#requestDemo');
+
+            upload1.addEventListener('upload-before', function(event) {
+              console.log('upload xhr before open: ', event.detail.xhr);
+
+              // Prevent the upload request:
+              // event.preventDefault();
+
+              var file = event.detail.file;
+
+              // Custom upload request url for file
+              file.uploadTarget = upload1.target + '/' + file.name;
+
+              // Custom name in the Content-Disposition header
+              file.formDataName = 'attachment';
+            });
+
+            upload1.addEventListener('upload-request', function(event) {
+              console.log('upload xhr after open: ', event.detail.xhr);
+
+              event.detail.xhr.setRequestHeader('X-File-Name', event.detail.file.name);
+              event.detail.formData.append('documentId', 1234);
+            });
+
+            upload1.addEventListener('upload-start', function(event) {
+              console.log('upload xhr after send: ', event.detail.xhr);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Sending Files Without Wrapping in FormData</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-sending-files-without-wrapping-in-formdata'>
+      <template preserve-content>
+        <vaadin-upload id="rawDemo"></vaadin-upload>
+
+        <script>
+          window.addDemoReadyListener('#upload-advanced-demos-sending-files-without-wrapping-in-formdata', function(document) {
+            var upload2 = document.querySelector('vaadin-upload#rawDemo');
+
+            upload2.addEventListener('upload-request', function(event) {
+              event.preventDefault();
+              event.detail.xhr.send(event.detail.file);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom Reaction on Server Response</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-reaction-on-server-response'>
+      <template preserve-content>
+        <vaadin-upload id="responseDemo"></vaadin-upload>
+
+        <script>
+          window.addDemoReadyListener('#upload-advanced-demos-custom-reaction-on-server-response', function(document) {
+            var upload3 = document.querySelector('vaadin-upload#responseDemo');
+
+            upload3.addEventListener('upload-response', function(event) {
+              console.log('upload xhr after server response: ', event.detail.xhr);
+              event.detail.file.error = 'Custom server error message.';
+
+              // Interpret any server response as success:
+              // event.detail.xhr.status = 200;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Pre-Filling the File List in Advance</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-pre-filling-the-file-list-in-advance'>
+      <template preserve-content>
+        <vaadin-upload id="preFill" accept="application/pdf">
+          <iron-icon slot="drop-label-icon" icon="description"></iron-icon>
+          <span slot="drop-label">Drop your favourite Novels here</span>
+        </vaadin-upload>
+        <script>
+          window.addDemoReadyListener('#upload-advanced-demos-pre-filling-the-file-list-in-advance', function(document) {
+            var upload = document.querySelector('vaadin-upload#preFill');
+            upload.files = [
+              {name: 'Don Quixote.pdf', progress: 100, complete: true},
+              {name: 'Hamlet.pdf', progress: 100, complete: true}
+            ];
+            upload.set('i18n.addFiles.many', 'Select books');
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom Upload Button</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-custom-upload-button'>
+      <template preserve-content>
+        <button-events-demo></button-events-demo>
+
+        <dom-module id="button-events-demo">
+          <template preserve-content>
+            <style>
+              vaadin-upload {
+                --vaadin-upload-buttons-primary: {
+                  align-items: center;
+                };
+              }
+            </style>
+            <vaadin-upload id="upload" max-files="1" max-files-reached="{{maxFilesReached}}">
+              <button slot="add-button" disabled$="[[maxFilesReached]]">
+                UPLOAD
+              </button>
+            </vaadin-upload>
+          </template>
+          <script>
+            Polymer({
+              is: 'button-events-demo',
+              properties: {
+                maxFilesReached: Boolean
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Manual Upload Trigger</h3>
+    <vaadin-demo-snippet id='upload-advanced-demos-manual-upload-trigger'>
+      <template preserve-content>
+        <vaadin-upload id="manualUpload" no-auto></vaadin-upload>
+        <br>
+        <button id="uploadButton">Start Upload(s)</button>
+
+        <script>
+          window.addDemoReadyListener('#upload-advanced-demos-manual-upload-trigger', function(document) {
+            var upload = document.querySelector('vaadin-upload#manualUpload');
+            var uploadButton = document.getElementById('uploadButton');
+
+            uploadButton.addEventListener('click', function() {
+              upload.uploadFiles();
+            });
+
+            // Change upload button text
+            upload.set('i18n.addFiles', {
+              one: 'Add File',
+              many: 'Add Files'
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class UploadAdvancedDemos extends DemoReadyEventEmitter(UploadDemo(Polymer.Element)) {
+      static get is() {
+        return 'upload-advanced-demos';
+      }
+    }
+    customElements.define(UploadAdvancedDemos.is, UploadAdvancedDemos);
+  </script>
+</dom-module>
