@@ -1,0 +1,176 @@
+<dom-module id="date-picker-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Plain date picker</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-plain-date-picker'>
+      <template preserve-content>
+        <vaadin-date-picker></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Label attribute</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-label-attribute'>
+      <template preserve-content>
+        <vaadin-date-picker label="Pick a date">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Placeholder attribute</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-placeholder-attribute'>
+      <template preserve-content>
+        <vaadin-date-picker placeholder="Pick a date">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Label and placeholder attributes together</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-label-and-placeholder-attributes-together'>
+      <template preserve-content>
+        <vaadin-date-picker label="Birthday" placeholder="Pick a date">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Pre-selected value</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-pre-selected-value'>
+      <template preserve-content>
+        <vaadin-date-picker label="Birthday" value="1980-08-14">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Disabled and readonly</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-disabled-and-readonly'>
+      <template preserve-content>
+        <vaadin-date-picker disabled label="Disabled input" value="1980-08-14"></vaadin-date-picker>
+        <vaadin-date-picker readonly label="Readonly input" value="1980-08-14"></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Initial position</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-initial-position'>
+      <template preserve-content>
+        <vaadin-date-picker label="Birthday" initial-position="1980-01-01">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Min and max dates</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-min-and-max-dates'>
+      <template preserve-content>
+        <vaadin-date-picker label="June 2017" min="2017-06-01" max="2017-06-30" initial-position="2017-06-01">
+        </vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Using as a Form Field</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-using-as-a-form-field'>
+      <template preserve-content>
+        <iron-form>
+          <form method="post">
+            <vaadin-date-picker name="date" required error-message="This field is required"></vaadin-date-picker>
+            <vaadin-button>Submit</vaadin-button>
+          </form>
+        </iron-form>
+
+        <script>
+          window.addDemoReadyListener('#date-picker-basic-demos-using-as-a-form-field', function(document) {
+            var form = document.querySelector('iron-form');
+
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with date: ' + form.serializeForm().date);
+              return false;
+            });
+
+            var button = document.querySelector('vaadin-button');
+            button.addEventListener('click', function() {
+              form.submit();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Date picker with week numbers</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-date-picker-with-week-numbers'>
+      <template preserve-content>
+        <p>Week numbers are only supported for locales that start the week on Monday.</p>
+        <vaadin-date-picker id="weeks" show-week-numbers></vaadin-date-picker>
+        <script>
+          window.addDemoReadyListener('#date-picker-basic-demos-date-picker-with-week-numbers', function(document) {
+            // Async call needed here for IE11 compatibility.
+            Polymer.Base.async(function() {
+              var datepicker = document.querySelector('vaadin-date-picker#weeks');
+              datepicker.set('i18n.firstDayOfWeek', 1);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Keyboard input</h3>
+    <vaadin-demo-snippet id='date-picker-basic-demos-keyboard-input'>
+      <template preserve-content>
+        <!--
+        Using a 3rd party library to parse dates from the input text.
+
+        Try typing the following examples:
+        "5/13/2014"
+        "today"
+        "in 20 days"
+        "three months from now"
+        "last year"
+        "in half a year"
+        "next week Thursday"
+        -->
+
+        <vaadin-date-picker label="Birthday" id="keyboard-input">
+        </vaadin-date-picker>
+        <script>
+          window.addDemoReadyListener('#date-picker-basic-demos-keyboard-input', function(document) {
+            // Async call needed here for IE11 compatibility.
+            Polymer.Base.async(function() {
+              var datepicker = document.querySelector('vaadin-date-picker#keyboard-input');
+              datepicker.set('i18n.parseDate', function(dateString) {
+                // See if we get exactly 1 match from the month names
+                var matches = datepicker.i18n.monthNames.filter(function(monthName) {
+                  return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
+                });
+                dateString = matches.length === 1 ? matches[0] : dateString;
+                // Parse the date (using a 3rd party library)
+                return Sugar.Date.create(dateString);
+              });
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class DatePickerBasicDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-picker-basic-demos';
+      }
+    }
+    customElements.define(DatePickerBasicDemos.is, DatePickerBasicDemos);
+  </script>
+</dom-module>

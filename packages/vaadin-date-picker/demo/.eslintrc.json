@@ -1,5 +1,7 @@
 {
   "globals": {
+    "DatePickerDemo": false,
+    "DemoReadyEventEmitter": false,
     "Sugar": false
   }
 }

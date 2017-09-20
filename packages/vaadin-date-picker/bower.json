@@ -28,14 +28,14 @@
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
     "vaadin-text-field": "^1.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
+    "vaadin-themable-mixin": "^1.1.0"
   },
   "devDependencies": {
-    "elements-demo-resources": "^2.0.1",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-flex-layout": "^2.0.0",
     "iron-form": "^2.0.0",
+    "iron-icon": "^2.0.0",
     "iron-icons": "^2.0.0",
     "iron-input": "^2.0.0",
     "iron-meta": "^2.0.0",
@@ -43,7 +43,7 @@
     "sugar": "^2.0.0",
     "vaadin-button": "^1.0.0",
     "vaadin-themes": "vaadin/vaadin-themes",
-    "webcomponentsjs": "^1.0.0",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.1.5",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   }
 }
