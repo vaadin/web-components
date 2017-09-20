@@ -1,0 +1,16 @@
+<script>
+  /* @polymerMixin */
+  TextFieldDemo = superClass => {
+    return class extends superClass {
+      static get properties() {
+        return {
+        };
+      }
+    };
+  };
+</script>
+<script>
+  window.addEventListener('WebComponentsReady', () => {
+    document.body.removeAttribute('unresolved');
+  });
+</script>

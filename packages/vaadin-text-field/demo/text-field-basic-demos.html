@@ -1,0 +1,198 @@
+<dom-module id="text-field-basic-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Setting the Value</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-setting-the-value'>
+      <template preserve-content>
+        <vaadin-text-field value="foo"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Label</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-label'>
+      <template preserve-content>
+        <vaadin-text-field label="Foo" value="bar"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Prefix and Suffix</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-prefix-and-suffix'>
+      <template preserve-content>
+        <vaadin-text-field label="Sum" value="1000">
+          <div slot="prefix">$</div>
+        </vaadin-text-field>
+        <br>
+        <br>
+        <vaadin-text-field label="Email">
+          <div slot="suffix">@vaadin.com</div>
+        </vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>TabIndex</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-tabindex'>
+      <template preserve-content>
+        <vaadin-text-field tabindex="4" placeholder="TabIndex 4"></vaadin-text-field>
+        <vaadin-text-field tabindex="3" placeholder="TabIndex 3"></vaadin-text-field>
+        <vaadin-text-field tabindex="2" placeholder="TabIndex 2 disabled" disabled></vaadin-text-field>
+        <vaadin-text-field tabindex="1" placeholder="TabIndex 1"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Right-To-Left</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-right-to-left'>
+      <template preserve-content>
+        <div class="container" dir="rtl">
+          <vaadin-text-field label="كلمه السر" placeholder="أنشئ كلمة مرور"></vaadin-text-field>
+          <vaadin-text-field label="البادئة واللاحقة">
+            <span slot="prefix">اختصار</span>
+            <span slot="suffix">لاحقة</span>
+          </vaadin-text-field>
+        </div>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Data Binding</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-data-binding'>
+      <template preserve-content>
+        <dom-bind id="demo-bind1">
+          <template>
+            <vaadin-text-field id="input1" value="{{value}}"></vaadin-text-field>
+            <vaadin-text-field id="input2" value="{{value}}"></vaadin-text-field>
+            <span>[[value]]</span>
+          </template>
+        </dom-bind>
+
+        <script>
+         window.addDemoReadyListener('#text-field-basic-demos-data-binding', function(document) {
+           var domBind = document.querySelector('#demo-bind1');
+           domBind.value = 'bar';
+         });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Required Input</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-required-input'>
+      <template preserve-content>
+        <p><vaadin-text-field required value="foo"></vaadin-text-field> is valid</p>
+        <p><vaadin-text-field required value=""></vaadin-text-field> is invalid</p>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Minlength and Maxlength Validation</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-minlength-and-maxlength-validation'>
+      <template preserve-content>
+        <p><vaadin-text-field required minlength="2"></vaadin-text-field> type at least 2 characters</p>
+        <p><vaadin-text-field maxlength="4"></vaadin-text-field> you cannot type more than 4 characters</p>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Pattern Validation</h3>
+    <p>
+      The <code>pattern</code> property specifies a regular expression that the element's value is checked against.
+    </p>
+    <vaadin-demo-snippet id='text-field-basic-demos-pattern-validation'>
+      <template preserve-content>
+        <p><vaadin-text-field pattern="\d\d\d*" required></vaadin-text-field> type 2 numbers or more</p>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Preventing Invalid Input</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-preventing-invalid-input'>
+      <template preserve-content>
+        <p><vaadin-text-field pattern="[0-9]*" prevent-invalid-input></vaadin-text-field> Can type numbers only</p>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Error Message</h3>
+    <p>
+      The <code>errorMessage</code> property defines a message that gets shown when the input value is invalid.
+    </p>
+    <p>
+      <b>NOTE: The message is not visible initially or when the field is valid</b>
+    </p>
+    <vaadin-demo-snippet id='text-field-basic-demos-error-message'>
+      <template preserve-content>
+        <p><vaadin-text-field required error-message="You must write something in this input"></vaadin-text-field> Required content</p>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Full Form</h3>
+    <vaadin-demo-snippet id='text-field-basic-demos-full-form'>
+      <template preserve-content>
+        <style>
+          span {
+            font-size: 80%;
+          }
+
+          .form-item {
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: 16px;
+          }
+        </style>
+        <h4>Registration Form</h4>
+        <iron-form>
+          <form>
+            <div class="form-item">
+              <vaadin-text-field label="User Name" minlength="4" maxlength="8" required pattern="^\w+$"></vaadin-text-field>
+              <span>* from 4 to 8 characters without spaces</span>
+            </div>
+            <div class="form-item">
+              <vaadin-text-field label="Email" required></vaadin-text-field>
+              <span>*</span>
+            </div>
+            <div class="form-item">
+              <vaadin-text-field label="Initials" minlength="3" maxlength="3"></vaadin-text-field>
+              <span>3 characters</span>
+            </div>
+            <div class="form-item">
+              <vaadin-text-field label="Age" pattern="\d\d\d*" required></vaadin-text-field>
+              <span>* 2 digits age</span>
+            </div>
+            <div class="form-item">
+              <vaadin-text-field label="Password" required pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"></vaadin-text-field>
+              <span>* 6 characters min including uppercase and number</span>
+            </div>
+            <button onclick="_submit()">Submit</button>
+          </form>
+        </iron-form>
+        <script>
+          window._submit = function() {
+            if (!document.querySelector('iron-form').validate()) {
+              window.alert('Please fill all required fields with valid values');
+            }
+          };
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </div>
+  </template>
+  <script>
+    class TextFieldBasicDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-field-basic-demos';
+      }
+    }
+    customElements.define(TextFieldBasicDemos.is, TextFieldBasicDemos);
+  </script>
+</dom-module>

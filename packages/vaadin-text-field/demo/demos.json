@@ -1,0 +1,37 @@
+{
+  "name": "Vaadin Text Field",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "text-field-basic-demos",
+    "src": "text-field-basic-demos.html",
+    "meta": {
+      "title": "vaadin-text-field Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Password Field",
+    "url": "text-field-password-demos",
+    "src": "text-field-password-demos.html",
+    "meta": {
+      "title": "vaadin-password-field Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Custom Validators",
+    "url": "text-field-validators-demos",
+    "src": "text-field-validators-demos.html",
+    "meta": {
+      "title": "vaadin-text-field Custom Validators",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
