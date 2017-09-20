@@ -27,7 +27,8 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-icon": "^2.0.0",
-    "iron-iconset-svg": "^2.0.0"
+    "iron-iconset-svg": "^2.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

@@ -1,0 +1,15 @@
+{
+  "name": "Vaadin Icons",
+  "pages": [
+    {
+      "name": "Vaadin Icons",
+      "url": "icons-basic-demos",
+      "src": "icons-basic-demos.html",
+      "meta": {
+        "title": "vaadin-icons",
+        "description": "",
+        "image": ""
+       }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+<dom-module id="icons-basic-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+
+      dom-repeat {
+        display: block;
+        width: 100%;
+      }
+
+      .icon-container {
+        margin: 24px 8px;
+        text-align: center;
+        width: 130px;
+        display: inline-block;
+        cursor: default;
+        vertical-align: top;
+      }
+
+      .icon-container span {
+        font-family: sans-serif;
+        font-size: 12px;
+        display: block;
+        margin-top: .5em;
+        color: #616161;
+        transition: all 600ms;
+      }
+
+      .icon-container:hover span {
+        color: #00b4f0;
+      }
+
+      .icon-container iron-icon {
+        display: inline-block;
+        fill: #616161;
+        transition: all 200ms;
+      }
+
+      .icon-container:hover iron-icon {
+        fill: #00b4f0;
+      }
+    </style>
+
+    <dom-repeat items="[[iconsets]]">
+      <template>
+        <dom-repeat id="wrapper" items="[[getIconNames(item)]]">
+          <template is="dom-repeat" >
+            <div class="icon-container">
+              <iron-icon icon="[[item]]"></iron-icon>
+              <span>[[item]]</span>
+            </div>
+          </template>
+        </dom-repeat>
+      </template>
+    </dom-repeat>
+  </template>
+  <script>
+    class IconsBasicDemos extends DemoReadyEventEmitter(IconsDemo(Polymer.Element)) {
+      static get is() {
+        return 'icons-basic-demos';
+      }
+
+      static get properties() {
+        return {
+          iconsets: Array,
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.iconsets = new Polymer.IronMeta({type: 'iconset'}).list;
+
+        // Checked in gemini before capture callback
+        window.webComponentsAreReady = true;
+      }
+
+      getIconNames(iconset) {
+        return iconset.getIconNames();
+      }
+    }
+    customElements.define(IconsBasicDemos.is, IconsBasicDemos);
+  </script>
+</dom-module>
