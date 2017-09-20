@@ -184,6 +184,16 @@ This program is available under Apache License Version 2.0, available at https:/
           type: String
         },
 
+        /**
+         * Set to true if the value is invalid.
+         */
+        invalid: {
+          type: Boolean,
+          reflectToAttribute: true,
+          notify: true,
+          value: false
+        },
+
         _toggleElement: Object,
         _clearElement: Object,
 

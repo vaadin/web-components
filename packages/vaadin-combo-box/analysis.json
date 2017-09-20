@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-combo-box.html",
         "start": {
-          "line": 356,
+          "line": 327,
           "column": 6
         },
         "end": {
-          "line": 356,
+          "line": 327,
           "column": 42
         }
       },
@@ -601,7 +601,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 126,
+                  "line": 128,
                   "column": 7
                 }
               },
@@ -614,11 +614,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 141,
                   "column": 6
                 },
                 "end": {
-                  "line": 152,
+                  "line": 154,
                   "column": 7
                 }
               },
@@ -635,11 +635,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 160,
                   "column": 6
                 },
                 "end": {
-                  "line": 163,
+                  "line": 165,
                   "column": 7
                 }
               },
@@ -656,11 +656,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 167,
                   "column": 6
                 },
                 "end": {
-                  "line": 170,
+                  "line": 172,
                   "column": 7
                 }
               },
@@ -677,11 +677,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 174,
                   "column": 6
                 },
                 "end": {
-                  "line": 184,
+                  "line": 186,
                   "column": 7
                 }
               },
@@ -698,11 +698,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 186,
+                  "line": 188,
                   "column": 6
                 },
                 "end": {
-                  "line": 192,
+                  "line": 194,
                   "column": 7
                 }
               },
@@ -722,11 +722,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 196,
                   "column": 6
                 },
                 "end": {
-                  "line": 202,
+                  "line": 204,
                   "column": 7
                 }
               },
@@ -739,11 +739,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 206,
                   "column": 6
                 },
                 "end": {
-                  "line": 230,
+                  "line": 233,
                   "column": 7
                 }
               },
@@ -764,7 +764,7 @@
               "column": 4
             },
             "end": {
-              "line": 231,
+              "line": 234,
               "column": 5
             }
           },
@@ -1545,6 +1545,144 @@
               "inheritedFrom": "Polymer.PropertyEffects"
             },
             {
+              "name": "_template",
+              "type": "HTMLTemplateElement",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 549,
+                  "column": 8
+                },
+                "end": {
+                  "line": 549,
+                  "column": 23
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "_importPath",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 551,
+                  "column": 8
+                },
+                "end": {
+                  "line": 551,
+                  "column": 25
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "rootPath",
+              "type": "string",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 553,
+                  "column": 8
+                },
+                "end": {
+                  "line": 553,
+                  "column": 22
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "importPath",
+              "type": "string",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 555,
+                  "column": 8
+                },
+                "end": {
+                  "line": 555,
+                  "column": 24
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "root",
+              "type": "(StampedTemplate|HTMLElement|ShadowRoot)",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 557,
+                  "column": 8
+                },
+                "end": {
+                  "line": 557,
+                  "column": 18
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "$",
+              "type": "!Object.<string, !Node>",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 559,
+                  "column": 8
+                },
+                "end": {
+                  "line": 559,
+                  "column": 15
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
               "name": "touchDevice",
               "type": "boolean",
               "description": "True if the device supports touch events.",
@@ -1803,11 +1941,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 447,
+                  "line": 448,
                   "column": 6
                 },
                 "end": {
-                  "line": 452,
+                  "line": 453,
                   "column": 7
                 }
               },
@@ -1847,11 +1985,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 461,
+                  "line": 462,
                   "column": 6
                 },
                 "end": {
-                  "line": 463,
+                  "line": 464,
                   "column": 7
                 }
               },
@@ -1882,11 +2020,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 472,
+                  "line": 473,
                   "column": 6
                 },
                 "end": {
-                  "line": 474,
+                  "line": 475,
                   "column": 7
                 }
               },
@@ -1912,16 +2050,16 @@
             },
             {
               "name": "attributeChangedCallback",
-              "description": "Provides a default implementation of the standard Custom Elements\n`attributeChangedCallback`.\n\nBy default, attributes declared in `properties` metadata are\ndeserialized using their `type` information to properties of the\nsame name.  \"Dash-cased\" attributes are deserialzed to \"camelCase\"\nproperties.",
+              "description": "Provides a default implementation of the standard Custom Elements\n`attributeChangedCallback`.\n\nBy default, attributes declared in `properties` metadata are\ndeserialized using their `type` information to properties of the\nsame name.  \"Dash-cased\" attributes are deserialized to \"camelCase\"\nproperties.",
               "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 699,
+                  "line": 715,
                   "column": 6
                 },
                 "end": {
-                  "line": 707,
+                  "line": 723,
                   "column": 7
                 }
               },
@@ -1952,11 +2090,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 557,
+                  "line": 573,
                   "column": 6
                 },
                 "end": {
-                  "line": 597,
+                  "line": 613,
                   "column": 7
                 }
               },
@@ -2299,7 +2437,7 @@
             },
             {
               "name": "_setPendingProperty",
-              "description": "Overrides the `PropertyAccessors` implementation to introduce special\ndirty check logic depending on the property & value being set:\n\n1. Any value set to a path (e.g. 'obj.prop': 42 or 'obj.prop': {...})\n   Stored in `__dataTemp`, dirty checked against `__dataTemp`\n2. Object set to simple property (e.g. 'prop': {...})\n   Stored in `__dataTemp` and `__data`, dirty checked against\n   `__dataTemp` by default implementation of `_shouldPropertyChange`\n3. Primitive value set to simple property (e.g. 'prop': 42)\n   Stored in `__data`, dirty checked against `__data`\n\nThe dirty-check is important to prevent cycles due to two-way\nnotification, but paths and objects are only dirty checked against any\nprevious value set during this turn via a \"temporary cache\" that is\ncleared when the last `_propertiesChaged` exits. This is so:\na. any cached array paths (e.g. 'array.3.prop') may be invalidated\n   due to array mutations like shift/unshift/splice; this is fine\n   since path changes are dirty-checked at user entry points like `set`\nb. dirty-checking for objects only lasts one turn to allow the user\n   to mutate the object in-place and re-set it with the same identity\n   and have all sub-properties re-propagated in a subsequent turn.\n\nThe temp cache is not necessarily sufficient to prevent invalid array\npaths, since a splice can happen during the same turn (with pathological\nuser code); we could introduce a \"fixup\" for temporarily cached array\npaths if needed: https://github.com/Polymer/polymer/issues/4227",
+              "description": "Overrides the `PropertyAccessors` implementation to introduce special\ndirty check logic depending on the property & value being set:\n\n1. Any value set to a path (e.g. 'obj.prop': 42 or 'obj.prop': {...})\n   Stored in `__dataTemp`, dirty checked against `__dataTemp`\n2. Object set to simple property (e.g. 'prop': {...})\n   Stored in `__dataTemp` and `__data`, dirty checked against\n   `__dataTemp` by default implementation of `_shouldPropertyChange`\n3. Primitive value set to simple property (e.g. 'prop': 42)\n   Stored in `__data`, dirty checked against `__data`\n\nThe dirty-check is important to prevent cycles due to two-way\nnotification, but paths and objects are only dirty checked against any\nprevious value set during this turn via a \"temporary cache\" that is\ncleared when the last `_propertiesChanged` exits. This is so:\na. any cached array paths (e.g. 'array.3.prop') may be invalidated\n   due to array mutations like shift/unshift/splice; this is fine\n   since path changes are dirty-checked at user entry points like `set`\nb. dirty-checking for objects only lasts one turn to allow the user\n   to mutate the object in-place and re-set it with the same identity\n   and have all sub-properties re-propagated in a subsequent turn.\n\nThe temp cache is not necessarily sufficient to prevent invalid array\npaths, since a splice can happen during the same turn (with pathological\nuser code); we could introduce a \"fixup\" for temporarily cached array\npaths if needed: https://github.com/Polymer/polymer/issues/4227",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -2479,7 +2617,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 613,
+                  "line": 609,
                   "column": 7
                 }
               },
@@ -2503,7 +2641,7 @@
               ],
               "return": {
                 "type": "boolean",
-                "desc": "Whether the property should be considered a change\n  and enqueue a `_proeprtiesChanged` callback"
+                "desc": "Whether the property should be considered a change\n  and enqueue a `_propertiesChanged` callback"
               },
               "inheritedFrom": "Polymer.PropertyAccessors"
             },
@@ -2876,11 +3014,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 644,
+                  "line": 660,
                   "column": 6
                 },
                 "end": {
-                  "line": 653,
+                  "line": 669,
                   "column": 7
                 }
               },
@@ -3126,7 +3264,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -3158,7 +3296,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -3187,7 +3325,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -3229,7 +3367,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -3258,7 +3396,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -3547,11 +3685,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 609,
+                  "line": 625,
                   "column": 6
                 },
                 "end": {
-                  "line": 614,
+                  "line": 630,
                   "column": 7
                 }
               },
@@ -3566,11 +3704,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 620,
+                  "line": 636,
                   "column": 6
                 },
                 "end": {
-                  "line": 620,
+                  "line": 636,
                   "column": 31
                 }
               },
@@ -3585,11 +3723,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 667,
+                  "line": 683,
                   "column": 6
                 },
                 "end": {
-                  "line": 683,
+                  "line": 699,
                   "column": 7
                 }
               },
@@ -3597,12 +3735,12 @@
               "params": [
                 {
                   "name": "dom",
-                  "type": "NodeList",
+                  "type": "StampedTemplate",
                   "description": "to attach to the element."
                 }
               ],
               "return": {
-                "type": "Node",
+                "type": "ShadowRoot",
                 "desc": "node to which the dom has been attached."
               },
               "inheritedFrom": "Polymer.ElementMixin"
@@ -3614,11 +3752,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 726,
+                  "line": 742,
                   "column": 6
                 },
                 "end": {
-                  "line": 730,
+                  "line": 746,
                   "column": 7
                 }
               },
@@ -3639,11 +3777,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 743,
+                  "line": 759,
                   "column": 6
                 },
                 "end": {
-                  "line": 748,
+                  "line": 764,
                   "column": 7
                 }
               },
@@ -4183,11 +4321,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 759,
+                  "line": 775,
                   "column": 6
                 },
                 "end": {
-                  "line": 762,
+                  "line": 778,
                   "column": 7
                 }
               },
@@ -4452,7 +4590,7 @@
             },
             {
               "name": "addPropertyEffect",
-              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n  {\n    fn: effectFunction, // Reference to function to call to perform effect\n    info: { ... }       // Effect metadata passed to function\n    trigger: {          // Optional triggering metadata; if not provided\n      name: string      // the property is treated as a wildcard\n      structured: boolean\n      wildcard: boolean\n    }\n  }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n  effectFunction(inst, path, props, oldProps, info, hasPaths)",
+              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n    {\n      fn: effectFunction, // Reference to function to call to perform effect\n      info: { ... }       // Effect metadata passed to function\n      trigger: {          // Optional triggering metadata; if not provided\n        name: string      // the property is treated as a wildcard\n        structured: boolean\n        wildcard: boolean\n      }\n    }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n    effectFunction(inst, path, props, oldProps, info, hasPaths)",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -4522,7 +4660,7 @@
             },
             {
               "name": "createMethodObserver",
-              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal Javascript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
+              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal JavaScript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -4632,7 +4770,7 @@
             },
             {
               "name": "createComputedProperty",
-              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal Javascript function signature:\n`'methodName(arg1, [..., argn])'`",
+              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal JavaScript function signature:\n`'methodName(arg1, [..., argn])'`",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -4927,6 +5065,2101 @@
           "tagname": "vaadin-combo-box-overlay"
         },
         {
+          "description": "`<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing\nonly the dropdown functionality and leaving the input field definition to the user.\n\nThis element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as\n[`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.\n\nTo create a custom input field, you need to add a child element which has a two-way\ndata-bindable property representing the input value. The property name is expected\nto be `value` by default. See the example below for a simplest possible example\nusing a `<vaadin-text-field>` element.\n\n```html\n<vaadin-combo-box-light>\n  <vaadin-text-field>\n  </vaadin-text-field>\n</vaadin-combo-box-light>\n```\n\nIf you are using other custom input fields like `<iron-input>`, you\nneed to define the name of the bindable property with the `attrForValue` attribute.\n\n```html\n<vaadin-combo-box-light attr-for-value=\"bind-value\">\n  <iron-input>\n    <input>\n  </iron-input>\n</vaadin-combo-box-light>\n```\n\nIn the next example you can see how to create a custom input field based\non a `<paper-input>` decorated with a custom `<iron-icon>` and\ntwo `<paper-button>`s to act as the clear and toggle controls.\n\n```html\n<vaadin-combo-box-light>\n  <paper-input label=\"Elements\" class=\"input\">\n    <iron-icon icon=\"toll\" prefix></iron-icon>\n    <paper-button slot=\"suffix\" class=\"clear-button\">Clear</paper-button>\n    <paper-button slot=\"suffix\" class=\"toggle-button\">Toggle</paper-button>\n  </paper-input>\n</vaadin-combo-box-light>\n```",
+          "summary": "",
+          "path": "vaadin-combo-box-light.html",
+          "properties": [
+            {
+              "name": "opened",
+              "type": "boolean",
+              "description": "True if the dropdown is open, false otherwise.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 25,
+                  "column": 8
+                },
+                "end": {
+                  "line": 31,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_openedChanged\""
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "description": "Set to true to disable this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 36,
+                  "column": 8
+                },
+                "end": {
+                  "line": 40,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "readonly",
+              "type": "boolean",
+              "description": "When present, it specifies that the element field is read-only.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 45,
+                  "column": 8
+                },
+                "end": {
+                  "line": 49,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "items",
+              "type": "Array",
+              "description": "A full set of items to filter the visible options from.\nThe items can be of either `String` or `Object` type.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 8
+                },
+                "end": {
+                  "line": 57,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "allowCustomValue",
+              "type": "boolean",
+              "description": "If `true`, the user can input a value that is not present in the items list.\n`value` property will be set to the input value in this case.\nAlso, when `value` is set programmatically, the input value will be set\nto reflect that value.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 65,
+                  "column": 8
+                },
+                "end": {
+                  "line": 68,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "filteredItems",
+              "type": "Array",
+              "description": "A subset of items, filtered based on the user input. Filtered items\ncan be assigned directly to omit the internal filtering functionality.\nThe items can be of either `String` or `Object` type.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 75,
+                  "column": 8
+                },
+                "end": {
+                  "line": 77,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "description": "The `String` value for the selected item of the combo box. Provides\nthe value for `iron-form`.\n\nWhen there’s no item selected, the value is an empty string.\n\nUse `selectedItem` property to get the raw selected item from\nthe `items` array.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 88,
+                  "column": 8
+                },
+                "end": {
+                  "line": 93,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_valueChanged\""
+                }
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_lastCommittedValue",
+              "type": "string",
+              "description": "Used to detect user value changes and fire `change` events.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 98,
+                  "column": 35
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "hasValue",
+              "type": "boolean",
+              "description": "A read-only property indicating whether this combo box has a value\nselected or not. It can be used for example in styling of the component.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 104,
+                  "column": 8
+                },
+                "end": {
+                  "line": 109,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "loading",
+              "type": "boolean",
+              "description": "When set to `true`, a loading spinner is displayed on top of the list of options.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 114,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_focusedIndex",
+              "type": "number",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 119,
+                  "column": 8
+                },
+                "end": {
+                  "line": 122,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "-1",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "filter",
+              "type": "string",
+              "description": "Filtering string the user has typed into the input field.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 127,
+                  "column": 8
+                },
+                "end": {
+                  "line": 131,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "selectedItem",
+              "type": "Object",
+              "description": "The selected item from the `items` array.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 136,
+                  "column": 8
+                },
+                "end": {
+                  "line": 139,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "itemLabelPath",
+              "type": "string",
+              "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.\n\nWhen using item templates, the property is still needed because it is used\nfor filtering, and for displaying the selected item value in the input box.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 152,
+                  "column": 8
+                },
+                "end": {
+                  "line": 155,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"label\"",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "itemValuePath",
+              "type": "string",
+              "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 165,
+                  "column": 8
+                },
+                "end": {
+                  "line": 168,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"value\"",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "description": "Set to true to mark the input as required.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 174,
+                  "column": 8
+                },
+                "end": {
+                  "line": 177,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "description": "The name of this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 182,
+                  "column": 8
+                },
+                "end": {
+                  "line": 184,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "invalid",
+              "type": "boolean",
+              "description": "Set to true if the value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_toggleElement",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 196,
+                  "column": 8
+                },
+                "end": {
+                  "line": 196,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_clearElement",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 197,
+                  "column": 8
+                },
+                "end": {
+                  "line": 197,
+                  "column": 29
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_inputElementValue",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 199,
+                  "column": 8
+                },
+                "end": {
+                  "line": 199,
+                  "column": 34
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_closeOnBlurIsPrevented",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 201,
+                  "column": 8
+                },
+                "end": {
+                  "line": 201,
+                  "column": 40
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_previousDocumentPointerEvents",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 203,
+                  "column": 8
+                },
+                "end": {
+                  "line": 203,
+                  "column": 46
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "attrForValue",
+              "type": "string",
+              "description": "Name of the two-way data-bindable property representing the\nvalue of the custom input field.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 96,
+                  "column": 10
+                },
+                "end": {
+                  "line": 99,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"value\""
+            },
+            {
+              "name": "overlayVerticalOffset",
+              "type": "number",
+              "description": "Number of pixels used as the vertical offset in positioning of\nthe dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 105,
+                  "column": 10
+                },
+                "end": {
+                  "line": 108,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "0"
+            },
+            {
+              "name": "inputElement",
+              "type": "Element",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 10
+                },
+                "end": {
+                  "line": 113,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 117,
+                  "column": 6
+                },
+                "end": {
+                  "line": 121,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "open",
+              "description": "Opens the dropdown list.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 244,
+                  "column": 4
+                },
+                "end": {
+                  "line": 249,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "close",
+              "description": "Closes the dropdown list.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 254,
+                  "column": 4
+                },
+                "end": {
+                  "line": 256,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_openedChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 258,
+                  "column": 4
+                },
+                "end": {
+                  "line": 274,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "old"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onOverlayTouchStart",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 276,
+                  "column": 4
+                },
+                "end": {
+                  "line": 282,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "event"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onClick",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 284,
+                  "column": 4
+                },
+                "end": {
+                  "line": 299,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onKeyDown",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 305,
+                  "column": 4
+                },
+                "end": {
+                  "line": 325,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_isEventKey",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 327,
+                  "column": 4
+                },
+                "end": {
+                  "line": 329,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "k"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_getItemLabel",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 331,
+                  "column": 4
+                },
+                "end": {
+                  "line": 333,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "item"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_getItemValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 335,
+                  "column": 4
+                },
+                "end": {
+                  "line": 341,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "item"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onArrowDown",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 343,
+                  "column": 4
+                },
+                "end": {
+                  "line": 352,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onArrowUp",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 354,
+                  "column": 4
+                },
+                "end": {
+                  "line": 368,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_prefillFocusedItemLabel",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 370,
+                  "column": 4
+                },
+                "end": {
+                  "line": 381,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_setSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 383,
+                  "column": 4
+                },
+                "end": {
+                  "line": 399,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "start"
+                },
+                {
+                  "name": "end"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_markAllSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 401,
+                  "column": 4
+                },
+                "end": {
+                  "line": 405,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_clearSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 407,
+                  "column": 4
+                },
+                "end": {
+                  "line": 412,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onEnter",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 414,
+                  "column": 4
+                },
+                "end": {
+                  "line": 423,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onEscape",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 425,
+                  "column": 4
+                },
+                "end": {
+                  "line": 436,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_toggleElementChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 438,
+                  "column": 4
+                },
+                "end": {
+                  "line": 443,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "toggleElement"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_clear",
+              "description": "Clears the current value.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 448,
+                  "column": 4
+                },
+                "end": {
+                  "line": 460,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "cancel",
+              "description": "Reverts back to original value.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 465,
+                  "column": 4
+                },
+                "end": {
+                  "line": 470,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onOpened",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 472,
+                  "column": 4
+                },
+                "end": {
+                  "line": 493,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_onClosed",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 495,
+                  "column": 4
+                },
+                "end": {
+                  "line": 530,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_inputValueChanged",
+              "description": "Filtering and items handling",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 535,
+                  "column": 4
+                },
+                "end": {
+                  "line": 541,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_filterFromInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 543,
+                  "column": 4
+                },
+                "end": {
+                  "line": 557,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_filterChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 559,
+                  "column": 4
+                },
+                "end": {
+                  "line": 566,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "filter"
+                },
+                {
+                  "name": "itemValuePath"
+                },
+                {
+                  "name": "itemLabelPath"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_loadingChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 568,
+                  "column": 4
+                },
+                "end": {
+                  "line": 572,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "loading"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_revertInputValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 574,
+                  "column": 4
+                },
+                "end": {
+                  "line": 581,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_revertInputValueToValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 583,
+                  "column": 4
+                },
+                "end": {
+                  "line": 589,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_selectedItemChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 591,
+                  "column": 4
+                },
+                "end": {
+                  "line": 620,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selectedItem"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_valueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 622,
+                  "column": 4
+                },
+                "end": {
+                  "line": 642,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_detectAndDispatchChange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 644,
+                  "column": 4
+                },
+                "end": {
+                  "line": 649,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_itemsChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 651,
+                  "column": 4
+                },
+                "end": {
+                  "line": 666,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "itemValuePath"
+                },
+                {
+                  "name": "itemLabelPath"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_filteredItemsChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 668,
+                  "column": 4
+                },
+                "end": {
+                  "line": 685,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                },
+                {
+                  "name": "itemValuePath"
+                },
+                {
+                  "name": "itemLabelPath"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_filterItems",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 687,
+                  "column": 4
+                },
+                "end": {
+                  "line": 697,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "arr"
+                },
+                {
+                  "name": "filter"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_setOverlayItems",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 699,
+                  "column": 4
+                },
+                "end": {
+                  "line": 704,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "items"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_hasItems",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 706,
+                  "column": 4
+                },
+                "end": {
+                  "line": 708,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "array"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_indexOfValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 710,
+                  "column": 4
+                },
+                "end": {
+                  "line": 720,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "items"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_isValidValue",
+              "description": "Checks if the value is supported as an item value in this control.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 727,
+                  "column": 4
+                },
+                "end": {
+                  "line": 729,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "boolean"
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_overlaySelectedItemChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 731,
+                  "column": 4
+                },
+                "end": {
+                  "line": 742,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "validate",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 750,
+                  "column": 4
+                },
+                "end": {
+                  "line": 752,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+              },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "checkValidity",
+              "description": "Returns true if the current input value satisfies all constraints (if any)\n\nYou can override the `checkValidity` method for custom validations.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 759,
+                  "column": 4
+                },
+                "end": {
+                  "line": 763,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_ensureTemplatized",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 774,
+                  "column": 4
+                },
+                "end": {
+                  "line": 792,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_preventInputBlur",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 794,
+                  "column": 4
+                },
+                "end": {
+                  "line": 801,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_restoreInputBlur",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 803,
+                  "column": 4
+                },
+                "end": {
+                  "line": 810,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_preventDefault",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 812,
+                  "column": 4
+                },
+                "end": {
+                  "line": 814,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "_stopPropagation",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 816,
+                  "column": 4
+                },
+                "end": {
+                  "line": 818,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "connectedCallback",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 127,
+                  "column": 6
+                },
+                "end": {
+                  "line": 134,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "disconnectedCallback",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 6
+                },
+                "end": {
+                  "line": 140,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            }
+          ],
+          "staticMethods": [
+            {
+              "name": "includeStyle",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 40,
+                  "column": 4
+                },
+                "end": {
+                  "line": 44,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 82,
+              "column": 4
+            },
+            "end": {
+              "line": 155,
+              "column": 5
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.ComboBoxLightElement",
+          "attributes": [
+            {
+              "name": "opened",
+              "description": "True if the dropdown is open, false otherwise.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 25,
+                  "column": 8
+                },
+                "end": {
+                  "line": 31,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "disabled",
+              "description": "Set to true to disable this element.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 36,
+                  "column": 8
+                },
+                "end": {
+                  "line": 40,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "readonly",
+              "description": "When present, it specifies that the element field is read-only.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 45,
+                  "column": 8
+                },
+                "end": {
+                  "line": 49,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "items",
+              "description": "A full set of items to filter the visible options from.\nThe items can be of either `String` or `Object` type.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 8
+                },
+                "end": {
+                  "line": 57,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Array",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "allow-custom-value",
+              "description": "If `true`, the user can input a value that is not present in the items list.\n`value` property will be set to the input value in this case.\nAlso, when `value` is set programmatically, the input value will be set\nto reflect that value.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 65,
+                  "column": 8
+                },
+                "end": {
+                  "line": 68,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "filtered-items",
+              "description": "A subset of items, filtered based on the user input. Filtered items\ncan be assigned directly to omit the internal filtering functionality.\nThe items can be of either `String` or `Object` type.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 75,
+                  "column": 8
+                },
+                "end": {
+                  "line": 77,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Array",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "value",
+              "description": "The `String` value for the selected item of the combo box. Provides\nthe value for `iron-form`.\n\nWhen there’s no item selected, the value is an empty string.\n\nUse `selectedItem` property to get the raw selected item from\nthe `items` array.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 88,
+                  "column": 8
+                },
+                "end": {
+                  "line": 93,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "has-value",
+              "description": "A read-only property indicating whether this combo box has a value\nselected or not. It can be used for example in styling of the component.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 104,
+                  "column": 8
+                },
+                "end": {
+                  "line": 109,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "loading",
+              "description": "When set to `true`, a loading spinner is displayed on top of the list of options.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 114,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "filter",
+              "description": "Filtering string the user has typed into the input field.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 127,
+                  "column": 8
+                },
+                "end": {
+                  "line": 131,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "selected-item",
+              "description": "The selected item from the `items` array.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 136,
+                  "column": 8
+                },
+                "end": {
+                  "line": 139,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Object",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "item-label-path",
+              "description": "Path for label of the item. If `items` is an array of objects, the\n`itemLabelPath` is used to fetch the displayed string label for each\nitem.\n\nThe item label is also used for matching items when processing user\ninput, i.e., for filtering and selecting items.\n\nWhen using item templates, the property is still needed because it is used\nfor filtering, and for displaying the selected item value in the input box.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 152,
+                  "column": 8
+                },
+                "end": {
+                  "line": 155,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "item-value-path",
+              "description": "Path for the value of the item. If `items` is an array of objects, the\n`itemValuePath:` is used to fetch the string value for the selected\nitem.\n\nThe item value is used in the `value` property of the combo box,\nto provide the form value.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 165,
+                  "column": 8
+                },
+                "end": {
+                  "line": 168,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "required",
+              "description": "Set to true to mark the input as required.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 174,
+                  "column": 8
+                },
+                "end": {
+                  "line": 177,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "name",
+              "description": "The name of this element.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 182,
+                  "column": 8
+                },
+                "end": {
+                  "line": 184,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true if the value is invalid.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "attr-for-value",
+              "description": "Name of the two-way data-bindable property representing the\nvalue of the custom input field.",
+              "sourceRange": {
+                "start": {
+                  "line": 96,
+                  "column": 10
+                },
+                "end": {
+                  "line": 99,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "overlay-vertical-offset",
+              "description": "Number of pixels used as the vertical offset in positioning of\nthe dropdown.",
+              "sourceRange": {
+                "start": {
+                  "line": 105,
+                  "column": 10
+                },
+                "end": {
+                  "line": 108,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "number"
+            },
+            {
+              "name": "input-element",
+              "description": "",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 10
+                },
+                "end": {
+                  "line": 113,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "Element"
+            }
+          ],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "change",
+              "description": "change",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "type": "CustomEvent",
+              "name": "custom-value-set",
+              "description": "custom-value-set",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "type": "CustomEvent",
+              "name": "selected-item-changed",
+              "description": "selected-item-changed",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "type": "CustomEvent",
+              "name": "value-changed",
+              "description": "value-changed",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "file": "vaadin-combo-box-light.html",
+                "start": {
+                  "line": 16,
+                  "column": 4
+                },
+                "end": {
+                  "line": 16,
+                  "column": 17
+                }
+              }
+            }
+          ],
+          "tagname": "vaadin-combo-box-light",
+          "mixins": [
+            "Vaadin.ComboBoxMixin",
+            "Vaadin.ThemableMixin"
+          ]
+        },
+        {
           "description": "`<vaadin-combo-box>` is a combo box element combining a dropdown list with an\ninput field for filtering the list of items. If you want to replace the default\ninput field with a custom implementation, you should use the\n[`<vaadin-combo-box-light>`](#vaadin-combo-box-light) element.\n\nItems in the dropdown list must be provided as a list of `String` values.\nDefining the items is done using the `items` property, which can be assigned\nwith data-binding, using an attribute or directly with the JavaScript property.\n\n```html\n<vaadin-combo-box\n    label=\"Fruit\"\n    items=\"[[data]]\">\n</vaadin-combo-box>\n```\n\n```js\ncombobox.items = ['apple', 'orange', 'banana'];\n```\n\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\nThis element can be used within an `iron-form`.\n\n### Item Template\n\n`<vaadin-combo-box>` supports using custom item template provided in the light\nDOM:\n\n```html\n<vaadin-combo-box items='[{\"label\": \"Hydrogen\", \"value\": \"H\"}]'>\n  <template>\n    [[index]]: [[item.label]] <b>[[item.value]</b>\n  </template>\n</vaadin-combo-box>\n```\n\nThe following properties are available for item template bindings:\n\nProperty name | Type | Description\n--------------|------|------------\n`index`| Number | Index of the item in the `items` array\n`item` | String or Object | The item reference\n`selected` | Boolean | True when item is selected\n`focused` | Boolean | True when item is focused\n\nSee the [Item Template Live Demos](demo/item-template.html) for more examples.\n\n### Styling\nThere are custom properties and mixins you can use to style the component:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`",
           "summary": "",
           "path": "vaadin-combo-box.html",
@@ -4963,11 +7196,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 197,
                   "column": 13
                 }
               },
@@ -4983,11 +7216,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 248,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -5266,9 +7499,9 @@
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
             {
-              "name": "inputElement",
-              "type": "HTMLElement",
-              "description": "Returns a reference to the native input element.",
+              "name": "required",
+              "type": "boolean",
+              "description": "Set to true to mark the input as required.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
@@ -5278,29 +7511,6 @@
                 },
                 "end": {
                   "line": 177,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              },
-              "inheritedFrom": "Vaadin.ComboBoxMixin"
-            },
-            {
-              "name": "required",
-              "type": "boolean",
-              "description": "Set to true to mark the input as required.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-combo-box-mixin.html",
-                "start": {
-                  "line": 182,
-                  "column": 8
-                },
-                "end": {
-                  "line": 185,
                   "column": 9
                 }
               },
@@ -5318,17 +7528,41 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 190,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 184,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {}
               },
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
+              "name": "invalid",
+              "type": "boolean",
+              "description": "Set to true if the value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false",
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
             {
@@ -5339,11 +7573,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 194,
+                  "line": 196,
                   "column": 8
                 },
                 "end": {
-                  "line": 194,
+                  "line": 196,
                   "column": 30
                 }
               },
@@ -5360,11 +7594,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 195,
+                  "line": 197,
                   "column": 29
                 }
               },
@@ -5381,11 +7615,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 197,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 199,
                   "column": 34
                 }
               },
@@ -5402,11 +7636,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 199,
+                  "line": 201,
                   "column": 8
                 },
                 "end": {
-                  "line": 199,
+                  "line": 201,
                   "column": 40
                 }
               },
@@ -5423,11 +7657,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 201,
+                  "line": 203,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 203,
                   "column": 46
                 }
               },
@@ -5443,11 +7677,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 171,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 174,
+                  "line": 173,
                   "column": 13
                 }
               },
@@ -5462,11 +7696,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 178,
                   "column": 12
                 },
                 "end": {
-                  "line": 182,
+                  "line": 181,
                   "column": 13
                 }
               },
@@ -5482,11 +7716,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 186,
                   "column": 12
                 },
                 "end": {
-                  "line": 190,
+                  "line": 189,
                   "column": 13
                 }
               },
@@ -5502,11 +7736,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 202,
                   "column": 12
                 },
                 "end": {
-                  "line": 205,
+                  "line": 204,
                   "column": 13
                 }
               },
@@ -5521,11 +7755,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 210,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 212,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -5540,11 +7774,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 219,
+                  "line": 218,
                   "column": 13
                 }
               },
@@ -5559,11 +7793,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 223,
                   "column": 12
                 },
                 "end": {
-                  "line": 226,
+                  "line": 225,
                   "column": 13
                 }
               },
@@ -5578,11 +7812,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 228,
+                  "line": 227,
                   "column": 12
                 },
                 "end": {
-                  "line": 230,
+                  "line": 229,
                   "column": 13
                 }
               },
@@ -5597,11 +7831,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 231,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 233,
                   "column": 13
                 }
               },
@@ -5616,11 +7850,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 239,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -5636,40 +7870,17 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 252,
+                  "line": 251,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {}
               }
-            },
-            {
-              "name": "focused",
-              "type": "boolean",
-              "description": "True when the input field has focus.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 257,
-                  "column": 12
-                },
-                "end": {
-                  "line": 263,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "readOnly": true
-                }
-              },
-              "defaultValue": "false"
             }
           ],
           "methods": [
@@ -5679,11 +7890,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 283,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 297,
+                  "line": 282,
                   "column": 9
                 }
               },
@@ -5697,11 +7908,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 236,
+                  "line": 244,
                   "column": 4
                 },
                 "end": {
-                  "line": 241,
+                  "line": 249,
                   "column": 5
                 }
               },
@@ -5716,11 +7927,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 246,
+                  "line": 254,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 256,
                   "column": 5
                 }
               },
@@ -5735,11 +7946,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 258,
                   "column": 4
                 },
                 "end": {
-                  "line": 266,
+                  "line": 274,
                   "column": 5
                 }
               },
@@ -5755,36 +7966,17 @@
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
             {
-              "name": "_onBlur",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-combo-box-mixin.html",
-                "start": {
-                  "line": 268,
-                  "column": 4
-                },
-                "end": {
-                  "line": 272,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.ComboBoxMixin"
-            },
-            {
               "name": "_onOverlayTouchStart",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 274,
+                  "line": 276,
                   "column": 4
                 },
                 "end": {
-                  "line": 280,
+                  "line": 282,
                   "column": 5
                 }
               },
@@ -5803,11 +7995,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 282,
+                  "line": 284,
                   "column": 4
                 },
                 "end": {
-                  "line": 297,
+                  "line": 299,
                   "column": 5
                 }
               },
@@ -5826,11 +8018,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 303,
+                  "line": 305,
                   "column": 4
                 },
                 "end": {
-                  "line": 323,
+                  "line": 325,
                   "column": 5
                 }
               },
@@ -5849,11 +8041,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 325,
+                  "line": 327,
                   "column": 4
                 },
                 "end": {
-                  "line": 327,
+                  "line": 329,
                   "column": 5
                 }
               },
@@ -5875,11 +8067,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 329,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 331,
+                  "line": 333,
                   "column": 5
                 }
               },
@@ -5898,11 +8090,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 333,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 339,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -5921,11 +8113,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 341,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 350,
+                  "line": 352,
                   "column": 5
                 }
               },
@@ -5940,11 +8132,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 352,
+                  "line": 354,
                   "column": 4
                 },
                 "end": {
-                  "line": 366,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -5959,11 +8151,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 368,
+                  "line": 370,
                   "column": 4
                 },
                 "end": {
-                  "line": 379,
+                  "line": 381,
                   "column": 5
                 }
               },
@@ -5978,11 +8170,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 381,
+                  "line": 383,
                   "column": 4
                 },
                 "end": {
-                  "line": 397,
+                  "line": 399,
                   "column": 5
                 }
               },
@@ -6004,11 +8196,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 399,
+                  "line": 401,
                   "column": 4
                 },
                 "end": {
-                  "line": 403,
+                  "line": 405,
                   "column": 5
                 }
               },
@@ -6023,11 +8215,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 405,
+                  "line": 407,
                   "column": 4
                 },
                 "end": {
-                  "line": 410,
+                  "line": 412,
                   "column": 5
                 }
               },
@@ -6042,11 +8234,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 412,
+                  "line": 414,
                   "column": 4
                 },
                 "end": {
-                  "line": 421,
+                  "line": 423,
                   "column": 5
                 }
               },
@@ -6065,11 +8257,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 423,
+                  "line": 425,
                   "column": 4
                 },
                 "end": {
-                  "line": 434,
+                  "line": 436,
                   "column": 5
                 }
               },
@@ -6088,11 +8280,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 436,
+                  "line": 438,
                   "column": 4
                 },
                 "end": {
-                  "line": 441,
+                  "line": 443,
                   "column": 5
                 }
               },
@@ -6111,11 +8303,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 446,
+                  "line": 448,
                   "column": 4
                 },
                 "end": {
-                  "line": 458,
+                  "line": 460,
                   "column": 5
                 }
               },
@@ -6130,11 +8322,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 463,
+                  "line": 465,
                   "column": 4
                 },
                 "end": {
-                  "line": 468,
+                  "line": 470,
                   "column": 5
                 }
               },
@@ -6149,11 +8341,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 470,
+                  "line": 472,
                   "column": 4
                 },
                 "end": {
-                  "line": 491,
+                  "line": 493,
                   "column": 5
                 }
               },
@@ -6168,11 +8360,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 493,
+                  "line": 495,
                   "column": 4
                 },
                 "end": {
-                  "line": 528,
+                  "line": 530,
                   "column": 5
                 }
               },
@@ -6187,11 +8379,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 533,
+                  "line": 535,
                   "column": 4
                 },
                 "end": {
-                  "line": 539,
+                  "line": 541,
                   "column": 5
                 }
               },
@@ -6210,11 +8402,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 541,
+                  "line": 543,
                   "column": 4
                 },
                 "end": {
-                  "line": 555,
+                  "line": 557,
                   "column": 5
                 }
               },
@@ -6233,11 +8425,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 557,
+                  "line": 559,
                   "column": 4
                 },
                 "end": {
-                  "line": 564,
+                  "line": 566,
                   "column": 5
                 }
               },
@@ -6262,11 +8454,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 566,
+                  "line": 568,
                   "column": 4
                 },
                 "end": {
-                  "line": 570,
+                  "line": 572,
                   "column": 5
                 }
               },
@@ -6285,11 +8477,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 572,
+                  "line": 574,
                   "column": 4
                 },
                 "end": {
-                  "line": 579,
+                  "line": 581,
                   "column": 5
                 }
               },
@@ -6304,11 +8496,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 581,
+                  "line": 583,
                   "column": 4
                 },
                 "end": {
-                  "line": 587,
+                  "line": 589,
                   "column": 5
                 }
               },
@@ -6323,11 +8515,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 589,
+                  "line": 591,
                   "column": 4
                 },
                 "end": {
-                  "line": 618,
+                  "line": 620,
                   "column": 5
                 }
               },
@@ -6346,11 +8538,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 620,
+                  "line": 622,
                   "column": 4
                 },
                 "end": {
-                  "line": 640,
+                  "line": 642,
                   "column": 5
                 }
               },
@@ -6369,11 +8561,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 642,
+                  "line": 644,
                   "column": 4
                 },
                 "end": {
-                  "line": 647,
+                  "line": 649,
                   "column": 5
                 }
               },
@@ -6388,11 +8580,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 649,
+                  "line": 651,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 666,
                   "column": 5
                 }
               },
@@ -6417,11 +8609,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 666,
+                  "line": 668,
                   "column": 4
                 },
                 "end": {
-                  "line": 683,
+                  "line": 685,
                   "column": 5
                 }
               },
@@ -6446,11 +8638,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 685,
+                  "line": 687,
                   "column": 4
                 },
                 "end": {
-                  "line": 695,
+                  "line": 697,
                   "column": 5
                 }
               },
@@ -6472,11 +8664,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 697,
+                  "line": 699,
                   "column": 4
                 },
                 "end": {
-                  "line": 702,
+                  "line": 704,
                   "column": 5
                 }
               },
@@ -6495,11 +8687,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 704,
+                  "line": 706,
                   "column": 4
                 },
                 "end": {
-                  "line": 706,
+                  "line": 708,
                   "column": 5
                 }
               },
@@ -6518,11 +8710,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 708,
+                  "line": 710,
                   "column": 4
                 },
                 "end": {
-                  "line": 718,
+                  "line": 720,
                   "column": 5
                 }
               },
@@ -6544,11 +8736,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 725,
+                  "line": 727,
                   "column": 4
                 },
                 "end": {
-                  "line": 727,
+                  "line": 729,
                   "column": 5
                 }
               },
@@ -6570,11 +8762,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 729,
+                  "line": 731,
                   "column": 4
                 },
                 "end": {
-                  "line": 740,
+                  "line": 742,
                   "column": 5
                 }
               },
@@ -6593,11 +8785,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 748,
+                  "line": 750,
                   "column": 4
                 },
                 "end": {
-                  "line": 750,
+                  "line": 752,
                   "column": 5
                 }
               },
@@ -6620,11 +8812,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 757,
+                  "line": 759,
                   "column": 4
                 },
                 "end": {
-                  "line": 761,
+                  "line": 763,
                   "column": 5
                 }
               },
@@ -6643,11 +8835,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 772,
+                  "line": 774,
                   "column": 4
                 },
                 "end": {
-                  "line": 790,
+                  "line": 792,
                   "column": 5
                 }
               },
@@ -6662,11 +8854,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 792,
+                  "line": 794,
                   "column": 4
                 },
                 "end": {
-                  "line": 799,
+                  "line": 801,
                   "column": 5
                 }
               },
@@ -6681,11 +8873,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 801,
+                  "line": 803,
                   "column": 4
                 },
                 "end": {
-                  "line": 808,
+                  "line": 810,
                   "column": 5
                 }
               },
@@ -6700,11 +8892,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 810,
+                  "line": 812,
                   "column": 4
                 },
                 "end": {
-                  "line": 812,
+                  "line": 814,
                   "column": 5
                 }
               },
@@ -6723,11 +8915,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 814,
+                  "line": 816,
                   "column": 4
                 },
                 "end": {
-                  "line": 816,
+                  "line": 818,
                   "column": 5
                 }
               },
@@ -6745,11 +8937,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 259,
                   "column": 8
                 },
                 "end": {
-                  "line": 281,
+                  "line": 269,
                   "column": 9
                 }
               },
@@ -6769,11 +8961,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 299,
+                  "line": 284,
                   "column": 8
                 },
                 "end": {
-                  "line": 302,
+                  "line": 287,
                   "column": 9
                 }
               },
@@ -6786,11 +8978,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 304,
+                  "line": 289,
                   "column": 8
                 },
                 "end": {
-                  "line": 307,
+                  "line": 292,
                   "column": 9
                 }
               },
@@ -6803,11 +8995,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 309,
+                  "line": 294,
                   "column": 8
                 },
                 "end": {
-                  "line": 311,
+                  "line": 296,
                   "column": 9
                 }
               },
@@ -6827,11 +9019,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 313,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 315,
+                  "line": 300,
                   "column": 9
                 }
               },
@@ -6844,71 +9036,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 317,
+                  "line": 302,
                   "column": 8
                 },
                 "end": {
-                  "line": 322,
+                  "line": 307,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": []
-            },
-            {
-              "name": "focus",
-              "description": "Sets focus on the input field.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 327,
-                  "column": 8
-                },
-                "end": {
-                  "line": 329,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "blur",
-              "description": "Removes focus from the input field.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 342,
-                  "column": 8
-                },
-                "end": {
-                  "line": 344,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_onInputContainerFocusedChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 346,
-                  "column": 8
-                },
-                "end": {
-                  "line": 348,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ]
             }
           ],
           "staticMethods": [
@@ -6945,11 +9082,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 160,
+              "line": 159,
               "column": 6
             },
             "end": {
-              "line": 349,
+              "line": 320,
               "column": 7
             }
           },
@@ -6980,11 +9117,11 @@
               "description": "Set to true to disable this input.",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 197,
                   "column": 13
                 }
               },
@@ -6996,11 +9133,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 248,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -7188,8 +9325,8 @@
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
             {
-              "name": "input-element",
-              "description": "Returns a reference to the native input element.",
+              "name": "required",
+              "description": "Set to true to mark the input as required.",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
@@ -7198,24 +9335,6 @@
                 },
                 "end": {
                   "line": 177,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "HTMLElement",
-              "inheritedFrom": "Vaadin.ComboBoxMixin"
-            },
-            {
-              "name": "required",
-              "description": "Set to true to mark the input as required.",
-              "sourceRange": {
-                "file": "vaadin-combo-box-mixin.html",
-                "start": {
-                  "line": 182,
-                  "column": 8
-                },
-                "end": {
-                  "line": 185,
                   "column": 9
                 }
               },
@@ -7229,11 +9348,11 @@
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
-                  "line": 190,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 184,
                   "column": 9
                 }
               },
@@ -7242,15 +9361,33 @@
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
             {
+              "name": "invalid",
+              "description": "Set to true if the value is invalid.",
+              "sourceRange": {
+                "file": "vaadin-combo-box-mixin.html",
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ComboBoxMixin"
+            },
+            {
               "name": "label",
               "description": "The label for this element.",
               "sourceRange": {
                 "start": {
-                  "line": 171,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 174,
+                  "line": 173,
                   "column": 13
                 }
               },
@@ -7262,11 +9399,11 @@
               "description": "Set to true to disable the floating label.",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 178,
                   "column": 12
                 },
                 "end": {
-                  "line": 182,
+                  "line": 181,
                   "column": 13
                 }
               },
@@ -7278,11 +9415,11 @@
               "description": "Set to true to always float the label.",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 186,
                   "column": 12
                 },
                 "end": {
-                  "line": 190,
+                  "line": 189,
                   "column": 13
                 }
               },
@@ -7294,11 +9431,11 @@
               "description": "Set to true to prevent the user from entering invalid input.",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 202,
                   "column": 12
                 },
                 "end": {
-                  "line": 205,
+                  "line": 204,
                   "column": 13
                 }
               },
@@ -7310,11 +9447,11 @@
               "description": "Set this to specify the pattern allowed by `preventInvalidInput`.",
               "sourceRange": {
                 "start": {
-                  "line": 210,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 212,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -7326,11 +9463,11 @@
               "description": "A pattern to validate the `input` with.",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 219,
+                  "line": 218,
                   "column": 13
                 }
               },
@@ -7342,11 +9479,11 @@
               "description": "The error message to display when the input is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 223,
                   "column": 12
                 },
                 "end": {
-                  "line": 226,
+                  "line": 225,
                   "column": 13
                 }
               },
@@ -7358,11 +9495,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 228,
+                  "line": 227,
                   "column": 12
                 },
                 "end": {
-                  "line": 230,
+                  "line": 229,
                   "column": 13
                 }
               },
@@ -7374,11 +9511,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 231,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 233,
                   "column": 13
                 }
               },
@@ -7390,11 +9527,11 @@
               "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
               "sourceRange": {
                 "start": {
-                  "line": 239,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -7406,32 +9543,16 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 252,
+                  "line": 251,
                   "column": 13
                 }
               },
               "metadata": {},
               "type": "number"
-            },
-            {
-              "name": "focused",
-              "description": "True when the input field has focus.",
-              "sourceRange": {
-                "start": {
-                  "line": 257,
-                  "column": 12
-                },
-                "end": {
-                  "line": 263,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
             }
           ],
           "events": [
@@ -7462,12 +9583,6 @@
               "description": "value-changed",
               "metadata": {},
               "inheritedFrom": "Vaadin.ComboBoxMixin"
-            },
-            {
-              "type": "CustomEvent",
-              "name": "focused-changed",
-              "description": "Fired when the `focused` property changes.",
-              "metadata": {}
             }
           ],
           "styling": {
@@ -7481,11 +9596,11 @@
               "range": {
                 "file": "vaadin-combo-box.html",
                 "start": {
-                  "line": 75,
+                  "line": 74,
                   "column": 6
                 },
                 "end": {
-                  "line": 75,
+                  "line": 74,
                   "column": 47
                 }
               }
@@ -7813,9 +9928,9 @@
               "defaultValue": "\"value\""
             },
             {
-              "name": "inputElement",
-              "type": "HTMLElement",
-              "description": "Returns a reference to the native input element.",
+              "name": "required",
+              "type": "boolean",
+              "description": "Set to true to mark the input as required.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -7824,27 +9939,6 @@
                 },
                 "end": {
                   "line": 177,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              }
-            },
-            {
-              "name": "required",
-              "type": "boolean",
-              "description": "Set to true to mark the input as required.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 182,
-                  "column": 8
-                },
-                "end": {
-                  "line": 185,
                   "column": 9
                 }
               },
@@ -7860,11 +9954,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 184,
                   "column": 9
                 }
               },
@@ -7873,17 +9967,39 @@
               }
             },
             {
+              "name": "invalid",
+              "type": "boolean",
+              "description": "Set to true if the value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
               "name": "_toggleElement",
               "type": "Object",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 196,
                   "column": 8
                 },
                 "end": {
-                  "line": 194,
+                  "line": 196,
                   "column": 30
                 }
               },
@@ -7898,11 +10014,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 195,
+                  "line": 197,
                   "column": 29
                 }
               },
@@ -7917,11 +10033,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 197,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 199,
                   "column": 34
                 }
               },
@@ -7936,11 +10052,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 199,
+                  "line": 201,
                   "column": 8
                 },
                 "end": {
-                  "line": 199,
+                  "line": 201,
                   "column": 40
                 }
               },
@@ -7955,11 +10071,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 201,
+                  "line": 203,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 203,
                   "column": 46
                 }
               },
@@ -7975,11 +10091,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 218,
                   "column": 4
                 },
                 "end": {
-                  "line": 231,
+                  "line": 239,
                   "column": 5
                 }
               },
@@ -7992,11 +10108,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 244,
                   "column": 4
                 },
                 "end": {
-                  "line": 241,
+                  "line": 249,
                   "column": 5
                 }
               },
@@ -8009,11 +10125,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 254,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 256,
                   "column": 5
                 }
               },
@@ -8026,11 +10142,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 258,
                   "column": 4
                 },
                 "end": {
-                  "line": 266,
+                  "line": 274,
                   "column": 5
                 }
               },
@@ -8045,33 +10161,16 @@
               ]
             },
             {
-              "name": "_onBlur",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 268,
-                  "column": 4
-                },
-                "end": {
-                  "line": 272,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
               "name": "_onOverlayTouchStart",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 276,
                   "column": 4
                 },
                 "end": {
-                  "line": 280,
+                  "line": 282,
                   "column": 5
                 }
               },
@@ -8088,11 +10187,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 284,
                   "column": 4
                 },
                 "end": {
-                  "line": 297,
+                  "line": 299,
                   "column": 5
                 }
               },
@@ -8109,11 +10208,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 303,
+                  "line": 305,
                   "column": 4
                 },
                 "end": {
-                  "line": 323,
+                  "line": 325,
                   "column": 5
                 }
               },
@@ -8130,11 +10229,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 325,
+                  "line": 327,
                   "column": 4
                 },
                 "end": {
-                  "line": 327,
+                  "line": 329,
                   "column": 5
                 }
               },
@@ -8154,11 +10253,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 329,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 331,
+                  "line": 333,
                   "column": 5
                 }
               },
@@ -8175,11 +10274,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 333,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 339,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -8196,11 +10295,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 350,
+                  "line": 352,
                   "column": 5
                 }
               },
@@ -8213,11 +10312,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 352,
+                  "line": 354,
                   "column": 4
                 },
                 "end": {
-                  "line": 366,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -8230,11 +10329,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 368,
+                  "line": 370,
                   "column": 4
                 },
                 "end": {
-                  "line": 379,
+                  "line": 381,
                   "column": 5
                 }
               },
@@ -8247,11 +10346,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 381,
+                  "line": 383,
                   "column": 4
                 },
                 "end": {
-                  "line": 397,
+                  "line": 399,
                   "column": 5
                 }
               },
@@ -8271,11 +10370,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 399,
+                  "line": 401,
                   "column": 4
                 },
                 "end": {
-                  "line": 403,
+                  "line": 405,
                   "column": 5
                 }
               },
@@ -8288,11 +10387,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 405,
+                  "line": 407,
                   "column": 4
                 },
                 "end": {
-                  "line": 410,
+                  "line": 412,
                   "column": 5
                 }
               },
@@ -8305,11 +10404,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 412,
+                  "line": 414,
                   "column": 4
                 },
                 "end": {
-                  "line": 421,
+                  "line": 423,
                   "column": 5
                 }
               },
@@ -8326,11 +10425,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 423,
+                  "line": 425,
                   "column": 4
                 },
                 "end": {
-                  "line": 434,
+                  "line": 436,
                   "column": 5
                 }
               },
@@ -8347,11 +10446,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 436,
+                  "line": 438,
                   "column": 4
                 },
                 "end": {
-                  "line": 441,
+                  "line": 443,
                   "column": 5
                 }
               },
@@ -8368,11 +10467,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 446,
+                  "line": 448,
                   "column": 4
                 },
                 "end": {
-                  "line": 458,
+                  "line": 460,
                   "column": 5
                 }
               },
@@ -8385,11 +10484,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 463,
+                  "line": 465,
                   "column": 4
                 },
                 "end": {
-                  "line": 468,
+                  "line": 470,
                   "column": 5
                 }
               },
@@ -8402,11 +10501,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 470,
+                  "line": 472,
                   "column": 4
                 },
                 "end": {
-                  "line": 491,
+                  "line": 493,
                   "column": 5
                 }
               },
@@ -8419,11 +10518,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 493,
+                  "line": 495,
                   "column": 4
                 },
                 "end": {
-                  "line": 528,
+                  "line": 530,
                   "column": 5
                 }
               },
@@ -8436,11 +10535,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 533,
+                  "line": 535,
                   "column": 4
                 },
                 "end": {
-                  "line": 539,
+                  "line": 541,
                   "column": 5
                 }
               },
@@ -8457,11 +10556,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 541,
+                  "line": 543,
                   "column": 4
                 },
                 "end": {
-                  "line": 555,
+                  "line": 557,
                   "column": 5
                 }
               },
@@ -8478,11 +10577,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 557,
+                  "line": 559,
                   "column": 4
                 },
                 "end": {
-                  "line": 564,
+                  "line": 566,
                   "column": 5
                 }
               },
@@ -8505,11 +10604,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 566,
+                  "line": 568,
                   "column": 4
                 },
                 "end": {
-                  "line": 570,
+                  "line": 572,
                   "column": 5
                 }
               },
@@ -8526,11 +10625,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 572,
+                  "line": 574,
                   "column": 4
                 },
                 "end": {
-                  "line": 579,
+                  "line": 581,
                   "column": 5
                 }
               },
@@ -8543,11 +10642,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 581,
+                  "line": 583,
                   "column": 4
                 },
                 "end": {
-                  "line": 587,
+                  "line": 589,
                   "column": 5
                 }
               },
@@ -8560,11 +10659,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 589,
+                  "line": 591,
                   "column": 4
                 },
                 "end": {
-                  "line": 618,
+                  "line": 620,
                   "column": 5
                 }
               },
@@ -8581,11 +10680,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 620,
+                  "line": 622,
                   "column": 4
                 },
                 "end": {
-                  "line": 640,
+                  "line": 642,
                   "column": 5
                 }
               },
@@ -8602,11 +10701,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 642,
+                  "line": 644,
                   "column": 4
                 },
                 "end": {
-                  "line": 647,
+                  "line": 649,
                   "column": 5
                 }
               },
@@ -8619,11 +10718,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 649,
+                  "line": 651,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 666,
                   "column": 5
                 }
               },
@@ -8646,11 +10745,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 666,
+                  "line": 668,
                   "column": 4
                 },
                 "end": {
-                  "line": 683,
+                  "line": 685,
                   "column": 5
                 }
               },
@@ -8673,11 +10772,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 685,
+                  "line": 687,
                   "column": 4
                 },
                 "end": {
-                  "line": 695,
+                  "line": 697,
                   "column": 5
                 }
               },
@@ -8697,11 +10796,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 697,
+                  "line": 699,
                   "column": 4
                 },
                 "end": {
-                  "line": 702,
+                  "line": 704,
                   "column": 5
                 }
               },
@@ -8718,11 +10817,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 704,
+                  "line": 706,
                   "column": 4
                 },
                 "end": {
-                  "line": 706,
+                  "line": 708,
                   "column": 5
                 }
               },
@@ -8739,11 +10838,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 708,
+                  "line": 710,
                   "column": 4
                 },
                 "end": {
-                  "line": 718,
+                  "line": 720,
                   "column": 5
                 }
               },
@@ -8763,11 +10862,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 725,
+                  "line": 727,
                   "column": 4
                 },
                 "end": {
-                  "line": 727,
+                  "line": 729,
                   "column": 5
                 }
               },
@@ -8787,11 +10886,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 729,
+                  "line": 731,
                   "column": 4
                 },
                 "end": {
-                  "line": 740,
+                  "line": 742,
                   "column": 5
                 }
               },
@@ -8808,11 +10907,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 748,
+                  "line": 750,
                   "column": 4
                 },
                 "end": {
-                  "line": 750,
+                  "line": 752,
                   "column": 5
                 }
               },
@@ -8833,11 +10932,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 757,
+                  "line": 759,
                   "column": 4
                 },
                 "end": {
-                  "line": 761,
+                  "line": 763,
                   "column": 5
                 }
               },
@@ -8854,11 +10953,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 772,
+                  "line": 774,
                   "column": 4
                 },
                 "end": {
-                  "line": 790,
+                  "line": 792,
                   "column": 5
                 }
               },
@@ -8871,11 +10970,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 792,
+                  "line": 794,
                   "column": 4
                 },
                 "end": {
-                  "line": 799,
+                  "line": 801,
                   "column": 5
                 }
               },
@@ -8888,11 +10987,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 801,
+                  "line": 803,
                   "column": 4
                 },
                 "end": {
-                  "line": 808,
+                  "line": 810,
                   "column": 5
                 }
               },
@@ -8905,11 +11004,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 810,
+                  "line": 812,
                   "column": 4
                 },
                 "end": {
-                  "line": 812,
+                  "line": 814,
                   "column": 5
                 }
               },
@@ -8926,11 +11025,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 814,
+                  "line": 816,
                   "column": 4
                 },
                 "end": {
-                  "line": 816,
+                  "line": 818,
                   "column": 5
                 }
               },
@@ -8951,7 +11050,7 @@
               "column": 2
             },
             "end": {
-              "line": 845,
+              "line": 847,
               "column": 3
             }
           },
@@ -9167,8 +11266,8 @@
               "type": "string"
             },
             {
-              "name": "input-element",
-              "description": "Returns a reference to the native input element.",
+              "name": "required",
+              "description": "Set to true to mark the input as required.",
               "sourceRange": {
                 "start": {
                   "line": 174,
@@ -9180,22 +11279,6 @@
                 }
               },
               "metadata": {},
-              "type": "HTMLElement"
-            },
-            {
-              "name": "required",
-              "description": "Set to true to mark the input as required.",
-              "sourceRange": {
-                "start": {
-                  "line": 182,
-                  "column": 8
-                },
-                "end": {
-                  "line": 185,
-                  "column": 9
-                }
-              },
-              "metadata": {},
               "type": "boolean"
             },
             {
@@ -9203,16 +11286,32 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 184,
                   "column": 9
                 }
               },
               "metadata": {},
               "type": "string"
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true if the value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
             }
           ],
           "events": [
