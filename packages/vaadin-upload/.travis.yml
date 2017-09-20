@@ -19,7 +19,7 @@ before_install:
 
 install:
   - npm install
-  - polymer install --variants
+  - polymer install
 
 before_script:
   - gulp lint
