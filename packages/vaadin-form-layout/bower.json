@@ -37,8 +37,5 @@
     "webcomponentsjs": "^1.0.1",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
-  },
-  "resolutions": {
-    "web-component-tester": "^6.1.5"
   }
 }
