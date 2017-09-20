@@ -371,6 +371,24 @@
         Vaadin.OverlayElement.prototype.addEventListener.restore();
       });
 
+      it('should have a click listener on the backdrop', () => {
+        // When backdrop is visible, it should also dispatch clicks,
+        // so another iOS workaround listener is needed for the backdrop.
+
+        sinon.spy(HTMLElement.prototype, 'addEventListener');
+
+        const overlay = document.createElement('vaadin-overlay');
+        document.body.appendChild(overlay);
+
+        const backdropCall = HTMLElement.prototype.addEventListener.getCalls()
+          .filter((call) => call.calledOn(overlay.$.backdrop))[0];
+        expect(backdropCall).to.not.be.undefined;
+        expect(backdropCall.calledWith('click')).to.be.true;
+
+        document.body.removeChild(overlay);
+        HTMLElement.prototype.addEventListener.restore();
+      });
+
       it('should allow pointer events on the overlayPart while skipping on the host', () => {
         expect(window.getComputedStyle(overlayPart).pointerEvents).to.equal('auto');
         expect(window.getComputedStyle(overlay).pointerEvents).to.equal('none');
