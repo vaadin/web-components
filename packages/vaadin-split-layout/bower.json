@@ -21,16 +21,19 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.0"
+    "vaadin-themable-mixin": "^1.1.0"
   },
   "devDependencies": {
-    "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",
     "iron-component-page": "^3.0.0",
     "iron-icon": "^2.0.0",
     "iron-icons": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "paper-button": "^2.0.0",
     "web-component-tester": "^6.1.5",
+    "webcomponentsjs": "^v1.0.0-rc.11",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+  },
+  "resolutions": {
     "webcomponentsjs": "^v1.0.0-rc.11"
   }
 }
