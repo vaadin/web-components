@@ -1,5 +1,9 @@
 {
   "rules": {
     "no-console": 0
-  }
+  },
+  "globals": {
+    "SplitLayoutDemo": false,
+    "DemoReadyEventEmitter": false
+  }  
 }
