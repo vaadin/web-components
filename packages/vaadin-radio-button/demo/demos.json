@@ -1,0 +1,26 @@
+{
+  "name": "Vaadin Radio Button",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "radio-button-basic-demos",
+    "src": "radio-button-basic-demos.html",
+    "meta": {
+      "title": "vaadin-radio-button Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Radio Button Group",
+    "url": "radio-button-group-demos",
+    "src": "radio-button-group-demos.html",
+    "meta": {
+      "title": "vaadin-radio-button-group Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
