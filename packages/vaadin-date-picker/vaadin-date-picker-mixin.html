@@ -523,11 +523,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._documentPointerEvents = document.body.style.pointerEvents;
       document.body.style.pointerEvents = 'none';
 
-      // Click on date cells do not work on Chrome 63 otherwise
-      const _pointerEvents = this.style.pointerEvents;
-      this.style.pointerEvents = 'auto';
-      this.style.pointerEvents = _pointerEvents;
-
       this._ignoreAnnounce = false;
     }
 
