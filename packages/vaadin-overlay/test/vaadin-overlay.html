@@ -52,11 +52,12 @@
     const mouseup = (el) => fire('mouseup', el);
 
     describe('overlay', function() {
-      var overlay, parent, content, backdrop, focusableElements;
+      var overlay, parent, overlayPart, content, backdrop, focusableElements;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
+        overlayPart = overlay.$.overlay;
         content = overlay.$.content;
         focusableElements = overlay._getFocusableElements();
         backdrop = overlay.$.backdrop;
@@ -134,14 +135,15 @@
           beforeEach(function() {
             parent = fixture('empty').children[0];
             overlay = parent.children[0];
+            overlayPart = overlay.$.overlay;
             content = overlay.$.content;
             overlay._observer.flush();
             overlay.opened = true;
           });
 
-          it('should focus the content when focusTrap = true', (done) => {
+          it('should focus the overlayPart when focusTrap = true', (done) => {
             overlay.addEventListener('vaadin-overlay-open', () => {
-              expect(overlay._focusedElement).to.eql(content);
+              expect(overlay._focusedElement).to.eql(overlayPart);
               done();
             });
           });
@@ -184,7 +186,7 @@
       });
 
       it('should not close on inside click', () => {
-        click(content);
+        click(overlayPart);
 
         expect(overlay.opened).to.be.true;
       });
@@ -212,7 +214,7 @@
         };
 
         overlay.addEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
-        click(content);
+        click(overlayPart);
         overlay.removeEventListener('vaadin-overlay-outside-click', outsideClickHandler, false);
       });
 
@@ -242,14 +244,14 @@
 
         it('should not close if mousedown outside and mouseup inside', () => {
           mousedown(parent);
-          mouseup(content);
-          click(content);
+          mouseup(overlayPart);
+          click(overlayPart);
 
           expect(overlay.opened).to.be.true;
         });
 
         it('should not close if mousedown inside and mouseup outside', () => {
-          mousedown(content);
+          mousedown(overlayPart);
           mouseup(parent);
           click(parent);
 
@@ -257,9 +259,9 @@
         });
 
         it('should not close if both mousedown mouseup inside', () => {
-          mousedown(content);
-          mouseup(content);
-          click(content);
+          mousedown(overlayPart);
+          mouseup(overlayPart);
+          click(overlayPart);
 
           expect(overlay.opened).to.be.true;
         });
@@ -272,7 +274,7 @@
 
         it('should close on outside click after mouseup inside', () => {
           // assume the overlay was opened on contextmenu event
-          mouseup(content);
+          mouseup(overlayPart);
 
           mousedown(parent);
           mouseup(parent);
@@ -294,11 +296,11 @@
         });
 
         it('should not close on inside click after mouseup inside', () => {
-          mouseup(content);
+          mouseup(overlayPart);
 
-          mousedown(content);
-          mouseup(content);
-          click(content);
+          mousedown(overlayPart);
+          mouseup(overlayPart);
+          click(overlayPart);
 
           expect(overlay.opened).to.be.true;
         });
@@ -306,9 +308,9 @@
         it('should not close on outside click after mouseup outside', () => {
           mouseup(parent);
 
-          mousedown(content);
-          mouseup(content);
-          click(content);
+          mousedown(overlayPart);
+          mouseup(overlayPart);
+          click(overlayPart);
 
           expect(overlay.opened).to.be.true;
         });
@@ -369,13 +371,13 @@
         Vaadin.OverlayElement.prototype.addEventListener.restore();
       });
 
-      it('should allow pointer events on the content while skipping on the host', () => {
-        expect(window.getComputedStyle(content).pointerEvents).to.equal('auto');
+      it('should allow pointer events on the overlayPart while skipping on the host', () => {
+        expect(window.getComputedStyle(overlayPart).pointerEvents).to.equal('auto');
         expect(window.getComputedStyle(overlay).pointerEvents).to.equal('none');
       });
 
-      it('should have scrollable content', () => {
-        expect(window.getComputedStyle(content).overflow).to.equal('auto');
+      it('should have scrollable overlayPart', () => {
+        expect(window.getComputedStyle(overlayPart).overflow).to.equal('auto');
       });
 
       describe('position and sizing', () => {
@@ -397,34 +399,34 @@
           expect(rect.bottom).to.be.lte(document.documentElement.clientHeight);
         });
 
-        it('should fit content in overlay', () => {
+        it('should fit overlayPart in overlay', () => {
           const overlayRect = overlay.getBoundingClientRect();
-          const contentRect = content.getBoundingClientRect();
+          const overlayPartRect = overlayPart.getBoundingClientRect();
 
-          expect(contentRect.left).to.be.gte(overlayRect.left);
-          expect(contentRect.top).to.be.gte(overlayRect.top);
-          expect(contentRect.right).to.be.lte(overlayRect.right);
-          expect(contentRect.bottom).to.be.lte(overlayRect.bottom);
+          expect(overlayPartRect.left).to.be.gte(overlayRect.left);
+          expect(overlayPartRect.top).to.be.gte(overlayRect.top);
+          expect(overlayPartRect.right).to.be.lte(overlayRect.right);
+          expect(overlayPartRect.bottom).to.be.lte(overlayRect.bottom);
         });
 
-        it('should center content in overlay with flex by default', () => {
+        it('should center overlayPart in overlay with flex by default', () => {
           // The “default” fixture content is too large to test this
           content.textContent = 'foo';
 
           const overlayRect = overlay.getBoundingClientRect();
-          const contentRect = content.getBoundingClientRect();
+          const overlayPartRect = overlayPart.getBoundingClientRect();
 
-          const halfWidthDifference = (overlayRect.width - contentRect.width) / 2;
-          const halfHeightDifference = (overlayRect.height - contentRect.height) / 2;
+          const halfWidthDifference = (overlayRect.width - overlayPartRect.width) / 2;
+          const halfHeightDifference = (overlayRect.height - overlayPartRect.height) / 2;
 
-          // Should not stretch the content in the overlay
+          // Should not stretch the overlayPart in the overlay
           expect(halfWidthDifference).to.be.gte(0);
           expect(halfHeightDifference).to.be.gte(0);
 
-          expect(contentRect.left - overlayRect.left).to.be.closeTo(halfWidthDifference, 1);
-          expect(overlayRect.right - contentRect.right).to.be.closeTo(halfWidthDifference, 1);
-          expect(contentRect.top - overlayRect.top).to.be.closeTo(halfHeightDifference, 1);
-          expect(overlayRect.bottom - contentRect.bottom).to.be.closeTo(halfHeightDifference, 1);
+          expect(overlayPartRect.left - overlayRect.left).to.be.closeTo(halfWidthDifference, 1);
+          expect(overlayRect.right - overlayPartRect.right).to.be.closeTo(halfWidthDifference, 1);
+          expect(overlayPartRect.top - overlayRect.top).to.be.closeTo(halfHeightDifference, 1);
+          expect(overlayRect.bottom - overlayPartRect.bottom).to.be.closeTo(halfHeightDifference, 1);
         });
       });
     });

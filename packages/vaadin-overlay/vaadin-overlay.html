@@ -20,7 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 8px;
       }
 
-      [part="content"] {
+      [part="overlay"] {
         background: #fff;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       }
@@ -37,7 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /*
           Despite of what the names say, <vaadin-overlay> is just a container
-          for position/sizing/alignment. The actual overlay is the content part.
+          for position/sizing/alignment. The actual overlay is the overlay part.
         */
 
         /*
@@ -49,7 +49,7 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
         left: 0;
 
-        /* Use flexbox alignment for the content part. */
+        /* Use flexbox alignment for the overlay part. */
         display: flex;
         flex-direction: column; /* makes dropdowns sizing easier */
         /* Align to center by default. */
@@ -59,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /* Allow centering when max-width/max-height applies. */
         margin: auto;
 
-        /* The host is not clickable, only the content is. */
+        /* The host is not clickable, only the overlay part is. */
         pointer-events: none;
 
         /* Remove tap highlight on touch devices. */
@@ -70,7 +70,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      [part="content"] {
+      [part="overlay"] {
         -webkit-overflow-scrolling: touch;
         overflow: auto;
         pointer-events: auto;
@@ -94,8 +94,10 @@ This program is available under Apache License Version 2.0, available at https:/
     <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}">
 
     </div>
-    <div part="content" id="content">
-      <slot id="slot"></slot>
+    <div part="overlay" id="overlay">
+      <div part="content" id="content">
+        <slot id="slot"></slot>
+      </div>
     </div>
   </template>
 </dom-module>
@@ -247,11 +249,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _mouseDownListener(event) {
-        this._mouseDownInside = event.composedPath().indexOf(this.$.content) >= 0;
+        this._mouseDownInside = event.composedPath().indexOf(this.$.overlay) >= 0;
       }
 
       _mouseUpListener(event) {
-        this._mouseUpInside = event.composedPath().indexOf(this.$.content) >= 0;
+        this._mouseUpInside = event.composedPath().indexOf(this.$.overlay) >= 0;
       }
 
       /**
@@ -263,7 +265,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
-        if (event.composedPath().indexOf(this.$.content) !== -1 ||
+        if (event.composedPath().indexOf(this.$.overlay) !== -1 ||
             this._mouseDownInside || this._mouseUpInside) {
           this._mouseDownInside = false;
           this._mouseUpInside = false;
@@ -400,8 +402,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // fallback if there are no focusable elements
-        this._focusedElement = this.$.content;
-        this.$.content.focus();
+        this._focusedElement = this.$.overlay;
+        this.$.overlay.focus();
       }
 
       // borrowed from jqeury $(elem).is(':visible') implementation
