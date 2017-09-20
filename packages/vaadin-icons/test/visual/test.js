@@ -6,7 +6,7 @@ gemini.suite('vaadin-icons', function(rootSuite) {
       .before(function(actions) {
         actions.waitForJSCondition(function(window) {
           return window.webComponentsAreReady;
-        }, 60000).wait(10000);
+        }, 120000).wait(10000);
       })
       .setCaptureElements('body')
       .capture('default');
