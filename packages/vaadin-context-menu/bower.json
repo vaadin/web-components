@@ -30,7 +30,6 @@
     "vaadin-overlay": "^1.1.0"
   },
   "devDependencies": {
-    "elements-demo-resources": "vaadin/elements-demo-resources#^2.0.0",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
@@ -40,6 +39,7 @@
     "test-fixture": "^3.0.0",
     "vaadin-grid": "^3.0.0",
     "webcomponentsjs": "^1.0.0",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.1.5",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   }
 }

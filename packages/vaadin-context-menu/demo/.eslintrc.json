@@ -4,6 +4,8 @@
     "no-unused-vars": 0
   },
   "globals": {
+    "ContextMenuDemo": false,
+    "DemoReadyEventEmitter": false,
     "getItems": false,
     "getNewItem": false
   }

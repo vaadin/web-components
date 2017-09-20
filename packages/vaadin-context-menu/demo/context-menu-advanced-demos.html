@@ -1,25 +1,16 @@
-<!doctype html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<dom-module id="context-menu-advanced-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
 
-  <title>vaadin-context-menu Basic Examples</title>
+    </style>
 
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-
-    <demo-navigation></demo-navigation>
 
     <h3>Opening and Closing Events</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='context-menu-advanced-demos-opening-and-closing-events'>
+      <template preserve-content>
         <vaadin-context-menu selector="button" open-on="click" close-on="none">
           <template>
             <paper-listbox>
@@ -31,13 +22,14 @@
           <button>Show Context Menu</button>
         </vaadin-context-menu>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Using with Vaadin Grid</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='context-menu-advanced-demos-using-with-vaadin-grid'>
+      <template preserve-content>
         <dom-module id="my-grid-view">
-          <template>
+          <template preserve-content>
             <style>
               vaadin-grid {
                 --vaadin-grid-body-cell: {
@@ -90,7 +82,7 @@
 
           <script>
 
-            document.addEventListener('WebComponentsReady', () => {
+            window.addDemoReadyListener('#context-menu-advanced-demos-using-with-vaadin-grid', function(document) {
               class MyGridView extends Polymer.Element {
                 static get is() {
                   return 'my-grid-view';
@@ -128,11 +120,12 @@
 
         <my-grid-view></my-grid-view>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Basic HTML Menu</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='context-menu-advanced-demos-basic-html-menu'>
+      <template preserve-content>
         <vaadin-context-menu>
           <template>
             <style>
@@ -164,11 +157,12 @@
           </p>
         </vaadin-context-menu>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
+
 
     <h3>Long Menus</h3>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='context-menu-advanced-demos-long-menus'>
+      <template preserve-content>
         <dom-bind id="app">
           <template>
             <vaadin-context-menu>
@@ -190,12 +184,20 @@
           </template>
         </dom-bind>
         <script>
-          document.addEventListener('WebComponentsReady', () => {
+          window.addDemoReadyListener('#context-menu-advanced-demos-long-menus', function(document) {
             document.querySelector('#app').menuItems = new Array(30);
           });
         </script>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
-</html>
+  </template>
+  <script>
+    class ContextMenuAdvancedDemos extends DemoReadyEventEmitter(ContextMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'context-menu-advanced-demos';
+      }
+    }
+    customElements.define(ContextMenuAdvancedDemos.is, ContextMenuAdvancedDemos);
+  </script>
+</dom-module>
