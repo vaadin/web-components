@@ -202,10 +202,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._observer.flush();
 
-        // Need to add a dummy click listener to this or else the document click
-        // event listener (_outsideClickListener) may never get invoked on iOS Safari
-        // (reproducable in <vaadin-dialog>)
+        // Need to add dummy click listeners to this and the backdrop or else
+        // the document click event listener (_outsideClickListener) may never
+        // get invoked on iOS Safari (reproducable in <vaadin-dialog> 
+        // and <vaadin-context-menu>).
         this.addEventListener('click', () => {});
+        this.$.backdrop.addEventListener('click', () => {});
       }
 
       _setTemplateFromNodes(nodes) {
