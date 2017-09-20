@@ -2,7 +2,7 @@
   "name": "Vaadin Icons",
   "pages": [
     {
-      "name": "Demo",
+      "name": "Vaadin Icons",
       "url": "icons-basic-demos",
       "src": "icons-basic-demos.html",
       "meta": {
