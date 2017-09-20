@@ -58,27 +58,25 @@
     <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
        then override the <code>checkValidity(value)</code> method to validate the input.
     <vaadin-demo-snippet id='date-picker-advanced-demos-custom-validator'>
-      <vaadin-demo-snippet id='date-picker-advanced-demos-custom-validator'>
-        <template preserve-content>
-          <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
+      <template preserve-content>
+        <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
 
-          <script>
-            window.addDemoReadyListener('#date-picker-advanced-demos-custom-validator', function(document) {
-              class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
-                checkValidity(value) {
-                  var valid = super.checkValidity();
-                  if (valid) {
-                    var currentYear = new Date().getFullYear();
-                    valid = new Date(value).getFullYear() === currentYear;
-                  }
-                  return valid;
+        <script>
+          window.addDemoReadyListener('#date-picker-advanced-demos-custom-validator', function(document) {
+            class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
+              checkValidity(value) {
+                var valid = super.checkValidity();
+                if (valid) {
+                  var currentYear = new Date().getFullYear();
+                  valid = new Date(value).getFullYear() === currentYear;
                 }
+                return valid;
               }
-              customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
-            });
-          </script>
-        </template>
-      </vaadin-demo-snippet>
+            }
+            customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
+          });
+        </script>
+      </template>
     </vaadin-demo-snippet>
 
 

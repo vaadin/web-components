@@ -452,7 +452,7 @@
 
           it('should be tabbable', () => {
             expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.equal(0);
-            expect(datepicker._inputElement.focused).to.be.undefined;
+            expect(datepicker._inputElement.focused).to.equal(false);
           });
 
           it('should focus the input on esc', () => {
