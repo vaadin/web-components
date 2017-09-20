@@ -93,8 +93,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addActiveListeners() {
-          this._addEventListenerToNode(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
-          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+          Polymer.Gestures.addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
+          Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
           this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
           this.addEventListener('keyup', () => this.removeAttribute('active'));
         }
