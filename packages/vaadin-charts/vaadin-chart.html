@@ -8,6 +8,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
 <link rel="import" href="vaadin-charts-default-theme.html">
 <script src="../highcharts/js/highcharts.js"></script>
 
@@ -61,6 +62,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         connectedCallback() {
           super.connectedCallback();
           Highcharts.chart(this.$.chart, this._baseConfig);
+          this._addLicenseChecker();
+        }
+
+        _addLicenseChecker() {
+          var licenseChecker = document.createElement('vaadin-license-checker');
+          licenseChecker.productName = 'vaadin-charts';
+          licenseChecker.productVersion = '6.0.0';
+          licenseChecker.productCaption = 'Vaadin Charts';
+          this.shadowRoot.appendChild(licenseChecker);
         }
       }
 
