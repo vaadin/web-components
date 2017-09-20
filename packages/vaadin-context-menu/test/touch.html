@@ -16,14 +16,28 @@
 </head>
 
 <body>
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      class TestWrapper extends Polymer.Element {
+        static get template() {
+          return `
+            <vaadin-context-menu selector="#target" id="menu">
+              <div id="target">Target</div>
+              <template>
+                <div>Menu Content</div>
+              </template>
+            </vaadin-context-menu>
+          `;
+        }
+      }
+      customElements.define('test-wrapper', TestWrapper);
+    });
+
+  </script>
+
   <test-fixture id="default">
     <template>
-      <vaadin-context-menu selector="#target">
-        <div id="target">Target</div>
-        <template>
-          <div>Menu Content</div>
-        </template>
-      </vaadin-context-menu>
+      <test-wrapper></test-wrapper>
     </template>
   </test-fixture>
 
@@ -33,9 +47,14 @@
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       beforeEach(() => {
-        menu = fixture('default');
+        var testWrapper = fixture('default');
+        menu = testWrapper.$.menu;
         target = Polymer.dom(menu).querySelector('#target');
         menu._phone = true;
+      });
+
+      afterEach(() => {
+        menu.close();
       });
 
       function makeSoloTouchEvent(type, xy, node) {

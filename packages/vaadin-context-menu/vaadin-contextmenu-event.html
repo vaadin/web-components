@@ -46,11 +46,11 @@ This program is available under Apache License Version 2.0, available at https:/
           y: e.changedTouches[0].clientY
         };
 
+        // After timeout event is already retargeted to the parent element in case there is one.
+        // So we are assinging the target synchronously on event dispatched.
+        const t = e.composedPath()[0] || e.target;
+
         this._timerId = setTimeout(() => {
-          // Original target may or may not be inside a shadow root.
-          // For code readability, findOriginalTarget() should be
-          // changed to use composedPath() directly after native Shadow becomes the norm.
-          const t = Polymer.Gestures.findOriginalTarget(e) || e.target;
           const ct = e.changedTouches[0];
           if (!e.shiftKey) {
             if (this.info._ios) {
