@@ -1,27 +1,18 @@
-<!doctype html>
-<html>
+<dom-module id="grid-crud-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>vaadin-grid – crud</title>
-
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-
-  <link rel="import" href="common.html">
-</head>
-
-<body unresolved>
-  <div class="vertical-section-container centered">
-    <demo-navigation></demo-navigation>
+    </style>
 
     <style>
       vaadin-grid {
         text-transform: none;
       }
     </style>
+
 
     <h3>CRUD</h3>
     <p>
@@ -30,11 +21,11 @@
     <p>
       <b>Note:</b> Remember to call <code>grid.clearCache()</code> to show updated data.
     </p>
-    <demo-snippet>
-      <template>
+    <vaadin-demo-snippet id='grid-crud-demos-crud'>
+      <template preserve-content>
         <x-crud></x-crud>
         <dom-module id="x-crud">
-          <template>
+          <template preserve-content>
             <style>
               input[readonly] {
                 border: 2px solid transparent;
@@ -89,7 +80,7 @@
             </vaadin-grid>
           </template>
           <script>
-            window.addEventListener('WebComponentsReady', function() {
+            window.addDemoReadyListener('#grid-crud-demos-crud', function(document) {
               class XCrud extends Polymer.Element {
                 static get is() {
                   return 'x-crud';
@@ -166,8 +157,16 @@
           </script>
         </dom-module>
       </template>
-    </demo-snippet>
+    </vaadin-demo-snippet>
   </div>
-</body>
 
-</html>
+  </template>
+  <script>
+    class GridCrudDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() {
+        return 'grid-crud-demos';
+      }
+    }
+    customElements.define(GridCrudDemos.is, GridCrudDemos);
+  </script>
+</dom-module>
