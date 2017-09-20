@@ -47,7 +47,7 @@
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       beforeEach(() => {
-        testWrapper = fixture('default');
+        var testWrapper = fixture('default');
         menu = testWrapper.$.menu;
         target = Polymer.dom(menu).querySelector('#target');
         menu._phone = true;
