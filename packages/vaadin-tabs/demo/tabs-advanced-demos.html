@@ -1,0 +1,30 @@
+<dom-module id="tabs-advanced-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Advanced example</h3>
+    <vaadin-demo-snippet id='tabs-advanced-demos-sample-example'>
+      <template preserve-content>
+        <vaadin-tabs>Hello World</vaadin-tabs>
+        <script>
+          window.addDemoReadyListener('#tabs-advanced-demos-sample-example', function(document) {
+            console.log(document.querySelector('vaadin-tabs').textContent); 
+          });
+        </script>
+    </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class TabsAdvancedDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
+      static get is() {
+        return 'tabs-advanced-demos';
+      }
+    }
+    customElements.define(TabsAdvancedDemos.is, TabsAdvancedDemos);
+  </script>
+</dom-module>

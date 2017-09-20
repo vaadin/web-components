@@ -1,0 +1,26 @@
+{
+  "name": "Vaadin Tabs",
+  "pages": [
+  {
+    "name": "Basic Examples",
+    "url": "tabs-basic-demos",
+    "src": "tabs-basic-demos.html",
+    "meta": {
+      "title": "vaadin-tabs Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Advanced Usage",
+    "url": "tabs-advanced-demos",
+    "src": "tabs-advanced-demos.html",
+    "meta": {
+      "title": "vaadin-tabs Advanced Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ]
+}
