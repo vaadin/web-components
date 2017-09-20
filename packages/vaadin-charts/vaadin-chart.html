@@ -8,11 +8,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<script src="../highcharts/highcharts.js"></script>
+<link rel="import" href="vaadin-charts-default-theme.html">
+<script src="../highcharts/js/highcharts.js"></script>
 
 <dom-module id="vaadin-chart">
   <template>
-    <style>
+    <style include="vaadin-charts-default-theme">
        :host {
         display: block;
       }
