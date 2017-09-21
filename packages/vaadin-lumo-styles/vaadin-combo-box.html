@@ -5,6 +5,11 @@
 <dom-module id="valo-combo-box" theme-for="vaadin-combo-box">
   <template>
     <style>
+      :host([label]) {
+        margin-top: var(--valo-space-m);
+        vertical-align: var(---vaadin-text-field-vertical-align-offset);
+      }
+
       [part="text-field"] {
         display: block;
         max-width: 100%;

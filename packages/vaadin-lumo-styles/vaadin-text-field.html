@@ -3,6 +3,16 @@
 <link rel="import" href="style.html">
 <link rel="import" href="typography.html">
 
+<custom-style>
+  <style>
+    html {
+      /* TODO Internal magic number, dependant on the font family, think if this could be computed somehow */
+      /* Used in combo-box and date-picker styles as well */
+      ---vaadin-text-field-vertical-align-offset: 34px;
+    }
+  </style>
+</custom-style>
+
 <dom-module id="valo-text-field" theme-for="vaadin-text-field">
   <template>
     <style>
@@ -14,8 +24,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
-        /* TODO why is this needed? Needs to be named different at least and added to the documentation */
-        --vaadin-text-field-vertical-align: bottom;
       }
 
       [part="label"] {
@@ -25,20 +33,16 @@
         margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
         margin-bottom: var(--valo-space-xs);
         transition: color 0.4s;
-        line-height: 1.333;
+        line-height: 1;
       }
 
       :host([label]) {
         margin-top: var(--valo-space-m);
-        vertical-align: var(--vaadin-text-field-vertical-align);
+        vertical-align: var(---vaadin-text-field-vertical-align-offset);
       }
 
       :host([focused]:not([readonly])) [part="label"] {
         color: var(--valo-primary-text-color);
-      }
-
-      :host([theme~="center"]) [part="value"] {
-        text-align: center;
       }
 
       /* Used for required and invalid indicators */
@@ -66,6 +70,7 @@
         color: inherit;
         background-color: transparent;
         align-self: baseline;
+        text-align: var(--valo-text-field-text-align);
 
         /* Disable default invalid style in Firefox */
         box-shadow: none;
@@ -213,10 +218,10 @@
       }
 
       /* Margin that doesn’t reserve space when there’s no error message*/
-      [part="error-message"]::before {
+      [part="error-message"]::after {
         content: "";
         display: block;
-        height: var(--valo-space-xs);
+        height: var(--valo-space-s);
       }
 
       [part="error-message"][hidden] {
@@ -228,8 +233,16 @@
       /* Small theme */
 
       :host([theme~="small"]) {
-        --valo-font-size: 14px;
+        --valo-font-size: var(--valo-font-size-s);
         --valo-size: var(--valo-size-s);
+      }
+
+      :host([theme~="small"][label]) {
+        ---vaadin-text-field-vertical-align-offset: 30px;
+      }
+
+      :host([theme~="small"][label]) [part="label"] {
+        font-size: var(--valo-font-size-xs);
       }
 
       /* Slotted buttons */
