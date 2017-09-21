@@ -13,17 +13,6 @@
   }
   ,
   {
-    "name": "Theming",
-    "url": "split-layout-theming-demos",
-    "src": "split-layout-theming-demos.html",
-    "meta": {
-      "title": "vaadin-split-layout Theming",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
     "name": "Integration",
     "url": "split-layout-integration-demos",
     "src": "split-layout-integration-demos.html",
