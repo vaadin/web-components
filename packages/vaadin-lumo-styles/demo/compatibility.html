@@ -144,14 +144,14 @@
       </template>
     </nice-demo-snippet>
 
-    <!-- TODO -->
     <h3 demo-section>Defining and overriding custom property values</h3>
 
-    <div class="note warn">
-      <p>TODO</p>
-    </div>
+    <p>From <a href="https://github.com/webcomponents/shadycss#custom-properties-and-apply">ShadyCSS documentation</a>:</p>
 
-
+    <blockquote>
+      <p>Properties cannot change from parent to child as they can under native custom properties; they can only change when a shadowRoot boundary is crossed.</p>
+      <p>To receive a custom property, an element must directly match a selector that defines the property in its host’s stylesheet.</p>
+    </blockquote>
 
   </div>
 </body>
