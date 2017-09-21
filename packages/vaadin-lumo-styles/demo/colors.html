@@ -59,26 +59,39 @@
     <p>The theme has a dark color variation available out of the box.</p>
     <p>Each color has two variations: the default variation which is used for the light theme, and another variation used for the dark theme.</p>
     <p><a href="#importing">You need to import</a> and include the “valo-colors” style module before you can use the dark theme. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
-    <p>For example, if you want to apply the dark colors for the whole app, include it in the global scope (e.g. index.html). Or if you want to apply the dark colors inside a shadow root, include it inside that shadow DOM template.</p>
+
+    <h4>1. Import and include the style module</h4>
     <nice-demo-snippet code-only>
       <template slot="source">
         <!-- Import the colors (this is done implicitly by all component themes) -->
         <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
 
-        <!-- Include the color style module -->
-        <!-- This will set the background and text color for this style scope -->
+        <!-- Include the color style module. This will set the background and text color
+             for this style scope (html element of a the host of a custom element) -->
         <custom-style>
           <style include="valo-colors"></style>
         </custom-style>
+      </template>
+    </nice-demo-snippet>
 
+    <h4>2.a. Applying the dark theme for global scope</h4>
+    <p>Apply the <code>theme="dark"</code> attribute on the HTML element:</p>
+    <code class="block">&lt;html theme="dark"&gt;
+  &lt;!-- The whole page/app will use the dark theme colors --&gt;
+&lt;/html&gt;</code>
+
+    <h4>2.b. Applying the dark theme for a single element scope</h4>
+    <p>You can apply the <code>theme="dark"</code> attribute on any element inside the style scope where you include the style module:</p>
+    <nice-demo-snippet code-only>
+      <template slot="source">
         <div theme="dark">
-          <!-- Everything inside this div will use the dark color theme -->
+          <!-- Everything inside this element will use the dark theme colors -->
         </div>
       </template>
     </nice-demo-snippet>
     <div class="note warn">
       <h6>Browser compatibility</h6>
-      <p>The previous example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors work in all supported browsers.</p>
+      <p>This example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors, scoped inside an element, work in all supported browsers.</p>
     </div>
 
 
