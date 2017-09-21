@@ -183,16 +183,33 @@
         });
 
         it('should refocus the field', (done) => {
-          customElement.dispatchEvent(new CustomEvent('focus'));
+          customElement.dispatchEvent(new CustomEvent('focusin'));
           MockInteractions.keyDownOn(customElement, 9, 'shift');
 
           // Shift + Tab disables refocusing temporarily, normal behaviour is restored asynchronously.
           setTimeout(() => {
             var spy = sinon.spy(focusElement, 'focus');
-            customElement.dispatchEvent(new CustomEvent('focus'));
+            customElement.dispatchEvent(new CustomEvent('focusin'));
             expect(spy.called).to.be.true;
             done();
           }, 0);
+        });
+
+        it('should add focusin and focusout listeners before super.ready', () => {
+          class TestSuperClass {
+            constructor() {
+              this.addEventListener = sinon.stub();
+            }
+            ready() {
+              // The listneres should have been added by now
+              expect(this.addEventListener.calledWith('focusin')).to.be.true;
+              expect(this.addEventListener.calledWith('focusout')).to.be.true;
+            }
+          }
+
+          class TestClass extends Vaadin.ControlStateMixin(TestSuperClass) {}
+          const instance = new TestClass();
+          instance.ready();
         });
       });
 
@@ -245,18 +262,6 @@
           expect(customElement.focused).to.be.false;
         });
 
-        it('should not set focused attribute on host mousedown with default prevented', () => {
-          const e = new CustomEvent('mousedown', {bubbles: true, cancelable: true, composed: true});
-          const preventDefaultListener = (e) => e.preventDefault();
-          customElement.$.input.addEventListener('mousedown', preventDefaultListener);
-
-          customElement.$.input.dispatchEvent(e);
-
-          expect(customElement.focused).to.be.false;
-
-          customElement.$.input.removeEventListener('mousedown', preventDefaultListener);
-        });
-
         it('should have focused and focus-ring set', done => {
           customElement = fixture('autofocus');
 
@@ -265,13 +270,6 @@
             expect(customElement.hasAttribute('focus-ring')).to.be.true;
             done();
           });
-        });
-
-        it('should focus an element only once on mousedown', () => {
-          customElement._focus = sinon.spy();
-          customElement.dispatchEvent(new CustomEvent('mousedown', {bubbles: true, composed: true}));
-          customElement.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
-          expect(customElement._focus.callCount).to.eql(1);
         });
       });
     });
