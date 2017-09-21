@@ -6,14 +6,70 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 
+<!-- Polymer Gestures will be needed for scrolling of the vaadin-tabs on mobiles later on -->
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+
 <dom-module id="vaadin-tabs">
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 16px;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .vaadin-tabs-wrapper {
+        flex-grow: 0.5;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .prefix,
+      .suffix {
+        flex-grow: 1;
+      }
+
+      .suffix {
+        text-align: right;
+      }
+
+      .vaadin-tabs {
+        display: flex;
+      }
+
+      .vaadin-tabs ::slotted(vaadin-tab) {
+        margin: 0 auto;
+      }
+
+      @media screen and (max-width: 600px) {
+        :host {
+          padding-left: 0;
+          padding-right: 0;
+        }
+
+        #scrollLeft,
+        #scrollRight {
+          flex: none;
+        }
+
+        .vaadin-tabs-wrapper {
+          flex-grow: 1;
+        }
       }
     </style>
-    <slot></slot>
+    <div id="scrollLeft">
+    </div>
+
+    <div class="vaadin-tabs-wrapper">
+      <div class="vaadin-tabs">
+        <slot id="tabs"></slot>
+      </div>
+    </div>
+
+    <div id="scrollRight">
+    </div>
   </template>
 
   <script>
@@ -33,15 +89,93 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinTabs extends Polymer.Element {
+      class VaadinTabs extends Polymer.GestureEventListeners(Polymer.Element) {
         static get is() {
           return 'vaadin-tabs';
         }
 
         static get properties() {
           return {
+            selected: {
+              type: Number,
+              reflectToAttribute: true,
+              notify: true
+            }
           };
         }
+
+        ready() {
+          super.ready();
+
+          this._addActiveListeners();
+        }
+
+        _setInitialSelectedTab() {
+          this.selected = this.children()[0];
+        }
+
+        _addActiveListeners() {
+          this.addEventListener('focusin', function(e) {
+            if (e.target.localName !== 'vaadin-tab') {
+              this.selected = 0;
+            } else {
+              this.selected = this._getIndexOfTab(e.target);
+            }
+          });
+
+          this.addEventListener('mousedown', function(e) {
+            if (e.target.localName !== 'vaadin-tab') {
+              return;
+            }
+
+            this.selected = this._getIndexOfTab(e.target);
+          });
+
+          this.addEventListener('keydown', e => {
+            // LEFT - select previous tab
+            if (e.keyCode === 37) {
+              e.preventDefault();
+              this._selectPreviousTab(this._getTabByIndex(this.selected));
+            }
+
+            // RIGHT select next tab
+            if (e.keyCode === 39) {
+              e.preventDefault();
+              this._selectNextTab(this._getTabByIndex(this.selected));
+            }
+          });
+        }
+
+        _getIndexOfTab(tab) {
+          return Array.from(this.children).indexOf(tab);
+        }
+
+        _getTabByIndex(indexOfTab) {
+          return this.children[indexOfTab];
+        }
+
+        _selectTab(tab) {
+          tab.focus();
+
+          this.selected = this._getIndexOfTab(tab);
+        }
+
+        _selectNextTab(tab) {
+          if (tab.nextElementSibling) {
+            this._selectTab(tab.nextElementSibling);
+          } else {
+            this._selectTab(this.firstElementChild);
+          }
+        }
+
+        _selectPreviousTab(tab) {
+          if (tab.previousElementSibling) {
+            this._selectTab(tab.previousElementSibling);
+          } else {
+            this._selectTab(this.lastElementChild);
+          }
+        }
+
       }
 
       customElements.define(VaadinTabs.is, VaadinTabs);

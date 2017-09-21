@@ -1,0 +1,130 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<script>
+    window.Vaadin = window.Vaadin || {};
+
+  /**
+   * A mixin providing focused, focus-ring, disabled, active, selected,
+   */
+  Vaadin.NavItemMixin = superClass => class VaadinNavItemMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * If true, the element currently has focus.
+         */
+        focused: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          readOnly: true,
+          observer: '_focusedChanged',
+          reflectToAttribute: true
+        },
+
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_disabledChanged',
+          reflectToAttribute: true
+        },
+
+        /**
+         * If true, the user is currently holding down the button.
+         */
+        active: {
+          type: Boolean,
+          readOnly: true,
+          value: false,
+          reflectToAttribute: true
+        },
+
+        /**
+         * If true, the button is in the selected state.
+         */
+        selected: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true
+        },
+
+        /**
+         * True if the input device that caused the element to receive focus
+         * was a keyboard.
+         */
+        focusRing: {
+          type: Boolean,
+          reflectToAttribute: true,
+          readOnly: true
+        }
+      };
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('focus', e => this._setFocused(true), true);
+      this.addEventListener('blur', e => this._setFocused(false), true);
+      this.addEventListener('mousedown', e => this._setActive(this._mousedown = true));
+      this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
+      this.addEventListener('keydown', e => this._onKeydown(e));
+      this.addEventListener('keyup', e => this._onKeyup());
+      this.addEventListener('click', e => this._toggle());
+      if (!this.hasAttribute('tabindex')) {
+        this.tabIndex = 0;
+      }
+    }
+
+    _toggle() {
+      this.selected = !this.selected;
+      this.dispatchEvent(new CustomEvent('selected', {bubbles: true, composed: true, detail: this.selected}));
+      this.setAttribute('aria-pressed', this.selected ? 'true' : 'false');
+    }
+
+    _disabledChanged(disabled, old) {
+      this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      this.style.pointerEvents = disabled ? 'none' : '';
+      if (disabled) {
+        this._oldTabIndex = this.tabIndex < 0 ? 0 : this.tabIndex;
+        this._setFocused(false);
+        this.tabIndex = -1;
+        this.blur();
+      } else if (this._oldTabIndex !== undefined) {
+        this.tabIndex = this._oldTabIndex;
+        delete this._oldTabIndex;
+      }
+    }
+
+    _focusedChanged(focused) {
+      this._setFocusRing(focused && !this._mousedown);
+      if (!focused) {
+        this._setActive(false);
+      }
+    }
+
+    _onKeydown(event) {
+      // space or enter
+      if (event.which == 32 || event.which == 13) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        this._setActive(true);
+      }
+    }
+
+    _onKeyup() {
+      if (this.active) {
+        this._setActive(false);
+        this._toggle();
+      }
+    }
+  };
+</script>
