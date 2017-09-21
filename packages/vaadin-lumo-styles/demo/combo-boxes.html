@@ -42,7 +42,7 @@
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-combo-box label="Label" placeholder="Placeholder"></vaadin-combo-box>
-        <vaadin-combo-box label="Label" value="Option one"></vaadin-combo-box>
+        <vaadin-combo-box label="Label" value="Option 1"></vaadin-combo-box>
       </template>
     </nice-demo-snippet>
 
@@ -50,9 +50,9 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-combo-box label="Enabled" value="Option one"></vaadin-combo-box>
-        <vaadin-combo-box label="Disabled" value="Option one" disabled></vaadin-combo-box>
-        <vaadin-combo-box label="Read only" value="Option one" readonly></vaadin-combo-box>
+        <vaadin-combo-box label="Enabled" value="Option 1"></vaadin-combo-box>
+        <vaadin-combo-box label="Disabled" value="Option 1" disabled></vaadin-combo-box>
+        <vaadin-combo-box label="Read only" value="Option 1" readonly></vaadin-combo-box>
       </template>
     </nice-demo-snippet>
 
@@ -132,7 +132,10 @@
       window.addEventListener('WebComponentsReady', function() {
         const combos = document.querySelectorAll('vaadin-combo-box');
         Array.from(combos).forEach(function(combo, i) {
-          combo.items = ['Option one', 'Option two', 'Option three', 'Option four', 'Option five'];
+          combo.items = [];
+          for (let i = 1; i <= 20; i++) {
+            combo.push('items', 'Option ' + i);
+          }
           if (combo.classList.contains('item-template')) {
             combo.items = [{name:"Maxine Richardson", email: "maxine.richardson@example.org"},
                            {name:"Kristina Howard", email: "kristina.howard@example.org"},
