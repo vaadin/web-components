@@ -11,16 +11,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Styling",
-    "url": "form-layout-styling-demos",
-    "src": "form-layout-styling-demos.html",
-    "meta": {
-      "title": "vaadin-form-layout Styling Examples",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }
