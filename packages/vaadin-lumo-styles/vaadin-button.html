@@ -67,14 +67,14 @@
       :host::after {
         content: "";
         position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: var(--valo-contrast-5pct);
+        border-radius: var(--valo-button-border-radius, var(--valo-border-radius));
         opacity: 0;
-        transition: opacity 0.5s;
-        border-radius: calc(var(--valo-button-border-radius, var(--valo-border-radius)) + 1px);
-        background-color: var(--valo-shade-5pct);
+        transition: opacity 0.2s;
         will-change: opacity;
         pointer-events: none;
       }
@@ -105,6 +105,10 @@
         transform: scale(0);
       }
 
+      :host([active]:not([theme~="primary"])) {
+        color: var(--valo-body-text-color);
+      }
+
       /* Tertiary */
 
       :host([theme~="tertiary"]) {
@@ -116,22 +120,24 @@
         padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
       }
 
-      :host([active][theme~="tertiary"]) {
-        color: var(--valo-body-text-color);
-      }
-
       /* Primary */
 
       :host([theme~="primary"]) {
         --valo-button-background-color: var(--valo-primary-color);
         --valo-button-text-color: var(--valo-primary-contrast-color);
-        box-shadow: 0 1px 2px 0 var(--valo-shade-30pct);
+        box-shadow: 0 1px 2px 0 var(--valo-shade-40pct);
         font-weight: var(--valo-primary-button-font-weight, 600);
         min-width: calc(var(--valo-size, var(--valo-size-m)) * 2.5);
       }
 
       :host([theme~="primary"][active])::after {
         opacity: 0.15;
+      }
+
+      @media (hover: hover) {
+        :host([theme~="primary"]:hover:not([active])) {
+          box-shadow: 0 2px 6px 0 var(--valo-shade-40pct);
+        }
       }
 
       /* X-Small */
