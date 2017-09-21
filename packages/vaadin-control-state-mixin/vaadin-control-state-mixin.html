@@ -85,23 +85,20 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     ready() {
+      this.addEventListener('focusin', e => {
+        if (e.composedPath()[0] === this) {
+          this._focus(e);
+        } else if (e.composedPath().indexOf(this.focusElement) !== -1 && !this.disabled) {
+          this._setFocused(true);
+        }
+      });
+      this.addEventListener('focusout', e => this._setFocused(false));
+
+      // In super.ready() other 'focusin' and 'focusout' listeners might be
+      // added, so we call it after our own ones to ensure they execute first.
+      // Issue to watch out: when incorrect, <vaadin-combo-box> refocuses the
+      // input field on iOS after “Done” is pressed.
       super.ready();
-
-      this.addEventListener('focus', e => {
-        if (this._tabPressed) {
-          this._focus(e);
-        }
-      });
-
-      this.addEventListener('focusin', e => e.composedPath().indexOf(this.focusElement) !== -1 && !this.disabled && this._setFocused(true));
-      this.addEventListener('focusout', e => e.composedPath().indexOf(this.focusElement) !== -1 && this._setFocused(false));
-
-      this.addEventListener('mousedown', e => {
-        if (!e.defaultPrevented) {
-          this._focus(e);
-          e.preventDefault();
-        }
-      });
 
       this.addEventListener('keydown', e => {
         if (e.shiftKey && e.keyCode === 9) {
