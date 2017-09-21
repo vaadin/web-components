@@ -1,4 +1,4 @@
-rootUrl: http://localhost:8080/components/vaadin-element/test/visual/
+rootUrl: http://localhost:8080/components/vaadin-ordered-layout/test/visual/
 gridUrl: http://localhost:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 
@@ -12,7 +12,7 @@ browsers:
   chrome:
     desiredCapabilities:
       browserName: "chrome"
-      version: "59.0"
+      version: "61.0"
       platform: "Windows 10"
 
   firefox:
