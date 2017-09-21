@@ -12,10 +12,12 @@
         margin: 0;
         padding: 0;
       }
+
       #container {
         width: 300px;
         min-height: 50px;
       }
+
       #container > div {
         width: 50px;
       }
@@ -34,16 +36,16 @@
   </test-fixture>
 
   <script>
-    describe('Basic tests', function() {
-      var element, c1, c2;
+    describe('Basic tests', () => {
+      let element, c1, c2;
 
-      beforeEach(function() {
+      beforeEach(() => {
         element = fixture('default');
         c1 = element.querySelector('#c1');
         c2 = element.querySelector('#c2');
       });
 
-      it('items are next to each other', function() {
+      it('items are next to each other', () => {
         expect(positionEquals(element, 0, 300, 50, 0)).to.be.true;
         expect(positionEquals(c1, 0, 50, 50, 0)).to.be.true;
         expect(positionEquals(c2, 0, 100, 50, 50)).to.be.true;
