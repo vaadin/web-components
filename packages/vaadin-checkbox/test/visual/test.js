@@ -20,10 +20,14 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
       .setCaptureElements('#default-tests')
       .capture('default')
       .capture('focus-ring', function(actions) {
-        actions.sendKeys(gemini.TAB);
+        actions.executeJS(function(window) {
+          window.document.querySelector('vaadin-checkbox').setAttribute('focus-ring', '');
+        });
       })
       .capture('checked', function(actions) {
-        actions.sendKeys(gemini.SPACE);
+        actions.executeJS(function(window) {
+          window.document.querySelector('vaadin-checkbox').checked = true;
+        });
       });
   });
 
