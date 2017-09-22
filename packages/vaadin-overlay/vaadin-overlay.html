@@ -110,6 +110,17 @@ This program is available under Apache License Version 2.0, available at https:/
   {
     /**
      * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
+     *
+     * ### Styling
+     *
+     * The following Shadow DOM parts are available for styling:
+     *
+     * Part name  | Description
+     * -----------|---------------------------------------------------------|
+     * `backdrop` | Backdrop of the overlay
+     * `overlay`  | Container for position/sizing/alignment of the content
+     * `content`  | Content of the overlay
+     *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
      * @demo demo/index.html
@@ -204,7 +215,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Need to add dummy click listeners to this and the backdrop or else
         // the document click event listener (_outsideClickListener) may never
-        // get invoked on iOS Safari (reproducable in <vaadin-dialog> 
+        // get invoked on iOS Safari (reproducible in <vaadin-dialog>
         // and <vaadin-context-menu>).
         this.addEventListener('click', () => {});
         this.$.backdrop.addEventListener('click', () => {});
