@@ -64,6 +64,17 @@
         expect(comboBox.opened).to.equal(true);
       });
 
+      it('should open before applying filter', () => {
+        comboBox.close();
+
+        const openSpy = sinon.spy(comboBox, 'open');
+        const filterChangedSpy = sinon.spy(comboBox, '_filterChanged');
+
+        setInputValue('f');
+
+        expect(openSpy.calledBefore(filterChangedSpy)).to.be.true;
+      });
+
       it('should not change the value of the combobox', () => {
         comboBox.value = 'foo';
         setInputValue('bar');

@@ -542,18 +542,17 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _filterFromInput(e) {
+      if (!this.opened) {
+        this.open();
+      }
+
       if (this.filter === this._inputElementValue) {
         // Filter and input value might get out of sync, while keyboard navigating for example.
         // Afterwards, input value might be changed to the same value as used in filtering.
         // In situation like these, we need to make sure all the filter changes handlers are run.
         this._filterChanged(this.filter, this.itemValuePath, this.itemLabelPath);
       } else {
-        this._userDefinedFilter = true;
         this.filter = this._inputElementValue;
-        this._userDefinedFilter = false;
-      }
-      if (!this.opened) {
-        this.open();
       }
     }
 
@@ -673,7 +672,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
         this._setOverlayItems(this.filteredItems);
 
-        this._focusedIndex = (this.opened || this._userDefinedFilter) ?
+        this._focusedIndex = this.opened ?
           this.$.overlay.indexOfLabel(this.filter) :
           this._indexOfValue(this.value, this.filteredItems);
 
