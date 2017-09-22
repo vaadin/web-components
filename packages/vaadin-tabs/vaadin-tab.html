@@ -26,6 +26,10 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
         padding: 4px;
         border: 2px solid transparent;
+        opacity: 0.7;
+        cursor: pointer;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
 
       [part="button"] {
@@ -48,8 +52,12 @@ This program is available under Apache License Version 2.0, available at https:/
         background: #03a9f44f;
       }
 
+      :host([disabled]) {
+        opacity: 0.3;
+      }
+
       :host(:hover) {
-        background: #03a9f415;
+        opacity: 1;
       }
     </style>
     <div id="button" type="button" part="button">

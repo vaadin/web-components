@@ -1,0 +1,94 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<linkey rel="import" href="../polymer/polymer.html">
+
+<script>
+    window.Vaadin = window.Vaadin || {};
+
+  /**
+   * A mixin providing rovin tabindex
+   */
+  Vaadin.RovinTabindexMixin = superClass => class VaadinRovinTabindexMixin extends superClass {
+    static get properties() {
+      return {
+        items: {
+          type: Array
+        }
+      };
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('selected', e => this._onSelected(e));
+      this.addEventListener('keydown', e => this._onKeydown(e));
+
+      Polymer.RenderStatus.beforeNextRender(this, () => {
+        this.items = Array.from(this.querySelectorAll(this.itemsSelector || '*'));
+        // Select first item is none selected
+        this.items[0] && !this.selected && this._select(this.items[0]);
+      });
+    }
+
+    get selected() {
+      return this.items.reduce((prev, el) => prev || (el.selected ? el : null), null);
+    }
+
+    get focused() {
+      return this.items.reduce((prev, el) => prev || (el.focused ? el : null), null);
+    }
+
+    _onKeydown(e) {
+      const key = e.which;
+      // arrow left or right
+      if (key == 37 || key == 39) {
+        this._moveToNext(key == 39, false);
+      }
+    }
+
+    // Move to the next/previous tab based on the ltr direction
+    // if select is set, then it selects the tab instead of focusing it
+    _moveToNext(ltr, doSelect) {
+      const l = this.items.length;
+      if (l) {
+        let curIdx = this.items.indexOf(doSelect ? this.selected : this.focused);
+        let newIdx = curIdx;
+        do {
+          newIdx += ltr ? 1 : -1;
+          newIdx = newIdx < 0 ? l - 1: newIdx == l ? 0 : newIdx;
+        } while (this.items[newIdx].disabled && newIdx != curIdx);
+        this.items[curIdx].tabIndex = -1;
+        this.items[newIdx].tabIndex = 0;
+        if (doSelect) {
+          this.items[curIdx].selected = false;
+          this.items[newIdx].selected = true;
+        } else {
+          this.items[newIdx].focus();
+        }
+        // TODO: move the current item to the scroller viewport
+        // this.$.scroll.scrollLeft = this.items[newIdx].offsetLeft;
+      }
+    }
+
+    _select(item) {
+      if (!item.disabled) {
+        this.items.forEach(e => {
+          e.selected = e == item ? true : false;
+          e.tabIndex = e == item ? 0 : -1;
+        });
+      }
+    }
+
+    _onSelected(e) {
+      if (!e.detail) {
+        // Prevent unselecting current item;
+        e.target.selected = true;
+      } else {
+        this._select(e.target);
+      }
+    }
+  };
+</script>

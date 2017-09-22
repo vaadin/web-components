@@ -5,8 +5,8 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-
-<!-- Polymer Gestures will be needed for scrolling of the vaadin-tabs on mobiles later on -->
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-rovin-tabindex-mixin.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <dom-module id="vaadin-tabs">
@@ -24,6 +24,12 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-grow: 0.5;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+        overflow: -moz-scrollbars-none;
+      }
+
+      .vaadin-tabs-wrapper::-webkit-scrollbar {
+        display: none;
       }
 
       .prefix,
@@ -43,14 +49,29 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0 auto;
       }
 
+      [part="left-button"],
+      [part="right-button"] {
+        opacity: 0.5;
+      }
+
+      [part="right-button"]::after {
+        padding-left: 8px;
+        content: '>';
+      }
+
+      [part="left-button"]::after {
+        padding-right: 8px;
+        content: '<';
+      }
+
       @media screen and (max-width: 600px) {
         :host {
           padding-left: 0;
           padding-right: 0;
         }
 
-        #scrollLeft,
-        #scrollRight {
+        [part="left-button"],
+        [part="right-button"] {
           flex: none;
         }
 
@@ -59,17 +80,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
-    <div id="scrollLeft">
-    </div>
+    <div on-click="_scrollLeft" part="left-button"></div>
 
-    <div class="vaadin-tabs-wrapper">
+    <div id="scroll" class="vaadin-tabs-wrapper">
       <div class="vaadin-tabs">
-        <slot id="tabs"></slot>
+        <slot></slot>
       </div>
     </div>
 
-    <div id="scrollRight">
-    </div>
+    <div on-click="_scrollRight" part="right-button"></div>
   </template>
 
   <script>
@@ -80,102 +99,23 @@ This program is available under Apache License Version 2.0, available at https:/
     {
 
       /**
-       * `<vaadin-tabs>` is a Polymer 2 element.
-       *
-       * ```
-       * <vaadin-tabs></vaadin-tabs>
-       * ```
+       * `<vaadin-tabs>` is a Polymer 2 element for easy switching between different view
        *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinTabs extends Polymer.GestureEventListeners(Polymer.Element) {
+      class VaadinTabs extends Vaadin.RovinTabindexMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
         static get is() {
           return 'vaadin-tabs';
         }
 
-        static get properties() {
-          return {
-            selected: {
-              type: Number,
-              reflectToAttribute: true,
-              notify: true
-            }
-          };
+        _scrollLeft() {
+          this.$.scroll.scrollLeft -= this.$.scroll.scrollWidth * 0.7;
         }
 
-        ready() {
-          super.ready();
-
-          this._addActiveListeners();
+        _scrollRight() {
+          this.$.scroll.scrollLeft += this.$.scroll.scrollWidth * 0.7;
         }
-
-        _setInitialSelectedTab() {
-          this.selected = this.children()[0];
-        }
-
-        _addActiveListeners() {
-          this.addEventListener('focusin', function(e) {
-            if (e.target.localName !== 'vaadin-tab') {
-              this.selected = 0;
-            } else {
-              this.selected = this._getIndexOfTab(e.target);
-            }
-          });
-
-          this.addEventListener('mousedown', function(e) {
-            if (e.target.localName !== 'vaadin-tab') {
-              return;
-            }
-
-            this.selected = this._getIndexOfTab(e.target);
-          });
-
-          this.addEventListener('keydown', e => {
-            // LEFT - select previous tab
-            if (e.keyCode === 37) {
-              e.preventDefault();
-              this._selectPreviousTab(this._getTabByIndex(this.selected));
-            }
-
-            // RIGHT select next tab
-            if (e.keyCode === 39) {
-              e.preventDefault();
-              this._selectNextTab(this._getTabByIndex(this.selected));
-            }
-          });
-        }
-
-        _getIndexOfTab(tab) {
-          return Array.from(this.children).indexOf(tab);
-        }
-
-        _getTabByIndex(indexOfTab) {
-          return this.children[indexOfTab];
-        }
-
-        _selectTab(tab) {
-          tab.focus();
-
-          this.selected = this._getIndexOfTab(tab);
-        }
-
-        _selectNextTab(tab) {
-          if (tab.nextElementSibling) {
-            this._selectTab(tab.nextElementSibling);
-          } else {
-            this._selectTab(this.firstElementChild);
-          }
-        }
-
-        _selectPreviousTab(tab) {
-          if (tab.previousElementSibling) {
-            this._selectTab(tab.previousElementSibling);
-          } else {
-            this._selectTab(this.lastElementChild);
-          }
-        }
-
       }
 
       customElements.define(VaadinTabs.is, VaadinTabs);
