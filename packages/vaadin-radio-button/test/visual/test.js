@@ -18,10 +18,7 @@ gemini.suite('vaadin-radio-button', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('default')
-      .capture('focus-tabindex', function(actions) {
-        actions.sendKeys(gemini.TAB);
-      });
+      .capture('default');
   });
 
 });
