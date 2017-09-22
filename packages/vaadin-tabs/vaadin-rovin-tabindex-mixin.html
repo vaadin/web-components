@@ -15,8 +15,31 @@ This program is available under Apache License Version 2.0, available at https:/
   Vaadin.RovinTabindexMixin = superClass => class VaadinRovinTabindexMixin extends superClass {
     static get properties() {
       return {
+        /**
+         * The CSS selector used to get items
+         */
+        itemsSelector: {
+          type: String,
+          value: '*'
+        },
+
+        /**
+         * The dom elements we can navigate and select
+         */
         items: {
-          type: Array
+          type: Array,
+          readOnly: true
+        },
+
+        /**
+         * The index of the item selected in the items array
+         */
+        selected: {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true,
+          notify: true,
+          observer: '_selectedChanged'
         }
       };
     }
@@ -26,15 +49,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
 
-      Polymer.RenderStatus.beforeNextRender(this, () => {
-        this.items = Array.from(this.querySelectorAll(this.itemsSelector || '*'));
-        // Select first item is none selected
-        this.items[0] && !this.selected && this._select(this.items[0]);
+      Polymer.RenderStatus.afterNextRender(this, () => {
+        this._setItems(Array.from(this.querySelectorAll(this.itemsSelector)));
+        // `selected` property could be set before items are ready.
+        this._selectedChanged(this.selected);
       });
-    }
-
-    get selected() {
-      return this.items.reduce((prev, el) => prev || (el.selected ? el : null), null);
     }
 
     get focused() {
@@ -47,14 +66,15 @@ This program is available under Apache License Version 2.0, available at https:/
       if (key == 37 || key == 39) {
         this._moveToNext(key == 39, false);
       }
+      // TODO: handle other keys to select items by the first letter.
     }
 
-    // Move to the next/previous tab based on the ltr direction
-    // if select is set, then it selects the tab instead of focusing it
+    // Move to the next/previous tab based on the ltr direction.
+    // If doSelect is true, it selects the tab instead of moving the focus to it
     _moveToNext(ltr, doSelect) {
       const l = this.items.length;
       if (l) {
-        let curIdx = this.items.indexOf(doSelect ? this.selected : this.focused);
+        let curIdx = doSelect ? this.selected : this.items.indexOf(this.focused);
         let newIdx = curIdx;
         do {
           newIdx += ltr ? 1 : -1;
@@ -73,8 +93,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _select(item) {
-      if (!item.disabled) {
+    _selectedChanged(idx) {
+      const item = this.items && this.items[idx < 0 ? 0 : idx];
+      if (item) {
         this.items.forEach(e => {
           e.selected = e == item ? true : false;
           e.tabIndex = e == item ? 0 : -1;
@@ -84,10 +105,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onSelected(e) {
       if (!e.detail) {
-        // Prevent unselecting current item;
+        // Prevent the user to unselect the current item
         e.target.selected = true;
       } else {
-        this._select(e.target);
+        this.selected = this.items.indexOf(e.target);
       }
     }
   };
