@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer.html">
 
 <script>
-    window.Vaadin = window.Vaadin || {};
+  window.Vaadin = window.Vaadin || {};
 
   /**
    * A mixin providing focused, focus-ring, disabled, active, selected,
@@ -87,11 +87,11 @@ This program is available under Apache License Version 2.0, available at https:/
     _toggle() {
       this.selected = !this.selected;
       this.dispatchEvent(new CustomEvent('selected', {bubbles: true, composed: true, detail: this.selected}));
-      this.setAttribute('aria-pressed', this.selected ? 'true' : 'false');
+      this.setAttribute('aria-pressed', !!this.selected);
     }
 
     _disabledChanged(disabled, old) {
-      this.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      this.setAttribute('aria-disabled', !!disabled);
       this.style.pointerEvents = disabled ? 'none' : '';
       if (disabled) {
         this._oldTabIndex = this.tabIndex < 0 ? 0 : this.tabIndex;

@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <linkey rel="import" href="../polymer/polymer.html">
 
 <script>
-    window.Vaadin = window.Vaadin || {};
+  window.Vaadin = window.Vaadin || {};
 
   /**
    * A mixin providing rovin tabindex
@@ -47,6 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
       this.addEventListener('selected', e => this._onSelected(e));
+      this.addEventListener('close', e => this._onClose(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
 
       Polymer.RenderStatus.afterNextRender(this, () => {
@@ -66,7 +67,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (key == 37 || key == 39) {
         this._moveToNext(key == 39, false);
       }
-      // TODO: handle other keys to select items by the first letter.
+      // TODO: handle other keys to focus items by the first letter.
     }
 
     // Move to the next/previous tab based on the ltr direction.
@@ -74,11 +75,11 @@ This program is available under Apache License Version 2.0, available at https:/
     _moveToNext(ltr, doSelect) {
       const l = this.items.length;
       if (l) {
-        let curIdx = doSelect ? this.selected : this.items.indexOf(this.focused);
+        const curIdx = doSelect ? this.selected : this.items.indexOf(this.focused);
         let newIdx = curIdx;
         do {
           newIdx += ltr ? 1 : -1;
-          newIdx = newIdx < 0 ? l - 1: newIdx == l ? 0 : newIdx;
+          newIdx = newIdx < 0 ? l - 1 : newIdx == l ? 0 : newIdx;
         } while (this.items[newIdx].disabled && newIdx != curIdx);
         this.items[curIdx].tabIndex = -1;
         this.items[newIdx].tabIndex = 0;
@@ -87,6 +88,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.items[newIdx].selected = true;
         } else {
           this.items[newIdx].focus();
+          this.items[curIdx].focused = false;
+          this.items[newIdx].focused = true;
         }
         // TODO: move the current item to the scroller viewport
         // this.$.scroll.scrollLeft = this.items[newIdx].offsetLeft;
@@ -110,6 +113,11 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this.selected = this.items.indexOf(e.target);
       }
+    }
+
+    _onClose(e) {
+      this.items.splice(this.items.indexOf(e.target), 1);
+      this.removeChild(e.target);
     }
   };
 </script>

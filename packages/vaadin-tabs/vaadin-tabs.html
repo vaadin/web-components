@@ -46,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       .vaadin-tabs ::slotted(vaadin-tab) {
-        margin: 0 auto;
+        flex: 1;
       }
 
       [part="left-button"],
@@ -80,7 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
-    <div on-click="_scrollLeft" part="left-button"></div>
+    <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
 
     <div id="scroll" class="vaadin-tabs-wrapper">
       <div class="vaadin-tabs">
@@ -88,7 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
     </div>
 
-    <div on-click="_scrollRight" part="right-button"></div>
+    <div id="right" on-click="_scrollRight" part="right-button" hidden$="[[_rightHidden]]"></div>
   </template>
 
   <script>
@@ -97,7 +97,6 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     {
-
       /**
        * `<vaadin-tabs>` is a Polymer 2 element for easy switching between different view
        *
@@ -111,12 +110,26 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-tabs';
         }
 
+        ready() {
+          super.ready();
+          window.addEventListener('resize', () => this._setHidden());
+          this.$.scroll.addEventListener('scroll', () => this._setHidden());
+          Polymer.RenderStatus.afterNextRender(this, () => this._setHidden());
+        }
+
         _scrollLeft() {
-          this.$.scroll.scrollLeft -= this.$.scroll.scrollWidth * 0.7;
+          this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
         }
 
         _scrollRight() {
-          this.$.scroll.scrollLeft += this.$.scroll.scrollWidth * 0.7;
+          this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
+        }
+
+        _setHidden() {
+          const hidden = this.$.scroll.scrollWidth == this.$.scroll.offsetWidth;
+          this._leftHidden = hidden || !hidden && this.$.scroll.scrollLeft == 0;
+          this._rightHidden = hidden || !hidden &&
+             this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth - this.$.right.offsetWidth;
         }
       }
 

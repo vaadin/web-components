@@ -25,7 +25,8 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.1.2"
+    "vaadin-themable-mixin": "^1.1.2",
+    "vaadin-valo-theme": "master"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

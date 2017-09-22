@@ -38,6 +38,32 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0;
         overflow: visible;
         border: none;
+        display: flex;
+        justify-content: center;
+      }
+
+      [part="close-button"] {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        border: solid 1px grey;
+        border-radius: 50%;
+        opacity: 0.6;
+        width: 12px;
+        height: 12px;
+        line-height: 10px;
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+      }
+
+      [part="close-button"]::before {
+        content: "x";
+      }
+
+      :host([hidden]) {
+        display: none;
       }
 
       :host([focused]) {
@@ -62,6 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div id="button" type="button" part="button">
       <slot></slot>
+      <div part="close-button" on-tap="_close" role="button"></div>
     </div>
   </template>
   <script>
@@ -92,6 +119,10 @@ This program is available under Apache License Version 2.0, available at https:/
           // since the focus is moved programmatically, and the second on a group.
           this.setAttribute('role', 'button');
           this.$.button.setAttribute('role', 'presentation');
+        }
+
+        _close() {
+          this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         }
       }
 
