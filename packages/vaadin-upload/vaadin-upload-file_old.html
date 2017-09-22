@@ -1,0 +1,347 @@
+<!--
+@license
+Copyright (c) 2016 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<!--
+`<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
+
+### Styling
+
+The following custom properties are available for styling the component.
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--vaadin-upload-file`|A mixin that is applied to the host element|`{}`
+`--vaadin-upload-file-row`|A mixin that is applied to the file row|`{}`
+`--vaadin-upload-file-status-icon`|A mixin that is applied to all file status icons. By default, file status icons are hidden until the upload process finishes.|`{}`
+`--vaadin-upload-file-status-icon-complete`|A mixin that is applied to the complete status icon when the upload process succeeds|`{}`
+`--vaadin-upload-file-status-icon-error`|A mixin that is applied to the error status icon when the upload process fails|`{}`
+`--vaadin-upload-file-meta`|A mixin that is applied to the info container|`{}`
+`--vaadin-upload-file-meta-complete`|A mixin that is applied to the info container when file upload is complete|`{}`
+`--vaadin-upload-file-meta-error`|A mixin that is applied to the info container when an error happens|`{}`
+`--vaadin-upload-file-name`|A mixin that is applied to the file name|`{}`
+`--vaadin-upload-file-status`|A mixin that is applied to the file status label|`{}`
+`--vaadin-upload-file-error`|A mixin that is applied to the file error label|`{}`
+`--vaadin-upload-file-commands`|A mixin that is applied to the buttons container|`{}`
+`--vaadin-upload-file-progress`|A mixin that is applied to the included paper-progress|`{}`
+`--vaadin-upload-file-progress-error`|A mixin that is applied to the progress bar when error is set|`{}`
+`--vaadin-upload-file-progress-indeterminate`|A mixin that is applied to the progress bar when indeterminate|`{}`
+`--vaadin-upload-file-progress-uploading-indeterminate`|A mixin that is applied to the progress bar when uploading and indeterminate|`{}`
+`--vaadin-upload-file-progress-complete`|A mixin that is applied to the progress when file is complete|`{}`
+`--vaadin-upload-file-canceled`|A mixin that is applied to the upload cancel animation|`{}`
+
+@element vaadin-upload-file
+@demo demo/
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-styles/typography.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../paper-progress/paper-progress.html">
+<link rel="import" href="vaadin-upload-icons.html">
+
+<dom-module id="vaadin-upload-file">
+  <template>
+    <style>
+      :host {
+        @apply --layout-vertical;
+        margin: 4px 0 0;
+        padding: 6px 0 4px;
+        @apply --vaadin-upload-file;
+      }
+
+      #row {
+        @apply --layout-horizontal;
+        @apply --layout-center;
+        height: 36px;
+        @apply --vaadin-upload-file-row;
+      }
+
+      iron-icon {
+        width: 24px;
+        height: 24px;
+        padding: 8px;
+        color: var(--primary-text-color, #000);
+        opacity: 0;
+        margin-right: -40px;
+        transition: margin-right 0.3s 0.1s, opacity 0.3s;
+        @apply --vaadin-upload-file-status-icon;
+      }
+
+      iron-icon[icon="vaadin-upload:warning"] {
+        color: var(--error-color, #f40303);
+      }
+
+      iron-icon[complete],
+      iron-icon[error] {
+        margin-right: 0;
+        opacity: 1;
+        transition: margin-right 0.3s, opacity 0.3s 0.1s;
+      }
+
+      iron-icon[complete] {
+        @apply --vaadin-upload-file-status-icon-complete;
+      }
+
+      iron-icon[error] {
+        @apply --vaadin-upload-file-status-icon-error;
+      }
+
+      #meta {
+        @apply --layout-vertical;
+        @apply --layout-flex;
+        height: 32px;
+        transition: height 0.1s;
+        width: 1px;
+        color: var(--disabled-text-color, gray);
+        overflow: hidden;
+        @apply --vaadin-upload-file-meta;
+      }
+
+      #meta[complete] {
+        height: 16px;
+        color: var(--primary-text-color, #000);
+        @apply --vaadin-upload-file-meta-complete;
+      }
+
+      #meta[error] {
+        color: var(--error-color, #f40303);
+        @apply --vaadin-upload-file-meta-error;
+      }
+
+      #name,
+      #status,
+      #error {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        line-height: 16px !important;
+      }
+
+      #name {
+        @apply --paper-font-body2;
+        @apply --vaadin-upload-file-name;
+      }
+
+      #status {
+        @apply --paper-font-caption;
+        color: var(--disabled-text-color, gray);
+        @apply --vaadin-upload-file-status;
+      }
+
+      #error {
+        @apply --paper-font-caption;
+        color: var(--error-color, #f40303);
+        @apply --vaadin-upload-file-error;
+      }
+
+      #commands {
+        @apply --layout-horizontal;
+        @apply --vaadin-upload-file-commands;
+      }
+
+      #commands [icon] {
+        color: var(--primary-text-color, #000);
+      }
+
+      #commands [icon="vaadin-upload:start"],
+      #commands [icon="vaadin-upload:refresh"],
+      #commands [icon="vaadin-upload:clear"] {
+        color: var(--primary-color, #00B4F0);
+      }
+
+      paper-progress {
+        --paper-progress-active-color: var(--primary-color, #00B4F0);
+        width: 100%;
+        height: 2px;
+        @apply --vaadin-upload-file-progress;
+      }
+
+      paper-progress[error] {
+        --paper-progress-container-color: var(--error-color, #f40303);
+        --paper-progress-active-color: var(--error-color, #f40303);
+        @apply --vaadin-upload-file-progress-error;
+      }
+
+      paper-progress[indeterminate] {
+        --paper-progress-container-color: var(--primary-color, #00B4F0);
+        --paper-progress-active-color: rgba(1, 97, 155, 0.5);
+        @apply --vaadin-upload-file-progress-indeterminate;
+      }
+
+      paper-progress[uploading][indeterminate] {
+        --paper-progress-container-color: var(--divider-color, #e0e0e0);
+        --paper-progress-active-color: var(--disabled-text-color, gray);
+        @apply --vaadin-upload-file-progress-uploading-indeterminate;
+      }
+
+      paper-progress[complete] {
+        @apply --vaadin-upload-file-progress-complete;
+      }
+
+      paper-icon-button[hidden] {
+        display: none;
+      }
+
+      :host(.fade-out) {
+        animation-name: fade-out;
+        animation-duration: 0.6s;
+        @apply --vaadin-upload-file-canceled;
+      }
+
+      @keyframes fade-out {
+        0% {
+          max-height: 38px;
+        }
+
+        33% {
+          max-height: 38px;
+          margin: 4px 0 0;
+          padding: 6px 0 4px;
+          opacity: 0.25;
+        }
+
+        67% {
+          opacity: 0;
+        }
+
+        100% {
+          max-height: 0;
+          margin: 0;
+          padding: 0;
+          opacity: 0;
+        }
+      }
+    </style>
+
+    <div id="row">
+
+      <iron-icon icon="vaadin-upload:done" complete$="[[file.complete]]"></iron-icon>
+      <iron-icon icon="vaadin-upload:warning" error$="[[file.error]]"></iron-icon>
+
+      <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
+        <div id="name">[[file.name]]</div>
+        <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
+        <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+      </div>
+
+      <div id="commands">
+        <paper-icon-button icon="vaadin-upload:start" file-event="file-start" on-tap="_fireFileEvent" hidden$="[[!file.held]]"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
+      </div>
+
+    </div>
+
+    <paper-progress
+        id="progress"
+        value$="[[file.progress]]"
+        error$="[[file.error]]"
+        indeterminate$="[[file.indeterminate]]"
+        uploading$="[[file.uploading]]"
+        complete$="[[file.complete]]"
+        >
+    </paper-progress>
+
+  </template>
+</dom-module>
+
+<script>
+
+  Polymer({
+
+    is: 'vaadin-upload-file',
+
+    properties: {
+      /**
+       * File metadata, upload status and progress information.
+       */
+      file: Object
+    },
+
+    observers: [
+      '_fileChanged(file.*)',
+      '_fileAborted(file.abort)'
+    ],
+
+    _fileChanged: function() {
+      this.$.progress.updateStyles();
+    },
+
+    ready: function() {
+      this.addEventListener('animationend', function(e) {
+        // Animation name is scoped to "fade-out-vaadin-upload-file-0" on
+        // Polymer 1 & Shady combination, so check with indexOf
+        if (e.animationName.indexOf('fade-out') > -1) {
+          this._remove();
+        }
+      });
+    },
+
+    _fileAborted: function(abort) {
+      if (abort) {
+        this.toggleClass('fade-out', true);
+
+        // In case the animation doesn't trigger, just remove the file instantly.
+        var animationName = window.getComputedStyle(this).animationName;
+        if (!animationName || animationName === 'none') {
+          this._remove();
+        }
+      }
+    },
+
+    _remove: function() {
+      this.toggleClass('fade-out', false);
+      this.fire('file-remove', {file: this.file});
+    },
+
+    _fireFileEvent: function(e) {
+      e.preventDefault();
+      var button = Polymer.dom(e).localTarget;
+      return this.fire(button.getAttribute('file-event'), {file: this.file});
+    }
+
+    /**
+    * Fired when the retry button is pressed. It is listened by `vaadin-upload`
+    * which will start a new upload process of this file.
+    *
+    * @event file-retry
+    * @param {Object} detail
+    * @param {Object} detail.file file to retry upload of
+    */
+
+    /**
+    * Fired when the start button is pressed. It is listened by `vaadin-upload`
+    * which will start a new upload process of this file.
+    *
+    * @event file-start
+    * @param {Object} detail
+    * @param {Object} detail.file file to start upload of
+    */
+
+    /**
+     * Fired when abort button is pressed. It is listened by `vaadin-upload` which
+     * will abort the upload in progress, but will not remove the file from the list
+     * to allow the animation to hide the element to be run.
+     *
+     * @event file-abort
+     * @param {Object} detail
+     * @param {Object} detail.file file to abort upload of
+     */
+
+    /**
+     * Fired after the animation to hide the element has finished. It is listened
+     * by `vaadin-upload` which will actually remove the file from the upload
+     * file list.
+     *
+     * @event file-remove
+     * @param {Object} detail
+     * @param {Object} detail.file file to remove from the  upload of
+     */
+  });
+
+</script>

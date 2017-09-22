@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 dist: trusty
 language: node_js
 node_js: 8.0
@@ -11,22 +11,20 @@ addons:
   firefox: latest
   google-chrome: latest
 
-# Temporary fix, currently there are some weird timeout issues in Travis with Chrome 59
-# TODO @limonte revisit after Chrome 60 release
-before_install:
-  - wget http://mirror.glendaleacademy.org/chrome/pool/main/g/google-chrome-stable/google-chrome-stable_58.0.3029.110-1_amd64.deb
-  - sudo dpkg -i google-chrome*.deb
-
 install:
   - npm install
-  - polymer install
+  - bower install
 
 before_script:
   - gulp lint
-  - polymer lint --rules polymer-2-hybrid --input *.html
+  - polymer lint --rules polymer-2 --input *.html
+  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - travis_retry xvfb-run -s '-screen 0 1024x768x24' gulp perf:run
 
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+      npm i gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+      gemini test test/visual &&
       xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
