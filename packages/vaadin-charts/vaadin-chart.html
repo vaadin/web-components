@@ -30,12 +30,44 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     {
 
       /**
-       * `<vaadin-chart>` is a Polymer 2 element.
+       * `<vaadin-chart>` is a Polymer 2 element for creating high quality charts.
        *
+       * ### Quick Start
+       *
+       * 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)
        * ```
+       * mkdir my-app
+       * cd my-app
+       * polymer init
+       * select `polymer-2-application`
+       * ```
+       * 1. Install Vaadin Charts
+       * ```
+       * bower install --save vaadin-charts#6.0-preview
+       * ```
+       * 1. Import `<vaadin-chart>` to your app
+       * Edit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag
+       * ```html
+       * <link rel="import" href="../../bower_components/vaadin-charts/vaadin-chart.html">
+       * ```
+       * 1. Add your first `<vaadin-chart>`
+       * Also in `my-app.html` add the following snippet before the `</template>` closing tag
+       * ```html
        * <vaadin-chart></vaadin-chart>
        * ```
-       *
+       * 1. Run your app with: 
+       * ```
+       * polymer serve --open
+       * ```
+       * Congratulations! You have your first Vaadin Chart setup.
+       * 
+       * ### Install License Key
+       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. 
+       * 
+       * You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
+       * 
+       * If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again
+       * 
        * @memberof Vaadin
        * @demo demo/index.html
        */

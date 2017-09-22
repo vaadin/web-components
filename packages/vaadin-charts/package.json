@@ -18,7 +18,8 @@
   },
   "homepage": "https://vaadin.com/charts",
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "analyze": "polymer analyze vaadin-chart.html > analysis.json"
   },
   "devDependencies": {
     "bower": "latest",

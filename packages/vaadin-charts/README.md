@@ -1,28 +1,44 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-charts.svg)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-charts.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-charts)
 
-# &lt;vaadin-chart&gt;
+# Vaadin Charts
 
-[&lt;vaadin-charts&gt;](https://vaadin.com/charts) is a [Polymer 2](http://polymer-project.org) element providing &lt;vaadin-chart&gt;, part of [Vaadin Elements](https://vaadin.com/elements).
+[Vaadin Charts](https://vaadin.com/charts) is a [Polymer 2](http://polymer-project.org) element providing &lt;vaadin-chart&gt; for creating high quality charts, part of [Vaadin Elements](https://vaadin.com/elements).
 
-<!--
+## Relevant links
+
+- **Product page** https://vaadin.com/charts
+- **Trial license** https://vaadin.com/pro/licenses
+
+
+## Using Vaadin Board in your project
+
+### Install Vaadin Charts
 ```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-chart.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
+$ bower install --save vaadin-charts#6.0-preview
 ```
--->
+
+### Import Vaadin Charts
+Add html import
+```html
+<link rel="import" href="bower_components/vaadin-charts/vaadin-chart.html">
+<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+```
+
+### Use Vaadin Charts
+Create your first Vaadin Chart
 ```html
 <vaadin-chart>
   ...
 </vaadin-chart>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-chart/master/screenshot.png" width="200" alt="Screenshot of vaadin-chart">](https://vaadin.com/elements/-/element/vaadin-chart)
+### Install License Key
+After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. 
+You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
+If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again.
+
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-charts/6.0-preview/screenshot.png" width="400" alt="Screenshot of vaadin-chart">](https://vaadin.com/elements/-/element/vaadin-chart)
 
 
 ## Running demos and tests in browser
