@@ -5,14 +5,18 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../vaadin-progress-bar/vaadin-progress-bar.html">
+<link rel="import" href="vaadin-upload-icons.html">
 
 <dom-module id="vaadin-upload-file">
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
       }
     </style>
+    <h1>hello</h1>
     <div id="row">
 
       <iron-icon icon="vaadin-upload:done" complete$="[[file.complete]]"></iron-icon>
@@ -25,21 +29,27 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
 
       <div id="commands">
-        <paper-icon-button icon="vaadin-upload:start" file-event="file-start" on-tap="_fireFileEvent" hidden$="[[!file.held]]"></paper-icon-button>
-        <paper-icon-button icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
-        <paper-icon-button icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
+        <iron-icon icon="vaadin-upload:start" file-event="file-start" on-tap="_fireFileEvent" hidden$="[[!file.held]]"></iron-icon>
+        <iron-icon icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></iron-icon>
+        <iron-icon icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></iron-icon>
       </div>
 
     </div>
-
-    <vaadin-progress-bar
+    <!-- TODO error, indeterminate, uploading, complete -->
+    <!-- <vaadin-progress-bar
         id="progress"
         value$="[[file.progress]]"
         error$="[[file.error]]"
         indeterminate$="[[file.indeterminate]]"
         uploading$="[[file.uploading]]"
         complete$="[[file.complete]]">
-    </paper-progress-bar>
+    </vaadin-progress-bar> -->
+
+    <vaadin-progress-bar
+        id="progress"
+        value$="[[file.progress]]">
+
+    </vaadin-progress-bar>
   </template>
 
   <script>
@@ -78,24 +88,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _fileChanged() {
-          console.log('changed')
-          this.$.progress.updateStyles();
-        }
-
-        ready() {
-          console.log('ready');
-          this.addEventListener('animationend', (e) => {
-            // Animation name is scoped to "fade-out-vaadin-upload-file-0" on
-            // Polymer 1 & Shady combination, so check with indexOf
-            if (e.animationName.indexOf('fade-out') > -1) {
-              this._remove();
-            }
-          });
+          // console.log(this.$)
+          // return;
+          // this.$.progress.updateStyles();
         }
 
         _fileAborted(abort) {
           if (abort) {
-            this.toggleClass('fade-out', true);
+            this.classList.add('fade-out')
+            // this.toggleClass('fade-out', true);
 
             // In case the animation doesn't trigger, just remove the file instantly.
             var animationName = window.getComputedStyle(this).animationName;
@@ -106,6 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _remove() {
+          this.classList.remove('fade-out');
           this.toggleClass('fade-out', false);
           this.dispatchEvent(
             new CustomEvent('file-remove', {
