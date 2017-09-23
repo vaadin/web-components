@@ -1,0 +1,1529 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "",
+      "summary": "",
+      "path": "vaadin-upload-file.html",
+      "properties": [
+        {
+          "name": "file",
+          "type": "Object",
+          "description": "File metadata, upload status and progress information.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 262,
+              "column": 6
+            },
+            "end": {
+              "line": 262,
+              "column": 18
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_fileChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 270,
+              "column": 4
+            },
+            "end": {
+              "line": 272,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 274,
+              "column": 4
+            },
+            "end": {
+              "line": 282,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_fileAborted",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 284,
+              "column": 4
+            },
+            "end": {
+              "line": 294,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "abort"
+            }
+          ]
+        },
+        {
+          "name": "_remove",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 296,
+              "column": 4
+            },
+            "end": {
+              "line": 299,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_fireFileEvent",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 301,
+              "column": 4
+            },
+            "end": {
+              "line": 305,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "e"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 254,
+          "column": 10
+        },
+        "end": {
+          "line": 344,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "file",
+          "description": "File metadata, upload status and progress information.",
+          "sourceRange": {
+            "start": {
+              "line": 262,
+              "column": 6
+            },
+            "end": {
+              "line": 262,
+              "column": 18
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "file-abort",
+          "description": "file-abort",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-remove",
+          "description": "file-remove",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-retry",
+          "description": "file-retry",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "file-start",
+          "description": "file-start",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "vaadin-upload-file"
+    },
+    {
+      "description": "",
+      "summary": "",
+      "path": "vaadin-upload.html",
+      "properties": [
+        {
+          "name": "nodrop",
+          "type": "boolean",
+          "description": "Define whether the element supports dropping files on it for uploading.\nBy default it's enabled in desktop and disabled in touch devices\nbecause mobile devices do not support drag events in general. Setting\nit false means that drop is enabled even in touch-devices, and true\ndisables drop in all devices.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 6
+            },
+            "end": {
+              "line": 207,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "target",
+          "type": "string",
+          "description": "The server URL. The default value is an empty string, which means that\n_window.location_ will be used.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 213,
+              "column": 6
+            },
+            "end": {
+              "line": 216,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "method",
+          "type": "string",
+          "description": "HTTP Method used to send the files. Only POST and PUT are allowed.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 221,
+              "column": 6
+            },
+            "end": {
+              "line": 224,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"POST\""
+        },
+        {
+          "name": "headers",
+          "type": "Object",
+          "description": "Key-Value map to send to the server. If you set this property as an\nattribute, use a valid JSON string, for example:\n```\n<vaadin-upload headers='{\"X-Foo\": \"Bar\"}'></vaadin-upload>\n```",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 233,
+              "column": 6
+            },
+            "end": {
+              "line": 236,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "{}"
+        },
+        {
+          "name": "timeout",
+          "type": "number",
+          "description": "Max time in milliseconds for the entire upload process, if exceeded the\nrequest will be aborted. Zero means that there is no timeout.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 243,
+              "column": 6
+            },
+            "end": {
+              "line": 246,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "_dragover",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 248,
+              "column": 6
+            },
+            "end": {
+              "line": 252,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_dragoverChanged\""
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "files",
+          "type": "Array",
+          "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while trasferring data to the server.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 276,
+              "column": 6
+            },
+            "end": {
+              "line": 282,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          },
+          "defaultValue": "[]"
+        },
+        {
+          "name": "maxFiles",
+          "type": "number",
+          "description": "Limit of files to upload, by default it is unlimited. If the value is\nset to one, native file browser will prevent selecting multiple files.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 288,
+              "column": 6
+            },
+            "end": {
+              "line": 291,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "maxFilesReached",
+          "type": "boolean",
+          "description": "Specifies if the maximum number of files have been uploaded",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 296,
+              "column": 6
+            },
+            "end": {
+              "line": 302,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true,
+              "readOnly": true
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "accept",
+          "type": "string",
+          "description": "Specifies the types of files that the server accepts.\nSyntax: a comma-separated list of MIME type patterns (wildcards are\nallowed) or file extensions.\nNotice that MIME types are widely supported, while file extensions\nare only implemented in certain browsers, so avoid using it.\nExample: accept=\"video/*,image/tiff\" or accept=\".pdf,audio/mp3\"",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 312,
+              "column": 6
+            },
+            "end": {
+              "line": 315,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "maxFileSize",
+          "type": "number",
+          "description": "Specifies the maximum file size in bytes allowed to upload.\nNotice that it is a client-side constraint, which will be checked before\nsending the request. Obviously you need to do the same validation in\nthe server-side and be sure that they are aligned.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 323,
+              "column": 6
+            },
+            "end": {
+              "line": 326,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_dragoverValid",
+          "type": "boolean",
+          "description": "Specifies if the dragover is validated with maxFiles and\naccept properties.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 332,
+              "column": 6
+            },
+            "end": {
+              "line": 336,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_dragoverValidChanged\""
+            }
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "formDataName",
+          "type": "string",
+          "description": "Specifies the 'name' property at Content-Disposition",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 341,
+              "column": 6
+            },
+            "end": {
+              "line": 344,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"file\""
+        },
+        {
+          "name": "noAuto",
+          "type": "boolean",
+          "description": "Prevents upload(s) from immediately uploading upon adding file(s).\nWhen set, you must manually trigger uploads using the `uploadFiles` method",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 350,
+              "column": 6
+            },
+            "end": {
+              "line": 353,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        },
+        {
+          "name": "i18n",
+          "type": "Object",
+          "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n    {\n      dropFiles: {\n       one: 'Drop file here...',\n       many: 'Drop files here...'\n      },\n      addFiles: {\n       one: 'Select File',\n       many: 'Upload Files'\n      },\n      cancel: 'Cancel',\n      error: {\n       tooManyFiles: 'Too Many Files.',\n       fileIsTooBig: 'File is Too Big.',\n       incorrectFileType: 'Incorrect File Type.'\n      },\n      uploading: {\n       status: {\n         connecting: 'Connecting...',\n         stalled: 'Stalled.',\n         processing: 'Processing File...',\n         held: 'Queued'\n       },\n       remainingTime: {\n         prefix: 'remaining time: ',\n         unknown: 'unknown remaining time'\n       },\n       error: {\n         serverUnavailable: 'Server Unavailable',\n         unexpectedServerError: 'Unexpected Server Error',\n         forbidden: 'Forbidden'\n       }\n      },\n      units: {\n       size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n      },\n      formatSize: function(bytes) {\n       // returns the size followed by the best suitable unit\n      },\n      formatTime: function(seconds, [secs, mins, hours]) {\n       // returns a 'HH:MM:SS' string\n      }\n    }",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 408,
+              "column": 6
+            },
+            "end": {
+              "line": 448,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_formatSize",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 461,
+              "column": 4
+            },
+            "end": {
+              "line": 472,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "bytes"
+            }
+          ]
+        },
+        {
+          "name": "_splitTimeByUnits",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 474,
+              "column": 4
+            },
+            "end": {
+              "line": 484,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "name": "_formatTime",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 486,
+              "column": 4
+            },
+            "end": {
+              "line": 502,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "seconds"
+            },
+            {
+              "name": "split"
+            }
+          ]
+        },
+        {
+          "name": "_formatFileProgress",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 504,
+              "column": 4
+            },
+            "end": {
+              "line": 511,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ]
+        },
+        {
+          "name": "_maxFilesAdded",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 513,
+              "column": 4
+            },
+            "end": {
+              "line": 515,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "maxFiles"
+            },
+            {
+              "name": "numFiles"
+            }
+          ]
+        },
+        {
+          "name": "_dragRippleAction",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 517,
+              "column": 4
+            },
+            "end": {
+              "line": 561,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "action"
+            },
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onDragover",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 563,
+              "column": 4
+            },
+            "end": {
+              "line": 573,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onDragleave",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 575,
+              "column": 4
+            },
+            "end": {
+              "line": 585,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onDrop",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 587,
+              "column": 4
+            },
+            "end": {
+              "line": 595,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_createXhr",
+          "description": "Override for tests",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 598,
+              "column": 4
+            },
+            "end": {
+              "line": 600,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_configureXhr",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 602,
+              "column": 4
+            },
+            "end": {
+              "line": 616,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "xhr"
+            }
+          ]
+        },
+        {
+          "name": "_setStatus",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 618,
+              "column": 4
+            },
+            "end": {
+              "line": 627,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            },
+            {
+              "name": "total"
+            },
+            {
+              "name": "loaded"
+            },
+            {
+              "name": "elapsed"
+            }
+          ]
+        },
+        {
+          "name": "uploadFiles",
+          "description": "Triggers the upload of any files that are not completed",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 634,
+              "column": 4
+            },
+            "end": {
+              "line": 640,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ]
+        },
+        {
+          "name": "_uploadFile",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 642,
+              "column": 4
+            },
+            "end": {
+              "line": 742,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ]
+        },
+        {
+          "name": "_retryFileUpload",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 744,
+              "column": 4
+            },
+            "end": {
+              "line": 749,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ]
+        },
+        {
+          "name": "_abortFileUpload",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 751,
+              "column": 4
+            },
+            "end": {
+              "line": 760,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ]
+        },
+        {
+          "name": "_notifyFileChanges",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 762,
+              "column": 4
+            },
+            "end": {
+              "line": 769,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file"
+            }
+          ]
+        },
+        {
+          "name": "_addFiles",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 771,
+              "column": 4
+            },
+            "end": {
+              "line": 773,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "files"
+            }
+          ]
+        },
+        {
+          "name": "_addFile",
+          "description": "Add the file for uploading. Called internally for each file after picking files from dialog or dropping files.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 780,
+              "column": 4
+            },
+            "end": {
+              "line": 803,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file",
+              "type": "File",
+              "description": "File being added"
+            }
+          ]
+        },
+        {
+          "name": "_removeFile",
+          "description": "Remove file from upload list. Called internally if file upload was canceled.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 809,
+              "column": 4
+            },
+            "end": {
+              "line": 811,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "file",
+              "type": "File",
+              "description": "File to remove"
+            }
+          ]
+        },
+        {
+          "name": "_onAddFilesClick",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 813,
+              "column": 4
+            },
+            "end": {
+              "line": 830,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_onFileInputChange",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 832,
+              "column": 4
+            },
+            "end": {
+              "line": 834,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onFileStart",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 836,
+              "column": 4
+            },
+            "end": {
+              "line": 838,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onFileRetry",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 840,
+              "column": 4
+            },
+            "end": {
+              "line": 842,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onFileAbort",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 844,
+              "column": 4
+            },
+            "end": {
+              "line": 846,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onFileRemove",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 848,
+              "column": 4
+            },
+            "end": {
+              "line": 851,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_dragoverChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 853,
+              "column": 4
+            },
+            "end": {
+              "line": 855,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "dragover"
+            }
+          ]
+        },
+        {
+          "name": "_dragoverValidChanged",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 857,
+              "column": 4
+            },
+            "end": {
+              "line": 859,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "dragoverValid"
+            }
+          ]
+        },
+        {
+          "name": "_i18nPlural",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 861,
+              "column": 4
+            },
+            "end": {
+              "line": 863,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "value"
+            },
+            {
+              "name": "plural"
+            }
+          ]
+        },
+        {
+          "name": "_isMultiple",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 865,
+              "column": 4
+            },
+            "end": {
+              "line": 867,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 183,
+          "column": 10
+        },
+        "end": {
+          "line": 868,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "nodrop",
+          "description": "Define whether the element supports dropping files on it for uploading.\nBy default it's enabled in desktop and disabled in touch devices\nbecause mobile devices do not support drag events in general. Setting\nit false means that drop is enabled even in touch-devices, and true\ndisables drop in all devices.",
+          "sourceRange": {
+            "start": {
+              "line": 197,
+              "column": 6
+            },
+            "end": {
+              "line": 207,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "target",
+          "description": "The server URL. The default value is an empty string, which means that\n_window.location_ will be used.",
+          "sourceRange": {
+            "start": {
+              "line": 213,
+              "column": 6
+            },
+            "end": {
+              "line": 216,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "HTTP Method used to send the files. Only POST and PUT are allowed.",
+          "sourceRange": {
+            "start": {
+              "line": 221,
+              "column": 6
+            },
+            "end": {
+              "line": 224,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "headers",
+          "description": "Key-Value map to send to the server. If you set this property as an\nattribute, use a valid JSON string, for example:\n```\n<vaadin-upload headers='{\"X-Foo\": \"Bar\"}'></vaadin-upload>\n```",
+          "sourceRange": {
+            "start": {
+              "line": 233,
+              "column": 6
+            },
+            "end": {
+              "line": 236,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "timeout",
+          "description": "Max time in milliseconds for the entire upload process, if exceeded the\nrequest will be aborted. Zero means that there is no timeout.",
+          "sourceRange": {
+            "start": {
+              "line": 243,
+              "column": 6
+            },
+            "end": {
+              "line": 246,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "files",
+          "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while trasferring data to the server.",
+          "sourceRange": {
+            "start": {
+              "line": 276,
+              "column": 6
+            },
+            "end": {
+              "line": 282,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Array"
+        },
+        {
+          "name": "max-files",
+          "description": "Limit of files to upload, by default it is unlimited. If the value is\nset to one, native file browser will prevent selecting multiple files.",
+          "sourceRange": {
+            "start": {
+              "line": 288,
+              "column": 6
+            },
+            "end": {
+              "line": 291,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "max-files-reached",
+          "description": "Specifies if the maximum number of files have been uploaded",
+          "sourceRange": {
+            "start": {
+              "line": 296,
+              "column": 6
+            },
+            "end": {
+              "line": 302,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "accept",
+          "description": "Specifies the types of files that the server accepts.\nSyntax: a comma-separated list of MIME type patterns (wildcards are\nallowed) or file extensions.\nNotice that MIME types are widely supported, while file extensions\nare only implemented in certain browsers, so avoid using it.\nExample: accept=\"video/*,image/tiff\" or accept=\".pdf,audio/mp3\"",
+          "sourceRange": {
+            "start": {
+              "line": 312,
+              "column": 6
+            },
+            "end": {
+              "line": 315,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "max-file-size",
+          "description": "Specifies the maximum file size in bytes allowed to upload.\nNotice that it is a client-side constraint, which will be checked before\nsending the request. Obviously you need to do the same validation in\nthe server-side and be sure that they are aligned.",
+          "sourceRange": {
+            "start": {
+              "line": 323,
+              "column": 6
+            },
+            "end": {
+              "line": 326,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "form-data-name",
+          "description": "Specifies the 'name' property at Content-Disposition",
+          "sourceRange": {
+            "start": {
+              "line": 341,
+              "column": 6
+            },
+            "end": {
+              "line": 344,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "no-auto",
+          "description": "Prevents upload(s) from immediately uploading upon adding file(s).\nWhen set, you must manually trigger uploads using the `uploadFiles` method",
+          "sourceRange": {
+            "start": {
+              "line": 350,
+              "column": 6
+            },
+            "end": {
+              "line": 353,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "i18n",
+          "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n    {\n      dropFiles: {\n       one: 'Drop file here...',\n       many: 'Drop files here...'\n      },\n      addFiles: {\n       one: 'Select File',\n       many: 'Upload Files'\n      },\n      cancel: 'Cancel',\n      error: {\n       tooManyFiles: 'Too Many Files.',\n       fileIsTooBig: 'File is Too Big.',\n       incorrectFileType: 'Incorrect File Type.'\n      },\n      uploading: {\n       status: {\n         connecting: 'Connecting...',\n         stalled: 'Stalled.',\n         processing: 'Processing File...',\n         held: 'Queued'\n       },\n       remainingTime: {\n         prefix: 'remaining time: ',\n         unknown: 'unknown remaining time'\n       },\n       error: {\n         serverUnavailable: 'Server Unavailable',\n         unexpectedServerError: 'Unexpected Server Error',\n         forbidden: 'Forbidden'\n       }\n      },\n      units: {\n       size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n      },\n      formatSize: function(bytes) {\n       // returns the size followed by the best suitable unit\n      },\n      formatTime: function(seconds, [secs, mins, hours]) {\n       // returns a 'HH:MM:SS' string\n      }\n    }",
+          "sourceRange": {
+            "start": {
+              "line": 408,
+              "column": 6
+            },
+            "end": {
+              "line": 448,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        }
+      ],
+      "events": [
+        {
+          "type": "CustomEvent",
+          "name": "file-reject",
+          "description": "file-reject",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-abort",
+          "description": "upload-abort",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-before",
+          "description": "upload-before",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-error",
+          "description": "upload-error",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-progress",
+          "description": "upload-progress",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-request",
+          "description": "upload-request",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-response",
+          "description": "upload-response",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-retry",
+          "description": "upload-retry",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-start",
+          "description": "upload-start",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "upload-success",
+          "description": "upload-success",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "files-changed",
+          "description": "Fired when the `files` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "max-files-reached-changed",
+          "description": "Fired when the `maxFilesReached` property changes.",
+          "metadata": {}
+        }
+      ],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [
+        {
+          "description": "",
+          "name": "add-button",
+          "range": {
+            "file": "vaadin-upload.html",
+            "start": {
+              "line": 152,
+              "column": 10
+            },
+            "end": {
+              "line": 156,
+              "column": 17
+            }
+          }
+        },
+        {
+          "description": "",
+          "name": "drop-label-icon",
+          "range": {
+            "file": "vaadin-upload.html",
+            "start": {
+              "line": 159,
+              "column": 10
+            },
+            "end": {
+              "line": 161,
+              "column": 17
+            }
+          }
+        },
+        {
+          "description": "",
+          "name": "drop-label",
+          "range": {
+            "file": "vaadin-upload.html",
+            "start": {
+              "line": 162,
+              "column": 10
+            },
+            "end": {
+              "line": 164,
+              "column": 17
+            }
+          }
+        },
+        {
+          "description": "",
+          "name": "file-list",
+          "range": {
+            "file": "vaadin-upload.html",
+            "start": {
+              "line": 168,
+              "column": 4
+            },
+            "end": {
+              "line": 174,
+              "column": 11
+            }
+          }
+        },
+        {
+          "description": "",
+          "name": "",
+          "range": {
+            "file": "vaadin-upload.html",
+            "start": {
+              "line": 175,
+              "column": 4
+            },
+            "end": {
+              "line": 175,
+              "column": 17
+            }
+          }
+        }
+      ],
+      "tagname": "vaadin-upload"
+    }
+  ]
+}
