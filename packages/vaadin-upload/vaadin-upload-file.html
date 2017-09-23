@@ -6,14 +6,40 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 
-<dom-module id="vaadin-element">
+<dom-module id="vaadin-upload-file">
   <template>
     <style>
       :host {
         display: inline-block;
       }
     </style>
-    <slot></slot>
+    <div id="row">
+
+      <iron-icon icon="vaadin-upload:done" complete$="[[file.complete]]"></iron-icon>
+      <iron-icon icon="vaadin-upload:warning" error$="[[file.error]]"></iron-icon>
+
+      <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
+        <div id="name">[[file.name]]</div>
+        <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
+        <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+      </div>
+
+      <div id="commands">
+        <paper-icon-button icon="vaadin-upload:start" file-event="file-start" on-tap="_fireFileEvent" hidden$="[[!file.held]]"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:refresh" file-event="file-retry" on-tap="_fireFileEvent" hidden$="[[!file.error]]"></paper-icon-button>
+        <paper-icon-button icon="vaadin-upload:clear" file-event="file-abort" on-tap="_fireFileEvent"></paper-icon-button>
+      </div>
+
+    </div>
+
+    <vaadin-progress-bar
+        id="progress"
+        value$="[[file.progress]]"
+        error$="[[file.error]]"
+        indeterminate$="[[file.indeterminate]]"
+        uploading$="[[file.uploading]]"
+        complete$="[[file.complete]]">
+    </paper-progress-bar>
   </template>
 
   <script>
@@ -24,33 +50,126 @@ This program is available under Apache License Version 2.0, available at https:/
     {
 
       /**
-       * `<vaadin-element>` is a Polymer 2 element.
+       * `<vaadin-upload-file>` is a Polymer 2 element.
        *
        * ```
-       * <vaadin-element></vaadin-element>
+       * <vaadin-upload-file></vaadin-upload-file>
        * ```
        *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinElement extends Polymer.Element {
+      class VaadinUploadFile extends Polymer.Element {
         static get is() {
-          return 'vaadin-element';
+          return 'vaadin-upload-file';
         }
 
         static get properties() {
           return {
+            file: Object
           };
         }
+
+        static get observers() {
+          return [
+            '_fileChanged(file.*)',
+            '_fileAborted(file.abort)'
+          ]
+        }
+
+        _fileChanged() {
+          console.log('changed')
+          this.$.progress.updateStyles();
+        }
+
+        ready() {
+          console.log('ready');
+          this.addEventListener('animationend', (e) => {
+            // Animation name is scoped to "fade-out-vaadin-upload-file-0" on
+            // Polymer 1 & Shady combination, so check with indexOf
+            if (e.animationName.indexOf('fade-out') > -1) {
+              this._remove();
+            }
+          });
+        }
+
+        _fileAborted(abort) {
+          if (abort) {
+            this.toggleClass('fade-out', true);
+
+            // In case the animation doesn't trigger, just remove the file instantly.
+            var animationName = window.getComputedStyle(this).animationName;
+            if (!animationName || animationName === 'none') {
+              this._remove();
+            }
+          }
+        }
+
+        _remove() {
+          this.toggleClass('fade-out', false);
+          this.dispatchEvent(
+            new CustomEvent('file-remove', {
+              detail: {file: this.file}
+            })
+          );
+        }
+
+        _fireFileEvent(e) {
+          e.preventDefault();
+          var button = Polymer.dom(e).localTarget; //TODO
+          return this.dispatchEvent(
+            new CustomEvent(button.getAttribute('file-event'), {
+              detail: {file: this.file}
+            })
+          );
+        }
+
+        /**
+        * Fired when the retry button is pressed. It is listened by `vaadin-upload`
+        * which will start a new upload process of this file.
+        *
+        * @event file-retry
+        * @param {Object} detail
+        * @param {Object} detail.file file to retry upload of
+        */
+
+        /**
+        * Fired when the start button is pressed. It is listened by `vaadin-upload`
+        * which will start a new upload process of this file.
+        *
+        * @event file-start
+        * @param {Object} detail
+        * @param {Object} detail.file file to start upload of
+        */
+
+        /**
+         * Fired when abort button is pressed. It is listened by `vaadin-upload` which
+         * will abort the upload in progress, but will not remove the file from the list
+         * to allow the animation to hide the element to be run.
+         *
+         * @event file-abort
+         * @param {Object} detail
+         * @param {Object} detail.file file to abort upload of
+         */
+
+        /**
+         * Fired after the animation to hide the element has finished. It is listened
+         * by `vaadin-upload` which will actually remove the file from the upload
+         * file list.
+         *
+         * @event file-remove
+         * @param {Object} detail
+         * @param {Object} detail.file file to remove from the  upload of
+         */
       }
 
-      customElements.define(VaadinElement.is, VaadinElement);
+      customElements.define(VaadinUploadFile.is, VaadinUploadFile);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinElement = VaadinElement;
+      Vaadin.VaadinUploadFile = VaadinUploadFile;
     }
   </script>
 </dom-module>

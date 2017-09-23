@@ -5,6 +5,8 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="vaadin-upload-file.html">
 
 <dom-module id="vaadin-upload">
   <template>
@@ -15,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div id="buttons">
       <div id="buttonsPrimary">
-        <div id="addFiles" on-tap="_onAddFilesClick">
+        <div id="addFiles" on-click="_onAddFilesClick">
           <slot name="add-button">
             <paper-button id="addButton" disabled$="[[maxFilesReached]]">
               [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
@@ -41,7 +43,6 @@ This program is available under Apache License Version 2.0, available at https:/
     </slot>
     <slot></slot>
     <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
-    <slot></slot>
   </template>
 
   <script>
@@ -61,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinUpload extends Polymer.Element {
+      class VaadinUpload extends Polymer.GestureEventListeners(Polymer.Element) {
         static get is() {
           return 'vaadin-upload';
         }
@@ -513,7 +514,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
 
             this._notifyFileChanges(file);
-            this.fire('upload-progress', {file: file, xhr: xhr}); //TODO
+            this.dispatchEvent(new CustomEvent('upload-progress', {detail: {file, xhr}}));
           };
 
           // More reliable than xhr.onload
@@ -528,7 +529,13 @@ This program is available under Apache License Version 2.0, available at https:/
               file.status = '';
               // Custom listener can modify the default behavior either
               // preventing default, changing the xhr, or setting the file error
-              var evt = this.fire('upload-response', {file: file, xhr: xhr}, {cancelable: true});
+              const evt = this.dispatchEvent(
+                new CustomEvent('upload-response', {
+                  detail: {file, xhr},
+                  cancelable: true
+                })
+              );
+
               if (evt.defaultPrevented) {
                 return;
               }
@@ -541,7 +548,11 @@ This program is available under Apache License Version 2.0, available at https:/
               }
 
               file.complete = !file.error;
-              this.fire('upload-' + (file.error ? 'error' : 'success'), {file: file, xhr: xhr}); //TODO
+              this.dispatchEvent(
+                new CustomEvent(`upload-${file.error ? 'error' : 'success'}`, {
+                  detail: {file, xhr}
+                })
+              );
               this._notifyFileChanges(file);
             }
           };
@@ -550,7 +561,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
           file.uploadTarget = this.target || '';
           file.formDataName = this.formDataName;
-          const evt = this.fire('upload-before', {file: file, xhr: xhr}, {cancelable: true}); //TODO
+
+          const evt = this.dispatchEvent(
+            new CustomEvent('upload-before', {
+              detail: {file, xhr},
+              cancelable: true
+            })
+          );
           if (evt.defaultPrevented) {
             return;
           }
@@ -565,27 +582,47 @@ This program is available under Apache License Version 2.0, available at https:/
           file.complete = file.abort = file.error = file.held = false;
 
           xhr.upload.onloadstart = () => {
-            this.fire('upload-start', {file: file, xhr: xhr}); //TODO
+            this.dispatchEvent(
+              new CustomEvent('upload-start', {
+                detail: {file, xhr}
+              })
+            );
             this._notifyFileChanges(file);
           };
 
+
           // Custom listener could modify the xhr just before sending it
           // preventing default
-          evt = this.fire('upload-request', {file: file, xhr: xhr, formData: formData}, {cancelable: true}); //TODO
-          if (!evt.defaultPrevented) {
+          const uploadEvt = this.dispatchEvent(
+            new CustomEvent('upload-request', {
+              detail: {file, xhr, formData},
+              cancelable: true
+            })
+          );
+          if (!uploadEvt.defaultPrevented) {
             xhr.send(formData);
           }
         }
 
         _retryFileUpload(file) {
-          var evt = this.fire('upload-retry', {file: file, xhr: file.xhr}, {cancelable: true}); //TODO
+          const evt = this.dispatchEvent(
+            new CustomEvent('upload-retry', {
+              detail: {file, xhr: file.xhr},
+              cancelable: true
+            })
+          );
           if (!evt.defaultPrevented) {
             this.async(this._uploadFile.bind(this, file));
           }
         }
 
         _abortFileUpload(file) {
-          var evt = this.fire('upload-abort', {file: file, xhr: file.xhr}, {cancelable: true}); //TODO
+          const evt = this.dispatchEvent(
+            new CustomEvent('upload-abort', {
+              detail: {file, xhr: file.xhr},
+              cancelable: true
+            })
+          );
           if (!evt.defaultPrevented) {
             file.abort = true;
             if (file.xhr) {
@@ -615,17 +652,29 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         _addFile(file) {
           if (this.maxFilesReached) {
-            this.fire('file-reject', {file: file, error: this.i18n.error.tooManyFiles}); //TODO
+            this.dispatchEvent(
+              new CustomEvent('file-reject', {
+                detail: {file, error: this.i18n.error.tooManyFiles}
+              })
+            );
             return;
           }
           if (this.maxFileSize >= 0 && file.size > this.maxFileSize) {
-            this.fire('file-reject', {file: file, error: this.i18n.error.fileIsTooBig}); //TODO
+            this.dispatchEvent(
+              new CustomEvent('file-reject', {
+                detail: {file, error: this.i18n.error.fileIsTooBig}
+              })
+            );
             return;
           }
           const fileExt = file.name.match(/\.[^\.]*$|$/)[0];
           const re = new RegExp('^(' + this.accept.replace(/[, ]+/g, '|').replace(/\/\*/g, '/.*') + ')$', 'i');
           if (this.accept && !(re.test(file.type) || re.test(fileExt))) {
-            this.fire('file-reject', {file: file, error: this.i18n.error.incorrectFileType}); //TODO
+            this.dispatchEvent(
+              new CustomEvent('file-reject', {
+                detail: {file, error: this.i18n.error.incorrectFileType}
+              })
+            );
             return;
           }
           file.loaded = 0;
@@ -647,6 +696,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onAddFilesClick() {
+          console.log('here');
           if (this.maxFilesReached) {
             return;
           }
@@ -675,28 +725,28 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onFileRetry(event) {
           this._retryFileUpload(event.detail.file);
-        },
+        }
 
         _onFileAbort(event) {
           this._abortFileUpload(event.detail.file);
-        },
+        }
 
         _onFileRemove(event) {
           event.stopPropagation();
           this._removeFile(event.detail.file);
-        },
+        }
 
         _dragoverChanged(dragover) {
-          this.toggleAttribute('dragover', dragover);
-        },
+          this.setAttribute('dragover', dragover);
+        }
 
         _dragoverValidChanged(dragoverValid) {
-          this.toggleAttribute('dragover-valid', dragoverValid);
-        },
+          this.setAttribute('dragover-valid', dragoverValid);
+        }
 
         _i18nPlural(value, plural) {
           return value == 1 ? plural.one : plural.many;
-        },
+        }
 
         _isMultiple() {
           return this.maxFiles != 1;
