@@ -41,7 +41,13 @@ This program is available under Apache License Version 2.0, available at https:/
     <slot name="file-list">
       <div id="fileList">
         <template is="dom-repeat" items="[[files]]" as="file">
-          <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
+          <vaadin-upload-file
+              file="[[file]]"
+              on-file-abort="_onFileAbort"
+              on-file-remove="_onFileRemove"
+              on-file-start="_onFileStart"
+              on-file-retry="_onFileRetry">
+          </vaadin-upload-file>
         </template>
       </div>
     </slot>
@@ -337,16 +343,17 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
-        static get listeners() {
-          return {
-            'dragover': '_onDragover',
-            'dragleave': '_onDragleave',
-            'drop': '_onDrop',
-            'file-retry': '_onFileRetry',
-            'file-abort': '_onFileAbort',
-            'file-remove': '_onFileRemove',
-            'file-start': '_onFileStart'
-          }
+        ready() {
+          super.ready();
+          this.addEventListener('dragover', () => this._onDragover);
+          this.addEventListener('dragleave', () => this._onDragleave);
+          this.addEventListener('drop', () => this._onDrop);
+        }
+
+        disconnectedCallback() {
+          this.removeEventListener('dragover', () => this._onDragover);
+          this.removeEventListener('dragleave', () => this._onDragleave);
+          this.removeEventListener('drop', () => this._onDrop);
         }
 
         _formatSize(bytes) {
