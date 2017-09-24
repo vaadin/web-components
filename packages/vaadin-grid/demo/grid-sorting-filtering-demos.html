@@ -177,7 +177,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Last Name" path="name.last" value="[[_filterLastName]]">
-                    <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
+                    <input slot="filter" placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.name.last]]</template>
@@ -220,7 +220,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Fist Name" path="firstName" value="[[_filterFirstName]]">
-                    <input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
+                    <input slot="filter" placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.firstName]]</template>
@@ -229,7 +229,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Last Name" path="lastName" value="[[_filterLastName]]">
-                    <input placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
+                    <input slot="filter" placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.lastName]]</template>
