@@ -26,8 +26,18 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
-       * `vaadin-grid-filter` is a helper element for the `vaadin-grid` that provides out-of-the-box UI controls,
+       * `<vaadin-grid-filter>` is a helper element for the `<vaadin-grid>` that provides out-of-the-box UI controls,
        * and handlers for filtering the grid data.
+       *
+       * #### Example:
+       * ```html
+       * <vaadin-grid-column>
+       *   <template class="header">
+       *     <vaadin-grid-filter path="name.first"></vaadin-grid-filter>
+       *   </template>
+       *   <template>[[item.name.first]]</template>
+       * </vaadin-grid-column>
+       * ```
        *
        * @memberof Vaadin
        */

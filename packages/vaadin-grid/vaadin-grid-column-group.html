@@ -11,27 +11,28 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
-       * A `vaadin-grid-column-group` is used to make groups of colums in `vaadin-grid` and
-       * to configure aditional headers and footers.
+       * A `<vaadin-grid-column-group>` is used to make groups of colums in `<vaadin-grid>` and
+       * to configure additional headers and footers.
        *
        * Groups can be nested to create complex header and footer configurations.
        *
        * The `class` attribute is used to differentiate header and footer templates.
        *
        * #### Example:
+       * ```html
+       * <vaadin-grid-column-group resizable>
+       *  <template class="header">Name</template>
        *
-       *     <vaadin-grid-column-group resizable>
-       *      <template class="header">Name</template>
-       *
-       *      <vaadin-grid-column>
-       *        <template class="header">First</template>
-       *        <template>[[item.name.first]]</template>
-       *      </vaadin-grid-column>
-       *      <vaadin-grid-column>
-       *        <template class="header">Last</template>
-       *        <template>[[item.name.last]]</template>
-       *      </vaadin-grid-column>
-       *     </vaadin-grid-column-group>
+       *  <vaadin-grid-column>
+       *    <template class="header">First</template>
+       *    <template>[[item.name.first]]</template>
+       *  </vaadin-grid-column>
+       *  <vaadin-grid-column>
+       *    <template class="header">Last</template>
+       *    <template>[[item.name.last]]</template>
+       *  </vaadin-grid-column>
+       * </vaadin-grid-column-group>
+       * ```
        *
        * @memberof Vaadin
        * @mixes Vaadin.Grid.ColumnBaseMixin
@@ -43,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get properties() {
-          const ownProperties = {
+          return {
             _childColumns: {
               value: function() {
                 return this._getChildColumns(this);
@@ -68,18 +69,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _visibleChildColumns: Array,
 
-            /**
-             * Represents the number of child columns of this group.
-             */
-            colSpan: {
-              type: Number,
-              readOnly: true
-            },
+            _colSpan: Number,
 
             _rootColumns: Array
           };
-
-          return Object.assign(ownProperties, super.properties);
         }
 
         static get observers() {
@@ -89,7 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
             '_groupFrozenChanged(frozen, _rootColumns)',
             '_groupHiddenChanged(hidden, _rootColumns)',
             '_visibleChildColumnsChanged(_visibleChildColumns)',
-            '_colSpanChanged(colSpan, _headerCell, _footerCell)',
+            '_colSpanChanged(_colSpan, _headerCell, _footerCell)',
             '_groupOrderChanged(_order, _rootColumns)',
             '_groupReorderStatusChanged(_reorderStatus, _rootColumns)',
             '_groupResizableChanged(resizable, _rootColumns)'
@@ -224,7 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _visibleChildColumnsChanged(visibleChildColumns) {
-          this._setColSpan(visibleChildColumns.length);
+          this._colSpan = visibleChildColumns.length;
 
           if (!this._ignoreVisibleChildColumns) {
             if (visibleChildColumns.length === 0) {

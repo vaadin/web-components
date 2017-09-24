@@ -350,18 +350,20 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
   {
     /**
-     * A `vaadin-grid-column` is used to configure how a column in `vaadin-grid` should look like by using HTML templates.
+     * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
+     * should look like by using HTML templates.
      * A column can have a template for each of the three table sections: header, body and footer.
      *
      * The `class` attribute is used to differentiate header and footer templates from the body template.
      *
      * #### Example:
-     *
-     *     <vaadin-grid-column>
-     *       <template class="header">I'm in the header</template>
-     *       <template>I'm in the body</template>
-     *       <template class="footer">I'm in the footer</template>
-     *     </vaadin-grid-column>
+     * ```html
+     * <vaadin-grid-column>
+     *   <template class="header">I'm in the header</template>
+     *   <template>I'm in the body</template>
+     *   <template class="footer">I'm in the footer</template>
+     * </vaadin-grid-column>
+     * ```
      *
      * @memberof Vaadin
      * @mixes Vaadin.Grid.ColumnBaseMixin
@@ -372,7 +374,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get properties() {
-        const ownProperties = {
+        return {
           /**
            * Width of the cells for this column.
            */
@@ -399,7 +401,6 @@ This program is available under Apache License Version 2.0, available at https:/
           _cells: Array
 
         };
-        return Object.assign(ownProperties, super.properties);
       }
 
     }

@@ -83,8 +83,9 @@
         } else {
           activeElement = document.activeElement;
           if (activeElement) {
-            while (activeElement.shadowRoot && activeElement.shadowRoot.activeElement)
+            while (activeElement.shadowRoot && activeElement.shadowRoot.activeElement) {
               activeElement = activeElement.shadowRoot.activeElement;
+            }
           }
         }
 

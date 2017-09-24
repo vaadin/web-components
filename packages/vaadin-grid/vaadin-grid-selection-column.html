@@ -24,12 +24,26 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
   {
     /**
-     * `vaadin-grid-selection-column` is a helper element for the `vaadin-grid` that provides default templates
-     * and functionality for the selection.
-     * With it the user can select rows using checkboxes displayed in a column.
+     * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
+     * that provides default templates and functionality for item selection.
      *
-     * When the grid is configured with an array of items as the data provider, it provides the feature of selecting
-     * all the items by clicking on the checkbox in the header.
+     * #### Example:
+     * ```html
+     * <vaadin-grid items="[[items]]">
+     *  <vaadin-grid-selection-column frozen auto-select></vaadin-grid-selection-column>
+     *
+     *  <vaadin-grid-column>
+     *    ...
+     * ```
+     *
+     * By default the selection column displays `<vaadin-checkbox>` elements in the
+     * column cells. The checkboxes in the body rows toggle selection of the corresponding row items.
+     *
+     * When the grid data is provided as an array of [`items`](#/elements/vaadin-grid#property-items),
+     * the column header gets an additional checkbox that can be used for toggling
+     * selection for all the items at once.
+     *
+     * __The default content templates can also be overridden with custom ones.__
      *
      * @memberof Vaadin
      * @mixes Vaadin.GridColumnElement
@@ -41,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get properties() {
-        const ownProperties = {
+        return {
           /**
            * Width of the cells for this column.
            */
@@ -59,7 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * When true it selects all the items.
+           * When true, all the items are selected.
            */
           selectAll: {
             type: Boolean,
@@ -68,7 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * When true it adds the active item to selectedItems.
+           * When true, the active gets automatically selected.
            */
           autoSelect: {
             type: Boolean,
@@ -95,8 +109,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _selectAllHidden: Boolean
         };
-
-        return Object.assign(super.properties, ownProperties);
       }
 
       static get observers() {

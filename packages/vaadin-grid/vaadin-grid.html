@@ -58,9 +58,87 @@ This program is available under Apache License Version 2.0, available at https:/
 
   {
     /**
+     * `<vaadin-grid>` is a free, high quality data grid / data table Polymer element.
+     *
+     * ### Quick Start
+     *
+     * - Use the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.
+     *
+     * - Then assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid items='[{"name": "John", "surname": "Lennon", "role": "singer"},
+     * {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
+     *   <vaadin-grid-column>
+     *     <template class="header">Name</template>
+     *     <template>[[item.name]]</template>
+     *   </vaadin-grid-column>
+     *   <vaadin-grid-column>
+     *     <template class="header">Surname</template>
+     *     <template>[[item.surname]]</template>
+     *   </vaadin-grid-column>
+     *   <vaadin-grid-column>
+     *     <template class="header">Role</template>
+     *     <template>[[item.role]]</template>
+     *   </vaadin-grid-column>
+     * </vaadin-grid>
+     * ```
+     *
+     * - The following helper elements can be used for further customization:
+     *  - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
+     *  - [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)
+     *  - [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)
+     *  - [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)
+     *
+     * __Note that the helper elements must be explicitly imported.__
+     * If you want to import everything at once you can use the `all-imports.html` bundle.
+     *
+     * - A column template can be decorated with one the following class names to specify its purpose
+     *  - "header": Marks a header template
+     *  - "footer": Marks a footer template
+     *  - "row-details": Marks a row details template
+     *
+     * - The following built-in template variables can be bound to inside the column templates
+     *  - "index": Number representing the row index
+     *  - "item" and it's sub-properties: Data object (provided by a data provider / items array)
+     *  - "selected": True if the item is selected (can be two-way bound)
+     *  - "expanded": True if the item is expanded for row details (can be two-way bound)
+     *
+     * ### Lazy Loading with Function Data Provider
+     *
+     * In addition to assigning an array to the items property, you can alternatively
+     * provide the `<vaadin-grid>` data through the
+     * [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.
+     * The `<vaadin-grid>` calls this function lazily, only when it needs more data
+     * to be displayed.
+     *
+     * See the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in
+     * the API reference below for the detailed data provider arguments description,
+     * and the “Assigning Data” page in the demos.
+     *
+     * __Note that when using function data providers, `size` always needs to be
+     * set manually.__
+     *
+     * ```javascript
+     * grid.size = 200; // The total number of items
+     * grid.dataProvider = function(params, callback) {
+     *   var url = 'https://api.example/data' +
+     *       '?page=' + params.page +        // the requested page index
+     *       '&per_page=' + params.pageSize; // number of items on the page
+     *   var xhr = new XMLHttpRequest();
+     *   xhr.onload = function() {
+     *     var response = JSON.parse(xhr.responseText);
+     *     callback(response.employees);
+     *   };
+     *   xhr.open('GET', url, true);
+     *   xhr.send();
+     * };
+     * ```
+     *
      * ### Styling
      *
-     * The following shadow DOM parts are exposed for styling:
+     * The following shadow DOM parts are available for styling:
      *
      * Part name | Description
      * ----------------|----------------
@@ -72,7 +150,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `details-cell` | Row details cell in the internal table
      * `resize-handle` | Handle for resizing the columns
      *
-     * The following state attributes are exposed for styling:
+     * The following state attributes are available for styling:
      *
      * Attribute    | Description | Part name
      * -------------|-------------|------------
