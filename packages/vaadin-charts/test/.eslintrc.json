@@ -1,8 +1,10 @@
 {
   "globals": {
     "WCT": false,
+    "HTMLImports": false,
     "describe": false,
     "beforeEach": false,
+    "before": false,
     "fixture": false,
     "it": false,
     "expect": false,

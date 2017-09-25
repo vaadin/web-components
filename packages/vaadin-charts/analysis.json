@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 113,
+          "line": 170,
           "column": 6
         },
         "end": {
-          "line": 113,
+          "line": 170,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-chart>` is a Polymer 2 element for creating high quality charts.\n\n### Quick Start\n\n1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-2-application`\n```\n1. Install Vaadin Charts\n```\nbower install --save vaadin-charts#6.0-preview\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag\n```html\n<link rel=\"import\" href=\"../../bower_components/vaadin-charts/vaadin-chart.html\">\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.html` add the following snippet before the `</template>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with: \n```\npolymer serve --open\n```\nCongratulations! You have your first Vaadin Chart setup.\n\n### Install License Key\nAfter one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. \n\nYou can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).\n\nIf the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again",
+          "description": "`<vaadin-chart>` is a Polymer 2 element for creating high quality charts.\n\n### Quick Start\n\n1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-2-application`\n```\n1. Install Vaadin Charts\n```\nbower install --save vaadin-charts#6.0-preview\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag\n```html\n<link rel=\"import\" href=\"../../bower_components/vaadin-charts/vaadin-chart.html\">\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.html` add the following snippet before the `</template>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with: \n```\npolymer serve --open\n```\nCongratulations! You have your first Vaadin Chart setup.\n\n### Configuring your chart using JS API \n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses JS Api to set chart title, categories and data\n```\ninitChartWithJSApi() {\n    const configuration = this.$.mychart.configuration;\n    configuration.setTitle({ text: 'The chart title' });\n    // By default there is one x axis, it is referenced by configuration.xAxis[0].\n    configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);\n    configuration.addSeries({\n      type: 'column',\n      data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSApi();\n}\n```\n1. And finally run your app with: \n```\npolymer serve --open\n```\n\n### Install License Key\nAfter one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. \n\nYou can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).\n\nIf the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again",
           "summary": "",
           "path": "vaadin-chart.html",
           "properties": [
@@ -642,6 +642,25 @@
                 }
               },
               "inheritedFrom": "Polymer.PropertyEffects"
+            },
+            {
+              "name": "configuration",
+              "type": "Object",
+              "description": "Configuration object that exposes the JS Api to configure the chart.\n\nMost important methods are:\n- `addSeries (Object options, [Boolean redraw], [Mixed animation])`\n- `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`\n- `setTitle (Object title, object subtitle, Boolean redraw)`\n\nMost important properties are:\n- `configuration.series`: An array of the chart's series. Detailed API for Series object is\n    available in [API Site](http://api.highcharts.com/highcharts/Series)\n- `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/highcharts/Axis)\n- `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/highcharts/Axis)\n- `configuration.title`: The chart title.\n\nFor detailed documentation of available API check the [API site](http://api.highcharts.com/highcharts/Chart)",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 33
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
             }
           ],
           "methods": [
@@ -2426,11 +2445,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 150,
                   "column": 8
                 },
                 "end": {
-                  "line": 97,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -2550,11 +2569,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 99,
+                  "line": 156,
                   "column": 8
                 },
                 "end": {
-                  "line": 105,
+                  "line": 162,
                   "column": 9
                 }
               },
@@ -3267,18 +3286,35 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 73,
+              "line": 108,
               "column": 6
             },
             "end": {
-              "line": 106,
+              "line": 163,
               "column": 7
             }
           },
           "privacy": "public",
           "superclass": "HTMLElement",
           "name": "Vaadin.VaadinChart",
-          "attributes": [],
+          "attributes": [
+            {
+              "name": "configuration",
+              "description": "Configuration object that exposes the JS Api to configure the chart.\n\nMost important methods are:\n- `addSeries (Object options, [Boolean redraw], [Mixed animation])`\n- `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`\n- `setTitle (Object title, object subtitle, Boolean redraw)`\n\nMost important properties are:\n- `configuration.series`: An array of the chart's series. Detailed API for Series object is\n    available in [API Site](http://api.highcharts.com/highcharts/Series)\n- `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/highcharts/Axis)\n- `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/highcharts/Axis)\n- `configuration.title`: The chart title.\n\nFor detailed documentation of available API check the [API site](http://api.highcharts.com/highcharts/Chart)",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 33
+                }
+              },
+              "metadata": {},
+              "type": "Object"
+            }
+          ],
           "events": [],
           "styling": {
             "cssVariables": [],
