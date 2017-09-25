@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-dialog.html",
         "start": {
-          "line": 177,
+          "line": 164,
           "column": 6
         },
         "end": {
-          "line": 177,
+          "line": 164,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-dialog>` is a Polymer 2 element for customised modal dialogs.\n\n```html\n<vaadin-dialog opened>\n  <template>\n    Sample dialog\n  </template>\n</vaadin-dialog>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description | Theme for Element\n----------------|----------------|----------------\n`backdrop` | Backdrop of the overlay | vaadin-dialog-overlay\n`content` | Content of the overlay | vaadin-dialog-overlay",
+          "description": "`<vaadin-dialog>` is a Polymer 2 element for customised modal dialogs.\n\n```html\n<vaadin-dialog opened>\n  <template>\n    Sample dialog\n  </template>\n</vaadin-dialog>\n```\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)\nfor `<vaadin-dialog-overlay>` parts.",
           "summary": "",
           "path": "vaadin-dialog.html",
           "properties": [
@@ -644,17 +644,155 @@
               "inheritedFrom": "Polymer.PropertyEffects"
             },
             {
+              "name": "_template",
+              "type": "HTMLTemplateElement",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 549,
+                  "column": 8
+                },
+                "end": {
+                  "line": 549,
+                  "column": 23
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "_importPath",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 551,
+                  "column": 8
+                },
+                "end": {
+                  "line": 551,
+                  "column": 25
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "rootPath",
+              "type": "string",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 553,
+                  "column": 8
+                },
+                "end": {
+                  "line": 553,
+                  "column": 22
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "importPath",
+              "type": "string",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 555,
+                  "column": 8
+                },
+                "end": {
+                  "line": 555,
+                  "column": 24
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "root",
+              "type": "(StampedTemplate|HTMLElement|ShadowRoot)",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 557,
+                  "column": 8
+                },
+                "end": {
+                  "line": 557,
+                  "column": 18
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
+              "name": "$",
+              "type": "!Object.<string, !Node>",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/element-mixin.html",
+                "start": {
+                  "line": 559,
+                  "column": 8
+                },
+                "end": {
+                  "line": 559,
+                  "column": 15
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Polymer.ElementMixin"
+            },
+            {
               "name": "opened",
               "type": "boolean",
               "description": "True if the overlay is currently displayed.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 78,
                   "column": 12
                 },
                 "end": {
-                  "line": 95,
+                  "line": 82,
                   "column": 13
                 }
               },
@@ -672,11 +810,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 87,
                   "column": 12
                 },
                 "end": {
-                  "line": 103,
+                  "line": 90,
                   "column": 13
                 }
               },
@@ -692,11 +830,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 95,
                   "column": 12
                 },
                 "end": {
-                  "line": 111,
+                  "line": 98,
                   "column": 13
                 }
               },
@@ -712,11 +850,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 113,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 113,
+                  "line": 100,
                   "column": 36
                 }
               },
@@ -762,11 +900,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 447,
+                  "line": 448,
                   "column": 6
                 },
                 "end": {
-                  "line": 452,
+                  "line": 453,
                   "column": 7
                 }
               },
@@ -806,11 +944,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 461,
+                  "line": 462,
                   "column": 6
                 },
                 "end": {
-                  "line": 463,
+                  "line": 464,
                   "column": 7
                 }
               },
@@ -841,11 +979,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/template-stamp.html",
                 "start": {
-                  "line": 472,
+                  "line": 473,
                   "column": 6
                 },
                 "end": {
-                  "line": 474,
+                  "line": 475,
                   "column": 7
                 }
               },
@@ -871,16 +1009,16 @@
             },
             {
               "name": "attributeChangedCallback",
-              "description": "Provides a default implementation of the standard Custom Elements\n`attributeChangedCallback`.\n\nBy default, attributes declared in `properties` metadata are\ndeserialized using their `type` information to properties of the\nsame name.  \"Dash-cased\" attributes are deserialzed to \"camelCase\"\nproperties.",
+              "description": "Provides a default implementation of the standard Custom Elements\n`attributeChangedCallback`.\n\nBy default, attributes declared in `properties` metadata are\ndeserialized using their `type` information to properties of the\nsame name.  \"Dash-cased\" attributes are deserialized to \"camelCase\"\nproperties.",
               "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 699,
+                  "line": 715,
                   "column": 6
                 },
                 "end": {
-                  "line": 707,
+                  "line": 723,
                   "column": 7
                 }
               },
@@ -911,11 +1049,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 557,
+                  "line": 573,
                   "column": 6
                 },
                 "end": {
-                  "line": 597,
+                  "line": 613,
                   "column": 7
                 }
               },
@@ -1258,7 +1396,7 @@
             },
             {
               "name": "_setPendingProperty",
-              "description": "Overrides the `PropertyAccessors` implementation to introduce special\ndirty check logic depending on the property & value being set:\n\n1. Any value set to a path (e.g. 'obj.prop': 42 or 'obj.prop': {...})\n   Stored in `__dataTemp`, dirty checked against `__dataTemp`\n2. Object set to simple property (e.g. 'prop': {...})\n   Stored in `__dataTemp` and `__data`, dirty checked against\n   `__dataTemp` by default implementation of `_shouldPropertyChange`\n3. Primitive value set to simple property (e.g. 'prop': 42)\n   Stored in `__data`, dirty checked against `__data`\n\nThe dirty-check is important to prevent cycles due to two-way\nnotification, but paths and objects are only dirty checked against any\nprevious value set during this turn via a \"temporary cache\" that is\ncleared when the last `_propertiesChaged` exits. This is so:\na. any cached array paths (e.g. 'array.3.prop') may be invalidated\n   due to array mutations like shift/unshift/splice; this is fine\n   since path changes are dirty-checked at user entry points like `set`\nb. dirty-checking for objects only lasts one turn to allow the user\n   to mutate the object in-place and re-set it with the same identity\n   and have all sub-properties re-propagated in a subsequent turn.\n\nThe temp cache is not necessarily sufficient to prevent invalid array\npaths, since a splice can happen during the same turn (with pathological\nuser code); we could introduce a \"fixup\" for temporarily cached array\npaths if needed: https://github.com/Polymer/polymer/issues/4227",
+              "description": "Overrides the `PropertyAccessors` implementation to introduce special\ndirty check logic depending on the property & value being set:\n\n1. Any value set to a path (e.g. 'obj.prop': 42 or 'obj.prop': {...})\n   Stored in `__dataTemp`, dirty checked against `__dataTemp`\n2. Object set to simple property (e.g. 'prop': {...})\n   Stored in `__dataTemp` and `__data`, dirty checked against\n   `__dataTemp` by default implementation of `_shouldPropertyChange`\n3. Primitive value set to simple property (e.g. 'prop': 42)\n   Stored in `__data`, dirty checked against `__data`\n\nThe dirty-check is important to prevent cycles due to two-way\nnotification, but paths and objects are only dirty checked against any\nprevious value set during this turn via a \"temporary cache\" that is\ncleared when the last `_propertiesChanged` exits. This is so:\na. any cached array paths (e.g. 'array.3.prop') may be invalidated\n   due to array mutations like shift/unshift/splice; this is fine\n   since path changes are dirty-checked at user entry points like `set`\nb. dirty-checking for objects only lasts one turn to allow the user\n   to mutate the object in-place and re-set it with the same identity\n   and have all sub-properties re-propagated in a subsequent turn.\n\nThe temp cache is not necessarily sufficient to prevent invalid array\npaths, since a splice can happen during the same turn (with pathological\nuser code); we could introduce a \"fixup\" for temporarily cached array\npaths if needed: https://github.com/Polymer/polymer/issues/4227",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -1387,11 +1525,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 108,
                   "column": 8
                 },
                 "end": {
-                  "line": 126,
+                  "line": 113,
                   "column": 9
                 }
               },
@@ -1438,7 +1576,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 613,
+                  "line": 609,
                   "column": 7
                 }
               },
@@ -1462,7 +1600,7 @@
               ],
               "return": {
                 "type": "boolean",
-                "desc": "Whether the property should be considered a change\n  and enqueue a `_proeprtiesChanged` callback"
+                "desc": "Whether the property should be considered a change\n  and enqueue a `_propertiesChanged` callback"
               },
               "inheritedFrom": "Polymer.PropertyAccessors"
             },
@@ -1835,11 +1973,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 644,
+                  "line": 660,
                   "column": 6
                 },
                 "end": {
-                  "line": 653,
+                  "line": 669,
                   "column": 7
                 }
               },
@@ -2085,7 +2223,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -2117,7 +2255,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -2146,7 +2284,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -2188,7 +2326,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -2217,7 +2355,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "string",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -2506,11 +2644,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 609,
+                  "line": 625,
                   "column": 6
                 },
                 "end": {
-                  "line": 614,
+                  "line": 630,
                   "column": 7
                 }
               },
@@ -2525,11 +2663,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 620,
+                  "line": 636,
                   "column": 6
                 },
                 "end": {
-                  "line": 620,
+                  "line": 636,
                   "column": 31
                 }
               },
@@ -2544,11 +2682,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 667,
+                  "line": 683,
                   "column": 6
                 },
                 "end": {
-                  "line": 683,
+                  "line": 699,
                   "column": 7
                 }
               },
@@ -2556,12 +2694,12 @@
               "params": [
                 {
                   "name": "dom",
-                  "type": "NodeList",
+                  "type": "StampedTemplate",
                   "description": "to attach to the element."
                 }
               ],
               "return": {
-                "type": "Node",
+                "type": "ShadowRoot",
                 "desc": "node to which the dom has been attached."
               },
               "inheritedFrom": "Polymer.ElementMixin"
@@ -2573,11 +2711,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 726,
+                  "line": 742,
                   "column": 6
                 },
                 "end": {
-                  "line": 730,
+                  "line": 746,
                   "column": 7
                 }
               },
@@ -2598,11 +2736,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 743,
+                  "line": 759,
                   "column": 6
                 },
                 "end": {
-                  "line": 748,
+                  "line": 764,
                   "column": 7
                 }
               },
@@ -2631,11 +2769,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 115,
                   "column": 8
                 },
                 "end": {
-                  "line": 146,
+                  "line": 133,
                   "column": 9
                 }
               },
@@ -2652,11 +2790,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 152,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -2673,11 +2811,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 157,
+                  "line": 144,
                   "column": 8
                 },
                 "end": {
-                  "line": 161,
+                  "line": 148,
                   "column": 9
                 }
               },
@@ -2694,11 +2832,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 153,
                   "column": 8
                 },
                 "end": {
-                  "line": 170,
+                  "line": 157,
                   "column": 9
                 }
               },
@@ -2752,11 +2890,11 @@
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 759,
+                  "line": 775,
                   "column": 6
                 },
                 "end": {
-                  "line": 762,
+                  "line": 778,
                   "column": 7
                 }
               },
@@ -3021,7 +3159,7 @@
             },
             {
               "name": "addPropertyEffect",
-              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n  {\n    fn: effectFunction, // Reference to function to call to perform effect\n    info: { ... }       // Effect metadata passed to function\n    trigger: {          // Optional triggering metadata; if not provided\n      name: string      // the property is treated as a wildcard\n      structured: boolean\n      wildcard: boolean\n    }\n  }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n  effectFunction(inst, path, props, oldProps, info, hasPaths)",
+              "description": "Ensures an accessor exists for the specified property, and adds\nto a list of \"property effects\" that will run when the accessor for\nthe specified property is set.  Effects are grouped by \"type\", which\nroughly corresponds to a phase in effect processing.  The effect\nmetadata should be in the following form:\n\n    {\n      fn: effectFunction, // Reference to function to call to perform effect\n      info: { ... }       // Effect metadata passed to function\n      trigger: {          // Optional triggering metadata; if not provided\n        name: string      // the property is treated as a wildcard\n        structured: boolean\n        wildcard: boolean\n      }\n    }\n\nEffects are called from `_propertiesChanged` in the following order by\ntype:\n\n1. COMPUTE\n2. PROPAGATE\n3. REFLECT\n4. OBSERVE\n5. NOTIFY\n\nEffect functions are called with the following signature:\n\n    effectFunction(inst, path, props, oldProps, info, hasPaths)",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -3091,7 +3229,7 @@
             },
             {
               "name": "createMethodObserver",
-              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal Javascript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
+              "description": "Creates a multi-property \"method observer\" based on the provided\nexpression, which should be a string in the form of a normal JavaScript\nfunction signature: `'methodName(arg1, [..., argn])'`.  Each argument\nshould correspond to a property or path in the context of this\nprototype (or instance), or may be a literal string or number.",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -3201,7 +3339,7 @@
             },
             {
               "name": "createComputedProperty",
-              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal Javascript function signature:\n`'methodName(arg1, [..., argn])'`",
+              "description": "Creates a computed property whose value is set to the result of the\nmethod described by the given `expression` each time one or more\narguments to the method changes.  The expression should be a string\nin the form of a normal JavaScript function signature:\n`'methodName(arg1, [..., argn])'`",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/polymer/lib/mixins/property-effects.html",
@@ -3415,11 +3553,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 81,
+              "line": 68,
               "column": 6
             },
             "end": {
-              "line": 171,
+              "line": 158,
               "column": 7
             }
           },
@@ -3432,11 +3570,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 78,
                   "column": 12
                 },
                 "end": {
-                  "line": 95,
+                  "line": 82,
                   "column": 13
                 }
               },
@@ -3448,11 +3586,11 @@
               "description": "Set to true to disable closing dialog on outside click",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 87,
                   "column": 12
                 },
                 "end": {
-                  "line": 103,
+                  "line": 90,
                   "column": 13
                 }
               },
@@ -3464,11 +3602,11 @@
               "description": "Set to true to disable closing dialog on Escape press",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 95,
                   "column": 12
                 },
                 "end": {
-                  "line": 111,
+                  "line": 98,
                   "column": 13
                 }
               },
@@ -3508,11 +3646,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 83,
+              "line": 123,
               "column": 10
             },
             "end": {
-              "line": 87,
+              "line": 127,
               "column": 11
             }
           },
@@ -3531,11 +3669,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 89,
+              "line": 129,
               "column": 10
             },
             "end": {
-              "line": 92,
+              "line": 132,
               "column": 11
             }
           },
@@ -3554,11 +3692,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 94,
+              "line": 134,
               "column": 10
             },
             "end": {
-              "line": 97,
+              "line": 137,
               "column": 11
             }
           },
@@ -3577,11 +3715,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 99,
+              "line": 139,
               "column": 10
             },
             "end": {
-              "line": 103,
+              "line": 143,
               "column": 11
             }
           },
@@ -3594,16 +3732,16 @@
         {
           "name": "focusTrap",
           "type": "boolean",
-          "description": "",
+          "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
           "privacy": "public",
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 105,
+              "line": 150,
               "column": 10
             },
             "end": {
-              "line": 108,
+              "line": 153,
               "column": 11
             }
           },
@@ -3621,11 +3759,53 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 110,
+              "line": 155,
               "column": 10
             },
             "end": {
-              "line": 112,
+              "line": 157,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "inheritedFrom": "Vaadin.OverlayElement"
+        },
+        {
+          "name": "_mouseDownInside",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
+            "start": {
+              "line": 159,
+              "column": 10
+            },
+            "end": {
+              "line": 161,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "inheritedFrom": "Vaadin.OverlayElement"
+        },
+        {
+          "name": "_mouseUpInside",
+          "type": "boolean",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
+            "start": {
+              "line": 163,
+              "column": 10
+            },
+            "end": {
+              "line": 165,
               "column": 11
             }
           },
@@ -3642,11 +3822,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 114,
+              "line": 167,
               "column": 10
             },
             "end": {
-              "line": 116,
+              "line": 169,
               "column": 11
             }
           },
@@ -3663,11 +3843,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 118,
+              "line": 171,
               "column": 10
             },
             "end": {
-              "line": 120,
+              "line": 173,
               "column": 11
             }
           },
@@ -3685,11 +3865,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 144,
+              "line": 199,
               "column": 6
             },
             "end": {
-              "line": 148,
+              "line": 210,
               "column": 7
             }
           },
@@ -3704,11 +3884,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 150,
+              "line": 212,
               "column": 6
             },
             "end": {
-              "line": 152,
+              "line": 214,
               "column": 7
             }
           },
@@ -3727,11 +3907,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 158,
+              "line": 220,
               "column": 6
             },
             "end": {
-              "line": 164,
+              "line": 226,
               "column": 7
             }
           },
@@ -3750,11 +3930,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 166,
+              "line": 228,
               "column": 6
             },
             "end": {
-              "line": 172,
+              "line": 234,
               "column": 7
             }
           },
@@ -3769,16 +3949,62 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 174,
+              "line": 236,
               "column": 6
             },
             "end": {
-              "line": 188,
+              "line": 250,
               "column": 7
             }
           },
           "metadata": {},
           "params": [],
+          "inheritedFrom": "Vaadin.OverlayElement"
+        },
+        {
+          "name": "_mouseDownListener",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
+            "start": {
+              "line": 252,
+              "column": 6
+            },
+            "end": {
+              "line": 254,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ],
+          "inheritedFrom": "Vaadin.OverlayElement"
+        },
+        {
+          "name": "_mouseUpListener",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
+            "start": {
+              "line": 256,
+              "column": 6
+            },
+            "end": {
+              "line": 258,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ],
           "inheritedFrom": "Vaadin.OverlayElement"
         },
         {
@@ -3788,11 +4014,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 198,
+              "line": 268,
               "column": 6
             },
             "end": {
-              "line": 209,
+              "line": 282,
               "column": 7
             }
           },
@@ -3811,11 +4037,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 215,
+              "line": 288,
               "column": 6
             },
             "end": {
-              "line": 241,
+              "line": 314,
               "column": 7
             }
           },
@@ -3834,11 +4060,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 247,
+              "line": 320,
               "column": 6
             },
             "end": {
-              "line": 281,
+              "line": 358,
               "column": 7
             }
           },
@@ -3857,11 +4083,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 283,
+              "line": 360,
               "column": 6
             },
             "end": {
-              "line": 294,
+              "line": 371,
               "column": 7
             }
           },
@@ -3880,11 +4106,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 296,
+              "line": 373,
               "column": 6
             },
             "end": {
-              "line": 298,
+              "line": 375,
               "column": 7
             }
           },
@@ -3903,11 +4129,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 300,
+              "line": 377,
               "column": 6
             },
             "end": {
-              "line": 327,
+              "line": 408,
               "column": 7
             }
           },
@@ -3929,11 +4155,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 330,
+              "line": 411,
               "column": 6
             },
             "end": {
-              "line": 332,
+              "line": 413,
               "column": 7
             }
           },
@@ -3952,11 +4178,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 334,
+              "line": 415,
               "column": 6
             },
             "end": {
-              "line": 358,
+              "line": 439,
               "column": 7
             }
           },
@@ -3971,11 +4197,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 360,
+              "line": 441,
               "column": 6
             },
             "end": {
-              "line": 364,
+              "line": 445,
               "column": 7
             }
           },
@@ -4017,11 +4243,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 49,
+          "line": 40,
           "column": 6
         },
         "end": {
-          "line": 53,
+          "line": 44,
           "column": 7
         }
       },
@@ -4035,11 +4261,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 83,
+              "line": 123,
               "column": 10
             },
             "end": {
-              "line": 87,
+              "line": 127,
               "column": 11
             }
           },
@@ -4053,11 +4279,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 89,
+              "line": 129,
               "column": 10
             },
             "end": {
-              "line": 92,
+              "line": 132,
               "column": 11
             }
           },
@@ -4071,11 +4297,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 94,
+              "line": 134,
               "column": 10
             },
             "end": {
-              "line": 97,
+              "line": 137,
               "column": 11
             }
           },
@@ -4089,11 +4315,11 @@
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 99,
+              "line": 139,
               "column": 10
             },
             "end": {
-              "line": 103,
+              "line": 143,
               "column": 11
             }
           },
@@ -4103,15 +4329,15 @@
         },
         {
           "name": "focus-trap",
-          "description": "",
+          "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
           "sourceRange": {
             "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
             "start": {
-              "line": 105,
+              "line": 150,
               "column": 10
             },
             "end": {
-              "line": 108,
+              "line": 153,
               "column": 11
             }
           },
