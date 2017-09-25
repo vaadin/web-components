@@ -57,8 +57,8 @@
           it('should scroll to scaled index', () => {
             [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 77, 88, 100].forEach(percentage => {
               const index = Math.ceil((grid.size - 1) * percentage / 100);
-              grid.scrollToIndex(0);
-              grid.scrollToIndex(index);
+              grid._scrollToIndex(0);
+              grid._scrollToIndex(index);
 
               if (percentage === 100) {
                 expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(index);
@@ -66,24 +66,24 @@
                 const table = grid.$.table;
                 expect(table.scrollTop).to.equal(table.scrollHeight - table.offsetHeight);
               } else {
-                expect(grid._vidxOffset + grid.firstVisibleIndex).to.equal(index);
+                expect(grid._vidxOffset + grid._firstVisibleIndex).to.equal(index);
               }
 
             });
           });
 
           it('should scroll to last index', () => {
-            grid.scrollToIndex(grid.size * 2);
+            grid._scrollToIndex(grid.size * 2);
             expect(grid._vidxOffset + grid.lastVisibleIndex).to.equal(grid.size - 1);
           });
 
           it('should scroll to first index', () => {
-            grid.scrollToIndex(-100);
-            expect(grid._vidxOffset + grid.firstVisibleIndex).to.equal(0);
+            grid._scrollToIndex(-100);
+            expect(grid._vidxOffset + grid._firstVisibleIndex).to.equal(0);
           });
 
           it('should set scroll position half-way', () => {
-            grid.scrollToIndex(grid.size / 2);
+            grid._scrollToIndex(grid.size / 2);
             flushGrid(grid);
             expect(grid.$.table.scrollTop).to.be.closeTo(
               (grid.$.table.scrollHeight - grid.$.table.offsetHeight) / 2, grid.$.table.scrollHeight / 20
@@ -99,14 +99,14 @@
 
         beforeEach(done => {
           grid = fixture('large');
-          grid.scrollToIndex(10);
+          grid._scrollToIndex(10);
           grid.dataProvider = infiniteDataProvider;
           flushGrid(grid);
           animationFrameFlush(done);
         });
 
         it('should schedule scroll to index', () => {
-          expect(grid.firstVisibleIndex).to.equal(10);
+          expect(grid._firstVisibleIndex).to.equal(10);
         });
 
         it('should have correct indexes after scrolling', done => {
@@ -120,7 +120,7 @@
             done();
           };
 
-          grid.scrollToIndex(100);
+          grid._scrollToIndex(100);
           listenOnce(grid.$.table, 'scroll', listener);
           grid.$.table.scrollTop -= 1;
         });

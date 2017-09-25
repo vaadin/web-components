@@ -30,17 +30,26 @@
     describe('iron list', () => {
       let grid, ironList;
 
-      beforeEach(() => {
+      beforeEach(done => {
         grid = fixture('default')[0];
         ironList = fixture('default')[1];
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
+        animationFrameFlush(done);
       });
 
-      it('should work with another iron-list on the page', done => {
+      it('should work with another iron-list on the page', () => {
         expect(grid.is && ironList.is).to.equal('iron-list');
+      });
 
-        done();
+      it('should warn when using iron-list APIs trough grid', () => {
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
+        grid.firstVisibleIndex;
+        grid.lastVisibleIndex;
+        grid.scrollToIndex(2);
+        console.warn = _warn;
+        expect(spy.callCount).to.be.above(2);
       });
 
     });

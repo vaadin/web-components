@@ -50,56 +50,56 @@
         grid.scroll(0, grid._physicalAverage * 50);
         grid._scrollHandler();
         expect(grid.firstVisibleIndex).to.equal(50);
-        grid.scrollToIndex(0);
+        grid._scrollToIndex(0);
         grid._scrollHandler();
         expect(grid.firstVisibleIndex);
       });
 
       it('last visible index', () => {
         const actualHeight = grid._physicalAverage;
-        grid.scrollToIndex(2);
+        grid._scrollToIndex(2);
         expect(grid.lastVisibleIndex, Math.ceil(((grid._scrollTop + grid.offsetHeight) / actualHeight) - 1));
       });
 
       it('scroll to index', () => {
         grid.size = 100;
 
-        grid.scrollToIndex(30);
+        grid._scrollToIndex(30);
         expect(grid.firstVisibleIndex).to.equal(30);
 
-        grid.scrollToIndex(0);
+        grid._scrollToIndex(0);
         expect(grid.firstVisibleIndex).to.equal(0);
 
-        grid.scrollToIndex(99);
+        grid._scrollToIndex(99);
 
         const rowHeight = getFirstVisibleItem(grid).offsetHeight;
         const viewportHeight = grid.offsetHeight;
         const itemsPerViewport = viewportHeight / rowHeight;
 
         expect(grid.firstVisibleIndex, Math.floor(grid.size - itemsPerViewport));
-        grid.scrollToIndex(0);
+        grid._scrollToIndex(0);
         // make the height of the viewport same as the height of the row
         // and scroll to the last item
         grid.style.height = (grid._physicalItems[0].offsetHeight - 2) + 'px';
         grid.notifyResize();
-        grid.scrollToIndex(99);
+        grid._scrollToIndex(99);
         expect(grid.firstVisibleIndex).to.equal(99);
       });
 
       it('scroll to top', () => {
-        grid.scrollToIndex(99);
+        grid._scrollToIndex(99);
         grid.scroll(0, 0);
         expect(grid._scrollTop).to.equal(0);
       });
 
       it('scroll to a given scrollTop', () => {
-        grid.scrollToIndex(99);
+        grid._scrollToIndex(99);
         grid.scroll(0, 500);
         expect(grid.$.table.scrollTop).to.equal(500);
       });
 
       it('should not scroll when size changes', () => {
-        grid.scrollToIndex(99);
+        grid._scrollToIndex(99);
         const top = grid.$.table.scrollTop;
 
         grid.size += 1;

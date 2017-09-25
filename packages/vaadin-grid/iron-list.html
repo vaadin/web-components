@@ -15,266 +15,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--
 
-`iron-list` displays a virtual, 'infinite' list. The template inside
-the iron-list element represents the DOM to create for each list item.
-The `items` property specifies an array of list item data.
-
-For performance reasons, not every item in the list is rendered at once;
-instead a small subset of actual template elements *(enough to fill the viewport)*
-are rendered and reused as the user scrolls. As such, it is important that all
-state of the list template is bound to the model driving it, since the view may
-be reused with a new model at any time. Particularly, any state that may change
-as the result of a user interaction with the list item must be bound to the model
-to avoid view state inconsistency.
-
-### Sizing iron-list
-
-`iron-list` must either be explicitly sized, or delegate scrolling to an
-explicitly sized parent. By "explicitly sized", we mean it either has an explicit
-CSS `height` property set via a class or inline style, or else is sized by other
-layout means (e.g. the `flex` or `fit` classes).
-
-#### Flexbox - [jsbin](http://jsbin.com/kokaki/edit?html,output)
-
-```html
-<template is="x-list">
-  <style>
-    :host {
-      display: block;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    iron-list {
-      flex: 1 1 auto;
-    }
-  </style>
-  <app-toolbar>App name</app-toolbar>
-  <iron-list items="[[items]]">
-    <template>
-      <div>
-        ...
-      </div>
-    </template>
-  </iron-list>
-</template>
-```
-#### Explicit size - [jsbin](http://jsbin.com/pibefo/edit?html,output)
-```html
-<template is="x-list">
-  <style>
-    :host {
-      display: block;
-    }
-
-    iron-list {
-      height: 100vh; /* don't use % values unless the parent element is sized. */
-    }
-  </style>
-  <iron-list items="[[items]]">
-    <template>
-      <div>
-        ...
-      </div>
-    </template>
-  </iron-list>
-</template>
-```
-#### Main document scrolling - [jsbin](http://jsbin.com/cojuli/edit?html,output)
-```html
-<head>
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-    }
-
-    app-toolbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-
-    iron-list {
-      /* add padding since the app-toolbar is fixed at the top */
-      padding-top: 64px;
-    }
-  </style>
-</head>
-<body>
-  <app-toolbar>App name</app-toolbar>
-  <iron-list scroll-target="document">
-    <template>
-      <div>
-        ...
-      </div>
-    </template>
-  </iron-list>
-</body>
-```
-
-`iron-list` must be given a `<template>` which contains exactly one element. In the examples
-above we used a `<div>`, but you can provide any element (including custom elements).
-
-### Template model
-
-List item templates should bind to template models of the following structure:
-
-```js
-{
-  index: 0,        // index in the item array
-  selected: false, // true if the current item is selected
-  tabIndex: -1,    // a dynamically generated tabIndex for focus management
-  item: {}         // user data corresponding to items[index]
-}
-```
-
-Alternatively, you can change the property name used as data index by changing the
-`indexAs` property. The `as` property defines the name of the variable to add to the binding
-scope for the array.
-
-For example, given the following `data` array:
-
-##### data.json
-
-```js
-[
-  {"name": "Bob"},
-  {"name": "Tim"},
-  {"name": "Mike"}
-]
-```
-
-The following code would render the list (note the name property is bound from the model
-object provided to the template scope):
-
-```html
-<iron-ajax url="data.json" last-response="{{data}}" auto></iron-ajax>
-<iron-list items="[[data]]" as="item">
-  <template>
-    <div>
-      Name: [[item.name]]
-    </div>
-  </template>
-</iron-list>
-```
-
-### Grid layout
-
-`iron-list` supports a grid layout in addition to linear layout by setting
-the `grid` attribute.  In this case, the list template item must have both fixed
-width and height (e.g. via CSS). Based on this, the number of items
-per row are determined automatically based on the size of the list viewport.
-
-### Accessibility
-
-`iron-list` automatically manages the focus state for the items. It also provides
-a `tabIndex` property within the template scope that can be used for keyboard navigation.
-For example, users can press the up and down keys to move to previous and next
-items in the list:
-
-```html
-<iron-list items="[[data]]" as="item">
-  <template>
-    <div tabindex$="[[tabIndex]]">
-      Name: [[item.name]]
-    </div>
-  </template>
-</iron-list>
-```
-
-### Styling
-
-You can use the `--iron-list-items-container` mixin to style the container of items:
-
-```css
-iron-list {
- --iron-list-items-container: {
-    margin: auto;
-  };
-}
-```
-
-### Resizing
-
-`iron-list` lays out the items when it receives a notification via the `iron-resize` event.
-This event is fired by any element that implements `IronResizableBehavior`.
-
-By default, elements such as `iron-pages`, `paper-tabs` or `paper-dialog` will trigger
-this event automatically. If you hide the list manually (e.g. you use `display: none`)
-you might want to implement `IronResizableBehavior` or fire this event manually right
-after the list became visible again. For example:
-
-```js
-document.querySelector('iron-list').fire('iron-resize');
-```
-
-### When should `<iron-list>` be used?
-
-`iron-list` should be used when a page has significantly more DOM nodes than the ones
-visible on the screen. e.g. the page has 500 nodes, but only 20 are visible at a time.
-This is why we refer to it as a `virtual` list. In this case, a `dom-repeat` will still
-create 500 nodes which could slow down the web app, but `iron-list` will only create 20.
-
-However, having an `iron-list` does not mean that you can load all the data at once.
-Say you have a million records in the database, you want to split the data into pages
-so you can bring in a page at the time. The page could contain 500 items, and iron-list
-will only render 20.
-
-@group Iron Element
-@element iron-list
-@demo demo/index.html
+This is a fork of <iron-list> for <vaadin-grid>'s internal purposes only!
+To update:
+1. Get the most recent code from https://github.com/PolymerElements/iron-list/
+2. Remove the  <dom-module id="iron-list"> to avoid collisions with actual <iron-list>
+3. Change "Polymer({" to "window.PolymerIronList = Polymer.Class({" to expose the class
+4. Optional: Remove all properties and functions not needed by <vaadin-grid>
+5. Profit!
 
 -->
-
-<dom-module id="iron-list">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-
-      @media only screen and (-webkit-max-device-pixel-ratio: 1) {
-        :host {
-          will-change: transform;
-        }
-      }
-
-      #items {
-        @apply --iron-list-items-container;
-        position: relative;
-      }
-
-      :host(:not([grid])) #items > ::slotted(*) {
-        width: 100%;
-      }
-
-      #items > ::slotted(*) {
-        box-sizing: border-box;
-        margin: 0;
-        position: absolute;
-        top: 0;
-        will-change: transform;
-      }
-    </style>
-
-    <array-selector
-        id="selector"
-        items="{{items}}"
-        selected="{{selectedItems}}"
-        selected-item="{{selectedItem}}"></array-selector>
-
-    <div id="items">
-      <slot></slot>
-    </div>
-
-  </template>
-</dom-module>
-
 <script>
 
 (function() {
@@ -318,90 +67,6 @@ will only render 20.
       },
 
       /**
-       * The name of the variable to add to the binding scope for the array
-       * element associated with a given template instance.
-       */
-      as: {
-        type: String,
-        value: 'item'
-      },
-
-      /**
-       * The name of the variable to add to the binding scope with the index
-       * for the row.
-       */
-      indexAs: {
-        type: String,
-        value: 'index'
-      },
-
-      /**
-       * The name of the variable to add to the binding scope to indicate
-       * if the row is selected.
-       */
-      selectedAs: {
-        type: String,
-        value: 'selected'
-      },
-
-      /**
-       * When true, the list is rendered as a grid. Grid items must have
-       * fixed width and height set via CSS. e.g.
-       *
-       * ```html
-       * <iron-list grid>
-       *   <template>
-       *      <div style="width: 100px; height: 100px;"> 100x100 </div>
-       *   </template>
-       * </iron-list>
-       * ```
-       */
-      grid: {
-        type: Boolean,
-        value: false,
-        reflectToAttribute: true
-      },
-
-      /**
-       * When true, tapping a row will select the item, placing its data model
-       * in the set of selected items retrievable via the selection property.
-       *
-       * Note that tapping focusable elements within the list item will not
-       * result in selection, since they are presumed to have their * own action.
-       */
-      selectionEnabled: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
-       * When `multiSelection` is false, this is the currently selected item, or `null`
-       * if no item is selected.
-       */
-      selectedItem: {
-        type: Object,
-        notify: true
-      },
-
-      /**
-       * When `multiSelection` is true, this is an array that contains the selected items.
-       */
-      selectedItems: {
-        type: Object,
-        notify: true
-      },
-
-      /**
-       * When `true`, multiple items may be selected at once (in this case,
-       * `selected` is an array of currently selected items).  When `false`,
-       * only one item may be selected at a time.
-       */
-      multiSelection: {
-        type: Boolean,
-        value: false
-      },
-
-      /**
        * The offset top from the scrolling element to the iron-list element.
        * This value can be computed using the position returned by `getBoundingClientRect()`
        * although it's preferred to use a constant value when possible.
@@ -418,8 +83,6 @@ will only render 20.
 
     observers: [
       '_itemsChanged(items.*)',
-      '_selectionEnabledChanged(selectionEnabled)',
-      '_multiSelectionChanged(multiSelection)',
       '_setOverflow(scrollTarget, scrollOffset)'
     ],
 
@@ -776,21 +439,15 @@ will only render 20.
       return this._scrollerPaddingTop + this.scrollOffset;
     },
 
-    ready: function() {
-      this.addEventListener('focus', this._didFocus.bind(this), true);
-    },
-
     attached: function() {
       this._debounceRender(this._render, ANIMATION_FRAME);
       // `iron-resize` is fired when the list is attached if the event is added
       // before attached causing unnecessary work.
       this.listen(this, 'iron-resize', '_resizeHandler');
-      this.listen(this, 'keydown', '_keydownHandler');
     },
 
     detached: function() {
       this.unlisten(this, 'iron-resize', '_resizeHandler');
-      this.unlisten(this, 'keydown', '_keydownHandler');
     },
 
     /**
@@ -942,26 +599,6 @@ will only render 20.
       this._updateScrollerSize();
     },
 
-    /**
-     * Creates a pool of DOM elements and attaches them to the local dom.
-     *
-     * @param {number} size Size of the pool
-     */
-    _createPool: function(size) {
-      this._ensureTemplatized();
-      var i, inst;
-      var physicalItems = new Array(size);
-      for (i = 0; i < size; i++) {
-        inst = this.stamp(null);
-        // TODO(blasten):
-        // First element child is item; Safari doesn't support children[0]
-        // on a doc fragment. Test this to see if it still matters.
-        physicalItems[i] = inst.root.querySelector('*');
-        this._itemsParent.appendChild(inst.root);
-      }
-      return physicalItems;
-    },
-
     _isClientFull: function() {
       return this._scrollBottom != 0 && this._physicalBottom-1 >= this._scrollBottom &&
           this._physicalTop <= this._scrollPosition;
@@ -1035,27 +672,6 @@ will only render 20.
         this.updateViewportBoundaries();
         this._increasePoolIfNeeded(DEFAULT_PHYSICAL_COUNT);
       }
-    },
-
-    /**
-     * Templetizes the user template.
-     */
-    _ensureTemplatized: function() {
-      if (this.ctor) {
-        return;
-      }
-      this._userTemplate = this.queryEffectiveChildren('template');
-      if (!this._userTemplate) {
-        console.warn('iron-list requires a template to be provided in light-dom');
-      }
-      var instanceProps = {};
-      instanceProps.__key__ = true;
-      instanceProps[this.as] = true;
-      instanceProps[this.indexAs] = true;
-      instanceProps[this.selectedAs] = true;
-      instanceProps.tabIndex = true;
-      this._instanceProps = instanceProps;
-      this.templatize(this._userTemplate, this.mutableData);
     },
 
     /**
@@ -1267,12 +883,6 @@ will only render 20.
       }
     },
 
-    _updateGridMetrics: function() {
-      this._itemWidth = this._physicalCount > 0 ? this._physicalItems[0].getBoundingClientRect().width : 200;
-      this._rowHeight = this._physicalCount > 0 ? this._physicalItems[0].offsetHeight : 200;
-      this._itemsPerRow = this._itemWidth ? Math.floor(this._viewportWidth / this._itemWidth) : this._itemsPerRow;
-    },
-
     /**
      * Updates the position of the physical items.
      */
@@ -1376,17 +986,6 @@ will only render 20.
     },
 
     /**
-     * Scroll to a specific item in the virtual list regardless
-     * of the physical items in the DOM tree.
-     *
-     * @method scrollToItem
-     * @param {(Object)} item The item to be scrolled to
-     */
-    scrollToItem: function(item){
-      return this.scrollToIndex(this.items.indexOf(item));
-    },
-
-    /**
      * Scroll to a specific index in the virtual list regardless
      * of the physical items in the DOM tree.
      *
@@ -1461,213 +1060,6 @@ will only render 20.
       }, ANIMATION_FRAME);
     },
 
-    /**
-     * Selects the given item.
-     *
-     * @method selectItem
-     * @param {Object} item The item instance.
-     */
-    selectItem: function(item) {
-      return this.selectIndex(this.items.indexOf(item));
-    },
-
-    /**
-     * Selects the item at the given index in the items array.
-     *
-     * @method selectIndex
-     * @param {Object} index The item instance.
-     */
-    selectIndex: function(index) {
-      if (index < 0 || index >= this._virtualCount) {
-        return;
-      }
-      if (!this.multiSelection && this.selectedItem) {
-       this.clearSelection();
-      }
-      if (this._isIndexRendered(index)) {
-        var model = this.modelForElement(this._physicalItems[this._getPhysicalIndex(index)]);
-        if (model) {
-          model[this.selectedAs] = true;
-        }
-        this.updateSizeForIndex(index);
-      }
-      if (this.$.selector.selectIndex) {
-        // v2
-        this.$.selector.selectIndex(index);
-      } else {
-        // v1
-        this.$.selector.select(this.items[index]);
-      }
-    },
-
-    /**
-     * Deselects the given item.
-     *
-     * @method deselect
-     * @param {Object} item The item instance.
-     */
-    deselectItem: function(item) {
-      return this.deselectIndex(this.items.indexOf(item));
-    },
-
-    /**
-     * Deselects the item at the given index in the items array.
-     *
-     * @method deselectIndex
-     * @param {number} index The index of the item in the items array.
-     */
-    deselectIndex: function(index) {
-      if (index < 0 || index >= this._virtualCount) {
-        return;
-      }
-      if (this._isIndexRendered(index)) {
-        var model = this.modelForElement(this._physicalItems[this._getPhysicalIndex(index)]);
-        model[this.selectedAs] = false;
-        this.updateSizeForIndex(index);
-      }
-      if (this.$.selector.deselectIndex) {
-        // v2
-        this.$.selector.deselectIndex(index);
-      } else {
-        // v1
-        this.$.selector.deselect(this.items[index]);
-      }
-    },
-
-    /**
-     * Selects or deselects a given item depending on whether the item
-     * has already been selected.
-     *
-     * @method toggleSelectionForItem
-     * @param {Object} item The item object.
-     */
-    toggleSelectionForItem: function(item) {
-      return this.toggleSelectionForIndex(this.items.indexOf(item));
-    },
-
-    /**
-     * Selects or deselects the item at the given index in the items array
-     * depending on whether the item has already been selected.
-     *
-     * @method toggleSelectionForIndex
-     * @param {Object} index The index of the item in the items array.
-     */
-    toggleSelectionForIndex: function(index) {
-      var isSelected = this.$.selector.isIndexSelected
-          ? this.$.selector.isIndexSelected(index) : this.$.selector.isSelected(this.items[index]);
-        isSelected ? this.deselectIndex(index) : this.selectIndex(index);
-    },
-
-    /**
-     * Clears the current selection in the list.
-     *
-     * @method clearSelection
-     */
-    clearSelection: function() {
-      this._iterateItems(function(pidx, vidx) {
-        this.modelForElement(this._physicalItems[pidx])[this.selectedAs] = false;
-      });
-      this.$.selector.clearSelection();
-    },
-
-    /**
-     * Add an event listener to `tap` if `selectionEnabled` is true,
-     * it will remove the listener otherwise.
-     */
-    _selectionEnabledChanged: function(selectionEnabled) {
-      var handler = selectionEnabled ? this.listen : this.unlisten;
-      handler.call(this, this, 'tap', '_selectionHandler');
-    },
-
-    /**
-     * Select an item from an event object.
-     */
-    _selectionHandler: function(e) {
-      var model = this.modelForElement(e.target);
-      if (!model) {
-        return;
-      }
-      var modelTabIndex, activeElTabIndex;
-      var target = Polymer.dom(e).path[0];
-      var itemsHost = this._itemsParent.node.domHost;
-      var activeEl = Polymer.dom(itemsHost ? itemsHost.root : document).activeElement;
-      var physicalItem = this._physicalItems[this._getPhysicalIndex(model[this.indexAs])];
-      // Safari does not focus certain form controls via mouse
-      // https://bugs.webkit.org/show_bug.cgi?id=118043
-      if (target.localName === 'input' ||
-          target.localName === 'button' ||
-          target.localName === 'select') {
-        return;
-      }
-      // Set a temporary tabindex
-      modelTabIndex = model.tabIndex;
-      model.tabIndex = SECRET_TABINDEX;
-      activeElTabIndex = activeEl ? activeEl.tabIndex : -1;
-      model.tabIndex = modelTabIndex;
-      // Only select the item if the tap wasn't on a focusable child
-      // or the element bound to `tabIndex`
-      if (activeEl && physicalItem !== activeEl && physicalItem.contains(activeEl) && activeElTabIndex !== SECRET_TABINDEX) {
-        return;
-      }
-      this.toggleSelectionForItem(model[this.as]);
-    },
-
-    _multiSelectionChanged: function(multiSelection) {
-      this.clearSelection();
-      this.$.selector.multi = multiSelection;
-    },
-
-    /**
-     * Updates the size of a given list item.
-     *
-     * @method updateSizeForItem
-     * @param {Object} item The item instance.
-     */
-    updateSizeForItem: function(item) {
-      return this.updateSizeForIndex(this.items.indexOf(item));
-    },
-
-     /**
-     * Updates the size of the item at the given index in the items array.
-     *
-     * @method updateSizeForIndex
-     * @param {number} index The index of the item in the items array.
-     */
-    updateSizeForIndex: function(index) {
-      if (!this._isIndexRendered(index)) {
-        return null;
-      }
-      this._updateMetrics([this._getPhysicalIndex(index)]);
-      this._positionItems();
-      return null;
-    },
-
-    /**
-     * Creates a temporary backfill item in the rendered pool of physical items
-     * to replace the main focused item. The focused item has tabIndex = 0
-     * and might be currently focused by the user.
-     *
-     * This dynamic replacement helps to preserve the focus state.
-     */
-    _manageFocus: function() {
-      var fidx = this._focusedVirtualIndex;
-
-      if (fidx >= 0 && fidx < this._virtualCount) {
-        // if it's a valid index, check if that index is rendered
-        // in a physical item.
-        if (this._isIndexRendered(fidx)) {
-          this._restoreFocusedItem();
-        } else {
-          this._createFocusBackfillItem();
-        }
-      } else if (this._virtualCount > 0 && this._physicalCount > 0) {
-        // otherwise, assign the initial focused index.
-        this._focusedPhysicalIndex = this._physicalStart;
-        this._focusedVirtualIndex = this._virtualStart;
-        this._focusedItem = this._physicalItems[this._physicalStart];
-      }
-    },
-
     _isIndexRendered: function(idx) {
       return idx >= this._virtualStart && idx <= this._virtualEnd;
     },
@@ -1678,151 +1070,6 @@ will only render 20.
 
     _getPhysicalIndex: function(idx) {
       return (this._physicalStart + (idx - this._virtualStart)) % this._physicalCount;
-    },
-
-    _focusPhysicalItem: function(idx) {
-      if (idx < 0 || idx >= this._virtualCount) {
-        return;
-      }
-      this._restoreFocusedItem();
-      // scroll to index to make sure it's rendered
-      if (!this._isIndexRendered(idx)) {
-        this.scrollToIndex(idx);
-      }
-      var physicalItem = this._physicalItems[this._getPhysicalIndex(idx)];
-      var model = this.modelForElement(physicalItem);
-      var focusable;
-      // set a secret tab index
-      model.tabIndex = SECRET_TABINDEX;
-      // check if focusable element is the physical item
-      if (physicalItem.tabIndex === SECRET_TABINDEX) {
-       focusable = physicalItem;
-      }
-      // search for the element which tabindex is bound to the secret tab index
-      if (!focusable) {
-        focusable = Polymer.dom(physicalItem).querySelector('[tabindex="' + SECRET_TABINDEX + '"]');
-      }
-      // restore the tab index
-      model.tabIndex = 0;
-      // focus the focusable element
-      this._focusedVirtualIndex = idx;
-      focusable && focusable.focus();
-    },
-
-    _removeFocusedItem: function() {
-      if (this._offscreenFocusedItem) {
-        this._itemsParent.removeChild(this._offscreenFocusedItem);
-      }
-      this._offscreenFocusedItem = null;
-      this._focusBackfillItem = null;
-      this._focusedItem = null;
-      this._focusedVirtualIndex = -1;
-      this._focusedPhysicalIndex = -1;
-    },
-
-    _createFocusBackfillItem: function() {
-      var fpidx = this._focusedPhysicalIndex;
-
-      if (this._offscreenFocusedItem || this._focusedVirtualIndex < 0) {
-        return;
-      }
-      if (!this._focusBackfillItem) {
-        // Create a physical item.
-        var inst = this.stamp(null);
-        this._focusBackfillItem = inst.root.querySelector('*');
-        this._itemsParent.appendChild(inst.root);
-      }
-      // Set the offcreen focused physical item.
-      this._offscreenFocusedItem = this._physicalItems[fpidx];
-      this.modelForElement(this._offscreenFocusedItem).tabIndex = 0;
-      this._physicalItems[fpidx] = this._focusBackfillItem;
-      this._focusedPhysicalIndex = fpidx;
-      // Hide the focused physical.
-      this.translate3d(0, HIDDEN_Y, 0, this._offscreenFocusedItem);
-    },
-
-    _restoreFocusedItem: function() {
-      if (!this._offscreenFocusedItem || this._focusedVirtualIndex < 0) {
-        return;
-      }
-      // Assign models to the focused index.
-      this._assignModels();
-      // Get the new physical index for the focused index.
-      var fpidx = this._focusedPhysicalIndex;
-
-      var onScreenItem = this._physicalItems[fpidx];
-      if (!onScreenItem) {
-        return;
-      }
-      var onScreenInstance = this.modelForElement(onScreenItem);
-      var offScreenInstance = this.modelForElement(this._offscreenFocusedItem);
-      // Restores the physical item only when it has the same model
-      // as the offscreen one. Use key for comparison since users can set
-      // a new item via set('items.idx').
-      if (onScreenInstance[this.as] === offScreenInstance[this.as]) {
-        // Flip the focus backfill.
-        this._focusBackfillItem = onScreenItem;
-        onScreenInstance.tabIndex = -1;
-        // Restore the focused physical item.
-        this._physicalItems[fpidx] = this._offscreenFocusedItem;
-        // Hide the physical item that backfills.
-        this.translate3d(0, HIDDEN_Y, 0, this._focusBackfillItem);
-      } else {
-        this._removeFocusedItem();
-        this._focusBackfillItem = null;
-      }
-      this._offscreenFocusedItem = null;
-    },
-
-    _didFocus: function(e) {
-      var targetModel = this.modelForElement(e.target);
-      var focusedModel = this.modelForElement(this._focusedItem);
-      var hasOffscreenFocusedItem = this._offscreenFocusedItem !== null;
-      var fidx = this._focusedVirtualIndex;
-      if (!targetModel || !focusedModel) {
-        return;
-      }
-      if (focusedModel === targetModel) {
-        // If the user focused the same item, then bring it into view if it's not visible.
-        if (!this._isIndexVisible(fidx)) {
-          this.scrollToIndex(fidx);
-        }
-      } else {
-        this._restoreFocusedItem();
-        // Restore tabIndex for the currently focused item.
-        focusedModel.tabIndex = -1;
-        // Set the tabIndex for the next focused item.
-        targetModel.tabIndex = 0;
-        fidx = targetModel[this.indexAs];
-        this._focusedVirtualIndex = fidx;
-        this._focusedPhysicalIndex = this._getPhysicalIndex(fidx);
-        this._focusedItem = this._physicalItems[this._focusedPhysicalIndex];
-        if (hasOffscreenFocusedItem && !this._offscreenFocusedItem) {
-          this._update();
-        }
-      }
-    },
-
-    _keydownHandler: function(e) {
-      switch (e.keyCode) {
-        case /* ARROW_DOWN */ 40:
-          e.preventDefault();
-          this._focusPhysicalItem(this._focusedVirtualIndex + (this.grid ? this._itemsPerRow : 1));
-          break;
-        case /* ARROW_RIGHT */ 39:
-          if (this.grid) this._focusPhysicalItem(this._focusedVirtualIndex + (this._isRTL ? -1 : 1));
-          break;
-        case /* ARROW_UP */ 38:
-          this._focusPhysicalItem(this._focusedVirtualIndex - (this.grid ? this._itemsPerRow : 1));
-          break;
-        case /* ARROW_LEFT */ 37:
-          if (this.grid) this._focusPhysicalItem(this._focusedVirtualIndex + (this._isRTL ? 1 : -1));
-          break;
-        case /* ENTER */ 13:
-          this._focusPhysicalItem(this._focusedVirtualIndex);
-          this._selectionHandler(e);
-          break;
-      }
     },
 
     _clamp: function(v, min, max) {
@@ -1868,38 +1115,6 @@ will only render 20.
         }
         this.notifyPath(Polymer.Path.translate(this.as, 'items.' + idx, prop), value);
       }
-    },
-
-    /* Templatizer bindings for v1 */
-    _getStampedChildren: function() {
-      return this._physicalItems;
-    },
-
-    _forwardInstancePath: function(inst, path, value) {
-      if (path.indexOf(this.as + '.') === 0) {
-        this.notifyPath('items.' + inst.__key__ + '.' +
-            path.slice(this.as.length + 1), value);
-      }
-    },
-
-    _forwardParentPath: function(path, value) {
-      (this._physicalItems || [])
-        .concat([this._offscreenFocusedItem, this._focusBackfillItem])
-        .forEach(function(item) {
-          if (item) {
-            this.modelForElement(item).notifyPath(path, value, true);
-          }
-        }, this);
-    },
-
-    _forwardParentProp: function(prop, value) {
-      (this._physicalItems || [])
-        .concat([this._offscreenFocusedItem, this._focusBackfillItem])
-        .forEach(function(item) {
-          if (item) {
-            this.modelForElement(item)[prop] = value;
-          }
-        }, this);
     }
 
   });

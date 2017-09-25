@@ -91,7 +91,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   function scrollToEnd(grid, callback) {
-    grid.scrollToIndex(grid.size - 1);
+    grid._scrollToIndex(grid.size - 1);
 
     // Ensure rows are in order
     grid._debounceScrolling.flush();
