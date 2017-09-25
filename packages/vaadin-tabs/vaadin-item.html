@@ -7,37 +7,20 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="vaadin-nav-item-mixin.html">
+<link rel="import" href="vaadin-item-mixin.html">
 
-<dom-module id="vaadin-tab-default-theme">
-  <template>
-    <style>
-      /* TODO: Implement default theme. */
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-tab">
+<dom-module id="vaadin-item-default-theme">
   <template>
     <style>
       :host {
-        display: inline-block;
-        position: relative;
-        outline: none;
         padding: 4px;
         border: 2px solid transparent;
         opacity: 0.7;
-        cursor: pointer;
         white-space: nowrap;
         text-overflow: ellipsis;
       }
 
       [part="button"] {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-        overflow: visible;
-        border: none;
         display: flex;
         justify-content: center;
       }
@@ -62,10 +45,6 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "x";
       }
 
-      :host([hidden]) {
-        display: none;
-      }
-
       :host([focused]) {
         border: 2px solid #03a9f4;
       }
@@ -86,10 +65,38 @@ This program is available under Apache License Version 2.0, available at https:/
         opacity: 1;
       }
     </style>
-    <div id="button" type="button" part="button">
-      <slot></slot>
-      <div part="close-button" on-tap="_close" role="button"></div>
-    </div>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+        position: relative;
+        outline: none;
+      }
+
+      [part="button"] {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+    </style>
+    <vaadin-nav-item>
+      <div id="button" type="button" part="button">
+        <slot name="prefix"></slot>
+        <slot name="icon"></slot>
+        <slot></slot>
+        <slot name="budge"></slot>
+        <div part="close-button" on-tap="_close" hidden$="[[closeEnabled]]"></div>
+        <slot name="suffix"></slot>
+      </div>
+    </vaadin-nav-item>
   </template>
   <script>
     if (!Polymer.Element) {
@@ -98,27 +105,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
     {
       /**
-       * `<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.
+       * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus
        *
        * @memberof Vaadin
        * @mixes Vaadin.NavItemMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Polymer.GestureEventListeners
        */
-      class TabElement extends Vaadin.NavItemMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class ItemElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-tab';
+          return 'vaadin-item';
         }
 
-        ready() {
-          super.ready();
-
-          // Leaving default role in the native button, makes navigation announcement
-          // being different when using focus navigation (tab) versus using normal
-          // navigation (arrows). The first way announces the label on a button
-          // since the focus is moved programmatically, and the second on a group.
-          this.setAttribute('role', 'button');
-          this.$.button.setAttribute('role', 'presentation');
+        static get properties() {
+          return {
+            closeEnabled: Boolean
+          };
         }
 
         _close() {
@@ -126,13 +127,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(TabElement.is, TabElement);
+      customElements.define(ItemElement.is, ItemElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.TabElement = TabElement;
+      Vaadin.ItemElement = ItemElement;
     }
   </script>
 </dom-module>

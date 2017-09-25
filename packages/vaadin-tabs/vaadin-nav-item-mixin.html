@@ -13,7 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * A mixin providing focused, focus-ring, disabled, active, selected
    * @polymerMixin
    */
-  Vaadin.NavItemMixin = superClass => class VaadinNavItemMixin extends superClass {
+  Vaadin.NavItemMixin = superClass => class VaadinItemMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -56,7 +56,8 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean,
           value: false,
           notify: true,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_selectedChanged'
         },
 
         /**
@@ -86,9 +87,16 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _toggle() {
-      this.selected = !this.selected;
-      this.dispatchEvent(new CustomEvent('selected', {bubbles: true, composed: true, detail: this.selected}));
-      this.setAttribute('aria-pressed', !!this.selected);
+      const val = !this.selected;
+      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: val});
+      this.dispatchEvent(evt);
+      if (!evt.defaultPrevented) {
+        this.selected = val;
+      }
+    }
+
+    _selectedChanged(selected) {
+      this.setAttribute('aria-pressed', !!selected);
     }
 
     _disabledChanged(disabled, old) {

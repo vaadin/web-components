@@ -1,0 +1,77 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-nav-item-mixin.html">
+
+<dom-module id="vaadin-nav-item-default-theme">
+  <template>
+    <style>
+     /* */
+    </style>
+    <slot>
+    </slot>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-nav-item">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      :host([selected]) {
+        background: pink;
+      }
+    </style>
+    <div id="button" type="button" part="button">
+      <slot></slot>
+      <div part="close-button" on-tap="_close" role="button"></div>
+    </div>
+  </template>
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    {
+      /**
+       * `<vaadin-nav-item>` is a Polymer 2 element providing an accessible and customizable tab.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.NavItemMixin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
+       */
+      class NavItemElement extends Vaadin.NavItemMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-nav-item';
+        }
+
+        ready() {
+          super.ready();
+          this.setAttribute('role', 'button');
+        }
+      }
+
+      customElements.define(NavItemElement.is, NavItemElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.NavItemElement = NavItemElement;
+    }
+  </script>
+</dom-module>

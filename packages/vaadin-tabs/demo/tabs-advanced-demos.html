@@ -6,15 +6,21 @@
       }
     </style>
 
-    <h3>Advanced example</h3>
+    <h3>Integration with iron-pages</h3>
     <vaadin-demo-snippet id='tabs-advanced-demos-sample-example'>
       <template preserve-content>
-        <vaadin-tabs>Hello World</vaadin-tabs>
-        <script>
-          window.addDemoReadyListener('#tabs-advanced-demos-sample-example', function(document) {
-            window.console.log(document.querySelector('vaadin-tabs').textContent); 
-          });
-        </script>
+        <vaadin-nav selected="{{page}}">
+          <vaadin-item>Page 1</vaadin-item>
+          <vaadin-item>Page 2</vaadin-item>
+          <vaadin-item>Page 3</vaadin-item>
+          <vaadin-item>Page 4</vaadin-item>
+        </vaadin-nav>
+        <iron-pages selected="[[page]]">
+          <div><h3>Page 1</h3>Hello World</div>
+          <div><h3>Page 2</h3>Hello World</div>
+          <div><h3>Page 3</h3>Hello World</div>
+          <div><h3>Page 4</h3>Hello World</div>
+        </iron-pages>
     </template>
     </vaadin-demo-snippet>
   </div>

@@ -6,10 +6,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="vaadin-rovin-tabindex-mixin.html">
+<link rel="import" href="vaadin-nav-mixin.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
-<dom-module id="vaadin-tabs">
+<dom-module id="vaadin-nav">
   <template>
     <style>
       :host {
@@ -20,7 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
       }
 
-      .vaadin-tabs-wrapper {
+      .vaadin-nav-wrapper {
         flex-grow: 1;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -28,7 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: -moz-scrollbars-none;
       }
 
-      .vaadin-tabs-wrapper::-webkit-scrollbar {
+      .vaadin-nav-wrapper::-webkit-scrollbar {
         display: none;
       }
 
@@ -41,11 +41,11 @@ This program is available under Apache License Version 2.0, available at https:/
         text-align: right;
       }
 
-      .vaadin-tabs {
+      .vaadin-nav {
         display: flex;
       }
 
-      .vaadin-tabs ::slotted(vaadin-tab) {
+      .vaadin-nav ::slotted(vaadin-item) {
         flex: 1;
       }
 
@@ -85,8 +85,8 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
 
-    <div id="scroll" class="vaadin-tabs-wrapper">
-      <div class="vaadin-tabs">
+    <div id="scroll" class="vaadin-nav-wrapper">
+      <div class="vaadin-nav">
         <slot></slot>
       </div>
     </div>
@@ -101,16 +101,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
     {
       /**
-       * `<vaadin-tabs>` is a Polymer 2 element for easy switching between different view
+       * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
        *
        * @memberof Vaadin
        * @mixes Vaadin.RovinTabindexMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinTabs extends Vaadin.RovinTabindexMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class VaadinNav extends Vaadin.RovinTabindexMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
         static get is() {
-          return 'vaadin-tabs';
+          return 'vaadin-nav';
         }
 
         static get properties() {
@@ -149,13 +149,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinTabs.is, VaadinTabs);
+      customElements.define(VaadinNav.is, VaadinNav);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinTabs = VaadinTabs;
+      Vaadin.VaadinNav = VaadinNav;
     }
   </script>
 </dom-module>

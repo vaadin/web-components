@@ -13,7 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * A mixin providing rovin tabindex
    * @polymerMixin
    */
-  Vaadin.RovinTabindexMixin = superClass => class VaadinRovinTabindexMixin extends superClass {
+  Vaadin.RovinTabindexMixin = superClass => class VaadinNavMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -52,8 +52,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keydown', e => this._onKeydown(e));
 
       Polymer.RenderStatus.afterNextRender(this, () => {
-        this._setItems(Array.from(this.querySelectorAll(this.itemsSelector)));
-        // `selected` property could be set before items are ready.
+        this._setItems(Array
+          .from(this.querySelectorAll(this.itemsSelector))
+          .filter(e => e instanceof Vaadin.NavItemElement));
         this._selectedChanged(this.selected);
       });
     }
@@ -110,7 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _onSelected(e) {
       if (!e.detail) {
         // Prevent the user to unselect the current item
-        e.target.selected = true;
+        e.preventDefault();
       } else {
         this.selected = this.items.indexOf(e.target);
       }

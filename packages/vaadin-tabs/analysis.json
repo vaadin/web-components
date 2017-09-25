@@ -2,9 +2,9 @@
   "schema_version": "1.0.0",
   "elements": [
     {
-      "description": "`<vaadin-tabs>` is a Polymer 2 element.\n\n```html\n<vaadin-tabs>\n</vaadin-tabs>\n```",
+      "description": "`<vaadin-nav>` is a Polymer 2 element.\n\n```html\n<vaadin-nav>\n</vaadin-nav>\n```",
       "summary": "",
-      "path": "vaadin-tabs.html",
+      "path": "vaadin-nav.html",
       "properties": [],
       "methods": [
         {
@@ -2604,7 +2604,7 @@
       },
       "privacy": "public",
       "superclass": "HTMLElement",
-      "name": "VaadinTabs",
+      "name": "VaadinNav",
       "attributes": [],
       "events": [],
       "styling": {
@@ -2616,7 +2616,7 @@
           "description": "",
           "name": "",
           "range": {
-            "file": "vaadin-tabs.html",
+            "file": "vaadin-nav.html",
             "start": {
               "line": 27,
               "column": 4
@@ -2628,7 +2628,7 @@
           }
         }
       ],
-      "tagname": "vaadin-tabs"
+      "tagname": "vaadin-nav"
     }
   ]
 }
