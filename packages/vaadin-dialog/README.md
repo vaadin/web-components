@@ -5,12 +5,12 @@
 
 # &lt;vaadin-dialog&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha2/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-dialog/html-examples/dialog-basic-demos)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-dialog/1.0.0-alpha2/#/elements/vaadin-dialog)
+[API documentation ↗](https://vaadin.com/elements/vaadin-dialog/html-api)
 
 
-[&lt;vaadin-dialog&gt;](https://vaadin.com/elements/-/element/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
+[&lt;vaadin-dialog&gt;](https://vaadin.com/elements/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
 
 <!--
 ```
