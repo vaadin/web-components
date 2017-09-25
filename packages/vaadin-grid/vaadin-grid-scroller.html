@@ -245,18 +245,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _accessIronListAPI(cb, asynchronous) {
+      _accessIronListAPI(cb) {
         this._warnPrivateAPIAccessAsyncEnabled = false;
-
         this._debouncerWarnPrivateAPIAccess = Polymer.Debouncer.debounce(
           this._debouncerWarnPrivateAPIAccess,
-            Polymer.Async.animationFrame,
-            () => Polymer.RenderStatus.afterNextRender(this, () => {
-              if (!this._debouncerWarnPrivateAPIAccess.isActive()) {
-                this._warnPrivateAPIAccessAsyncEnabled = true;
-              }
-            }));
+          Polymer.Async.animationFrame,
+          () => this._warnPrivateAPIAccessAsyncEnabled = true
+        );
         return cb.apply(this);
+      }
+
+      /* Allow iron-list to access its APIs from debounced callbacks without warns */
+      _debounceRender(cb, asyncModule) {
+        super._debounceRender(() => this._accessIronListAPI(cb), asyncModule);
       }
 
       /* Warn when iron-list APIs are being accessed directly */
