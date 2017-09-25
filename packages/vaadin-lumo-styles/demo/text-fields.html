@@ -11,9 +11,9 @@
   <link rel="import" href="common.html">
 
   <link rel="import" href="../vaadin-text-field.html">
-  <link rel="import" href="../vaadin-button.html">
+  <link rel="import" href="../vaadin-password-field.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
-  <link rel="import" href="../../vaadin-button/vaadin-button.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-password-field.html">
 
   <style>
     [unresolved] {
@@ -39,18 +39,9 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-text-field label="Label" placeholder="Placeholder"></vaadin-text-field>
-        <vaadin-text-field label="Label" value="Value"></vaadin-text-field>
-      </template>
-    </nice-demo-snippet>
-
-
-    <h3 demo-section>Text field with button</h3>
-
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-text-field label="Label" placeholder="Placeholder"></vaadin-text-field>
-        <vaadin-button theme="primary">Hello</vaadin-button>
+        <vaadin-text-field label="Label"></vaadin-text-field>
+        <vaadin-text-field placeholder="Placeholder"></vaadin-text-field>
+        <vaadin-text-field value="Value"></vaadin-text-field>
       </template>
     </nice-demo-snippet>
 
@@ -61,6 +52,16 @@
         <vaadin-text-field label="Enabled" value="Value"></vaadin-text-field>
         <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
         <vaadin-text-field label="Read only" value="Value" readonly></vaadin-text-field>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3 demo-section>Types</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-text-field label="Text" value="Value"></vaadin-text-field>
+        <vaadin-password-field label="Password" value="gd8f#cJS2!L"></vaadin-password-field>
       </template>
     </nice-demo-snippet>
 
