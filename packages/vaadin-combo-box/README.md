@@ -6,11 +6,11 @@
 
 # &lt;vaadin-combo-box&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-combo-box/3.0.0-alpha3/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-combo-box/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-combo-box/3.0.0-alpha3/#/elements/vaadin-combo-box)
+[API documentation ↗](https://vaadin.com/elements/vaadin-combo-box/html-api)
 
-[&lt;vaadin-combo-box&gt;](https://vaadin.com/elements/-/element/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-combo-box&gt;](https://vaadin.com/elements/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
