@@ -5,11 +5,11 @@
 
 # &lt;vaadin-checkbox&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha4/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-checkbox/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-checkbox/1.0.0-alpha4/#/elements/vaadin-checkbox)
+[API documentation ↗](https://vaadin.com/elements/vaadin-checkbox/html-api)
 
-[&lt;vaadin-checkbox&gt;](https://vaadin.com/elements/-/element/vaadin-checkbox) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable checkbox, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-checkbox&gt;](https://vaadin.com/elements/vaadin-checkbox) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable checkbox, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
