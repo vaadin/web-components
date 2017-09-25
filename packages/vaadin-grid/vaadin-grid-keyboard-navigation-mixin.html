@@ -207,6 +207,23 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      // Header and footer could have hidden rows, e. g., if none of the columns
+      // or groups on the given column tree level define template. Skip them
+      // in vertical keyboard navigation.
+      if (activeRowGroup !== this.$.items) {
+        if (dstRowIndex > rowIndex) {
+          while (
+              dstRowIndex < maxRowIndex &&
+              activeRowGroup.children[dstRowIndex].hidden
+          ) dstRowIndex++;
+        } else if (dstRowIndex < rowIndex) {
+          while (
+              dstRowIndex > 0 &&
+              activeRowGroup.children[dstRowIndex].hidden
+          ) dstRowIndex--;
+        }
+      }
+
       // _focusedColumnOrder is memoized — this is to ensure predictable
       // navigation when entering and leaving detail and column group cells.
       if (this._focusedColumnOrder === undefined) {
@@ -473,7 +490,7 @@ This program is available under Apache License Version 2.0, available at https:/
       let columnTreeLevel = this._columnTree.length - 1;
       if (rowGroup === this.$.header) {
         columnTreeLevel = rowIndex;
-      } else if (rowGroup === this.$.header) {
+      } else if (rowGroup === this.$.footer) {
         columnTreeLevel = this._columnTree.length - 1 - rowIndex;
       }
       return this._columnTree[columnTreeLevel];
