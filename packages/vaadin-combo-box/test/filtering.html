@@ -127,6 +127,25 @@
           done();
         });
       });
+
+      it('should update focus when opening with filling filter', () => {
+        comboBox.close();
+
+        setInputValue('bar');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(0);
+      });
+
+      it('should reset focus when opening with filter cleared', () => {
+        comboBox.value = 'bar';
+        comboBox.close();
+
+        setInputValue('');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(-1);
+      });
     });
 
     describe('filtering items', () => {
@@ -245,6 +264,7 @@
       });
 
       it('should focus on filtered value', () => {
+        comboBox.filteredItems = ['foo'];
         setInputValue('bar');
         expect(comboBox._focusedIndex).to.eql(-1);
 
@@ -259,6 +279,27 @@
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
         expect(comboBox._focusedIndex).to.eql(1);
+      });
+
+      it('should update focus when opening with filling filter', () => {
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+        comboBox.close();
+
+        setInputValue('bar');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(1);
+      });
+
+      it('should reset focus when opening with filter cleared', () => {
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+        comboBox.value = 'bar';
+        comboBox.close();
+
+        setInputValue('');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(-1);
       });
 
       it('should not hide the overlay while loading', () => {
