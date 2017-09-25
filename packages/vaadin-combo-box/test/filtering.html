@@ -64,17 +64,6 @@
         expect(comboBox.opened).to.equal(true);
       });
 
-      it('should open before applying filter', () => {
-        comboBox.close();
-
-        const openSpy = sinon.spy(comboBox, 'open');
-        const filterChangedSpy = sinon.spy(comboBox, '_filterChanged');
-
-        setInputValue('f');
-
-        expect(openSpy.calledBefore(filterChangedSpy)).to.be.true;
-      });
-
       it('should not change the value of the combobox', () => {
         comboBox.value = 'foo';
         setInputValue('bar');
@@ -137,6 +126,25 @@
           expect(spy.callCount).to.eql(1); // scrolls once on open
           done();
         });
+      });
+
+      it('should update focus when opening with filling filter', () => {
+        comboBox.close();
+
+        setInputValue('bar');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(0);
+      });
+
+      it('should reset focus when opening with filter cleared', () => {
+        comboBox.value = 'bar';
+        comboBox.close();
+
+        setInputValue('');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(-1);
       });
     });
 
@@ -256,6 +264,7 @@
       });
 
       it('should focus on filtered value', () => {
+        comboBox.filteredItems = ['foo'];
         setInputValue('bar');
         expect(comboBox._focusedIndex).to.eql(-1);
 
@@ -270,6 +279,27 @@
         comboBox.filteredItems = ['foo', 'bar', 'baz'];
 
         expect(comboBox._focusedIndex).to.eql(1);
+      });
+
+      it('should update focus when opening with filling filter', () => {
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+        comboBox.close();
+
+        setInputValue('bar');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(1);
+      });
+
+      it('should reset focus when opening with filter cleared', () => {
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+        comboBox.value = 'bar';
+        comboBox.close();
+
+        setInputValue('');
+
+        expect(comboBox.opened).to.be.true;
+        expect(comboBox._focusedIndex).to.equal(-1);
       });
 
       it('should not hide the overlay while loading', () => {

@@ -562,6 +562,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       if (this.items) {
         this.filteredItems = this._filterItems(this.items, filter);
+      } else {
+        // With certain use cases (e. g., external filtering), `items` are
+        // undefined. Filtering is unnecessary per se, but the filteredItems
+        // observer should still be invoked to update focused item.
+        this._filteredItemsChanged({path: 'filteredItems'}, itemValuePath, itemLabelPath);
       }
     }
 
