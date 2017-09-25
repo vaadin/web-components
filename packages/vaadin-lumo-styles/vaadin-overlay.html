@@ -4,7 +4,6 @@
 <custom-style>
   <style>
     html {
-      --valo-overlay-border-radius: var(--valo-border-radius);
       --valo-overlay-box-shadow:
           0 0 0 1px var(--valo-contrast-5pct),
           0 1px 6px 0 var(--valo-shade-30pct),
@@ -20,16 +19,18 @@
   </style>
 </custom-style>
 
-<dom-module id="valo-overlay" theme-for="vaadin-overlay">
+<!-- TODO add vaadin-date-picker-overlay once it uses the generic vaadin-overlay element -->
+<dom-module id="valo-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style>
       [part="overlay"] {
         background-color: var(--valo-base-color);
-        border-radius: var(--valo-overlay-border-radius, var(--valo-border-radius));
+        border-radius: var(--valo-border-radius);
         box-shadow: var(--valo-overlay-box-shadow);
         box-sizing: border-box;
         animation: 0.2s vaadin-overlay-enter;
         font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size-m);
       }
 
       @keyframes vaadin-overlay-enter {

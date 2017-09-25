@@ -50,15 +50,19 @@
   </template>
 </dom-module>
 
-<!-- TODO should have some way of just affecting combo box overlay (either a specific element of a class on the host) -->
-<dom-module id="valo-combo-box-overlay" theme-for="vaadin-overlay">
+<dom-module id="valo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style>
-      [part="content"] {
-        padding: var(--vaadin-combo-box-overlay-padding, var(--valo-space-xs));
-        /* TODO should not be needed, fix it in the combo box default styles/theme, make it
-         * possible to override it somehow */
-        box-shadow: var(--valo-overlay-box-shadow) !important;
+      #scroller {
+        border-radius: var(--valo-border-radius);
+      }
+
+      /* TODO ugly hack to overcome the overly-complex nested scroller structure and add vertical spacing between the first and last items and the overlay */
+      /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
+      #selector {
+        border-top: var(--valo-space-xs) solid transparent;
+        border-bottom: var(--valo-space-xs) solid transparent;
+        box-sizing: border-box;
       }
     </style>
   </template>
@@ -78,6 +82,12 @@
         cursor: pointer;
         white-space: nowrap;
         position: relative;
+
+        /* TODO ugly hack to add horizontal spacing between the overlay and the item */
+        /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
+        left: var(--valo-space-xs);
+        right: var(--valo-space-xs);
+        width: auto !important;
       }
 
       :host([focused]) {
