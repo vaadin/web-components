@@ -144,6 +144,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (this.positionTarget && this.opened) {
           this._setPosition();
+          // Schedule another position update (to cover virtual keyboard opening for example)
+          requestAnimationFrame(this._setPosition.bind(this));
         }
       }
 
