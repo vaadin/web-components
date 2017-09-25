@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
-<link rel="import" href="vaadin-combo-box-overlay.html">
+<link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
 <link rel="import" href="vaadin-combo-box-styles.html">
 
 <dom-module id="vaadin-combo-box-light">
@@ -16,14 +16,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <slot></slot>
 
-    <vaadin-combo-box-overlay part="overlay" id="overlay"
+    <vaadin-combo-box-dropdown-wrapper id="overlay"
         opened=[[opened]]
         position-target="[[inputElement]]"
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
         loading="[[loading]]"
         vertical-offset="[[overlayVerticalOffset]]">
-    </vaadin-combo-box-overlay>
+    </vaadin-combo-box-dropdown-wrapper>
   </template>
 </dom-module>
 
@@ -37,8 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `<vaadin-combo-box-light>` is a customizable version of the `<vaadin-combo-box>` providing
      * only the dropdown functionality and leaving the input field definition to the user.
      *
-     * This element is using the same [`ComboBoxBehavior`](#vaadin.elements.combobox.ComboBoxBehavior) as
-     * [`<vaadin-combo-box>`](#vaadin-combo-box), so the API remains the same.
+     * The element has the same API as `<vaadin-combo-box>`.
      *
      * To create a custom input field, you need to add a child element which has a two-way
      * data-bindable property representing the input value. The property name is expected

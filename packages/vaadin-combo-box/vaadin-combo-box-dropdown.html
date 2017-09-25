@@ -19,16 +19,33 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
     </style>
-    <vaadin-overlay id="overlay" opened="[[opened]]" template="{{template}}" style="align-items: stretch; margin: 0;">
+    <vaadin-combo-box-overlay id="overlay" opened="[[opened]]" template="{{template}}" style="align-items: stretch; margin: 0;">
       <slot></slot>
-    </vaadin-overlay>
+    </vaadin-combo-box-overlay>
   </template>
 </dom-module>
 
 <script>
   {
     /**
-     * `<vaadin-combo-box-dropdown>` is a Polymer element for creating dropdowns.
+     * The overlay element.
+     *
+     * ### Styling
+     * See <vaadin-overlay> documentation for styling.
+     *
+     * @memberof Vaadin
+     */
+    class VaadinComboBoxOverlay extends Vaadin.OverlayElement {
+      static get is() {
+        return 'vaadin-combo-box-overlay';
+      }
+    }
+
+    customElements.define(VaadinComboBoxOverlay.is, VaadinComboBoxOverlay);
+
+    /**
+     * Element for internal use only.
+     *
      * @memberof Vaadin
      */
     class DropdownElement extends Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element) {

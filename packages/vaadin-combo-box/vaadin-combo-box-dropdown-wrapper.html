@@ -12,7 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-combo-box-spinner.html">
 <link rel="import" href="vaadin-combo-box-dropdown.html">
 
-<dom-module id="vaadin-combo-box-overlay">
+<dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
     <vaadin-combo-box-dropdown id="dropdown" opened="{{opened}}" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]"
       on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
@@ -58,11 +58,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
     /**
+     * Element for internal use only.
+     *
      * @memberof Vaadin
      */
     class ComboBoxOverlayElement extends Polymer.Element {
       static get is() {
-        return 'vaadin-combo-box-overlay';
+        return 'vaadin-combo-box-dropdown-wrapper';
       }
 
       static get properties() {
