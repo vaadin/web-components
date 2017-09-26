@@ -48,7 +48,6 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
       this.addEventListener('selected', e => this._onSelected(e));
-      this.addEventListener('close', e => this._onClose(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
 
       Polymer.RenderStatus.afterNextRender(this, () => {
@@ -115,11 +114,6 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this.selected = this.items.indexOf(e.target);
       }
-    }
-
-    _onClose(e) {
-      this.splice('items', this.items.indexOf(e.target), 1);
-      this.removeChild(e.target);
     }
   };
 </script>

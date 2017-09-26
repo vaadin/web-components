@@ -9,21 +9,48 @@
     <h3>Integration with iron-pages</h3>
     <vaadin-demo-snippet id='tabs-advanced-demos-sample-example'>
       <template preserve-content>
+        <style>
+          page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+        </style>
         <vaadin-nav selected="{{page}}">
-          <vaadin-item>Page 1</vaadin-item>
-          <vaadin-item>Page 2</vaadin-item>
-          <vaadin-item>Page 3</vaadin-item>
-          <vaadin-item>Page 4</vaadin-item>
+          <vaadin-nav-item>
+            <vaadin-item>
+              <img src="https://api.adorable.io/avatars/100/foo.png" slot="icon"></img>
+              Page 1
+              <span slot="badge">Foo</span>
+            </vaadin-item>
+          </vaadin-nav-item>
+          <vaadin-nav-item>
+            <vaadin-item>
+              <img src="https://api.adorable.io/avatars/100/bar.png" slot="icon"></img>
+              Page 1
+            </vaadin-item>
+          </vaadin-nav-item>
+          <vaadin-nav-item>
+            <vaadin-item>
+              <img src="https://api.adorable.io/avatars/100/baz.png" slot="icon"></img>
+              Page 1
+            </vaadin-item>
+          </vaadin-nav-item>
+          <vaadin-nav-item>
+            <vaadin-item>
+              <img src="https://api.adorable.io/avatars/100/lorem.png" slot="icon"></img>
+              Page 1
+            </vaadin-item>
+          </vaadin-nav-item>
         </vaadin-nav>
         <iron-pages selected="[[page]]">
-          <div><h3>Page 1</h3>Hello World</div>
-          <div><h3>Page 2</h3>Hello World</div>
-          <div><h3>Page 3</h3>Hello World</div>
-          <div><h3>Page 4</h3>Hello World</div>
+          <page><h3>Page 1</h3>Hello World</page>
+          <page><h3>Page 2</h3>Hello World</page>
+          <page><h3>Page 3</h3>Hello World</page>
+          <page><h3>Page 4</h3>Hello World</page>
         </iron-pages>
     </template>
     </vaadin-demo-snippet>
-  </div>
   </template>
   <script>
     class TabsAdvancedDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {

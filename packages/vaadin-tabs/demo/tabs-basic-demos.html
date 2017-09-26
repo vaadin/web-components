@@ -1,15 +1,19 @@
 <dom-module id="tabs-basic-demos">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
       }
-
     </style>
 
     <h3>Simple tabs</h3>
     <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
       <template preserve-content>
+        <style>
+          vaadin-nav-item {
+            text-align: center;
+          }
+        </style>
         <vaadin-nav>
           <vaadin-nav-item>Foo</vaadin-nav-item>
           <vaadin-nav-item>Bar</vaadin-nav-item>
@@ -18,49 +22,74 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Vaadin items</h3>
+    <h3>Scrollable tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
+      <template preserve-content>
+        <style>
+          vaadin-nav-item {
+            min-width: 100px;
+            text-align: center;
+          }
+        </style>
+        <vaadin-nav selected="2">
+          <vaadin-nav-item>Foo-1</vaadin-nav-item>
+          <vaadin-nav-item>Bar-1</vaadin-nav-item>
+          <vaadin-nav-item>Foo-2</vaadin-nav-item>
+          <vaadin-nav-item>Bar-2</vaadin-nav-item>
+          <vaadin-nav-item>Foo-3</vaadin-nav-item>
+          <vaadin-nav-item>Bar-3</vaadin-nav-item>
+          <vaadin-nav-item>Foo-4</vaadin-nav-item>
+          <vaadin-nav-item>Bar-4</vaadin-nav-item>
+          <vaadin-nav-item>Foo-5</vaadin-nav-item>
+          <vaadin-nav-item>Bar-5</vaadin-nav-item>
+          <vaadin-nav-item>Foo-6</vaadin-nav-item>
+          <vaadin-nav-item>Bar-6</vaadin-nav-item>
+          <vaadin-nav-item>Foo-7</vaadin-nav-item>
+          <vaadin-nav-item>Bar-7</vaadin-nav-item>
+          <vaadin-nav-item>Foo-8</vaadin-nav-item>
+          <vaadin-nav-item>Bar-8</vaadin-nav-item>
+        </vaadin-nav>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Wrapping &lt;vaadin-item></h3>
     <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
       <template preserve-content>
         <vaadin-nav>
           <vaadin-nav-item>
-            <vaadin-item>Foo</vaadin-item>
+            <vaadin-item>
+              Foo
+              <span slot="badge">foo</span>
+            </vaadin-item>
           </vaadin-nav-item>
           <vaadin-nav-item>
-            <vaadin-item>Bar</vaadin-item>
+            <vaadin-item>
+              Bar
+              <span slot="badge">bar</span>
+            </vaadin-item>
           </vaadin-nav-item>
           <vaadin-nav-item>
-            <vaadin-item>Baz</vaadin-item>
+            <vaadin-item>
+              Baz
+              <span slot="badge">baz</span>
+            </vaadin-item>
           </vaadin-nav-item>
           <vaadin-nav-item disabled>
-            <vaadin-item>Lorem</vaadin-item>
+            <vaadin-item>
+              Lorem
+              <span slot="badge">lorem</span>
+            </vaadin-item>
           </vaadin-nav-item>
           <vaadin-nav-item>
-            <vaadin-item>Ipsum</vaadin-item>
+            <vaadin-item>
+              Ipsum
+              <span slot="badge">ipsum</span>
+            </vaadin-item>
           </vaadin-nav-item>
         </vaadin-nav>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Scrolling tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
-      <template preserve-content>
-        <vaadin-nav selected="2">
-          <vaadin-item>Foo-1</vaadin-item>
-          <vaadin-item>Bar-1</vaadin-item>
-          <vaadin-item>Foo-2</vaadin-item>
-          <vaadin-item>Bar-2</vaadin-item>
-          <vaadin-item>Foo-3</vaadin-item>
-          <vaadin-item>Bar-3</vaadin-item>
-          <vaadin-item>Foo-4</vaadin-item>
-          <vaadin-item>Bar-4</vaadin-item>
-          <vaadin-item>Foo-5</vaadin-item>
-          <vaadin-item>Bar-5</vaadin-item>
-          <vaadin-item>Foo-6</vaadin-item>
-          <vaadin-item>Bar-6</vaadin-item>
-        </vaadin-nav>
-      </template>
-    </vaadin-demo-snippet>
-  </div>
   </template>
   <script>
     class TabsBasicDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
