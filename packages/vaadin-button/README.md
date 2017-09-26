@@ -5,11 +5,11 @@
 
 # &lt;vaadin-button&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-button/1.0.0/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-button/html-examples/)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-button/1.0.0/#/elements/vaadin-button)
+[API documentation ↗](https://vaadin.com/elements/vaadin-button/html-api/)
 
-[&lt;vaadin-button&gt;](https://vaadin.com/elements/-/element/vaadin-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-button&gt;](https://vaadin.com/elements/vaadin-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
