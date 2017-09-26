@@ -31,7 +31,7 @@
     "paper-button": "^2.0.0",
     "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^v1.0.0-rc.11",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "^1.0.0"
   },
   "resolutions": {
     "webcomponentsjs": "^v1.0.0-rc.11"
