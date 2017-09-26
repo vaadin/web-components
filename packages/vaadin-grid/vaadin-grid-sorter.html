@@ -16,14 +16,43 @@ This program is available under Apache License Version 2.0, available at https:/
   }
 </style>
 
+<dom-module id="vaadin-grid-sorter-default-theme" theme-for="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+
+      :host(:not([direction])) [part="indicators"]::before {
+        opacity: 0.2;
+      }
+
+      [part="content"] {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 1;
+      }
+
+      [part="indicators"]::before {
+        display: block;
+        padding: 0 10px;
+      }
+
+      [part="order"] {
+        transform: translateY(-6px) scale(0.7);
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-grid-sorter">
   <template>
     <style>
       :host {
-        position: relative;
         display: inline-flex;
-        justify-content: space-between;
-        align-items: center;
         cursor: pointer;
       }
 
@@ -35,18 +64,14 @@ This program is available under Apache License Version 2.0, available at https:/
         position: absolute;
         right: 0;
         top: 0;
-        transform: translateY(-6px) scale(0.7);
       }
 
       [part="indicators"]::before {
         font-family: 'vaadin-grid-sorter-icons';
-        display: block;
-        padding: 0 10px;
       }
 
       :host(:not([direction])) [part="indicators"]::before {
         content: "\e901";
-        opacity: 0.2;
       }
 
       :host([direction=asc]) [part="indicators"]::before {
@@ -62,13 +87,6 @@ This program is available under Apache License Version 2.0, available at https:/
         z-index: -1;
         clip: rect(0, 0, 0, 0);
         text-transform: none;
-      }
-
-      [part="content"] {
-        display: inline-block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        flex: 1;
       }
     </style>
 
