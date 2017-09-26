@@ -27,33 +27,33 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
 
-      #indicators {
+      [part="indicators"] {
         position: relative;
       }
 
-      #order {
+      [part="order"] {
         position: absolute;
         right: 0;
         top: 0;
         transform: translateY(-6px) scale(0.7);
       }
 
-      #indicators::before {
+      [part="indicators"]::before {
         font-family: 'vaadin-grid-sorter-icons';
         display: block;
         padding: 0 10px;
       }
 
-      :host(:not([direction])) #indicators::before {
+      :host(:not([direction])) [part="indicators"]::before {
         content: "\e901";
         opacity: 0.2;
       }
 
-      :host([direction=asc]) #indicators::before {
+      :host([direction=asc]) [part="indicators"]::before {
         content: "\e900";
       }
 
-      :host([direction=desc]) #indicators::before {
+      :host([direction=desc]) [part="indicators"]::before {
         content: "\e902";
       }
 
@@ -64,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
         text-transform: none;
       }
 
-      #content {
+      [part="content"] {
         display: inline-block;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -72,14 +72,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="content" on-focus="_onContentFocus">
+    <div part="content" on-focus="_onContentFocus">
       <slot></slot>
     </div>
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
-    <div id="indicators" part="sorter-indicators" aria-hidden="true" on-focus="_onContentFocus">
-      <div part="sorter-order" id="order">[[_getDisplayOrder(_order)]]</div>
+    <div part="indicators" aria-hidden="true" on-focus="_onContentFocus">
+      <div part="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
   </template>
@@ -101,14 +101,15 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * The following shadow DOM parts are exposed for styling:
+       * The following shadow DOM parts are available for styling:
        *
        * Part name | Description
        * ----------------|----------------
-       * `sorter-indicators` | The internal sorter indicators. With ::before selector it is possible to customize the arrow
-       * `sorter-order` | The internal sorter order
+       * `content` | The slotted content wrapper
+       * `indicators` | The internal sorter indicators.
+       * `order` | The internal sorter order
        *
-       * The following state attributes are exposed for styling:
+       * The following state attributes are available for styling:
        *
        * Attribute    | Description | Part name
        * -------------|-------------|------------
