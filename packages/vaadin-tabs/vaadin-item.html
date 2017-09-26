@@ -81,7 +81,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
     {
       /**
-       * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus
+       * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
+
+       * It has 4 slots:
+       *  - The `prefix` slot to add additional content at the left of the label.
+       *  - The `icon` slot to provide an icon or image.
+       *  - The `label` slot for the text of the item.
+       *  - The `badge` slot for adding some thext the small area.
+       *  - The `suffix` slot to add additional content at the right of the label.
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `icon` | The item icon | vaadin-item
+       * `label` | The item label | vaadin-item
+       * `badge` | For auxilary content | vaadin-item
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin

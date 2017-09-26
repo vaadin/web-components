@@ -7,7 +7,7 @@
     </style>
 
     <h3>Simple tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
+    <vaadin-demo-snippet id='tabs-basic-demos-simple-tabs'>
       <template preserve-content>
         <style>
           vaadin-nav-item {
@@ -22,8 +22,27 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Simple tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-vertical-tabs'>
+      <template preserve-content>
+        <style>
+          vaadin-nav-item {
+            padding-left: 20px;
+          }
+        </style>
+        <vaadin-nav direction="vertical">
+          <vaadin-nav-item>Foo</vaadin-nav-item>
+          <vaadin-nav-item>Bar</vaadin-nav-item>
+          <vaadin-nav-item>Baz</vaadin-nav-item>
+          <vaadin-nav-item disabled>Disabled</vaadin-nav-item>
+          <vaadin-nav-item>Ipsum</vaadin-nav-item>
+          <vaadin-nav-item>Dolor</vaadin-nav-item>
+        </vaadin-nav>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Scrollable tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
+    <vaadin-demo-snippet id='tabs-basic-demos-scrollable-tabs'>
       <template preserve-content>
         <style>
           vaadin-nav-item {
@@ -53,7 +72,7 @@
     </vaadin-demo-snippet>
 
     <h3>Wrapping &lt;vaadin-item></h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-sample-example'>
+    <vaadin-demo-snippet id='tabs-basic-demos-vaadin-items'>
       <template preserve-content>
         <vaadin-nav>
           <vaadin-nav-item>
@@ -79,7 +98,7 @@
             <vaadin-item>
               <iron-icon icon="mail" slot="icon"></iron-icon>
               Lorem
-              <span slot="badge">lorem</span>
+              <span slot="badge">disabled</span>
             </vaadin-item>
           </vaadin-nav-item>
           <vaadin-nav-item>

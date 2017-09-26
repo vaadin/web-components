@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-nav-item-mixin.html">
 
@@ -17,7 +16,7 @@ This program is available under Apache License Version 2.0, available at https:/
         border: solid 1px transparent;
         opacity: 0.8;
         background: #e5e1e1;
-        margin: 0 1px;
+        margin: 1px;
         white-space: nowrap;
       }
 
@@ -72,9 +71,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.NavItemMixin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Polymer.GestureEventListeners
        */
-      class NavItemElement extends Vaadin.NavItemMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class NavItemElement extends Vaadin.NavItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-nav-item';
         }

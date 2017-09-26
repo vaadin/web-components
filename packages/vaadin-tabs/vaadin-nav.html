@@ -7,7 +7,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-nav-mixin.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 
 <dom-module id="vaadin-nav">
   <template>
@@ -20,7 +19,11 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
       }
 
-      .vaadin-nav-wrapper {
+      :host([direction=vertical]) .vaadin-nav {
+        flex-direction: column;
+      }
+
+      .vaadin-nav-scroller {
         flex-grow: 1;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -28,7 +31,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: -moz-scrollbars-none;
       }
 
-      .vaadin-nav-wrapper::-webkit-scrollbar {
+      .vaadin-nav-scroller::-webkit-scrollbar {
         display: none;
       }
 
@@ -85,7 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
 
-    <div id="scroll" class="vaadin-nav-wrapper">
+    <div id="scroll" class="vaadin-nav-scroller">
       <div class="vaadin-nav">
         <slot></slot>
       </div>
@@ -104,18 +107,20 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
        *
        * @memberof Vaadin
-       * @mixes Vaadin.RovinTabindexMixin
+       * @mixes Vaadin.NavMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinNav extends Vaadin.RovinTabindexMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class VaadinNav extends Vaadin.NavMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-nav';
         }
 
         static get properties() {
           return {
+            /* @private */
             _leftHidden: Boolean,
+            /* @private */
             _rightHidden: Boolean
           };
         }
