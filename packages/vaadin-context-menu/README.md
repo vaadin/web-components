@@ -5,9 +5,11 @@
 
 # &lt;vaadin-context-menu&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-context-menu/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-context-menu/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-context-menu/html-api)
 
-[&lt;vaadin-context-menu&gt;](https://vaadin.com/elements/-/element/vaadin-context-menu) is a [Polymer](http://polymer-project.org) element providing a contextual menu, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-context-menu&gt;](https://vaadin.com/elements/vaadin-context-menu) is a [Polymer](http://polymer-project.org) element providing a contextual menu, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
