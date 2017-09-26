@@ -44,9 +44,9 @@
             <div></div>
           </template>
           <template>
-            [[index]] [[item]]
-            <div></div>
-            <div></div>
+            <span>
+              [[index]] [[item]]
+            </span>
           </template>
           <template class="footer"></template>
         </vaadin-grid-column>
@@ -1140,6 +1140,15 @@
           clickItem(0);
 
           expect(grid.activeItem).to.be.null;
+        });
+
+        it('should activate when clicking on non-focusable child', () => {
+          const span = getCellContent(getRowCell(0, 2)).children[0];
+          // Normally non-focusables like span should not focus, but in MSIE they can
+          span.focus(); 
+          span.click();
+
+          expect(grid.activeItem).to.equal('foo');
         });
 
         it('should not activate when clicking on a native input', () => {
