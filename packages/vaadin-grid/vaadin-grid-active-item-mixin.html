@@ -42,7 +42,9 @@ This program is available under Apache License Version 2.0, available at https:/
       const model = e.detail.model;
       const clickedItem = model ? model.item : null;
 
-      this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+      if (clickedItem) {
+        this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+      }
     }
 
     _activeItemChanged() {

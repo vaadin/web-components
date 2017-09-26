@@ -1149,6 +1149,23 @@
           expect(grid.activeItem).to.be.null;
         });
 
+        it('should not deactivate on space in non-body row', () => {
+          clickItem(0);
+
+          tabToHeader();
+          space();
+
+          expect(grid.activeItem).to.equal('foo');
+        });
+
+        it('should not deactivate on click in non-body row', () => {
+          clickItem(0);
+
+          clickFirstHeaderCell();
+
+          expect(grid.activeItem).to.equal('foo');
+        });
+
         describe('space click shortcut', () => {
           beforeEach(() => {
             header.children[0].children[1].focus();
