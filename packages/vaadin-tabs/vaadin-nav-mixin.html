@@ -59,14 +59,12 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get focused() {
-      return this.items.reduce((prev, el) => prev || (el.focused ? el : null), null);
+      return this.items.reduce((prev, el) => prev || (el.hasAttribute('focused') ? el : null), null);
     }
 
     _onKeydown(e) {
-      const key = e.which;
-      // arrow left or right
-      if (key == 37 || key == 39) {
-        this._moveToNext(key == 39, false);
+      if (/^(Arrow)?(Left|Right)$/i.test(e.key)) {
+        this._moveToNext(/Right/i.test(e.key), false);
       }
       // TODO: handle other keys to focus items by the first letter.
     }

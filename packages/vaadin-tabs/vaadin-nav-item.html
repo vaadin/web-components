@@ -20,17 +20,21 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0 1px;
         white-space: nowrap;
       }
+
       :host([selected]) {
         color: #2196f3f2;
         font-weight: 500;
         opacity: 0.9;
       }
+
       :host([focused]) {
         border: dashed 1px grey;
       }
+
       :host(:hover) {
         opacity: 1;
       }
+
       :host([disabled]) {
         opacity: 0.5;
       }
@@ -77,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this.setAttribute('role', 'button');
+          this.setAttribute('role', 'tab');
         }
       }
 

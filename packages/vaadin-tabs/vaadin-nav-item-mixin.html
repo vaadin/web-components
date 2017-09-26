@@ -10,24 +10,14 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
 
   /**
-   * A mixin providing focused, focus-ring, disabled, active, selected
+   * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
+   *
+   * `focused`, `active` and `focus-ring` are set as only as attributes.
    * @polymerMixin
    */
   Vaadin.NavItemMixin = superClass => class VaadinItemMixin extends superClass {
     static get properties() {
       return {
-        /**
-         * If true, the element currently has focus.
-         */
-        focused: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          readOnly: true,
-          observer: '_focusedChanged',
-          reflectToAttribute: true
-        },
-
         /**
          * If true, the user cannot interact with this element.
          */
@@ -38,17 +28,6 @@ This program is available under Apache License Version 2.0, available at https:/
           observer: '_disabledChanged',
           reflectToAttribute: true
         },
-
-        /**
-         * If true, the user is currently holding down the button.
-         */
-        active: {
-          type: Boolean,
-          readOnly: true,
-          value: false,
-          reflectToAttribute: true
-        },
-
         /**
          * If true, the button is in the selected state.
          */
@@ -58,16 +37,6 @@ This program is available under Apache License Version 2.0, available at https:/
           notify: true,
           reflectToAttribute: true,
           observer: '_selectedChanged'
-        },
-
-        /**
-         * True if the input device that caused the element to receive focus
-         * was a keyboard.
-         */
-        focusRing: {
-          type: Boolean,
-          reflectToAttribute: true,
-          readOnly: true
         }
       };
     }
@@ -113,16 +82,29 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _focusedChanged(focused) {
-      this._setFocusRing(focused && !this._mousedown);
-      if (!focused) {
+    _setFocused(focused) {
+      if (focused) {
+        this.setAttribute('focused', '');
+        if (!this._mousedown) {
+          this.setAttribute('focus-ring', '');
+        }
+      } else {
+        this.removeAttribute('focused');
+        this.removeAttribute('focus-ring');
         this._setActive(false);
       }
     }
 
+    _setActive(active) {
+      if (active) {
+        this.setAttribute('active', '');
+      } else {
+        this.removeAttribute('active');
+      }
+    }
+
     _onKeydown(event) {
-      // space or enter
-      if (event.which == 32 || event.which == 13) {
+      if (/^( |SpaceBar|Enter)$/i.test(event.key)) {
         event.preventDefault();
         event.stopImmediatePropagation();
         this._setActive(true);
@@ -130,7 +112,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onKeyup() {
-      if (this.active) {
+      if (this.hasAttribute('active')) {
         this._setActive(false);
         this._toggle();
       }
