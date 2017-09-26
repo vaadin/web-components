@@ -47,7 +47,7 @@
     "test-fixture": "PolymerElements/test-fixture#^3.0.0",
     "web-component-tester": "Polymer/web-component-tester#^6.1.5",
     "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^1.0.0"
   },
   "variants": {
     "1.x": {
