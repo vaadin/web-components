@@ -160,6 +160,16 @@ This program is available under Apache License Version 2.0, available at https:/
        * `error-message` | The error message element
        * `input-field` | The element that wraps prefix, value and suffix
        *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `disabled` | Set to a disabled text field | :host
+       * `has-value` | Set when the element has a value | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.FormElementMixin
