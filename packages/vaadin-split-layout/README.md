@@ -6,9 +6,11 @@
 
 # &lt;vaadin-split-layout&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-split-layout/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-split-layout/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-split-layout/html-api)
 
-[&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/-/element/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
+[&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
 <!---
 ```
@@ -70,7 +72,7 @@
     - API documentation: http://127.0.0.1:8001/components/vaadin-split-layout/
     - Examples: http://127.0.0.1:8001/components/vaadin-split-layout/demo/
     - Tests: http://127.0.0.1:8001/components/vaadin-split-layout/test/
-    
+
 Note that ports `8000` and `8001` could be different in your environment.
 
 
