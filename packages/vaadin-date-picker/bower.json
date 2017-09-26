@@ -44,6 +44,6 @@
     "vaadin-button": "^1.0.0",
     "vaadin-themes": "vaadin/vaadin-themes",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "^1.0.0"
   }
 }
