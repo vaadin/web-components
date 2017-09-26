@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
         box-sizing: border-box;
       }
 
-      [part="content"] {
+      [part="label"] {
         display: flex;
         flex: 1;
         padding: 5px 10px;
@@ -26,6 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="icon"] {
         display: flex;
+        align-items: center;
       }
 
       [part="icon"] ::slotted(*) {
@@ -64,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="icon">
         <slot name="icon"></slot>
       </div>
-      <div part="content">
+      <div part="label">
          <slot></slot>
       </div>
       <div part="badge">
