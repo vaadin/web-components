@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <style>
   @font-face {
@@ -115,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        */
-      class GridSorterElement extends Polymer.Element {
+      class GridSorterElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-grid-sorter';
         }
