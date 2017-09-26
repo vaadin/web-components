@@ -6,11 +6,13 @@
 
 # &lt;vaadin-grid&gt; v2
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-grid/2.0.2/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-grid/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-grid/html-api)
 
 > :eyes: Looking for &lt;vaadin-grid&gt; v1.x? Please see the [the v1 branch](https://github.com/vaadin/vaadin-grid/tree/1.x)
 
-[&lt;vaadin-grid&gt;](https://vaadin.com/elements/-/element/vaadin-grid) is a free, high quality data grid / data table [Polymer](http://polymer-project.org) element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-grid&gt;](https://vaadin.com/elements/vaadin-grid) is a free, high quality data grid / data table [Polymer](http://polymer-project.org) element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!---
 ```
