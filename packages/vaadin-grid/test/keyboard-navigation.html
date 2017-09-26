@@ -144,9 +144,8 @@
       const cell = getRowCell(rowIndex || 0, 1);
 
       const input = getCellContent(cell).children[0];
+      input.focus();
       input.click();
-      input.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
-      input.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
       return input;
     }
 
@@ -1274,12 +1273,6 @@
 
           const cell = getRowCell(0, 1);
           input = getCellContent(cell).children[0];
-
-          sinon.stub(input, 'focus', () => {
-            Polymer.Base.fire('focus', {}, {
-              node: input
-            });
-          });
         });
 
         it('should enter interaction mode with enter', () => {
@@ -1367,7 +1360,7 @@
           right(); // focus the cell with input.
           enter();
 
-          tab();
+          tab(getCellContent(getRowCell(0, 1)).children[0]); // tab in the input
 
           // expecting focusable item cell to remain in place, instead actual focus moves.
           expect(grid._itemsFocusable).to.equal(getRowCell(0, 1));
