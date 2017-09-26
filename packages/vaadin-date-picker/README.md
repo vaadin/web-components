@@ -5,9 +5,11 @@
 
 # &lt;vaadin-date-picker&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-date-picker/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-date-picker/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-date-picker/html-api)
 
-[&lt;vaadin-date-picker&gt;](https://vaadin.com/elements/-/element/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-date-picker&gt;](https://vaadin.com/elements/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
