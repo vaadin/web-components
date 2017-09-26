@@ -60,16 +60,15 @@
     describe('sorting', () => {
 
       describe('sorter', () => {
-        let sorter, title, button, indicators, directionIndicator, orderIndicator, announcer;
+        let sorter, title, button, indicators, orderIndicator, announcer;
 
         beforeEach(() => {
 
           sorter = fixture('sorter');
           title = sorter.querySelector('.title');
           button = sorter.querySelector('button');
-          indicators = sorter.shadowRoot.querySelector('#indicators');
-          directionIndicator = sorter.shadowRoot.querySelector('#direction');
-          orderIndicator = sorter.shadowRoot.querySelector('#order');
+          indicators = sorter.shadowRoot.querySelector('[part="indicators"]');
+          orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
           announcer = sorter.shadowRoot.querySelector('#announcer');
         });
 
