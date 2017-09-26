@@ -45,7 +45,7 @@
     "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
     "app-localize-behavior": "^v2.0.0",
     "iron-list": "^v2.0.4",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "^1.0.0"
   },
   "dependencies": {
     "polymer": "^2.0.0",
