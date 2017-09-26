@@ -5,9 +5,11 @@
 
 # &lt;vaadin-form-layout&gt;
 
-[Live Demo ↗](https://cdn-origin.vaadin.com/vaadin-form-layout/1.0.0/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-form-layout/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-form-layout/html-api)
 
-[&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/-/element/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
