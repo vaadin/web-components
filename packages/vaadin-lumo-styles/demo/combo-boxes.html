@@ -33,9 +33,10 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <h1>Combo boxes</h1>
+    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-combo-box.html" class="theme-source-code">Theme source code</a>
+    <h1>Combo box</h1>
 
-    <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text fields</a>.</p>
+    <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text field</a>.</p>
 
     <h3 demo-section>Label, placeholder and value</h3>
 
@@ -104,25 +105,18 @@
 
     <h2 demo-section>Styling API</h2>
 
-    <h3>Custom properties</h3>
+    <div class="note warn">
+      <p>Read the <b><a href="customization.html">customization instructions</a></b> to learn how to customize the component styles.</p>
+    </div>
+
+    <!-- <h3>Custom properties</h3>
 
     <dl class="custom-properties">
-      <dt>--valo-overlay-box-shadow</dt>
-    </dl>
+    </dl> -->
 
     <h3>Shadow parts and states</h3>
 
-    <p>See the API documentation for:</p>
-    <ul>
-      <li><a href="https://vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement">vaadin-combo-box</a></li>
-    </ul>
-
-    <hr>
-
-    <div class="note">
-      <h5>Looking for more help?</h5>
-      <p>Read the <a href="customization.html">customization instructions</a> to learn how to customize the component styles.</p>
-    </div>
+    <p>See the <a href="https://vaadin.com/elements/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement">API documentation for vaadin-combo-box</a></p>
 
     <!-- This needs to be last on the page, otherwise the demo-sections are not parsed correctly -->
     <script type="text/javascript">
@@ -130,7 +124,7 @@
         const combos = document.querySelectorAll('vaadin-combo-box');
         Array.from(combos).forEach(function(combo, i) {
           combo.items = [];
-          for (let i = 1; i <= 20; i++) {
+          for (let i = 1; i <= 100; i++) {
             combo.push('items', 'Option ' + i);
           }
           if (combo.classList.contains('item-template')) {

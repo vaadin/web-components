@@ -1,37 +1,46 @@
-<link rel="import" href="color.html">
-<link rel="import" href="sizing-and-spacing.html">
-<link rel="import" href="style.html">
-<link rel="import" href="typography.html">
+<link rel="import" href="vaadin-checkbox.html">
 
 <dom-module id="valo-grid" theme-for="vaadin-grid">
   <template>
     <style>
       :host {
+        background-color: var(--valo-base-color);
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size);
+        line-height: var(--valo-line-height);
+        color: var(--valo-body-text-color);
         border: 1px solid var(--valo-contrast-10pct);
       }
 
       [part~="cell"] {
         min-height: var(--valo-size-l);
         padding: var(--valo-space-xs) var(--valo-space-m);
-        background: var(--valo-base-color);
-        font-family: var(--valo-font-family);
-        color: var(--valo-body-text-color);
-        font-size: var(--valo-font-size, var(--valo-font-size-m));
-        line-height: var(--valo-line-height);
+        align-items: center;
       }
 
       [part~="header-cell"],
       [part~="footer-cell"] {
-        min-height: var(--valo-size-xl);
+        background-color: var(--valo-base-color);
         color: var(--valo-secondary-text-color);
-        font-size: var(--valo-font-size, var(--valo-font-size-xs));
       }
+
+      [part~="header-cell"] ::slotted(*),
+      [part~="footer-cell"] ::slotted(*) {
+        font-size: var(--valo-font-size-xs);
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"] {
+        min-height: var(--valo-size-m);
+      }
+
+      [part="row"]:only-child [part~="header-cell"] {
+        min-height: var(--valo-size-xl);
+      }
+
+      /* Header and footer divider between body rows */
 
       [part~="row"]:last-child [part~="header-cell"] {
-        border-bottom: 1px solid var(--valo-contrast-10pct);
-      }
-
-      [part~="body-cell"] {
         border-bottom: 1px solid var(--valo-contrast-10pct);
       }
 
@@ -39,16 +48,22 @@
         border-top: 1px solid var(--valo-contrast-10pct);
       }
 
-      [part~="row"][selected] [part~="body-cell"] {
-        background: var(--valo-contrast-10pct);
+      /* Body rows/cells */
+
+      [part~="body-cell"] {
+        background-color: var(--valo-base-color);
       }
 
-      [part~="cell"][last-frozen] {
-        border-right: 1px solid var(--valo-contrast-10pct);
+      /* Selected row */
+
+      :host(:not([reordering])) [part~="row"][selected] [part~="cell"] {
+        background: linear-gradient(var(--valo-primary-color-10pct), var(--valo-primary-color-10pct)) var(--valo-base-color);
       }
+
+      /* Column reordering */
 
       :host([reordering]) [part~="cell"] {
-        background: linear-gradient(var(--valo-shade-10pct), var(--valo-shade-10pct)) var(--valo-base-color);
+        background: linear-gradient(var(--valo-shade-20pct), var(--valo-shade-20pct)) var(--valo-base-color);
       }
 
       :host([reordering]) [part~="cell"][reorder-status="allowed"] {
@@ -56,20 +71,98 @@
       }
 
       :host([reordering]) [part~="cell"][reorder-status="dragging"] {
-        background: linear-gradient(var(--valo-contrast-20pct), var(--valo-contrast-20pct)) var(--valo-base-color);
+        background: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct)) var(--valo-base-color);
       }
 
-      [part="resize-handle"] {
+      /* Frozen columns */
+
+      [part~="cell"][last-frozen] {
+        border-right: 1px solid var(--valo-contrast-10pct);
+      }
+
+      /* Column resizing */
+
+      :host(:not([theme~="column-dividers"])) [part~="cell"]:not([last-frozen]) [part="resize-handle"] {
         border-right: 1px solid var(--valo-contrast-10pct);
         right: -1px;
       }
+
+      /* Keyboard navigation */
 
       [part~="cell"]:focus {
         outline: none;
       }
 
       :host([navigating]) [part~="cell"]:focus {
-        box-shadow: inset 0 0 0 3px var(--valo-shade-70pct);
+        box-shadow: inset 0 0 0 2px var(--valo-contrast-50pct);
+      }
+
+      /* Borderless */
+
+      :host([theme~="borderless"]) {
+        border: none;
+      }
+
+      /* Row dividers */
+
+      :host([theme~="row-dividers"]) [part~="body-cell"] {
+        border-bottom: 1px solid var(--valo-contrast-10pct);
+      }
+
+      /* Column dividers */
+
+      :host([theme~="column-dividers"]) [part~="cell"]:not([last-column]) {
+        border-right: 1px solid var(--valo-contrast-10pct);
+      }
+
+      /* Row stripes */
+
+      :host([theme~="row-stripes"]) [part~="row"][odd] [part~="body-cell"] {
+        background: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct)) var(--valo-base-color);
+        background-repeat: repeat-x;
+      }
+
+      :host([theme~="row-stripes"]) [part~="row"][odd][selected] [part~="body-cell"] {
+        background: linear-gradient(var(--valo-primary-color-10pct), var(--valo-primary-color-10pct)), linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct)) var(--valo-base-color);
+        background-repeat: repeat, repeat-x;
+      }
+
+      /* Override cell content styles (experimental) */
+
+      [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+        display: block;
+        text-overflow: ellipsis;
+        cursor: default;
+      }
+
+      /* Wrap cell contents */
+
+      :host([theme~="wrap-cell-content"]) [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+        white-space: normal;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="valo-grid-sorter" theme-for="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        justify-content: flex-start;
+        height: 100%;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      /* TODO unsupported selector */
+      #content {
+        flex: none;
+      }
+
+      :host([direction]) {
+        color: var(--valo-primary-text-color);
       }
     </style>
   </template>

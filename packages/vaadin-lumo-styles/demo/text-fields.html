@@ -32,7 +32,8 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <h1>Text fields</h1>
+    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-text-field.html" class="theme-source-code">Theme source code</a>
+    <h1>Text field</h1>
 
 
     <h3 demo-section>Label, placeholder and value</h3>
@@ -61,7 +62,7 @@
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-text-field label="Text" value="Value"></vaadin-text-field>
-        <vaadin-password-field label="Password" value="gd8f#cJS2!L"></vaadin-password-field>
+        <vaadin-password-field label="Password" value="Secret – hush!"></vaadin-password-field>
       </template>
     </nice-demo-snippet>
 
@@ -112,11 +113,13 @@
 
     <h2 demo-section>Styling API</h2>
 
+    <div class="note warn">
+      <p>Read the <b><a href="customization.html">customization instructions</a></b> to learn how to customize the component styles.</p>
+    </div>
+
     <h3>Custom properties</h3>
 
     <dl class="custom-properties">
-      <dt>--valo-text-field-default-width: <code>calc(var(--valo-size-m) * 5)</code></dt>
-      <dt>--valo-text-field-border-radius: <code>var(--valo-border-radius)</code></dt>
       <dt>--valo-text-field-text-align: <code>inherit</code></dt>
       <dt>--valo-required-field-indicator: <code>"•"</code></dt>
     </dl>
@@ -124,13 +127,6 @@
     <h3>Shadow parts and states</h3>
 
     <p>See the <a href="https://vaadin.com/elements/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement">API documentation for <code>vaadin-text-field</code></a>.</p>
-
-    <hr>
-
-    <div class="note">
-      <h5>Looking for more help?</h5>
-      <p>Read the <a href="customization.html">customization instructions</a> to learn how to customize the component styles.</p>
-    </div>
 
   </div>
 </body>

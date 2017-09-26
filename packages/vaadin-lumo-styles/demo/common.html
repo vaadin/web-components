@@ -8,13 +8,14 @@
     {name: 'colors', title: 'Colors'},
     {name: 'style', title: 'Style'},
     // {name: 'sizing-and-spacing', title: 'Sizing and spacing'},
-    {name: 'buttons', title: 'Buttons', group: 'Components'},
-    {name: 'checkboxes', title: 'Checkboxes'},
-    {name: 'combo-boxes', title: 'Combo boxes'},
-    {name: 'date-pickers', title: 'Date pickers'},
-    {name: 'forms', title: 'Forms'},
-    {name: 'grids', title: 'Grids'},
-    {name: 'text-fields', title: 'Text fields'}
+    {name: 'buttons', title: 'Button', group: 'UI Components'},
+    {name: 'checkboxes', title: 'Checkbox'},
+    {name: 'combo-boxes', title: 'Combo box'},
+    {name: 'context-menus', title: 'Context menu'},
+    {name: 'grids', title: 'Data Grid'},
+    {name: 'date-pickers', title: 'Date picker'},
+    {name: 'text-fields', title: 'Text field'},
+    {name: 'forms', title: 'Form layout', group: 'Layouts'}
   ];
 </script>
 
@@ -144,6 +145,27 @@
       --demo-navigation-sidebar-background-color: var(--valo-shade-5pct);
       --demo-navigation-current-section-border: 2px solid var(--valo-contrast-10pct);
       --demo-navigation-selected-item-color: var(--valo-primary-text-color);
+    }
+
+    .theme-source-code {
+      display: inline-block;
+      font-size: var(--valo-font-size-s);
+      height: 1em;
+      line-height: 1em;
+      float: right;
+      font-weight: 600;
+    }
+
+    .theme-source-code::before {
+      content: "";
+      display: inline-block;
+      width: 1.5em;
+      height: 1.5em;
+      background-image: url("assets/github.svg");
+      background-size: 100% 100%;
+      vertical-align: -0.3em;
+      margin-right: 0.5em;
+      opacity: 0.8;
     }
   </style>
 </custom-style>

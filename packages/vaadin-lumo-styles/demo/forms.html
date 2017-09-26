@@ -13,6 +13,7 @@
   <link rel="import" href="../vaadin-form-layout.html">
   <link rel="import" href="../vaadin-form-item.html">
   <link rel="import" href="../vaadin-date-picker.html">
+  <link rel="import" href="../vaadin-combo-box.html">
 
   <link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
   <link rel="import" href="../../vaadin-form-layout/vaadin-form-item.html">
@@ -38,14 +39,20 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <h1>Forms</h1>
+    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-form-layout.html" class="theme-source-code">Theme source code</a>
+    <h1>Form layout</h1>
 
     <h3 demo-section>Form layout defining label position</h3>
 
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-form-layout responsive-steps='[{
-          "columns": 3,
+          "minWidth": 0,
+          "columns": 1,
+          "labelsPosition": "top"
+        },{
+          "minWidth": "600px",
+          "columns": 2,
           "labelsPosition": "aside"
         }]'>
 

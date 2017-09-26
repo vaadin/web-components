@@ -13,14 +13,12 @@
   <link rel="import" href="../vaadin-button.html">
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
 
+  <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+
   <style>
     [unresolved] {
       opacity: 0;
-    }
-
-    .flex {
-      display: flex;
-      flex-wrap: wrap;
     }
   </style>
 </head>
@@ -35,10 +33,11 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <h1>Buttons</h1>
+    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-button.html" class="theme-source-code">Theme source code</a>
+    <h1>Button</h1>
 
     <p>The additional theme styles can be applied together, with the exception of styles inside a single section which are mutually exclusive.</p>
-    <p>For example, you can combine the <code>primary</code> style with the <code>small</code>, <code>icon</code> and <code>success</code> styles, but you can’t combine <code>primary</code> with <code>tertiary</code> or <code>success</code> with <code>danger</code>.</p>
+    <p>For example, you can combine the <code>primary</code> style with the <code>small</code> and <code>success</code> styles, but you can’t combine <code>primary</code> with <code>tertiary</code> or <code>success</code> with <code>danger</code>.</p>
 
     <!-- Workaround for #4 (the first vaadin-button inside a nice-demo-snippet on the page gets weird colors) -->
     <nice-demo-snippet style="display: none;">
@@ -54,6 +53,7 @@
         <vaadin-button theme="primary">Primary</vaadin-button>
         <vaadin-button>Secondary</vaadin-button>
         <vaadin-button theme="tertiary">Tertiary</vaadin-button>
+        <vaadin-button theme="tertiary inline">Tertiary Inline</vaadin-button> with text
       </template>
     </nice-demo-snippet>
 
@@ -73,23 +73,33 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <div class="flex">
+        <!-- Icon-only buttons should specify theme="icon" -->
+        <vaadin-button theme="icon" aria-label="Icon-only button">
+          <iron-icon icon="valo:plus"></iron-icon>
+        </vaadin-button>
 
-          <vaadin-button theme="icon" aria-label="Icon-only button">
-            <iron-icon icon="valo:plus"></iron-icon>
-          </vaadin-button>
+        <!-- When using an icon together with text, wrap the text in a span and don’t leave
+             white-space characters between it and the icon element-->
 
-          <vaadin-button theme="icon">
-            <iron-icon icon="valo:edit"></iron-icon>
-            <span>Icon prefix</span>
-          </vaadin-button>
+        <vaadin-button>
+          <iron-icon icon="valo:edit"></iron-icon><!--
+       --><span>Icon prefix</span>
+        </vaadin-button>
 
-          <vaadin-button theme="icon">
-            <span>Icon suffix</span>
-            <iron-icon icon="valo:arrow-right"></iron-icon>
-          </vaadin-button>
+        <vaadin-button>
+          <span>Icon suffix</span><!--
+       --><iron-icon icon="valo:arrow-right"></iron-icon>
+        </vaadin-button>
 
-        </div>
+        <vaadin-button>
+          <iron-icon icon="vaadin:wrench"></iron-icon><!--
+       --><span>Vaadin Icons</span>
+        </vaadin-button>
+
+        <vaadin-button>
+          <iron-icon icon="info-outline"></iron-icon><!--
+       --><span>Iron Icons</span>
+        </vaadin-button>
       </template>
     </nice-demo-snippet>
 
@@ -134,25 +144,18 @@
 
     <h2 demo-section>Styling API</h2>
 
-    <h3>Custom properties</h3>
+    <div class="note warn">
+      <p>Read the <b><a href="customization.html">customization instructions</a></b> to learn how to customize the component styles.</p>
+    </div>
+
+    <!-- <h3>Custom properties</h3>
 
     <dl class="custom-properties">
-      <dt>--valo-button-text-color: <code>var(--valo-primary-text-color)</code></dt>
-      <dt>--valo-button-background-color: <code>var(--valo-tint-80pct)</code> for light, <code>var(--valo-tint-5pct)</code> for dark</dt>
-      <dt>--valo-button-border-radius: <code>var(--valo-border-radius)</code></dt>
-      <dt>--valo-primary-button-font-weight: <code>600</code></dt>
-    </dl>
+    </dl> -->
 
     <h3>Shadow parts and states</h3>
 
     <p>See the <a href="https://vaadin.com/elements/vaadin-button/html-api/elements/Vaadin.ButtonElement">API documentation for vaadin-button</a>.</p>
-
-    <hr>
-
-    <div class="note">
-      <h5>Looking for more help?</h5>
-      <p>Read the <a href="customization.html">customization instructions</a> to learn how to customize the component styles.</p>
-    </div>
 
   </div>
 </body>

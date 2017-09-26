@@ -6,7 +6,7 @@
 <custom-style>
   <style>
     html {
-      /* TODO Internal magic number, dependant on the font family, think if this could be computed somehow */
+      /* TODO Internal magic number, dependent on the font family, think if this could be computed somehow */
       /* Used in combo-box and date-picker styles as well */
       ---vaadin-text-field-vertical-align-offset: 34px;
     }
@@ -20,7 +20,7 @@
         color: var(--valo-body-text-color);
         font-size: var(--valo-font-size, var(--valo-font-size-m));
         font-family: var(--valo-font-family);
-        width: var(--valo-text-field-default-width, calc(var(--valo-size-m) * 5));
+        width: calc(var(--valo-size-m) * 5);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
@@ -30,7 +30,7 @@
         color: var(--valo-contrast-60pct);
         font-weight: 500;
         font-size: var(--valo-font-size-s);
-        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        margin-left: calc(var(--valo-border-radius) / 4);
         margin-bottom: var(--valo-space-xs);
         transition: color 0.4s;
         line-height: 1;
@@ -101,9 +101,9 @@
       [part="input-field"] {
         margin-top: var(--valo-space-xs);
         margin-bottom: var(--valo-space-xs);
-        border-radius: var(--valo-text-field-border-radius, var(--valo-border-radius));
+        border-radius: var(--valo-border-radius);
         background-color: var(--valo-contrast-5pct);
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-border-radius) / 4);
         transition: all 0.5s;
         font-weight: 500;
         position: relative;
@@ -208,7 +208,7 @@
       /* Error message */
 
       [part="error-message"] {
-        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        margin-left: calc(var(--valo-border-radius) / 4);
         font-size: var(--valo-font-size-xs);
         line-height: var(--valo-line-height-xs);
         color: var(--valo-secondary-text-color);

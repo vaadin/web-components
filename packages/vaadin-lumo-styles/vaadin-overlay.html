@@ -20,23 +20,35 @@
 </custom-style>
 
 <!-- TODO add vaadin-date-picker-overlay once it uses the generic vaadin-overlay element -->
-<dom-module id="valo-overlay" theme-for="vaadin-combo-box-overlay">
+<dom-module id="valo-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay">
   <template>
     <style>
       [part="overlay"] {
         background-color: var(--valo-base-color);
         border-radius: var(--valo-border-radius);
         box-shadow: var(--valo-overlay-box-shadow);
-        box-sizing: border-box;
         animation: 0.2s vaadin-overlay-enter;
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-m);
+        will-change: transform;
       }
 
       @keyframes vaadin-overlay-enter {
         0% {
           opacity: 0;
           transform: translateY(-4px);
+        }
+      }
+
+      [part="backdrop"] {
+        background-color: var(--valo-shade-40pct);
+        animation: 0.2s vaadin-overlay-backdrop-enter;
+        will-change: opacity;
+      }
+
+      @keyframes vaadin-overlay-backdrop-enter {
+        0% {
+          opacity: 0;
         }
       }
     </style>

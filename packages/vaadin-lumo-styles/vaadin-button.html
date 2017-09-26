@@ -10,14 +10,15 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        color: var(--valo-button-text-color, var(--valo-primary-text-color));
+        color: var(--valo-primary-text-color);
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size, var(--valo-font-size-m));
         font-weight: 500;
-        background-color: var(--valo-button-background-color, var(--valo-tint-80pct));
+        /* Custom property only needed for the dark theme */
+        background-color: var(---valo-button-background-color, var(--valo-tint-80pct));
         min-width: calc(var(--valo-size, var(--valo-size-m)) * 2);
-        height: var(--valo-size, var(--valo-size-m));
-        border-radius: var(--valo-button-border-radius, var(--valo-border-radius));
+        min-height: var(--valo-size, var(--valo-size-m));
+        border-radius: var(--valo-border-radius);
         margin: var(--valo-space-xs);
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
@@ -27,14 +28,13 @@
         will-change: transform;
         position: relative;
         box-shadow: 0 0 0 1px var(--valo-shade-5pct), 0 1px 2px 0 var(--valo-shade-20pct);
-        --iron-icon-width: 1.5em;
-        --iron-icon-height: 1.5em;
+        cursor: default;
       }
 
       [part="button"] {
         border: 0;
         margin: 0;
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 3 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
+        padding: var(--valo-space-xs) calc(var(--valo-size, var(--valo-size-m)) / 3 + var(--valo-border-radius) / 2);
         background-color: transparent;
         color: inherit;
         font: inherit;
@@ -49,6 +49,9 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        cursor: inherit;
+        /* TODO magic number, based on Valo icons size -1px to make it work nicely with Roboto and SF fonts */
+        line-height: calc(var(--valo-size, var(--valo-size-m)) - 13px);
       }
 
       [part="button"]::-moz-focus-inner {
@@ -72,7 +75,7 @@
         bottom: 0;
         left: 0;
         background-color: var(--valo-contrast-5pct);
-        border-radius: var(--valo-button-border-radius, var(--valo-border-radius));
+        border-radius: var(--valo-border-radius);
         opacity: 0;
         transition: opacity 0.2s;
         will-change: opacity;
@@ -114,19 +117,32 @@
       :host([theme~="tertiary"]) {
         background-color: transparent;
         box-shadow: none;
+        cursor: pointer;
       }
 
       :host([theme~="tertiary"]) [part="button"] {
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-button-border-radius, var(--valo-border-radius)) / 2);
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-border-radius) / 2);
+      }
+
+      /* Tertiary inline (no padding or margin) */
+
+      :host([theme~="inline"]) {
+        margin: 0;
+        min-width: 0;
+        min-height: 0;
+      }
+
+      :host([theme~="inline"]) [part="button"] {
+        padding: 0;
       }
 
       /* Primary */
 
       :host([theme~="primary"]) {
-        --valo-button-background-color: var(--valo-primary-color);
-        --valo-button-text-color: var(--valo-primary-contrast-color);
+        background-color: var(--valo-primary-color);
+        color: var(--valo-primary-contrast-color);
         box-shadow: 0 1px 2px 0 var(--valo-shade-40pct);
-        font-weight: var(--valo-primary-button-font-weight, 600);
+        font-weight: 600;
         min-width: calc(var(--valo-size, var(--valo-size-m)) * 2.5);
       }
 
@@ -161,92 +177,89 @@
         --valo-size: var(--valo-size-l);
       }
 
-      /* Buttons with icons */
+      /* Icon-only */
 
-      :host([theme~="icon"]) {
-        min-width: var(--valo-size-m);
+      :host([theme~="icon"]:not([theme~="inline"])) {
+        min-width: var(--valo-size, var(--valo-size-m));
       }
 
-      :host([theme~="icon"]) [part="button"] {
-        display: inline-flex;
-        justify-content: center;
-      }
-
-      :host([theme~="small"][theme~="icon"]) {
-        min-width: var(--valo-size);
+      :host([theme~="icon"]:not([theme~="inline"])) [part="button"] {
+        padding-left: var(--valo-space-s);
+        padding-right: var(--valo-space-s);
       }
 
       /* Icons used together with text (not super proud of these calc's) */
 
-      [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
+      :host ::slotted(iron-icon:first-child:not(:last-child)) {
         margin-left: calc(var(--valo-size, var(--valo-size-m)) / -6);
         margin-right: calc(var(--valo-size, var(--valo-size-m)) / 9);
       }
 
-      [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
+      :host ::slotted(iron-icon:last-child:not(:first-child)) {
         margin-left: calc(var(--valo-size, var(--valo-size-m)) / 9);
         margin-right: calc(var(--valo-size, var(--valo-size-m)) / -6);
       }
 
-      [part="button"] ::slotted(iron-icon:first-child:last-child) {
-        margin: 0 calc(var(--valo-size, var(--valo-size-m)) / -6);
-        flex-grow: 1;
+      :host([theme~="inline"]) ::slotted(iron-icon:first-child:not(:last-child)) {
+        margin-left: 0;
       }
 
-      [part="button"] ::slotted(*) {
-        /* Truncate text also in slotted elements */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        /* Allow text content to take full width */
-        flex: auto;
-        /* Using this on [part=button] doesn't work in Safari, but this does */
-        align-self: center;
+      :host([theme~="inline"]) ::slotted(iron-icon:last-child:not(:first-child)) {
+        margin-right: 0;
       }
 
       [part="button"] ::slotted(iron-icon) {
-        /* Icons should be aligned to the edge of the button */
-        flex: none;
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+      }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+      [part="button"] ::slotted(iron-icon[icon^="vaadin:"]) {
+        width: 1em;
+        height: 1em;
+        padding: 4px;
       }
 
       /* Color alternatives */
 
       :host([theme~="success"]) {
-        --valo-button-text-color: var(--valo-success-text-color);
+        color: var(--valo-success-text-color);
       }
 
       :host([theme~="success"][theme~="primary"]) {
-        --valo-button-background-color: var(--valo-success-color);
-        --valo-button-text-color: var(--valo-success-contrast-color);
+        background-color: var(--valo-success-color);
+        color: var(--valo-success-contrast-color);
       }
 
       :host([theme~="danger"]) {
-        --valo-button-text-color: var(--valo-error-text-color);
+        color: var(--valo-error-text-color);
       }
 
       :host([theme~="danger"][theme~="primary"]) {
-        --valo-button-background-color: var(--valo-error-color);
-        --valo-button-text-color: var(--valo-error-contrast-color);
+        background-color: var(--valo-error-color);
+        color: var(--valo-error-contrast-color);
       }
 
       :host([theme~="contrast"]) {
-        --valo-button-text-color: var(--valo-contrast);
+        color: var(--valo-contrast);
       }
 
       :host([theme~="contrast"][theme~="primary"]) {
-        --valo-button-background-color: var(--valo-contrast);
-        --valo-button-text-color: var(--valo-base-color);
+        background-color: var(--valo-contrast);
+        color: var(--valo-base-color);
       }
 
       /* Disabled */
 
       :host([disabled][disabled]) {
         pointer-events: none;
-        --valo-button-text-color: var(--valo-disabled-text-color);
+        color: var(--valo-disabled-text-color);
         box-shadow: none;
       }
 
       :host([disabled]:not([theme~="tertiary"])) {
-        --valo-button-background-color: var(--valo-contrast-20pct);
+        background-color: var(--valo-contrast-20pct);
       }
 
       /* Keyboard focus */
@@ -258,7 +271,6 @@
       /* Hacks department (shame) */
 
       /* Needed to cancel the 3D push effect in IE11 */
-
       ::-ms-backdrop,
       :host([active]) [part="button"] {
         transform: translate(-1px, -1px);
@@ -267,6 +279,30 @@
       ::-ms-backdrop,
       :host([active]) [part="button"] ::slotted(*) {
         transform: translate(1px, 1px);
+      }
+
+      /* Align the icon nicely with the text, without using flexbox on the parent element (in order to keep text truncation working) */
+      [part="button"] ::slotted(iron-icon) {
+        vertical-align: -0.43em;
+      }
+
+      @-moz-document url-prefix() {
+        /* Firefox is being stupid and truncates (shows an ellipsis) the suffix icon because of the negative margin */
+        [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
+          margin-right: 0;
+        }
+
+        /* Firefox is being picky about the vertical alignment */
+        [part="button"] ::slotted(iron-icon) {
+          vertical-align: -0.39em;
+        }
+      }
+
+      @supports (-ms-ime-align: auto) {
+        /* Edge is also being picky about the vertical alignment */
+        [part="button"] ::slotted(iron-icon) {
+          vertical-align: -0.39em;
+        }
       }
     </style>
   </template>
