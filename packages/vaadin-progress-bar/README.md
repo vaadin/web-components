@@ -5,11 +5,11 @@
 
 # &lt;vaadin-progress-bar&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-progress-bar/1.0.0-alpha1/demo)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-progress-bar/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-progress-bar/1.0.0-alpha1/#/elements/vaadin-progress-bar)
+[API documentation ↗](https://vaadin.com/elements/vaadin-progress-bar/html-api)
 
-[&lt;vaadin-progress-bar&gt;](https://vaadin.com/elements/-/element/vaadin-progress-bar) is a [Polymer 2](http://polymer-project.org) progress bar, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-progress-bar&gt;](https://vaadin.com/elements/vaadin-progress-bar) is a [Polymer 2](http://polymer-project.org) progress bar, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
