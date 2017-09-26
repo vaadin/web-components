@@ -5,9 +5,11 @@
 
 # &lt;vaadin-radio-button&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-radio-button/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-radio-button/html-examples)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-radio-button/html-api)
 
-[&lt;vaadin-radio-button&gt;](https://vaadin.com/elements/-/element/vaadin-radio-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable radio button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-radio-button&gt;](https://vaadin.com/elements/vaadin-radio-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable radio button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
