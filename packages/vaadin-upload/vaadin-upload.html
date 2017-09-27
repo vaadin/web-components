@@ -354,6 +354,14 @@ Custom property | Description | Default
       },
 
       /**
+       * Set the withCredentials flag on the request.
+       */
+       withCredentials: {
+        type: Boolean,
+        value: false
+      },
+
+      /**
        * The object used to localize this component.
        * For changing the default localization, change the entire
        * _i18n_ object or just the property you want to modify.
@@ -613,6 +621,9 @@ Custom property | Description | Default
       }
       if (this.timeout) {
         xhr.timeout = this.timeout;
+      }
+      if (this.withCredentials ) {
+        xhr.withCredentials  = this.withCredentials ;
       }
     },
 
