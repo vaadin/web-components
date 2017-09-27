@@ -180,7 +180,7 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: translateX(-50%);
       }
 
-      [lastcolumn] [part~="resize-handle"]::before,
+      [last-column] [part~="resize-handle"]::before,
       [last-frozen] [part~="resize-handle"]::before {
         width: 18px;
         transform: translateX(-100%);
@@ -309,6 +309,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="resize-handle"] {
         border-right: 1px solid #dbdbdb;
+      }
+
+      [last-frozen] [part="resize-handle"] {
         right: -1px;
       }
 
