@@ -9,7 +9,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../iron-list/iron-list.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-combo-box-item.html">
-<link rel="import" href="vaadin-combo-box-spinner.html">
 <link rel="import" href="vaadin-combo-box-dropdown.html">
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
@@ -40,7 +39,6 @@ This program is available under Apache License Version 2.0, available at https:/
             };
           }
         </style>
-        <vaadin-combo-box-spinner active="[[loading]]"></vaadin-combo-box-spinner>
         <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
           <iron-list id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>

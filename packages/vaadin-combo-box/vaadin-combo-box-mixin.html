@@ -110,11 +110,12 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /*
-         * When set to `true`, a loading spinner is displayed on top of the list of options.
+         * When set to `true`, "loading" attibute is added to host and the overlay element.
          */
         loading: {
           type: Boolean,
-          value: false
+          value: false,
+          reflectToAttribute: true
         },
 
         _focusedIndex: {
