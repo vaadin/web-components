@@ -6,7 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="vaadin-nav-mixin.html">
+<link rel="import" href="vaadin-nav-list-mixin.html">
 
 <dom-module id="vaadin-nav">
   <template>
@@ -56,15 +56,13 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="right-button"] {
         opacity: 0.5;
         padding: 3px;
-        height: 12px;
-        width: 12px;
-        line-height: 11px;
-        font-size: 10px;
-        border: solid 1px grey;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
         cursor: pointer;
+      }
+
+      :host([direction="horizontal"]) [part="left-button"][hidden],
+      :host([direction="horizontal"]) [part="right-button"][hidden] {
+        visibility: hidden;
+        display: block;
       }
 
       [hidden] {
@@ -107,11 +105,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
        *
        * @memberof Vaadin
-       * @mixes Vaadin.NavMixin
+       * @mixes Vaadin.NavListMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinNav extends Vaadin.NavMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class VaadinNav extends Vaadin.NavListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-nav';
         }
