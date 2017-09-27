@@ -71,7 +71,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * ```html
        *     <vaadin-chart id="mychart"></vaadin-chart>
        * ```
-       * 1. Add a function that uses JS Api to set chart title, categories and data
+       * 1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data
        * ```
        * initChartWithJSApi() {
        *     const configuration = this.$.mychart.configuration;
@@ -89,6 +89,51 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * connectedCallback() {
        *     super.connectedCallback();
        *     this.initChartWithJSApi();
+       * }
+       * ```
+       * 1. And finally run your app with: 
+       * ```
+       * polymer serve --open
+       * ```
+       * 
+       * 
+       * ### Configuring your chart using JS JSON API 
+       * 
+       * JS JSON API is a simple alternative to the JS API.
+       * 
+       * Using as a base the project created with in Quick Start
+       * 
+       * Do the following changes in `my-app.html`
+       * 
+       * 1. Set and id for the `<vaadin-chart>` in the template
+       * ```html
+       *     <vaadin-chart id="mychart"></vaadin-chart>
+       * ```
+       * 1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data
+       * ```
+       * initChartWithJSJSONApi() {
+       *     this.$.mychart.update({
+       *       title: {
+       *         text: 'The chart title'
+       *       },
+       *       subtitle: {
+       *         text: 'Subtitle'
+       *       },
+       *       xAxis: {
+       *         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+       *       },
+       *       series: [{
+       *         type: 'column',
+       *         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+       *       }]
+       *     });
+       * }
+       * ```
+       * 1. Call that function from connectedCallback (when the element is added to a document)
+       * ```
+       * connectedCallback() {
+       *     super.connectedCallback();
+       *     this.initChartWithJSJSONApi();
        * }
        * ```
        * 1. And finally run your app with: 
@@ -147,19 +192,107 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           };
         }
 
-
         connectedCallback() {
           super.connectedCallback();
           this.configuration = Highcharts.chart(this.$.chart, this._baseConfig);
-          this._addLicenseChecker();
+          this.__addLicenseChecker();
         }
 
-        _addLicenseChecker() {
+        __addLicenseChecker() {
           var licenseChecker = document.createElement('vaadin-license-checker');
           licenseChecker.productName = 'vaadin-charts';
           licenseChecker.productVersion = '6.0.0';
           licenseChecker.productCaption = 'Vaadin Charts';
           this.shadowRoot.appendChild(licenseChecker);
+        }
+
+        /*
+         * Update the chart configuration.
+         * This JSON API provides a simple single-argument alternative to the configuration property.
+         * 
+         * @param {Object} jsonConfiguration Object chart configuration. Most important properties are:
+         *  
+         * - chart `Object` with options regarding the chart area and plot area as well as general chart options.  
+         *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
+         * - credits `Object` with options regarding the chart area and plot area as well as general chart options.  
+         *    Detailed API for credits object is available in [API Site](http://api.highcharts.com/highcharts/credits)
+         * - labels `Object[]` with HTML labels that can be positioned anywhere in the chart area
+         *    Detailed API for labels object is available in [API Site](http://api.highcharts.com/highcharts/labels)
+         * - plotOptions `Object` wrapper for config objects for each series type.  
+         *    Detailed API for plotOptions object is available in [API Site](http://api.highcharts.com/highcharts/plotOptions)
+         * - series `Object[]` the actual series to append to the chart.  
+         *    Detailed API for series object is available in [API Site](http://api.highcharts.com/highcharts/series)
+         * - subtitle `Object` the chart's subtitle.  
+         *    Detailed API for subtitle object is available in [API Site](http://api.highcharts.com/highcharts/subtitle)
+         * - title `Object` the chart's main title.
+         *    Detailed API for title object is available in [API Site](http://api.highcharts.com/highcharts/title)
+         * - tooltip `Object` Options for the tooltip that appears when the user hovers over a series or point.  
+         *    Detailed API for tooltip object is available in [API Site](http://api.highcharts.com/highcharts/tooltip)
+         * - xAxis `Object[]` The X axis or category axis. Normally this is the horizontal axis.  
+         *    Detailed API for xAxis object is available in [API Site](http://api.highcharts.com/highcharts/xAxis)
+         * - yAxis `Object[]` The Y axis or value axis. Normally this is the vertical axis.  
+         *    Detailed API for yAxis object is available in [API Site](http://api.highcharts.com/highcharts/yAxis)
+         * - zAxis `Object[]` The Z axis or depth axis for 3D plots.  
+         *    Detailed API for zAxis object is available in [API Site](http://api.highcharts.com/highcharts/zAxis)
+         * 
+         * @param {Boolean} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or 
+         *    if existing configuration should be discarded.
+        */
+        update(jsonConfiguration, resetConfiguration) {
+          if (resetConfiguration) {
+            this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
+            return;
+          }
+          this.configuration.update(jsonConfiguration);
+          if (jsonConfiguration.credits) {
+            this.__updateOrAddCredits(jsonConfiguration.credits);
+          }
+          if (jsonConfiguration.xAxis) {
+            this.__updateOrAddAxes(jsonConfiguration.xAxis, true);
+          }
+          if (jsonConfiguration.yAxis) {
+            this.__updateOrAddAxes(jsonConfiguration.yAxis, false);
+          }
+          if (jsonConfiguration.series) {
+            this.__updateOrAddSeries(jsonConfiguration.series);
+          }
+        }
+
+        __updateOrAddCredits(credits) {
+          if (this.configuration.credits) {
+            this.configuration.credits.update(credits);
+          } else {
+            this.configuration.addCredits(credits);
+          }
+        }
+
+        __updateOrAddAxes(axes, isX) {
+          if (!Array.isArray(axes)) {
+            axes = [axes];
+          }
+          var confAxes = isX ? this.configuration.xAxis : this.configuration.yAxis;
+          for (var i = 0; i < axes.length; i++) {
+            var axis = axes[i];
+            if (confAxes[i]) {
+              confAxes[i].update(axis);
+            } else {
+              this.configuration.addAxis(axis, isX);
+            }
+          }
+        }
+
+        __updateOrAddSeries(series) {
+          if (!Array.isArray(series)) {
+            throw new Error('The type of jsonConfiguration.series should be Object[]');
+          }
+          for (var i = 0; i < series.length; i++) {
+            var currentSeries = series[i];
+            if (this.configuration.series[i]) {
+              this.configuration.series[i].update(currentSeries);
+            } else {
+              this.configuration.addSeries(currentSeries);
+            }
+          }
         }
       }
 
