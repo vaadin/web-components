@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/lib/utils/async.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <dom-module id="vaadin-grid-column-group">
@@ -258,7 +259,10 @@ This program is available under Apache License Version 2.0, available at https:/
               this._childColumns = this._rootColumns;
               this._preventHiddenCascade = false;
 
-              this._grid && this._grid._updateColumnTree && this._grid._updateColumnTree();
+              // Update the column tree with microtask timing to avoid shady style scope issues
+              Polymer.Async.microTask.run(() => {
+                this._grid && this._grid._updateColumnTree && this._grid._updateColumnTree();
+              });
             }
           });
           this._observer.flush();
