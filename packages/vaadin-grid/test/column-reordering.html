@@ -165,8 +165,8 @@
       });
     }
 
-    function getCellByCellContent(grid, cellContent) {
-      return grid._getCellByCellContent(cellContent);
+    function getCellByCellContent(cellContent) {
+      return cellContent.assignedSlot.parentNode;
     }
 
     describe('reordering simple grid', () => {
@@ -195,13 +195,13 @@
 
       it('should indicate dragged cells', () => {
         dragStart(headerContent[0]);
-        const cell = getCellByCellContent(grid, headerContent[0]);
+        const cell = getCellByCellContent(headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('dragging');
       });
 
       it('should clear reorder status on dragend', () => {
         dragAndDropOver(headerContent[0], headerContent[1]);
-        const cell = getCellByCellContent(grid, headerContent[0]);
+        const cell = getCellByCellContent(headerContent[0]);
         expect(cell.getAttribute('reorder-status')).to.equal('');
         expect(grid.hasAttribute('reordering')).to.be.false;
       });
@@ -267,7 +267,7 @@
 
       it('should not cancel touchmove on resizer', () => {
         const e = makeSoloTouchEvent('touchmove', {x: 0, y: 0},
-          getCellByCellContent(grid, headerContent[0]).querySelector('[part~="resize-handle"]'));
+          getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]'));
         expect(e.defaultPrevented).to.be.false;
       });
 
@@ -291,7 +291,7 @@
       });
 
       it('should not start reordering on resize handle move', () => {
-        const handle = grid._getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+        const handle = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
         dragStart(handle);
         expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
       });
@@ -329,8 +329,8 @@
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
-        it('should have last-column attribute', () => {
-          let cell = getCellByCellContent(grid, headerContent[3]);
+        it('should update last-column attribute', () => {
+          let cell = getCellByCellContent(headerContent[3]);
           expect(cell.hasAttribute('last-column')).to.be.true;
           cell = getContainerCell(grid.$.items, 0, 3);
           expect(cell.hasAttribute('last-column')).to.be.true;
@@ -338,15 +338,15 @@
 
         it('should update last-column attribute', () => {
           dragOver(headerContent[2], headerContent[3]);
-          const cell = getCellByCellContent(grid, headerContent[2]);
+          const cell = getCellByCellContent(headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
         it('should update last-column attribute (details open)', () => {
           grid.expandItem(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
-          let cell = getCellByCellContent(grid, headerContent[2]);
-          cell = getCellByCellContent(grid, headerContent[2]);
+          let cell = getCellByCellContent(headerContent[2]);
+          cell = getCellByCellContent(headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
@@ -386,7 +386,7 @@
         });
 
         it('should update last-frozen while dragging', () => {
-          const cell = getCellByCellContent(grid, headerContent[0]);
+          const cell = getCellByCellContent(headerContent[0]);
           expect(cell.hasAttribute('last-frozen')).to.be.false;
           dragOver(headerContent[0], headerContent[1]);
           expect(cell.hasAttribute('last-frozen')).to.be.true;
