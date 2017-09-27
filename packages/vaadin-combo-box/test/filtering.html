@@ -325,6 +325,16 @@
 
         expect(getFilteredItems()).to.eql(['foo']);
       });
+
+      it('should toggle loading attributes to host and overlay', () => {
+        comboBox.loading = true;
+        expect(comboBox.hasAttribute('loading')).to.be.true;
+        expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.true;
+
+        comboBox.loading = false;
+        expect(comboBox.hasAttribute('loading')).to.be.false;
+        expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.false;
+      });
     });
   });
 </script>
