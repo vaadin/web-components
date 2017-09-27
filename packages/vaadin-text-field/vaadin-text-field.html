@@ -381,7 +381,11 @@ This program is available under Apache License Version 2.0, available at https:/
          * Returns true if the current input value satisfies all constraints (if any)
          */
         checkValidity() {
-          return this.focusElement.checkValidity();
+          if (this.required || this.pattern || this.maxlength || this.minlength) {
+            return this.focusElement.checkValidity();
+          } else {
+            return !this.invalid;
+          }
         }
 
         ready() {

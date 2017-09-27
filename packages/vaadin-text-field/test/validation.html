@@ -76,6 +76,28 @@
         expect(tf.validate()).to.be.true;
       });
 
+      it('should check validity on validate', function() {
+        const spy = sinon.spy(tf, 'checkValidity');
+        tf.validate();
+        expect(spy.called).to.be.true;
+      });
+
+      it('should not change invalid property is no constraints are set', function() {
+        tf.validate();
+        expect(tf.invalid).to.be.false;
+        tf.invalid = true;
+        tf.validate();
+        expect(tf.invalid).to.be.true;
+      });
+
+      it('should override explicilty set invalid if constraints are set', function() {
+        tf.invalid = true;
+        tf.value = 'foo';
+        tf.required = true;
+        tf.validate();
+        expect(tf.invalid).to.be.false;
+      });
+
       describe('prevent invalid input', function() {
 
         beforeEach(function() {
