@@ -547,7 +547,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 })
               );
 
-              if (evt.defaultPrevented) {
+              if (!evt) {
                 return;
               }
               if (xhr.status === 0) {
@@ -579,7 +579,7 @@ This program is available under Apache License Version 2.0, available at https:/
               cancelable: true
             })
           );
-          if (evt.defaultPrevented) {
+          if (!evt) {
             return;
           }
 
@@ -610,7 +610,7 @@ This program is available under Apache License Version 2.0, available at https:/
               cancelable: true
             })
           );
-          if (!uploadEvt.defaultPrevented) {
+          if (uploadEvt) {
             xhr.send(formData);
           }
         }
@@ -622,7 +622,7 @@ This program is available under Apache License Version 2.0, available at https:/
               cancelable: true
             })
           );
-          if (!evt.defaultPrevented) {
+          if (evt) {
             this.async(this._uploadFile.bind(this, file));
           }
         }
@@ -634,7 +634,7 @@ This program is available under Apache License Version 2.0, available at https:/
               cancelable: true
             })
           );
-          if (!evt.defaultPrevented) {
+          if (evt) {
             file.abort = true;
             if (file.xhr) {
               file.xhr.abort();
@@ -732,19 +732,39 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onFileStart(event) {
           this._uploadFile(event.detail.file);
+          this.dispatchEvent(
+            new CustomEvent('file-start', {
+              detail: {file: event.detail.file}
+            })
+          );
         }
 
         _onFileRetry(event) {
           this._retryFileUpload(event.detail.file);
+          this.dispatchEvent(
+            new CustomEvent('file-retry', {
+              detail: {file: event.detail.file}
+            })
+          );
         }
 
         _onFileAbort(event) {
           this._abortFileUpload(event.detail.file);
+          this.dispatchEvent(
+            new CustomEvent('file-abort', {
+              detail: {file: event.detail.file}
+            })
+          );
         }
 
         _onFileRemove(event) {
           event.stopPropagation();
           this._removeFile(event.detail.file);
+          this.dispatchEvent(
+            new CustomEvent('file-remove', {
+              detail: {file: event.detail.file}
+            })
+          );
         }
 
         _dragoverChanged(dragover) {
