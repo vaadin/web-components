@@ -84,7 +84,8 @@ var xhrCreator = function(c) {
       if (xhr.upload.onloadstart) {
         xhr.upload.onloadstart();
       }
-      var total = cfg.size, done = 0;
+      var total = cfg.size;
+      var done = 0;
       var step = total / cfg.uploadTime * cfg.stepTime;
       function finish() {
         var error = cfg.serverValidation(xhr);

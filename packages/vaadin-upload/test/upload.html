@@ -18,7 +18,7 @@
 
   <script>
     describe('Uploader', () => {
-      var upload, file;
+      let upload, file;
       beforeEach(() => {
         upload = fixture('upload');
         upload.target = 'http://foo.com/bar';
@@ -51,9 +51,9 @@
         });
 
         it('should fire the upload-progress event multiple times', done => {
-          var count = 0;
+          let count = 0;
           upload.addEventListener('upload-progress', e => {
-            var f = e.detail.file;
+            let f = e.detail.file;
             expect(e.detail.xhr).to.be.ok;
             expect(f.totalStr).to.be.equal('100 kB');
             switch (count++) {
@@ -121,11 +121,11 @@
             expect(e.detail.xhr.readyState).to.equal(0);
             expect(e.detail.file.uploadTarget).to.be.ok;
 
-            var modifiedUrl = 'http://example.com/modified/url';
+            const modifiedUrl = 'http://example.com/modified/url';
             e.detail.file.uploadTarget = modifiedUrl;
 
             // Monkey-patch xhr.open to check the url param passed into
-            var originalOpen = e.detail.xhr.open;
+            let originalOpen = e.detail.xhr.open;
             e.detail.xhr.open = function(method, url) {
               expect(url).to.equal(modifiedUrl);
               originalOpen.apply(this, arguments);
@@ -142,7 +142,7 @@
           MockFormData.prototype.append = function(name, value, filename) {
             this.data.push({name: name, value: value, filename: filename});
           };
-          var OriginalFormData = window.FormData;
+          const OriginalFormData = window.FormData;
           window.FormData = MockFormData;
 
           upload.addEventListener('upload-before', e => {
@@ -205,7 +205,7 @@
         });
 
         it('should fail if a `upload-response` listener sets an error', done => {
-          var error = 'Custom Error';
+          const error = 'Custom Error';
           upload.addEventListener('upload-response', e => {
             e.detail.file.error = error;
           });
@@ -286,7 +286,7 @@
         });
 
         it('should not be indeterminate when progressing', done => {
-          var uploadProgressListener = e => {
+          const uploadProgressListener = e => {
             if (file.progress > 0) {
               expect(e.detail.file.indeterminate).not.to.be.ok;
               expect(e.detail.file.status).to.contain(upload.i18n.uploading.remainingTime.prefix);
@@ -327,7 +327,7 @@
       });
 
       describe('Manual Upload', () => {
-        var files;
+        let files;
         beforeEach(() => {
           upload.noAuto = true;
           upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
@@ -344,12 +344,12 @@
         });
 
         it('should start uploading non-completed files after call to uploadFiles', done => {
-          var counter = 0;
+          let counter = 0;
           files = createFiles(3, 512, 'application/json');
           upload.files = files;
           upload.files[1].complete = true;
 
-          for (var i = 0; i < upload.files.length; i++) {
+          for (let i = 0; i < upload.files.length; i++) {
             expect(upload.files[i].uploading).not.to.be.ok;
           }
           upload.addEventListener('upload-start', e => {
@@ -365,12 +365,12 @@
         });
 
         it('should only start uploading files passed to uploadFiles call', done => {
-          var tempFileName = 'file-test';
+          const tempFileName = 'file-test';
           files = createFiles(3, 512, 'application/json');
           upload.files = files;
           upload.files[2].name = tempFileName;
 
-          for (var i = 0; i < upload.files.length; i++) {
+          for (let i = 0; i < upload.files.length; i++) {
             expect(upload.files[i].uploading).not.to.be.ok;
           }
           upload.addEventListener('upload-start', e => {
@@ -379,7 +379,7 @@
             expect(e.detail.file.name).to.equal(tempFileName);
             expect(e.detail.file.uploading).to.be.ok;
 
-            for (var i = 0; i < upload.files.length - 1; i++) {
+            for (let i = 0; i < upload.files.length - 1; i++) {
               expect(upload.files[i].uploading).not.to.be.ok;
             }
             done();
@@ -413,7 +413,7 @@
       });
 
       describe('Abort Files', () => {
-        var files;
+        let files;
         beforeEach(() => {
           upload._createXhr = xhrCreator({size: file.size, uploadTime: 200, stepTime: 50});
           files = createFiles(2, 512, 'application/json');
@@ -433,7 +433,7 @@
         });
 
         it('should remove all files', done => {
-          var removeFirst = () => {
+          const removeFirst = () => {
             if (upload.files.length === 0) {
               done();
             } else {

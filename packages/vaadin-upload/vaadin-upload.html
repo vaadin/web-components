@@ -23,7 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <div id="buttonsPrimary">
         <div id="addFiles" on-click="_onAddFilesClick">
           <slot name="add-button">
-            <vaadin-button id="addButton" disabled$="[[maxFilesReached]]">
+            <vaadin-button id="addButton" disabled="[[maxFilesReached]]">
               [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
             </vaadin-button>
           </slot>
