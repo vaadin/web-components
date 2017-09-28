@@ -65,11 +65,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _selectedChanged(selected) {
-      this.setAttribute('aria-selected', !!selected);
+      this.setAttribute('aria-selected', selected);
     }
 
-    _disabledChanged(disabled, old) {
-      this.setAttribute('aria-disabled', !!disabled);
+    _disabledChanged(disabled) {
+      this.setAttribute('aria-disabled', disabled);
       this.style.pointerEvents = disabled ? 'none' : '';
       if (disabled) {
         this._oldTabIndex = this.tabIndex < 0 ? 0 : this.tabIndex;
@@ -106,7 +106,6 @@ This program is available under Apache License Version 2.0, available at https:/
     _onKeydown(event) {
       if (/^( |SpaceBar|Enter)$/i.test(event.key)) {
         event.preventDefault();
-        event.stopImmediatePropagation();
         this._setActive(true);
       }
     }
