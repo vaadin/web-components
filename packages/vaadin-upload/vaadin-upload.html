@@ -7,30 +7,38 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-button/vaadin-button.html">
-<link rel="import" href="vaadin-upload-icons.html">
+<link rel="import" href="vaadin-upload-styles.html">
 <link rel="import" href="vaadin-upload-file.html">
 
 <dom-module id="vaadin-upload">
   <template>
     <style>
-       :host {
+      :host {
         display: inline-block;
+      }
+
+      [part="drop-label-icon"] {
+        font-family: 'vaadin-upload-icons';
+      }
+
+      [part="drop-label-icon"]::before {
+        content: "\e901"; /* TODO */
       }
     </style>
     <div id="buttons">
       <div id="buttonsPrimary">
         <div id="addFiles" on-click="_onAddFilesClick">
           <slot name="add-button">
-            <vaadin-button id="addButton" disabled="[[maxFilesReached]]">
+            <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
               [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
             </vaadin-button>
           </slot>
         </div>
         <div id="dropLabel" hidden$="[[nodrop]]">
           <slot name="drop-label-icon">
-            <iron-icon id="dropLabelIcon" icon="vaadin-upload:file-upload"></iron-icon>
+            <div part="drop-label-icon"></div>
           </slot>
           <slot name="drop-label">
             [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
@@ -72,7 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinUpload extends Polymer.GestureEventListeners(Polymer.Element) {
+      class VaadinUpload extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
         static get is() {
           return 'vaadin-upload';
         }
@@ -707,7 +715,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onAddFilesClick() {
-          console.log('here');
           if (this.maxFilesReached) {
             return;
           }

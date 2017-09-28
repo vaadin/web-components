@@ -6,9 +6,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-progress-bar/vaadin-progress-bar.html">
-<link rel="import" href="vaadin-upload-icons.html">
+<link rel="import" href="vaadin-upload-styles.html">
 
 <dom-module id="vaadin-upload-file">
   <template>
@@ -16,11 +16,39 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: block;
       }
+
+      [part="done-icon"],
+      [part="warning-icon"],
+      [part="start-button"],
+      [part="retry-button"],
+      [part="clear-button"] {
+        font-family: 'vaadin-upload-icons';
+      }
+
+      [part="done-icon"]::before {
+        content: "\e901"; /* TODO */
+      }
+
+      [part="warning-icon"]::before {
+        content: "\e901"; /* TODO */
+      }
+
+      [part="start-button"]::before {
+        content: "\e901"; /* TODO */
+      }
+
+      [part="retry-button"]::before {
+        content: "\e901"; /* TODO */
+      }
+
+      [part="clear-button"]::before {
+        content: "\e901"; /* TODO */
+      }
     </style>
     <div id="row">
 
-      <iron-icon icon="vaadin-upload:done" complete$="[[file.complete]]"></iron-icon>
-      <iron-icon icon="vaadin-upload:warning" error$="[[file.error]]"></iron-icon>
+      <div part="done-icon" complete$="[[file.complete]]"></div>
+      <div part="warning-icon" error$="[[file.error]]"></div>
 
       <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
         <div id="name">[[file.name]]</div>
@@ -29,14 +57,15 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
 
       <div id="commands">
-        <iron-icon icon="vaadin-upload:start" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></iron-icon>
-        <iron-icon icon="vaadin-upload:refresh" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></iron-icon>
-        <iron-icon icon="vaadin-upload:clear" file-event="file-abort" on-click="_fireFileEvent"></iron-icon>
+        <div part="start-button" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></div>
+        <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
+        <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
       </div>
 
     </div>
 
     <vaadin-progress-bar
+        part="progress"
         id="progress"
         value$="[[file.progress]]"
         error$="[[file.error]]"
@@ -63,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinUploadFile extends Polymer.GestureEventListeners(Polymer.Element) {
+      class VaadinUploadFile extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
         static get is() {
           return 'vaadin-upload-file';
         }
@@ -109,9 +138,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _fireFileEvent(e) {
           e.preventDefault();
-          var button = Polymer.dom(e).localTarget; //TODO
           return this.dispatchEvent(
-            new CustomEvent(button.getAttribute('file-event'), {
+            new CustomEvent(e.target.getAttribute('file-event'), {
               detail: {file: this.file},
               bubbles: true
             })
