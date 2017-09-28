@@ -208,24 +208,24 @@
 
       it('should have a reorder ghost', () => {
         dragStart(headerContent[0]);
-        expect(grid.$.reorderghost.style.visibility).to.equal('visible');
+        expect(grid._reorderGhost.style.visibility).to.equal('visible');
       });
 
       it('should have header cell content', () => {
         dragStart(headerContent[0]);
-        const ghost = grid.$.reorderghost;
+        const ghost = grid._reorderGhost;
         expect(ghost.innerHTML).to.equal('1');
       });
 
       it('should not be accessible', () => {
         dragStart(headerContent[0]);
 
-        const ghost = grid.$.reorderghost;
+        const ghost = grid._reorderGhost;
         expect(window.getComputedStyle(ghost).pointerEvents).to.equal('none');
       });
 
       it('should position ghost', () => {
-        const ghost = grid.$.reorderghost;
+        const ghost = grid._reorderGhost;
         dragOver(headerContent[0], headerContent[1]);
 
         const ghostRect = ghost.getBoundingClientRect();
@@ -237,7 +237,7 @@
         dragAndDropOver(headerContent[0], headerContent[1]);
         dragStart(headerContent[0]);
         Polymer.dom.flush();
-        expect(grid.$.reorderghost.style.visibility).to.equal('visible');
+        expect(grid._reorderGhost.style.visibility).to.equal('visible');
       });
 
       it('should not adjust outer-scroller z while reordering', () => {
