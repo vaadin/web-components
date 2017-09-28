@@ -329,12 +329,16 @@
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
-        it('should update last-column attribute', () => {
+        it('should have last-column attribute', () => {
           let cell = getCellByCellContent(grid, headerContent[3]);
           expect(cell.hasAttribute('last-column')).to.be.true;
+          cell = getContainerCell(grid.$.items, 0, 3);
+          expect(cell.hasAttribute('last-column')).to.be.true;
+        });
 
+        it('should update last-column attribute', () => {
           dragOver(headerContent[2], headerContent[3]);
-          cell = getCellByCellContent(grid, headerContent[2]);
+          const cell = getCellByCellContent(grid, headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
