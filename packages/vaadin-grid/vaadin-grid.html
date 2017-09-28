@@ -285,8 +285,8 @@ This program is available under Apache License Version 2.0, available at https:/
         const slotName = 'vaadin-grid-cell-content-' + contentId;
 
         const cellContent = document.createElement('vaadin-grid-cell-content');
-        cellContent.setAttribute('slot', slotName);
 
+        cellContent.setAttribute('slot', slotName);
         const cell = document.createElement(tagName);
         cell.id = slotName.replace('-content-', '-');
         cell.setAttribute('tabindex', '-1');
@@ -298,6 +298,18 @@ This program is available under Apache License Version 2.0, available at https:/
         cell.appendChild(slot);
 
         cell._content = cellContent;
+
+        // With native Shadow DOM, mousedown on slotted element does not focus
+        // focusable slot wrapper, that is why cells are not focused with
+        // mousedown. Workaround: make cellContent focusable and delegate
+        // focus to assigned cell.
+        cellContent.setAttribute('tabindex', '-1');
+        cellContent.addEventListener('focusin', (e) => {
+          if (e.composedPath()[0] === cellContent) {
+            e.stopPropagation();
+          }
+          this._onMouseCellFocus(e);
+        });
 
         return cell;
       }

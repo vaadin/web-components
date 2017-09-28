@@ -51,7 +51,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keydown', this._onKeyDown);
       this.addEventListener('focusin', this._onFocusIn);
       this.addEventListener('focusout', this._onFocusOut);
-      this.addEventListener('cell-focus', this._onCellFocus);
 
       // When focus goes from cell to another cell, focusin/focusout events do
       // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
@@ -401,7 +400,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onFocusIn(e) {
-      this.navigating = true;
+      if (!this._isMouseFocus) {
+        this.navigating = true;
+      }
       if (e.composedPath()[0] === this.$.focusexit) {
         // The focus enters the bottom of the grid, meaning that user has
         // shift-tabbed into the grid. Move the focus to the last focusable.
@@ -448,16 +449,23 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Mouse click focuses the cell
      */
-    _onCellFocus(e) {
+    _onMouseCellFocus(e) {
       this._focusedColumnOrder = undefined;
-      const cell = e.detail.cell;
-      if (cell._content.contains(this.getRootNode().activeElement)) {
+      const path = e.composedPath();
+      const cell = path[path.indexOf(this.$.table) - 3];
+      if (e.composedPath()[0] !== cell._content) {
         // Some cell content is focused
         this.interacting = true;
       } else {
         // No focused cell content, focus the cell itself
         this.interacting = false;
-        e.detail.cell.focus();
+
+        // iOS bug: simply setting this.navigating to false does not remove
+        // the focus outline. Need to raise a flag to prevent this.navigating
+        // from being set to true by the `_onFocusIn` listener.
+        this._isMouseFocus = true;
+        cell.focus();
+        this._isMouseFocus = false;
       }
       this.navigating = false;
     }
