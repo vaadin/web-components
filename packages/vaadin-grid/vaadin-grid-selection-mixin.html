@@ -119,7 +119,11 @@ This program is available under Apache License Version 2.0, available at https:/
         Array.from(this.$.items.children).forEach(row => {
           const selected = this._isSelected(row._item);
           this._toggleAttribute('selected', selected, row);
-          Array.from(row.children).forEach(cell => cell._instance.selected = selected);
+          Array.from(row.children).forEach(cell => {
+            if (cell._instance) {
+              cell._instance.selected = selected;
+            }
+          });
         });
       }
     }

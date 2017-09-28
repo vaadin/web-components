@@ -110,6 +110,11 @@
           expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
         });
 
+        it('should not stamp the details template eagerly', () => {
+          const cells = getRowCells(bodyRows[1]);
+          expect(getCellContent(cells[1]).textContent.trim()).to.be.empty;
+        });
+
         it('should have correct bounds', () => {
           expandRow(1);
           const cells = getRowCells(bodyRows[1]);

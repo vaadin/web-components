@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_expandedItemsChanged(expandedItems.*, dataProvider, _rowDetailsTemplate)'
+        '_expandedItemsChanged(expandedItems.*, dataProvider, _rowDetailsTemplate, _physicalCountVal)'
       ];
     }
 
@@ -52,7 +52,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _expandedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate) {
+    _expandedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate, physicalCount) {
       if (dataProvider === undefined || !rowDetailsTemplate) {
         return;
       }
@@ -64,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._flushItemsDebouncer();
 
-      if (this._lastExpandedItems && this._physicalItems) {
+      if (this._lastExpandedItems && physicalCount) {
         this._physicalItems.forEach(this._toggleDetailsCell, this);
         this._render();
       }
@@ -77,10 +77,6 @@ This program is available under Apache License Version 2.0, available at https:/
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
       cell.setAttribute('frozen', '');
-      // Stamp the template
-      cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
-      cell._content.innerHTML = '';
-      cell._content.appendChild(cell._instance.root);
     }
 
     _toggleDetailsCell(row, item) {
@@ -91,6 +87,14 @@ This program is available under Apache License Version 2.0, available at https:/
         if (detailsHidden) {
           row.style.removeProperty('padding-bottom');
         } else {
+          if (!cell._instance) {
+            // Stamp the template
+            cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
+            cell._content.innerHTML = '';
+            cell._content.appendChild(cell._instance.root);
+            this._updateItem(row, item);
+          }
+
           row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
         }
       }
