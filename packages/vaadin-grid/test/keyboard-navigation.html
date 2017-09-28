@@ -385,6 +385,31 @@
 
           expect(grid.navigating).to.be.true;
         });
+
+        it('should not enable navigation mode on mouse cell focus', () => {
+          const cell = getRowFirstCell(0);
+          MockInteractions.down(cell);
+          cell.focus();
+
+          expect(grid.navigating).to.be.false;
+        });
+
+        it('should not enable navigation mode on mouse cell content focus', () => {
+          const cellContent = getCellContent(getRowFirstCell(0));
+          MockInteractions.down(cellContent);
+          cellContent.focus();
+
+          expect(grid.navigating).to.be.false;
+        });
+
+        it('should disable navigation mode on mousedown', () => {
+          focusFirstHeaderCell();
+          grid.navigating = true;
+
+          MockInteractions.down(grid);
+
+          expect(grid.navigating).to.be.false;
+        });
       });
 
       describe('navigating with tab', () => {

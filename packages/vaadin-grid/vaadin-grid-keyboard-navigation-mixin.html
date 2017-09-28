@@ -56,6 +56,12 @@ This program is available under Apache License Version 2.0, available at https:/
       // not escape the grid’s shadowRoot, thus listening inside the shadowRoot.
       this.$.table.addEventListener('focusin', this._onCellFocusIn.bind(this));
       this.$.table.addEventListener('focusout', this._onCellFocusOut.bind(this));
+
+      this.addEventListener('mousedown', () => {
+        this.navigating = false;
+        this._isMousedown = true;
+      });
+      this.addEventListener('mouseup', () => this._isMousedown = false);
     }
 
     _focusableChanged(focusable, oldFocusable) {
@@ -400,9 +406,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onFocusIn(e) {
-      if (!this._isMouseFocus) {
+      if (!this._isMouseFocus && !this._isMousedown) {
         this.navigating = true;
       }
+
       if (e.composedPath()[0] === this.$.focusexit) {
         // The focus enters the bottom of the grid, meaning that user has
         // shift-tabbed into the grid. Move the focus to the last focusable.
