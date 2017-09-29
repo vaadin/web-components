@@ -85,6 +85,11 @@
         expect(headerCells[1].querySelector('[part~="resize-handle"]')).to.be.not.ok;
       });
 
+      it('should extend scroll width', () => {
+        grid._columnTree[0][1].resizable = true;
+        expect(grid.$.table.scrollWidth).to.equal(grid.$.table.offsetWidth);
+      });
+
       it('should display resize handle as top-most element', () => {
         const rect = headerCells[1].getBoundingClientRect();
         const scrollerRect = grid.$.scroller.getBoundingClientRect();
