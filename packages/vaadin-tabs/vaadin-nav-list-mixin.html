@@ -54,41 +54,82 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onKeydown(event) {
-      const keys = this.direction == 'vertical' ? 'Up|Down' : 'Left|Right';
-      const next = this.direction == 'vertical' ? 'Down' : 'Right';
-      if (RegExp(`^(Arrow)?(${keys})$`).test(event.key)) {
+      // left/up
+      if (event.keyCode === 37 || event.keyCode === 38) {
+        this._focusPrevious();
         event.preventDefault();
-        event.stopImmediatePropagation();
-        this._moveToNext(RegExp(`${next}$`).test(event.key), false);
+
+      // right/down
+      } else if (event.keyCode === 39 || event.keyCode === 40) {
+        this._focusNext();
+        event.preventDefault();
+
+      // home
+      } else if (event.keyCode === 36) {
+        this._focusFirst();
+        event.preventDefault();
+
+      // end
+      } else if (event.keyCode === 35) {
+        this._focusLast();
+        event.preventDefault();
       }
-      // TODO: handle other keys to focus items by the first letter.
     }
 
-    // Move to the next/previous tab based on the ltr direction.
-    // If doSelect is true, it selects the tab instead of moving the focus to it
-    _moveToNext(ltr, doSelect) {
-      const items = this._navItems;
-      const l = items.length;
-      if (l) {
-        const curIdx = doSelect ? this.selected : items.indexOf(this.focused);
-        let newIdx = curIdx;
-        do {
-          newIdx += ltr ? 1 : -1;
-          newIdx = newIdx < 0 ? l - 1 : newIdx == l ? 0 : newIdx;
-        } while (items[newIdx].disabled && newIdx != curIdx);
-        items[curIdx].tabIndex = -1;
-        items[newIdx].tabIndex = 0;
-        if (doSelect) {
-          items[curIdx].selected = false;
-          items[newIdx].selected = true;
-        } else {
-          items[newIdx].focus();
-          items[curIdx].focused = false;
-          items[newIdx].focused = true;
-        }
-        // TODO: move the current item to the scroller viewport
-        // this.$.scroll.scrollLeft = items[newIdx].offsetLeft;
+    _focusFirst() {
+      this._focus(0);
+
+      if (this.focused.disabled) {
+        this._focusNext();
       }
+    }
+
+    _focusLast() {
+      this._focus(this._navItems.length - 1);
+
+      if (this.focused.disabled) {
+        this._focusPrevious();
+      }
+    }
+
+    _focusPrevious() {
+      const items = this._navItems;
+      const currentFocused = items.indexOf(this.focused);
+
+      if (currentFocused === 0) {
+        this._focus(items.length - 1);
+      } else {
+        this._focus(currentFocused - 1);
+      }
+
+      if (this.focused.disabled) {
+        this._focusPrevious();
+      }
+    }
+
+    _focusNext() {
+      const items = this._navItems;
+      const currentFocused = items.indexOf(this.focused);
+
+      if (currentFocused === items.length - 1) {
+        this._focus(0);
+      } else {
+        this._focus(currentFocused + 1);
+      }
+
+      if (this.focused.disabled) {
+        this._focusNext();
+      }
+    }
+
+    _focus(index) {
+      const items = this._navItems;
+      items[index].focus();
+
+      for (const item of items) {
+        item.focused = false;
+      }
+      items[index].focused = true;
     }
 
     _selectedChanged(idx) {
