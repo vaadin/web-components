@@ -23,27 +23,27 @@
   </test-fixture>
   <script>
     function arrowDown(target) {
-      MockInteractions.keyDownOn(target, 40);
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
     }
 
     function arrowRight(target) {
-      MockInteractions.keyDownOn(target, 39);
+      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
     }
 
     function arrowUp(target) {
-      MockInteractions.keyDownOn(target, 38);
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
     }
 
     function arrowLeft(target) {
-      MockInteractions.keyDownOn(target, 37);
+      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
     }
 
     function home(target) {
-      MockInteractions.keyDownOn(target, 36);
+      MockInteractions.keyDownOn(target, 36, [], 'Home');
     }
 
     function end(target) {
-      MockInteractions.keyDownOn(target, 35);
+      MockInteractions.keyDownOn(target, 35, [], 'End');
     }
 
     describe('vaadin-nav', () => {
