@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <test-fixture id="vaadin-nav-item">
+  <test-fixture id="navItem">
     <template>
       <vaadin-nav-item>
         text-content
@@ -18,7 +18,7 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="vaadin-item">
+  <test-fixture id="vaadinItem">
     <template>
       <vaadin-item>
         <div slot="prefix">prefix-content</div>
@@ -44,7 +44,7 @@
     describe('vaadin-nav-item', () => {
       var item;
 
-      beforeEach(() => item = fixture('vaadin-nav-item'));
+      beforeEach(() => item = fixture('navItem'));
 
       it('should have a correct localName', () => {
         expect(item.localName).to.be.equal('vaadin-nav-item');
@@ -69,12 +69,12 @@
         beforeEach(() => {});
 
         it('should not have focused attribute when not focused', () => {
-          expect(item.focused).to.be.false;
+          expect(item.getAttribute('focused')).to.be.null;
         });
 
         it.skip('should have focused attribute when focused', () => {
           item.focus();
-          expect(item.focused).to.be.true;
+          expect(item.getAttribute('focused')).to.equal('');
         });
 
         it('should not have focus-ring attribute when not focused with keyboard', () => {
@@ -119,10 +119,7 @@
     describe('vaadin item', () => {
       var item;
 
-      beforeEach(() => item = fixture('vaadin-item'));
-      beforeEach(() => {
-        item = fixture('vaadin-item');
-      });
+      beforeEach(() => item = fixture('vaadinItem'));
 
       it('should have a correct localName', () => {
         expect(item.localName).to.be.equal('vaadin-item');
