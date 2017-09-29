@@ -37,7 +37,7 @@
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^v2.0.5",
     "vaadin-dialog": "vaadin/vaadin-dialog#^v1.0.0-beta1",
     "vaadin-form-layout": "vaadin/vaadin-form-layout#^v1.0.3",
-    "vaadin-grid": "vaadin/vaadin-grid#^v4.0.0-alpha2",
+    "vaadin-grid": "vaadin/vaadin-grid#^v4.0.0-alpha3",
     "vaadin-icons": "vaadin/vaadin-icons#^4.1.2",
     "vaadin-progress-bar": "vaadin/vaadin-progress-bar#^v1.0.0-alpha3",
     "vaadin-radio-button": "vaadin/vaadin-radio-button#^v1.0.0-alpha3",
