@@ -142,13 +142,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
         }
 
-        _hideScrollButtons(change) {
-          if (!change || change.path == 'items.length') {
-            const hidden = this.$.scroll.scrollWidth == this.$.scroll.offsetWidth;
-            this._leftHidden = hidden || !hidden && this.$.scroll.scrollLeft == 0;
-            this._rightHidden = hidden || !hidden &&
-               this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth - this.$.right.offsetWidth;
-          }
+        _hideScrollButtons() {
+          this._leftHidden = this.$.scroll.scrollLeft == 0;
+          this._rightHidden = this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth;
         }
       }
 

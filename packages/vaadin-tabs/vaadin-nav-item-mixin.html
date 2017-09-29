@@ -48,7 +48,13 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('keyup', e => this._onKeyup(e));
-      this.addEventListener('click', e => this.selected = true);
+      this.addEventListener('click', e => this._select());
+    }
+
+    _select() {
+      this.selected = true;
+      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true});
+      this.dispatchEvent(evt);
     }
 
     _selectedChanged(selected) {
@@ -100,7 +106,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // space/enter
       if (event.keyCode === 13 || event.keyCode === 32) {
         this._setActive(false);
-        this.selected = true;
+        this._select();
       }
     }
   };
