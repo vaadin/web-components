@@ -112,6 +112,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this.footerTemplate && (this.footerTemplate.templatizer._grid = this._grid);
 
       this._templateObserver.flush();
+      if (!this.template) {
+        // The observer might not have triggered if the tag is empty. Run manually.
+        this._templateObserver.callback();
+      }
 
       requestAnimationFrame(() => {
         this._allCells.forEach(cell => {
@@ -165,11 +169,9 @@ This program is available under Apache License Version 2.0, available at https:/
       super();
 
       this._templateObserver = new Polymer.FlattenedNodesObserver(this, info => {
-        if (info.addedNodes.length >= 0) {
-          this.headerTemplate = this._prepareHeaderTemplate();
-          this.footerTemplate = this._prepareFooterTemplate();
-          this.template = this._prepareBodyTemplate();
-        }
+        this.headerTemplate = this._prepareHeaderTemplate();
+        this.footerTemplate = this._prepareFooterTemplate();
+        this.template = this._prepareBodyTemplate();
       });
     }
 
