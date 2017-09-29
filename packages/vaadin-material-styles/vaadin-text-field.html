@@ -146,13 +146,13 @@
       /* TODO: using unsupported selector to fix IE11 (even thought the label element is scaled down,
          the 133% width still takes the same space as an unscaled element */
       ::-ms-backdrop,
-      .container {
+      .vaadin-text-field-container {
         overflow: hidden;
       }
 
       /* Same fix for MS Edge ^^   */
       @supports (-ms-ime-align:auto) {
-        .container {
+        .vaadin-text-field-container {
           overflow: hidden;
         }
       }
