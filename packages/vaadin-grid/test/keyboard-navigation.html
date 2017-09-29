@@ -44,9 +44,9 @@
             <div></div>
           </template>
           <template>
-            [[index]] [[item]]
-            <div></div>
-            <div></div>
+            <span>
+              [[index]] [[item]]
+            </span>
           </template>
           <template class="footer"></template>
         </vaadin-grid-column>
@@ -85,23 +85,24 @@
       && !window.top.document.hasFocus()) {
       // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
       const nativeFocus = HTMLElement.prototype.focus;
-      let fakeFocusCurrentTarget;
+      let fakeFocusCurrentTarget, recursiveFocusInterrupt;
       HTMLElement.prototype.focus = function() {
-        const dispatchMockFocusEvent = function(type, bubbles, target, relatedTarget) {
+        const dispatchMockFocusEvent = function(type, bubbles, composed, target, relatedTarget) {
           if (!target) {
             return;
           }
-          const e = new CustomEvent(type, {bubbles, composed: true});
+          const e = new CustomEvent(type, {bubbles, composed: composed});
           e.relatedTarget = relatedTarget;
           target.dispatchEvent(e);
         };
 
-        let activeElement;
+        let activeElement, recursiveFocusInvoke = false;
         if (fakeFocusCurrentTarget) {
           // When focus is called from a focusin/focusout listener (e. g.,
           // recursive .focus()), activeElement might not be shifted yet.
           // The true activeElement is a target of the previous .focus call.
           activeElement = fakeFocusCurrentTarget;
+          recursiveFocusInvoke = true;
         } else {
           activeElement = document.activeElement;
           if (activeElement) {
@@ -116,13 +117,18 @@
           nativeFocus.apply(this, arguments);
         } else {
           fakeFocusCurrentTarget = this;
-          dispatchMockFocusEvent('focusout', true, activeElement, this);
-          dispatchMockFocusEvent('focusin', true, this, activeElement);
-          nativeFocus.apply(this, arguments);
-          dispatchMockFocusEvent('blur', false, activeElement, this);
-          dispatchMockFocusEvent('focus', false, this, activeElement);
+          // If shadow roots match, the events are shadow-internal, not composed
+          const composed = this.getRootNode() !== activeElement.getRootNode();
+          dispatchMockFocusEvent('focusout', true, composed, activeElement, this);
+          !recursiveFocusInterrupt && dispatchMockFocusEvent('focusin', true, composed, this, activeElement);
+          !recursiveFocusInterrupt && nativeFocus.apply(this, arguments);
+          !recursiveFocusInterrupt && dispatchMockFocusEvent('blur', false, composed, activeElement, this);
+          !recursiveFocusInterrupt && dispatchMockFocusEvent('focus', false, composed, this, activeElement);
           fakeFocusCurrentTarget = undefined;
         }
+
+        // Recursive focus invoke should interrupt the parent
+        recursiveFocusInterrupt = recursiveFocusInvoke;
       };
     }
 
@@ -130,6 +136,10 @@
 
     function clickItem(rowIndex) {
       return getCellContent(getRowFirstCell(rowIndex)).click();
+    }
+
+    function focusItem(rowIndex) {
+      return getCellContent(getRowFirstCell(rowIndex)).focus();
     }
 
     function getRowCell(rowIndex, cellIndex) {
@@ -140,13 +150,11 @@
       return getRowCell(rowIndex, 0);
     }
 
-    function clickFirstBodyInput(rowIndex) {
+    function focusFirstBodyInput(rowIndex) {
       const cell = getRowCell(rowIndex || 0, 1);
 
       const input = getCellContent(cell).children[0];
-      input.click();
-      input.dispatchEvent(new CustomEvent('focus', {bubbles: true, composed: true}));
-      input.dispatchEvent(new CustomEvent('focusin', {bubbles: true, composed: true}));
+      input.focus();
       return input;
     }
 
@@ -221,31 +229,21 @@
     function focusHeaderInput() {
       const cell = grid.$.header.children[0].children[1];
       const contents = getCellContent(cell);
-
-      contents.children[0].click();
-
-      Polymer.Base.fire('focus', {}, {
-        node: contents.children[0]
-      });
+      contents.children[0].focus();
     }
 
     function focusFooterInput() {
       const cell = grid.$.footer.children[0].children[1];
       const contents = getCellContent(cell);
-
-      contents.children[0].click();
-
-      Polymer.Base.fire('focus', {}, {
-        node: contents.children[0]
-      });
+      contents.children[0].focus();
     }
 
-    function clickFirstHeaderCell() {
-      getCellContent(getFirstHeaderCell()).click();
+    function focusFirstHeaderCell() {
+      getCellContent(getFirstHeaderCell()).focus();
     }
 
-    function clickFirstFooterCell() {
-      getCellContent(grid.$.footer.children[0].children[0]).click();
+    function focusFirstFooterCell() {
+      getCellContent(grid.$.footer.children[0].children[0]).focus();
     }
 
     function tabToHeader() {
@@ -312,13 +310,13 @@
         });
 
         it('should not enable navigation mode when cell is clicked', () => {
-          clickFirstHeaderCell();
+          focusFirstHeaderCell();
 
           expect(grid.navigating).to.be.false;
         });
 
         it('should disable navigation mode when blurred', () => {
-          clickFirstHeaderCell();
+          focusFirstHeaderCell();
           grid.navigating = true;
 
           focusable.focus();
@@ -334,7 +332,7 @@
         });
 
         it('should enable navigation mode when tabbed inside header', () => {
-          clickFirstHeaderCell();
+          focusFirstHeaderCell();
 
           tab();
 
@@ -349,7 +347,7 @@
         });
 
         it('should enable navigation mode when tabbed inside footer', () => {
-          clickFirstFooterCell();
+          focusFirstFooterCell();
 
           tab();
 
@@ -357,7 +355,7 @@
         });
 
         it('should enable navigation mode with page down', () => {
-          clickItem(0);
+          focusItem(0);
 
           pageDown();
 
@@ -365,7 +363,7 @@
         });
 
         it('should enable navigation mode with page up', () => {
-          clickItem(0);
+          focusItem(0);
 
           pageUp();
 
@@ -373,7 +371,7 @@
         });
 
         it('should enable navigation mode with home', () => {
-          clickItem(0);
+          focusItem(0);
 
           home();
 
@@ -381,11 +379,36 @@
         });
 
         it('should enable navigation mode with end', () => {
-          clickItem(0);
+          focusItem(0);
 
           end();
 
           expect(grid.navigating).to.be.true;
+        });
+
+        it('should not enable navigation mode on mouse cell focus', () => {
+          const cell = getRowFirstCell(0);
+          MockInteractions.down(cell);
+          cell.focus();
+
+          expect(grid.navigating).to.be.false;
+        });
+
+        it('should not enable navigation mode on mouse cell content focus', () => {
+          const cellContent = getCellContent(getRowFirstCell(0));
+          MockInteractions.down(cellContent);
+          cellContent.focus();
+
+          expect(grid.navigating).to.be.false;
+        });
+
+        it('should disable navigation mode on mousedown', () => {
+          focusFirstHeaderCell();
+          grid.navigating = true;
+
+          MockInteractions.down(grid);
+
+          expect(grid.navigating).to.be.false;
         });
       });
 
@@ -494,13 +517,14 @@
 
         it('should set native focus to header on header cell click', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
-          clickFirstHeaderCell();
+          focusFirstHeaderCell();
 
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[0]);
         });
 
         it('should set native focus to body on body cell click', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
+          focusItem(0);
           clickItem(0);
 
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
@@ -508,7 +532,7 @@
 
         it('should set native focus to footer on footer cell click', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
-          clickFirstFooterCell();
+          focusFirstFooterCell();
 
           expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
         });
@@ -540,7 +564,7 @@
 
       describe('navigating with keys', () => {
         it('should enable navigation mode on down', () => {
-          clickItem(0);
+          focusItem(0);
 
           down();
 
@@ -548,7 +572,7 @@
         });
 
         it('should navigate on down when navigation mode is off', () => {
-          clickItem(0);
+          focusItem(0);
 
           down();
 
@@ -556,7 +580,7 @@
         });
 
         it('should enable navigation mode on up', () => {
-          clickItem(0);
+          focusItem(0);
 
           up();
 
@@ -564,7 +588,7 @@
         });
 
         it('should navigate on up when navigation mode is off', () => {
-          clickItem(1);
+          focusItem(1);
 
           up();
 
@@ -572,7 +596,7 @@
         });
 
         it('should enable navigation mode on left', () => {
-          clickItem(0);
+          focusItem(0);
 
           left();
 
@@ -580,7 +604,7 @@
         });
 
         it('should navigate on left when navigation mode is off', () => {
-          getCellContent(getRows(body)[0].children[1]).click();
+          getCellContent(getRows(body)[0].children[1]).focus();
 
           left();
 
@@ -588,7 +612,7 @@
         });
 
         it('should enable navigation mode on right', () => {
-          clickItem(0);
+          focusItem(0);
 
           right();
 
@@ -596,7 +620,7 @@
         });
 
         it('should navigate on right when navigation mode is off', () => {
-          clickItem(0);
+          focusItem(0);
 
           right();
 
@@ -604,7 +628,7 @@
         });
 
         it('should focus cell below with down', () => {
-          clickItem(0);
+          focusItem(0);
 
           down();
 
@@ -613,7 +637,7 @@
         });
 
         it('should focus cell above with up', () => {
-          clickItem(0);
+          focusItem(0);
           down();
 
           up();
@@ -623,7 +647,7 @@
         });
 
         it('should focus cell left with left', () => {
-          clickItem(0);
+          focusItem(0);
           right();
 
           left();
@@ -633,7 +657,7 @@
         });
 
         it('should focus cell right with right', () => {
-          clickItem(0);
+          focusItem(0);
 
           right();
 
@@ -644,7 +668,7 @@
         describe('with hidden columns', () => {
           it('should skip over hidden column with right arrow', () => {
             grid._columnTree[0][1].hidden = true;
-            getCellContent(body.children[0].children[0]).click();
+            getCellContent(body.children[0].children[0]).focus();
 
             right();
 
@@ -653,7 +677,7 @@
 
           it('should skip over hidden column with left arrow', () => {
             grid._columnTree[0][1].hidden = true;
-            getCellContent(body.children[0].children[0]).click();
+            getCellContent(body.children[0].children[0]).focus();
             right();
 
             left();
@@ -663,7 +687,7 @@
 
           it('should not navigate to hidden column with left arrow', () => {
             grid._columnTree[0][0].hidden = true;
-            getCellContent(body.children[0].children[1]).click();
+            getCellContent(body.children[0].children[1]).focus();
 
             left();
 
@@ -672,7 +696,7 @@
 
           it('should not navigate to hidden column with right arrow', () => {
             grid._columnTree[0][2].hidden = true;
-            getCellContent(body.children[0].children[0]).click();
+            getCellContent(body.children[0].children[0]).focus();
 
             right();
             right();
@@ -682,7 +706,7 @@
 
           it('should not navigate to hidden column with end', () => {
             grid._columnTree[0][0].hidden = true;
-            getCellContent(body.children[0].children[1]).click();
+            getCellContent(body.children[0].children[1]).focus();
 
             home();
 
@@ -691,7 +715,7 @@
 
           it('should not navigate to hidden column with home', () => {
             grid._columnTree[0][2].hidden = true;
-            getCellContent(body.children[0].children[0]).click();
+            getCellContent(body.children[0].children[0]).focus();
 
             end();
 
@@ -821,7 +845,7 @@
 
           it('should set focused cell when tapping on details cell', () => {
             const rowDetailsCell = findRowDetailsCell(body.children[0]);
-            grid.dispatchEvent(new CustomEvent('cell-focus', {detail: {cell: rowDetailsCell}}));
+            rowDetailsCell._content.focus();
 
             expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
           });
@@ -842,7 +866,7 @@
         });
 
         it('should focus first cell with home', () => {
-          clickItem(0);
+          focusItem(0);
           right();
 
           home();
@@ -851,7 +875,7 @@
         });
 
         it('should focus first cell on first row with ctrl+home', () => {
-          clickItem(0);
+          focusItem(0);
           right();
 
           ctrlHome();
@@ -861,7 +885,7 @@
         });
 
         it('should focus last cell with end', () => {
-          clickItem(0);
+          focusItem(0);
 
           end();
 
@@ -870,7 +894,7 @@
 
 
         it('should focus last cell on last row with ctrl+end', () => {
-          clickItem(0);
+          focusItem(0);
 
           ctrlEnd();
 
@@ -883,7 +907,7 @@
           grid.size = 200;
           grid.dataProvider = infiniteDataProvider;
 
-          clickItem(0);
+          focusItem(0);
 
           ctrlEnd();
 
@@ -896,7 +920,7 @@
           });
 
           it('should scroll cells visible with right arrow on header', () => {
-            clickFirstHeaderCell();
+            focusFirstHeaderCell();
             down();
 
             right();
@@ -905,7 +929,7 @@
           });
 
           it('should scroll cells visible with right arrow on body', () => {
-            clickItem(0);
+            focusItem(0);
             down();
 
             right();
@@ -914,7 +938,7 @@
           });
 
           it('should scroll cells visible with right arrow on footer', () => {
-            clickFirstFooterCell();
+            focusFirstFooterCell();
             down();
 
             right();
@@ -923,7 +947,7 @@
           });
 
           it('should scroll cells visible with left arrow on header', () => {
-            clickFirstHeaderCell();
+            focusFirstHeaderCell();
             down();
             right();
 
@@ -933,7 +957,7 @@
           });
 
           it('should scroll cells visible with left arrow on body', () => {
-            clickItem(0);
+            focusItem(0);
             down();
             right();
 
@@ -943,7 +967,7 @@
           });
 
           it('should scroll cells visible with home', () => {
-            clickItem(0);
+            focusItem(0);
             grid.$.table.scrollLeft = 999999999;
 
             home();
@@ -952,7 +976,7 @@
           });
 
           it('should scroll cells visible with end', () => {
-            clickItem(0);
+            focusItem(0);
 
             end();
 
@@ -964,7 +988,7 @@
             grid.style.border = 'none';
             grid._columnTree[0][0].frozen = true;
 
-            clickItem(0);
+            focusItem(0);
             right();
             right();
 
@@ -976,7 +1000,7 @@
           });
 
           it('should scroll cells visible with left arrow on footer', () => {
-            clickFirstFooterCell();
+            focusFirstFooterCell();
             down();
             right();
 
@@ -996,7 +1020,7 @@
           });
 
           it('should scroll rows visible with up arrow', () => {
-            clickItem(0);
+            focusItem(0);
             grid._scrollToIndex(100);
 
             up();
@@ -1005,7 +1029,7 @@
           });
 
           it('should scroll rows visible with down arrow', () => {
-            clickItem(grid._lastVisibleIndex);
+            focusItem(grid._lastVisibleIndex);
 
             down();
 
@@ -1013,7 +1037,7 @@
           });
 
           it('should scroll to the first row with ctrl+home', () => {
-            clickItem(0);
+            focusItem(0);
 
             scrollToEnd(grid);
 
@@ -1022,7 +1046,7 @@
           });
 
           it('should scroll to the last row with ctrl+end', () => {
-            clickItem(0);
+            focusItem(0);
 
             ctrlEnd();
 
@@ -1030,7 +1054,7 @@
           });
 
           it('should scroll down one page with page down', () => {
-            clickItem(0);
+            focusItem(0);
 
             pageDown();
 
@@ -1039,7 +1063,7 @@
           });
 
           it('should scroll up one page with page up', done => {
-            clickItem(0);
+            focusItem(0);
             pageDown();
 
             grid.async(() => {
@@ -1066,7 +1090,7 @@
 
           describe('rotating focus indicator prevention', () => {
             it('should hide navigation mode when a focused row goes off screen', () => {
-              clickItem(0);
+              focusItem(0);
               right();
 
               expect(grid.navigating).to.be.true;
@@ -1077,7 +1101,7 @@
             });
 
             it('should reveal navigation mode when a focused row is back on screen', () => {
-              clickItem(0);
+              focusItem(0);
               right();
               grid._scrollToIndex(100);
 
@@ -1099,6 +1123,7 @@
         });
 
         it('should activate item another on space', () => {
+          focusItem(0);
           clickItem(0);
           tab();
 
@@ -1109,6 +1134,7 @@
         });
 
         it('should deactive item on space', () => {
+          focusItem(0);
           clickItem(0); // activates first item on click
           tab();
 
@@ -1143,8 +1169,17 @@
           expect(grid.activeItem).to.be.null;
         });
 
+        it('should activate when clicking on non-focusable child', () => {
+          const span = getCellContent(getRowCell(0, 2)).children[0];
+          // Normally non-focusables like span should not focus, but in MSIE they can
+          span.focus();
+          span.click();
+
+          expect(grid.activeItem).to.equal('foo');
+        });
+
         it('should not activate when clicking on a native input', () => {
-          clickFirstBodyInput(0);
+          focusFirstBodyInput(0);
 
           expect(grid.activeItem).to.be.null;
         });
@@ -1161,7 +1196,7 @@
         it('should not deactivate on click in non-body row', () => {
           clickItem(0);
 
-          clickFirstHeaderCell();
+          focusFirstHeaderCell();
 
           expect(grid.activeItem).to.equal('foo');
         });
@@ -1246,6 +1281,7 @@
         });
 
         it('should focus on click', () => {
+          focusItem(1);
           clickItem(1);
 
           const cell = getRowFirstCell(1);
@@ -1259,8 +1295,11 @@
 
         it('should not throw an error when switching focus between body and header', () => {
           expect(() => {
+            focusItem(1);
             clickItem(1);
+            getRowCells(getRows(grid.$.header)[0])[0].focus();
             getRowCells(getRows(grid.$.header)[0])[0].click();
+            focusItem(0);
             clickItem(0);
           }).to.not.throw(Error);
         });
@@ -1270,16 +1309,11 @@
         let input;
 
         beforeEach(() => {
+          focusItem(0);
           clickItem(0);
 
           const cell = getRowCell(0, 1);
           input = getCellContent(cell).children[0];
-
-          sinon.stub(input, 'focus', () => {
-            Polymer.Base.fire('focus', {}, {
-              node: input
-            });
-          });
         });
 
         it('should enter interaction mode with enter', () => {
@@ -1367,7 +1401,7 @@
           right(); // focus the cell with input.
           enter();
 
-          tab();
+          tab(getCellContent(getRowCell(0, 1)).children[0]); // tab in the input
 
           // expecting focusable item cell to remain in place, instead actual focus moves.
           expect(grid._itemsFocusable).to.equal(getRowCell(0, 1));
@@ -1388,7 +1422,7 @@
         });
 
         it('should not navigate with arrow up when in interaction mode', () => {
-          const input = clickFirstBodyInput(1);
+          const input = focusFirstBodyInput(1);
 
           up(input);
           escape(input);
@@ -1398,7 +1432,7 @@
         });
 
         it('should not navigate with arrow down when in interaction mode', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           down(input);
           escape(input);
@@ -1409,7 +1443,7 @@
 
         it('should not navigate with arrow left when in interaction mode', () => {
           right();
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           left(input);
           escape(input);
@@ -1419,7 +1453,7 @@
         });
 
         it('should not navigate with arrow right when in interaction mode', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           right(input);
           escape(input);
@@ -1430,7 +1464,7 @@
 
         it('should not navigate with home when in interaction mode', () => {
           right();
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           home(input);
           escape(input);
@@ -1441,7 +1475,7 @@
 
         it('should not navigate with ctrl+home when in interaction mode', () => {
           right();
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           ctrlHome(input);
           escape(input);
@@ -1451,7 +1485,7 @@
         });
 
         it('should not navigate with end when in interaction mode', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           end(input);
           escape(input);
@@ -1461,7 +1495,7 @@
         });
 
         it('should not navigate with ctrl+end when in interaction mode', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           ctrlEnd(input);
           escape(input);
@@ -1471,7 +1505,7 @@
         });
 
         it('should not navigate with page down when in interaction mode', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           pageDown(input);
           escape(input);
@@ -1481,7 +1515,7 @@
         });
 
         it('should not navigate with page up when in interaction mode', () => {
-          const input = clickFirstBodyInput(1);
+          const input = focusFirstBodyInput(1);
 
           pageUp(input);
           escape(input);
@@ -1492,7 +1526,7 @@
 
         it('should not activate on space when in interaction mode', () => {
           grid.activeItem = null;
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           space(input);
 
@@ -1538,7 +1572,7 @@
         });
 
         it('should remove focus from cell with escape', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           escape(input); // revert to navigation first
 
@@ -1549,7 +1583,7 @@
         });
 
         it('should revert to navigation from interaction mode with escape', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           escape(input);
 
@@ -1557,7 +1591,7 @@
         });
 
         it('should revert to navigation from interaction mode with F2', () => {
-          const input = clickFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
 
           f2(input);
 
@@ -1576,7 +1610,7 @@
         });
 
         it('should enter interaction mode when cell contents are focused', () => {
-          clickFirstBodyInput(0);
+          focusFirstBodyInput(0);
 
           expect(grid.interacting).to.be.true;
         });

@@ -90,13 +90,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div part="content" on-focus="_onContentFocus">
+    <div part="content">
       <slot></slot>
     </div>
     <div id="announcer" aria-hidden="true">
       <div>[[_getAriaLabel(direction, _order)]]</div>
     </div>
-    <div part="indicators" aria-hidden="true" on-focus="_onContentFocus">
+    <div part="indicators" aria-hidden="true">
       <div part="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
@@ -221,18 +221,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this._cellContent.removeEventListener('cell-focusout', this._boundOnCellContentFocusout);
             this._cellContent = undefined;
           }
-        }
-
-        _onContentFocus(e) {
-          /* Need to move the focus to the correct trap. This is only required for IE11. */
-          var grid = this;
-          while (grid.localName !== 'vaadin-grid') {
-            grid = grid.parentNode;
-          }
-
-          grid.interacting = false;
-          var thisCell = grid.$.scroller._getCellByCellContent(this);
-          thisCell.focus();
         }
 
         _getClosestCellContent() {
