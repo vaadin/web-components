@@ -54,6 +54,10 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none;
       }
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
     </style>
     <div id="button" type="button" part="button">
       <slot></slot>

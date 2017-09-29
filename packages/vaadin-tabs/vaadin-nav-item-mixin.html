@@ -4,8 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer.html">
-
 <script>
   window.Vaadin = window.Vaadin || {};
 
@@ -28,6 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
           observer: '_disabledChanged',
           reflectToAttribute: true
         },
+
         /**
          * If true, the button is in the selected state.
          */
@@ -43,16 +42,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      this.addEventListener('focus', e => this._setFocused(true), true);
+      console.log(this)
+      this.addEventListener('focus', e => {
+        this._setFocused(true);
+      }, true);
       this.addEventListener('blur', e => this._setFocused(false), true);
       this.addEventListener('mousedown', e => this._setActive(this._mousedown = true));
       this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
       this.addEventListener('keydown', e => this._onKeydown(e));
-      this.addEventListener('keyup', e => this._onKeyup());
+      this.addEventListener('keyup', e => this._onKeyup(e));
       this.addEventListener('click', e => this._toggle());
-      if (!this.hasAttribute('tabindex')) {
-        this.tabIndex = 0;
-      }
     }
 
     _toggle() {
@@ -69,16 +68,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _disabledChanged(disabled) {
-      this.setAttribute('aria-disabled', disabled);
-      this.style.pointerEvents = disabled ? 'none' : '';
       if (disabled) {
-        this._oldTabIndex = this.tabIndex < 0 ? 0 : this.tabIndex;
-        this._setFocused(false);
-        this.tabIndex = -1;
+        this.setAttribute('aria-disabled', 'true');
         this.blur();
-      } else if (this._oldTabIndex !== undefined) {
-        this.tabIndex = this._oldTabIndex;
-        delete this._oldTabIndex;
+      } else {
+        this.removeAttribute('aria-disabled');
       }
     }
 
@@ -104,14 +98,16 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onKeydown(event) {
-      if (/^( |SpaceBar|Enter)$/i.test(event.key)) {
+      // space/enter
+      if (event.keyCode === 13 || event.keyCode === 32) {
         event.preventDefault();
         this._setActive(true);
       }
     }
 
-    _onKeyup() {
-      if (this.hasAttribute('active')) {
+    _onKeyup(event) {
+      // space/enter
+      if (event.keyCode === 13 || event.keyCode === 32) {
         this._setActive(false);
         this._toggle();
       }
