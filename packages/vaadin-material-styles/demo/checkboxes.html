@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Material Theme Checkbox</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <link rel="import" href="../vaadin-checkbox.html">
+  <link rel="import" href="../../vaadin-checkbox/vaadin-checkbox.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Material</span>
+    </demo-navigation>
+
+    <h1>Checkbox</h1>
+
+    <h3 demo-section>States</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-checkbox checked>Checked</vaadin-checkbox>
+        <vaadin-checkbox>Unchecked</vaadin-checkbox>
+        <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Disabled</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-checkbox checked disabled>Checked</vaadin-checkbox>
+        <vaadin-checkbox disabled>Unchecked</vaadin-checkbox>
+        <vaadin-checkbox indeterminate disabled>Indeterminate</vaadin-checkbox>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Multi-line label</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-checkbox checked>
+          <b>Label</b>
+          <div>Description</div>
+        </vaadin-checkbox>
+
+        <vaadin-checkbox disabled>
+          <b>Label</b>
+          <div>Description</div>
+        </vaadin-checkbox>
+      </template>
+    </nice-demo-snippet>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3 demo-section>Dark theme</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-checkbox checked>Checked</vaadin-checkbox>
+          <vaadin-checkbox>Unchecked</vaadin-checkbox>
+          <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+  </div>
+</body>
+</html>

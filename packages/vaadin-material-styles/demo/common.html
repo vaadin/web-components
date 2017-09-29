@@ -1,12 +1,13 @@
 <script>
   window.demos = [
     {name: 'index', title: 'Getting started'},
-    {name: 'compatibility', title: 'Browser compatibility'},
     {name: 'typography', title: 'Typography', group: 'Style guide'},
     {name: 'colors', title: 'Colors'},
-    {name: 'buttons', title: 'Buttons', group: 'Components'},
-    {name: 'date-pickers', title: 'Date pickers'},
-    {name: 'text-fields', title: 'Text fields'}
+    {name: 'buttons', title: 'Button', group: 'Components'},
+    {name: 'checkboxes', title: 'Checkbox'},
+    {name: 'date-pickers', title: 'Date picker'},
+    {name: 'grids', title: 'Data grid'},
+    {name: 'text-fields', title: 'Text field'}
   ];
 </script>
 
@@ -34,6 +35,7 @@
 
     demo-navigation {
       --demo-navigation-font-size: 1em;
+      --demo-navigation-selected-item-color: var(--material-primary-text-color);
     }
 
     demo-navigation [slot="header"] {
@@ -47,6 +49,15 @@
       font-size: 0.95em;
       border-radius: 3px;
       padding: 0 0.2em;
+    }
+
+    code.block {
+      display: block;
+      white-space: pre;
+      border: 1px solid rgba(0,0,0,0.1);
+      padding: 1em;
+      font-size: 13px;
+      margin: 1em 0;
     }
 
     dl.custom-properties {
@@ -81,6 +92,27 @@
     nice-demo-snippet div[theme="dark"] {
       margin: -1em;
       padding: 1em;
+    }
+
+    .theme-source-code {
+      display: inline-block;
+      font-size: var(--valo-font-size-s);
+      height: 1em;
+      line-height: 1em;
+      float: right;
+      font-weight: 600;
+    }
+
+    .theme-source-code::before {
+      content: "";
+      display: inline-block;
+      width: 1.5em;
+      height: 1.5em;
+      background-image: url("assets/github.svg");
+      background-size: 100% 100%;
+      vertical-align: -0.3em;
+      margin-right: 0.5em;
+      opacity: 0.8;
     }
   </style>
 </custom-style>

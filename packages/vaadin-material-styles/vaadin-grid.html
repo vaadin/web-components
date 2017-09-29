@@ -1,0 +1,210 @@
+<link rel="import" href="vaadin-checkbox.html">
+<link rel="import" href="font-icons.html">
+
+
+<dom-module id="valo-grid" theme-for="vaadin-grid">
+  <template>
+    <style>
+      :host {
+        background-color: var(--material-background-color);
+        font-family: var(--material-font-family);
+        font-size: 13px;
+        color: var(--material-body-text-color);
+        border: 1px solid var(--material-divider-color);
+      }
+
+      [part~="cell"] {
+        font-size: 13px;
+        min-height: 48px;
+        padding: 4px 12px;
+        align-items: center;
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"] {
+        background-color: var(--material-background-color);
+        color: var(--material-secondary-text-color);
+      }
+
+      [part~="header-cell"] ::slotted(*),
+      [part~="footer-cell"] ::slotted(*) {
+        font-size: 12px;
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"] {
+        min-height: 32px;
+      }
+
+      [part="row"]:only-child [part~="header-cell"],
+      [part="row"]:only-child [part~="footer-cell"] {
+        min-height: 56px;
+      }
+
+      /* Header and footer divider between body rows */
+
+      [part~="body-cell"],
+      [part~="row"]:last-child [part~="header-cell"] {
+        border-bottom: 1px solid var(--material-divider-color);
+      }
+
+      [part~="row"]:first-child [part~="footer-cell"] {
+        border-top: 1px solid var(--material-divider-color);
+      }
+
+      /* Body rows/cells */
+
+      [part~="body-cell"] {
+        background-color: var(--material-background-color);
+      }
+
+      [part~="row"]:hover [part~="body-cell"] {
+        background: linear-gradient(var(---material-grid-row-hover-background-color, rgba(0,0,0,0.06)), var(---material-grid-row-hover-background-color, rgba(0,0,0,0.06))) var(--material-background-color);
+      }
+
+      @media (pointer: coarse) {
+        [part~="row"]:hover [part~="body-cell"] {
+          background: var(--material-background-color);
+        }
+      }
+
+      /* Selected row */
+
+      :host(:not([reordering])) [part~="row"][selected] [part~="cell"] {
+        background-color: var(--material-secondary-background-color);
+      }
+
+      /* Column reordering */
+
+      :host([reordering]) [part~="cell"] {
+        background: var(--material-secondary-background-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: var(--material-background-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: var(--material-background-color);
+      }
+
+      /* Frozen columns */
+
+      [part~="cell"][last-frozen] {
+        border-right: 1px solid var(--material-divider-color);
+      }
+
+      /* Column resizing */
+
+      :host(:not([theme~="column-dividers"])) [part~="cell"]:not([last-frozen]) [part="resize-handle"] {
+        border-right: 1px solid var(--material-divider-color);
+        right: -1px;
+      }
+
+      /* Keyboard navigation */
+
+      [part~="cell"]:focus {
+        outline: none;
+      }
+
+      :host([navigating]) [part~="cell"]:focus {
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      }
+
+      /* Override cell content styles (experimental) */
+
+      [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+        display: block;
+        text-overflow: ellipsis;
+        cursor: default;
+        white-space: normal;
+      }
+
+      /* Firefox is too eager to truncate even the selection column with the checkbox.
+         As we can’t target those separately, disable text truncation completely in Firefox */
+      @-moz-document url-prefix() {
+        [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+          text-overflow: initial;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-grid-sorter" theme-for="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        justify-content: flex-start;
+        height: 100%;
+        min-height: 28px;
+        align-items: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      :host([direction]) {
+        color: var(--material-body-text-color);
+      }
+
+      [part="content"] {
+        flex: none;
+      }
+
+      [part="indicators"] {
+        order: -1;
+      }
+
+      [part="indicators"]::before {
+        display: inline-block;
+        font-size: 18px;
+        line-height: 18px;
+        width: 24px;
+        vertical-align: top;
+        font-family: "material-icons";
+        overflow: hidden;
+        transition: 0.2s width;
+        opacity: 0.5;
+      }
+
+      :host(:not([direction])) [part="indicators"]::before {
+        content: "\e5d8";
+        width: 0;
+      }
+
+      :host([direction]) [part="indicators"]::before {
+        opacity: 1;
+      }
+
+      :host([direction="asc"]) [part="indicators"]::before {
+        content: "\e5d8";
+      }
+
+      :host([direction="desc"]) [part="indicators"]::before {
+        content: "\e5db";
+      }
+
+      :host(:hover) [part="indicators"]::before {
+        width: 24px;
+      }
+
+      [part="order"] {
+        right: 4px;
+        top: -8px;
+        font-size: 10px;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<!-- Make the selection column checkbox ripple effect visible. This only works for grids in the global scope. -->
+<!-- TODO make it possible to target the selection column checkboxes separately -->
+<custom-style>
+  <style>
+    vaadin-grid-cell-content vaadin-checkbox:only-child {
+      position: fixed;
+      margin-top: -12px;
+    }
+  </style>
+</custom-style>

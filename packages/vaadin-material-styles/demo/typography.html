@@ -31,10 +31,37 @@
 
     <h1>Typography</h1>
 
+    <h3>Importing the style module</h3>
+
     <p>If you are not importing any element themes, and want to use the font properties, you need to import them manually.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <link rel="import" href="path/to/bower_components/vaadin-material-theme/typography.html">
+        <link rel="import" href="bower_components/vaadin-material-theme/typography.html">
+      </template>
+    </nice-demo-snippet>
+
+    <h2 demo-section>Global typography styles</h2>
+    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope. It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
+    <p>If needed, you can include the style module in any other style scopes (i.e. shadow roots) as well.</p>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <custom-style>
+          <style include="material-typography">
+            /* The <style> tag needs to be non-empty for IE11 */
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet class="headers">
+      <template slot="source">
+        <h1>Header 1</h1>
+        <h2>Header 2</h2>
+        <h3>Header 3</h3>
+        <h4>Header 4</h4>
+        <h5>Header 5</h5>
+        <h6>Header 6</h6>
       </template>
     </nice-demo-snippet>
 
@@ -113,31 +140,6 @@
       </template>
     </nice-demo-snippet>
 
-
-    <h2 demo-section>Global style modules</h2>
-    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope. It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
-    <p>If needed, you can include the style module in any other style scopes (i.e. shadow roots) as well.</p>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <custom-style>
-          <style include="material-typography">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-      </template>
-    </nice-demo-snippet>
-
-    <nice-demo-snippet class="headers">
-      <template slot="source">
-        <h1>Header 1</h1>
-        <h2>Header 2</h2>
-        <h3>Header 3</h3>
-        <h4>Header 4</h4>
-        <h5>Header 5</h5>
-        <h6>Header 6</h6>
-      </template>
-    </nice-demo-snippet>
 
     <h2 demo-section>Custom properties</h2>
 
