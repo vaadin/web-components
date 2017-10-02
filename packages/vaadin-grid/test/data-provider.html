@@ -193,7 +193,7 @@
 
         setTimeout(() => {
           expect(container.dataProvider.called).to.be.true;
-          const oldFirstItem = grid._cache[0];
+          const oldFirstItem = grid._cache.getItemForIndex(0);
           expect(oldFirstItem).to.be.ok;
 
           container.dataProvider.reset();
@@ -201,8 +201,8 @@
 
           setTimeout(() => {
             expect(container.dataProvider.called).to.be.true;
-            expect(grid._cache[0]).to.be.ok;
-            expect(grid._cache[0]).not.to.equal(oldFirstItem);
+            expect(grid._cache.getItemForIndex(0)).to.be.ok;
+            expect(grid._cache.getItemForIndex(0)).not.to.equal(oldFirstItem);
             done();
           }, loadDebounceTime * 2);
         }, loadDebounceTime * 2);

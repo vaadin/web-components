@@ -8,6 +8,76 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};
 
+  // TODO: Scope
+  class CacheItem {
+
+    constructor() {
+      this.expandedItems = {};
+      this.map = {};
+      this.size = -1; // Size must include all expanded items sizes
+    }
+
+    getItemForIndex(index) {
+      const {cache, scaledIndex} = this.getCacheAndIndex(index);
+      return cache.map[scaledIndex];
+    }
+
+    setItemForIndex(index, item) {
+      const {cache, scaledIndex} = this.getCacheAndIndex(index);
+      if (item.siblingCount !== undefined && cache.size !== parseInt(item.siblingCount)) {
+        cache.ownSize = parseInt(item.siblingCount);
+        cache.updateSize();
+      }
+      cache.map[scaledIndex] = item;
+    }
+
+    updateSize() {
+      this.size = this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
+        return prev + this.expandedItems[curr].collapsed ? 0 : this.expandedItems[curr].size;
+      }, 0);
+
+      if (this.parentCache) {
+        this.parentCache.updateSize();
+      }
+    }
+
+    expandIndex(index) {
+      const {cache, scaledIndex} = this.getCacheAndIndex(index);
+      cache.expandedItems[scaledIndex] = cache.expandedItems[scaledIndex] || new CacheItem();
+      cache.expandedItems[scaledIndex].collapsed = false;
+      cache.expandedItems[scaledIndex].parentCache = this;
+      this.updateSize();
+    }
+
+    collapseIndex(index) {
+      const {cache, scaledIndex} = this.getCacheAndIndex(index);
+      cache.expandedItems[scaledIndex].collapsed = true;
+      cache.updateSize();
+    }
+
+    getCacheAndIndex(index) {
+      let thisLevelIndex = index;
+      const keys = Object.keys(this.expandedItems).sort().filter(expandedIndex => {
+        return !this.expandedItems[expandedIndex].collapsed;
+      });
+      for (var i = 0; i < keys.length; i++) {
+        const expandedIndex = keys[i];
+        const subCache = this.expandedItems[expandedIndex];
+        if (thisLevelIndex <= expandedIndex) {
+          return {cache: this, scaledIndex: thisLevelIndex};
+        } else if (subCache.size === -1) {
+          return {cache: subCache, scaledIndex: thisLevelIndex - expandedIndex - 1};
+        } else if (thisLevelIndex < expandedIndex + subCache.size) {
+          return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
+        }
+        thisLevelIndex -= subCache.size;
+      }
+      return {cache: this, scaledIndex: thisLevelIndex};
+    }
+
+  }
+
+
   /**
    * @polymerMixin
    */
@@ -54,7 +124,9 @@ This program is available under Apache License Version 2.0, available at https:/
         _cache: {
           type: Object,
           value: function() {
-            return {};
+            const cache = new CacheItem();
+            cache.size = 100000000; // TODO:
+            return cache;
           }
         },
 
@@ -65,6 +137,17 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         },
       };
+    }
+
+    static get observers() {
+      return [
+        '_updateCacheSize(size)'
+      ];
+    }
+
+    _updateCacheSize(size) {
+      this._cache.ownSize = size;
+      this._cache.updateSize();
     }
 
     _loadingChanged(loading) {
@@ -79,7 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _getItem(index, el) {
       el.index = index;
-      const item = this._cache[index];
+      const item = this._cache.getItemForIndex(index);
       if (item) {
         this._updateItem(el, item);
       } else {
@@ -129,12 +212,21 @@ This program is available under Apache License Version 2.0, available at https:/
         }, []);
     }
 
+    expandIndex(index) {
+      this._cache.expandIndex(index);
+      this._assignModels();
+    }
+
+    collapseIndex(index) {
+      this._cache.collapseIndex(index);
+      this._assignModels();
+    }
+
     _canPopulate() {
-      return this._hasData;
+      return true;
     }
 
     _loadPage(page) {
-
       // make sure same page isn't requested multiple times.
       if (!this._pendingRequests[page] && this.dataProvider) {
         this._pendingRequests[page] = true;
@@ -147,11 +239,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this.dataProvider(params, (items) => {
           items.forEach((item, itemsIndex) => {
-            this._cache[page * this.pageSize + itemsIndex] = item;
+            this._cache.setItemForIndex(page * this.pageSize + itemsIndex, item);
           });
+          this._fullSize = this._cache.size;
 
           Array.from(this.$.items.children).forEach(row => {
-            const cachedItem = this._cache[row.index];
+            const cachedItem = this._cache.getItemForIndex(row.index);
             if (items.indexOf(cachedItem) > -1) {
               this._updateItem(row, cachedItem);
             }
@@ -175,7 +268,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache() {
-      this._cache = {};
+      this._cache = new CacheItem();
       this._pendingRequests = {};
       this._hasData = false;
       this._loading = true;

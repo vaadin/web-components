@@ -32,7 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_sizeChanged(size)'
+          '_sizeChanged(_fullSize)'
         ];
       }
 
@@ -72,11 +72,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         this._scrollingToIndex = true;
-        index = Math.min(Math.max(index, 0), this.size - 1);
-        this.$.table.scrollTop = index / this.size * (this.$.table.scrollHeight - this.$.table.offsetHeight);
+        index = Math.min(Math.max(index, 0), this._fullSize - 1);
+        this.$.table.scrollTop = index / this._fullSize * (this.$.table.scrollHeight - this.$.table.offsetHeight);
         this._scrollHandler();
 
-        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this.size) {
+        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this._fullSize) {
           this._adjustVirtualIndexOffset(1000000);
         }
 
@@ -89,7 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // This is a hack to get around offset issues when scrolling to bottom.
-        if (this._vidxOffset + this._lastVisibleIndex === this.size - 1) {
+        if (this._vidxOffset + this._lastVisibleIndex === this._fullSize - 1) {
           this.$.table.scrollTop = this.$.table.scrollHeight - this.$.table.offsetHeight;
           this._scrollHandler();
         }
@@ -183,7 +183,7 @@ This program is available under Apache License Version 2.0, available at https:/
       _assignModels(itemSet) {
         this._iterateItems((pidx, vidx) => {
           const el = this._physicalItems[pidx];
-          this._toggleAttribute('hidden', vidx >= this.size, el);
+          this._toggleAttribute('hidden', vidx >= this._fullSize, el);
           this._updateScrollerItem(el, vidx + (this._vidxOffset || 0));
         }, itemSet);
       }
@@ -192,7 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const delta = this.$.table.scrollTop - this._scrollPosition;
         this._accessIronListAPI(super._scrollHandler);
         const oldOffset = this._vidxOffset;
-        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this.size) {
+        if (this._accessIronListAPI(() => this._maxScrollTop) && this._virtualCount < this._fullSize) {
           this._adjustVirtualIndexOffset(delta);
         }
         if (this._vidxOffset !== oldOffset) {
@@ -208,7 +208,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
           const scale = this.$.table.scrollTop / (this.$.table.scrollHeight - this.$.table.offsetHeight);
-          const offset = scale * this.size;
+          const offset = scale * this._fullSize;
           this._vidxOffset = Math.round(offset - scale * this._virtualCount);
         } else {
           // Make sure user can always swipe/wheel scroll to the start and end
@@ -229,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._noScale = true;
           }
           // At end
-          const maxOffset = this.size - this._virtualCount;
+          const maxOffset = this._fullSize - this._virtualCount;
           if (this._scrollTop >= this._maxScrollTop && this._maxScrollTop > 0) {
             this._vidxOffset = maxOffset;
             if (oldOffset !== this._vidxOffset) {

@@ -42,7 +42,7 @@
         </style>
         <input value="{{foobar::input}}">
         <label>[[foobar]]</label>
-        <vaadin-grid id="component" items="[[items]]" multi-selection column-reordering-allowed>
+        <vaadin-grid id="component" data-provider="[[hierarchicalDataProvider]]" multi-selection column-reordering-allowed>
 
           <template class="row-details">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -57,10 +57,10 @@
 
           <vaadin-grid-column width="145px" flex-grow="0" frozen resizable>
             <template>
-              [[index]] [[foobar]]
+              [[index]] <button hidden="[[!item.hasChildren]]" on-click="_toggle" item="[[item]]">Toggle</button>
             </template>
             <template class="header">
-              Index [[foobar]]
+              Index
             </template>
           </vaadin-grid-column>
 
@@ -169,16 +169,74 @@
       </template>
       <script>
         window.addEventListener('WebComponentsReady', () => {
+
+          const dataBase = [
+            {name: {first: 'foo-0', last: 'bar-0'}},
+            {name: {first: 'foo-1', last: 'bar-1'}, children: [
+              {name: {first: 'foo-1-0', last: 'bar-1-0'}, siblingCount: 3},
+              {name: {first: 'foo-1-1', last: 'bar-1-1'}, siblingCount: 3},
+              {name: {first: 'foo-1-2', last: 'bar-1-2'}, siblingCount: 3},
+            ]},
+            {name: {first: 'foo-2', last: 'bar-2'}},
+            {name: {first: 'foo-3', last: 'bar-3'}},
+          ];
+
           class XApp extends Polymer.Element {
             static get is() {
               return 'x-app';
             }
+
             static get properties() {
               return {
-                items: {
-                  value: window.users.results
+
+                hierarchicalDataProvider: {
+                  value: function() {
+                    return this.hierarchicalDataProvider.bind(this);
+                  }
+                },
+
+                expandedItems: {
+                  value: function() {
+                    return [];
+                  }
                 }
               };
+            }
+
+            hierarchicalDataProvider(params, cb) {
+              cb(this._flattened.slice(params.page * params.pageSize, params.pageSize));
+            }
+
+            get _flattened() {
+              return dataBase.reduce((prev, curr) => {
+                prev.push(curr);
+                if (curr.children) {
+                  curr.hasChildren = curr.children.length;
+                }
+                if (this.expandedItems.indexOf(curr) > -1) {
+                  prev = prev.concat(curr.children);
+                }
+                return prev;
+              }, []);
+            }
+
+            ready() {
+              super.ready();
+              this.$.component.size = dataBase.length;
+            }
+
+            _toggle(e) {
+              e.stopPropagation();
+              const item = e.target.item;
+              const index = this._flattened.indexOf(item);
+
+              if (this.expandedItems.indexOf(item) === -1) {
+                this.expandedItems.push(item);
+                this.$.component.expandIndex(index);
+              } else {
+                this.expandedItems.splice(this.expandedItems.indexOf(item), 1);
+                this.$.component.collapseIndex(index);
+              }
             }
           }
           window.customElements.define(XApp.is, XApp);
