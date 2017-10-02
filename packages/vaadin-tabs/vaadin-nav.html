@@ -1,0 +1,160 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-nav-list-mixin.html">
+
+<dom-module id="vaadin-nav">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 16px;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      :host([direction=vertical]) .vaadin-nav {
+        flex-direction: column;
+      }
+
+      .vaadin-nav-scroller {
+        flex-grow: 1;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        -ms-overflow-style: none;
+        overflow: -moz-scrollbars-none;
+      }
+
+      .vaadin-nav-scroller::-webkit-scrollbar {
+        display: none;
+      }
+
+      .prefix,
+      .suffix {
+        flex-grow: 1;
+      }
+
+      .suffix {
+        text-align: right;
+      }
+
+      .vaadin-nav {
+        display: flex;
+      }
+
+      .vaadin-nav ::slotted(*) {
+        flex: 1;
+      }
+
+      [part="left-button"],
+      [part="right-button"] {
+        opacity: 0.5;
+        padding: 3px;
+        cursor: pointer;
+      }
+
+      :host([direction="horizontal"]) [part="left-button"][hidden],
+      :host([direction="horizontal"]) [part="right-button"][hidden] {
+        visibility: hidden;
+        display: block;
+      }
+
+      [hidden] {
+        display: none;
+      }
+
+      [part="right-button"]::after {
+        content: '>';
+      }
+
+      [part="left-button"]::after {
+        content: '<';
+      }
+
+      @media screen and (max-width: 600px) {
+        :host {
+          padding-left: 0;
+          padding-right: 0;
+        }
+      }
+    </style>
+    <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
+
+    <div id="scroll" class="vaadin-nav-scroller">
+      <div class="vaadin-nav">
+        <slot></slot>
+      </div>
+    </div>
+
+    <div id="right" on-click="_scrollRight" part="right-button" hidden$="[[_rightHidden]]"></div>
+  </template>
+
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    {
+      /**
+       * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.NavListMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class VaadinNav extends Vaadin.NavListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-nav';
+        }
+
+        static get properties() {
+          return {
+            _leftHidden: Boolean,
+
+            _rightHidden: Boolean
+          };
+        }
+
+        static get observers() {
+          return ['_hideScrollButtons(items.*)'];
+        }
+
+        ready() {
+          super.ready();
+          window.addEventListener('resize', () => this._hideScrollButtons());
+          this.$.scroll.addEventListener('scroll', () => this._hideScrollButtons());
+          this._hideScrollButtons();
+          this.setAttribute('role', 'tablist');
+        }
+
+        _scrollLeft() {
+          this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
+        }
+
+        _scrollRight() {
+          this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
+        }
+
+        _hideScrollButtons() {
+          this._leftHidden = this.$.scroll.scrollLeft == 0;
+          this._rightHidden = this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth;
+        }
+      }
+
+      customElements.define(VaadinNav.is, VaadinNav);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.VaadinNav = VaadinNav;
+    }
+  </script>
+</dom-module>

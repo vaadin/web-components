@@ -1,0 +1,139 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-nav tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../vaadin-nav-item.html">
+  <link rel="import" href="../vaadin-nav.html">
+</head>
+
+<body>
+  <test-fixture id="nav">
+    <template>
+      <vaadin-nav>
+        <vaadin-nav-item>Foo</vaadin-nav-item>
+        <vaadin-nav-item>Bar</vaadin-nav-item>
+        <separator>---</separator>
+        <vaadin-nav-item>Baz</vaadin-nav-item>
+        <vaadin-nav-item>Baz</vaadin-nav-item>
+      </vaadin-nav>
+    </template>
+  </test-fixture>
+  <script>
+    function arrowDown(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+    }
+
+    function arrowRight(target) {
+      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+    }
+
+    function arrowUp(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+
+    function arrowLeft(target) {
+      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
+    }
+
+    function home(target) {
+      MockInteractions.keyDownOn(target, 36, [], 'Home');
+    }
+
+    function end(target) {
+      MockInteractions.keyDownOn(target, 35, [], 'End');
+    }
+
+    describe('vaadin-nav', () => {
+      var nav;
+
+      beforeEach(() => nav = fixture('nav'));
+
+      it('should have a correct localName', () => {
+        expect(nav.localName).to.equal('vaadin-nav');
+      });
+
+      it('should have role="tablist"', () => {
+        expect(nav.getAttribute('role')).to.equal('tablist');
+      });
+
+      it('`_navItems` should only contain vaadin-nav-items', () => {
+        expect(nav._navItems.length).to.equal(4);
+        for (const item of nav._navItems) {
+          expect(item.tagName.toLowerCase()).to.equal('vaadin-nav-item');
+        }
+      });
+
+      describe('vaadin-nav-list-mixin', () => {
+        beforeEach(() => nav._focusFirst());
+
+        it('should select first item by default', () => {
+          expect(nav._navItems[0].selected).to.be.true;
+        });
+
+        it('select an item when `selected` property is set', () => {
+          nav.selected = 2;
+          expect(nav._navItems[2].selected).to.be.true;
+        });
+
+        it('should move focus to next element on "arrow-right" keydown', () => {
+          arrowRight(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('should move focus to prev element on "arrow-left" keydown', () => {
+          arrowRight(nav);
+          arrowLeft(nav);
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('should move focus to next element on "arrow-down" keydown', () => {
+          nav.direction = 'vertical';
+          arrowDown(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('should move focus to prev element on "arrow-up" keydown', () => {
+          nav.direction = 'vertical';
+          arrowDown(nav);
+          arrowUp(nav);
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('should move focus to first element on "home" keydown', () => {
+          arrowDown(nav);
+          arrowDown(nav);
+          home(nav);
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('should move focus to last element on "end" keydown', () => {
+          arrowDown(nav);
+          arrowDown(nav);
+          end(nav);
+          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
+        });
+
+        it('if focus is in last element should move focus to first element on arrow-right', () => {
+          nav._focusLast();
+          arrowRight(nav);
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('if focus is in first element should move focus to last element on arrow-left', () => {
+          arrowLeft(nav);
+          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
+        });
+
+        it('focus loop should skip disabled items', () => {
+          nav._navItems[1].disabled = true;
+          arrowRight(nav);
+          expect(nav._navItems[2].focused).to.be.true;
+        });
+
+      });
+    });
+  </script>
+</body>

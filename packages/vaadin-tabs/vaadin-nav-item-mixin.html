@@ -1,0 +1,110 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
+   *
+   * `focused`, `active` and `focus-ring` are set as only as attributes.
+   * @polymerMixin
+   */
+  Vaadin.NavItemMixin = superClass => class VaadinItemMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * If true, the user cannot interact with this element.
+         */
+        disabled: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          observer: '_disabledChanged',
+          reflectToAttribute: true
+        },
+
+        /**
+         * If true, the button is in the selected state.
+         */
+        selected: {
+          type: Boolean,
+          value: false,
+          notify: true,
+          reflectToAttribute: true,
+          observer: '_selectedChanged'
+        }
+      };
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('focus', e => {
+        this._setFocused(true);
+      }, true);
+      this.addEventListener('blur', e => this._setFocused(false), true);
+      this.addEventListener('mousedown', e => this._setActive(this._mousedown = true));
+      this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
+      this.addEventListener('keydown', e => this._onKeydown(e));
+      this.addEventListener('keyup', e => this._onKeyup(e));
+      this.addEventListener('click', e => this._toggle());
+    }
+
+    _toggle() {
+      this.selected = !this.selected;
+      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: this.selected});
+      this.dispatchEvent(evt);
+    }
+
+    _selectedChanged(selected) {
+      this.setAttribute('aria-selected', selected);
+    }
+
+    _disabledChanged(disabled) {
+      if (disabled) {
+        this.setAttribute('aria-disabled', 'true');
+        this.blur();
+      } else {
+        this.removeAttribute('aria-disabled');
+      }
+    }
+
+    _setFocused(focused) {
+      if (focused) {
+        this.setAttribute('focused', '');
+        if (!this._mousedown) {
+          this.setAttribute('focus-ring', '');
+        }
+      } else {
+        this.removeAttribute('focused');
+        this.removeAttribute('focus-ring');
+        this._setActive(false);
+      }
+    }
+
+    _setActive(active) {
+      if (active) {
+        this.setAttribute('active', '');
+      } else {
+        this.removeAttribute('active');
+      }
+    }
+
+    _onKeydown(event) {
+      if (/^( |SpaceBar|Enter)$/.test(event.key)) {
+        event.preventDefault();
+        this._setActive(true);
+      }
+    }
+
+    _onKeyup(event) {
+      if (/^( |SpaceBar|Enter)$/.test(event.key)) {
+        this._setActive(false);
+        this._toggle();
+      }
+    }
+  };
+</script>

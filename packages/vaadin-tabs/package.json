@@ -1,12 +1,12 @@
 {
-  "name": "vaadin-tabs",
+  "name": "vaadin-nav",
   "version": "0.1.0",
-  "description": "vaadin-tabs",
-  "main": "vaadin-tabs.html",
-  "repository": "vaadin/vaadin-tabs",
+  "description": "vaadin-nav",
+  "main": "vaadin-nav.html",
+  "repository": "vaadin/vaadin-nav",
   "keywords": [
     "Vaadin",
-    "vaadin-tabs",
+    "vaadin-nav",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-tabs/issues"
+    "url": "https://github.com/vaadin/vaadin-nav/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {

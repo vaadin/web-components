@@ -1,0 +1,142 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * A mixin for `nav` elements, facilitating navigation and selection of childNodes.
+   *
+   * @polymerMixin
+   */
+  Vaadin.NavListMixin = superClass => class VaadinNavListMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * The index of the item selected in the items array
+         */
+        selected: {
+          type: Number,
+          value: 0,
+          reflectToAttribute: true,
+          notify: true,
+          observer: '_selectedChanged'
+        },
+        /**
+         * Define who items are disposed in the dom.
+         * Possible values are: `horizontal|vertical`.
+         */
+        direction: {
+          type: String,
+          value: 'horizontal',
+          reflectToAttribute: true
+        }
+      };
+    }
+
+    ready() {
+      super.ready();
+      this.addEventListener('selected', e => this._onSelected(e));
+      this.addEventListener('keydown', e => this._onKeydown(e));
+
+      this._selectedChanged(this.selected);
+    }
+
+    get focused() {
+      return this.getRootNode().activeElement;
+    }
+
+    get _navItems() {
+      return Array.from(this.childNodes).filter(e => e instanceof Vaadin.NavItemElement);
+    }
+
+    _onKeydown(event) {
+      // left/up
+      if (
+        this.direction === 'horizontal' && event.key === 'ArrowLeft' ||
+        this.direction === 'vertical' && event.key === 'ArrowUp'
+      ) {
+        this._moveFocus(true);
+        event.preventDefault();
+
+      // right/down
+      } else if (
+        this.direction === 'horizontal' && event.key === 'ArrowRight' ||
+        this.direction === 'vertical' && event.key === 'ArrowDown'
+      ) {
+        this._moveFocus();
+        event.preventDefault();
+
+      // home
+      } else if (event.key === 'Home') {
+        this._focusFirst();
+        event.preventDefault();
+
+      // end
+      } else if (event.key === 'End') {
+        this._focusLast();
+        event.preventDefault();
+      }
+    }
+
+    _focusFirst() {
+      this._focus(this._navItems.length - 1);
+      this._moveFocus();
+    }
+
+    _focusLast() {
+      this._focus(0);
+      this._moveFocus(true);
+    }
+
+    _moveFocus(reverse) {
+      const items = this._navItems;
+      const currentFocused = items.indexOf(this.focused);
+
+      let idx = currentFocused + (reverse ? -1 : 1);
+      if (idx < 0) {
+        idx = items.length - 1;
+      } else if (idx >= items.length ) {
+        idx = 0;
+      }
+      this._focus(idx);
+
+      if (this.focused.disabled) {
+        this._moveFocus(reverse);
+      }
+    }
+
+    _focus(index) {
+      const items = this._navItems;
+      items[index].focus();
+
+      for (const item of items) {
+        item.focused = false;
+      }
+      items[index].focused = true;
+    }
+
+    _selectedChanged(idx) {
+      const items = this._navItems;
+      const item = items && items[idx < 0 ? 0 : idx];
+      if (item) {
+        items.forEach(e => {
+          e.selected = e == item ? true : false;
+          e.tabIndex = e == item ? 0 : -1;
+        });
+      }
+    }
+
+    _onSelected(e) {
+      if (!e.detail) {
+        // Prevent the user to unselect the current item
+        e.target.selected = true;
+      } else {
+        this.selected = this._navItems.indexOf(e.target);
+      }
+    }
+  };
+</script>

@@ -1,0 +1,147 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-nav tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../vaadin-nav-item.html">
+  <link rel="import" href="../vaadin-item.html">
+</head>
+
+<body>
+  <test-fixture id="navItem">
+    <template>
+      <vaadin-nav-item>
+        text-content
+      </vaadin-nav-item>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="vaadinItem">
+    <template>
+      <vaadin-item>
+        <div slot="prefix">prefix-content</div>
+        <div slot="icon">icon-content</div>
+        <div>label-content</div>
+        <div slot="badge">badge-content</div>
+        <div slot="suffix">suffix-content</div>
+      </vaadin-item>
+    </template>
+  </test-fixture>
+
+  <script>
+    function space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+      MockInteractions.keyUpOn(target, 32, [], ' ');
+    }
+
+    function enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+      MockInteractions.keyUpOn(target, 13, [], 'Enter');
+    }
+
+    describe('vaadin-nav-item', () => {
+      var item;
+
+      beforeEach(() => item = fixture('navItem'));
+
+      it('should have a correct localName', () => {
+        expect(item.localName).to.be.equal('vaadin-nav-item');
+      });
+
+      it('should have a correct role', () => {
+        expect(item.getAttribute('role')).to.be.equal('tab');
+      });
+
+      it('should have an unnamed slot for content', () => {
+        const slot = item.root.querySelector('slot:not([name])');
+        const content = slot.assignedNodes()[0];
+        expect(content.nodeType).to.be.equal(3);
+        expect(content.textContent.trim()).to.be.equal('text-content');
+      });
+
+      it('should extend vaadin-nav-item-mixin', () => {
+        expect(item instanceof Vaadin.NavItemElement).to.be.true;
+      });
+
+      describe('vaadin-nav-item-mixin', () => {
+        beforeEach(() => {});
+
+        it('should not have focused attribute when not focused', () => {
+          expect(item.getAttribute('focused')).to.be.null;
+        });
+
+        it.skip('should have focused attribute when focused', () => {
+          item.focus();
+          expect(item.getAttribute('focused')).to.equal('');
+        });
+
+        it('should not have focus-ring attribute when not focused with keyboard', () => {
+          item.click();
+          expect(item.getAttribute('focus-ring')).to.be.null;
+        });
+
+        it.skip('should have focus-ring attribute when focused with keyboard', () => {
+          expect(item.getAttribute('focus-ring')).to.equal('');
+        });
+
+        it('should be selectable with mouse click', () => {
+          item.click();
+          expect(item.selected).to.be.true;
+        });
+
+        it('should be selectable with Enter key', () => {
+          enter(item);
+          expect(item.selected).to.be.true;
+        });
+
+        it('should be selectable with Space key', () => {
+          space(item);
+          expect(item.selected).to.be.true;
+        });
+
+        it('should have aria-disabled when disabled', () => {
+          item.disabled = true;
+          expect(item.getAttribute('aria-disabled')).to.equal('true');
+          item.disabled = false;
+          expect(item.getAttribute('aria-disabled')).to.be.null;
+        });
+
+        it('should be possible to unselect the current item', () => {
+          item.click();
+          item.click();
+          expect(item.selected).to.be.false;
+        });
+      });
+    });
+
+    describe('vaadin item', () => {
+      var item;
+
+      beforeEach(() => item = fixture('vaadinItem'));
+
+      it('should have a correct localName', () => {
+        expect(item.localName).to.be.equal('vaadin-item');
+      });
+
+      it('should have prefix slot', () => {
+      });
+
+      it('should have icon slot', () => {
+      });
+
+      it('should have unnamed slot for label', () => {
+      });
+
+      it('should have badge slot', () => {
+      });
+
+      it('should have suffix slot', () => {
+      });
+
+      it('should have an unnamed slot for content', () => {
+      });
+    });
+  </script>
+</body>

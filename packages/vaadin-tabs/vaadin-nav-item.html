@@ -1,0 +1,99 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-nav-item-mixin.html">
+
+<dom-module id="vaadin-nav-item-default-theme">
+  <template>
+    <style>
+      :host {
+        outline: none;
+        border: solid 1px transparent;
+        opacity: 0.8;
+        background: #e5e1e1;
+        margin: 1px;
+        white-space: nowrap;
+      }
+
+      :host([selected]) {
+        color: #2196f3f2;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      :host([focused]) {
+        border: dashed 1px grey;
+      }
+
+      :host(:hover) {
+        opacity: 1;
+      }
+
+      :host([disabled]) {
+        opacity: 0.5;
+      }
+    </style>
+    <slot>
+    </slot>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-nav-item">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      :host([hidden]) {
+        display: none;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+    </style>
+    <div id="button" type="button" part="button">
+      <slot></slot>
+    </div>
+  </template>
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    {
+      /**
+       * `<vaadin-nav-item>` is a Polymer 2 element providing an accessible and customizable tab.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.NavItemMixin
+       * @mixes Vaadin.ThemableMixin
+       */
+      class NavItemElement extends Vaadin.NavItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-nav-item';
+        }
+
+        ready() {
+          super.ready();
+          this.setAttribute('role', 'tab');
+        }
+      }
+
+      customElements.define(NavItemElement.is, NavItemElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.NavItemElement = NavItemElement;
+    }
+  </script>
+</dom-module>
