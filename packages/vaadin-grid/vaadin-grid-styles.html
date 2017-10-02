@@ -120,8 +120,14 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #outerscroller {
-        /* Needed for Android Chrome */
+        /* Needed (at least) for Android Chrome */
         z-index: 0;
+      }
+
+      #scroller:not([safari]) #outerscroller {
+        /* Needed for Android Chrome (#1020). Can't be applied to Safari
+        since it would re-introduce the sub-pixel overflow bug (#853) */
+        will-change: transform;
       }
 
       [no-scrollbars]:not([safari]) #outerscroller,
