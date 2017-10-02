@@ -16,7 +16,7 @@
         <vaadin-nav-item>Foo</vaadin-nav-item>
         <vaadin-nav-item>Bar</vaadin-nav-item>
         <separator>---</separator>
-        <vaadin-nav-item>Baz</vaadin-nav-item>
+        <vaadin-nav-item disabled>Baz</vaadin-nav-item>
         <vaadin-nav-item>Baz</vaadin-nav-item>
       </vaadin-nav>
     </template>
@@ -44,6 +44,10 @@
 
     function end(target) {
       MockInteractions.keyDownOn(target, 35, [], 'End');
+    }
+
+    function keyDownChar(target, letter, modifier) {
+      MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
     }
 
     describe('vaadin-nav', () => {
@@ -128,9 +132,36 @@
         });
 
         it('focus loop should skip disabled items', () => {
-          nav._navItems[1].disabled = true;
           arrowRight(nav);
-          expect(nav._navItems[2].focused).to.be.true;
+          arrowRight(nav);
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('should focus the next item whose first letter matches the key pressed', () => {
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('key search should be case insensitive', () => {
+          keyDownChar(nav, 'B');
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('key search should not happen if a modifier key is pressed', () => {
+          keyDownChar(nav, 'b', 'shift');
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('key search should skip disabled items', () => {
+          keyDownChar(nav, 'b');
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('focus should loop when search by first letter', () => {
+          nav._focus(nav._navItems.length - 1);
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[1].focused).to.be.true;
         });
       });
     });

@@ -54,42 +54,54 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onKeydown(event) {
-      let reverse;
+      if (event.metaKey || event.shiftKey || event.ctrlKey) {
+        return;
+      }
+
+      const items = this._navItems;
+      let position = items.indexOf(this.focused);
+      let increment, condition;
 
       if (this.direction === 'horizontal' && event.key === 'ArrowLeft' ||
           this.direction === 'vertical' && event.key === 'ArrowUp') {
-        reverse = true;
+        increment = -1;
       } else if (this.direction === 'horizontal' && event.key === 'ArrowRight' ||
          this.direction === 'vertical' && event.key === 'ArrowDown') {
-        reverse = false;
+        increment = 1;
       } else if (event.key === 'Home') {
-        this._focus(this._navItems.length - 1);
-        reverse = false;
+        position = 1;
+        increment = -1;
+        this._moveFocus(event, 1, -1);
       } else if (event.key === 'End') {
-        this._focus(0);
-        reverse = true;
+        position = this._navItems.length - 2;
+        increment = 1;
+      } else if (event.key.length == 1) {
+        increment = 1;
+        condition = (event, item) => item.textContent.toLowerCase().indexOf(event.key.toLowerCase()) == 0;
       }
 
-      if (reverse !== undefined) {
-        this._moveFocus(reverse);
-        event.preventDefault();
+      if (increment) {
+        this._moveFocus(event, items, position, increment, condition);
       }
     }
 
-    _moveFocus(reverse) {
-      const items = this._navItems;
-      const currentFocused = items.indexOf(this.focused);
+    _moveFocus(event, items, idx, increment, condition) {
+      const totalItems = items.length;
 
-      let idx = currentFocused + (reverse ? -1 : 1);
-      if (idx < 0) {
-        idx = items.length - 1;
-      } else if (idx >= items.length ) {
-        idx = 0;
-      }
-      this._focus(idx);
+      for (let i = 0; i < totalItems; i++) {
+        idx += increment;
+        if (idx < 0) {
+          idx = totalItems - 1;
+        } else if (idx >= totalItems) {
+          idx = 0;
+        }
 
-      if (this.focused.disabled) {
-        this._moveFocus(reverse);
+        const item = items[idx];
+        if (!item.disabled && (!condition || condition(event, item))) {
+          this._focus(idx);
+          event.preventDefault();
+          return;
+        }
       }
     }
 
