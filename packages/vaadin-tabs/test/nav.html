@@ -67,7 +67,7 @@
       });
 
       describe('vaadin-nav-list-mixin', () => {
-        beforeEach(() => nav._focusFirst());
+        beforeEach(() => nav._focus(0));
 
         it('should select first item by default', () => {
           expect(nav._navItems[0].selected).to.be.true;
@@ -117,7 +117,7 @@
         });
 
         it('if focus is in last element should move focus to first element on arrow-right', () => {
-          nav._focusLast();
+          nav._focus(nav._navItems.length - 1);
           arrowRight(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
@@ -132,7 +132,6 @@
           arrowRight(nav);
           expect(nav._navItems[2].focused).to.be.true;
         });
-
       });
     });
   </script>
