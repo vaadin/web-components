@@ -17,6 +17,23 @@ This program is available under Apache License Version 2.0, available at https:/
         display: block;
       }
 
+      div[hidden] {
+        display: none;
+      }
+
+      [part="file-row"] {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      [part="file-info"] {
+        display: flex;
+      }
+
+      [part="file-commands"] {
+        display: flex;
+      }
+
       [part="done-icon"],
       [part="warning-icon"],
       [part="start-button"],
@@ -45,23 +62,22 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e904";
       }
     </style>
-    <div id="row">
-
-      <div part="done-icon" complete$="[[file.complete]]"></div>
-      <div part="warning-icon" error$="[[file.error]]"></div>
-
-      <div id="meta" complete$="[[file.complete]]" error$="[[file.error]]">
-        <div id="name">[[file.name]]</div>
-        <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
-        <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+    <div part="file-row">
+      <div part="file-info">
+        <div part="done-icon" hidden$="[[!file.complete]]"></div>
+        <div part="warning-icon" hidden$="[[!file.error]]"></div>
+  
+        <div part="file-meta">
+          <div id="name">[[file.name]]</div>
+          <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
+          <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+        </div>
       </div>
-
-      <div id="commands">
+      <div part="file-commands">
         <div part="start-button" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></div>
         <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
         <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
       </div>
-
     </div>
 
     <vaadin-progress-bar
@@ -105,30 +121,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_fileChanged(file.*)',
             '_fileAborted(file.abort)'
           ]
         }
 
-        _fileChanged() {
-          //TODO IS THIS NEEDED?
-          this.$.progress.updateStyles();
-        }
-
         _fileAborted(abort) {
           if (abort) {
-            this.classList.add('fade-out')
-
-            // In case the animation doesn't trigger, just remove the file instantly.
-            var animationName = window.getComputedStyle(this).animationName;
-            if (!animationName || animationName === 'none') {
-              this._remove(); //TODO remove animation?
-            }
+            this._remove();
           }
         }
 
         _remove() {
-          this.classList.remove('fade-out');
           this.dispatchEvent(
             new CustomEvent('file-remove', {
               detail: {file: this.file}

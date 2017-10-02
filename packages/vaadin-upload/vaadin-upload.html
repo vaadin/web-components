@@ -16,34 +16,48 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
+        position: relative;
+        text-align: left;
+      }
+
+      :host(:not([nodrop])) {
+        border: 1px dashed;
+        padding: 1em;
+      }
+
+      [part="primary-buttons"] {
+        display: flex;
+      }
+
+      [part="drop-label"] {
+        display: flex;
       }
 
       [part="drop-label-icon"] {
         font-family: 'vaadin-upload-icons';
+        margin: 0 1em;
       }
 
       [part="drop-label-icon"]::before {
         content: "\e905";
       }
     </style>
-    <div id="buttons">
-      <div id="buttonsPrimary">
-        <div id="addFiles" on-click="_onAddFilesClick">
-          <slot name="add-button">
-            <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
-              [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
-            </vaadin-button>
-          </slot>
-        </div>
-        <div id="dropLabel" hidden$="[[nodrop]]">
-          <slot name="drop-label-icon">
-            <div part="drop-label-icon"></div>
-          </slot>
-          <slot name="drop-label">
-            [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
-          </slot>
-        </div>
+    <div part="primary-buttons">
+      <div on-click="_onAddFilesClick">
+        <slot name="add-button">
+          <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
+            [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
+          </vaadin-button>
+        </slot>
+      </div>
+      <div part="drop-label" hidden$="[[nodrop]]">
+        <slot name="drop-label-icon">
+          <div part="drop-label-icon"></div>
+        </slot>
+        <slot name="drop-label">
+          [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
+        </slot>
       </div>
     </div>
     <slot name="file-list">
@@ -163,7 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `elapsedStr`: Human-readable elapsed time.
              * - `remaining`: Number of seconds remaining for the upload to finish.
              * - `remainingStr`: Human-readable remaining time for the upload to finish.
-             * - `progress`: Percentage of the file already uploaded.
+             * - `progress`: Amount of the file already uploaded.
              * - `speed`: Upload speed in kB/s.
              * - `size`: File size in bytes.
              * - `totalStr`: Human-readable total size of the file.
@@ -409,7 +423,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _formatFileProgress(file) {
           return file.totalStr + ': ' +
-              file.progress + '% (' +
+              ~~(file.progress * 100) + '% (' +
               (file.loaded > 0 ?
                 this.i18n.uploading.remainingTime.prefix + file.remainingStr :
                 this.i18n.uploading.remainingTime.unknown) +
@@ -510,8 +524,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
             last = Date.now();
             const elapsed = (last - ini) / 1000;
-            const loaded = e.loaded, total = e.total, progress = ~~(loaded / total * 100);
-
+            const loaded = e.loaded, total = e.total;
+            const progress = (loaded / total).toFixed(2);
             file.loaded = loaded;
             file.progress = progress;
             file.indeterminate = loaded <= 0 || loaded >= total;
@@ -519,7 +533,7 @@ This program is available under Apache License Version 2.0, available at https:/
             if (file.error) {
               file.indeterminate = file.status = undefined;
             } else if (!file.abort) {
-              if (progress < 100) {
+              if (progress < 1) {
                 this._setStatus(file, total, loaded, elapsed);
                 stalledId = setTimeout(() => {
                   file.status = this.i18n.uploading.status.stalled;
