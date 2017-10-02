@@ -32,13 +32,13 @@
 
   <script>
     function space(target) {
-      MockInteractions.keyDownOn(target, 32);
-      MockInteractions.keyUpOn(target, 32);
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+      MockInteractions.keyUpOn(target, 32, [], ' ');
     }
 
     function enter(target) {
-      MockInteractions.keyDownOn(target, 13);
-      MockInteractions.keyUpOn(target, 13);
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+      MockInteractions.keyUpOn(target, 13, [], 'Enter');
     }
 
     describe('vaadin-nav-item', () => {
