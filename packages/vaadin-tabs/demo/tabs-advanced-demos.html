@@ -7,7 +7,34 @@
     </style>
 
     <h3>Integration with iron-pages</h3>
-    <vaadin-demo-snippet id='tabs-advanced-demos-sample-example'>
+    <vaadin-demo-snippet id='tabs-advanced-demos-integration-iron-pages'>
+      <template preserve-content>
+        <style>
+          page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+        </style>
+        <vaadin-nav selected="{{page}}">
+          <vaadin-nav-item>Page 1</vaadin-nav-item>
+          <vaadin-nav-item>Page 2</vaadin-nav-item>
+          <vaadin-nav-item>Page 3</vaadin-nav-item>
+          <vaadin-nav-item>Page 4</vaadin-nav-item>
+        </vaadin-nav>
+
+        <iron-pages selected="[[page]]">
+          <page><h3>Page 1</h3>Hello World</page>
+          <page><h3>Page 2</h3>Hi All</page>
+          <page><h3>Page 3</h3>Good Morning</page>
+          <page><h3>Page 4</h3>Welcome</page>
+        </iron-pages>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Wrapping 3rd Party Custom Items</h3>
+    <vaadin-demo-snippet id='tabs-advanced-demos-wrapping-custom-items'>
       <template preserve-content>
         <style>
           page {
@@ -32,26 +59,16 @@
             </my-custom-item>
           </vaadin-nav-item>
           <vaadin-nav-item>
-            <my-custom-item>
-              <img src="https://api.adorable.io/avatars/100/carl.png" width="100" height="100" alt="Carl" slot="icon"></img>
-              Carl
-              <span slot="badge">3</span>
-            </my-custom-item>
-          </vaadin-nav-item>
-          <vaadin-nav-item>
-            <my-custom-item>
-              <img src="https://api.adorable.io/avatars/100/josef.png" width="100" height="100" alt="Josef" slot="icon"></img>
-              Josef
-              <span slot="badge">4</span>
-            </my-custom-item>
+            <paper-icon-item>
+              <iron-icon icon="polymer" slot="item-icon"></iron-icon>
+              <paper-item-body two-line>
+                <div>(639) 111-111</div>
+                <div secondary>Mobile</div>
+              </paper-item-body>
+              <iron-icon icon="star"></iron-icon>
+            </paper-icon-item>
           </vaadin-nav-item>
         </vaadin-nav>
-        <iron-pages selected="[[page]]">
-          <page><h3>Page 1</h3>Hello World</page>
-          <page><h3>Page 2</h3>Hi All</page>
-          <page><h3>Page 3</h3>Good Morning</page>
-          <page><h3>Page 4</h3>Welcome</page>
-        </iron-pages>
       </template>
     </vaadin-demo-snippet>
   </template>

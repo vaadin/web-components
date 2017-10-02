@@ -36,6 +36,7 @@
     "iron-test-helpers": "^2.0.0",
     "vaadin-demo-helpers": "^1.0.0",
     "webcomponentsjs": "^1.0.0",
-    "web-component-tester": "^6.1.5"
+    "web-component-tester": "^6.1.5",
+    "paper-item": "^2.0.0"
   }
 }
