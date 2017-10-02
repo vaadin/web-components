@@ -109,8 +109,8 @@
         });
 
         it('should not be possible to unselect the current item', () => {
-          space(item);
-          space(item);
+          item.click();
+          item.click();
           expect(item.selected).to.be.true;
         });
       });

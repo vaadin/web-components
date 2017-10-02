@@ -42,27 +42,28 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      this.addEventListener('focus', e => this._setFocused(true), true);
+      this.addEventListener('focus', e => {
+        this._setFocused(true);
+      }, true);
       this.addEventListener('blur', e => this._setFocused(false), true);
       this.addEventListener('mousedown', e => this._setActive(this._mousedown = true));
       this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('keyup', e => this._onKeyup(e));
-      this.addEventListener('click', e => this._select());
+      this.addEventListener('click', e => this._toggle());
     }
 
-    _select() {
-      this.selected = true;
-      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true});
+    _toggle() {
+      const val = !this.selected;
+      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: val});
       this.dispatchEvent(evt);
+      if (!evt.defaultPrevented) {
+        this.selected = val;
+      }
     }
 
     _selectedChanged(selected) {
-      if (selected) {
-        this.setAttribute('aria-selected', 'true');
-      } else {
-        this.removeAttribute('aria-selected');
-      }
+      this.setAttribute('aria-selected', selected);
     }
 
     _disabledChanged(disabled) {
@@ -106,7 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // space/enter
       if (event.keyCode === 13 || event.keyCode === 32) {
         this._setActive(false);
-        this._select();
+        this._toggle();
       }
     }
   };
