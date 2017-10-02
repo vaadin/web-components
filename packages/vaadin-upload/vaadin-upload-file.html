@@ -83,7 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-progress-bar
         part="progress"
         id="progress"
-        value$="[[file.progress]]"
+        value$="[[_formatProgressValue(file.progress)]]"
         error$="[[file.error]]"
         indeterminate$="[[file.indeterminate]]"
         uploading$="[[file.uploading]]"
@@ -137,6 +137,10 @@ This program is available under Apache License Version 2.0, available at https:/
               detail: {file: this.file}
             })
           );
+        }
+
+        _formatProgressValue(progress) {
+          return progress / 100;
         }
 
         _fireFileEvent(e) {
