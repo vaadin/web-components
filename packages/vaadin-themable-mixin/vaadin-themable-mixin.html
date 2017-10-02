@@ -1,6 +1,10 @@
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
 
 <script>
+  if (Polymer && !Polymer.version.startsWith('2.')) {
+    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+  }
+
   window.Vaadin = window.Vaadin || {};
 
   /**
