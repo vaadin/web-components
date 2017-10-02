@@ -32,29 +32,6 @@ This program is available under Apache License Version 2.0, available at https:/
       ];
     }
 
-    ready() {
-      super.ready();
-      this.addEventListener('template-instance-changed', this._templateInstanceChangedSelection.bind(this));
-    }
-
-    _templateInstanceChangedSelection(e) {
-      if (e.detail.prop === 'selected') {
-        const item = e.detail.inst.item;
-        (this._isSelected(item) ? this.deselectItem : this.selectItem).call(this, item);
-
-        this.dispatchEvent(new CustomEvent('iron-announce', {
-          bubbles: true,
-          composed: true,
-          detail: {
-            text: (this._isSelected(item) ? 'Selected' : 'Deselected') + ' Row ' + (e.detail.inst.index + 1) + ' of ' + this.size
-          }
-        }));
-
-        // stop this internal event from propagating outside.
-        e.stopPropagation();
-      }
-    }
-
     _isSelected(item) {
       return this.selectedItems && this.selectedItems.indexOf(item) > -1;
     }
@@ -117,13 +94,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _selectedItemsChanged(e) {
       if (this.$.items.children.length && (e.path === 'selectedItems' || e.path === 'selectedItems.splices')) {
         Array.from(this.$.items.children).forEach(row => {
-          const selected = this._isSelected(row._item);
-          this._toggleAttribute('selected', selected, row);
-          Array.from(row.children).forEach(cell => {
-            if (cell._instance) {
-              cell._instance.selected = selected;
-            }
-          });
+          this._toggleRowSelected(row, this._isSelected(row._item));
         });
       }
     }

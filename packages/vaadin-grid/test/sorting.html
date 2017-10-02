@@ -60,7 +60,7 @@
     describe('sorting', () => {
 
       describe('sorter', () => {
-        let sorter, title, button, indicators, orderIndicator, announcer;
+        let sorter, title, button, indicators, orderIndicator;
 
         beforeEach(() => {
 
@@ -69,7 +69,6 @@
           button = sorter.querySelector('button');
           indicators = sorter.shadowRoot.querySelector('[part="indicators"]');
           orderIndicator = sorter.shadowRoot.querySelector('[part="order"]');
-          announcer = sorter.shadowRoot.querySelector('#announcer');
         });
 
         function clickSorter(sorter) {
@@ -118,111 +117,10 @@
           expect(sorter.getAttribute('direction')).to.equal('desc');
         });
 
-        it('should have aria-hidden for indicator', () => {
-          expect(indicators.getAttribute('aria-hidden')).to.equal('true');
-        });
-
         it('should prevent default on click', () => {
           const clickEvent = clickSorter(sorter);
 
           expect(clickEvent.defaultPrevented).to.be.true;
-        });
-
-        describe('announcer', () => {
-          it('should reflect direction', () => {
-            expect(announcer.textContent).to.have.string('Unsorted');
-            expect(announcer.textContent).to.not.have.string('Sorted');
-
-            sorter.direction = 'asc';
-            expect(announcer.textContent).to.have.string('Sorted');
-            expect(announcer.textContent).to.not.have.string('Unsorted');
-            expect(announcer.textContent).to.have.string('ascending');
-            expect(announcer.textContent).to.not.have.string('descending');
-
-            sorter.direction = 'desc';
-            expect(announcer.textContent).to.have.string('Sorted');
-            expect(announcer.textContent).to.not.have.string('Unsorted');
-            expect(announcer.textContent).to.have.string('descending');
-            expect(announcer.textContent).to.not.have.string('ascending');
-          });
-
-          it('should reflect order', () => {
-            sorter.direction = 'asc';
-
-            expect(announcer.textContent).to.not.have.string('Order');
-
-            sorter._order = 0;
-            expect(announcer.textContent).to.have.string('Order 1');
-
-            sorter._order = 4;
-            expect(announcer.textContent).to.have.string('Order 5');
-          });
-
-          it('should announce direction change', () => {
-            const spy = sinon.spy();
-            sorter.addEventListener('iron-announce', spy);
-
-            sorter.direction = 'asc';
-
-            sorter._debouncerDirectionAnnounce.flush();
-
-            expect(spy.callCount).to.eql(1);
-          });
-
-          it('should announce order change', () => {
-            const spy = sinon.spy();
-            sorter.addEventListener('iron-announce', spy);
-
-            sorter._order = 0;
-
-            sorter._debouncerDirectionAnnounce.flush();
-
-            expect(spy.callCount).to.eql(1);
-          });
-
-          it('should debounce direction and order changes', () => {
-            const spy = sinon.spy();
-            sorter.addEventListener('iron-announce', spy);
-
-            sorter.direction = 'asc';
-            sorter._order = 0;
-
-            sorter._debouncerDirectionAnnounce.flush();
-
-            expect(spy.callCount).to.eql(1);
-            expect(spy.args[0][0].detail.text).to.eql('Sorted ascending, Order 1.');
-          });
-        });
-      });
-
-      describe('sorter in cell content', () => {
-        let cellContent, sorter, announcer;
-
-        beforeEach(() => {
-
-          cellContent = fixture('sorter-in-cell-content');
-          sorter = cellContent.querySelector('vaadin-grid-sorter');
-          announcer = sorter.shadowRoot.querySelector('#announcer');
-        });
-
-        it('should have aria-hidden state on announcer by default', () => {
-          expect(announcer.getAttribute('aria-hidden')).to.equal('true');
-        });
-
-        it('should not have aria-hidden state on announcer after cell content receives focus', () => {
-          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
-
-          expect(announcer.getAttribute('aria-hidden')).to.equal('false');
-        });
-
-        it('should have aria-hidden state on announcer after cell content looses focus', done => {
-          cellContent.dispatchEvent(new CustomEvent('cell-focusin'));
-          cellContent.dispatchEvent(new CustomEvent('cell-focusout'));
-
-          setTimeout(() => {
-            expect(announcer.getAttribute('aria-hidden')).to.equal('true');
-            done();
-          }, 1);
         });
       });
 
@@ -486,6 +384,25 @@
 
             expect(sorterFirst.direction).to.be.null;
             expect(sorterLast.direction).to.eql('desc');
+          });
+        });
+
+        describe('accessibility', () => {
+          function getSorterCell(sorter) {
+            return sorter.parentNode.assignedSlot.parentNode;
+          }
+
+          it('should set aria-sort on cells', () => {
+            expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('ascending');
+            expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('descending');
+          });
+
+          it('should update aria-sort on sorter change', () => {
+            sorterFirst.direction = 'desc';
+            sorterLast.direction = null;
+
+            expect(getSorterCell(sorterFirst).getAttribute('aria-sort')).to.equal('descending');
+            expect(getSorterCell(sorterLast).getAttribute('aria-sort')).to.equal('none');
           });
         });
 

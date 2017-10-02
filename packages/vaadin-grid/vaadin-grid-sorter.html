@@ -81,22 +81,12 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([direction=desc]) [part="indicators"]::before {
         content: "\e902";
       }
-
-      #announcer {
-        position: absolute;
-        z-index: -1;
-        clip: rect(0, 0, 0, 0);
-        text-transform: none;
-      }
     </style>
 
     <div part="content">
       <slot></slot>
     </div>
-    <div id="announcer" aria-hidden="true">
-      <div>[[_getAriaLabel(direction, _order)]]</div>
-    </div>
-    <div part="indicators" aria-hidden="true">
+    <div part="indicators">
       <div part="order">[[_getDisplayOrder(_order)]]</div>
     </div>
 
@@ -164,28 +154,9 @@ This program is available under Apache License Version 2.0, available at https:/
               value: null
             },
 
-            _cellHasFocus: {
-              type: Boolean,
-              value: false
-            },
-
             _isConnected: {
               type: Boolean,
               value: false
-            },
-
-            _boundOnCellContentFocusin: {
-              type: Function,
-              value: function() {
-                return this._onCellContentFocusin.bind(this);
-              }
-            },
-
-            _boundOnCellContentFocusout: {
-              type: Function,
-              value: function() {
-                return this._onCellContentFocusout.bind(this);
-              }
             }
           };
         }
@@ -193,8 +164,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_pathOrDirectionChanged(path, direction, _isConnected)',
-            '_directionOrOrderChanged(direction, _order)',
-            '_cellHasFocusChanged(_cellHasFocus)'
+            '_directionOrOrderChanged(direction, _order)'
           ];
         }
 
@@ -206,43 +176,11 @@ This program is available under Apache License Version 2.0, available at https:/
         connectedCallback() {
           super.connectedCallback();
           this._isConnected = true;
-          this._cellContent = this._getClosestCellContent();
-          if (this._cellContent) {
-            this._cellContent.addEventListener('cell-focusin', this._boundOnCellContentFocusin);
-            this._cellContent.addEventListener('cell-focusout', this._boundOnCellContentFocusout);
-          }
         }
 
         disconnectedCallback() {
           super.disconnectedCallback();
           this._isConnected = false;
-          if (this._cellContent) {
-            this._cellContent.removeEventListener('cell-focusin', this._boundOnCellContentFocusin);
-            this._cellContent.removeEventListener('cell-focusout', this._boundOnCellContentFocusout);
-            this._cellContent = undefined;
-          }
-        }
-
-        _getClosestCellContent() {
-          var el = this;
-          while (el = Polymer.dom(el).parentNode) {
-            if (el.localName === 'vaadin-grid' || el === document.body) {
-              // not found
-              return null;
-            }
-            if (el.localName === 'vaadin-grid-cell-content') {
-              // found
-              return el;
-            }
-          }
-        }
-
-        _onCellContentFocusin() {
-          this._cellHasFocus = true;
-        }
-
-        _onCellContentFocusout() {
-          this._cellHasFocus = false;
         }
 
         _pathOrDirectionChanged(path, direction, isConnected) {
@@ -276,31 +214,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _getAriaLabel(direction, order) {
-          if (direction) {
-            var label = 'Sorted ';
-            label += direction === 'asc' ? 'ascending' : 'descending';
-            label += order === null ? '. ' : (', Order ' + (order + 1) + '.');
-            return label;
-          } else {
-            return 'Unsorted.';
-          }
-        }
-
         _directionOrOrderChanged(direction, order) {
           if (direction === undefined || order === undefined) {
             return;
           }
-
-          this._debouncerDirectionAnnounce = Polymer.Debouncer.debounce(this._debouncerDirectionAnnounce,
-              Polymer.Async.timeOut.after(1),
-              () => this.dispatchEvent(new CustomEvent('iron-announce', {
-                bubbles: true,
-                composed: true,
-                detail: {
-                  text: this._getAriaLabel(direction, order)
-                }
-              })));
 
           // Safari has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
@@ -310,21 +227,6 @@ This program is available under Apache License Version 2.0, available at https:/
               el.style['-webkit-backface-visibility'] = 'visible';
               el.style['-webkit-backface-visibility'] = '';
             });
-          }
-        }
-
-        _cellHasFocusChanged(cellHasFocus) {
-          // Let us hide the a11y announces when the cell content parent
-          // of the sorter does not have virtual focus. This is needed to prevent
-          // the sorter announcement on every body cell of the sortable column.
-          if (cellHasFocus) {
-            this.$.announcer.setAttribute('aria-hidden', 'false');
-          } else {
-            // Wait before hiding the label to prevent readers like NVDA from reacting
-            // to changes for the unfocused cell.
-            this._debouncerAriaHidden = Polymer.Debouncer.debounce(this._debouncerAriaHidden,
-                Polymer.Async.timeOut.after(1),
-                () => this.$.announcer.setAttribute('aria-hidden', 'true'));
           }
         }
       }
