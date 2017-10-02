@@ -13,10 +13,11 @@
   Vaadin.ThemableMixin = superClass => class VaadinThemableMixin extends superClass {
 
     static get template() {
+      const modules = Polymer.DomModule.prototype.modules;
+
       if (super.template && !this.hasOwnProperty('_memoizedThemableMixinTemplate')) {
         this._memoizedThemableMixinTemplate = super.template.cloneNode(true);
 
-        const modules = Polymer.DomModule.prototype.modules;
         let hasThemes = false;
         const defaultModuleName = this.is + '-default-theme';
 
@@ -34,8 +35,8 @@
           }
         });
 
-        if (!hasThemes) {
-          // No theme modules found, include the default module
+        if (!hasThemes && modules[defaultModuleName]) {
+          // No theme modules found, include the default module if it exists
           this.includeStyle(defaultModuleName);
         }
       }
