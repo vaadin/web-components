@@ -59,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.direction === 'horizontal' && event.key === 'ArrowLeft' ||
         this.direction === 'vertical' && event.key === 'ArrowUp'
       ) {
-        this._focusPrevious();
+        this._moveFocus(true);
         event.preventDefault();
 
       // right/down
@@ -67,7 +67,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.direction === 'horizontal' && event.key === 'ArrowRight' ||
         this.direction === 'vertical' && event.key === 'ArrowDown'
       ) {
-        this._focusNext();
+        this._moveFocus();
         event.preventDefault();
 
       // home
@@ -83,48 +83,29 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _focusFirst() {
-      this._focus(0);
-
-      if (this.focused.disabled) {
-        this._focusNext();
-      }
+      this._focus(this._navItems.length - 1);
+      this._moveFocus();
     }
 
     _focusLast() {
-      this._focus(this._navItems.length - 1);
-
-      if (this.focused.disabled) {
-        this._focusPrevious();
-      }
+      this._focus(0);
+      this._moveFocus(true);
     }
 
-    _focusPrevious() {
+    _moveFocus(reverse) {
       const items = this._navItems;
       const currentFocused = items.indexOf(this.focused);
 
-      if (currentFocused === 0) {
-        this._focus(items.length - 1);
-      } else {
-        this._focus(currentFocused - 1);
+      let idx = currentFocused + (reverse ? -1 : 1);
+      if (idx < 0) {
+        idx = items.length - 1;
+      } else if (idx >= items.length ) {
+        idx = 0;
       }
+      this._focus(idx);
 
       if (this.focused.disabled) {
-        this._focusPrevious();
-      }
-    }
-
-    _focusNext() {
-      const items = this._navItems;
-      const currentFocused = items.indexOf(this.focused);
-
-      if (currentFocused === items.length - 1) {
-        this._focus(0);
-      } else {
-        this._focus(currentFocused + 1);
-      }
-
-      if (this.focused.disabled) {
-        this._focusNext();
+        this._moveFocus(reverse);
       }
     }
 
