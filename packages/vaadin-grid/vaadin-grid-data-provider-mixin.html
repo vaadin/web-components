@@ -67,94 +67,48 @@ This program is available under Apache License Version 2.0, available at https:/
       };
     }
 
-    ready() {
-      super.ready();
-      this.addEventListener('item-changed', this._templateItemChanged.bind(this));
-    }
-
     _loadingChanged(loading) {
       this._toggleAttribute('loading', loading, this);
     }
 
-    _templateItemChanged(e) {
-      const item = e.detail.item;
-
-      // TODO: We could avoid iterating rows by fixing _physicalIndexForKey mapping
-      // in iron-list-behavior so that vidx could be used to fetch the correct row element.
-      Array.prototype.forEach.call(Polymer.dom(this.$.items).children, row => {
-        if (row.item === item) {
-          row.iterateCells(cell => {
-            // prevent _forwardInstancePath from firing duplicate `item-changed`
-            // events on all the sibling cells.
-            cell._templatizer._suppressItemChangeEvent = true;
-            cell.instance.notifyPath('item.' + e.detail.path, e.detail.value);
-            cell._templatizer._suppressItemChangeEvent = false;
-          });
-        }
+    _updateRowItem(item, el) {
+      el.children.forEach(cell => {
+        cell._instance && (cell._instance.item = item);
       });
     }
 
-    _getCachedItem(index) {
-      const page = this._getPageForIndex(index);
-
-      const p = this._cache && this._cache[page];
-
-      if (p) {
-        return p[index - page * this.pageSize];
-      } else {
-        return null;
-      }
-    }
-
     _getItem(index, el) {
-      this._virtualIndexToItem = this._virtualIndexToItem || {};
-
-      if (el.index) {
-        delete this._virtualIndexToItem[el.index];
-      }
       el.index = index;
-      this._virtualIndexToItem[el.index] = el;
-
-      const item = this._getCachedItem(index);
-      item && this._updateItem(el, item);
-      this._eagerlyLoadPages();
-      //
-      const uncachedPages = this._uncachedPagesForPhysicalItems();
-      if (uncachedPages.length > 0) {
-        this._loading = true;
-        // avoid debounce during scroll to mitigate scrollbar flickering on iOS.
-        // debouncing only when data is needed to be fetched. eager loading
-        // should somewhat prevent from getting here when scrolling slowly.
-        this._debouncerLoad = Polymer.Debouncer.debounce(
-          this._debouncerLoad,
-          Polymer.Async.timeOut.after(100),
-          () => {
-            uncachedPages.forEach(i => this._loadPage(i));
-          });
+      const item = this._cache[index];
+      if (item) {
+        this._updateItem(el, item);
+      } else {
+        const pageForIndex = this._getPageForIndex(index);
+        this._loadPage(pageForIndex);
       }
     }
 
-    _cachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] !== undefined);
-    }
-
-    _uncachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] === undefined);
-    }
-
-    _eagerlyLoadPages() {
-      const pages = this._cachedPagesForPhysicalItems().slice(0);
-
-      if (pages.length > 0) {
-        pages.sort((a, b) => a > b);
-
-        const prev = Math.max(0, pages[0] - 1);
-        const next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));
-
-        this._loadPage(prev);
-        this._loadPage(next);
-      }
-    }
+    // _cachedPagesForPhysicalItems() {
+    //   return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] !== undefined);
+    // }
+    //
+    // _uncachedPagesForPhysicalItems() {
+    //   return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] === undefined);
+    // }
+    //
+    // _eagerlyLoadPages() {
+    //   const pages = this._cachedPagesForPhysicalItems().slice(0);
+    //
+    //   if (pages.length > 0) {
+    //     pages.sort((a, b) => a > b);
+    //
+    //     const prev = Math.max(0, pages[0] - 1);
+    //     const next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));
+    //
+    //     this._loadPage(prev);
+    //     this._loadPage(next);
+    //   }
+    // }
 
     _pagesForPhysicalItems() {
       // TODO: potentially heavy operation to run first visible index,
@@ -175,53 +129,41 @@ This program is available under Apache License Version 2.0, available at https:/
         }, []);
     }
 
-    _updateItems(page, items) {
-      for (let i = 0; i < this.pageSize; i++) {
-        const index = page * this.pageSize + i;
-        const row = this._virtualIndexToItem && this._virtualIndexToItem[index];
-        if (row) {
-          this._updateItem(row, items[i]);
-
-          this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
-            Polymer.Async.timeOut.after(1), () => {
-              this._updateMetrics();
-              this._positionItems();
-              this._updateScrollerSize();
-            }
-          );
-        }
-      }
-    }
-
     _canPopulate() {
       return this._hasData;
     }
 
-    _loadPage(page, cb) {
-      cb = cb || this._updateItems.bind(this);
-      if (!this._cache[page]) {
-        // make sure same page isn't requested multiple times.
-        if (!this._pendingRequests[page] && this.dataProvider) {
-          this._pendingRequests[page] = true;
-          const params = {
-            page: page,
-            pageSize: this.pageSize,
-            sortOrders: this._mapSorters(),
-            filters: this._mapFilters()
-          };
-          this.dataProvider(params, (items) => {
-            this._cache[page] = items;
-            delete this._pendingRequests[page];
-            cb(page, items);
+    _loadPage(page) {
 
-            this._loading = this._pendingRequests.length > 0;
+      // make sure same page isn't requested multiple times.
+      if (!this._pendingRequests[page] && this.dataProvider) {
+        this._pendingRequests[page] = true;
+        const params = {
+          page: page,
+          pageSize: this.pageSize,
+          sortOrders: this._mapSorters(),
+          filters: this._mapFilters()
+        };
 
-            this._debouncerCheckSize = Polymer.Debouncer.debounce(
-              this._debouncerCheckSize,
-              Polymer.Async.timeOut.after(2000),
-              this._checkSize.bind(this));
+        this.dataProvider(params, (items) => {
+          items.forEach((item, itemsIndex) => {
+            this._cache[page * this.pageSize + itemsIndex] = item;
           });
-        }
+
+          Array.from(this.$.items.children).forEach(row => {
+            const cachedItem = this._cache[row.index];
+            if (items.indexOf(cachedItem) > -1) {
+              this._updateItem(row, cachedItem);
+            }
+          });
+
+          this._hasData = true;
+          this._increasePoolIfNeeded();
+
+          delete this._pendingRequests[page];
+
+          this._loading = this._pendingRequests.length > 0;
+        });
       }
     }
 
@@ -235,17 +177,9 @@ This program is available under Apache License Version 2.0, available at https:/
     clearCache() {
       this._cache = {};
       this._pendingRequests = {};
-      if (this._hasData) {
-        this._loading = true;
-        const firstVisiblePage = this._getPageForIndex(this._firstVisibleIndex + this._vidxOffset);
-        this._loadPage(firstVisiblePage, (page, items) => {
-          // Update items for the first visible page
-          this._updateItems(page, items);
-          // Request items for rest of the pages to be updated
-          this._eagerlyLoadPages();
-        });
-      }
-      this._flushItemsDebouncer();
+      this._hasData = false;
+      this._loading = true;
+      this._assignModels();
     }
 
     _flushItemsDebouncer() {
@@ -288,6 +222,16 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+
+      this._debouncerCheckSize = Polymer.Debouncer.debounce(
+        this._debouncerCheckSize,
+        Polymer.Async.timeOut.after(2000),
+        this._checkSize.bind(this));
+      //
+      // if (dataProvider && this.items && this.items.length) {
+      //   // Fixes possibly invalid cached lastVisibleIndex value in <iron-list>
+      //   this._scrollToIndex(this._firstVisibleIndex);
+      // }
     }
 
   };

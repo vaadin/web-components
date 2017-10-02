@@ -483,6 +483,14 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
+
+        this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
+          Polymer.Async.timeOut.after(1), () => {
+            this._updateMetrics();
+            this._positionItems();
+            this._updateScrollerSize();
+          }
+        );
       }
 
       _toggleRowDetailsOpened(row, detailsOpened) {
