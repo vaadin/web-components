@@ -108,10 +108,10 @@
           expect(item.getAttribute('aria-disabled')).to.be.null;
         });
 
-        it('should not be possible to unselect the current item', () => {
+        it('should be possible to unselect the current item', () => {
           item.click();
           item.click();
-          expect(item.selected).to.be.true;
+          expect(item.selected).to.be.false;
         });
       });
     });

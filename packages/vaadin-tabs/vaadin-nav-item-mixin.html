@@ -54,12 +54,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _toggle() {
-      const val = !this.selected;
-      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: val});
+      this.selected = !this.selected;
+      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: this.selected});
       this.dispatchEvent(evt);
-      if (!evt.defaultPrevented) {
-        this.selected = val;
-      }
     }
 
     _selectedChanged(selected) {
