@@ -50,7 +50,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get _navItems() {
-      return Array.from(this.childNodes).filter(e => e instanceof Vaadin.NavItemElement);
+      return Array.from(this.childNodes)
+        .filter(e => Vaadin.NavItemElement && e instanceof Vaadin.NavItemElement);
     }
 
     _onKeydown(event) {
