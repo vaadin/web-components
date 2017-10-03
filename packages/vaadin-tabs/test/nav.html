@@ -30,6 +30,10 @@
       MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
     }
 
+    function arrowRightIE(target) {
+      MockInteractions.keyDownOn(target, 39, [], 'Right');
+    }
+
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
     }
@@ -84,6 +88,11 @@
 
         it('should move focus to next element on "arrow-right" keydown', () => {
           arrowRight(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('should move focus with to next element on "arrow-right" keydown in IE', () => {
+          arrowRightIE(nav);
           expect(nav._navItems[1].focused).to.be.true;
         });
 
