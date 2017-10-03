@@ -71,46 +71,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Wrapping &lt;vaadin-item></h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-vaadin-items'>
-      <template preserve-content>
-        <vaadin-nav>
-          <vaadin-nav-item>
-            <vaadin-item>
-              <iron-icon icon="polymer" slot="icon"></iron-icon>
-              Foo
-              <span slot="badge">foo</span>
-            </vaadin-item>
-          </vaadin-nav-item>
-          <vaadin-nav-item>
-            <vaadin-item>
-              Bar
-              <span slot="badge">bar</span>
-            </vaadin-item>
-          </vaadin-nav-item>
-          <vaadin-nav-item>
-            <vaadin-item>
-              Baz
-              <span slot="badge">baz</span>
-            </vaadin-item>
-          </vaadin-nav-item>
-          <vaadin-nav-item disabled>
-            <vaadin-item>
-              <iron-icon icon="mail" slot="icon"></iron-icon>
-              Lorem
-              <span slot="badge">disabled</span>
-            </vaadin-item>
-          </vaadin-nav-item>
-          <vaadin-nav-item>
-            <vaadin-item>
-              Ipsum
-              <span slot="badge">ipsum</span>
-            </vaadin-item>
-          </vaadin-nav-item>
-        </vaadin-nav>
-      </template>
-    </vaadin-demo-snippet>
-
   </template>
   <script>
     class TabsBasicDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {

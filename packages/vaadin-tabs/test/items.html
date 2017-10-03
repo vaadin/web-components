@@ -6,7 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../vaadin-nav-item.html">
-  <link rel="import" href="../vaadin-item.html">
+  <link rel="import" href="../my-custom-item.html">
 </head>
 
 <body>
@@ -15,18 +15,6 @@
       <vaadin-nav-item>
         text-content
       </vaadin-nav-item>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="vaadinItem">
-    <template>
-      <vaadin-item>
-        <div slot="prefix">prefix-content</div>
-        <div slot="icon">icon-content</div>
-        <div>label-content</div>
-        <div slot="badge">badge-content</div>
-        <div slot="suffix">suffix-content</div>
-      </vaadin-item>
     </template>
   </test-fixture>
 
@@ -113,34 +101,6 @@
           item.click();
           expect(item.selected).to.be.false;
         });
-      });
-    });
-
-    describe('vaadin item', () => {
-      var item;
-
-      beforeEach(() => item = fixture('vaadinItem'));
-
-      it('should have a correct localName', () => {
-        expect(item.localName).to.be.equal('vaadin-item');
-      });
-
-      it('should have prefix slot', () => {
-      });
-
-      it('should have icon slot', () => {
-      });
-
-      it('should have unnamed slot for label', () => {
-      });
-
-      it('should have badge slot', () => {
-      });
-
-      it('should have suffix slot', () => {
-      });
-
-      it('should have an unnamed slot for content', () => {
       });
     });
   </script>
