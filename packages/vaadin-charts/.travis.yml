@@ -15,6 +15,13 @@ install:
   - npm install
   - bower install
 
+deploy:
+  - provider: script
+    script: ./.travis.deploy.sh
+    skip_cleanup: true
+    on:
+      branch: 6.0-preview
+
 before_script:
   - gulp lint
   - polymer lint --rules polymer-2 --input *.html
