@@ -37,6 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
         transform-origin: 0 50%;
         transition: transform 150ms;
         width: 100%;
+        transform: scaleX(var(--vaadin-progress-value));
       }
 
       :host(:not([value])) #foreground {
@@ -55,8 +56,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     </style>
 
-    <div id="background"></div>
-    <div id="foreground" style$="transform: scaleX([[_normalizeValue(value, min, max)]])"></div>
+    <div id="background">
+      <div id="foreground"></div>
+    </div>
 
   </template>
 
