@@ -91,7 +91,7 @@
           expect(nav._navItems[1].focused).to.be.true;
         });
 
-        it('should move focus with to next element on "arrow-right" keydown in IE', () => {
+        it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
           arrowRightIE(nav);
           expect(nav._navItems[1].focused).to.be.true;
         });
