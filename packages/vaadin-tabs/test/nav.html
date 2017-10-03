@@ -106,16 +106,13 @@
           expect(nav._navItems[0].focused).to.be.true;
         });
 
-        it('should move focus to first element on "home" keydown', () => {
-          arrowDown(nav);
-          arrowDown(nav);
+        it('should move focus to first element on "home" keydown', function(done) {
+          nav._focus(3);
           home(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
 
         it('should move focus to last element on "end" keydown', () => {
-          arrowDown(nav);
-          arrowDown(nav);
           end(nav);
           expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
         });
