@@ -76,7 +76,7 @@
   </style>
 </custom-style>
 
-<dom-module id="valo-colors">
+<dom-module id="valo-color">
   <template>
     <style>
       html {
@@ -247,3 +247,23 @@
     </style>
   </template>
 </dom-module>
+
+<!-- TODO remove before beta (https://github.com/vaadin/vaadin-valo-theme/issues/15) -->
+<dom-module id="valo-colors">
+  <template>
+    <style include="valo-color">
+      body {
+        --valo-deprecated-colors-style-module: "true";
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+document.addEventListener('WebComponentsReady', () => {
+  const deprecatedStyleModule = ShadyCSS.getComputedStyleValue(document.body, '--valo-deprecated-colors-style-module');
+  if (deprecatedStyleModule) {
+    console.warn("The “valo-colors” style module is renamed to “valo-color”. Please update your code accordingly. The deprecated “valo-colors” style module will be removed in some version before the first beta version.");
+  }
+});
+</script>
