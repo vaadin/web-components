@@ -59,29 +59,31 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       const items = this._navItems;
-      let position = items.indexOf(this.focused);
-      let increment, condition;
+      const currentIdx = items.indexOf(this.focused);
+      let idx, increment, condition;
 
       if (this.direction === 'horizontal' && event.key === 'ArrowLeft' ||
           this.direction === 'vertical' && event.key === 'ArrowUp') {
         increment = -1;
+        idx = currentIdx - 1;
       } else if (this.direction === 'horizontal' && event.key === 'ArrowRight' ||
          this.direction === 'vertical' && event.key === 'ArrowDown') {
         increment = 1;
+        idx = currentIdx + 1;
       } else if (event.key === 'Home') {
-        position = 1;
-        increment = -1;
-        this._moveFocus(event, 1, -1);
-      } else if (event.key === 'End') {
-        position = this._navItems.length - 2;
         increment = 1;
+        idx = 0;
+      } else if (event.key === 'End') {
+        increment = -1;
+        idx = this._navItems.length - 1;
       } else if (event.key.length == 1) {
         increment = 1;
+        idx = currentIdx + 1;
         condition = (event, item) => item.textContent.toLowerCase().indexOf(event.key.toLowerCase()) == 0;
       }
 
       if (increment) {
-        this._moveFocus(event, items, position, increment, condition);
+        this._moveFocus(event, items, idx, increment, condition);
       }
     }
 
@@ -89,7 +91,6 @@ This program is available under Apache License Version 2.0, available at https:/
       const totalItems = items.length;
 
       for (let i = 0; i < totalItems; i++) {
-        idx += increment;
         if (idx < 0) {
           idx = totalItems - 1;
         } else if (idx >= totalItems) {
@@ -102,6 +103,8 @@ This program is available under Apache License Version 2.0, available at https:/
           event.preventDefault();
           return;
         }
+
+        idx += increment;
       }
     }
 

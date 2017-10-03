@@ -106,15 +106,28 @@
           expect(nav._navItems[0].focused).to.be.true;
         });
 
-        it('should move focus to first element on "home" keydown', function(done) {
+        it('should move focus to first element on "home" keydown', () => {
           nav._focus(3);
           home(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
 
+        it('should move focus to second element if first is disabled on "home" keydown', () => {
+          nav._navItems[0].disabled = true;
+          nav._focus(3);
+          home(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
         it('should move focus to last element on "end" keydown', () => {
           end(nav);
-          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
+          nav._navItems[3].disabled = true;
+          end(nav);
+          expect(nav._navItems[1].focused).to.be.true;
         });
 
         it('if focus is in last element should move focus to first element on arrow-right', () => {
