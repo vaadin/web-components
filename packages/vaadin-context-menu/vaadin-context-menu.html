@@ -39,6 +39,16 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-context-menu-overlay">
   <script>
     {
+      /**
+       * The overlay element.
+       *
+       * ### Styling
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-context-menu-overlay>` parts.
+       *
+       * @memberof Vaadin
+       */
       class VaadinContextMenuOverlayElement extends Vaadin.OverlayElement {
         static get is() {
           return 'vaadin-context-menu-overlay';
@@ -69,11 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </vaadin-context-menu-overlay>
   </template>
   <script>
-    if (!Polymer.Element) {
-      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-    }
-
-    (function() {
+    {
       /**
        * ```html
        * <vaadin-context-menu>
@@ -184,6 +190,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </ul>
        * </vaadin-context-menu>
        * ```
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-context-menu-overlay>` parts.
        *
        * @memberof Vaadin
        * @mixes Polymer.GestureEventListeners
@@ -461,6 +474,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.ContextMenuElement = ContextMenuElement;
-    })();
+    }
   </script>
 </dom-module>

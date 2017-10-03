@@ -12,7 +12,12 @@ This program is available under Apache License Version 2.0, available at https:/
     <iron-media-query query="min-device-width: 750px" query-matches="{{wide}}"></iron-media-query>
   </template>
   <script>
-    (function() {
+    {
+      /**
+       * Element for internal use only.
+       *
+       * @memberof Vaadin
+       */
       class DeviceDetector extends Polymer.Element {
 
         static get is() {
@@ -70,6 +75,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.DeviceDetector = DeviceDetector;
-    })();
+    }
   </script>
 </dom-module>
