@@ -367,15 +367,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this.addEventListener('dragover', () => this._onDragover);
-          this.addEventListener('dragleave', () => this._onDragleave);
-          this.addEventListener('drop', () => this._onDrop);
-        }
-
-        disconnectedCallback() {
-          this.removeEventListener('dragover', () => this._onDragover);
-          this.removeEventListener('dragleave', () => this._onDragleave);
-          this.removeEventListener('drop', () => this._onDrop);
+          this.addEventListener('dragover', this._onDragover.bind(this));
+          this.addEventListener('dragleave', this._onDragleave.bind(this));
+          this.addEventListener('drop', this._onDrop.bind(this));
         }
 
         _formatSize(bytes) {
@@ -438,9 +432,6 @@ This program is available under Apache License Version 2.0, available at https:/
           event.preventDefault();
           if (!this.nodrop && !this._dragover) {
             this._dragoverValid = !this.maxFilesReached;
-            if (this._dragoverValid) {
-              this._dragRippleAction('down', event);
-            }
             this._dragover = true;
           }
           event.dataTransfer.dropEffect = !this._dragoverValid || this.nodrop ? 'none' : 'copy';
@@ -449,7 +440,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _onDragleave(event) {
           event.preventDefault();
           if (this._dragover && !this.nodrop) {
-            this._dragRippleAction('up', event);
             this._dragover = this._dragoverValid = false;
           }
         }
@@ -457,9 +447,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _onDrop(event) {
           if (!this.nodrop) {
             event.preventDefault();
-            this._dragRippleAction('up', event);
             this._dragover = this._dragoverValid = false;
-            this._dragRippleAction('upAction', event);
             this._addFiles(event.dataTransfer.files);
           }
         }
