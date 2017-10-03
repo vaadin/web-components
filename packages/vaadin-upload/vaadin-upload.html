@@ -24,6 +24,7 @@ This program is available under Apache License Version 2.0, available at https:/
       :host(:not([nodrop])) {
         border: 1px dashed;
         padding: 1em;
+        overflow: hidden;
       }
 
       [part="primary-buttons"] {
@@ -44,7 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <div part="primary-buttons">
-      <div on-click="_onAddFilesClick">
+      <div id="addFiles" on-click="_onAddFilesClick">
         <slot name="add-button">
           <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
             [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
@@ -55,7 +56,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot name="drop-label-icon">
           <div part="drop-label-icon"></div>
         </slot>
-        <slot name="drop-label">
+        <slot name="drop-label" id="dropLabel">
           [[_i18nPlural(maxFiles, i18n.dropFiles, i18n.dropFiles.*)]]
         </slot>
       </div>
@@ -63,13 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <slot name="file-list">
       <div id="fileList">
         <template is="dom-repeat" items="[[files]]" as="file">
-          <vaadin-upload-file
-              file="[[file]]"
-              on-file-abort="_onFileAbort"
-              on-file-remove="_onFileRemove"
-              on-file-start="_onFileStart"
-              on-file-retry="_onFileRetry">
-          </vaadin-upload-file>
+          <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
         </template>
       </div>
     </slot>
@@ -370,6 +365,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('dragover', this._onDragover.bind(this));
           this.addEventListener('dragleave', this._onDragleave.bind(this));
           this.addEventListener('drop', this._onDrop.bind(this));
+          this.addEventListener('file-retry', this._onFileRetry.bind(this));
+          this.addEventListener('file-abort', this._onFileAbort.bind(this));
+          this.addEventListener('file-remove', this._onFileRemove.bind(this));
+          this.addEventListener('file-start', this._onFileStart.bind(this));
         }
 
         _formatSize(bytes) {
@@ -740,39 +739,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onFileStart(event) {
           this._uploadFile(event.detail.file);
-          this.dispatchEvent(
-            new CustomEvent('file-start', {
-              detail: {file: event.detail.file}
-            })
-          );
         }
 
         _onFileRetry(event) {
           this._retryFileUpload(event.detail.file);
-          this.dispatchEvent(
-            new CustomEvent('file-retry', {
-              detail: {file: event.detail.file}
-            })
-          );
         }
 
         _onFileAbort(event) {
           this._abortFileUpload(event.detail.file);
-          this.dispatchEvent(
-            new CustomEvent('file-abort', {
-              detail: {file: event.detail.file}
-            })
-          );
         }
 
         _onFileRemove(event) {
           event.stopPropagation();
           this._removeFile(event.detail.file);
-          this.dispatchEvent(
-            new CustomEvent('file-remove', {
-              detail: {file: event.detail.file}
-            })
-          );
         }
 
         _dragoverChanged(dragover) {

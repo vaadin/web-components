@@ -127,8 +127,7 @@
 
           const clickSpy = sinon.spy();
           upload.$.fileInput.addEventListener('click', clickSpy);
-
-          upload.$.addFiles.dispatchEvent(new CustomEvent('tap'));
+          upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
           expect(clickSpy).not.to.be.called;
         });
 
