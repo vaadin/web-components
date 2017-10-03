@@ -36,6 +36,10 @@
         <div part="text" id="text">text</div>
       </template>
     </dom-module>
+
+    <dom-module id="test-no-theme">
+      <template></template>
+    </dom-module>
   </div>
 
   <script>
@@ -190,6 +194,20 @@
 
       it('should work with themable parent', function() {
         expect(window.getComputedStyle(components[2].$.text).width).to.equal('100px');
+      });
+
+      it('should not warn about missing default theme', function() {
+        class TestNoTheme extends Vaadin.ThemableMixin(Polymer.Element) {
+          static get is() {
+            return 'test-no-theme';
+          }
+        }
+        const spy = sinon.spy(console, 'warn');
+        customElements.define(TestNoTheme.is, TestNoTheme);
+        document.createElement(TestNoTheme.is);
+        spy.restore();
+
+        expect(spy.called).to.be.false;
       });
 
     });
