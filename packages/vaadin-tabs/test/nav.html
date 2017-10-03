@@ -69,9 +69,9 @@
 
       it('`_navItems` should only contain vaadin-nav-items', () => {
         expect(nav._navItems.length).to.equal(4);
-        for (const item of nav._navItems) {
+        nav._navItems.forEach(item => {
           expect(item.tagName.toLowerCase()).to.equal('vaadin-nav-item');
-        }
+        });
       });
 
       describe('vaadin-nav-list-mixin', () => {
