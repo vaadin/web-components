@@ -110,9 +110,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const items = this._navItems;
       items[index].focus();
 
-      for (const item of items) {
-        item.focused = false;
-      }
+      items.forEach(e => e.focused = false);
       items[index].focused = true;
     }
 
