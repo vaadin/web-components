@@ -50,46 +50,59 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get _navItems() {
-      return Array.from(this.childNodes).filter(e => e instanceof Vaadin.NavItemElement);
+      return Array.from(this.childNodes)
+        .filter(e => Vaadin.NavItemElement && e instanceof Vaadin.NavItemElement);
     }
 
     _onKeydown(event) {
-      let reverse;
-
-      if (this.direction === 'horizontal' && event.key === 'ArrowLeft' ||
-          this.direction === 'vertical' && event.key === 'ArrowUp') {
-        reverse = true;
-      } else if (this.direction === 'horizontal' && event.key === 'ArrowRight' ||
-         this.direction === 'vertical' && event.key === 'ArrowDown') {
-        reverse = false;
-      } else if (event.key === 'Home') {
-        this._focus(this._navItems.length - 1);
-        reverse = false;
-      } else if (event.key === 'End') {
-        this._focus(0);
-        reverse = true;
+      if (event.metaKey || event.shiftKey || event.ctrlKey) {
+        return;
       }
 
-      if (reverse !== undefined) {
-        this._moveFocus(reverse);
-        event.preventDefault();
-      }
-    }
-
-    _moveFocus(reverse) {
+      // IE names for arrows do not include the Arrow prefix
+      const key = event.key.replace(/^Arrow/, '');
       const items = this._navItems;
-      const currentFocused = items.indexOf(this.focused);
+      const currentIdx = items.indexOf(this.focused);
+      let condition = item => !item.disabled;
+      let idx, increment;
 
-      let idx = currentFocused + (reverse ? -1 : 1);
-      if (idx < 0) {
-        idx = items.length - 1;
-      } else if (idx >= items.length ) {
+      if (this.direction === 'horizontal' && key === 'Left' ||
+          this.direction === 'vertical' && key === 'Up') {
+        increment = -1;
+        idx = currentIdx - 1;
+      } else if (this.direction === 'horizontal' && key === 'Right' ||
+         this.direction === 'vertical' && key === 'Down') {
+        increment = 1;
+        idx = currentIdx + 1;
+      } else if (key === 'Home') {
+        increment = 1;
         idx = 0;
+      } else if (key === 'End') {
+        increment = -1;
+        idx = this._navItems.length - 1;
+      } else if (key.length == 1) {
+        increment = 1;
+        idx = currentIdx + 1;
+        condition = item => !item.disabled &&
+          item.textContent.toLowerCase().indexOf(key.toLowerCase()) === 0;
       }
-      this._focus(idx);
 
-      if (this.focused.disabled) {
-        this._moveFocus(reverse);
+      if (increment) {
+        const totalItems = items.length;
+        for (let i = 0; i < totalItems; i++, idx += increment) {
+          if (idx < 0) {
+            idx = totalItems - 1;
+          } else if (idx >= totalItems) {
+            idx = 0;
+          }
+
+          const item = items[idx];
+          if (condition(item)) {
+            this._focus(idx);
+            event.preventDefault();
+            return;
+          }
+        }
       }
     }
 
@@ -97,9 +110,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const items = this._navItems;
       items[index].focus();
 
-      for (const item of items) {
-        item.focused = false;
-      }
+      items.forEach(e => e.focused = false);
       items[index].focused = true;
     }
 
@@ -108,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const item = items && items[idx < 0 ? 0 : idx];
       if (item) {
         items.forEach(e => {
-          e.selected = e == item ? true : false;
+          e.selected = e == item;
           e.tabIndex = e == item ? 0 : -1;
         });
       }

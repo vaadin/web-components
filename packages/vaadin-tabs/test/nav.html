@@ -16,7 +16,7 @@
         <vaadin-nav-item>Foo</vaadin-nav-item>
         <vaadin-nav-item>Bar</vaadin-nav-item>
         <separator>---</separator>
-        <vaadin-nav-item>Baz</vaadin-nav-item>
+        <vaadin-nav-item disabled>Baz</vaadin-nav-item>
         <vaadin-nav-item>Baz</vaadin-nav-item>
       </vaadin-nav>
     </template>
@@ -28,6 +28,10 @@
 
     function arrowRight(target) {
       MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+    }
+
+    function arrowRightIE(target) {
+      MockInteractions.keyDownOn(target, 39, [], 'Right');
     }
 
     function arrowUp(target) {
@@ -46,6 +50,10 @@
       MockInteractions.keyDownOn(target, 35, [], 'End');
     }
 
+    function keyDownChar(target, letter, modifier) {
+      MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
+    }
+
     describe('vaadin-nav', () => {
       var nav;
 
@@ -61,9 +69,9 @@
 
       it('`_navItems` should only contain vaadin-nav-items', () => {
         expect(nav._navItems.length).to.equal(4);
-        for (const item of nav._navItems) {
+        nav._navItems.forEach(item => {
           expect(item.tagName.toLowerCase()).to.equal('vaadin-nav-item');
-        }
+        });
       });
 
       describe('vaadin-nav-list-mixin', () => {
@@ -80,6 +88,11 @@
 
         it('should move focus to next element on "arrow-right" keydown', () => {
           arrowRight(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
+          arrowRightIE(nav);
           expect(nav._navItems[1].focused).to.be.true;
         });
 
@@ -103,17 +116,27 @@
         });
 
         it('should move focus to first element on "home" keydown', () => {
-          arrowDown(nav);
-          arrowDown(nav);
+          nav._focus(3);
           home(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
 
+        it('should move focus to second element if first is disabled on "home" keydown', () => {
+          nav._navItems[0].disabled = true;
+          nav._focus(3);
+          home(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
         it('should move focus to last element on "end" keydown', () => {
-          arrowDown(nav);
-          arrowDown(nav);
           end(nav);
-          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
+          nav._navItems[3].disabled = true;
+          end(nav);
+          expect(nav._navItems[1].focused).to.be.true;
         });
 
         it('if focus is in last element should move focus to first element on arrow-right', () => {
@@ -128,9 +151,36 @@
         });
 
         it('focus loop should skip disabled items', () => {
-          nav._navItems[1].disabled = true;
           arrowRight(nav);
-          expect(nav._navItems[2].focused).to.be.true;
+          arrowRight(nav);
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('should focus the next item whose first letter matches the key pressed', () => {
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('key search should be case insensitive', () => {
+          keyDownChar(nav, 'B');
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('key search should not happen if a modifier key is pressed', () => {
+          keyDownChar(nav, 'b', 'shift');
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('key search should skip disabled items', () => {
+          keyDownChar(nav, 'b');
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[3].focused).to.be.true;
+        });
+
+        it('focus should loop when search by first letter', () => {
+          nav._focus(nav._navItems.length - 1);
+          keyDownChar(nav, 'b');
+          expect(nav._navItems[1].focused).to.be.true;
         });
       });
     });
