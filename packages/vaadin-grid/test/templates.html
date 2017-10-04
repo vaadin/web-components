@@ -20,7 +20,7 @@
     <template>
       <vaadin-grid size="10" id="grid" style="height: 300px" data-provider="[[dataProvider]]">
         <vaadin-grid-column>
-          <template>[[_format(index)]] [[parentProp]]</template>
+          <template>[[_format(index)]] [[parentProp]] [[_formatItem(item)]]</template>
           <template class="header">[[_format('header1')]] [[parentProp]]</template>
           <template class="footer">Footer</template>
         </vaadin-grid-column>
@@ -76,6 +76,9 @@
           }
           _format(value) {
             return 'foo' + value;
+          }
+          _formatItem(item) {
+            return item;
           }
           _valueChanged() {
             this.valueChanged = true;
@@ -161,6 +164,24 @@
 
         it('should work inside header templates', () => {
           expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('fooheader1');
+        });
+
+        it('should not invoke computed functions with null item', () => {
+          const spy = sinon.spy(container, '_formatItem');
+          grid.size = 1000;
+          grid._scrollToIndex(100);
+          spy.getCalls().forEach(call => {
+            expect(call.args[0]).not.to.be.null;
+          });
+        });
+
+        it('should not invoke computed functions with empty item', () => {
+          const spy = sinon.spy(container, '_formatItem');
+          grid.size = 1000;
+          grid._scrollToIndex(100);
+          spy.getCalls().forEach(call => {
+            expect(call.args[0]).not.to.be.empty;
+          });
         });
       });
 

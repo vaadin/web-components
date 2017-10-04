@@ -446,13 +446,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _updateItem(row, item) {
-        // row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
         row._item = item;
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
             if (cell._instance.item === item) {
               // Force data system to pick up subproperty changes
-              cell._instance.item = {};
+              cell._instance._setPendingProperty('item', {}, false);
             }
             cell._instance.item = item;
             cell._instance.index = row.index;
