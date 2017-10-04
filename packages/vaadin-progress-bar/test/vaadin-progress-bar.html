@@ -23,10 +23,7 @@
       it('should have proper scale', () => {
         progress.value = 0.1;
 
-        setTimeout(() => {
-          expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
-        }, 0);
-        
+        expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
       });
 
       it('should set progress-value custom variable properly', () => {
@@ -40,9 +37,7 @@
         progress.min = 10;
         progress.value = 15;
 
-        setTimeout(() => {
-          expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
-        }, 0);
+        expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
       });
 
       it('should throw an exception in case of wrong bounds', () => {

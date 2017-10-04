@@ -41,20 +41,6 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: scaleX(var(--vaadin-progress-value));
       }
 
-      :host(:not([value])) #value {
-        animation: indeterminate-progress-bar 1s infinite;
-      }
-
-      @keyframes indeterminate-progress-bar {
-        0% {
-          transform: translateX(-100%);
-        }
-
-        100% {
-          transform: translateX(100%);
-        }
-      }
-
     </style>
 
     <div id="bar">
