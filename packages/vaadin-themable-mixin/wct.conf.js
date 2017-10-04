@@ -6,6 +6,7 @@ module.exports = {
       'macOS 10.12/iphone@10.3',
       'macOS 10.12/ipad@10.3',
       'Windows 10/microsoftedge@15',
+      'Windows 10/internet explorer@11',
       'macOS 10.12/safari@10.0'
     ];
 
