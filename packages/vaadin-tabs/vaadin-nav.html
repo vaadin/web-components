@@ -53,29 +53,25 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: 1 0 auto;
       }
 
-      [part="left-button"],
-      [part="right-button"] {
+      [part="back-button"],
+      [part="forward-button"] {
         opacity: 0.5;
         padding: 3px;
         cursor: pointer;
-      }
-
-      :host(:not([vertical])) [part="left-button"][hidden],
-      :host(:not([vertical])) [part="right-button"][hidden] {
         visibility: hidden;
-        display: block;
       }
 
-      [hidden] {
-        display: none;
+      :host([overflow~="start"]) [part="back-button"],
+      :host([overflow~="end"]) [part="forward-button"] {
+        visibility: visible;
       }
 
-      [part="right-button"]::after {
-        content: '>';
-      }
-
-      [part="left-button"]::after {
+      [part="back-button"]::after {
         content: '<';
+      }
+
+      [part="forward-button"]::after {
+        content: '>';
       }
 
       @media screen and (max-width: 600px) {
@@ -85,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
-    <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
+    <div on-click="_scrollBack" part="back-button"></div>
 
     <div id="scroll" class="vaadin-nav-scroller">
       <div class="vaadin-nav">
@@ -93,7 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
     </div>
 
-    <div id="right" on-click="_scrollRight" part="right-button" hidden$="[[_rightHidden]]"></div>
+    <div on-click="_scrollForward" part="forward-button"></div>
   </template>
 
   <script>
@@ -119,33 +115,35 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-nav';
         }
 
-        static get properties() {
-          return {
-            _leftHidden: Boolean,
-
-            _rightHidden: Boolean
-          };
+        static get observers() {
+          return ['_hideScrollButtons(items.*)'];
         }
 
         ready() {
           super.ready();
-          this.addEventListener('iron-resize', () => this._hideScrollButtons());
-          this.$.scroll.addEventListener('scroll', () => this._hideScrollButtons());
-          this._hideScrollButtons();
+          window.addEventListener('resize', () => this._setOverflow());
+          this.$.scroll.addEventListener('scroll', () => this._setOverflow());
+          this._setOverflow();
           this.setAttribute('role', 'tablist');
         }
 
-        _scrollLeft() {
+        _scrollBack() {
           this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
         }
 
-        _scrollRight() {
+        _scrollForward() {
           this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
         }
 
-        _hideScrollButtons() {
-          this._leftHidden = this.$.scroll.scrollLeft == 0;
-          this._rightHidden = this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth;
+        _setOverflow() {
+          let overflow = this.$.scroll.scrollLeft != 0 ? 'start' : ''
+          overflow += this.$.scroll.scrollLeft + this.$.scroll.offsetWidth < this.$.scroll.scrollWidth ? ' end' : '';
+
+          if (overflow) {
+            this.setAttribute('overflow', overflow.trim());
+          } else {
+            this.removeAttribute('overflow');
+          }
         }
       }
 
