@@ -109,9 +109,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @mixes Vaadin.NavListMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.IronResizableBehavior
        * @demo demo/index.html
        */
-      class VaadinNav extends Vaadin.NavListMixin(Vaadin.ThemableMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
+      class VaadinNav extends
+        Vaadin.NavListMixin(
+          Vaadin.ThemableMixin(
+            Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
+
         static get is() {
           return 'vaadin-nav';
         }
