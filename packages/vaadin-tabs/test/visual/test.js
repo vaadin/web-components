@@ -1,4 +1,5 @@
-gemini.suite('vaadin-tabs', function(rootSuite) {
+gemini.suite('vaadin-nav', function(rootSuite) {
+
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -14,11 +15,31 @@ gemini.suite('vaadin-tabs', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
+  gemini.suite('horizontal-nav', (suite) => {
     suite
-      .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .setUrl('horizontal-nav.html')
+      .setCaptureElements('#horizontal-nav')
+      .capture('horizontal-nav', {}, (actions, find) => {
+        actions.wait(6000);
+      });
+  });
+
+  gemini.suite('vertical-nav', (suite) => {
+    suite
+      .setUrl('vertical-nav.html')
+      .setCaptureElements('#vertical-nav')
+      .capture('vertical-nav', {}, (actions, find) => {
+        actions.wait(6000);
+      });
+  });
+
+  gemini.suite('scrollable-nav', (suite) => {
+    suite
+      .setUrl('scrollable-nav.html')
+      .setCaptureElements('#scrollable-nav')
+      .capture('scrollable-nav', {}, (actions, find) => {
+        actions.wait(6000);
+      });
   });
 
 });
