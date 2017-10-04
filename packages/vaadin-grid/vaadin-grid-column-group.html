@@ -232,9 +232,11 @@ This program is available under Apache License Version 2.0, available at https:/
         _colSpanChanged(colSpan, headerCell, footerCell) {
           if (headerCell) {
             headerCell.setAttribute('colspan', colSpan);
+            this._grid && this._grid._a11yUpdateCellColspan(headerCell, colSpan);
           }
           if (footerCell) {
             footerCell.setAttribute('colspan', colSpan);
+            this._grid && this._grid._a11yUpdateCellColspan(footerCell, colSpan);
           }
         }
 

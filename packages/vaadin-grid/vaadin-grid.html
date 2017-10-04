@@ -17,6 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-grid-sort-mixin.html">
 <link rel="import" href="vaadin-grid-row-details-mixin.html">
 <link rel="import" href="vaadin-grid-keyboard-navigation-mixin.html">
+<link rel="import" href="vaadin-grid-a11y-mixin.html">
 <link rel="import" href="vaadin-grid-filter-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column-resizing-mixin.html">
@@ -29,7 +30,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <style include="vaadin-grid-styles"></style>
 
     <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" loading$=[[_loading]] edge$="[[_edge]]">
-      <table id="table" role="application grid">
+      <table id="table" role="grid" aria-multiselectable="true">
         <caption id="fixedsizer" class="sizer" part="row"></caption>
         <thead id="header" role="rowgroup"></thead>
         <tbody id="items" role="rowgroup"></tbody>
@@ -192,10 +193,11 @@ This program is available under Apache License Version 2.0, available at https:/
       Vaadin.Grid.SortMixin(
       Vaadin.Grid.RowDetailsMixin(
       Vaadin.Grid.KeyboardNavigationMixin(
+      Vaadin.Grid.A11yMixin(
       Vaadin.Grid.FilterMixin(
       Vaadin.Grid.ColumnReorderingMixin(
       Vaadin.Grid.ColumnResizingMixin(
-      Vaadin.Grid.ScrollerElement)))))))))))))) {
+      Vaadin.Grid.ScrollerElement))))))))))))))) {
 
       static get is() {
         return 'vaadin-grid';
@@ -203,7 +205,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_columnTreeChanged(_columnTree, _columnTree.*)',
+          '_columnTreeChanged(_columnTree, _columnTree.*)'
         ];
       }
 
@@ -282,12 +284,12 @@ This program is available under Apache License Version 2.0, available at https:/
         const slotName = 'vaadin-grid-cell-content-' + contentId;
 
         const cellContent = document.createElement('vaadin-grid-cell-content');
-
         cellContent.setAttribute('slot', slotName);
+
         const cell = document.createElement(tagName);
         cell.id = slotName.replace('-content-', '-');
         cell.setAttribute('tabindex', '-1');
-        cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader gridcell');
+        cell.setAttribute('role', tagName === 'td' ? 'gridcell' : 'columnheader');
 
         const slot = document.createElement('slot');
         slot.setAttribute('name', slotName);
@@ -347,16 +349,12 @@ This program is available under Apache License Version 2.0, available at https:/
               }
               this._configureDetailsCell(detailsCell);
               row.appendChild(detailsCell);
+              this._a11ySetRowDetailsCell(row, detailsCell);
               detailsCell._vacant = false;
             }
 
             if (column.notifyPath && !noNotify) {
               column.notifyPath('_cells.*', column._cells);
-            }
-
-            const descriptionCell = column._headerCell || column._footerCell;
-            if (descriptionCell) {
-              cell.setAttribute('aria-labelledby', `${descriptionCell.id} ${cell.id}`);
             }
           } else {
             // Header & footer
@@ -406,6 +404,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
         this._toggleAttribute('odd', index % 2, row);
+        this._a11yUpdateRowRowindex(row, index);
         this._getItem(index, row);
       }
 
@@ -442,12 +441,14 @@ This program is available under Apache License Version 2.0, available at https:/
         this._frozenCellsChanged();
         this._updateLastColumn();
         this._resetKeyboardNavigation();
+        this._a11yUpdateHeaderRows();
+        this._a11yUpdateFooterRows();
       }
 
       _updateItem(row, item) {
         // row.style.minHeight = item ? '' : this.$.scroller._physicalAverage + 'px';
         row._item = item;
-        Array.from(row.children).forEach((cell) => {
+        Array.from(row.children).forEach(cell => {
           if (cell._instance) {
             if (cell._instance.item === item) {
               // Force data system to pick up subproperty changes
@@ -455,16 +456,34 @@ This program is available under Apache License Version 2.0, available at https:/
             }
             cell._instance.item = item;
             cell._instance.index = row.index;
-            cell._instance.__expanded__ = this._isExpanded(item);
-            cell._instance.expanded = this._isExpanded(item);
-            cell._instance.__selected__ = this._isSelected(item);
-            cell._instance.selected = this._isSelected(item);
           }
         });
-        this._toggleAttribute('selected', this._isSelected(item), row);
+        this._toggleRowSelected(row, this._isSelected(item));
+        this._toggleRowExpanded(row, this._rowDetailsTemplate && this._isExpanded(item));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
+      }
+
+      _toggleRowExpanded(row, expanded) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__expanded__ = expanded;
+            cell._instance.expanded = expanded;
+          }
+        });
+        this._a11yUpdateRowExpanded(row, expanded);
+      }
+
+      _toggleRowSelected(row, selected) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__selected__ = selected;
+            cell._instance.selected = selected;
+          }
+        });
+        this._toggleAttribute('selected', selected, row);
+        this._a11yUpdateRowSelected(row, selected);
       }
 
       _resizeHandler() {

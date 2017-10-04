@@ -202,15 +202,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _updateGhost(cell) {
       const ghost = this._reorderGhost;
 
-      const sorter = cell._content.querySelector('vaadin-grid-sorter');
-      if (sorter) {
-        // Hide sorter announcer text
-        sorter.$.announcer.hidden = true;
-      }
       ghost.textContent = cell._content.innerText;
-      if (sorter) {
-        sorter.$.announcer.hidden = false;
-      }
       const style = window.getComputedStyle(cell);
       ['boxSizing', 'display', 'width', 'height', 'background', 'alignItems', 'padding', 'border', 'flex-direction', 'overflow']
         .forEach(propertyName => ghost.style[propertyName] = style[propertyName]);
