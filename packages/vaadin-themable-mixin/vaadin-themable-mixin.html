@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
 
 <script>
-  if (Polymer && !Polymer.version.startsWith('2.')) {
+  if (Polymer && Polymer.version.indexOf('2.') !== 0) {
     throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
   }
 
