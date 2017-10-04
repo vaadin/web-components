@@ -119,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const item = items && items[idx < 0 ? 0 : idx];
       if (item) {
         items.forEach(e => {
-          e.selected = e == item ? true : false;
+          e.selected = e == item;
           e.tabIndex = e == item ? 0 : -1;
         });
       }
