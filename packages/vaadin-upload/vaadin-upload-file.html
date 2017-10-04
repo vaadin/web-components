@@ -132,9 +132,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _remove() {
-          this.dispatchEvent(
+          var a = this.dispatchEvent(
             new CustomEvent('file-remove', {
-              detail: {file: this.file}
+              detail: {file: this.file},
+              bubbles: true,
+              composed: true
             })
           );
         }
@@ -148,7 +150,8 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.dispatchEvent(
             new CustomEvent(e.target.getAttribute('file-event'), {
               detail: {file: this.file},
-              bubbles: true
+              bubbles: true,
+              composed: true
             })
           );
         }
