@@ -20,7 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
       }
 
-      :host([direction=vertical]) .vaadin-nav {
+      :host([vertical]) .vaadin-nav {
         flex-direction: column;
       }
 
@@ -60,8 +60,8 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
 
-      :host([direction="horizontal"]) [part="left-button"][hidden],
-      :host([direction="horizontal"]) [part="right-button"][hidden] {
+      :host(:not([vertical])) [part="left-button"][hidden],
+      :host(:not([vertical])) [part="right-button"][hidden] {
         visibility: hidden;
         display: block;
       }
