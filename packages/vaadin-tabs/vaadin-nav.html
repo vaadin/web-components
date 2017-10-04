@@ -20,6 +20,11 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
       }
 
+      :host([vertical]) {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
       :host([vertical]) .vaadin-nav {
         flex-direction: column;
       }
@@ -30,6 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: none;
         overflow: -moz-scrollbars-none;
+        height: 100%;
       }
 
       .vaadin-nav-scroller::-webkit-scrollbar {
@@ -59,6 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
         padding: 3px;
         cursor: pointer;
         visibility: hidden;
+        text-align: center;
       }
 
       :host([overflow~="start"]) [part="back-button"],
@@ -66,12 +73,19 @@ This program is available under Apache License Version 2.0, available at https:/
         visibility: visible;
       }
 
+      :host([vertical]) [part="back-button"]::after {
+        content: '▲';
+      }
+      :host([vertical]) [part="forward-button"]::after {
+        content: '▼';
+      }
+
       [part="back-button"]::after {
-        content: '<';
+        content: '◀';
       }
 
       [part="forward-button"]::after {
-        content: '>';
+        content: '▶';
       }
 
       @media screen and (max-width: 600px) {
@@ -128,22 +142,29 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _scrollBack() {
-          this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
+          if (this.vertical) {
+            this.$.scroll.scrollTop -= this.$.scroll.offsetHeight;
+          } else {
+            this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
+          }
         }
 
         _scrollForward() {
-          this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
+          if (this.vertical) {
+            this.$.scroll.scrollTop += this.$.scroll.offsetHeight;
+          } else {
+            this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
+          }
         }
 
         _setOverflow() {
-          let overflow = this.$.scroll.scrollLeft != 0 ? 'start' : ''
-          overflow += this.$.scroll.scrollLeft + this.$.scroll.offsetWidth < this.$.scroll.scrollWidth ? ' end' : '';
+          const scrollPosition = this.vertical ? this.$.scroll.scrollTop : this.$.scroll.scrollLeft;
+          const scrollOffset = this.vertical ? this.$.scroll.offsetHeight : this.$.scroll.offsetWidth;
+          const scrollSize = this.vertical ? this.$.scroll.scrollHeight : this.$.scroll.scrollWidth;
 
-          if (overflow) {
-            this.setAttribute('overflow', overflow.trim());
-          } else {
-            this.removeAttribute('overflow');
-          }
+          let overflow = scrollPosition != 0 ? 'start' : '';
+          overflow += scrollPosition + scrollOffset < scrollSize ? ' end' : '';
+          overflow ? this.setAttribute('overflow', overflow.trim()) : this.removeAttribute('overflow');
         }
       }
 
