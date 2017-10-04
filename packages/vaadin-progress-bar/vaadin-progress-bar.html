@@ -12,9 +12,10 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        --vaadin-progress-background-color: rgba(0, 0, 0, 0.1);
-        --vaadin-progress-foreground-color: var(--primary-color, rgba(0, 0, 0, 0.5));
+        --vaadin-progress-bar-color: rgba(0, 0, 0, 0.1);
+        --vaadin-progress-value-color: var(--primary-color, rgba(0, 0, 0, 0.5));
         --vaadin-progress-line-width: 3px;
+        --vaadin-progress-value: 0;
 
         display: block;
         height: var(--vaadin-progress-line-width);
@@ -23,15 +24,15 @@ This program is available under Apache License Version 2.0, available at https:/
         position: relative;
       }
 
-      #background {
-        background: var(--vaadin-progress-background-color);
+      #bar {
+        background: var(--vaadin-progress-bar-color);
         height: 100%;
         position: absolute;
         width: 100%;
       }
 
-      #foreground {
-        background: var(--vaadin-progress-foreground-color);
+      #value {
+        background: var(--vaadin-progress-value-color);
         height: 100%;
         position: absolute;
         transform-origin: 0 50%;
@@ -40,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: scaleX(var(--vaadin-progress-value));
       }
 
-      :host(:not([value])) #foreground {
+      :host(:not([value])) #value {
         animation: indeterminate-progress-bar 1s infinite;
       }
 
@@ -56,8 +57,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     </style>
 
-    <div id="background">
-      <div id="foreground"></div>
+    <div id="bar">
+      <div id="value"></div>
     </div>
 
   </template>
@@ -71,6 +72,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * <vaadin-progress-bar>
        * </vaadin-progress-bar>
        * ```
+       *
+       * ### Styling
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|-------------
+       * `--vaadin-progress-value` | showing current progress | 0
        *
        * @memberof Vaadin
        * @mixes Vaadin.ProgressMixin

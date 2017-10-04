@@ -23,7 +23,16 @@
       it('should have proper scale', () => {
         progress.value = 0.1;
 
-        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+        setTimeout(() => {
+          expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+        }, 0);
+        
+      });
+
+      it('should set progress-value custom variable properly', () => {
+        progress.value = 0.1;
+
+        expect(progress.style.cssText).to.be.equals('--vaadin-progress-value:0.1;');
       });
 
       it('should have proper scale with custom min and max', () => {
@@ -31,7 +40,9 @@
         progress.min = 10;
         progress.value = 15;
 
-        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+        setTimeout(() => {
+          expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+        }, 0);
       });
 
       it('should throw an exception in case of wrong bounds', () => {
