@@ -70,11 +70,12 @@
           upload.style.width = '100px';
           upload._addFile(createFiles(1)[0]);
           Polymer.dom.flush();
-
           Polymer.RenderStatus.afterNextRender(upload, () => {
-            const fileListItem = getFileListItems(upload)[0];
-            expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
-            done();
+            window.requestAnimationFrame(() => {
+              const fileListItem = getFileListItems(upload)[0];
+              expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
+              done();
+            });
           });
         });
       });

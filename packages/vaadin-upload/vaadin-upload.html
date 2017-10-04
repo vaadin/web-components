@@ -755,11 +755,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _dragoverChanged(dragover) {
-          this.setAttribute('dragover', dragover);
+          dragover ? this.setAttribute('dragover', dragover) : this.removeAttribute('dragover');
         }
 
         _dragoverValidChanged(dragoverValid) {
-          this.setAttribute('dragover-valid', dragoverValid);
+          dragoverValid ? this.setAttribute('dragover-valid', dragoverValid) : this.removeAttribute('dragover-valid');
         }
 
         _i18nPlural(value, plural) {
