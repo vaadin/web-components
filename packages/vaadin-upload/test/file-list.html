@@ -71,11 +71,11 @@
           upload._addFile(createFiles(1)[0]);
           Polymer.dom.flush();
           Polymer.RenderStatus.afterNextRender(upload, () => {
-            window.requestAnimationFrame(() => {
+            setTimeout(() => { //IE11 Fix
               const fileListItem = getFileListItems(upload)[0];
               expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
               done();
-            });
+            }, 100);
           });
         });
       });
