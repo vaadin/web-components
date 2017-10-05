@@ -28,7 +28,7 @@
               themeFor.split(' ').forEach(themeForToken => {
                 if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
                   hasThemes = true;
-                  this.includeStyle(moduleName);
+                  this._includeStyle(moduleName);
                 }
               });
             }
@@ -37,13 +37,14 @@
 
         if (!hasThemes && modules[defaultModuleName]) {
           // No theme modules found, include the default module if it exists
-          this.includeStyle(defaultModuleName);
+          this._includeStyle(defaultModuleName);
         }
       }
       return this._memoizedThemableMixinTemplate;
     }
 
-    static includeStyle(moduleName) {
+    /** @private */
+    static _includeStyle(moduleName) {
       const styleEl = document.createElement('style');
       styleEl.setAttribute('include', moduleName);
       this._memoizedThemableMixinTemplate.content.appendChild(styleEl);
