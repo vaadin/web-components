@@ -12,11 +12,11 @@ gemini.suite('vaadin-upload', function(rootSuite) {
 
   rootSuite
     .before(wait)
-    // .after(goToAboutBlank);
+    .after(goToAboutBlank);
 
   gemini.suite('default-tests', function(suite) {
     suite
-      .setUrl('./default.html')
+      .setUrl('/default.html')
       .setCaptureElements('#default-tests')
       .capture('vaadin-upload');
   });
