@@ -21,7 +21,9 @@
     <demo-snippet>
       <template>
         <vaadin-overlay id="overlay1">
-          Overlay Content
+          <template>
+            Overlay Content
+          </template>
         </vaadin-overlay>
 
         <vaadin-button onclick="document.querySelector('#overlay1').opened = true">
@@ -52,35 +54,6 @@
       </template>
     </demo-snippet>
 
-    <h3>Change Overlay's Content</h3>
-    <demo-snippet>
-      <template>
-        <vaadin-overlay with-backdrop id="overlay3">
-        </vaadin-overlay>
-
-        <vaadin-button id="button">
-          Show overlay and change it's content
-        </vaadin-button>
-
-        <script>
-          document.querySelector('#button').addEventListener('click', event => {
-            var overlay = document.querySelector('#overlay3');
-            overlay.innerText = '';
-            overlay.opened = true;
-
-            var timer = 3;
-            var interval = setInterval(() => {
-              overlay.innerText = 'I will close in ' + timer;
-              if (timer-- === 0) {
-                overlay.close();
-                clearInterval(interval);
-              }
-            }, 1000);
-          });
-        </script>
-      </template>
-    </demo-snippet>
-
     <h3>Content Scrolling</h3>
     <demo-snippet>
       <template>
@@ -89,11 +62,13 @@
               max-width: 300px;
               max-height: 300px;
             ">
-          <p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos totam nulla consequuntur? Iste!</p>
-          <p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo accusamus corrupti atque dolore corrupti?</p>
-          <p>Elit ipsam error fuga voluptatum voluptates distinctio quod? Porro provident laborum et soluta enim nam blanditiis provident nulla eum eaque eius vel earum. Officiis quaerat voluptas quidem perspiciatis omnis ipsa.</p>
-          <p>Adipisicing nisi autem quod blanditiis officia blanditiis, cum. Ratione eius quia explicabo molestias iste maiores quas quod. Quia doloribus quis eius laboriosam cupiditate maxime non dignissimos adipisci unde exercitationem deserunt.</p>
-          <p>Lorem voluptate impedit qui tenetur molestiae nemo. Repellat sit repellat ratione distinctio laborum aut et numquam repellendus et dolorem aliquam molestiae voluptatum voluptas, possimus! Quaerat animi odit consequatur tempore ea.</p>
+          <template>
+            <p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos totam nulla consequuntur? Iste!</p>
+            <p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo accusamus corrupti atque dolore corrupti?</p>
+            <p>Elit ipsam error fuga voluptatum voluptates distinctio quod? Porro provident laborum et soluta enim nam blanditiis provident nulla eum eaque eius vel earum. Officiis quaerat voluptas quidem perspiciatis omnis ipsa.</p>
+            <p>Adipisicing nisi autem quod blanditiis officia blanditiis, cum. Ratione eius quia explicabo molestias iste maiores quas quod. Quia doloribus quis eius laboriosam cupiditate maxime non dignissimos adipisci unde exercitationem deserunt.</p>
+            <p>Lorem voluptate impedit qui tenetur molestiae nemo. Repellat sit repellat ratione distinctio laborum aut et numquam repellendus et dolorem aliquam molestiae voluptatum voluptas, possimus! Quaerat animi odit consequatur tempore ea.</p>
+          </template>
         </vaadin-overlay>
 
         <vaadin-button onclick="document.getElementById('overlay-scrollable').opened = true">
@@ -132,7 +107,9 @@
     </ol>
     <demo-snippet>
       <template>
-        <vaadin-overlay>I am next to the pointer</vaadin-overlay>
+        <vaadin-overlay>
+          <template>I am next to the pointer</template>
+        </vaadin-overlay>
         <vaadin-button id="button-overlay-pointer">Show the overlay next to click</vaadin-button>
         <script>
           document.getElementById('button-overlay-pointer').addEventListener('click', event => {
@@ -147,7 +124,9 @@
           });
         </script>
 
-        <vaadin-overlay>I am below the button</vaadin-overlay>
+        <vaadin-overlay>
+          <template>I am below the button</template>
+        </vaadin-overlay>
         <vaadin-button id="button-overlay-below">Show the overlay below me</vaadin-button>
         <script>
           document.getElementById('button-overlay-below').addEventListener('click', event => {
