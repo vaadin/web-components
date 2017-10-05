@@ -92,6 +92,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onTrackEvent(e) {
       if (e.detail.state === 'start') {
+        const path = e.composedPath();
+        const headerCell = path[path.indexOf(this.$.header) - 2];
+        if (!headerCell || !headerCell._content) {
+          // Not a header column
+          return;
+        }
+
+        const activeElement = this.getRootNode().activeElement;
+        if (headerCell._content.contains(this.getRootNode().activeElement)
+            && (!this._ie || !this._isFocusable(activeElement))) {
+          // Something was focused inside the cell
+          return;
+        }
+
         if (!this._touchDevice) {
           // Not a touch device
           this._onTrackStart(e);
