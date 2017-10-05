@@ -115,7 +115,8 @@ This program is available under Apache License Version 2.0, available at https:/
       el.index = index;
       this._virtualIndexToItem[el.index] = el;
 
-      this._updateItem(el, this._getCachedItem(index));
+      const item = this._getCachedItem(index);
+      item && this._updateItem(el, item);
       this._eagerlyLoadPages();
       //
       const uncachedPages = this._uncachedPagesForPhysicalItems();
