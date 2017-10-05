@@ -12,16 +12,18 @@
 <body>
   <test-fixture id="nav">
     <template>
-      <vaadin-nav>
+      <vaadin-nav style="width: 400px; height: 400px;">
         <vaadin-nav-item>Foo</vaadin-nav-item>
         <vaadin-nav-item>Bar</vaadin-nav-item>
-        <separator>---</separator>
+        <separator>___</separator>
         <vaadin-nav-item disabled>Baz</vaadin-nav-item>
         <vaadin-nav-item>Baz</vaadin-nav-item>
       </vaadin-nav>
     </template>
   </test-fixture>
   <script>
+    const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
+
     function arrowDown(target) {
       MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
     }
@@ -71,6 +73,68 @@
         expect(nav._navItems.length).to.equal(4);
         nav._navItems.forEach(item => {
           expect(item.tagName.toLowerCase()).to.equal('vaadin-nav-item');
+        });
+      });
+
+      it('should not have attribute overflow when items fit in the viewport', function(done) {
+        setTimeout(() => {
+          expect(nav.hasAttribute('overflow')).to.be.false;
+          done();
+        }, 1);
+      });
+
+      describe('Overflow', () => {
+
+        [false, true].forEach(isVertical => {
+          beforeEach(() => nav.vertical = isVertical);
+
+          describe('In large viewport', () => {
+            it(`when vertical=${isVertical} should not have overflow`, function(done) {
+              setTimeout(() => {
+                expect(nav.hasAttribute('overflow')).to.be.false;
+                done();
+              }, 10);
+            });
+          });
+
+          describe('In small viewport', () => {
+
+            // these tests pass in latest Safari but fails in previous version
+            if (safari10) {
+              return;
+            }
+
+            beforeEach(() => {
+              nav.style.width = nav.style.height = '100px';
+              nav._updateOverflow();
+            });
+
+            it(`when vertical=${isVertical} should have overflow="end" if scroll is at the beginning`, done => {
+              setTimeout(() => {
+                expect(nav.getAttribute('overflow')).to.be.equal('end');
+                done();
+              }, 10);
+            });
+
+            it(`when vertical=${isVertical} should have overflow="start end" if scroll is at the middle`, done => {
+              const listener = nav.$.scroll.addEventListener('scroll', () => {
+                expect(nav.getAttribute('overflow')).to.be.equal('start end');
+                nav.$.scroll.removeEventListener('scroll', listener);
+                done();
+              });
+              nav._scroll(2);
+            });
+
+            it(`when vertical=${isVertical} should have overflow="start" if scroll is at the end`, done => {
+              const listener = nav.$.scroll.addEventListener('scroll', () => {
+                expect(nav.getAttribute('overflow')).to.be.equal('start');
+                nav.$.scroll.removeEventListener('scroll', listener);
+                done();
+              });
+              nav._scroll(400);
+            });
+          });
+
         });
       });
 
