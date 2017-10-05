@@ -1059,7 +1059,7 @@
             pageDown();
 
             expect(grid._lastVisibleIndex).to.be.gt(1); // sanity check
-            expect(getFocusedRowIndex()).to.equal(grid._lastVisibleIndex - 1);
+            expect(getFocusedRowIndex()).to.equal(grid._lastVisibleIndex - 2);
           });
 
           it('should scroll up one page with page up', done => {
