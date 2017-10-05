@@ -112,6 +112,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     {
+      const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
+
       /**
        * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
        *
@@ -167,11 +169,19 @@ This program is available under Apache License Version 2.0, available at https:/
           overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
           overflow ? this.setAttribute('overflow', overflow.trim()) : this.removeAttribute('overflow');
 
-          // In iOS we need this to make buttons appear/dissapear
-          this.$.backButton.style.transform = 'translate3d(0, 0, 0)';
-          this.$.backButton.style.transform = 'translateZ(0)';
-          this.$.forwardButton.style.transform = 'translate3d(0, 0, 0)';
-          this.$.forwardButton.style.transform = 'translateZ(0)';
+          this._repaintShadowNodesHack();
+        }
+
+        _repaintShadowNodesHack() {
+          // Safari 10 has an issue with repainting shadow root element styles when a host attribute changes.
+          // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          if (safari10 && this.root) {
+            const WEBKIT_PROPERTY = '-webkit-backface-visibility';
+            this.root.querySelectorAll('*').forEach(el => {
+              el.style[WEBKIT_PROPERTY] = 'visible';
+              el.style[WEBKIT_PROPERTY] = '';
+            });
+          }
         }
       }
 
