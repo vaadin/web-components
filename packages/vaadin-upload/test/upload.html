@@ -53,7 +53,7 @@
         it('should fire the upload-progress event multiple times', done => {
           let count = 0;
           upload.addEventListener('upload-progress', e => {
-            let f = e.detail.file;
+            const f = e.detail.file;
             expect(e.detail.xhr).to.be.ok;
             expect(f.totalStr).to.be.equal('100 kB');
             switch (count++) {
@@ -125,7 +125,7 @@
             e.detail.file.uploadTarget = modifiedUrl;
 
             // Monkey-patch xhr.open to check the url param passed into
-            let originalOpen = e.detail.xhr.open;
+            const originalOpen = e.detail.xhr.open;
             e.detail.xhr.open = function(method, url) {
               expect(url).to.equal(modifiedUrl);
               originalOpen.apply(this, arguments);

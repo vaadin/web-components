@@ -1,5 +1,6 @@
-/* exported ios, touchDevice, ieOrEdge, describeIf, createFiles, xhrCreator */
-var ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+/* exported touchDevice, ieOrEdge, describeIf, createFiles, xhrCreator */
+
+// eslint-disable-next-line
 var touchDevice = (function() {
   try {
     document.createEvent('TouchEvent');
@@ -10,6 +11,8 @@ var touchDevice = (function() {
 })();
 var ie = /Trident/.test(navigator.userAgent);
 var edge = /Edge/.test(navigator.userAgent);
+
+// eslint-disable-next-line
 var ieOrEdge = ie || edge;
 
 var describeSkipIf = function(bool, title, callback) {
@@ -21,6 +24,7 @@ var describeSkipIf = function(bool, title, callback) {
   }
 };
 
+// eslint-disable-next-line
 var describeIf = function(bool, title, callback) {
   bool = typeof bool == 'function' ? bool() : bool;
   describeSkipIf(!bool, title, callback);
@@ -44,6 +48,7 @@ function createFile(fileSize, contentType) {
 /**
  * Creates an array of Files suitable to add to FormData.
  */
+// eslint-disable-next-line
 function createFiles(arraySize, fileSize, contentType) {
   var files = [];
   for (var i = 0; i < arraySize; i++) {
@@ -65,6 +70,7 @@ function createFiles(arraySize, fileSize, contentType) {
  *     serverType: the contentType of the serverResponse.
  *     serverValidation: a function run once the file has been sent.
  */
+// eslint-disable-next-line
 var xhrCreator = function(c) {
   c = c || {};
   var cfg = {

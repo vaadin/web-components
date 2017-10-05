@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
     </div>
     <slot name="file-list">
-      <div id="fileList">
+      <div id="fileList" part="file-list">
         <template is="dom-repeat" items="[[files]]" as="file">
           <vaadin-upload-file file="[[file]]"></vaadin-upload-file>
         </template>
@@ -86,7 +86,32 @@ This program is available under Apache License Version 2.0, available at https:/
        * <vaadin-upload></vaadin-upload>
        * ```
        *
+       * 
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `primary-buttons` | Upload container | vaadin-upload
+       * `upload-button` | Upload button | vaadin-upload
+       * `drop-label` | Label for drop indicator | vaadin-upload
+       * `drop-label-icon` | Icon for drop indicator | vaadin-upload
+       * `file-list` | File list container | vaadin-upload
+       * `file-row` | File container | vaadin-upload-file
+       * `file-info` | File info icon | vaadin-upload-file
+       * `done-icon` | File done icon | vaadin-upload-file
+       * `warning-icon` | File warning icon | vaadin-upload-file
+       * `file-meta` | Container for file status icons | vaadin-upload-file
+       * `file-commands` |  | vaadin-upload-file
+       * `start-button` | Start file upload button | vaadin-upload-file
+       * `retry-button` | Retry file upload button | vaadin-upload-file
+       * `clear-button` | Clear file button | vaadin-upload-file
+       * `progress` | Progress bar | vaadin-upload-file
+       * 
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
       class VaadinUpload extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
@@ -108,7 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
             nodrop: {
               type: Boolean,
               reflectToAttribute: true,
-              value: function () {
+              value: function() {
                 try {
                   return !!document.createEvent('TouchEvent');
                 } catch (e) {
@@ -187,7 +212,7 @@ This program is available under Apache License Version 2.0, available at https:/
             files: {
               type: Array,
               notify: true,
-              value: function () {
+              value: function() {
                 return [];
               }
             },
@@ -318,7 +343,7 @@ This program is available under Apache License Version 2.0, available at https:/
             */
             i18n: {
               type: Object,
-              value: function () {
+              value: function() {
                 return {
                   dropFiles: {
                     one: 'Drop file here...',
@@ -464,7 +489,7 @@ This program is available under Apache License Version 2.0, available at https:/
               this.headers = undefined;
             }
           }
-          for (var key in this.headers) { //TODO ES6
+          for (var key in this.headers) {
             xhr.setRequestHeader(key, this.headers[key]);
           }
           if (this.timeout) {
@@ -653,7 +678,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _notifyFileChanges(file) {
           var p = 'files.' + this.files.indexOf(file) + '.';
-          for (var i in file) { //TODO IN ES6?
+          for (var i in file) {
             if (file.hasOwnProperty(i)) {
               this.notifyPath(p + i, file[i]);
             }
@@ -719,9 +744,9 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          if (Polymer.Gestures.resetMouseCanceller) { //TODO
+          if (Polymer.Gestures.resetMouseCanceller) {
             /*
-              With Polymer v1.7.1, the ghost-click prevention cancels the synthetic
+              The ghost-click prevention cancels the synthetic
               file input click in iOS Safari. This prevents the cancelling.
 
               See also: https://github.com/Polymer/polymer/issues/4242
@@ -729,8 +754,8 @@ This program is available under Apache License Version 2.0, available at https:/
             Polymer.Gestures.resetMouseCanceller();
           }
 
-          this.$.fileInput.value = ''; //TODO
-          this.$.fileInput.click(); //TODO
+          this.$.fileInput.value = '';
+          this.$.fileInput.click();
         }
 
         _onFileInputChange(event) {
@@ -769,9 +794,113 @@ This program is available under Apache License Version 2.0, available at https:/
         _isMultiple() {
           return this.maxFiles != 1;
         }
-      }
 
-      //TODO Comments to the bottom?
+        /**
+        * Fired when a file cannot be added to the queue due to a constrain:
+        *  file-size, file-type or maxFiles
+        *
+        * @event file-reject
+        * @param {Object} detail
+        * @param {Object} detail.file the file added
+        * @param {Object} detail.error the cause
+        */
+
+        /**
+        * Fired before the XHR is opened. Could be used for changing the request
+        * URL. If the default is prevented, then XHR would not be opened.
+        *
+        * @event upload-before
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        * @param {Object} detail.file.uploadTarget the upload request URL, initialized with the value of vaadin-upload `target` property
+        */
+
+        /**
+        * Fired when the XHR has been opened but not sent yet. Useful for appending
+        * data keys to the FormData object, for changing some parameters like
+        * headers, etc. If the event is preventDefault, `vaadin-upload` will not
+        * send the request allowing the user to do something on his own.
+        *
+        * @event upload-request
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        * @param {Object} detail.formData the FormData object
+        */
+
+        /**
+        * Fired when the XHR is sent.
+        *
+        * @event upload-start
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        */
+
+        /**
+        * Fired as many times as the progress is updated.
+        *
+        * @event upload-progress
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded with loaded info
+        */
+
+        /**
+        * Fired when we have the actual server response, and before the component
+        * analyses it. It's useful for developers to make the upload fail depending
+        * on the server response. If the event is preventDefault the vaadin-upload
+        * will return allowing the user to do something on his own like retry the
+        * upload, etc. since he has full access to the `xhr` and `file` objects.
+        * Otherwise, if the event is not prevented default `vaadin-upload` continues
+        * with the normal workflow checking the `xhr.status` and `file.error`
+        * which also might be modified by the user to force a customised response.
+        *
+        * @event upload-response
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        */
+
+        /**
+        * Fired in case the upload process succeed.
+        *
+        * @event upload-success
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded with loaded info
+        */
+
+        /**
+        * Fired in case the upload process failed.
+        *
+        * @event upload-error
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        */
+
+        /**
+        * Fired when retry upload is requested. If the default is prevented, then
+        * retry would not be performed.
+        *
+        * @event upload-retry
+        * @param {Object} detail
+        * @param {Object} detail.xhr the previous upload xhr
+        * @param {Object} detail.file the file being uploaded
+        */
+
+        /**
+        * Fired when retry abort is requested. If the default is prevented, then the
+        * file upload would not be aborted.
+        *
+        * @event upload-abort
+        * @param {Object} detail
+        * @param {Object} detail.xhr the xhr
+        * @param {Object} detail.file the file being uploaded
+        */
+      }
 
       customElements.define(VaadinUpload.is, VaadinUpload);
 

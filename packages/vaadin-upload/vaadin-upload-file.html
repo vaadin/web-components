@@ -101,11 +101,9 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
        *
-       * ```
-       * <vaadin-upload-file></vaadin-upload-file>
-       * ```
-       *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
       class VaadinUploadFile extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
@@ -122,7 +120,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_fileAborted(file.abort)'
-          ]
+          ];
         }
 
         _fileAborted(abort) {
@@ -132,7 +130,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _remove() {
-          var a = this.dispatchEvent(
+          this.dispatchEvent(
             new CustomEvent('file-remove', {
               detail: {file: this.file},
               bubbles: true,
