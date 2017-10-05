@@ -7,7 +7,7 @@ port=5199
 
 # make folder (same as input, no checking!)
 mkdir ${repo}
-git clone git@github.com:$org/$repo.git --branch ${branch} --single-branch
+git clone https://github.com/$org/$repo.git --branch ${branch} --single-branch
 
 # switch to deploy branch
 pushd ${repo} >/dev/null
@@ -17,6 +17,7 @@ git checkout --orphan deploy
 git rm -rf -q .
 
 # user bower to install runtime deployment
+npm i -g bower
 bower cache clean $repo # make sure to clean cache before installing 
 git show ${branch}:bower.json > bower.json
 echo "{

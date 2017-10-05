@@ -10,7 +10,7 @@ cache:
 addons:
   firefox: latest
   google-chrome: latest
-  ssh_known_hosts: charts-demo.app.fi
+  ssh_known_hosts: app.fi
 
 install:
   - npm install
