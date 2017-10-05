@@ -20,6 +20,14 @@
 
       beforeEach(() => progress = fixture('progressBar'));
 
+      function _getPropertyValue(element, propertyName) {
+        if (window.ShadyCSS) {
+          return window.ShadyCSS.getComputedStyleValue(element, propertyName);
+        } else {
+          return window.getComputedStyle(element).getPropertyValue(propertyName);
+        }
+      }
+
       it('should have proper scale', () => {
         progress.value = 0.1;
 
@@ -29,7 +37,7 @@
       it('should set progress-value custom variable properly', () => {
         progress.value = 0.1;
 
-        expect(progress.style.cssText).to.be.equals('--vaadin-progress-value:0.1;');
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.equal('0.1');
       });
 
       it('should have proper scale with custom min and max', () => {
