@@ -1183,7 +1183,16 @@
         });
 
         it('should not activate when clicking on a native input', () => {
-          focusFirstBodyInput(0);
+          const input = focusFirstBodyInput(0);
+          input.click();
+
+          expect(grid.activeItem).to.be.null;
+        });
+
+        it('should not activate on space click on a native input', () => {
+          const input = focusFirstBodyInput(0);
+          escape(input);
+          space();
 
           expect(grid.activeItem).to.be.null;
         });
