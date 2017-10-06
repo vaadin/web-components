@@ -507,8 +507,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (this.$.items.firstElementChild) {
-        const firstVisibleIndexRow = Array.from(this.$.items.children)
-          .filter(row => row.index === this._firstVisibleIndex)[0];
+        const firstVisibleIndexRow = this._iterateItems((pidx, vidx) => {
+          if (this._firstVisibleIndex === vidx) {
+            return this.$.items.children[pidx];
+          }
+        });
         if (firstVisibleIndexRow) {
           this._itemsFocusable = firstVisibleIndexRow.firstElementChild;
         }
