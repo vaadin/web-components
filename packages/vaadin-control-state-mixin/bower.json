@@ -25,9 +25,18 @@
   ],
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^6.1.5",
+    "webcomponentsjs": "^1.0.0",
+    "vaadin-text-field": "master",
+    "vaadin-button": "master",
+    "vaadin-checkbox": "master",
+    "vaadin-combo-box": "master",
+    "vaadin-radio-button": "master"
   },
   "dependencies": {
     "polymer": "^2.0.0"
+  },
+  "resolutions": {
+    "vaadin-text-field": "master"
   }
 }
