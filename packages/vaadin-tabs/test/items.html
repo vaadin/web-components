@@ -18,14 +18,26 @@
   </test-fixture>
 
   <script>
-    function space(target) {
+    function spaceDown(target) {
       MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+
+    function spaceUp(target) {
       MockInteractions.keyUpOn(target, 32, [], ' ');
+    }
+
+    function space(target) {
+      spaceDown(target);
+      spaceUp(target);
     }
 
     function enter(target) {
       MockInteractions.keyDownOn(target, 13, [], 'Enter');
       MockInteractions.keyUpOn(target, 13, [], 'Enter');
+    }
+
+    function fire(target, type) {
+      target.dispatchEvent(new CustomEvent(type, {composed: true, bubbles: true}));
     }
 
     describe('vaadin-tab', () => {
@@ -59,9 +71,43 @@
           expect(item.hasAttribute('focused')).to.be.false;
         });
 
-        it('should have focused attribute when focused', () =>  {
-          item._setFocused(true);
+        it('should have focused attribute when focused', () => {
+          fire(item, 'focus');
           expect(item.hasAttribute('focused')).to.be.true;
+        });
+
+        it('should not have focused attribute when blurred', () => {
+          fire(item, 'focus');
+          fire(item, 'blur');
+          expect(item.hasAttribute('focused')).to.be.false;
+        });
+
+        it('should have active attribute on mousedown', () => {
+          fire(item, 'mousedown');
+          expect(item.hasAttribute('active')).to.be.true;
+          expect(item._mousedown).to.be.true;
+        });
+
+        it('should not have active attribute after mouseup', () => {
+          fire(item, 'mousedown');
+          fire(item, 'mouseup');
+          expect(item.hasAttribute('active')).to.be.false;
+          expect(item._mousedown).to.be.false;
+        });
+
+        it('should have active attribute on space down', () => {
+          spaceDown(item);
+          expect(item.hasAttribute('active')).to.be.true;
+        });
+
+        it('should not have active attribute after space up', () => {
+          spaceDown(item);
+          spaceUp(item);
+          expect(item.hasAttribute('active')).to.be.false;
+        });
+
+        it('should not have focus-ring if not focused', () => {
+          expect(item.hasAttribute('focus-ring')).to.be.false;
         });
 
         it('should not have focus-ring attribute when not focused with keyboard', () => {
@@ -70,8 +116,14 @@
         });
 
         it('should have focus-ring attribute when focused with keyboard', () => {
-          item._setFocused(true);
+          fire(item, 'focus');
           expect(item.hasAttribute('focus-ring')).to.be.true;
+        });
+
+        it('should not have focus-ring after blur', () => {
+          fire(item, 'focus');
+          fire(item, 'blur');
+          expect(item.hasAttribute('focus-ring')).to.be.false;
         });
 
         it('should be selectable with mouse click', () => {
