@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Scrollable nav visual tests</title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-tab.html">
+  <link rel="import" href="../../vaadin-tabs.html">
+</head>
+
+<body>
+  <style media="screen">
+    .capture-block {
+      display: inline-block;
+      width: 800px;
+    }
+
+    vaadin-tab {
+      text-align: center;
+      min-width: 100px;
+    }
+  </style>
+
+  <div class="capture-block" id="scrollable-tabs">
+    <vaadin-tabs selected="2">
+      <vaadin-tab>Foo-1</vaadin-tab>
+      <vaadin-tab>Bar-1</vaadin-tab>
+      <vaadin-tab>Foo-2</vaadin-tab>
+      <vaadin-tab>Bar-2</vaadin-tab>
+      <vaadin-tab>Foo-3</vaadin-tab>
+      <vaadin-tab>Bar-3</vaadin-tab>
+      <vaadin-tab>Foo-4</vaadin-tab>
+      <vaadin-tab>Bar-4</vaadin-tab>
+      <vaadin-tab>Foo-5</vaadin-tab>
+      <vaadin-tab>Bar-5</vaadin-tab>
+      <vaadin-tab>Foo-6</vaadin-tab>
+      <vaadin-tab>Bar-6</vaadin-tab>
+      <vaadin-tab>Foo-7</vaadin-tab>
+      <vaadin-tab>Bar-7</vaadin-tab>
+      <vaadin-tab>Foo-8</vaadin-tab>
+      <vaadin-tab>Bar-8</vaadin-tab>
+    </vaadin-tabs>
+
+    <vaadin-tabs selected="2" style="height: 140px" vertical>
+      <vaadin-tab>Foo-1</vaadin-tab>
+      <vaadin-tab>Bar-1</vaadin-tab>
+      <vaadin-tab>Foo-2</vaadin-tab>
+      <vaadin-tab>Bar-2</vaadin-tab>
+      <vaadin-tab>Foo-3</vaadin-tab>
+      <vaadin-tab>Bar-3</vaadin-tab>
+      <vaadin-tab>Foo-4</vaadin-tab>
+      <vaadin-tab>Bar-4</vaadin-tab>
+      <vaadin-tab>Foo-5</vaadin-tab>
+      <vaadin-tab>Bar-5</vaadin-tab>
+      <vaadin-tab>Foo-6</vaadin-tab>
+      <vaadin-tab>Bar-6</vaadin-tab>
+      <vaadin-tab>Foo-7</vaadin-tab>
+      <vaadin-tab>Bar-7</vaadin-tab>
+      <vaadin-tab>Foo-8</vaadin-tab>
+      <vaadin-tab>Bar-8</vaadin-tab>
+    </vaadin-tabs>
+  </div>
+
+</body>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>Vertical nav visual tests</title>
+  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-tab.html">
+  <link rel="import" href="../../vaadin-tabs.html">
+</head>
+
+<body>
+  <style media="screen">
+    .capture-block {
+      display: inline-block;
+      width: 800px;
+    }
+
+    vaadin-tab {
+      text-align: center;
+    }
+  </style>
+
+  <div class="capture-block" id="vertical-tabs">
+    <vaadin-tabs vertical>
+      <vaadin-tab>Foo</vaadin-tab>
+      <vaadin-tab>Bar</vaadin-tab>
+      <vaadin-tab>Baz</vaadin-tab>
+      <vaadin-tab disabled>Disabled</vaadin-tab>
+      <vaadin-tab>Ipsum</vaadin-tab>
+      <vaadin-tab>Dolor</vaadin-tab>
+    </vaadin-tabs>
+  </div>
+
+</body>

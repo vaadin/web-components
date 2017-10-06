@@ -1,4 +1,4 @@
-gemini.suite('vaadin-nav', function(rootSuite) {
+gemini.suite('vaadin-tabs', function(rootSuite) {
 
   function wait(actions, find) {
     actions.wait(5000);
@@ -15,29 +15,29 @@ gemini.suite('vaadin-nav', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('horizontal-nav', (suite) => {
+  gemini.suite('horizontal-tabs', (suite) => {
     suite
-      .setUrl('horizontal-nav.html')
-      .setCaptureElements('#horizontal-nav')
-      .capture('horizontal-nav', {}, (actions, find) => {
+      .setUrl('horizontal-tabs.html')
+      .setCaptureElements('#horizontal-tabs')
+      .capture('horizontal-tabs', {}, (actions, find) => {
         actions.wait(6000);
       });
   });
 
-  gemini.suite('vertical-nav', (suite) => {
+  gemini.suite('vertical-tabs', (suite) => {
     suite
-      .setUrl('vertical-nav.html')
-      .setCaptureElements('#vertical-nav')
-      .capture('vertical-nav', {}, (actions, find) => {
+      .setUrl('vertical-tabs.html')
+      .setCaptureElements('#vertical-tabs')
+      .capture('vertical-tabs', {}, (actions, find) => {
         actions.wait(6000);
       });
   });
 
-  gemini.suite('scrollable-nav', (suite) => {
+  gemini.suite('scrollable-tabs', (suite) => {
     suite
-      .setUrl('scrollable-nav.html')
-      .setCaptureElements('#scrollable-nav')
-      .capture('scrollable-nav', {}, (actions, find) => {
+      .setUrl('scrollable-tabs.html')
+      .setCaptureElements('#scrollable-tabs')
+      .capture('scrollable-tabs', {}, (actions, find) => {
         actions.wait(6000);
       });
   });
