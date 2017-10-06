@@ -6,7 +6,7 @@
     "url": "tabs-basic-demos",
     "src": "tabs-basic-demos.html",
     "meta": {
-      "title": "vaadin-nav Basic Examples",
+      "title": "vaadin-tabs Basic Examples",
       "description": "",
       "image": ""
      }
@@ -17,7 +17,7 @@
     "url": "tabs-advanced-demos",
     "src": "tabs-advanced-demos.html",
     "meta": {
-      "title": "vaadin-nav Advanced Examples",
+      "title": "vaadin-tabs Advanced Examples",
       "description": "",
       "image": ""
      }

@@ -7,10 +7,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="vaadin-nav-item.html">
-<link rel="import" href="vaadin-nav-list-mixin.html">
+<link rel="import" href="vaadin-tab.html">
+<link rel="import" href="vaadin-list-mixin.html">
 
-<dom-module id="vaadin-nav">
+<dom-module id="vaadin-tabs">
   <template>
     <style>
       :host {
@@ -25,11 +25,11 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: stretch;
       }
 
-      :host([vertical]) .vaadin-nav {
+      :host([vertical]) .vaadin-tabs {
         flex-direction: column;
       }
 
-      .vaadin-nav-scroller {
+      .vaadin-tabs-scroller {
         flex-grow: 1;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -37,7 +37,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: -moz-scrollbars-none;
       }
 
-      .vaadin-nav-scroller::-webkit-scrollbar {
+      .vaadin-tabs-scroller::-webkit-scrollbar {
         display: none;
       }
 
@@ -50,11 +50,11 @@ This program is available under Apache License Version 2.0, available at https:/
         text-align: right;
       }
 
-      .vaadin-nav {
+      .vaadin-tabs {
         display: flex;
       }
 
-      .vaadin-nav ::slotted(*) {
+      .vaadin-tabs ::slotted(*) {
         flex: 1 0 auto;
       }
 
@@ -97,8 +97,8 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
     <div on-click="_scrollBack" part="back-button"></div>
 
-    <div id="scroll" class="vaadin-nav-scroller">
-      <div class="vaadin-nav">
+    <div id="scroll" class="vaadin-tabs-scroller">
+      <div class="vaadin-tabs">
         <slot></slot>
       </div>
     </div>
@@ -115,20 +115,20 @@ This program is available under Apache License Version 2.0, available at https:/
       const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
 
       /**
-       * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
+       * `<vaadin-tabs>` is a Polymer 2 element for easy switching between different view
        *
        * @memberof Vaadin
-       * @mixes Vaadin.NavListMixin
+       * @mixes Vaadin.ListMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinNav extends
-        Vaadin.NavListMixin(
+      class VaadinTabs extends
+        Vaadin.ListMixin(
           Vaadin.ThemableMixin(
             Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
 
         static get is() {
-          return 'vaadin-nav';
+          return 'vaadin-tabs';
         }
 
         static get observers() {
@@ -185,13 +185,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinNav.is, VaadinNav);
+      customElements.define(VaadinTabs.is, VaadinTabs);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinNav = VaadinNav;
+      Vaadin.VaadinTabs = VaadinTabs;
     }
   </script>
 </dom-module>

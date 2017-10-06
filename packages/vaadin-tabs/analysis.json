@@ -6,7 +6,7 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-nav.html",
+        "file": "vaadin-tabs.html",
         "start": {
           "line": 176,
           "column": 6
@@ -18,9 +18,9 @@
       },
       "elements": [
         {
-          "description": "`<vaadin-nav-item>` is a Polymer 2 element providing an accessible and customizable tab.",
+          "description": "`<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.",
           "summary": "",
-          "path": "vaadin-nav-item.html",
+          "path": "vaadin-tab.html",
           "properties": [
             {
               "name": "disabled",
@@ -28,7 +28,7 @@
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 21,
                   "column": 8
@@ -53,7 +53,7 @@
               "description": "If true, the button is in the selected state.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 32,
                   "column": 8
@@ -96,7 +96,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 55,
                   "column": 4
@@ -115,7 +115,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 61,
                   "column": 4
@@ -138,7 +138,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 65,
                   "column": 4
@@ -161,7 +161,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 74,
                   "column": 4
@@ -184,7 +184,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 87,
                   "column": 4
@@ -207,7 +207,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 95,
                   "column": 4
@@ -230,7 +230,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 102,
                   "column": 4
@@ -288,13 +288,13 @@
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.NavItemElement",
+          "name": "Vaadin.TabElement",
           "attributes": [
             {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 21,
                   "column": 8
@@ -312,7 +312,7 @@
               "name": "selected",
               "description": "If true, the button is in the selected state.",
               "sourceRange": {
-                "file": "vaadin-nav-item-mixin.html",
+                "file": "vaadin-list-item-mixin.html",
                 "start": {
                   "line": 32,
                   "column": 8
@@ -337,7 +337,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-nav-item.html",
+                "file": "vaadin-tab.html",
                 "start": {
                   "line": 62,
                   "column": 6
@@ -349,16 +349,16 @@
               }
             }
           ],
-          "tagname": "vaadin-nav-item",
+          "tagname": "vaadin-tab",
           "mixins": [
             "Vaadin.NavItemMixin",
             "Vaadin.ThemableMixin"
           ]
         },
         {
-          "description": "`<vaadin-nav>` is a Polymer 2 element for easy switching between different view",
+          "description": "`<vaadin-tabs>` is a Polymer 2 element for easy switching between different view",
           "summary": "",
-          "path": "vaadin-nav.html",
+          "path": "vaadin-tabs.html",
           "properties": [
             {
               "name": "selected",
@@ -366,7 +366,7 @@
               "description": "The index of the item selected in the items array",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 20,
                   "column": 8
@@ -391,7 +391,7 @@
               "description": "When true changes the disposition of items in dom from horizontal\nto vertical.\nIt also changes navigation keys from left/right to up/down.",
               "privacy": "public",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 32,
                   "column": 8
@@ -431,7 +431,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 57,
                   "column": 4
@@ -454,7 +454,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 107,
                   "column": 4
@@ -477,7 +477,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 115,
                   "column": 4
@@ -500,7 +500,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 126,
                   "column": 4
@@ -635,13 +635,13 @@
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.VaadinNav",
+          "name": "Vaadin.VaadinTabs",
           "attributes": [
             {
               "name": "selected",
               "description": "The index of the item selected in the items array",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 20,
                   "column": 8
@@ -659,7 +659,7 @@
               "name": "vertical",
               "description": "When true changes the disposition of items in dom from horizontal\nto vertical.\nIt also changes navigation keys from left/right to up/down.",
               "sourceRange": {
-                "file": "vaadin-nav-list-mixin.html",
+                "file": "vaadin-list-mixin.html",
                 "start": {
                   "line": 32,
                   "column": 8
@@ -684,7 +684,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-nav.html",
+                "file": "vaadin-tabs.html",
                 "start": {
                   "line": 99,
                   "column": 8
@@ -696,7 +696,7 @@
               }
             }
           ],
-          "tagname": "vaadin-nav",
+          "tagname": "vaadin-tabs",
           "mixins": [
             "Vaadin.NavListMixin",
             "Vaadin.ThemableMixin"
@@ -707,7 +707,7 @@
         {
           "description": "A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.\n\n`focused`, `active` and `focus-ring` are set as only as attributes.",
           "summary": "",
-          "path": "vaadin-nav-item-mixin.html",
+          "path": "vaadin-list-item-mixin.html",
           "properties": [
             {
               "name": "disabled",
@@ -977,7 +977,7 @@
         {
           "description": "A mixin for `nav` elements, facilitating navigation and selection of childNodes.",
           "summary": "",
-          "path": "vaadin-nav-list-mixin.html",
+          "path": "vaadin-list-mixin.html",
           "properties": [
             {
               "name": "selected",
