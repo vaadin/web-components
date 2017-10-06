@@ -53,18 +53,6 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * If true, the element currently has focus.
-         */
-        focused: {
-          type: Boolean,
-          value: false,
-          notify: true,
-          readOnly: true,
-          observer: '_focusedChanged',
-          reflectToAttribute: true
-        },
-
-        /**
          * Stores the previous value of tabindex attribute of the disabled element
          */
         _previousTabIndex: {
@@ -111,7 +99,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       });
 
-      if (this.autofocus && !this.focused && !this.disabled) {
+      if (this.autofocus && !this.disabled) {
         window.requestAnimationFrame(() => {
           this._focus();
           this._setFocused(true);
@@ -135,16 +123,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       document.body.removeEventListener('keydown', this._boundKeydownListener, true);
       document.body.removeEventListener('keyup', this._boundKeyupListener, true);
-    }
-
-    _focusedChanged(focused) {
-      // focus-ring is true when the element was focused from the keyboard.
-      // Focus Ring [A11ycasts]: https://youtu.be/ilj2P5-5CjI
-      if (this.focused && this._tabPressed) {
-        this.setAttribute('focus-ring', '');
-      } else {
-        this.removeAttribute('focus-ring');
-      }
     }
 
     _bodyKeydownListener(e) {
@@ -171,6 +149,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this.focusElement.focus();
       this._setFocused(true);
+    }
+
+    _setFocused(status) {
+      if (status) {
+        this.setAttribute('focused', '');
+        this._tabPressed && this.setAttribute('focus-ring', '');
+      } else {
+        this.removeAttribute('focused');
+        this.removeAttribute('focus-ring');
+      }
     }
 
     /**
