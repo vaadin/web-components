@@ -20,7 +20,12 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
       }
 
-      :host([direction=vertical]) .vaadin-nav {
+      :host([vertical]) {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      :host([vertical]) .vaadin-nav {
         flex-direction: column;
       }
 
@@ -53,29 +58,34 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: 1 0 auto;
       }
 
-      [part="left-button"],
-      [part="right-button"] {
+      [part="back-button"],
+      [part="forward-button"] {
         opacity: 0.5;
         padding: 3px;
         cursor: pointer;
-      }
-
-      :host([direction="horizontal"]) [part="left-button"][hidden],
-      :host([direction="horizontal"]) [part="right-button"][hidden] {
         visibility: hidden;
-        display: block;
+        text-align: center;
       }
 
-      [hidden] {
-        display: none;
+      :host([overflow~="start"]) [part="back-button"],
+      :host([overflow~="end"]) [part="forward-button"] {
+        visibility: visible;
       }
 
-      [part="right-button"]::after {
-        content: '>';
+      :host([vertical]) [part="back-button"]::after {
+        content: '▲';
       }
 
-      [part="left-button"]::after {
-        content: '<';
+      :host([vertical]) [part="forward-button"]::after {
+        content: '▼';
+      }
+
+      [part="back-button"]::after {
+        content: '◀';
+      }
+
+      [part="forward-button"]::after {
+        content: '▶';
       }
 
       @media screen and (max-width: 600px) {
@@ -85,7 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
     </style>
-    <div on-click="_scrollLeft" part="left-button" hidden$="[[_leftHidden]]"></div>
+    <div on-click="_scrollBack" part="back-button"></div>
 
     <div id="scroll" class="vaadin-nav-scroller">
       <div class="vaadin-nav">
@@ -93,7 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
     </div>
 
-    <div id="right" on-click="_scrollRight" part="right-button" hidden$="[[_rightHidden]]"></div>
+    <div on-click="_scrollForward" part="forward-button"></div>
   </template>
 
   <script>
@@ -102,6 +112,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     {
+      const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
+
       /**
        * `<vaadin-nav>` is a Polymer 2 element for easy switching between different view
        *
@@ -119,33 +131,57 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-nav';
         }
 
-        static get properties() {
-          return {
-            _leftHidden: Boolean,
-
-            _rightHidden: Boolean
-          };
+        static get observers() {
+          return ['_updateOverflow(items.*, vertical)'];
         }
 
         ready() {
           super.ready();
-          this.addEventListener('iron-resize', () => this._hideScrollButtons());
-          this.$.scroll.addEventListener('scroll', () => this._hideScrollButtons());
-          this._hideScrollButtons();
+          this.addEventListener('iron-resize', () => this._updateOverflow());
+          this.$.scroll.addEventListener('scroll', () => this._updateOverflow());
+          this._updateOverflow();
           this.setAttribute('role', 'tablist');
         }
 
-        _scrollLeft() {
-          this.$.scroll.scrollLeft -= this.$.scroll.offsetWidth;
+        _scrollForward() {
+          this._scroll(this._scrollOffset);
         }
 
-        _scrollRight() {
-          this.$.scroll.scrollLeft += this.$.scroll.offsetWidth;
+        _scrollBack() {
+          this._scroll(-1 * this._scrollOffset);
         }
 
-        _hideScrollButtons() {
-          this._leftHidden = this.$.scroll.scrollLeft == 0;
-          this._rightHidden = this.$.scroll.scrollLeft + this.$.scroll.offsetWidth >= this.$.scroll.scrollWidth;
+        _scroll(pixels) {
+          this.vertical ? this.$.scroll.scrollTop += pixels : this.$.scroll.scrollLeft += pixels;
+        }
+
+        get _scrollOffset() {
+          return this.vertical ? this.$.scroll.offsetHeight : this.$.scroll.offsetWidth;
+        }
+
+        _updateOverflow() {
+          const scrollPosition = this.vertical ? this.$.scroll.scrollTop : this.$.scroll.scrollLeft;
+          let scrollSize = this.vertical ? this.$.scroll.scrollHeight : this.$.scroll.scrollWidth;
+          // In Edge we need to adjust the size in 1 pixel
+          scrollSize -= 1;
+
+          let overflow = scrollPosition != 0 ? 'start' : '';
+          overflow += scrollPosition + this._scrollOffset < scrollSize ? ' end' : '';
+          overflow ? this.setAttribute('overflow', overflow.trim()) : this.removeAttribute('overflow');
+
+          this._repaintShadowNodesHack();
+        }
+
+        _repaintShadowNodesHack() {
+          // Safari 10 has an issue with repainting shadow root element styles when a host attribute changes.
+          // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          if (safari10 && this.root) {
+            const WEBKIT_PROPERTY = '-webkit-backface-visibility';
+            this.root.querySelectorAll('*').forEach(el => {
+              el.style[WEBKIT_PROPERTY] = 'visible';
+              el.style[WEBKIT_PROPERTY] = '';
+            });
+          }
         }
       }
 
