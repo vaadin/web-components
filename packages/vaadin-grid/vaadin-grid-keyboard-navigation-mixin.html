@@ -418,7 +418,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onFocusIn(e) {
-      if (!this._isMouseFocus && !this._isMousedown) {
+      if (!this._isMousedown) {
         this.navigating = true;
       }
 
@@ -463,30 +463,6 @@ This program is available under Apache License Version 2.0, available at https:/
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
         cell._content.dispatchEvent(new CustomEvent('cell-focusout', {bubbles: false}));
       }
-    }
-
-    /**
-     * Mouse click focuses the cell
-     */
-    _onMouseCellFocus(e) {
-      this._focusedColumnOrder = undefined;
-      const path = e.composedPath();
-      const cell = path[path.indexOf(this.$.table) - 3];
-      if (e.composedPath()[0] !== cell._content) {
-        // Some cell content is focused
-        this.interacting = true;
-      } else {
-        // No focused cell content, focus the cell itself
-        this.interacting = false;
-
-        // iOS bug: simply setting this.navigating to false does not remove
-        // the focus outline. Need to raise a flag to prevent this.navigating
-        // from being set to true by the `_onFocusIn` listener.
-        this._isMouseFocus = true;
-        cell.focus();
-        this._isMouseFocus = false;
-      }
-      this.navigating = false;
     }
 
     _detectInteracting(e) {

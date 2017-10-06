@@ -139,7 +139,7 @@
     }
 
     function focusItem(rowIndex) {
-      return getCellContent(getRowFirstCell(rowIndex)).focus();
+      return getRowFirstCell(rowIndex).focus();
     }
 
     function getRowCell(rowIndex, cellIndex) {
@@ -226,6 +226,13 @@
       return grid.$.header.children[0].children[0];
     }
 
+    function focusWithMouse(element, mouseTarget) {
+      mouseTarget = mouseTarget || element;
+      MockInteractions.down(mouseTarget);
+      element.focus();
+      MockInteractions.up(mouseTarget);
+    }
+
     function focusHeaderInput() {
       const cell = grid.$.header.children[0].children[1];
       const contents = getCellContent(cell);
@@ -239,11 +246,11 @@
     }
 
     function focusFirstHeaderCell() {
-      getCellContent(getFirstHeaderCell()).focus();
+      focusWithMouse(getFirstHeaderCell());
     }
 
     function focusFirstFooterCell() {
-      getCellContent(grid.$.footer.children[0].children[0]).focus();
+      focusWithMouse(grid.$.footer.children[0].children[0]);
     }
 
     function tabToHeader() {
@@ -387,17 +394,14 @@
         });
 
         it('should not enable navigation mode on mouse cell focus', () => {
-          const cell = getRowFirstCell(0);
-          MockInteractions.down(cell);
-          cell.focus();
+          focusWithMouse(getRowFirstCell(0));
 
           expect(grid.navigating).to.be.false;
         });
 
         it('should not enable navigation mode on mouse cell content focus', () => {
-          const cellContent = getCellContent(getRowFirstCell(0));
-          MockInteractions.down(cellContent);
-          cellContent.focus();
+          const cell = getRowFirstCell(0);
+          focusWithMouse(cell, getCellContent(cell));
 
           expect(grid.navigating).to.be.false;
         });
@@ -604,7 +608,7 @@
         });
 
         it('should navigate on left when navigation mode is off', () => {
-          getCellContent(getRows(body)[0].children[1]).focus();
+          getRows(body)[0].children[1].focus();
 
           left();
 
@@ -668,7 +672,7 @@
         describe('with hidden columns', () => {
           it('should skip over hidden column with right arrow', () => {
             grid._columnTree[0][1].hidden = true;
-            getCellContent(body.children[0].children[0]).focus();
+            body.children[0].children[0].focus();
 
             right();
 
@@ -677,7 +681,7 @@
 
           it('should skip over hidden column with left arrow', () => {
             grid._columnTree[0][1].hidden = true;
-            getCellContent(body.children[0].children[0]).focus();
+            body.children[0].children[0].focus();
             right();
 
             left();
@@ -687,7 +691,7 @@
 
           it('should not navigate to hidden column with left arrow', () => {
             grid._columnTree[0][0].hidden = true;
-            getCellContent(body.children[0].children[1]).focus();
+            body.children[0].children[1].focus();
 
             left();
 
@@ -696,7 +700,7 @@
 
           it('should not navigate to hidden column with right arrow', () => {
             grid._columnTree[0][2].hidden = true;
-            getCellContent(body.children[0].children[0]).focus();
+            body.children[0].children[0].focus();
 
             right();
             right();
@@ -706,7 +710,7 @@
 
           it('should not navigate to hidden column with end', () => {
             grid._columnTree[0][0].hidden = true;
-            getCellContent(body.children[0].children[1]).focus();
+            body.children[0].children[1].focus();
 
             home();
 
@@ -715,7 +719,7 @@
 
           it('should not navigate to hidden column with home', () => {
             grid._columnTree[0][2].hidden = true;
-            getCellContent(body.children[0].children[0]).focus();
+            body.children[0].children[0].focus();
 
             end();
 
@@ -845,7 +849,7 @@
 
           it('should set focused cell when tapping on details cell', () => {
             const rowDetailsCell = findRowDetailsCell(body.children[0]);
-            rowDetailsCell._content.focus();
+            focusWithMouse(rowDetailsCell, rowDetailsCell._content);
 
             expect(findRowDetailsCell(grid.shadowRoot.activeElement.parentNode)).to.equal(grid.shadowRoot.activeElement);
           });
