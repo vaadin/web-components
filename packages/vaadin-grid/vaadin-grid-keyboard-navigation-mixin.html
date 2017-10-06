@@ -293,15 +293,17 @@ This program is available under Apache License Version 2.0, available at https:/
         this._focusedItemIndex = dstRowIndex;
       }
 
-      const dstRect = dstCell.getBoundingClientRect();
-      const footerTop = this.$.footer.getBoundingClientRect().top;
-      const headerBottom = this.$.header.getBoundingClientRect().bottom;
-      if (dstRect.bottom > footerTop) {
-        this.$.table.scrollTop += dstRect.bottom - footerTop;
-        this._scrollHandler();
-      } else if (dstRect.top < headerBottom) {
-        this.$.table.scrollTop -= headerBottom - dstRect.top;
-        this._scrollHandler();
+      if (activeRowGroup === this.$.items) {
+        const dstRect = dstCell.getBoundingClientRect();
+        const footerTop = this.$.footer.getBoundingClientRect().top;
+        const headerBottom = this.$.header.getBoundingClientRect().bottom;
+        if (dstRect.bottom > footerTop) {
+          this.$.table.scrollTop += dstRect.bottom - footerTop;
+          this._scrollHandler();
+        } else if (dstRect.top < headerBottom) {
+          this.$.table.scrollTop -= headerBottom - dstRect.top;
+          this._scrollHandler();
+        }
       }
 
       dstCell.focus();
