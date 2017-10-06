@@ -145,6 +145,15 @@
           expect(nav._navItems[0].selected).to.be.true;
         });
 
+        it('should set tabIndex=-1 to all items, but the first', () => {
+          [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        });
+
+        it('should move tabIndex when moving focus', () => {
+          nav._focus(3);
+          [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        });
+
         it('select an item when `selected` property is set', () => {
           nav.selected = 2;
           expect(nav._navItems[2].selected).to.be.true;

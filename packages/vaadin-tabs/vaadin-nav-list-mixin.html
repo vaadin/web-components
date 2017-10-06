@@ -43,7 +43,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
 
-      this._selectedChanged(this.selected);
+      if (this._navItems.length) {
+        this._selectedChanged(this.selected);
+        this._setFocusable(this.selected);
+      }
     }
 
     get focused() {
@@ -105,23 +108,21 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _focus(index) {
+    _setFocusable(idx) {
       const items = this._navItems;
-      items[index].focus();
+      items.forEach(e => e.tabIndex = e === items[idx] ? 0 : -1);
+    }
 
-      items.forEach(e => e.focused = false);
-      items[index].focused = true;
+    _focus(idx) {
+      const items = this._navItems;
+      items.forEach(e => e.focused = e === items[idx]);
+      this._setFocusable(idx);
+      items[idx].focus();
     }
 
     _selectedChanged(idx) {
       const items = this._navItems;
-      const item = items && items[idx < 0 ? 0 : idx];
-      if (item) {
-        items.forEach(e => {
-          e.selected = e == item;
-          e.tabIndex = e == item ? 0 : -1;
-        });
-      }
+      items[idx] && items.forEach(e => e.selected = e === items[idx]);
     }
 
     _onSelected(e) {
