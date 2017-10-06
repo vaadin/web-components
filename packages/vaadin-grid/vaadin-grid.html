@@ -305,6 +305,9 @@ This program is available under Apache License Version 2.0, available at https:/
           if (window.chrome) {
             // Chrome bug: focusing before mouseup prevents text selection, see http://crbug.com/771903
             const mouseUpListener = () => {
+              if (!cellContent.contains(this.getRootNode().activeElement)) {
+                cell.focus();
+              }
               // If focus is in the cell content — respect it, do not change.
               document.removeEventListener('mouseup', mouseUpListener, true);
             };
@@ -312,7 +315,7 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             // Focus on mouseup, on the other hand, removes selection on Safari.
             // Watch out sync focus removal issue, only async focus works here.
-            Polymer.Async.microTask.run(() => {
+            setTimeout(() => {
               if (!cellContent.contains(this.getRootNode().activeElement)) {
                 cell.focus();
               }
