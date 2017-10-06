@@ -17,6 +17,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (grid._debounceScrolling) {
       grid._debounceScrolling.flush();
     }
+    if (grid._debounceScrollPeriod) {
+      grid._debounceScrollPeriod.flush();
+    }
     Polymer.flush();
     if (grid._debouncerLoad) {
       grid._debouncerLoad.flush();

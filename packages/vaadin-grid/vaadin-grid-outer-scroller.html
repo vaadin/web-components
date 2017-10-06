@@ -61,6 +61,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           outerScrolling: Boolean,
 
+          noScrollbars: Boolean,
+
           _touchDevice: {
             type: Boolean,
             value: function() {
@@ -94,7 +96,11 @@ This program is available under Apache License Version 2.0, available at https:/
       _onMouseMove(e) {
         // Ignore mousemove events on touch devices
         if (!this._touchDevice) {
-          this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
+          if (this.noScrollbars && this.parentElement.hasAttribute('scroll-period')) {
+            this.passthrough = e.offsetY <= this.clientHeight - 20 && e.offsetX <= this.clientWidth - 20;
+          } else {
+            this.passthrough = e.offsetY <= this.clientHeight && e.offsetX <= this.clientWidth;
+          }
         }
       }
 

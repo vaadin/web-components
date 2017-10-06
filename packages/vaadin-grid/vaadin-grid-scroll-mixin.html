@@ -134,6 +134,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this.hasAttribute('reordering')) {
         this._toggleAttribute('scrolling', true, this.$.scroller);
+        this._toggleAttribute('scroll-period', true, this.$.scroller);
       }
 
       this._debounceScrolling = Polymer.Debouncer.debounce(this._debounceScrolling,
@@ -143,6 +144,12 @@ This program is available under Apache License Version 2.0, available at https:/
             if (!this.$.outerscroller.outerScrolling) {
               this._reorderRows();
             }
+          });
+
+      this._debounceScrollPeriod = Polymer.Debouncer.debounce(this._debounceScrollPeriod,
+          Polymer.Async.timeOut.after(1000),
+          () => {
+            this._toggleAttribute('scroll-period', false, this.$.scroller);
           });
 
       this.$.outerscroller.syncOuterScroller();

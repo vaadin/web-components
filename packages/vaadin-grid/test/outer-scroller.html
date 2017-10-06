@@ -18,7 +18,7 @@
 
   <test-fixture id="default">
     <template>
-      <vaadin-grid style="width: 50px; height: 400px;" size="10">
+      <vaadin-grid style="width: 60px; height: 400px;" size="10">
         <vaadin-grid-column width="200px">
           <template class="header">header</template>
           <template>[[index]]</template>
@@ -220,13 +220,21 @@
             node.dispatchEvent(e);
           }
 
-          function outerScrollerInUse() {
+          function outerScrollerAccessible() {
             return window.getComputedStyle(outerScroller).pointerEvents !== 'none';
           }
 
+          function outerScrollerScrollable() {
+            return window.getComputedStyle(outerScroller).overflow !== 'hidden';
+          }
+
+          beforeEach(() => {
+            flushGrid(grid);
+          });
+
           it('should passtrough pointer events', done => {
             scroller.addEventListener('mousemove', () => {
-              expect(outerScrollerInUse()).to.be.false;
+              expect(outerScrollerAccessible()).to.be.false;
               done();
             });
 
@@ -235,7 +243,7 @@
 
           it('should not passtrough if and only if scrollbars exist (vertical scrollbar hover)', done => {
             scroller.addEventListener('mousemove', () => {
-              expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
+              expect(outerScrollerAccessible()).to.equal(getScrollbarWidth() > 0);
               done();
             });
             move(tableRect.width, 1);
@@ -243,13 +251,19 @@
 
           it('should not passtrough if and only if scrollbars exist (horizontal scrollbar hover)', done => {
             scroller.addEventListener('mousemove', () => {
-              // TODO: @limonte revisit in future
-              if (!firefox) { // firefox has the blinking issue here (current version is 50)
-                expect(outerScrollerInUse()).to.be[getScrollbarWidth() > 0 ? 'true' : 'false'];
-              }
+              expect(outerScrollerAccessible()).to.equal(getScrollbarWidth() > 0);
               done();
             });
             move(1, tableRect.height);
+          });
+
+          it('should not passtrough if hovered after srcoll period', done => {
+            grid._scrollHandler();
+            scroller.addEventListener('mousemove', () => {
+              expect(outerScrollerAccessible()).to.equal(outerScrollerScrollable());
+              done();
+            });
+            move(tableRect.width, 1);
           });
 
         });

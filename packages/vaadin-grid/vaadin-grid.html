@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style include="vaadin-grid-styles"></style>
 
-    <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" loading$=[[_loading]] edge$="[[_edge]]">
+    <div id="scroller" no-scrollbars$="[[!_scrollbarWidth]]" safari$="[[_safari]]" ios$="[[_ios]]" loading$=[[_loading]] edge$="[[_edge]]" firefox$="[[_firefox]]">
       <table id="table" role="grid" aria-multiselectable="true">
         <caption id="fixedsizer" class="sizer" part="row"></caption>
         <thead id="header" role="rowgroup"></thead>
@@ -40,7 +40,8 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="reorder-ghost"></div>
       <vaadin-grid-outer-scroller id="outerscroller"
           scroll-target="[[scrollTarget]]"
-          scroll-handler="[[_this]]">
+          scroll-handler="[[_this]]"
+          no-scrollbars="[[!_scrollbarWidth]]">
         <div id="outersizer" class="sizer" part="row"></div>
       </vaadin-grid-outer-scroller>
     </div>
@@ -242,6 +243,13 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Boolean,
             value: function() {
               return !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+            }
+          },
+
+          _firefox: {
+            type: Boolean,
+            value: function() {
+              return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
             }
           }
         };
