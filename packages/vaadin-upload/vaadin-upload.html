@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-button/vaadin-button.html">
@@ -19,6 +18,10 @@ This program is available under Apache License Version 2.0, available at https:/
         display: block;
         position: relative;
         text-align: left;
+      }
+
+      div[hidden] {
+        display: none;
       }
 
       :host(:not([nodrop])) {
@@ -52,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
           </vaadin-button>
         </slot>
       </div>
-      <div part="drop-label" hidden$="[[nodrop]]">
+      <div part="drop-label" hidden$="[[nodrop]]" id="dropLabelContainer">
         <slot name="drop-label-icon">
           <div part="drop-label-icon"></div>
         </slot>
@@ -87,30 +90,29 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * The following shadow DOM parts are available for styling:
        *
-       * Part name | Description | Theme for Element
-       * ----------------|----------------|----------------
-       * `primary-buttons` | Upload container | vaadin-upload
-       * `upload-button` | Upload button | vaadin-upload
-       * `drop-label` | Label for drop indicator | vaadin-upload
-       * `drop-label-icon` | Icon for drop indicator | vaadin-upload
-       * `file-list` | File list container | vaadin-upload
-       * `file-row` | File container | vaadin-upload-file
-       * `file-info` | File info icon | vaadin-upload-file
-       * `done-icon` | File done icon | vaadin-upload-file
-       * `warning-icon` | File warning icon | vaadin-upload-file
-       * `file-meta` | Container for file status icons | vaadin-upload-file
-       * `file-commands` |  | vaadin-upload-file
-       * `start-button` | Start file upload button | vaadin-upload-file
-       * `retry-button` | Retry file upload button | vaadin-upload-file
-       * `clear-button` | Clear file button | vaadin-upload-file
-       * `progress` | Progress bar | vaadin-upload-file
+       * Part name         | Description                      | Theme for Element
+       * ------------------|----------------------------------|--------------------
+       * `primary-buttons` | Upload container                 | vaadin-upload
+       * `upload-button`   | Upload button                    | vaadin-upload
+       * `drop-label`      | Label for drop indicator         | vaadin-upload
+       * `drop-label-icon` | Icon for drop indicator          | vaadin-upload
+       * `file-list`       | File list container              | vaadin-upload
+       * `file-row`        | File container                   | vaadin-upload-file
+       * `file-info`       | File info icon                   | vaadin-upload-file
+       * `done-icon`       | File done icon                   | vaadin-upload-file
+       * `warning-icon`    | File warning icon                | vaadin-upload-file
+       * `file-meta`       | Container for file status icons  | vaadin-upload-file
+       * `file-commands`   | Container for file command icons | vaadin-upload-file
+       * `start-button`    | Start file upload button         | vaadin-upload-file
+       * `retry-button`    | Retry file upload button         | vaadin-upload-file
+       * `clear-button`    | Clear file button                | vaadin-upload-file
+       * `progress`        | Progress bar                     | vaadin-upload-file
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
-       * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class VaadinUpload extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      class VaadinUpload extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-upload';
         }
@@ -511,9 +513,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         uploadFiles(files) {
           files = files || this.files;
-          files = files.filter((file) => {
-            return !file.complete;
-          });
+          files = files.filter(file => (!file.complete));
           Array.prototype.forEach.call(files, this._uploadFile.bind(this));
         }
 
@@ -738,16 +738,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _onAddFilesClick() {
           if (this.maxFilesReached) {
             return;
-          }
-
-          if (Polymer.Gestures.resetMouseCanceller) {
-            /*
-              The ghost-click prevention cancels the synthetic
-              file input click in iOS Safari. This prevents the cancelling.
-
-              See also: https://github.com/Polymer/polymer/issues/4242
-            */
-            Polymer.Gestures.resetMouseCanceller();
           }
 
           this.$.fileInput.value = '';
