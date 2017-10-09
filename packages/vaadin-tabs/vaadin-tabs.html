@@ -10,74 +10,91 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-tab.html">
 <link rel="import" href="vaadin-list-mixin.html">
 
+<dom-module id="vaadin-tabs-default-theme">
+  <template>
+    <style>
+      :host {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      :host(:not([vertical])) {
+        min-height: 2.5em;
+        box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+      }
+
+      /* Horizontal tabs styles */
+      /* Firefox requires the extra [part="tabs"] before the ::slotted */
+
+      :host(:not([vertical])) [part="tabs"] ::slotted(vaadin-tab) {
+        justify-content: center;
+        border-bottom: 2px solid transparent;
+      }
+
+      :host(:not([vertical])) [part="tabs"] ::slotted(vaadin-tab[selected]) {
+        border-bottom-color: currentColor;
+      }
+
+      /* Vertical tab styles */
+
+      :host([vertical]) [part="tabs"] ::slotted(vaadin-tab) {
+        border-left: 2px solid transparent;
+      }
+
+      :host([vertical]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
+        border-left-color: currentColor;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-tabs">
   <template>
     <style>
       :host {
         display: flex;
-        justify-content: space-between;
-        padding: 8px 16px;
-        -webkit-tap-highlight-color: transparent;
+        align-items: center;
       }
 
       :host([vertical]) {
-        flex-direction: column;
-        align-items: stretch;
+        display: block;
       }
 
-      :host([vertical]) .vaadin-tabs {
-        flex-direction: column;
-      }
-
-      .vaadin-tabs-scroller {
-        flex-grow: 1;
+      :host(:not([vertical])) [part="tabs"] {
+        flex: 1;
+        display: flex;
+        align-self: stretch;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
         -ms-overflow-style: none;
-        overflow: -moz-scrollbars-none;
       }
 
-      .vaadin-tabs-scroller::-webkit-scrollbar {
+      /* This seems more future-proof than `overflow: -moz-scrollbars-none` which is marked obsolete
+         and is no longer guaranteed to work:
+         https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions */
+      @-moz-document url-prefix() {
+        :host(:not([vertical])) [part="tabs"] {
+          overflow: hidden;
+        }
+      }
+
+      :host(:not([vertical])) [part="tabs"]::-webkit-scrollbar {
         display: none;
       }
 
-      .prefix,
-      .suffix {
-        flex-grow: 1;
-      }
-
-      .suffix {
-        text-align: right;
-      }
-
-      .vaadin-tabs {
-        display: flex;
-      }
-
-      .vaadin-tabs ::slotted(*) {
-        flex: 1 0 auto;
+      :host([vertical]) [part="tabs"] {
+        height: 100%;
+        overflow-y: auto;
       }
 
       [part="back-button"],
       [part="forward-button"] {
-        opacity: 0.5;
-        padding: 3px;
-        cursor: pointer;
-        visibility: hidden;
-        text-align: center;
+        opacity: 0;
+        cursor: default;
       }
 
       :host([overflow~="start"]) [part="back-button"],
       :host([overflow~="end"]) [part="forward-button"] {
-        visibility: visible;
-      }
-
-      :host([vertical]) [part="back-button"]::after {
-        content: '▲';
-      }
-
-      :host([vertical]) [part="forward-button"]::after {
-        content: '▼';
+        opacity: 1;
       }
 
       [part="back-button"]::after {
@@ -88,19 +105,15 @@ This program is available under Apache License Version 2.0, available at https:/
         content: '▶';
       }
 
-      @media screen and (max-width: 600px) {
-        :host {
-          padding-left: 0;
-          padding-right: 0;
-        }
+      :host([vertical]) [part="back-button"],
+      :host([vertical]) [part="forward-button"] {
+        display: none;
       }
     </style>
     <div on-click="_scrollBack" part="back-button"></div>
 
-    <div id="scroll" class="vaadin-tabs-scroller">
-      <div class="vaadin-tabs">
-        <slot></slot>
-      </div>
+    <div id="scroll" part="tabs">
+      <slot></slot>
     </div>
 
     <div on-click="_scrollForward" part="forward-button"></div>
@@ -139,8 +152,12 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
           this.addEventListener('iron-resize', () => this._updateOverflow());
           this.$.scroll.addEventListener('scroll', () => this._updateOverflow());
-          this._updateOverflow();
           this.setAttribute('role', 'tablist');
+
+          // Wait for the vaadin-tab elements to upgrade and get styled
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            this._updateOverflow();
+          });
         }
 
         _scrollForward() {

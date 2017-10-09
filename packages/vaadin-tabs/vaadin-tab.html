@@ -12,34 +12,27 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
+        display: flex;
+        align-items: center;
         outline: none;
-        border: solid 1px transparent;
-        opacity: 0.8;
-        background: #e5e1e1;
-        margin: 1px;
-        white-space: nowrap;
+        opacity: 0.6;
+        padding: 0.3em 1em;
+        box-sizing: border-box;
+        flex-shrink: 0;
       }
 
       :host([selected]) {
-        color: rgba(33, 150, 243, 0.95);
-        font-weight: 500;
-        opacity: 0.9;
-      }
-
-      :host([focused]) {
-        border: dashed 1px grey;
-      }
-
-      :host(:hover) {
         opacity: 1;
       }
 
+      :host([focus-ring]) {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+
       :host([disabled]) {
-        opacity: 0.5;
+        opacity: 0.3;
       }
     </style>
-    <slot>
-    </slot>
   </template>
 </dom-module>
 
@@ -49,6 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-block;
         cursor: pointer;
+        flex-shrink: 0;
       }
 
       :host([hidden]) {
@@ -59,9 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: none;
       }
     </style>
-    <div id="button" type="button" part="button">
-      <slot></slot>
-    </div>
+    <slot></slot>
   </template>
   <script>
     if (!Polymer.Element) {
