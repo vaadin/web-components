@@ -17,7 +17,7 @@ gemini.suite('vaadin-upload', function(rootSuite) {
   gemini.suite('default-tests', function(suite) {
     suite
       .setUrl('/default.html')
-      .setCaptureElements('body')
+      .setCaptureElements('#default-tests')
       .capture('vaadin-upload');
   });
 
