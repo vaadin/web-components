@@ -7,44 +7,38 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="vaadin-progress-mixin.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-progress-bar-styles.html">
 
 <dom-module id="vaadin-progress-bar">
   <template>
     <style>
       :host {
-        --vaadin-progress-bar-color: rgba(0, 0, 0, 0.1);
-        --vaadin-progress-value-color: var(--primary-color, rgba(0, 0, 0, 0.5));
-        --vaadin-progress-line-width: 3px;
-        --vaadin-progress-value: 0;
-
         display: block;
-        height: var(--vaadin-progress-line-width);
+        height: 3px;
         margin: 8px 0;
         overflow: hidden;
         position: relative;
       }
 
-      #bar {
-        background: var(--vaadin-progress-bar-color);
+      [part="bar"] {
         height: 100%;
         position: absolute;
         width: 100%;
       }
 
-      #value {
-        background: var(--vaadin-progress-value-color);
+      [part="value"] {
         height: 100%;
         position: absolute;
         transform-origin: 0 50%;
-        transition: transform 150ms;
         width: 100%;
         transform: scaleX(var(--vaadin-progress-value));
       }
 
     </style>
 
-    <div id="bar">
-      <div id="value"></div>
+    <div id="bar" part="bar">
+      <div id="value" part="value"></div>
     </div>
 
   </template>
@@ -61,6 +55,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `bar` | Progress-bar's background | vaadin-progress-bar
+       * `value` | Progress-bar's foreground | vaadin-progress-bar
+       *
        * Custom property | Description | Default
        * ----------------|-------------|-------------
        * `--vaadin-progress-value` | showing current progress | 0
@@ -69,7 +70,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ProgressMixin
        * @demo demo/index.html
        */
-      class ProgressBarElement extends Vaadin.ProgressMixin(Polymer.Element) {
+      class ProgressBarElement extends Vaadin.ThemableMixin(Vaadin.ProgressMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-progress-bar';
         }
