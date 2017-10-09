@@ -10,15 +10,15 @@
     <vaadin-demo-snippet id='tabs-basic-demos-simple-tabs'>
       <template preserve-content>
         <style>
-          vaadin-nav-item {
+          vaadin-tab {
             text-align: center;
           }
         </style>
-        <vaadin-nav>
-          <vaadin-nav-item>Foo</vaadin-nav-item>
-          <vaadin-nav-item>Bar</vaadin-nav-item>
-          <vaadin-nav-item>Baz</vaadin-nav-item>
-        </vaadin-nav>
+        <vaadin-tabs>
+          <vaadin-tab>Foo</vaadin-tab>
+          <vaadin-tab>Bar</vaadin-tab>
+          <vaadin-tab>Baz</vaadin-tab>
+        </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 
@@ -26,18 +26,18 @@
     <vaadin-demo-snippet id='tabs-basic-demos-vertical-tabs'>
       <template preserve-content>
         <style>
-          vaadin-nav-item {
+          vaadin-tab {
             padding-left: 20px;
           }
         </style>
-        <vaadin-nav vertical>
-          <vaadin-nav-item>Foo</vaadin-nav-item>
-          <vaadin-nav-item>Bar</vaadin-nav-item>
-          <vaadin-nav-item>Baz</vaadin-nav-item>
-          <vaadin-nav-item disabled>Disabled</vaadin-nav-item>
-          <vaadin-nav-item>Ipsum</vaadin-nav-item>
-          <vaadin-nav-item>Dolor</vaadin-nav-item>
-        </vaadin-nav>
+        <vaadin-tabs vertical>
+          <vaadin-tab>Foo</vaadin-tab>
+          <vaadin-tab>Bar</vaadin-tab>
+          <vaadin-tab>Baz</vaadin-tab>
+          <vaadin-tab disabled>Disabled</vaadin-tab>
+          <vaadin-tab>Ipsum</vaadin-tab>
+          <vaadin-tab>Dolor</vaadin-tab>
+        </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 
@@ -45,29 +45,29 @@
     <vaadin-demo-snippet id='tabs-basic-demos-scrollable-tabs'>
       <template preserve-content>
         <style>
-          vaadin-nav-item {
+          vaadin-tab {
             min-width: 100px;
             text-align: center;
           }
         </style>
-        <vaadin-nav selected="2">
-          <vaadin-nav-item>Foo-1</vaadin-nav-item>
-          <vaadin-nav-item>Bar-1</vaadin-nav-item>
-          <vaadin-nav-item>Foo-2</vaadin-nav-item>
-          <vaadin-nav-item>Bar-2</vaadin-nav-item>
-          <vaadin-nav-item>Foo-3</vaadin-nav-item>
-          <vaadin-nav-item>Bar-3</vaadin-nav-item>
-          <vaadin-nav-item>Foo-4</vaadin-nav-item>
-          <vaadin-nav-item>Bar-4</vaadin-nav-item>
-          <vaadin-nav-item>Foo-5</vaadin-nav-item>
-          <vaadin-nav-item>Bar-5</vaadin-nav-item>
-          <vaadin-nav-item>Foo-6</vaadin-nav-item>
-          <vaadin-nav-item>Bar-6</vaadin-nav-item>
-          <vaadin-nav-item>Foo-7</vaadin-nav-item>
-          <vaadin-nav-item>Bar-7</vaadin-nav-item>
-          <vaadin-nav-item>Foo-8</vaadin-nav-item>
-          <vaadin-nav-item>Bar-8</vaadin-nav-item>
-        </vaadin-nav>
+        <vaadin-tabs selected="2">
+          <vaadin-tab>Foo-1</vaadin-tab>
+          <vaadin-tab>Bar-1</vaadin-tab>
+          <vaadin-tab>Foo-2</vaadin-tab>
+          <vaadin-tab>Bar-2</vaadin-tab>
+          <vaadin-tab>Foo-3</vaadin-tab>
+          <vaadin-tab>Bar-3</vaadin-tab>
+          <vaadin-tab>Foo-4</vaadin-tab>
+          <vaadin-tab>Bar-4</vaadin-tab>
+          <vaadin-tab>Foo-5</vaadin-tab>
+          <vaadin-tab>Bar-5</vaadin-tab>
+          <vaadin-tab>Foo-6</vaadin-tab>
+          <vaadin-tab>Bar-6</vaadin-tab>
+          <vaadin-tab>Foo-7</vaadin-tab>
+          <vaadin-tab>Bar-7</vaadin-tab>
+          <vaadin-tab>Foo-8</vaadin-tab>
+          <vaadin-tab>Bar-8</vaadin-tab>
+        </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 
@@ -75,29 +75,29 @@
     <vaadin-demo-snippet id='tabs-basic-demos-scrollable-tabs'>
       <template preserve-content>
         <style>
-          vaadin-nav-item {
+          vaadin-tab {
             min-width: 100px;
             text-align: center;
           }
         </style>
-        <vaadin-nav selected="2" vertical style="height: 120px">
-          <vaadin-nav-item>Foo-1</vaadin-nav-item>
-          <vaadin-nav-item>Bar-1</vaadin-nav-item>
-          <vaadin-nav-item>Foo-2</vaadin-nav-item>
-          <vaadin-nav-item>Bar-2</vaadin-nav-item>
-          <vaadin-nav-item>Foo-3</vaadin-nav-item>
-          <vaadin-nav-item>Bar-3</vaadin-nav-item>
-          <vaadin-nav-item>Foo-4</vaadin-nav-item>
-          <vaadin-nav-item>Bar-4</vaadin-nav-item>
-          <vaadin-nav-item>Foo-5</vaadin-nav-item>
-          <vaadin-nav-item>Bar-5</vaadin-nav-item>
-          <vaadin-nav-item>Foo-6</vaadin-nav-item>
-          <vaadin-nav-item>Bar-6</vaadin-nav-item>
-          <vaadin-nav-item>Foo-7</vaadin-nav-item>
-          <vaadin-nav-item>Bar-7</vaadin-nav-item>
-          <vaadin-nav-item>Foo-8</vaadin-nav-item>
-          <vaadin-nav-item>Bar-8</vaadin-nav-item>
-        </vaadin-nav>
+        <vaadin-tabs selected="2" vertical style="height: 120px">
+          <vaadin-tab>Foo-1</vaadin-tab>
+          <vaadin-tab>Bar-1</vaadin-tab>
+          <vaadin-tab>Foo-2</vaadin-tab>
+          <vaadin-tab>Bar-2</vaadin-tab>
+          <vaadin-tab>Foo-3</vaadin-tab>
+          <vaadin-tab>Bar-3</vaadin-tab>
+          <vaadin-tab>Foo-4</vaadin-tab>
+          <vaadin-tab>Bar-4</vaadin-tab>
+          <vaadin-tab>Foo-5</vaadin-tab>
+          <vaadin-tab>Bar-5</vaadin-tab>
+          <vaadin-tab>Foo-6</vaadin-tab>
+          <vaadin-tab>Bar-6</vaadin-tab>
+          <vaadin-tab>Foo-7</vaadin-tab>
+          <vaadin-tab>Bar-7</vaadin-tab>
+          <vaadin-tab>Foo-8</vaadin-tab>
+          <vaadin-tab>Bar-8</vaadin-tab>
+        </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 

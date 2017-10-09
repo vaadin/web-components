@@ -12,7 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
    *
    * @polymerMixin
    */
-  Vaadin.NavListMixin = superClass => class VaadinNavListMixin extends superClass {
+  Vaadin.ListMixin = superClass => class VaadinListMixin extends superClass {
     static get properties() {
       return {
         /**
@@ -55,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     get _navItems() {
       return Array.from(this.childNodes)
-        .filter(e => Vaadin.NavItemElement && e instanceof Vaadin.NavItemElement);
+        .filter(e => Vaadin.TabElement && e instanceof Vaadin.TabElement);
     }
 
     _onKeydown(event) {

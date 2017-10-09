@@ -2,23 +2,23 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>vaadin-nav tests</title>
+  <title>vaadin-tabs tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../vaadin-nav-item.html">
-  <link rel="import" href="../vaadin-nav.html">
+  <link rel="import" href="../vaadin-tab.html">
+  <link rel="import" href="../vaadin-tabs.html">
 </head>
 
 <body>
   <test-fixture id="nav">
     <template>
-      <vaadin-nav style="width: 400px; height: 400px;">
-        <vaadin-nav-item>Foo</vaadin-nav-item>
-        <vaadin-nav-item>Bar</vaadin-nav-item>
+      <vaadin-tabs style="width: 400px; height: 400px;">
+        <vaadin-tab>Foo</vaadin-tab>
+        <vaadin-tab>Bar</vaadin-tab>
         <separator>___</separator>
-        <vaadin-nav-item disabled>Baz</vaadin-nav-item>
-        <vaadin-nav-item>Baz</vaadin-nav-item>
-      </vaadin-nav>
+        <vaadin-tab disabled>Baz</vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
+      </vaadin-tabs>
     </template>
   </test-fixture>
   <script>
@@ -56,23 +56,23 @@
       MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
     }
 
-    describe('vaadin-nav', () => {
+    describe('vaadin-tabs', () => {
       var nav;
 
       beforeEach(() => nav = fixture('nav'));
 
       it('should have a correct localName', () => {
-        expect(nav.localName).to.equal('vaadin-nav');
+        expect(nav.localName).to.equal('vaadin-tabs');
       });
 
       it('should have role="tablist"', () => {
         expect(nav.getAttribute('role')).to.equal('tablist');
       });
 
-      it('`_navItems` should only contain vaadin-nav-items', () => {
+      it('`_navItems` should only contain vaadin-tabs', () => {
         expect(nav._navItems.length).to.equal(4);
         nav._navItems.forEach(item => {
-          expect(item.tagName.toLowerCase()).to.equal('vaadin-nav-item');
+          expect(item.tagName.toLowerCase()).to.equal('vaadin-tab');
         });
       });
 
@@ -138,7 +138,7 @@
         });
       });
 
-      describe('vaadin-nav-list-mixin', () => {
+      describe('vaadin-list-mixin', () => {
         beforeEach(() => nav._focus(0));
 
         it('should select first item by default', () => {
