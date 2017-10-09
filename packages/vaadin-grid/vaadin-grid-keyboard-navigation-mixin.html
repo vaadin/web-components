@@ -69,7 +69,7 @@ This program is available under Apache License Version 2.0, available at https:/
         oldFocusable.setAttribute('tabindex', '-1');
       }
       if (focusable) {
-        focusable.setAttribute('tabindex', '1');
+        focusable.setAttribute('tabindex', '0');
       }
     }
 
@@ -360,6 +360,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _predictFocusStepTarget(srcElement, step) {
       const tabOrder = [
+        this.$.table,
         this._headerFocusable,
         this._itemsFocusable,
         this._footerFocusable,
@@ -380,7 +381,14 @@ This program is available under Apache License Version 2.0, available at https:/
     _onTabKeyDown(e) {
       const focusTarget = this._predictFocusStepTarget(e.composedPath()[0], e.shiftKey ? -1 : 1);
 
-      if (focusTarget === this._itemsFocusable) {
+      if (focusTarget === this.$.table) {
+        // The focus is about to exit the grid to the top.
+        this.$.table.focus();
+      } else if (focusTarget === this.$.focusexit) {
+        // The focus is about to exit the grid to the bottom.
+        this.$.focusexit.focus();
+      } else if (focusTarget === this._itemsFocusable) {
+        let itemsFocusTarget = focusTarget;
         const targetRow = this._itemsFocusable.parentNode;
         this._ensureScrolledToIndex(this._focusedItemIndex);
         if (targetRow.index !== this._focusedItemIndex) {
@@ -391,16 +399,14 @@ This program is available under Apache License Version 2.0, available at https:/
           const focusedItemRow = Array.from(this.$.items.children)
               .filter(row => row.index === this._focusedItemIndex)[0];
           if (focusedItemRow) {
-            e.preventDefault(); // avoid native focus jump, we are doing our own
-            focusedItemRow.children[columnIndex].focus();
+            itemsFocusTarget = focusedItemRow.children[columnIndex];
           }
         }
-      }
-
-      if (focusTarget === this.$.focusexit) {
-        // The focus is about to exit the grid. We move the focus to the exit
-        // to make it happen.
-        this.$.focusexit.focus();
+        e.preventDefault();
+        itemsFocusTarget.focus();
+      } else {
+        e.preventDefault();
+        focusTarget.focus();
       }
 
       this.navigating = true;
@@ -424,10 +430,17 @@ This program is available under Apache License Version 2.0, available at https:/
         this.navigating = true;
       }
 
-      if (e.composedPath()[0] === this.$.focusexit) {
-        // The focus enters the bottom of the grid, meaning that user has
-        // shift-tabbed into the grid. Move the focus to the last focusable.
-        this._predictFocusStepTarget(e.composedPath()[0], -1).focus();
+      const rootTarget = e.composedPath()[0];
+
+      if (rootTarget === this.$.table ||
+          rootTarget === this.$.focusexit) {
+        // The focus enters the top (bottom) of the grid, meaning that user has
+        // tabbed (shift-tabbed) into the grid. Move the focus to
+        // the first (the last) focusable.
+        this._predictFocusStepTarget(
+          rootTarget,
+          rootTarget === this.$.table ? 1 : -1
+        ).focus();
         this.interacting = false;
       } else {
         this._detectInteracting(e);
@@ -507,8 +520,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (this.$.items.firstElementChild) {
-        const firstVisibleIndexRow = Array.from(this.$.items.children)
-          .filter(row => row.index === this._firstVisibleIndex)[0];
+        const firstVisibleIndexRow = this._iterateItems((pidx, vidx) => {
+          if (this._firstVisibleIndex === vidx) {
+            return this.$.items.children[pidx];
+          }
+        });
         if (firstVisibleIndexRow) {
           this._itemsFocusable = firstVisibleIndexRow.firstElementChild;
         }
