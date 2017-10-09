@@ -427,18 +427,18 @@
 
         it('should have single tabbable cell in every section', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
-          expect(tabbableElements.length).to.equal(4);
-          expect(tabbableElements[0].parentNode.parentNode).to.equal(grid.$.header);
-          expect(tabbableElements[1].parentNode.parentNode).to.equal(grid.$.items);
-          expect(tabbableElements[2].parentNode.parentNode).to.equal(grid.$.footer);
-          expect(tabbableElements[3]).to.equal(grid.$.focusexit);
+          expect(tabbableElements.length).to.equal(5);
+          expect(tabbableElements[0]).to.equal(grid.$.table);
+          expect(tabbableElements[1].parentNode.parentNode).to.equal(grid.$.header);
+          expect(tabbableElements[2].parentNode.parentNode).to.equal(grid.$.items);
+          expect(tabbableElements[3].parentNode.parentNode).to.equal(grid.$.footer);
+          expect(tabbableElements[4]).to.equal(grid.$.focusexit);
         });
 
-        it('should have tabindex 1 on tabbable cells', () => {
+        it('should have tabindex 0 on tabbable cells', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
-          expect(tabbableElements[0].tabIndex).to.equal(1);
-          expect(tabbableElements[1].tabIndex).to.equal(1);
-          expect(tabbableElements[2].tabIndex).to.equal(1);
+          const tabIndexes = Array.from(tabbableElements).map(el => el.tabIndex);
+          expect(tabIndexes).to.eql([0, 0, 0, 0, 0]);
         });
 
         it('should have a focus exit as the very last child', () => {
@@ -455,17 +455,15 @@
           grid.$.scroller.addEventListener('keydown', listener);
 
           // assuming grid has been tabbed into.
-          tabbableElements[0].focus(); // focus header
-          tab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          tabbableElements[1].focus();
 
-          tabbableElements[1].focus(); // focus body
-          tab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          tab(); // to body cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
-          tabbableElements[2].focus(); // focus footer
-          tab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          tab(); // to footer cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
 
           grid.$.scroller.removeEventListener('keydown', listener);
         });
@@ -477,25 +475,23 @@
           const listener = (e) => keydownEvent = e;
           grid.$.scroller.addEventListener('keydown', listener);
 
-          // assuming grid has been tabbed into.
-          tabbableElements[2].focus(); // focus footer
-          shiftTab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          // assuming grid has been shift-tabbed into.
+          tabbableElements[3].focus();
 
-          tabbableElements[1].focus(); // focus body
-          shiftTab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          shiftTab(); // to body cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
 
-          tabbableElements[0].focus(); // focus footer
-          shiftTab();
-          expect(keydownEvent.defaultPrevented).to.be.false;
+          shiftTab(); // to header cell
+          expect(keydownEvent.defaultPrevented).to.be.true;
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
 
           grid.$.scroller.removeEventListener('keydown', listener);
         });
 
         it('should be possible to exit grid with tab', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
-          tabbableElements[2].focus(); // focus footer cell
+          tabbableElements[3].focus(); // focus footer cell
 
           let keydownEvent;
           listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => keydownEvent = e);
@@ -507,23 +503,49 @@
           expect(keydownEvent.defaultPrevented).to.be.false;
         });
 
+        it('should be possible to exit grid with shift+tab', () => {
+          const tabbableElements = getTabbableElements(grid.shadowRoot);
+          tabbableElements[1].focus(); // focus header cell
+
+          let keydownEvent;
+          listenOnce(grid.shadowRoot.activeElement, 'keydown', (e) => keydownEvent = e);
+          shiftTab();
+
+          // Expect programmatic focus on focus exit element
+          expect(grid.shadowRoot.activeElement).to.equal(grid.$.table);
+          // Ensure native focus jump is allowed
+          expect(keydownEvent.defaultPrevented).to.be.false;
+        });
+
+        it('should be possible to enter grid with tab', () => {
+          const tabbableElements = getTabbableElements(grid.shadowRoot);
+
+          // focusin on table element — same as tab from above the grid
+          const event = new CustomEvent('focusin', {bubbles: true, composed: true});
+          event.relatedTarget = focusable;
+          tabbableElements[0].dispatchEvent(event);
+
+          // Expect programmatic focus on header cell
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
+        });
+
         it('should be possible to enter grid with shift+tab', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
 
           // focusin on focusexit element — same as shift+tab from below the grid
           const event = new CustomEvent('focusin', {bubbles: true, composed: true});
           event.relatedTarget = focusable;
-          tabbableElements[3].dispatchEvent(event);
+          tabbableElements[4].dispatchEvent(event);
 
           // Expect programmatic focus on footer cell
-          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
         });
 
         it('should set native focus to header on header cell click', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
           focusFirstHeaderCell();
 
-          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[0]);
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
         });
 
         it('should set native focus to body on body cell click', () => {
@@ -531,14 +553,14 @@
           focusItem(0);
           clickItem(0);
 
-          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[1]);
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
         });
 
         it('should set native focus to footer on footer cell click', () => {
           const tabbableElements = getTabbableElements(grid.shadowRoot);
           focusFirstFooterCell();
 
-          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[2]);
+          expect(grid.shadowRoot.activeElement).to.equal(tabbableElements[3]);
         });
 
         it('should move header tabbable cell when navigating with keys', () => {
@@ -1129,7 +1151,6 @@
         it('should activate item another on space', () => {
           focusItem(0);
           clickItem(0);
-          tab();
 
           down();
           space();
@@ -1140,7 +1161,6 @@
         it('should deactive item on space', () => {
           focusItem(0);
           clickItem(0); // activates first item on click
-          tab();
 
           space();
 
