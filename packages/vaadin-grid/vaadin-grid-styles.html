@@ -130,9 +130,19 @@ This program is available under Apache License Version 2.0, available at https:/
         will-change: transform;
       }
 
-      [no-scrollbars]:not([safari]) #outerscroller,
-      [no-scrollbars][safari] #table {
+      [no-scrollbars]:not([safari]):not([firefox]) #outerscroller,
+      [no-scrollbars][safari] #table,
+      [no-scrollbars][firefox] #table {
         overflow: hidden;
+      }
+
+      [no-scrollbars]:not([safari]):not([firefox]) #outerscroller {
+        pointer-events: none;
+      }
+
+      [scrolling][safari] #outerscroller,
+      [scrolling][firefox] #outerscroller {
+        pointer-events: auto;
       }
 
       [ios] #outerscroller {
