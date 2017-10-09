@@ -57,14 +57,6 @@
             expect(clickSpy).to.be.calledOnce;
           });
 
-          it('should reset Polymer mouse canceller on click', () => {
-            const spy = sinon.spy(Polymer.Gestures, 'resetMouseCanceller');
-
-            upload.$.addFiles.dispatchEvent(new MouseEvent('click'));
-
-            expect(spy).to.be.called;
-          });
-
           it('should reset input.value before dialog', () => {
             const input = upload.$.fileInput;
             // jshint ignore:start
@@ -204,6 +196,11 @@
             upload.dispatchEvent(createDndEvent('dragover'));
             expect(upload._dragoverValid).not.to.be.ok;
             expect(upload.hasAttribute('dragover')).to.be.false;
+          });
+
+          it('should hide `drop files here` label and icon when drop is disabled', () => {
+            upload.nodrop = true;
+            expect(window.getComputedStyle(upload.$.dropLabelContainer).display).to.equal('none');
           });
         });
       });
