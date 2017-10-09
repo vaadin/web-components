@@ -20,10 +20,24 @@
 
       beforeEach(() => progress = fixture('progressBar'));
 
+      function _getPropertyValue(element, propertyName) {
+        if (window.ShadyCSS) {
+          return window.ShadyCSS.getComputedStyleValue(element, propertyName);
+        } else {
+          return window.getComputedStyle(element).getPropertyValue(propertyName);
+        }
+      }
+
       it('should have proper scale', () => {
         progress.value = 0.1;
 
-        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+        expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+      });
+
+      it('should set progress-value custom variable properly', () => {
+        progress.value = 0.1;
+
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.equal('0.1');
       });
 
       it('should have proper scale with custom min and max', () => {
@@ -31,7 +45,7 @@
         progress.min = 10;
         progress.value = 15;
 
-        expect(progress.$.foreground.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+        expect(progress.$.value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
       });
 
       it('should throw an exception in case of wrong bounds', () => {
