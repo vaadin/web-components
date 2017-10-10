@@ -75,12 +75,14 @@ This program is available under Apache License Version 2.0, available at https:/
       _normalizeValue(value, min, max) {
         var nV;
 
-        if (!value && value != 0 || nV < 0) {
+        if (!value && value != 0) {
           nV = 0;
-        } else if (min >= max || nV > 1) {
+        } else if (min >= max) {
           nV = 1;
         } else {
           nV = (value - min) / (max - min);
+
+          nV = Math.min(Math.max(nV, 0), 1);
         }
 
         return nV;
