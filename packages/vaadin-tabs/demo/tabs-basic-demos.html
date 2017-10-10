@@ -6,18 +6,13 @@
       }
     </style>
 
-    <h3>Simple tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-simple-tabs'>
+    <h3>Horizontal tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-horizontal-tabs'>
       <template preserve-content>
-        <style>
-          vaadin-tab {
-            text-align: center;
-          }
-        </style>
         <vaadin-tabs>
-          <vaadin-tab>Foo</vaadin-tab>
-          <vaadin-tab>Bar</vaadin-tab>
-          <vaadin-tab>Baz</vaadin-tab>
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
         </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
@@ -25,78 +20,96 @@
     <h3>Vertical tabs</h3>
     <vaadin-demo-snippet id='tabs-basic-demos-vertical-tabs'>
       <template preserve-content>
-        <style>
-          vaadin-tab {
-            padding-left: 20px;
-          }
-        </style>
         <vaadin-tabs vertical>
-          <vaadin-tab>Foo</vaadin-tab>
-          <vaadin-tab>Bar</vaadin-tab>
-          <vaadin-tab>Baz</vaadin-tab>
-          <vaadin-tab disabled>Disabled</vaadin-tab>
-          <vaadin-tab>Ipsum</vaadin-tab>
-          <vaadin-tab>Dolor</vaadin-tab>
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
         </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Scrollable tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-scrollable-tabs'>
+    <h3>Scrollable horizontal tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-scrollable-horizontal-tabs'>
       <template preserve-content>
-        <style>
-          vaadin-tab {
-            min-width: 100px;
-            text-align: center;
-          }
-        </style>
-        <vaadin-tabs selected="2">
-          <vaadin-tab>Foo-1</vaadin-tab>
-          <vaadin-tab>Bar-1</vaadin-tab>
-          <vaadin-tab>Foo-2</vaadin-tab>
-          <vaadin-tab>Bar-2</vaadin-tab>
-          <vaadin-tab>Foo-3</vaadin-tab>
-          <vaadin-tab>Bar-3</vaadin-tab>
-          <vaadin-tab>Foo-4</vaadin-tab>
-          <vaadin-tab>Bar-4</vaadin-tab>
-          <vaadin-tab>Foo-5</vaadin-tab>
-          <vaadin-tab>Bar-5</vaadin-tab>
-          <vaadin-tab>Foo-6</vaadin-tab>
-          <vaadin-tab>Bar-6</vaadin-tab>
-          <vaadin-tab>Foo-7</vaadin-tab>
-          <vaadin-tab>Bar-7</vaadin-tab>
-          <vaadin-tab>Foo-8</vaadin-tab>
-          <vaadin-tab>Bar-8</vaadin-tab>
+        <vaadin-tabs>
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+          <vaadin-tab>Tab four</vaadin-tab>
+          <vaadin-tab>Tab five</vaadin-tab>
+          <vaadin-tab>Tab six</vaadin-tab>
+          <vaadin-tab>Tab seven</vaadin-tab>
+          <vaadin-tab>Tab eight</vaadin-tab>
+          <vaadin-tab>Tab nine</vaadin-tab>
+          <vaadin-tab>Tab ten</vaadin-tab>
+          <vaadin-tab>Tab eleven</vaadin-tab>
+          <vaadin-tab>Tab twelve</vaadin-tab>
+          <vaadin-tab>Tab thirteen</vaadin-tab>
+          <vaadin-tab>Tab fourteen</vaadin-tab>
+          <vaadin-tab>Tab fifteen</vaadin-tab>
         </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Vertical and Scrollable tabs</h3>
-    <vaadin-demo-snippet id='tabs-basic-demos-scrollable-tabs'>
+    <h3>Scrolling vertical tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-scrollable-vertical-tabs'>
+      <template preserve-content>
+        <vaadin-tabs vertical style="height: 130px;">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+          <vaadin-tab>Tab four</vaadin-tab>
+          <vaadin-tab>Tab five</vaadin-tab>
+          <vaadin-tab>Tab six</vaadin-tab>
+          <vaadin-tab>Tab seven</vaadin-tab>
+          <vaadin-tab>Tab eight</vaadin-tab>
+          <vaadin-tab>Tab nine</vaadin-tab>
+          <vaadin-tab>Tab ten</vaadin-tab>
+          <vaadin-tab>Tab eleven</vaadin-tab>
+          <vaadin-tab>Tab twelve</vaadin-tab>
+          <vaadin-tab>Tab thirteen</vaadin-tab>
+          <vaadin-tab>Tab fourteen</vaadin-tab>
+          <vaadin-tab>Tab fifteen</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Disabled tabs</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-disabled-tabs'>
+      <template preserve-content>
+        <vaadin-tabs>
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab disabled>Disabled tab</vaadin-tab>
+          <vaadin-tab>Tab four</vaadin-tab>
+          <vaadin-tab>Tab five</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Tabs that cover the entire width of the tab bar</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-span-tabs'>
       <template preserve-content>
         <style>
-          vaadin-tab {
-            min-width: 100px;
-            text-align: center;
+          .full-width-tabs vaadin-tab {
+            flex-grow: 1;
           }
         </style>
-        <vaadin-tabs selected="2" vertical style="height: 120px">
-          <vaadin-tab>Foo-1</vaadin-tab>
-          <vaadin-tab>Bar-1</vaadin-tab>
-          <vaadin-tab>Foo-2</vaadin-tab>
-          <vaadin-tab>Bar-2</vaadin-tab>
-          <vaadin-tab>Foo-3</vaadin-tab>
-          <vaadin-tab>Bar-3</vaadin-tab>
-          <vaadin-tab>Foo-4</vaadin-tab>
-          <vaadin-tab>Bar-4</vaadin-tab>
-          <vaadin-tab>Foo-5</vaadin-tab>
-          <vaadin-tab>Bar-5</vaadin-tab>
-          <vaadin-tab>Foo-6</vaadin-tab>
-          <vaadin-tab>Bar-6</vaadin-tab>
-          <vaadin-tab>Foo-7</vaadin-tab>
-          <vaadin-tab>Bar-7</vaadin-tab>
-          <vaadin-tab>Foo-8</vaadin-tab>
-          <vaadin-tab>Bar-8</vaadin-tab>
+        <vaadin-tabs class="full-width-tabs">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Pre-selected tab</h3>
+    <vaadin-demo-snippet id='tabs-basic-demos-preselected-tab'>
+      <template preserve-content>
+        <vaadin-tabs selected="1">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
         </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
