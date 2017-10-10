@@ -33,7 +33,7 @@
   </vaadin-tabs>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="200" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/-/element/vaadin-tabs)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/-/element/vaadin-tabs)
 
 
 ## Running demos and tests in browser
