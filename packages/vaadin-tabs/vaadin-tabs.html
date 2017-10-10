@@ -154,7 +154,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinTabs extends
+      class TabsElement extends
         Vaadin.ListMixin(
           Vaadin.ThemableMixin(
             Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
@@ -221,13 +221,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinTabs.is, VaadinTabs);
+      customElements.define(TabsElement.is, TabsElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinTabs = VaadinTabs;
+      Vaadin.TabsElement = TabsElement;
     }
   </script>
 </dom-module>
