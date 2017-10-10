@@ -50,8 +50,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     </style>
 
-    <div id="bar" part="bar">
-      <div id="value" part="value"></div>
+    <div part="bar">
+      <div part="value"></div>
     </div>
 
   </template>
@@ -81,6 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ProgressMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
       class ProgressBarElement extends Vaadin.ThemableMixin(Vaadin.ProgressMixin(Polymer.Element)) {
