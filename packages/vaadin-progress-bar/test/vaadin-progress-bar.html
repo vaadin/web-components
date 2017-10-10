@@ -52,20 +52,12 @@
         expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
       });
 
-      it('should throw an exception in case of wrong bounds', () => {
-        var threw = false;
-        var message = '';
+      it('should set normalized value to 1 in case of wrong bounds', () => {
+        progress.value = 10;
+        progress.max = 12;
+        progress.min = 13;
 
-        try {
-          progress.max = 12;
-          progress.min = 13;
-        } catch (exception) {
-          threw = true;
-          message = exception.message;
-        }
-
-        expect(threw).to.be.true;
-        expect(message).to.be.equal('min should be less then max');
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('1');
       });
 
     });
