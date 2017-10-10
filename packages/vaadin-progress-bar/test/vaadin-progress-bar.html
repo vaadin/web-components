@@ -83,6 +83,26 @@
         expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('1');
       });
 
+      it('should set proper aria-valuenow on value change', () => {
+        progress.max = 100;
+        progress.value = 50;
+
+        expect(progress.getAttribute('aria-valuenow')).to.equal('50');
+      });
+
+      it('should set proper aria-valuemin on min change', () => {
+        progress.max = 100;
+        progress.min = 10;
+
+        expect(progress.getAttribute('aria-valuemin')).to.equal('10');
+      });
+
+      it('should set proper aria-valuemax on max change', () => {
+        progress.max = 100;
+        progress.min = 10;
+
+        expect(progress.getAttribute('aria-valuemax')).to.equal('100');
+      });
     });
   </script>
 </body>
