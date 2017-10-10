@@ -17,7 +17,6 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: block;
         position: relative;
-        text-align: left;
       }
 
       div[hidden] {
@@ -25,8 +24,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host(:not([nodrop])) {
-        border: 1px dashed;
-        padding: 1em;
         overflow: hidden;
       }
 
@@ -40,7 +37,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="drop-label-icon"] {
         font-family: 'vaadin-upload-icons';
-        margin: 0 1em;
       }
 
       [part="drop-label-icon"]::before {
@@ -112,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinUpload extends Vaadin.ThemableMixin(Polymer.Element) {
+      class UploadElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-upload';
         }
@@ -888,13 +884,13 @@ This program is available under Apache License Version 2.0, available at https:/
         */
       }
 
-      customElements.define(VaadinUpload.is, VaadinUpload);
+      customElements.define(UploadElement.is, UploadElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinUpload = VaadinUpload;
+      Vaadin.UploadElement = UploadElement;
     }
   </script>
 </dom-module>
