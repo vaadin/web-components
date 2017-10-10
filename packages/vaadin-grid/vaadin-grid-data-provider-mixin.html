@@ -45,8 +45,9 @@ This program is available under Apache License Version 2.0, available at https:/
       const {cache, scaledIndex} = this.getCacheAndIndex(index);
       cache.expandedItems[scaledIndex] = cache.expandedItems[scaledIndex] || new CacheItem();
       cache.expandedItems[scaledIndex].collapsed = false;
-      cache.expandedItems[scaledIndex].parentCache = this;
-      this.updateSize();
+      cache.expandedItems[scaledIndex].parentCache = cache;
+      cache.expandedItems[scaledIndex].parentItem = cache.map[scaledIndex];
+      cache.updateSize();
     }
 
     collapseIndex(index) {
@@ -57,20 +58,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
     getCacheAndIndex(index) {
       let thisLevelIndex = index;
-      const keys = Object.keys(this.expandedItems).sort().filter(expandedIndex => {
-        return !this.expandedItems[expandedIndex].collapsed;
-      });
+      const keys = Object.keys(this.expandedItems)
+        .map(Number) // JS gotcha: Object.keys() are strings
+        .sort()
+        .filter(expandedIndex => {
+          return !this.expandedItems[expandedIndex].collapsed;
+        });
       for (var i = 0; i < keys.length; i++) {
         const expandedIndex = keys[i];
         const subCache = this.expandedItems[expandedIndex];
+        const subCacheEffectiveSize = subCache.collapsed ? 0 : subCache.size;
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
         } else if (subCache.size === -1) {
           return {cache: subCache, scaledIndex: thisLevelIndex - expandedIndex - 1};
-        } else if (thisLevelIndex < expandedIndex + subCache.size) {
+        } else if (thisLevelIndex <= expandedIndex + subCacheEffectiveSize) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
-        thisLevelIndex -= subCache.size;
+        thisLevelIndex -= subCacheEffectiveSize;
       }
       return {cache: this, scaledIndex: thisLevelIndex};
     }
@@ -161,14 +166,17 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItem(index, el) {
+
       el.index = index;
       const item = this._cache.getItemForIndex(index);
       if (item) {
         this._updateItem(el, item);
       } else {
-        const pageForIndex = this._getPageForIndex(index);
-        this._loadPage(pageForIndex);
+        const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
+        const pageForIndex = this._getPageForIndex(scaledIndex);
+        this._loadPage(pageForIndex, cache);
       }
+
     }
 
     // _cachedPagesForPhysicalItems() {
@@ -214,32 +222,43 @@ This program is available under Apache License Version 2.0, available at https:/
 
     expandIndex(index) {
       this._cache.expandIndex(index);
+      this._fullSize = this._cache.size;
       this._assignModels();
     }
 
     collapseIndex(index) {
       this._cache.collapseIndex(index);
+      this._fullSize = this._cache.size;
       this._assignModels();
+    }
+
+    isIndexExpanded(index) {
+      const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
+      const subCache = cache.expandedItems[scaledIndex];
+      return Boolean(subCache && !subCache.collapsed);
     }
 
     _canPopulate() {
       return true;
     }
 
-    _loadPage(page) {
+    _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
       if (!this._pendingRequests[page] && this.dataProvider) {
         this._pendingRequests[page] = true;
         const params = {
-          page: page,
+          page,
           pageSize: this.pageSize,
           sortOrders: this._mapSorters(),
-          filters: this._mapFilters()
+          filters: this._mapFilters(),
+          parentItem: cache.parentItem
         };
 
-        this.dataProvider(params, (items) => {
+        this.dataProvider(params, (items, size) => {
+          cache.ownSize = size;
+          cache.updateSize();
           items.forEach((item, itemsIndex) => {
-            this._cache.setItemForIndex(page * this.pageSize + itemsIndex, item);
+            cache.setItemForIndex(page * this.pageSize + itemsIndex, item);
           });
           this._fullSize = this._cache.size;
 
@@ -307,7 +326,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // load data before adding rows to make sure they have content when
         // rendered for the first time.
         this._loading = true;
-        this._loadPage(0, () => {
+        this._loadPage(0, this._cache, () => {
           const hadData = this._hasData;
           this._hasData = true;
           if (!hadData) {
