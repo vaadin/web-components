@@ -56,11 +56,16 @@
           </vaadin-grid-selection-column>
 
           <vaadin-grid-column width="145px" flex-grow="0" frozen resizable>
-            <template>
-              [[index]] <button hidden="[[!item.hasChildren]]" on-click="_toggle" item="[[item]]" index="[[index]]">Toggle</button>
-            </template>
             <template class="header">
               Index
+            </template>
+            <template>
+              <vaadin-grid-hierarchy-toggle
+                  level="[[hierarchyLevel]]"
+                  enabled="[[item.hasChildren]]"
+                  expanded="{{hierarchyExpanded}}">
+                [[index]]
+              </vaadin-grid-hierarchy-toggle>
             </template>
           </vaadin-grid-column>
 

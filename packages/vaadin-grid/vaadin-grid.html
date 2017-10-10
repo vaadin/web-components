@@ -480,6 +480,8 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleRowSelected(row, this._isSelected(item));
         this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
+        this._toggleRowHierarchyExpanded(row, this.isIndexExpanded(row.index));
+        this._updateRowHierarchyLevel(row, this._getIndexHierarchyLevel(row.index));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
@@ -512,6 +514,24 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleAttribute('selected', selected, row);
         this._a11yUpdateRowSelected(row, selected);
+      }
+
+      _updateRowHierarchyLevel(row, level) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__hierarchyLevel__ = level;
+            cell._instance.hierarchyLevel = level;
+          }
+        });
+      }
+
+      _toggleRowHierarchyExpanded(row, expanded) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__hierarchyExpanded__ = expanded;
+            cell._instance.hierarchyExpanded = expanded;
+          }
+        });
       }
 
       _resizeHandler() {

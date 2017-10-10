@@ -231,10 +231,28 @@ This program is available under Apache License Version 2.0, available at https:/
       this._assignModels();
     }
 
+    _hierarchyExpandedInstanceChangedCallback(inst, value) {
+      if (value) {
+        this.expandIndex(inst.index);
+      } else {
+        this.collapseIndex(inst.index);
+      }
+    }
+
     isIndexExpanded(index) {
       const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
       const subCache = cache.expandedItems[scaledIndex];
       return Boolean(subCache && !subCache.collapsed);
+    }
+
+    _getIndexHierarchyLevel(index) {
+      let {cache} = this._cache.getCacheAndIndex(index);
+      let level = 0;
+      while (cache.parentCache) {
+        cache = cache.parentCache;
+        level++;
+      }
+      return level;
     }
 
     _canPopulate() {

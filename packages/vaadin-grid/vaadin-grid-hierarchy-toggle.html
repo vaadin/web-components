@@ -1,0 +1,131 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+
+<dom-module id="vaadin-grid-hierarchy-toggle-default-theme">
+  <template>
+    <style>
+      :host {
+        --level-offset: 1em;
+      }
+
+      :host(:not([expanded])) [part="toggle"]::before {
+        content: "➕";
+      }
+
+      :host([expanded]) [part="toggle"]::before {
+        content: "➖";
+      }
+
+      :host(:not([enabled])) [part="toggle"] {
+        visibility: hidden;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-grid-hierarchy-toggle">
+  <template>
+    <style>
+      :host {
+        cursor: pointer;
+      }
+
+      [part="spacer"] {
+        display: inline-block;
+        width: calc(var(--level, 0) * var(--level-offset, 1em));
+      }
+    </style>
+
+    <span part="spacer"></span><span part="toggle"></span><span part="content"><slot></slot></span>
+  </template>
+</dom-module>
+
+<script>
+  {
+    /**
+     * `<vaadin-grid-hierarchy-toggle>` is a helper element for the `<vaadin-grid>`
+     * that provides toggle and level display functionality for the item hierarchy.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid>
+     *   <vaadin-grid-hierarchy-toggle frozen></vaadin-grid-hierarchy-toggle>
+     *
+     *   <vaadin-grid-column><template>[[index]]<template></vaadin-grid-column>
+     *   <!-- ... -->
+     *  </vaadin-grid>
+     * ```
+     *
+     * @memberof Vaadin
+     * @mixes Vaadin.ThemableMixin
+     */
+    class GridHierarchyToggleElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'vaadin-grid-hierarchy-toggle';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Current level of the hierarchy represented with a horizontal offset
+           * of the toggle button.
+           */
+          level: {
+            type: Number,
+            observer: '_levelChanged'
+          },
+
+          /**
+           * Enables toggling a hierarchy sublevel.
+           */
+          enabled: {
+            type: Boolean,
+            reflectToAttribute: true
+          },
+
+          /**
+           * Sublevel toggle state.
+           */
+          expanded: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+
+        this.addEventListener('click', e => this._onClick(e));
+      }
+
+      _onClick(e) {
+        if (!this.enabled) {
+          return;
+        }
+
+        e.preventDefault();
+        this.expanded = !this.expanded;
+      }
+
+      _levelChanged(level) {
+        this.updateStyles({'--level': Number(level)});
+      }
+    }
+
+    customElements.define(GridHierarchyToggleElement.is, GridHierarchyToggleElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridHierarchyToggleElement = GridHierarchyToggleElement;
+  }
+</script>
