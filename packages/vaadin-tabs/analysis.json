@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-tabs.html",
         "start": {
-          "line": 176,
+          "line": 228,
           "column": 6
         },
         "end": {
-          "line": 176,
+          "line": 228,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.",
+          "description": "`<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.\n\n```\n  <vaadin-tab>\n    Tab 1\n  </vaadin-tab>\n```",
           "summary": "",
           "path": "vaadin-tab.html",
           "properties": [
@@ -45,7 +45,7 @@
                 }
               },
               "defaultValue": "false",
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "selected",
@@ -70,7 +70,7 @@
                 }
               },
               "defaultValue": "false",
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
           "methods": [
@@ -80,11 +80,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 83,
+                  "line": 81,
                   "column": 8
                 },
                 "end": {
-                  "line": 86,
+                  "line": 84,
                   "column": 9
                 }
               },
@@ -108,7 +108,7 @@
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_selectedChanged",
@@ -131,7 +131,7 @@
                   "name": "selected"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_disabledChanged",
@@ -154,7 +154,7 @@
                   "name": "disabled"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_setFocused",
@@ -177,7 +177,7 @@
                   "name": "focused"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_setActive",
@@ -200,7 +200,7 @@
                   "name": "active"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_onKeydown",
@@ -223,7 +223,7 @@
                   "name": "event"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "_onKeyup",
@@ -246,22 +246,22 @@
                   "name": "event"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
           "staticMethods": [
             {
-              "name": "includeStyle",
+              "name": "_includeStyle",
               "description": "",
-              "privacy": "public",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 45,
+                  "line": 46,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 50,
                   "column": 5
                 }
               },
@@ -278,11 +278,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 78,
+              "line": 76,
               "column": 6
             },
             "end": {
-              "line": 87,
+              "line": 85,
               "column": 7
             }
           },
@@ -306,7 +306,7 @@
               },
               "metadata": {},
               "type": "boolean",
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "selected",
@@ -324,7 +324,7 @@
               },
               "metadata": {},
               "type": "boolean",
-              "inheritedFrom": "Vaadin.NavItemMixin"
+              "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
           "events": [],
@@ -339,24 +339,24 @@
               "range": {
                 "file": "vaadin-tab.html",
                 "start": {
-                  "line": 62,
-                  "column": 6
+                  "line": 55,
+                  "column": 4
                 },
                 "end": {
-                  "line": 62,
-                  "column": 19
+                  "line": 55,
+                  "column": 17
                 }
               }
             }
           ],
           "tagname": "vaadin-tab",
           "mixins": [
-            "Vaadin.NavItemMixin",
+            "Vaadin.ItemMixin",
             "Vaadin.ThemableMixin"
           ]
         },
         {
-          "description": "`<vaadin-tabs>` is a Polymer 2 element for easy switching between different view",
+          "description": "`<vaadin-tabs>` is a Polymer 2 element for easy switching between different view\n\n```\n  <vaadin-tabs selected=\"4\">\n    <vaadin-tab>Page 1</vaadin-tab>\n    <vaadin-tab>Page 2</vaadin-tab>\n    <vaadin-tab>Page 3</vaadin-tab>\n    <vaadin-tab>Page 4</vaadin-tab>\n  </vaadin-tabs>       \n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description                          | Theme for Element\n------------------|--------------------------------------|--------------------\n`back-button`     | Button for moving the scroll back    | vaadin-tabs\n`tabs`            | The tabs container                   | vaadin-tabs\n`forward-button`  | Button for moving the scroll forward | vaadin-tabs",
           "summary": "",
           "path": "vaadin-tabs.html",
           "properties": [
@@ -383,7 +383,7 @@
                 }
               },
               "defaultValue": "0",
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
               "name": "vertical",
@@ -405,7 +405,7 @@
                 "polymer": {}
               },
               "defaultValue": "false",
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             }
           ],
           "methods": [
@@ -415,11 +415,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 169,
                   "column": 8
                 },
                 "end": {
-                  "line": 135,
+                  "line": 179,
                   "column": 9
                 }
               },
@@ -433,11 +433,11 @@
               "sourceRange": {
                 "file": "vaadin-list-mixin.html",
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 4
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 5
                 }
               },
@@ -447,16 +447,16 @@
                   "name": "event"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
-              "name": "_focus",
+              "name": "_setFocusable",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-list-mixin.html",
                 "start": {
-                  "line": 107,
+                  "line": 110,
                   "column": 4
                 },
                 "end": {
@@ -467,13 +467,13 @@
               "metadata": {},
               "params": [
                 {
-                  "name": "index"
+                  "name": "idx"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
-              "name": "_selectedChanged",
+              "name": "_focus",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -483,7 +483,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 124,
+                  "line": 120,
                   "column": 5
                 }
               },
@@ -493,7 +493,30 @@
                   "name": "idx"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
+            },
+            {
+              "name": "_selectedChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-list-mixin.html",
+                "start": {
+                  "line": 122,
+                  "column": 4
+                },
+                "end": {
+                  "line": 125,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "idx"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
               "name": "_onSelected",
@@ -502,11 +525,11 @@
               "sourceRange": {
                 "file": "vaadin-list-mixin.html",
                 "start": {
-                  "line": 126,
+                  "line": 127,
                   "column": 4
                 },
                 "end": {
-                  "line": 133,
+                  "line": 134,
                   "column": 5
                 }
               },
@@ -516,7 +539,7 @@
                   "name": "e"
                 }
               ],
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
               "name": "_scrollForward",
@@ -524,11 +547,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 181,
                   "column": 8
                 },
                 "end": {
-                  "line": 139,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -541,11 +564,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 185,
                   "column": 8
                 },
                 "end": {
-                  "line": 143,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -553,16 +576,16 @@
               "params": []
             },
             {
-              "name": "_incrementScroll",
+              "name": "_scroll",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 189,
                   "column": 8
                 },
                 "end": {
-                  "line": 147,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -579,11 +602,28 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 168,
+                  "line": 208,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_repaintShadowNodesHack",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 210,
+                  "column": 8
+                },
+                "end": {
+                  "line": 220,
                   "column": 9
                 }
               },
@@ -593,17 +633,17 @@
           ],
           "staticMethods": [
             {
-              "name": "includeStyle",
+              "name": "_includeStyle",
               "description": "",
-              "privacy": "public",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 45,
+                  "line": 46,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 50,
                   "column": 5
                 }
               },
@@ -625,11 +665,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 120,
+              "line": 156,
               "column": 6
             },
             "end": {
-              "line": 169,
+              "line": 221,
               "column": 7
             }
           },
@@ -653,7 +693,7 @@
               },
               "metadata": {},
               "type": "number",
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             },
             {
               "name": "vertical",
@@ -671,7 +711,7 @@
               },
               "metadata": {},
               "type": "boolean",
-              "inheritedFrom": "Vaadin.NavListMixin"
+              "inheritedFrom": "Vaadin.ListMixin"
             }
           ],
           "events": [],
@@ -686,19 +726,19 @@
               "range": {
                 "file": "vaadin-tabs.html",
                 "start": {
-                  "line": 99,
-                  "column": 8
+                  "line": 115,
+                  "column": 6
                 },
                 "end": {
-                  "line": 99,
-                  "column": 21
+                  "line": 115,
+                  "column": 19
                 }
               }
             }
           ],
           "tagname": "vaadin-tabs",
           "mixins": [
-            "Vaadin.NavListMixin",
+            "Vaadin.ListMixin",
             "Vaadin.ThemableMixin"
           ]
         }
@@ -932,7 +972,7 @@
             }
           },
           "privacy": "public",
-          "name": "Vaadin.NavItemMixin",
+          "name": "Vaadin.ItemMixin",
           "attributes": [
             {
               "name": "disabled",
@@ -1034,7 +1074,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 46,
+                  "line": 49,
                   "column": 5
                 }
               },
@@ -1047,11 +1087,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 4
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 5
                 }
               },
@@ -1063,12 +1103,12 @@
               ]
             },
             {
-              "name": "_focus",
+              "name": "_setFocusable",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 107,
+                  "line": 110,
                   "column": 4
                 },
                 "end": {
@@ -1079,7 +1119,28 @@
               "metadata": {},
               "params": [
                 {
-                  "name": "index"
+                  "name": "idx"
+                }
+              ]
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 115,
+                  "column": 4
+                },
+                "end": {
+                  "line": 120,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "idx"
                 }
               ]
             },
@@ -1089,11 +1150,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 115,
+                  "line": 122,
                   "column": 4
                 },
                 "end": {
-                  "line": 124,
+                  "line": 125,
                   "column": 5
                 }
               },
@@ -1110,11 +1171,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 126,
+                  "line": 127,
                   "column": 4
                 },
                 "end": {
-                  "line": 133,
+                  "line": 134,
                   "column": 5
                 }
               },
@@ -1135,12 +1196,12 @@
               "column": 2
             },
             "end": {
-              "line": 134,
+              "line": 135,
               "column": 3
             }
           },
           "privacy": "public",
-          "name": "Vaadin.NavListMixin",
+          "name": "Vaadin.ListMixin",
           "attributes": [
             {
               "name": "selected",

@@ -25,11 +25,12 @@
 ```
 -->
 ```html
-<vaadin-tabs direction="horizontal" selected="2">
-  <vaadin-tab>Foo</vaadin-tab>
-  <vaadin-tab>Bar</vaadin-tab>
-  <vaadin-tab>Baz</vaadin-tab>
-</vaadin-tabs>
+  <vaadin-tabs selected="4">
+    <vaadin-tab>Page 1</vaadin-tab>
+    <vaadin-tab>Page 2</vaadin-tab>
+    <vaadin-tab>Page 3</vaadin-tab>
+    <vaadin-tab>Page 4</vaadin-tab>
+  </vaadin-tabs>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="200" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/-/element/vaadin-tabs)
