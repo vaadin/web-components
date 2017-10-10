@@ -12,6 +12,10 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-progress-bar-default-theme" theme-for="vaadin-progress-bar">
   <template>
     <style>
+      :host {
+        height: 3px;
+      }
+
       [part="bar"] {
         background: #ddd;
       }
@@ -28,23 +32,15 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
-        height: 3px;
-        margin: 8px 0;
-        overflow: hidden;
-        position: relative;
       }
 
       [part="bar"] {
         height: 100%;
-        position: absolute;
-        width: 100%;
       }
 
       [part="value"] {
         height: 100%;
-        position: absolute;
         transform-origin: 0 50%;
-        width: 100%;
         transform: scaleX(var(--vaadin-progress-value));
       }
 
