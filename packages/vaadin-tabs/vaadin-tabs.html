@@ -130,6 +130,25 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * `<vaadin-tabs>` is a Polymer 2 element for easy switching between different view
        *
+       * ```
+       *   <vaadin-tabs selected="4">
+       *     <vaadin-tab>Page 1</vaadin-tab>
+       *     <vaadin-tab>Page 2</vaadin-tab>
+       *     <vaadin-tab>Page 3</vaadin-tab>
+       *     <vaadin-tab>Page 4</vaadin-tab>
+       *   </vaadin-tabs>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name         | Description                          | Theme for Element
+       * ------------------|--------------------------------------|--------------------
+       * `back-button`     | Button for moving the scroll back    | vaadin-tabs
+       * `tabs`            | The tabs container                   | vaadin-tabs
+       * `forward-button`  | Button for moving the scroll forward | vaadin-tabs
+       *       
        * @memberof Vaadin
        * @mixes Vaadin.ListMixin
        * @mixes Vaadin.ThemableMixin
