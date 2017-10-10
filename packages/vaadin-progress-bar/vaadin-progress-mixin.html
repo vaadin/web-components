@@ -17,7 +17,8 @@ This program is available under Apache License Version 2.0, available at https:/
            * Displays current progress
            */
           value: {
-            type: Number
+            type: Number,
+            observer: '_valueChanged'
           },
           /**
            * Minimum bound of the progress bar. Cannot be greater than max.
@@ -40,14 +41,24 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_valueChanged(value, min, max)'
+          '_normalizedValueChanged(value, min, max)'
         ];
       }
 
-      _valueChanged(value, min, max) {
+      ready() {
+        super.ready();
+
+        this.setAttribute('role', 'progressbar');
+      }
+
+      _normalizedValueChanged(value, min, max) {
         this.updateStyles({
           '--vaadin-progress-value': String(this._normalizeValue(value, min, max))
         });
+      }
+
+      _valueChanged(newV, oldV) {
+        this.setAttribute('aria-valuenow', this.value);
       }
 
       _minChanged(newV, oldV) {
@@ -58,6 +69,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this.min = oldV;
           }
         }
+
+        this.setAttribute('aria-valuemin', this.min);
       }
 
       _maxChanged(newV, oldV) {
@@ -68,6 +81,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this.max = oldV;
           }
         }
+
+        this.setAttribute('aria-valuemax', this.max);
       }
 
       /**
