@@ -39,7 +39,7 @@
     return xhr;
   }
 
-  window.addEventListener('WebComponentsReady', function() {
+  window.addEventListener('WebComponentsReady', () => {
     // Monkey-patch vaadin-upload prototype to use MockHttpRequest
     Object.getPrototypeOf(document.createElement('vaadin-upload'))._createXhr = mockXhrGenerator;
   });

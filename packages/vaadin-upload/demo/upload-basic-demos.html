@@ -37,36 +37,15 @@
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Custom Color Scheme and Container Styles</h3>
-    <vaadin-demo-snippet id='upload-basic-demos-custom-color-scheme-and-container-styles'>
-      <template preserve-content>
-        <style is="custom-style">
-          vaadin-upload.thick-border {
-            --primary-color: #396;
-            --dark-primary-color: #063;
-            --light-primary-color: #6c9;
-            --error-color: darkred;
-
-            border: 2px solid #ccc;
-            padding: 14px;
-            background: #eee;
-            border-radius: 0;
-          }
-
-          vaadin-upload.thick-border[dragover] {
-            border-color: #396;
-          }
-        </style>
-
-        <vaadin-upload class="thick-border"></vaadin-upload>
-      </template>
-    </vaadin-demo-snippet>
-
-
     <h3>Custom Drop Label</h3>
     <vaadin-demo-snippet id='upload-basic-demos-custom-drop-label'>
       <template preserve-content>
+        <style>
+          [slot="drop-label-icon"] {
+            margin: 0 1em;
+            width: 20px;
+          }
+        </style>
         <vaadin-upload>
           <iron-icon slot="drop-label-icon" icon="cloud-upload"></iron-icon>
           <span slot="drop-label">Drop files to the cloud...</span>
@@ -93,11 +72,11 @@
         <paper-toast id="rejectToast"></paper-toast>
 
         <script>
-          window.addDemoReadyListener('#upload-basic-demos-setting-restrictions-on-files-to-upload', function(document) {
+          window.addDemoReadyListener('#upload-basic-demos-setting-restrictions-on-files-to-upload', document => {
             var upload = document.querySelector('vaadin-upload#rejectEventDemo');
             var toast = document.querySelector('paper-toast#rejectToast');
 
-            upload.addEventListener('file-reject', function(event) {
+            upload.addEventListener('file-reject', event => {
               toast.text = event.detail.file.name + ' error: ' + event.detail.error;
               toast.open();
             });

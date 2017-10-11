@@ -1,6 +1,5 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-upload.svg)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-upload)
-![Polymer 2 supported](https://img.shields.io/badge/Polymer2-supported-blue.svg)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-upload.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-upload)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -69,23 +68,14 @@
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-upload` directory, run `npm install` and then `polymer install --variants` to install dependencies.
+1. When in the `vaadin-upload` directory, run `npm install` and then `bower install` to install dependencies.
 
-1. Run `polymer serve`, after that you will be able to access:
+1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
-  - Polymer1-compatible version:
+1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-    - API documentation: http://127.0.0.1:8000/components/vaadin-upload/
-    - Examples: http://127.0.0.1:8000/components/vaadin-upload/demo/
-    - Tests: http://127.0.0.1:8000/components/vaadin-upload/test/
-
-  - Polymer2-compatible version:
-
-    - API documentation: http://127.0.0.1:8001/components/vaadin-upload/
-    - Examples: http://127.0.0.1:8001/components/vaadin-upload/demo/
-    - Tests: http://127.0.0.1:8001/components/vaadin-upload/test/
-
-Note that ports `8000` and `8001` could be different in your environment.
+  - http://127.0.0.1:8080/components/vaadin-upload/demo
+  - http://127.0.0.1:8080/components/vaadin-upload/test
 
 
 ## Running tests from the command line
@@ -98,10 +88,10 @@ Note that ports `8000` and `8001` could be different in your environment.
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
 
 
-## Creating a pull request
+## Contributing
 
   - Make sure your code is compliant with our code linters: `gulp lint`
-  - Check that tests are passing: `npm test`
+  - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin Elements team members
 
