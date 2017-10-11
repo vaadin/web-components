@@ -33,7 +33,8 @@ This program is available under Apache License Version 2.0, available at https:/
         vertical: {
           type: Boolean,
           value: false,
-          reflectToAttribute: true
+          reflectToAttribute: true,
+          observer: '_verticalChanged'
         }
       };
     }
@@ -46,6 +47,14 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._navItems.length) {
         this._selectedChanged(this.selected);
         this._setFocusable(this.selected);
+      }
+    }
+
+    _verticalChanged(vertical) {
+      if (vertical) {
+        this.setAttribute('aria-orientation', 'vertical');
+      } else {
+        this.setAttribute('aria-orientation', 'horizontal');
       }
     }
 
