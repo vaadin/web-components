@@ -50,24 +50,59 @@
         progress.value = 15;
 
         expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.equal('0.5');
       });
 
-      it('should throw an exception in case of wrong bounds', () => {
-        var threw = false;
-        var message = '';
+      it('should set normalized value to 1 in case of wrong bounds', () => {
+        progress.value = 10;
+        progress.max = 12;
+        progress.min = 13;
 
-        try {
-          progress.max = 12;
-          progress.min = 13;
-        } catch (exception) {
-          threw = true;
-          message = exception.message;
-        }
-
-        expect(threw).to.be.true;
-        expect(message).to.be.equal('min should be less then max');
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('1');
       });
 
+      it('should set normalized value to 1 in case of equal bounds', () => {
+        progress.value = 10;
+        progress.max = 10;
+        progress.min = 10;
+
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('1');
+      });
+
+      it('should set normalized value to 0 if the value is undefined', () => {
+        progress.value = undefined;
+
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('0');
+      });
+
+      it('should clamp normalized value between 0 and 1', () => {
+        progress.value = -1;
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('0');
+
+        progress.value = 2;
+        expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.be.equal('1');
+      });
+
+      it('should set proper aria-valuenow on value change', () => {
+        progress.max = 100;
+        progress.value = 50;
+
+        expect(progress.getAttribute('aria-valuenow')).to.equal('50');
+      });
+
+      it('should set proper aria-valuemin on min change', () => {
+        progress.max = 100;
+        progress.min = 10;
+
+        expect(progress.getAttribute('aria-valuemin')).to.equal('10');
+      });
+
+      it('should set proper aria-valuemax on max change', () => {
+        progress.max = 100;
+        progress.min = 10;
+
+        expect(progress.getAttribute('aria-valuemax')).to.equal('100');
+      });
     });
   </script>
 </body>

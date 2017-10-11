@@ -21,7 +21,7 @@ This program is available under Apache License Version 2.0, available at https:/
             observer: '_valueChanged'
           },
           /**
-           * Minimum bound of the progress bar. Cannot be greater than max.
+           * Minimum bound of the progress bar.
            */
           min: {
             type: Number,
@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
             observer: '_minChanged'
           },
           /**
-           * Maximum bound of the progress bar. Cannot be less than min.
+           * Maximum bound of the progress bar.
            */
           max: {
             type: Number,
@@ -58,47 +58,31 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _valueChanged(newV, oldV) {
-        this.setAttribute('aria-valuenow', this.value);
+        this.setAttribute('aria-valuenow', newV);
       }
 
       _minChanged(newV, oldV) {
-        if (newV >= this.max) {
-          try {
-            throw new Error('min should be less then max');
-          } finally {
-            this.min = oldV;
-          }
-        }
-
-        this.setAttribute('aria-valuemin', this.min);
+        this.setAttribute('aria-valuemin', newV);
       }
 
       _maxChanged(newV, oldV) {
-        if (newV <= this.min) {
-          try {
-            throw new Error('min should be less then max');
-          } finally {
-            this.max = oldV;
-          }
-        }
-
-        this.setAttribute('aria-valuemax', this.max);
+        this.setAttribute('aria-valuemax', newV);
       }
 
       /**
        * Percent of current progress relative to whole progress bar (max - min)
        */
       _normalizeValue(value, min, max) {
+        var nV;
+
         if (!value && value != 0) {
-          return;
-        }
-
-        var nV = (value - min) / (max - min);
-
-        if (nV > 1) {
-          nV = 1;
-        } else if (nV < 0) {
           nV = 0;
+        } else if (min >= max) {
+          nV = 1;
+        } else {
+          nV = (value - min) / (max - min);
+
+          nV = Math.min(Math.max(nV, 0), 1);
         }
 
         return nV;
