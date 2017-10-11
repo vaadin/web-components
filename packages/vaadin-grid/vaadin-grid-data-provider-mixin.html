@@ -22,13 +22,8 @@ This program is available under Apache License Version 2.0, available at https:/
       return cache.map[scaledIndex];
     }
 
-    setItemForIndex(index, item) {
-      const {cache, scaledIndex} = this.getCacheAndIndex(index);
-      if (item.siblingCount !== undefined && cache.size !== parseInt(item.siblingCount)) {
-        cache.ownSize = parseInt(item.siblingCount);
-        cache.updateSize();
-      }
-      cache.map[scaledIndex] = item;
+    setItemForScaledIndex(scaledIndex, item) {
+      this.map[scaledIndex] = item;
     }
 
     updateSize() {
@@ -258,7 +253,7 @@ This program is available under Apache License Version 2.0, available at https:/
           cache.ownSize = size;
           cache.updateSize();
           items.forEach((item, itemsIndex) => {
-            cache.setItemForIndex(page * this.pageSize + itemsIndex, item);
+            cache.setItemForScaledIndex(page * this.pageSize + itemsIndex, item);
           });
           this._fullSize = this._cache.size;
 
