@@ -151,6 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _updateCacheSize(size) {
       this._cache.ownSize = size;
       this._cache.updateSize();
+      this._fullSize = this._cache.size;
     }
 
     _loadingChanged(loading) {
@@ -253,7 +254,9 @@ This program is available under Apache License Version 2.0, available at https:/
         };
 
         this.dataProvider(params, (items, size) => {
-          cache.ownSize = size;
+          if (size !== undefined) {
+            cache.ownSize = size;
+          }
           cache.updateSize();
           items.forEach((item, itemsIndex) => {
             cache.setItemForScaledIndex(page * this.pageSize + itemsIndex, item);
@@ -286,6 +289,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     clearCache() {
       this._cache = new CacheItem();
+      this._cache.ownSize = this.size;
       this._pendingRequests = {};
       this._hasData = false;
       this._loading = true;

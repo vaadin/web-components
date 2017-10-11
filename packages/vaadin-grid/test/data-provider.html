@@ -298,8 +298,9 @@
         setTimeout(() => {
           grid.dataProvider = sinon.spy(infiniteDataProvider);
 
-          expect(grid.dataProvider.callCount).to.eql(1);
+          expect(grid.dataProvider.callCount).to.eql(2);
           expect(grid.dataProvider.args[0][0].page).to.eql(0);
+          expect(grid.dataProvider.args[1][0].page).to.eql(1);
           done();
         }, 1000);
       });
