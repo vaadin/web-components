@@ -255,6 +255,15 @@
           keyDownChar(nav, 'b');
           expect(nav._navItems[1].focused).to.be.true;
         });
+
+        it('if not vertically oriented, aria-orientation attribute should be set to horizontal', () => {
+          expect(nav.getAttribute('aria-orientation')).to.be.equal('horizontal');
+        });
+
+        it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
+          nav.vertical = true;
+          expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
+        });
       });
     });
   </script>
