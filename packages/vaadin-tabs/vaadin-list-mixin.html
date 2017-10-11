@@ -51,11 +51,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _verticalChanged(vertical) {
-      if (vertical) {
-        this.setAttribute('aria-orientation', 'vertical');
-      } else {
-        this.setAttribute('aria-orientation', 'horizontal');
-      }
+      this.setAttribute('aria-orientation', vertical ? 'vertical' : 'horizontal');
     }
 
     get focused() {
