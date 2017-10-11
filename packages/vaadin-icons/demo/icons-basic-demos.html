@@ -87,9 +87,6 @@
       ready() {
         super.ready();
         this.iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'vaadin');
-
-        // Checked in gemini before capture callback
-        window.webComponentsAreReady = true;
       }
 
       getIconNames(iconset, search) {
