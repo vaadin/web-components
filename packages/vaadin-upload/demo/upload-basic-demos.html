@@ -40,6 +40,12 @@
     <h3>Custom Drop Label</h3>
     <vaadin-demo-snippet id='upload-basic-demos-custom-drop-label'>
       <template preserve-content>
+        <style>
+          [slot="drop-label-icon"] {
+            margin: 0 1em;
+            width: 20px;
+          }
+        </style>
         <vaadin-upload>
           <iron-icon slot="drop-label-icon" icon="cloud-upload"></iron-icon>
           <span slot="drop-label">Drop files to the cloud...</span>
