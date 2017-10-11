@@ -5,7 +5,7 @@
 
 # &lt;vaadin-upload&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-upload/html-examples)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-upload/html-examples/upload-basic-demos)
 
 [&lt;vaadin-upload&gt;](https://vaadin.com/elements/vaadin-upload) is a  [Polymer](http://polymer-project.org) element for uploading files, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
@@ -60,7 +60,7 @@
 </vaadin-upload>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/docs/img/vaadin-upload-overview.png" alt="Screenshot of vaadin-upload" width="723" />](https://vaadin.com/elements/-/element/vaadin-upload)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="723" />](https://vaadin.com/elements/-/element/vaadin-upload)
 
 ## Running demos and tests in browser
 
