@@ -117,11 +117,12 @@ This program is available under Apache License Version 2.0, available at https:/
       const items = this._navItems;
       items.forEach(e => e.focused = e === items[idx]);
       this._setFocusable(idx);
-      this._moveItemToScrollerEdge(idx);
+      this._scrollToItem(idx);
       items[idx].focus();
     }
 
-    _moveItemToScrollerEdge(idx) {
+    // Scroll the item to the viewport so it will be displayed on the edge of it.
+    _scrollToItem(idx) {
       const itemRect = this._navItems[idx].getBoundingClientRect();
       const scrollerRect = this.$.scroll.getBoundingClientRect();
 
@@ -143,7 +144,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _selectedChanged(idx, prevIdx) {
       const items = this._navItems;
       items[idx] && items.forEach(e => e.selected = e === items[idx]);
-      this._moveItemToScrollerEdge(idx);
+      this._scrollToItem(idx);
       this._setFocusable(idx);
 
       if (items[prevIdx] && items[prevIdx].focused) {

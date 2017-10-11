@@ -1,0 +1,99 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-tabs tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../vaadin-tab.html">
+  <link rel="import" href="../vaadin-tabs.html">
+</head>
+
+<body>
+  <test-fixture id="scrollable_nav">
+    <template>
+      <vaadin-tabs style="width: 400px; height: 150px;">
+        <vaadin-tab>Foo</vaadin-tab>
+        <vaadin-tab>Bar</vaadin-tab>
+        <separator>___</separator>
+        <vaadin-tab disabled>Baz</vaadin-tab>
+        <vaadin-tab>Baz</vaadin-tab>
+        <vaadin-tab>Foo1</vaadin-tab>
+        <vaadin-tab>Bar1</vaadin-tab>
+        <vaadin-tab>Baz1</vaadin-tab>
+        <vaadin-tab>Foo2</vaadin-tab>
+      </vaadin-tabs>
+    </template>
+  </test-fixture>
+
+  <script>
+    function arrowDown(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+    }
+
+    function arrowRight(target) {
+      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
+    }
+
+    function arrowUp(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+
+    function arrowLeft(target) {
+      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
+    }
+
+    describe('scrollable-vaadin-tabs', () => {
+      var nav;
+
+      beforeEach(() => nav = fixture('scrollable_nav'));
+
+      it(`Should have overflow`, function(done) {
+        setTimeout(() => {
+          expect(nav.hasAttribute('overflow')).to.be.true;
+          done();
+        }, 10);
+      });
+
+      it('The next item should be displayed on the edge of the viewport on "arrow-right" on the last fully visible tab in viewport', () => {
+        nav.selected = 5;
+        nav._focus(5);
+        arrowRight(nav);
+        expect(nav.$.scroll.getBoundingClientRect().right).to.be.closeTo(nav._navItems[6].getBoundingClientRect().right, 1);
+      });
+
+      it('The next item should be displayed on the edge of the viewport on "arrow-left" on the last fully visible tab in viewport', () => {
+        // Move scroller so the first tab will be out of visible part
+        nav.selected = 6;
+        nav._focus(6);
+        // Move focus and choose the first visible tab selected
+        nav.selected = 1;
+        nav._focus(1);
+
+        arrowLeft(nav);
+        expect(nav.$.scroll.getBoundingClientRect().left).to.be.closeTo(nav._navItems[0].getBoundingClientRect().left, 1);
+      });
+
+      it('The next item should be displayed on the edge of the viewport on "arrow-down" on the last fully visible tab in viewport', () => {
+        nav.vertical = true;
+        nav.selected = 5;
+        nav._focus(5);
+        arrowDown(nav);
+        expect(nav.$.scroll.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[6].getBoundingClientRect().bottom, 1);
+      });
+
+      it('The next item should be displayed on the edge of the viewport on "arrow-up" on the last fully visible tab in viewport', () => {
+        nav.vertical = true;
+        // Move scroller so the first tab will be out of visible part
+        nav.selected = 5;
+        nav._focus(5);
+        // Move focus and choose the first visible tab selected
+        nav.selected = 1;
+        nav._focus(1);
+
+        arrowUp(nav);
+        expect(nav.$.scroll.getBoundingClientRect().top).to.be.closeTo(nav._navItems[0].getBoundingClientRect().top, 1);
+      });
+    });
+  </script>
+</body>
