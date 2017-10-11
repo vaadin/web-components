@@ -26,9 +26,13 @@ This program is available under Apache License Version 2.0, available at https:/
       this.map[scaledIndex] = item;
     }
 
+    getEffectiveSize() {
+      return this.collapsed ? 0 : this.size;
+    }
+
     updateSize() {
       this.size = this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
-        return prev + this.expandedItems[curr].collapsed ? 0 : this.expandedItems[curr].size;
+        return prev + this.expandedItems[curr].getEffectiveSize();
       }, 0);
 
       if (this.parentCache) {
@@ -62,15 +66,14 @@ This program is available under Apache License Version 2.0, available at https:/
       for (var i = 0; i < keys.length; i++) {
         const expandedIndex = keys[i];
         const subCache = this.expandedItems[expandedIndex];
-        const subCacheEffectiveSize = subCache.collapsed ? 0 : subCache.size;
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
         } else if (subCache.size === -1) {
           return {cache: subCache, scaledIndex: thisLevelIndex - expandedIndex - 1};
-        } else if (thisLevelIndex <= expandedIndex + subCacheEffectiveSize) {
+        } else if (thisLevelIndex <= expandedIndex + subCache.getEffectiveSize()) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
-        thisLevelIndex -= subCacheEffectiveSize;
+        thisLevelIndex -= subCache.getEffectiveSize();
       }
       return {cache: this, scaledIndex: thisLevelIndex};
     }
