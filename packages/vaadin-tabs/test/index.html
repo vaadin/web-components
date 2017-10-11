@@ -14,7 +14,8 @@
 
     WCT.loadSuites([
       'items.html',
-      'nav.html'
+      'nav.html',
+      'scrollable-tabs.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
