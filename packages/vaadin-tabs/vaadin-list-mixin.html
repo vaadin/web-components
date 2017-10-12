@@ -150,6 +150,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     // Scroll the container to have the next item by the edge of the viewport
     _scrollToItem(idx) {
+      if (!this._navItems[idx]) {
+        return;
+      }
+
       const itemRect = this._navItems[idx].getBoundingClientRect();
       const scrollerRect = this.$.scroll.getBoundingClientRect();
       var scrollDistance;
