@@ -35,11 +35,6 @@
     "web-component-tester": "^6.1.5",
     "yargs": "latest"
   },
-  "greenkeeper": {
-    "ignore": [
-      "lighthouse"
-    ]
-  },
   "dependencies": {
     "gemini": "^4.19.3",
     "gemini-polyserve": "^1.0.0",
