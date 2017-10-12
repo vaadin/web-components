@@ -10,6 +10,11 @@
         width: 100%;
       }
 
+      .iconset-container {
+        margin-top: 1em;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
       .icon-container {
         margin: 24px 8px;
         text-align: center;
@@ -43,18 +48,29 @@
       }
     </style>
 
-    <dom-repeat items="[[iconsets]]">
-      <template>
-        <dom-repeat id="wrapper" items="[[getIconNames(item)]]">
-          <template is="dom-repeat" >
-            <div class="icon-container">
-              <iron-icon icon="[[item]]"></iron-icon>
-              <span>[[item]]</span>
-            </div>
-          </template>
-        </dom-repeat>
+    <h3>Simple Usage</h3>
+    <vaadin-demo-snippet id='icons-basic-demos-simple-usage'>
+      <template preserve-content>
+        <iron-icon icon="vaadin:vaadin-h"></iron-icon>
       </template>
-    </dom-repeat>
+    </vaadin-demo-snippet>
+
+    <h3>All Icons</h3>
+    <vaadin-text-field value="{{search}}" label="Filter" placeholder="Icon Name"></vaadin-text-field>
+    <div class="iconset-container">
+      <dom-repeat items="[[iconsets]]">
+        <template>
+          <dom-repeat id="wrapper" items="[[getIconNames(item, search)]]">
+            <template is="dom-repeat" >
+              <div class="icon-container">
+                <iron-icon icon="[[item]]"></iron-icon>
+                <span>[[item]]</span>
+              </div>
+            </template>
+          </dom-repeat>
+        </template>
+      </dom-repeat>
+    </div>
   </template>
   <script>
     class IconsBasicDemos extends DemoReadyEventEmitter(IconsDemo(Polymer.Element)) {
@@ -71,15 +87,13 @@
       ready() {
         super.ready();
         this.iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'vaadin');
-
-        // Checked in gemini before capture callback
-        window.webComponentsAreReady = true;
       }
 
-      getIconNames(iconset) {
-        return iconset.getIconNames();
+      getIconNames(iconset, search) {
+        return iconset.getIconNames().filter(name => RegExp('^vaadin:' + search, 'i').test(name));
       }
     }
+
     customElements.define(IconsBasicDemos.is, IconsBasicDemos);
   </script>
 </dom-module>
