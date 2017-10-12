@@ -126,6 +126,13 @@
           expect(item.hasAttribute('focus-ring')).to.be.false;
         });
 
+        it('set this._mousedown to false if mouseup was outside', () => {
+          fire(item, 'mousedown');
+          expect(item._mousedown).to.be.true;
+          fire(document, 'mouseup');
+          expect(item._mousedown).to.be.false;
+        });
+
         it('should be selectable with mouse click', () => {
           item.click();
           expect(item.selected).to.be.true;
