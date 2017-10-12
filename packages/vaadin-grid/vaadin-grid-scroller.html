@@ -66,7 +66,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (index > 0) {
           this._pendingScrollToIndex = null;
         }
-        if (!this.$.items.style.borderTopWidth && index > 0) {
+        if (!parseInt(this.$.items.style.borderTopWidth) && index > 0) {
           // Schedule another scroll to be invoked once init is complete
           this._pendingScrollToIndex = index;
         }

@@ -65,7 +65,7 @@
         grid = fixture('default');
 
         grid.dataProvider = infiniteDataProvider;
-        cachedItems = grid._cache[0];
+        cachedItems = grid._cache.map;
         grid.selectedItems = [cachedItems[0]];
         flushGrid(grid);
         rows = getRows(grid.$.items);
@@ -139,7 +139,7 @@
         flushGrid(grid);
 
         selectionColumn = grid._columnTree[0][0];
-        cachedItems = grid._cache[0];
+        cachedItems = grid._cache.map;
         rows = getRows(grid.$.items);
         headerRows = getRows(grid.$.header);
 
