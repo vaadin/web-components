@@ -36,28 +36,28 @@
   </test-fixture>
 
   <script>
-    describe('file list', function() {
-      var upload;
+    describe('file list', () => {
+      let upload;
 
       function getFileListItems(upload, selector) {
         return Polymer.dom(upload.$.fileList).querySelectorAll(selector || 'vaadin-upload-file');
       }
 
-      describe('file template', function() {
-        beforeEach(function() {
+      describe('file template', () => {
+        beforeEach(() => {
           upload = fixture('upload');
           upload._createXhr = xhrCreator();
           chai.should();
         });
 
-        it('should render files', function() {
+        it('should render files', () => {
           expect(getFileListItems(upload)).to.be.empty;
 
-          var files = createFiles(2);
+          const files = createFiles(2);
           files.forEach(upload._addFile.bind(upload));
           Polymer.dom.flush();
 
-          var fileListItems = getFileListItems(upload);
+          const fileListItems = getFileListItems(upload);
           expect(fileListItems).to.not.be.empty;
           expect(fileListItems.length).to.equal(2);
           expect(fileListItems[0]).to.be.ok;
@@ -66,15 +66,16 @@
           expect(fileListItems[1]).to.have.property('file', files[0]);
         });
 
-        it('should not overflow content', function(done) {
+        it('should not overflow content', done => {
           upload.style.width = '100px';
           upload._addFile(createFiles(1)[0]);
           Polymer.dom.flush();
-
-          Polymer.RenderStatus.afterNextRender(upload, function() {
-            var fileListItem = getFileListItems(upload)[0];
-            expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
-            done();
+          Polymer.RenderStatus.afterNextRender(upload, () => {
+            setTimeout(() => { // IE11 Fix
+              const fileListItem = getFileListItems(upload)[0];
+              expect(fileListItem.scrollWidth).to.equal(fileListItem.offsetWidth);
+              done();
+            }, 100);
           });
         });
       });

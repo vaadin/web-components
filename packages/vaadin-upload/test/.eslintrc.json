@@ -1,6 +1,22 @@
 {
-  "rules": {
-    "no-undef": 0,
-    "no-unused-vars": 0
+  "globals": {
+    "WCT": false,
+    "describe": false,
+    "beforeEach": false,
+    "fixture": false,
+    "it": false,
+    "expect": false,
+    "gemini": false,
+    "sinon": false,
+    "touchDevice": false,
+    "ieOrEdge": false,
+    "describeIf": false,
+    "createFiles": false,
+    "xhrCreator": false,
+    "MockHttpRequest": false,
+    "flush": false,
+    "createFile": false,
+    "chai": false,
+    "describeSkipIf": false
   }
 }
