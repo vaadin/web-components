@@ -27,7 +27,7 @@
 <vaadin-progress-bar value="0.3"></vaadin-progress-bar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="780" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.png" width="780" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
 
 
 ## Running demos and tests in browser

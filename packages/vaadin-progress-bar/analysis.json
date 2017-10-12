@@ -18,7 +18,7 @@
       },
       "elements": [
         {
-          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar>\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0",
+          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar value=\"30\" min=\"10\" max=\"100\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0",
           "summary": "",
           "path": "vaadin-progress-bar.html",
           "properties": [
@@ -253,17 +253,17 @@
           ],
           "staticMethods": [
             {
-              "name": "includeStyle",
+              "name": "_includeStyle",
               "description": "",
-              "privacy": "public",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 45,
+                  "line": 46,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 50,
                   "column": 5
                 }
               },
