@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../vaadin-grid-hierarchy-toggle.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid-hierarchy-toggle></vaadin-grid-hierarchy-toggle>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('hierarchy toggle', () => {
+      let toggle;
+
+      function click(element) {
+        const event = new CustomEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        element.dispatchEvent(event);
+        return event;
+      }
+
+      beforeEach(() => {
+        toggle = fixture('default');
+      });
+
+      it('should have enabled false by default', () => {
+        expect(toggle.enabled).to.not.be.ok;
+      });
+
+      it('should have expanded false by default', () => {
+        expect(toggle.expanded).to.not.be.ok;
+      });
+
+      it('should not toggle on click if not enabled', () => {
+        const clickEvent = click(toggle);
+        expect(toggle.expanded).to.not.be.ok;
+        expect(clickEvent.defaultPrevented).to.be.false;
+      });
+
+      it('should toggle on click if enabled', () => {
+        toggle.enabled = true;
+
+        let clickEvent = click(toggle);
+        expect(toggle.expanded).to.be.true;
+        expect(clickEvent.defaultPrevented).to.be.true;
+
+        clickEvent = click(toggle);
+        expect(toggle.expanded).to.be.false;
+        expect(clickEvent.defaultPrevented).to.be.true;
+      });
+
+      it('should notify for expanded on toggle', () => {
+        toggle.enabled = true;
+        const spy = sinon.spy();
+        toggle.addEventListener('expanded-changed', spy);
+
+        click(toggle);
+
+        expect(spy.callCount).to.equal(1);
+
+        toggle.removeEventListener('expanded-changed', spy);
+      });
+
+      it('should have default slot', () => {
+        const slot = toggle.shadowRoot.querySelector('slot:not([name])');
+        expect(slot).to.be.ok;
+      });
+
+      describe('level', () => {
+        it('should have level zero by default', () => {
+          expect(toggle.level).to.equal(0);
+        });
+
+        it('should have zero spacer width by default', () => {
+          const spacer = toggle.shadowRoot.querySelector('[part~="spacer"]');
+          expect(spacer.getBoundingClientRect().width).to.equal(0);
+        });
+
+        it('should increase spacer width for each level step', () => {
+          const spacer = toggle.shadowRoot.querySelector('[part~="spacer"]');
+          let prevWidth = 0;
+          for (let i = 1; i < 3; i++) {
+            toggle.level = i;
+            const width = spacer.getBoundingClientRect().width;
+            expect(width).to.be.gt(prevWidth);
+            prevWidth = width;
+          }
+        });
+      });
+
+      describe('themability', () => {
+        it('should extend themable mixin', () => {
+          const ctorNames = [];
+          let ctor = toggle.constructor;
+          while (ctor && ctor !== Polymer.Element) {
+            ctorNames.push(ctor.name);
+            ctor = Object.getPrototypeOf(ctor);
+          }
+          expect(ctorNames).to.include('VaadinThemableMixin');
+        });
+
+        it('should have shadow parts', () => {
+          [
+            'spacer',
+            'toggle',
+            'content'
+          ].forEach(partName => {
+            expect(toggle.shadowRoot.querySelector(`[part~="${partName}"]`)).to.not.be.null;
+          });
+        });
+      });
+    });
+  </script>
+
+</body>
+
+</html

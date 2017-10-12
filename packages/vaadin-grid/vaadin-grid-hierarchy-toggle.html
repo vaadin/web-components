@@ -86,6 +86,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           level: {
             type: Number,
+            value: 0,
             observer: '_levelChanged'
           },
 
@@ -94,6 +95,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           enabled: {
             type: Boolean,
+            value: false,
             reflectToAttribute: true
           },
 
@@ -102,6 +104,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           expanded: {
             type: Boolean,
+            value: false,
             reflectToAttribute: true,
             notify: true
           }
