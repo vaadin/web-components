@@ -14,12 +14,20 @@ This program is available under Apache License Version 2.0, available at https:/
         --level-offset: 1em;
       }
 
+      [part="toggle"]::before {
+        display: inline-block;
+        width: 1em;
+        text-align: center;
+      }
+
       :host(:not([expanded])) [part="toggle"]::before {
-        content: "➕";
+        /* TODO: Enhance using icon font. */
+        content: "▸";
       }
 
       :host([expanded]) [part="toggle"]::before {
-        content: "➖";
+        /* TODO: Enhance using icon font. */
+        content: "▾";
       }
 
       :host(:not([enabled])) [part="toggle"] {
