@@ -219,24 +219,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }, []);
     }
 
-    expandIndex(index) {
-      this._cache.expandIndex(index);
-      this._fullSize = this._cache.size;
-      this._assignModels();
-    }
-
-    collapseIndex(index) {
-      this._cache.collapseIndex(index);
-      this._fullSize = this._cache.size;
-      this._assignModels();
-    }
-
     _hierarchyExpandedInstanceChangedCallback(inst, value) {
       if (value) {
-        this.expandIndex(inst.index);
+        this._cache.expandIndex(inst.index);
       } else {
-        this.collapseIndex(inst.index);
+        this._cache.collapseIndex(inst.index);
       }
+      this._fullSize = this._cache.size;
+      this._assignModels();
     }
 
     isIndexExpanded(index) {
