@@ -182,7 +182,7 @@
           // ];
 
           function generateItem(level, index) {
-            const levelPrefix = Array(...new Array(level)).map(() => '🔳 ').join("");
+            const levelPrefix = Array(...new Array(level)).map(() => '🔳 ').join('');
             const item = {
               name: {
                 first: `${levelPrefix}foo-${level}-${index}`,
