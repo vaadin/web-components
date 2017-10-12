@@ -264,6 +264,10 @@ This program is available under Apache License Version 2.0, available at https:/
         this.dataProvider(params, (items, size) => {
           if (size !== undefined) {
             cache.ownSize = size;
+          } else {
+            if (params.parentItem) {
+              cache.ownSize = items.length;
+            }
           }
           cache.updateSize();
           items.forEach((item, itemsIndex) => {
