@@ -34,10 +34,5 @@
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.1.5",
     "yargs": "latest"
-  },
-  "greenkeeper": {
-    "ignore": [
-      "lighthouse"
-    ]
   }
 }
