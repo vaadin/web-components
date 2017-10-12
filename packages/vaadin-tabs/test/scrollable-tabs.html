@@ -16,12 +16,12 @@
         <vaadin-tab>Foo</vaadin-tab>
         <vaadin-tab>Bar</vaadin-tab>
         <separator>___</separator>
-        <vaadin-tab disabled>Baz</vaadin-tab>
         <vaadin-tab>Baz</vaadin-tab>
         <vaadin-tab>Foo1</vaadin-tab>
         <vaadin-tab>Bar1</vaadin-tab>
         <vaadin-tab>Baz1</vaadin-tab>
         <vaadin-tab>Foo2</vaadin-tab>
+        <vaadin-tab>Bar2</vaadin-tab>
       </vaadin-tabs>
     </template>
   </test-fixture>
@@ -55,41 +55,41 @@
         }, 10);
       });
 
-      it('The next item should be displayed on the edge of the viewport on "arrow-right" on the last fully visible tab in viewport', () => {
+      it('One item in advance should be displayed on the edge of the viewport on "arrow-right" on the last visible tab in viewport', () => {
         nav.selected = 5;
         nav._focus(5);
         arrowRight(nav);
-        expect(nav.$.scroll.getBoundingClientRect().right).to.be.closeTo(nav._navItems[6].getBoundingClientRect().right, 1);
+        expect(nav.$.scroll.getBoundingClientRect().right).to.be.closeTo(nav._navItems[7].getBoundingClientRect().right, 1);
       });
 
-      it('The next item should be displayed on the edge of the viewport on "arrow-left" on the last fully visible tab in viewport', () => {
+      it('One item in advance should be displayed on the edge of the viewport on "arrow-left" on the last visible tab in viewport', () => {
         // Move scroller so the first tab will be out of visible part
-        nav.selected = 6;
-        nav._focus(6);
+        nav.selected = 7;
+        nav._focus(7);
         // Move focus and choose the first visible tab selected
-        nav.selected = 1;
-        nav._focus(1);
+        nav.selected = 2;
+        nav._focus(2);
 
         arrowLeft(nav);
         expect(nav.$.scroll.getBoundingClientRect().left).to.be.closeTo(nav._navItems[0].getBoundingClientRect().left, 1);
       });
 
-      it('The next item should be displayed on the edge of the viewport on "arrow-down" on the last fully visible tab in viewport', () => {
+      it('One item in advance should be displayed on the edge of the viewport on "arrow-down" on the last visible tab in viewport', () => {
         nav.vertical = true;
         nav.selected = 5;
         nav._focus(5);
         arrowDown(nav);
-        expect(nav.$.scroll.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[6].getBoundingClientRect().bottom, 1);
+        expect(nav.$.scroll.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[7].getBoundingClientRect().bottom, 1);
       });
 
-      it('The next item should be displayed on the edge of the viewport on "arrow-up" on the last fully visible tab in viewport', () => {
+      it('One item in advance should be displayed on the edge of the viewport on "arrow-up" on the last visible tab in viewport', () => {
         nav.vertical = true;
         // Move scroller so the first tab will be out of visible part
-        nav.selected = 5;
-        nav._focus(5);
+        nav.selected = 7;
+        nav._focus(7);
         // Move focus and choose the first visible tab selected
-        nav.selected = 1;
-        nav._focus(1);
+        nav.selected = 2;
+        nav._focus(2);
 
         arrowUp(nav);
         expect(nav.$.scroll.getBoundingClientRect().top).to.be.closeTo(nav._navItems[0].getBoundingClientRect().top, 1);
