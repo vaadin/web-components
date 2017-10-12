@@ -59,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
       let thisLevelIndex = index;
       const keys = Object.keys(this.expandedItems)
         .map(Number) // JS gotcha: Object.keys() are strings
-        .sort()
+        .sort((b, a) => b - a) // JS gotcha: default sort() comparison is string-based
         .filter(expandedIndex => {
           return !this.expandedItems[expandedIndex].collapsed;
         });
