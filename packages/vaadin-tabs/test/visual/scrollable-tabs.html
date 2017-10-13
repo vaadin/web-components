@@ -11,7 +11,8 @@
 <body>
   <style>
     .capture-block {
-      display: inline-block;
+      display: flex;
+      flex-direction: column;
       width: 400px;
       height: 200px;
     }
@@ -36,8 +37,7 @@
       <vaadin-tab>Foo-8</vaadin-tab>
       <vaadin-tab>Bar-8</vaadin-tab>
     </vaadin-tabs>
-    <br />
-    <vaadin-tabs selected="8" style="height: 100%" vertical>
+    <vaadin-tabs selected="8" style="flex: 1; overflow: hidden;" vertical>
       <vaadin-tab>Foo-1</vaadin-tab>
       <vaadin-tab>Bar-1</vaadin-tab>
       <vaadin-tab>Foo-2</vaadin-tab>
