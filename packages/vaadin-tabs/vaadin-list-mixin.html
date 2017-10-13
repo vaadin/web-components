@@ -126,26 +126,16 @@ This program is available under Apache License Version 2.0, available at https:/
       items[idx].focus();
     }
 
-    _getScrollOffsetOfNextItem(idx, side) {
-      if (!this._navItems[idx + 1]) {
+    _getScrollOffsetOfTheItem(idx, side) {
+      var increment = idx + ((side === 'right' || side === 'bottom') ? 1 : -1);
+      if (!this._navItems[increment]) {
         return;
       }
 
-      const nextItemRect = this._navItems[idx + 1].getBoundingClientRect();
+      const itemRect = this._navItems[increment].getBoundingClientRect();
       const scrollerRect = this.$.scroll.getBoundingClientRect();
 
-      return nextItemRect[side] > scrollerRect[side] && nextItemRect[side] - scrollerRect[side];
-    }
-
-    _getScrollOffsetOfPrevItem(idx, side) {
-      if (!this._navItems[idx - 1]) {
-        return;
-      }
-
-      const prevItemRect = this._navItems[idx - 1].getBoundingClientRect();
-      const scrollerRect = this.$.scroll.getBoundingClientRect();
-
-      return scrollerRect[side] > prevItemRect[side] && prevItemRect[side] - scrollerRect[side];
+      return itemRect[side] - scrollerRect[side];
     }
 
     // Scroll the container to have the next item by the edge of the viewport
@@ -156,47 +146,44 @@ This program is available under Apache License Version 2.0, available at https:/
 
       const itemRect = this._navItems[idx].getBoundingClientRect();
       const scrollerRect = this.$.scroll.getBoundingClientRect();
-      var scrollDistance;
+      var scrollDistance = 0;
 
       if (!this.vertical) {
-        const scrollDistanceRight = this._getScrollOffsetOfNextItem(idx, 'right');
-        const scrollDistanceLeft = this._getScrollOffsetOfPrevItem(idx, 'left');
+        const scrollDistanceRight = this._getScrollOffsetOfTheItem(idx, 'right');
+        const scrollDistanceLeft = this._getScrollOffsetOfTheItem(idx, 'left');
 
         if (itemRect.right > scrollerRect.right) {
           scrollDistance = (scrollDistanceRight) ? scrollDistanceRight : itemRect.right - scrollerRect.right;
-          this._scroll(scrollDistance);
 
-        } else if (scrollDistanceRight) {
-          this._scroll(scrollDistanceRight);
+        } else if (scrollDistanceRight > 0) {
+          scrollDistance = scrollDistanceRight;
 
         } else if (scrollerRect.left > itemRect.left) {
           scrollDistance = (scrollDistanceLeft) ? scrollDistanceLeft : itemRect.left - scrollerRect.left;
-          this._scroll(scrollDistance);
 
-        } else if (scrollDistanceLeft) {
-          this._scroll(scrollDistanceLeft);
+        } else if (scrollDistanceLeft < 0) {
+          scrollDistance = scrollDistanceLeft;
 
         }
       } else {
-        const scrollDistanceTop = this._getScrollOffsetOfPrevItem(idx, 'top');
-        const scrollDistanceBottom = this._getScrollOffsetOfNextItem(idx, 'bottom');
+        const scrollDistanceTop = this._getScrollOffsetOfTheItem(idx, 'top');
+        const scrollDistanceBottom = this._getScrollOffsetOfTheItem(idx, 'bottom');
 
         if (itemRect.top < scrollerRect.top) {
           scrollDistance = (scrollDistanceTop) ? scrollDistanceTop : itemRect.top - scrollerRect.top;
-          this._scroll(scrollDistance);
 
-        } else if (scrollDistanceTop) {
-          this._scroll(scrollDistanceTop);
+        } else if (scrollDistanceTop < 0) {
+          scrollDistance = scrollDistanceTop;
 
         } else if (itemRect.bottom > scrollerRect.bottom) {
           scrollDistance = (scrollDistanceBottom) ? scrollDistanceBottom : itemRect.bottom - scrollerRect.bottom;
-          this._scroll(scrollDistance);
 
-        } else if (scrollDistanceBottom) {
-          this._scroll(scrollDistanceBottom);
+        } else if (scrollDistanceBottom > 0) {
+          scrollDistance = scrollDistanceBottom;
 
         }
       }
+      this._scroll(scrollDistance);
     }
 
     _selectedChanged(idx) {
