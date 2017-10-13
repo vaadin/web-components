@@ -72,8 +72,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _addNodeObserver() {
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-        var isColumnElement = node => {
-          return (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection|flow)/i.test(node.localName));
+        const isColumnElement = node => {
+          return node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
         };
         if (info.addedNodes.filter(isColumnElement).length > 0 ||
           info.removedNodes.filter(isColumnElement).length > 0) {
