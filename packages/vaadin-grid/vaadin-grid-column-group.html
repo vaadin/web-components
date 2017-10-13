@@ -242,18 +242,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _getChildColumns(el) {
           // TODO: Drop legacy api
-          return Polymer.dom(el).queryDistributedElements('*')
-                 .filter(e => e instanceof Vaadin.GridColumnElement || e instanceof Vaadin.GridColumnGroupElement);
+          return Polymer.dom(el).queryDistributedElements('*').filter(this._isColumnElement);
         }
 
         _addNodeObserver() {
           // TODO: Drop legacy api
           this._observer = Polymer.dom(this).observeNodes(info => {
-            const isColumnElement =
-              node => node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
-
-            if (info.addedNodes.filter(isColumnElement).length > 0 ||
-              info.removedNodes.filter(isColumnElement).length > 0) {
+            if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
+              info.removedNodes.filter(this._isColumnElement).length > 0) {
 
               this._preventHiddenCascade = true;
               this._rootColumns = this._getChildColumns(this);
@@ -267,6 +263,10 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
           this._observer.flush();
+        }
+
+        _isColumnElement(node) {
+          return node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
         }
       }
 

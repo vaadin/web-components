@@ -30,8 +30,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _getChildColumns(el) {
       // TODO: Drop legacy api
-      return Polymer.dom(el).queryDistributedElements('*')
-             .filter(e => e instanceof Vaadin.GridColumnElement || e instanceof Vaadin.GridColumnGroupElement);
+      return Polymer.dom(el).queryDistributedElements('*').filter(this._isColumnElement);
     }
 
     _flattenColumnGroups(columns) {
@@ -47,9 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getColumnTree() {
-      var rootColumns = this.queryAllEffectiveChildren('*')
-                        .filter(e => e instanceof Vaadin.GridColumnElement || e instanceof Vaadin.GridColumnGroupElement);
-
+      var rootColumns = this.queryAllEffectiveChildren('*').filter(this._isColumnElement);
       var _columnTree = [];
 
       for (var c = rootColumns; ; ) {
@@ -72,11 +69,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _addNodeObserver() {
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-        const isColumnElement = node => {
-          return node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
-        };
-        if (info.addedNodes.filter(isColumnElement).length > 0 ||
-          info.removedNodes.filter(isColumnElement).length > 0) {
+        if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
+          info.removedNodes.filter(this._isColumnElement).length > 0) {
           this._updateColumnTree();
         }
 
@@ -136,6 +130,10 @@ This program is available under Apache License Version 2.0, available at https:/
             this._toggleAttribute('last-column', cellIndex === children.length - 1, cell);
           });
       });
+    }
+
+    _isColumnElement(node) {
+      return node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
     }
   };
 </script>
