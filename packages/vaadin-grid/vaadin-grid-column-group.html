@@ -243,7 +243,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _getChildColumns(el) {
           // TODO: Drop legacy api
           return Polymer.dom(el).queryDistributedElements(
-              'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
+              'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column, vaadin-grid-flow-selection-column'
           );
         }
 
@@ -251,7 +251,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // TODO: Drop legacy api
           this._observer = Polymer.dom(this).observeNodes(info => {
             const isColumnElement =
-              node => (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
+              node => (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection|flow)/i.test(node.localName));
 
             if (info.addedNodes.filter(isColumnElement).length > 0 ||
               info.removedNodes.filter(isColumnElement).length > 0) {
