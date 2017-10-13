@@ -242,9 +242,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _getChildColumns(el) {
           // TODO: Drop legacy api
-          return Polymer.dom(el).queryDistributedElements(
-              'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column, vaadin-grid-flow-selection-column'
-          );
+          return Polymer.dom(el).queryDistributedElements('*')
+                 .filter(e => e instanceof Vaadin.GridColumnElement || e instanceof Vaadin.GridColumnGroupElement);
         }
 
         _addNodeObserver() {
