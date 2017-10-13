@@ -25,6 +25,7 @@ script:
       npm i gemini@^4.0.0 gemini-sauce gemini-polyserve &&
       gemini test test/visual &&
       gemini test test/visual -c .gemini-ie.yml &&
+      gemini test test/visual -c .gemini-edge.yml &&
       xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then

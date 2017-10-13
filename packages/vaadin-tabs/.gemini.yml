@@ -21,12 +21,6 @@ browsers:
       version: "47.0"
       platform: "Windows 10"
 
-  edge:
-    desiredCapabilities:
-      browserName: "microsoftedge"
-      version: "15"
-      platform: "Windows 10"
-
   # The following setups don't currently work due to Selenium SafariDriver issue
   # https://github.com/vaadin/vaadin-element-skeleton/issues/19
   #
