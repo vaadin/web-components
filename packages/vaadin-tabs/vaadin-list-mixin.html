@@ -126,63 +126,25 @@ This program is available under Apache License Version 2.0, available at https:/
       items[idx].focus();
     }
 
-    _getScrollOffsetOfTheItem(idx, side) {
-      var increment = idx + ((side === 'right' || side === 'bottom') ? 1 : -1);
-      if (!this._navItems[increment]) {
-        return;
-      }
-
-      const itemRect = this._navItems[increment].getBoundingClientRect();
-      const scrollerRect = this.$.scroll.getBoundingClientRect();
-
-      return itemRect[side] - scrollerRect[side];
-    }
-
     // Scroll the container to have the next item by the edge of the viewport
     _scrollToItem(idx) {
-      if (!this._navItems[idx]) {
+      const item = this._navItems[idx];
+      if (!item) {
         return;
       }
 
-      const itemRect = this._navItems[idx].getBoundingClientRect();
+      const props = this.vertical ? ['top', 'bottom'] : ['left', 'right'];
       const scrollerRect = this.$.scroll.getBoundingClientRect();
-      var scrollDistance = 0;
+      const nextItemRect = (this._navItems[idx + 1] || item).getBoundingClientRect();
+      const prevItemRect = (this._navItems[idx - 1] || item).getBoundingClientRect();
 
-      if (!this.vertical) {
-        const scrollDistanceRight = this._getScrollOffsetOfTheItem(idx, 'right');
-        const scrollDistanceLeft = this._getScrollOffsetOfTheItem(idx, 'left');
-
-        if (itemRect.right > scrollerRect.right) {
-          scrollDistance = (scrollDistanceRight) ? scrollDistanceRight : itemRect.right - scrollerRect.right;
-
-        } else if (scrollDistanceRight > 0) {
-          scrollDistance = scrollDistanceRight;
-
-        } else if (scrollerRect.left > itemRect.left) {
-          scrollDistance = (scrollDistanceLeft) ? scrollDistanceLeft : itemRect.left - scrollerRect.left;
-
-        } else if (scrollDistanceLeft < 0) {
-          scrollDistance = scrollDistanceLeft;
-
-        }
-      } else {
-        const scrollDistanceTop = this._getScrollOffsetOfTheItem(idx, 'top');
-        const scrollDistanceBottom = this._getScrollOffsetOfTheItem(idx, 'bottom');
-
-        if (itemRect.top < scrollerRect.top) {
-          scrollDistance = (scrollDistanceTop) ? scrollDistanceTop : itemRect.top - scrollerRect.top;
-
-        } else if (scrollDistanceTop < 0) {
-          scrollDistance = scrollDistanceTop;
-
-        } else if (itemRect.bottom > scrollerRect.bottom) {
-          scrollDistance = (scrollDistanceBottom) ? scrollDistanceBottom : itemRect.bottom - scrollerRect.bottom;
-
-        } else if (scrollDistanceBottom > 0) {
-          scrollDistance = scrollDistanceBottom;
-
-        }
+      let scrollDistance = 0;
+      if (nextItemRect[props[1]] >= scrollerRect[props[1]]) {
+        scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
+      } else if (prevItemRect[props[0]] <= scrollerRect[props[0]]) {
+        scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
       }
+
       this._scroll(scrollDistance);
     }
 
