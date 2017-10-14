@@ -101,7 +101,7 @@
 
         expect(spy.callCount).to.be.above(2);
 
-        if (navigator.userAgent.match(/iPhone/i)) {
+        if (navigator.userAgent.match(/iPhone/i) || grid._ie) {
           expect(spy.callCount).to.be.below(20);
         } else {
           expect(spy.callCount).to.be.below(8);
