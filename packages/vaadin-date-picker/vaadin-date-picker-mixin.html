@@ -205,17 +205,14 @@ This program is available under Apache License Version 2.0, available at https:/
               today: 'Today',
               cancel: 'Cancel',
               formatDate: d => {
-                var year = d.getFullYear();
-                var yearString = year.toString();
-                if (yearString.length < 3 && year >= 0) {
-                  yearString = (year < 10 ? '000' : '00') + year;
-                }
-                return (d.getMonth() + 1) + '/' + d.getDate() + '/' + yearString;
+                let yearStr = String(d.getFullYear());
+                yearStr = yearStr.replace(/\d+/, y => '0000'.substr(y.length) + y);
+                return [d.getMonth() + 1, d.getDate(), yearStr].join('/');
               },
               parseDate: text => {
-                var parts = text.split('/');
-                var today = new Date();
-                var date, month = today.getMonth(), year = today.getFullYear();
+                const parts = text.split('/');
+                const today = new Date();
+                let date, month = today.getMonth(), year = today.getFullYear();
 
                 if (parts.length === 3) {
                   year = parseInt(parts[2]);
@@ -232,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
 
                 if (date !== undefined) {
-                  var result = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
+                  const result = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
                   result.setFullYear(year);
                   result.setMonth(month);
                   result.setDate(date);
