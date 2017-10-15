@@ -1,0 +1,197 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-text-area tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-text-area.html">
+
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-text-area></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="line-height">
+    <style>
+      vaadin-text-area.line-height {
+        --vaadin-text-area-line-height​​: 1;
+      }
+    </style>
+    <template>
+      <vaadin-text-area class="line-height"></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="max-height">
+    <style>
+      vaadin-text-area.max-height {
+        --vaadin-text-area-max-height: 80px;
+      }
+    </style>
+    <template>
+      <vaadin-text-area class="max-height"></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <script>
+
+    describe('properties', () => {
+      var textArea, input;
+
+      beforeEach(() => {
+        textArea = fixture('default');
+        input = textArea.focusElement;
+      });
+
+      describe('native', () => {
+
+        function assertAttrCanBeSet(prop, value) {
+          textArea[prop] = value;
+          var attrval = input.getAttribute(prop);
+
+          if (value === true) {
+            expect(attrval).not.to.be.null;
+          } else if (value === false) {
+            expect(attrval).to.be.null;
+          } else if (value) {
+            expect(attrval).to.be.equal(String(value));
+          }
+        }
+
+        function assertPropCanBeSet(prop, value) {
+          textArea[prop] = value;
+          expect(input[prop]).to.be.equal(value);
+        }
+
+        ['placeholder', 'value'].forEach(prop => {
+          it('should set string property ' + prop, () => {
+            assertPropCanBeSet(prop, 'foo');
+          });
+        });
+
+        ['autofocus', 'disabled'].forEach(prop => {
+          it('should set boolean property ' + prop, () => {
+            assertPropCanBeSet(prop, true);
+          });
+        });
+
+        ['maxlength', 'minlength'].forEach(prop => {
+          it('should set numeric attribute ' + prop, () => {
+            assertAttrCanBeSet(prop, 2);
+          });
+        });
+
+        ['autocomplete'].forEach(prop => {
+          it('should set boolean attribute ' + prop, () => {
+            assertAttrCanBeSet(prop, 'on');
+          });
+        });
+
+        ['autocomplete', 'readonly', 'required'].forEach(prop => {
+          it('should set boolean attribute ' + prop, () => {
+            assertAttrCanBeSet(prop, true);
+            assertAttrCanBeSet(prop, false);
+          });
+        });
+      });
+
+      describe('binding', () => {
+        it('default value should be empty string', () => {
+          expect(textArea.value).to.be.equal('');
+        });
+
+        it('setting input value updates value', () => {
+          input.value = 'foo';
+          input.dispatchEvent(new Event('input', {bubbles: true, cancelable: true, composed: true}));
+          expect(textArea.value).to.be.equal('foo');
+        });
+
+        it('setting input value updates has-value attribute', () => {
+          textArea.value = 'foo';
+          expect(textArea.hasValue).to.be.true;
+        });
+
+        it('setting value to undefine should not update has-value attribute', () => {
+          textArea.value = undefined;
+          expect(textArea.hasValue).to.be.false;
+        });
+
+        it('setting empty value does not update has-value property', () => {
+          textArea.value = '';
+          expect(textArea.hasValue).to.be.false;
+        });
+
+        // User could accidently set a 0 or false value
+        it('setting number value updates has-value property', () => {
+          textArea.value = 0;
+          expect(textArea.hasValue).to.be.true;
+        });
+
+        it('setting boolean value updates has-value property', () => {
+          textArea.value = false;
+          expect(textArea.hasValue).to.be.true;
+        });
+      });
+
+      if (!window.ShadyDOM) {
+        describe('label', () => {
+          it('should not update focused property on click if disabled', () => {
+            textArea.disabled = true;
+            const label = textArea.root.querySelector('[part="label"]');
+            label.click();
+            expect(textArea.focused).to.be.false;
+          });
+        });
+      }
+
+    });
+
+    describe('multi-line', () => {
+      it('should grow height with unwrapped text', () => {
+        const textArea = fixture('default');
+        const input = textArea.focusElement;
+        const originalHeight = parseInt(window.getComputedStyle(input).height);
+
+        textArea.value = 'asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd';
+
+        const newHeight = parseInt(window.getComputedStyle(input).height);
+        expect(newHeight).to.be.at.least(originalHeight + 10);
+      });
+
+      it('should use --vaadin-text-area-line-height​​ property', () => {
+        const textArea = fixture('line-height');
+        const input = textArea.focusElement;
+        const originalHeight = parseInt(window.getComputedStyle(input).height);
+
+        textArea.value = `
+        rows and height
+        should
+        double
+        here
+        3*2=6`;
+
+        const newHeight = parseInt(window.getComputedStyle(input).height);
+        expect(newHeight).to.be.equal(originalHeight * 2);
+      });
+
+      it('should not grow over max-height', () => {
+        const textArea = fixture('max-height');
+        const input = textArea.focusElement;
+
+        textArea.value = `
+        there
+        should
+        be
+        6
+        rows`;
+
+        expect(window.getComputedStyle(input).height).to.be.equal('80px');
+      });
+    });
+  </script>
+</body>

@@ -27,6 +27,8 @@ script:
       gemini test test/visual --component=vaadin-text-field -c .gemini-ie.yml &&
       gemini test test/visual --component=vaadin-password-field &&
       gemini test test/visual --component=vaadin-password-field -c .gemini-ie.yml &&
+      gemini test test/visual --component=vaadin-text-area &&
+      gemini test test/visual --component=vaadin-text-area -c .gemini-ie.yml &&
       xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then

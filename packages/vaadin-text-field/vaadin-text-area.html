@@ -1,0 +1,212 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="vaadin-text-field-mixin.html">
+<link rel="import" href="vaadin-text-field-styles.html">
+
+<dom-module id="vaadin-text-area">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        min-width: 175px;
+        outline: none;
+      }
+
+      .vaadin-text-area-container {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
+      [part="input-field"] {
+        display: flex;
+        line-height: var(--vaadin-text-area-line-height​​, 1.5);
+      }
+
+      [part="value"] {
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        min-width: 0;
+        min-height: calc(3em * var(--vaadin-text-area-line-height​​, 1.5));
+        max-height: var(--vaadin-text-area-max-height, auto);
+        align-self: center;
+        resize: none;
+      }
+
+      [part="value"]::-ms-clear {
+        display: none;
+      }
+
+      .mirror-container {
+        visibility: hidden;
+        word-wrap: break-word;
+        position: absolute;
+      }
+
+      .mirror-text {
+        line-height: var(--vaadin-text-area-line-height​​, 1.5);
+      }
+    </style>
+
+    <div class="vaadin-text-area-container">
+
+      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
+
+      <div part="input-field">
+
+        <slot name="prefix"></slot>
+
+        <textarea part="value"
+            autocomplete$="[[autocomplete]]"
+            autofocus$="[[autofocus]]"
+            disabled$="[[disabled]]"
+            maxlength$="[[maxlength]]"
+            minlength$="[[minlength]]"
+            placeholder$="[[placeholder]]"
+            readonly$="[[readonly]]"
+            aria-readonly$="[[readonly]]"
+            required$="[[required]]"
+            aria-required$="[[required]]"
+            value="{{value::input}}"
+            on-blur="validate"
+            on-input="_onInput"
+            aria-describedby$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]"
+            aria-labelledby$="[[_getActiveLabelId(label, _labelId)]]"
+            aria-invalid$="[[invalid]]"></textarea>
+
+        <slot name="suffix"></slot>
+
+      </div>
+      <div class="mirror-container" aria-hidden="true" part="value">
+        <div class="mirror-text"></div>
+      </div>
+
+      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
+
+    </div>
+
+  </template>
+
+  <script>
+    (function() {
+      /**
+       * `<vaadin-text-area>` is a Polymer 2 element for text area control in forms.
+       *
+       * ```html
+       * <vaadin-text-area label="Add description">
+       * </vaadin-text-area>
+       * ```
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following custom properties are available for styling:
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|-------------
+       * `--vaadin-text-area-line-height` | Property that determines the line height of the textarea element | `1.5`
+       * `--vaadin-text-area-max-height` | Property that determines the max height of the textarea element | `auto`
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       * `value` | The textarea element
+       * `error-message` | The error message element
+       * `text-area` | The element that wraps prefix, value and suffix
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `disabled` | Set to a disabled text field | :host
+       * `has-value` | Set when the element has a value | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.TextFieldMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class TextAreaElement extends Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-text-area';
+        }
+
+        _valueChanged(newVal, oldVal) {
+          // setting initial value to empty string, skip validation
+          if (newVal === '' && oldVal === undefined) {
+            return;
+          }
+          if (this.invalid) {
+            this.validate();
+          }
+          this._setHasValue(newVal !== '' && newVal != null);
+          this._setInputHeight();
+        }
+
+        _setInputHeight() {
+          const input = this.focusElement;
+          const mirror = this.shadowRoot.querySelector('.mirror-text');
+          const rows = (input && input.value) ?
+            input.value
+              .replace(/&/gm, '&amp;')
+              .replace(/"/gm, '&quot;')
+              .replace(/'/gm, '&#39;')
+              .replace(/</gm, '&lt;')
+              .replace(/>/gm, '&gt;')
+              .split('\n')
+            : [''];
+
+          mirror.innerHTML = rows.join('<br/>') + '<br/>';
+          mirror.style.width = window.getComputedStyle(input).width;
+          input.style.height = window.getComputedStyle(mirror).height;
+        }
+
+        /**
+         * Returns true if the current textarea value satisfies all constraints (if any)
+         */
+        checkValidity() {
+          if (this.required || this.maxlength || this.minlength) {
+            return this.focusElement.checkValidity();
+          } else {
+            return !this.invalid;
+          }
+        }
+
+        ready() {
+          super.ready();
+          if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+            this.updateStyles();
+          }
+
+          var uniqueId = TextAreaElement._uniqueId = 1 + TextAreaElement._uniqueId || 0;
+          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+          this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+        }
+      }
+
+      customElements.define(TextAreaElement.is, TextAreaElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.TextAreaElement = TextAreaElement;
+    })();
+  </script>
+</dom-module>

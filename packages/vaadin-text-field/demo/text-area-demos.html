@@ -1,0 +1,62 @@
+<dom-module id="text-area-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Default Text area</h3>
+    <vaadin-demo-snippet id='text-area-demos-default-text-area'>
+      <template preserve-content>
+        <vaadin-text-area
+            label="Write a description"
+            placeholder="Add detailed explanation">
+        </vaadin-text-area>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Text area with max height</h3>
+    <vaadin-demo-snippet id='text-area-demos-text-area-with-max-height'>
+      <template preserve-content>
+        <style>
+          vaadin-text-area.max-height {
+            --vaadin-text-area-max-height: 75px;
+          }
+        </style>
+        <vaadin-text-area
+            class="max-height"
+            label="Text area growing stops at 75px"
+            placeholder="Add more text here">
+        </vaadin-text-area>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Text area with custom line height</h3>
+    <vaadin-demo-snippet id='text-area-demos-custom-line-height'>
+      <template preserve-content>
+        <style>
+          vaadin-text-area.line-height {
+            --vaadin-text-area-line-height​​: 3;
+          }
+        </style>
+        <vaadin-text-area
+            class="line-height"
+            label="Write a description"
+            placeholder="Line height has doubled!">
+        </vaadin-text-area>
+      </template>
+    </vaadin-demo-snippet>
+
+  </div>
+  </template>
+  <script>
+    class TextAreaDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-area-demos';
+      }
+    }
+    customElements.define(TextAreaDemos.is, TextAreaDemos);
+  </script>
+</dom-module>
