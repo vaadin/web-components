@@ -6,7 +6,7 @@
     "url": "element-basic-demos",
     "src": "element-basic-demos.html",
     "meta": {
-      "title": "vaadin-element Basic Examples",
+      "title": "vaadin-dropdown-menu Basic Examples",
       "description": "",
       "image": ""
      }
@@ -17,7 +17,7 @@
     "url": "element-advanced-demos",
     "src": "element-advanced-demos.html",
     "meta": {
-      "title": "vaadin-element Advanced Examples",
+      "title": "vaadin-dropdown-menu Advanced Examples",
       "description": "",
       "image": ""
      }

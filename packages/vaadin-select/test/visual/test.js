@@ -1,4 +1,4 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-dropdown-menu', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -18,7 +18,7 @@ gemini.suite('vaadin-element', function(rootSuite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .capture('vaadin-dropdown-menu');
   });
 
 });

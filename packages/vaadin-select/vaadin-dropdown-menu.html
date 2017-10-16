@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-element">
+<dom-module id="vaadin-dropdown-menu">
   <template>
     <style>
       :host {
@@ -21,18 +21,18 @@ This program is available under Apache License Version 2.0, available at https:/
     {
 
       /**
-       * `<vaadin-element>` is a Polymer 2 element.
+       * `<vaadin-dropdown-menu>` is a Polymer 2 element.
        *
        * ```
-       * <vaadin-element></vaadin-element>
+       * <vaadin-dropdown-menu></vaadin-dropdown-menu>
        * ```
        *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-element';
+          return 'vaadin-dropdown-menu';
         }
 
         static get properties() {
@@ -41,13 +41,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinElement.is, VaadinElement);
+      customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinElement = VaadinElement;
+      Vaadin.VaadinDropdownMenuElement = VaadinDropdownMenuElement;
     }
   </script>
 </dom-module>

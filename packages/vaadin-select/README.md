@@ -1,56 +1,56 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-element.svg)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-element)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-element.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-element)
+![Bower version](https://img.shields.io/bower/v/vaadin-dropdown-menu.svg)
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dropdown-menu)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-dropdown-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dropdown-menu)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# &lt;vaadin-element&gt;
+# &lt;vaadin-dropdown-menu&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-element/demo/)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dropdown-menu/demo/)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-element/)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dropdown-menu/)
 
 
-[&lt;vaadin-element&gt;](https://vaadin.com/elements/-/element/vaadin-element) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/elements/-/element/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
 <custom-element-demo>
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-element.html">
+    <link rel="import" href="vaadin-dropdown-menu.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-element>
+<vaadin-dropdown-menu>
   ...
-</vaadin-element>
+</vaadin-dropdown-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-element/master/screenshot.png" width="200" alt="Screenshot of vaadin-element">](https://vaadin.com/elements/-/element/vaadin-element)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.png" width="200" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-element` repository and clone it locally.
+1. Fork the `vaadin-dropdown-menu` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-element` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-dropdown-menu` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-element/demo
-  - http://127.0.0.1:8080/components/vaadin-element/test
+  - http://127.0.0.1:8080/components/vaadin-dropdown-menu/demo
+  - http://127.0.0.1:8080/components/vaadin-dropdown-menu/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-element` directory, run `polymer test`
+1. When in the `vaadin-dropdown-menu` directory, run `polymer test`
 
 
 ## Following the coding style
