@@ -1,4 +1,4 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-item', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }
@@ -14,7 +14,7 @@ gemini.suite('vaadin-element', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
+  gemini.suite('vaadin-item', function(suite) {
     suite
       .setUrl('/default.html')
       .setCaptureElements('#default-tests')

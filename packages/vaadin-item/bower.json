@@ -1,14 +1,14 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-item",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-item",
+  "main": "vaadin-item.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-item",
     "web-components",
     "web-component",
     "polymer"

@@ -1,12 +1,12 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-item",
   "version": "0.1.0",
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
-  "repository": "vaadin/vaadin-element",
+  "description": "vaadin-item",
+  "main": "vaadin-item.html",
+  "repository": "vaadin/vaadin-item",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-item",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-element/issues"
+    "url": "https://github.com/vaadin/vaadin-item/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
