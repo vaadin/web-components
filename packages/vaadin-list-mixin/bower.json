@@ -1,14 +1,14 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-list-mixin",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-list-mixin",
+  "main": "vaadin-list-mixin.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-list-mixin",
     "web-components",
     "web-component",
     "polymer"

@@ -2,9 +2,9 @@
   "schema_version": "1.0.0",
   "elements": [
     {
-      "description": "`<vaadin-element>` is a Polymer 2 element.\n\n```html\n<vaadin-element>\n</vaadin-element>\n```",
+      "description": "`<vaadin-list-mixin>` is a Polymer 2 element.\n\n```html\n<vaadin-list-mixin>\n</vaadin-list-mixin>\n```",
       "summary": "",
-      "path": "vaadin-element.html",
+      "path": "vaadin-list-mixin.html",
       "properties": [],
       "methods": [
         {
@@ -2604,7 +2604,7 @@
       },
       "privacy": "public",
       "superclass": "HTMLElement",
-      "name": "VaadinElement",
+      "name": "VaadinListMixin",
       "attributes": [],
       "events": [],
       "styling": {
@@ -2616,7 +2616,7 @@
           "description": "",
           "name": "",
           "range": {
-            "file": "vaadin-element.html",
+            "file": "vaadin-list-mixin.html",
             "start": {
               "line": 27,
               "column": 4
@@ -2628,7 +2628,7 @@
           }
         }
       ],
-      "tagname": "vaadin-element"
+      "tagname": "vaadin-list-mixin"
     }
   ]
 }
