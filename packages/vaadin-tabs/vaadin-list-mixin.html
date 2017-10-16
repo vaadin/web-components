@@ -126,24 +126,26 @@ This program is available under Apache License Version 2.0, available at https:/
       items[idx].focus();
     }
 
-    // Scroll the container to have the item by the edge of the viewport
+    // Scroll the container to have the next item by the edge of the viewport
     _scrollToItem(idx) {
-      const itemRect = this._navItems[idx].getBoundingClientRect();
-      const scrollerRect = this.$.scroll.getBoundingClientRect();
-
-      if (!this.vertical) {
-        if (itemRect.right > scrollerRect.right) {
-          this._scroll(itemRect.right - scrollerRect.right);
-        } else if (scrollerRect.left > itemRect.left) {
-          this._scroll(itemRect.left - scrollerRect.left);
-        }
-      } else {
-        if (scrollerRect.top > itemRect.top) {
-          this._scroll(itemRect.top - scrollerRect.top);
-        } else if (itemRect.bottom > scrollerRect.bottom) {
-          this._scroll(itemRect.bottom - scrollerRect.bottom);
-        }
+      const item = this._navItems[idx];
+      if (!item) {
+        return;
       }
+
+      const props = this.vertical ? ['top', 'bottom'] : ['left', 'right'];
+      const scrollerRect = this.$.scroll.getBoundingClientRect();
+      const nextItemRect = (this._navItems[idx + 1] || item).getBoundingClientRect();
+      const prevItemRect = (this._navItems[idx - 1] || item).getBoundingClientRect();
+
+      let scrollDistance = 0;
+      if (nextItemRect[props[1]] >= scrollerRect[props[1]]) {
+        scrollDistance = nextItemRect[props[1]] - scrollerRect[props[1]];
+      } else if (prevItemRect[props[0]] <= scrollerRect[props[0]]) {
+        scrollDistance = prevItemRect[props[0]] - scrollerRect[props[0]];
+      }
+
+      this._scroll(scrollDistance);
     }
 
     _selectedChanged(idx) {
