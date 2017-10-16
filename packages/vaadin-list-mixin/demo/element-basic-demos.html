@@ -1,0 +1,27 @@
+<dom-module id="element-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Sample example</h3>
+    <vaadin-demo-snippet id='element-basic-demos-sample-example'>
+      <template preserve-content>
+        <vaadin-element>Foobar</vaadin-element>
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+  </template>
+  <script>
+    class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'element-basic-demos';
+      }
+    }
+    customElements.define(ElementBasicDemos.is, ElementBasicDemos);
+  </script>
+</dom-module>
