@@ -221,14 +221,14 @@
         border-radius: var(---valo-tab-marker-border-radius, var(--valo-border-radius) var(--valo-border-radius) 0 0);
         transform: var(---valo-tab-marker-transform, translateX(-50%)) scale(0);
         transform-origin: var(---valo-tab-marker-transform-origin, 50% 100%);
-        transition: 0.15s transform cubic-bezier(.12, .32, .54, 1);
+        transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
         will-change: transform;
       }
 
       :host::after {
         box-shadow: 0 0 1px 4px var(--valo-primary-color);
         opacity: 0.15;
-        transition: 0.15s transform, 0.4s 0.2s opacity;
+        transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
       }
 
       :host([selected])::before,
@@ -239,10 +239,6 @@
 
       :host([selected])::after {
         opacity: 0;
-      }
-
-      :host([active])::after {
-        opacity: 1;
       }
 
       :host ::slotted(iron-icon) {
