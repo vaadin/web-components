@@ -1,0 +1,38 @@
+{
+  "name": "vaadin-element",
+  "version": "0.1.0",
+  "description": "vaadin-element",
+  "main": "vaadin-element.html",
+  "repository": "vaadin/vaadin-element",
+  "keywords": [
+    "Vaadin",
+    "vaadin-element",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-element/issues"
+  },
+  "homepage": "https://vaadin.com/elements",
+  "scripts": {
+    "test": "wct"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "eslint": "^4.0.0",
+    "eslint-config-vaadin": "latest",
+    "eslint-plugin-html": "^3.0.0",
+    "gulp": "latest",
+    "gulp-eslint": "^4.0.0",
+    "gulp-html-extract": "^0.3.0",
+    "gulp-stylelint": "^5.0.0",
+    "polymer-cli": "^1.2.0",
+    "stylelint": "^8.0.0",
+    "stylelint-config-vaadin": "latest",
+    "web-component-tester": "^6.1.5",
+    "yargs": "latest"
+  }
+}
