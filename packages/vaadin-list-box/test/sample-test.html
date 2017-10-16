@@ -1,0 +1,31 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-element tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-element.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-element></vaadin-element>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('sample test', function() {
+      var element;
+
+      beforeEach(function() {
+        element = fixture('default');
+      });
+
+      it('should pass', function() {
+        expect(element.localName).to.be.equal('vaadin-element');
+      });
+
+    });
+  </script>
+</body>
