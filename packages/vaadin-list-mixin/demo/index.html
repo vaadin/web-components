@@ -3,28 +3,83 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
-  <title>vaadin-element Examples</title>
+  <title>Vaadin Control State Mixin Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
   <style>
     body {
       font-family: sans-serif;
     }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
   </style>
 </head>
 
 <body>
   <link rel="import" href="../../polymer/polymer.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
+  <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
+  <link rel="import" href="../../vaadin-dropdown-menu/vaadin-dropdown-menu.html">
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../vaadin-item/vaadin-item.html">
 
-  <link rel="import" href="element-demo.html">
 
-  <link rel="import" href="../../paper-styles/default-theme.html">
-  <link rel="import" href="../vaadin-element.html">
+  <div class="container">
 
-  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
+    <h2>Demos of vaadin-list-mixin</h2>
+
+    <h3>vaadin-tabs</h3>
+    <vaadin-tabs selected="2">
+      <vaadin-tab>Foo</vaadin-tab>
+      <vaadin-tab disabled>Bar</vaadin-tab>
+      <vaadin-tab>Baz</vaadin-tab>
+      <vaadin-tab>
+        <my-custom-item>
+          <img src="https://api.adorable.io/avatars/100/peter.png" width="100" height="100" alt="Peter" slot="icon"></img>
+          Peter
+          <span slot="badge">1</span>
+        </my-custom-item>
+      </vaadin-tab>
+    </vaadin-tabs>
+    <vaadin-tabs vertical selected="4">
+      <vaadin-tab>Foo</vaadin-tab>
+      <vaadin-tab disabled>Bar</vaadin-tab>
+      <vaadin-tab>Baz</vaadin-tab>
+      <vaadin-tab>
+        <my-custom-item>
+          <img src="https://api.adorable.io/avatars/100/peter.png" width="100" height="100" alt="Peter" slot="icon"></img>
+          Peter
+          <span slot="badge">1</span>
+        </my-custom-item>
+      </vaadin-tab>
+      <vaadin-tab>
+        <my-custom-item>
+          <img src="https://api.adorable.io/avatars/100/John.png" width="100" height="100" alt="John" slot="icon"></img>
+          John
+          <span slot="badge">2</span>
+        </my-custom-item>
+      </vaadin-tab>
+    </vaadin-tabs>
+
+    <h3>vaadin-list-box</h3>
+    <vaadin-list-box>
+      <vaadin-item disabled>Foo</vaadin-item>
+      <vaadin-item>Bar</vaadin-item>
+      <vaadin-item>Baz</vaadin-item>
+    </vaadin-list-box>
+
+    <h3>vaadin-dropdown</h3>
+    <vaadin-dropdown-menu>
+      <vaadin-list-box>
+        <vaadin-item disabled>Foo</vaadin-item>
+        <vaadin-item>Bar</vaadin-item>
+        <vaadin-item>Baz</vaadin-item>
+      </vaadin-list-box>
+    </vaadin-dropdown-menu>
+
+  </div>
+
 </body>
 </html>
