@@ -35,6 +35,6 @@
     "stylelint": "7.10.1",
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.1.5",
-    "yargs": "latest"
+    "yargs": "v8.0.2"
   }
 }

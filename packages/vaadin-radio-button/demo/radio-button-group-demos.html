@@ -19,6 +19,17 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Radio Group with Custom Tabindex</h3>
+    <vaadin-demo-snippet id='radio-button-group-demos-radio-group-custom-tabindex'>
+      <template preserve-content>
+        <vaadin-radio-button-group name="radio-group">
+          <vaadin-radio-button tabindex="1">1</vaadin-radio-button>
+          <vaadin-radio-button tabindex="3">2</vaadin-radio-button>
+          <vaadin-radio-button tabindex="2">3</vaadin-radio-button>
+        </vaadin-radio-button-group>
+      </template>
+    </vaadin-demo-snippet>
+
 
     <h3>Radio Group Disabled</h3>
     <vaadin-demo-snippet id='radio-button-group-demos-radio-group-disabled'>
@@ -36,23 +47,27 @@
     <h3>Radio Group with Iron Form</h3>
     <vaadin-demo-snippet id='radio-button-group-demos-radio-group-with-iron-form'>
       <template preserve-content>
-        <iron-form id="test_form">
-          <form action="/test" method="get">
+        <iron-form id="test-form">
+          <form>
             <vaadin-radio-button-group name="radio-group" required>
-              <vaadin-radio-button><b>1</b></vaadin-radio-button>
+              <vaadin-radio-button value="first">1</vaadin-radio-button>
               <vaadin-radio-button value="second">2</vaadin-radio-button>
-              <vaadin-radio-button>3</vaadin-radio-button>
+              <vaadin-radio-button value="third">3</vaadin-radio-button>
               <vaadin-radio-button value="fourth">4</vaadin-radio-button>
             </vaadin-radio-button-group>
-            <br><br>
-            <vaadin-button onclick="test_form.submit()">Submit</vaadin-button>
+            <vaadin-button id="submit-button">Submit</vaadin-button>
           </form>
-          <br>
           <div class="output"></div>
         </iron-form>
         <script>
           window.addDemoReadyListener('#radio-button-group-demos-radio-group-with-iron-form', function(document) {
-            var testForm = document.getElementById('test_form');
+            var testForm = document.getElementById('test-form');
+            var submitButton = document.getElementById('submit-button');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
             testForm.addEventListener('iron-form-submit', function(event) {
               this.querySelector('.output').innerHTML = JSON.stringify(event.detail);
             });
