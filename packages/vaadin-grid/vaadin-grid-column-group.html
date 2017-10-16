@@ -242,19 +242,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _getChildColumns(el) {
           // TODO: Drop legacy api
-          return Polymer.dom(el).queryDistributedElements(
-              'vaadin-grid-column, vaadin-grid-column-group, vaadin-grid-selection-column'
-          );
+          return Polymer.dom(el).queryDistributedElements('*').filter(this._isColumnElement);
         }
 
         _addNodeObserver() {
           // TODO: Drop legacy api
           this._observer = Polymer.dom(this).observeNodes(info => {
-            const isColumnElement =
-              node => (node.nodeType === Node.ELEMENT_NODE && /^vaadin-grid-(column|selection)/i.test(node.localName));
-
-            if (info.addedNodes.filter(isColumnElement).length > 0 ||
-              info.removedNodes.filter(isColumnElement).length > 0) {
+            if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
+              info.removedNodes.filter(this._isColumnElement).length > 0) {
 
               this._preventHiddenCascade = true;
               this._rootColumns = this._getChildColumns(this);
@@ -268,6 +263,10 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
           this._observer.flush();
+        }
+
+        _isColumnElement(node) {
+          return node.nodeType === Node.ELEMENT_NODE && /vaadin-grid.*column.*/.test(node.localName);
         }
       }
 
