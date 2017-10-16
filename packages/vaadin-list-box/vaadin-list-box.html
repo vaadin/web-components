@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-element">
+<dom-module id="vaadin-list-box">
   <template>
     <style>
       :host {
@@ -21,18 +21,18 @@ This program is available under Apache License Version 2.0, available at https:/
     {
 
       /**
-       * `<vaadin-element>` is a Polymer 2 element.
+       * `<vaadin-list-box>` is a Polymer 2 element.
        *
        * ```
-       * <vaadin-element></vaadin-element>
+       * <vaadin-list-box></vaadin-list-box>
        * ```
        *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class VaadinListBoxElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-element';
+          return 'vaadin-list-box';
         }
 
         static get properties() {
@@ -41,13 +41,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinElement.is, VaadinElement);
+      customElements.define(VaadinListBoxElement.is, VaadinListBoxElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinElement = VaadinElement;
+      Vaadin.ListBoxElement = VaadinListBoxElement;
     }
   </script>
 </dom-module>
