@@ -35,7 +35,7 @@
       it('should have proper scale', () => {
         progress.value = 0.1;
 
-        expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.001);
+        expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(0.1, 0.002);
       });
 
       it('should set progress-value custom variable properly', () => {
@@ -49,7 +49,7 @@
         progress.min = 10;
         progress.value = 15;
 
-        expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.001);
+        expect(value.getBoundingClientRect().width / progress.offsetWidth).to.be.closeTo(.5, 0.002);
         expect(_getPropertyValue(progress, '--vaadin-progress-value')).to.equal('0.5');
       });
 
