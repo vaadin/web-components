@@ -153,14 +153,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addActiveListeners() {
-          // DOWN
           this._addEventListenerToNode(this, 'down', (e) => {
             if (!this.disabled) {
               this.setAttribute('active', '');
             }
           });
 
-          // UP
           this._addEventListenerToNode(this, 'up', (e) => {
             this.removeAttribute('active');
 
@@ -169,7 +167,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
-          // KEYDOWN
           this.addEventListener('keydown', e => {
             if (!this.disabled && e.keyCode === 32) {
               e.preventDefault();
@@ -177,7 +174,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           });
 
-          // KEYUP
           this.addEventListener('keyup', e => {
             if (!this.disabled && e.keyCode === 32) {
               e.preventDefault();
