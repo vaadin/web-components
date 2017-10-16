@@ -133,7 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isColumnElement(node) {
-      return node instanceof Vaadin.GridColumnElement || node instanceof Vaadin.GridColumnGroupElement;
+      return node.nodeType === Node.ELEMENT_NODE && /vaadin-grid.*column.*/.test(node.localName);
     }
   };
 </script>
