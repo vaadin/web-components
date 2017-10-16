@@ -283,6 +283,14 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Set the withCredentials flag on the request.
+             */
+            withCredentials: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
              * The object used to localize this component.
              * For changing the default localization, change the entire
              * _i18n_ object or just the property you want to modify.
@@ -489,6 +497,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.timeout) {
             xhr.timeout = this.timeout;
           }
+          xhr.withCredentials = this.withCredentials;
         }
 
         _setStatus(file, total, loaded, elapsed) {

@@ -232,6 +232,16 @@
           upload._uploadFile(file);
         });
 
+        it('should propagate with-credentials to the xhr', done => {
+          upload.withCredentials = true;
+          upload.addEventListener('upload-start', e => {
+            e.preventDefault();
+            expect(e.detail.xhr.withCredentials).to.be.true;
+            done();
+          });                    
+          upload._uploadFile(file);
+        });
+
         describe('Response Status', () => {
           function expectResponseErrorForStatus(error, status, done) {
             upload._createXhr = xhrCreator({
