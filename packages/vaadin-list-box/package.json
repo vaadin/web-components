@@ -1,12 +1,12 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-list-box",
   "version": "0.1.0",
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
-  "repository": "vaadin/vaadin-element",
+  "description": "vaadin-list-box",
+  "main": "vaadin-list-box.html",
+  "repository": "vaadin/vaadin-list-box",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-list-box",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-element/issues"
+    "url": "https://github.com/vaadin/vaadin-list-box/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
