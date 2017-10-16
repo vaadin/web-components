@@ -1,0 +1,272 @@
+<link rel="import" href="color.html">
+<link rel="import" href="typography.html">
+<link rel="import" href="font-icons.html">
+
+<dom-module id="valo-tabs" theme-for="vaadin-tabs">
+  <template>
+    <style include="vaadin-tabs-default-theme">
+      :host {
+        ---valo-tab-marker-display: block;
+      }
+
+      :host(:not([vertical])) {
+        box-shadow: inset 0 -1px 0 0 var(--valo-contrast-10pct);
+        position: relative;
+        min-height: var(--valo-size-l);
+      }
+
+      [part="forward-button"],
+      [part="back-button"] {
+        position: absolute;
+        z-index: 1;
+        font-family: valo-icons;
+        color: var(--valo-tertiary-text-color);
+        font-size: 24px;
+        line-height: 24px;
+        width: 30px;
+        text-align: center;
+        transition: 0.2s opacity;
+        top: calc((100% - 24px) / 2);
+      }
+
+      [part="forward-button"]:hover,
+      [part="back-button"]:hover {
+        color: inherit;
+      }
+
+      [part="forward-button"] {
+        right: 0;
+      }
+
+      [part="forward-button"]::after {
+        content: "\e906";
+      }
+
+      [part="back-button"]::after {
+        content: "\e903";
+      }
+
+      /* Tabs overflow */
+
+      [part="tabs"] {
+        --valo-tabs-overflow-mask-image: none;
+        -webkit-mask-image: var(--valo-tabs-overflow-mask-image);
+        mask-image: var(--valo-tabs-overflow-mask-image);
+      }
+
+      /* Horizontal tabs overflow */
+
+      /* Both ends overflowing */
+      :host([overflow~="start"][overflow~="end"]:not([vertical])) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px, #000 calc(100% - 60px), transparent calc(100% - 30px));
+      }
+
+      /* End overflowing */
+      :host([overflow~="end"]:not([vertical])) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 60px), transparent calc(100% - 30px));
+      }
+
+      /* Start overflowing */
+      :host([overflow~="start"]:not([vertical])) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px);
+      }
+
+      /* Vertical tabs overflow */
+
+      /* Both ends overflowing */
+      :host([overflow~="start"][overflow~="end"][vertical]) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px, #000 calc(100% - 30px), transparent);
+      }
+
+      /* End overflowing */
+      :host([overflow~="end"][vertical]) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 30px), transparent);
+      }
+
+      /* Start overflowing */
+      :host([overflow~="start"][vertical]) [part="tabs"] {
+        --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px);
+      }
+
+      /* Selected tab styles */
+
+      :host [part="tabs"][part="tabs"] ::slotted(vaadin-tab) {
+        border: 0;
+      }
+
+      :host([vertical]) [part="tabs"] ::slotted(vaadin-tab) {
+        ---valo-tab-marker-left: 0;
+        ---valo-tab-marker-bottom: 50%;
+        ---valo-tab-marker-transform: translateY(50%);
+        ---valo-tab-marker-width: 2px;
+        ---valo-tab-marker-height: 3em;
+        ---valo-tab-marker-border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+        ---valo-tab-marker-transform-origin: 100% 50%;
+      }
+
+      /* Small theme */
+
+      :host([theme~="small"]) {
+        font-size: var(--valo-font-size-s);
+      }
+
+      /* Minimal and pill themes */
+
+      :host([theme~="minimal"]),
+      :host([theme~="pill"]) {
+        box-shadow: none;
+        ---valo-tab-marker-display: none;
+      }
+
+      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected]),
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
+        color: var(--valo-primary-text-color);
+      }
+
+      /* Pill theme */
+      :host([theme~="pill"]) {
+        display: inline-flex;
+        max-width: 100%;
+        min-height: var(--valo-size-m);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab) {
+        border: 1px solid transparent;
+        background-color: var(--valo-contrast-10pct);
+        margin-left: 1px;
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
+        padding-left: calc(var(--valo-border-radius) / 3 + 1em);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
+        padding-right: calc(var(--valo-border-radius) / 3 + 1em);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
+        border: 1px solid var(--valo-contrast-10pct);
+        background-color: var(--valo-base-color);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
+        color: var(--valo-primary-text-color);
+        box-shadow:  1px 0 0 0 var(--valo-contrast-10pct),
+                    -1px 0 0 0 var(--valo-contrast-10pct);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:first-child) {
+        box-shadow: 1px 0 0 0 var(--valo-contrast-10pct);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:last-child) {
+        box-shadow: -1px 0 0 0 var(--valo-contrast-10pct);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
+        border-radius: var(--valo-border-radius) 0 0 var(--valo-border-radius);
+      }
+
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
+        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-tab" theme-for="vaadin-tab">
+  <template>
+    <style include="vaadin-tab-default-theme">
+      :host {
+        font-weight: 500;
+        opacity: 1;
+        color: var(--valo-contrast-60pct);
+        transition: 0.2s color;
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+
+      :host(:hover),
+      :host([focus-ring]) {
+        color: var(--valo-body-text-color);
+      }
+
+      :host([focus-ring]) {
+        background-color: var(--valo-contrast-5pct);
+      }
+
+      :host([selected]) {
+        color: var(--valo-primary-text-color);
+        transition: 0.6s color;
+      }
+
+      :host([active]:not([selected])) {
+        color: var(--valo-primary-text-color);
+        transition-duration: 0.1s;
+      }
+
+      :host::before,
+      :host::after {
+        content: "";
+        position: absolute;
+        display: var(---valo-tab-marker-display, block);
+        bottom: var(---valo-tab-marker-bottom, 0);
+        left: var(---valo-tab-marker-left, 50%);
+        width: var(---valo-tab-marker-width, 2.5em);
+        max-width: 80%;
+        height: var(---valo-tab-marker-height, 2px);
+        max-height: 80%;
+        background-color: var(--valo-primary-color);
+        border-radius: var(---valo-tab-marker-border-radius, var(--valo-border-radius) var(--valo-border-radius) 0 0);
+        transform: var(---valo-tab-marker-transform, translateX(-50%)) scale(0);
+        transform-origin: var(---valo-tab-marker-transform-origin, 50% 100%);
+        transition: 0.15s transform cubic-bezier(.12, .32, .54, 1);
+        will-change: transform;
+      }
+
+      :host::after {
+        box-shadow: 0 0 1px 4px var(--valo-primary-color);
+        opacity: 0.15;
+        transition: 0.15s transform, 0.4s 0.2s opacity;
+      }
+
+      :host([selected])::before,
+      :host([selected])::after {
+        transform: var(---valo-tab-marker-transform, translateX(-50%)) scale(1);
+        transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
+      }
+
+      :host([selected])::after {
+        opacity: 0;
+      }
+
+      :host([active])::after {
+        opacity: 1;
+      }
+
+      :host ::slotted(iron-icon) {
+        margin: 0 4px;
+      }
+
+      :host ::slotted(iron-icon:first-child) {
+        margin-left: 0;
+      }
+
+      :host ::slotted(iron-icon:last-child) {
+        margin-right: 0;
+      }
+
+      :host([theme~="icon-on-top"]) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      :host([theme~="icon-on-top"]) ::slotted(iron-icon) {
+        margin: 0;
+      }
+    </style>
+  </template>
+</dom-module>
