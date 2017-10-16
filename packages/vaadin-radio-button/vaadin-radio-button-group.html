@@ -215,6 +215,9 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * @protected
+         */
         validate() {
           if (!this._checkedButton && this.required && !this.disabled) {
             this.setAttribute('invalid', '');

@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-radio-button-group.html",
         "start": {
-          "line": 233,
+          "line": 236,
           "column": 6
         },
         "end": {
-          "line": 233,
+          "line": 236,
           "column": 42
         }
       },
@@ -455,7 +455,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 183,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -468,11 +468,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 189,
+                  "line": 193,
                   "column": 8
                 },
                 "end": {
-                  "line": 191,
+                  "line": 195,
                   "column": 9
                 }
               },
@@ -522,7 +522,7 @@
               "column": 6
             },
             "end": {
-              "line": 192,
+              "line": 196,
               "column": 7
             }
           },
@@ -1022,14 +1022,14 @@
             {
               "name": "validate",
               "description": "",
-              "privacy": "public",
+              "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 220,
                   "column": 8
                 },
                 "end": {
-                  "line": 225,
+                  "line": 228,
                   "column": 9
                 }
               },
@@ -1075,7 +1075,7 @@
               "column": 6
             },
             "end": {
-              "line": 226,
+              "line": 229,
               "column": 7
             }
           },
