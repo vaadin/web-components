@@ -74,8 +74,8 @@
 
       describe('simple', () => {
 
-        function expandRow(index) {
-          grid.expandItem(grid._cache[0][index]);
+        function openRowDetails(index) {
+          grid.openItemDetails(grid._cache[0][index]);
         }
 
         beforeEach(done => {
@@ -87,25 +87,25 @@
           animationFrameFlush(() => done());
         });
 
-        function collapseRow(index) {
-          grid.collapseItem(grid._cache[0][index]);
+        function closeRowDetails(index) {
+          grid.closeItemDetails(grid._cache[0][index]);
         }
 
-        it('should expand a row', () => {
+        it('should open details row', () => {
           const cells = getRowCells(bodyRows[1]);
           expect(cells[1].hidden).to.be.true;
-          expandRow(1);
+          openRowDetails(1);
           expect(cells[1].hidden).to.be.false;
         });
 
-        it('should collapse a row', () => {
-          expandRow(1);
-          collapseRow(1);
+        it('should close details row', () => {
+          openRowDetails(1);
+          closeRowDetails(1);
           expect(getRowCells(bodyRows[1])[1].hidden).to.be.true;
         });
 
         it('should stamp the details template', () => {
-          expandRow(1);
+          openRowDetails(1);
           const cells = getRowCells(bodyRows[1]);
           expect(getCellContent(cells[1]).textContent.trim()).to.equal('1-details');
         });
@@ -116,7 +116,7 @@
         });
 
         it('should have correct bounds', () => {
-          expandRow(1);
+          openRowDetails(1);
           const cells = getRowCells(bodyRows[1]);
           const bounds = cells[1].getBoundingClientRect();
           expect(bounds.top).to.be.closeTo(cells[0].getBoundingClientRect().bottom, 1);
@@ -127,14 +127,14 @@
         });
 
         it('should hide the details cell', () => {
-          expandRow(1);
+          openRowDetails(1);
           const row = bodyRows[1];
           scrollToEnd(grid);
           expect(getRowCells(row)[1].hidden).to.be.true;
         });
 
         it('should add details to fixed cells cache', () => {
-          expandRow(1);
+          openRowDetails(1);
 
           flushGrid(grid);
           bodyRows = getRows(grid.$.items);
@@ -153,11 +153,11 @@
         });
 
         it('should have the correct index on details template', () => {
-          // expand item 0
-          grid.expandItem('foo');
+          // open details for item 0
+          grid.openItemDetails('foo');
 
-          // expand item 1
-          grid.expandItem('bar');
+          // open details for item 1
+          grid.openItemDetails('bar');
 
           const firstRowCells = getRowCells(bodyRows[0]);
           const secondRowCells = getRowCells(bodyRows[1]);
@@ -176,7 +176,7 @@
         beforeEach(() => grid = fixture('repeat'));
 
         it('should have correct height', done => {
-          grid.expandItem(items[0]);
+          grid.openItemDetails(items[0]);
 
           grid.dataProvider = (params, callback) => callback(items);
           flushGrid(grid);

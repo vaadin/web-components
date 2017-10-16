@@ -60,9 +60,9 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * ### Quick Start
      *
-     * - Use the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.
+     * Use the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.
      *
-     * - Then assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.
+     * Then assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.
      *
      * #### Example:
      * ```html
@@ -83,25 +83,25 @@ This program is available under Apache License Version 2.0, available at https:/
      * </vaadin-grid>
      * ```
      *
-     * - The following helper elements can be used for further customization:
-     *  - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
-     *  - [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)
-     *  - [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)
-     *  - [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)
+     * The following helper elements can be used for further customization:
+     * - [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)
+     * - [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)
+     * - [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)
+     * - [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)
      *
      * __Note that the helper elements must be explicitly imported.__
      * If you want to import everything at once you can use the `all-imports.html` bundle.
      *
-     * - A column template can be decorated with one the following class names to specify its purpose
-     *  - "header": Marks a header template
-     *  - "footer": Marks a footer template
-     *  - "row-details": Marks a row details template
+     * A column template can be decorated with one the following class names to specify its purpose
+     * - `header`: Marks a header template
+     * - `footer`: Marks a footer template
+     * - `row-details`: Marks a row details template
      *
-     * - The following built-in template variables can be bound to inside the column templates
-     *  - "index": Number representing the row index
-     *  - "item" and it's sub-properties: Data object (provided by a data provider / items array)
-     *  - "selected": True if the item is selected (can be two-way bound)
-     *  - "expanded": True if the item is expanded for row details (can be two-way bound)
+     * The following built-in template variables can be bound to inside the column templates:
+     * - `[[index]]`: Number representing the row index
+     * - `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)
+     * - `{{selected}}`: True if the item is selected (can be two-way bound)
+     * - `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)
      *
      * ### Lazy Loading with Function Data Provider
      *
@@ -479,20 +479,20 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
         this._toggleRowSelected(row, this._isSelected(item));
-        this._toggleRowExpanded(row, this._rowDetailsTemplate && this._isExpanded(item));
+        this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
       }
 
-      _toggleRowExpanded(row, expanded) {
+      _toggleRowDetailsOpened(row, detailsOpened) {
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            cell._instance.__expanded__ = expanded;
-            cell._instance.expanded = expanded;
+            cell._instance.__detailsOpened__ = detailsOpened;
+            cell._instance.detailsOpened = detailsOpened;
           }
         });
-        this._a11yUpdateRowExpanded(row, expanded);
+        this._a11yUpdateRowDetailsOpened(row, detailsOpened);
       }
 
       _toggleRowSelected(row, selected) {
