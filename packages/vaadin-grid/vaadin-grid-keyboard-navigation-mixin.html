@@ -202,8 +202,8 @@ This program is available under Apache License Version 2.0, available at https:/
         if (isRowDetails) {
           dstIsRowDetails = dy === 0;
         } else {
-          dstIsRowDetails = dy === 1 && this._isExpanded(item) ||
-            dy === -1 && dstRowIndex !== rowIndex && this._isExpanded(dstItem);
+          dstIsRowDetails = dy === 1 && this._isDetailsOpened(item) ||
+            dy === -1 && dstRowIndex !== rowIndex && this._isDetailsOpened(dstItem);
         }
         // Should we navigate between details and regular cells of the same row?
         if (dstIsRowDetails !== isRowDetails &&

@@ -294,8 +294,8 @@
             });
           });
 
-          it('should set aria-expended true on cells after row expanded', () => {
-            grid.expandItem(grid.items[0]);
+          it('should set aria-expended true on cells after row details opened', () => {
+            grid.openItemDetails(grid.items[0]);
 
             expect(uniqueAttrValues(
               grid.$.items.children[0].children,
@@ -308,9 +308,9 @@
             )).to.eql(['false']);
           });
 
-          it('should set aria-expanded false on cells after row collapsed', () => {
-            grid.expandItem(grid.items[0]);
-            grid.collapseItem(grid.items[0]);
+          it('should set aria-expanded false on cells after row details closed', () => {
+            grid.openItemDetails(grid.items[0]);
+            grid.closeItemDetails(grid.items[0]);
 
             expect(uniqueAttrValues(
               grid.$.items.children[0].children,

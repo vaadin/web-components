@@ -11,9 +11,9 @@
     <h3>Row Details</h3>
     <p>
       Row Details can be enabled by providing a <code>&lt;template class="row-details"&gt;</code>
-      and expanding/collapsing items by using <code>{{expanded}}</code> template variable,
-      <code>expandedItems</code> property or <code>expandItem(item)</code> and
-      <code>collapseItem(item)</code> methods.
+      and toggling item details by using <code>{{detailsOpened}}</code> template variable,
+      <code>detailsOpenedItems</code> property or <code>openItemDetails(item)</code> and
+      <code>closeItemDetails(item)</code> methods.
     </p>
     <vaadin-demo-snippet id='grid-row-details-demos-row-details'>
       <template preserve-content>
@@ -66,7 +66,7 @@
               <vaadin-grid-column width="100px">
                 <template class="header"></template>
                 <template>
-                  <paper-checkbox aria-label$="Show Details for [[item.name.first]]" checked="{{expanded}}">Show Details</paper-checkbox>
+                  <paper-checkbox aria-label$="Show Details for [[item.name.first]]" checked="{{detailsOpened}}">Show Details</paper-checkbox>
                 </template>
               </vaadin-grid-column>
 
@@ -77,17 +77,17 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Expanding Items Without Data Binding</h3>
+    <h3>Toggling Details Without Data Binding</h3>
     <p>
-      In this example the grid's <code>activeItem</code> property is bound to <code>expandedItems</code> property.
+      In this example the grid's <code>activeItem</code> property is bound to <code>detailsOpenedItems</code> property.
     </p>
     <p>
       <b>Hint: </b>Click a row to toggle the active item.
     </p>
-    <vaadin-demo-snippet id='grid-row-details-demos-expanding-items-without-data-binding'>
+    <vaadin-demo-snippet id='grid-row-details-demos-toggling-details-without-data-binding'>
       <template preserve-content>
-        <bind-expanded-items></bind-expanded-items>
-        <dom-module id="bind-expanded-items">
+        <bind-details-opened-items></bind-details-opened-items>
+        <dom-module id="bind-details-opened-items">
           <template preserve-content>
             <style>
               :host {
@@ -112,7 +112,7 @@
 
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
-            <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Expanded Items Example" data-provider="[[dataProvider]]" size="200">
+            <vaadin-grid on-active-item-changed="_onActiveItemChanged" id="grid" aria-label="Details Opened Items Example" data-provider="[[dataProvider]]" size="200">
 
               <template class="row-details">
                 <div class="details">
@@ -140,17 +140,17 @@
 
           </template>
           <script>
-            window.addDemoReadyListener('#grid-row-details-demos-expanding-items-without-data-binding', function(document) {
-              class BindExpandedItems extends Polymer.Element {
+            window.addDemoReadyListener('#grid-row-details-demos-toggling-details-without-data-binding', function(document) {
+              class BindDetailsOpenedItems extends Polymer.Element {
                 static get is() {
-                  return 'bind-expanded-items';
+                  return 'bind-details-opened-items';
                 }
 
                 _onActiveItemChanged(e) {
-                  this.$.grid.expandedItems = [e.detail.value];
+                  this.$.grid.detailsOpenedItems = [e.detail.value];
                 }
               }
-              window.customElements.define(BindExpandedItems.is, BindExpandedItems);
+              window.customElements.define(BindDetailsOpenedItems.is, BindDetailsOpenedItems);
             });
           </script>
         </dom-module>

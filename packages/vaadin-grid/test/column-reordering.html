@@ -343,7 +343,7 @@
         });
 
         it('should update last-column attribute (details open)', () => {
-          grid.expandItem(getRows(grid.$.items)[0].item);
+          grid.openItemDetails(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
           let cell = getCellByCellContent(headerContent[2]);
           cell = getCellByCellContent(headerContent[2]);

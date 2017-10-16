@@ -67,10 +67,10 @@ This program is available under Apache License Version 2.0, available at https:/
       );
     }
 
-    _a11yUpdateRowExpanded(row, expanded) {
+    _a11yUpdateRowDetailsOpened(row, detailsOpened) {
       Array.from(row.children).forEach(cell => {
-        if (typeof expanded === 'boolean') {
-          cell.setAttribute('aria-expanded', expanded);
+        if (typeof detailsOpened === 'boolean') {
+          cell.setAttribute('aria-expanded', detailsOpened);
         } else {
           if (cell.hasAttribute('aria-expanded')) {
             cell.removeAttribute('aria-expanded');

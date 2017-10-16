@@ -17,9 +17,9 @@ This program is available under Apache License Version 2.0, available at https:/
     static get properties() {
       return {
         /**
-        * An array containing references to expanded items.
+        * An array containing references to items with open row details.
         */
-        expandedItems: {
+        detailsOpenedItems: {
           type: Array,
           value: function() {
             return [];
@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_expandedItemsChanged(expandedItems.*, dataProvider, _rowDetailsTemplate, _physicalCountVal)'
+        '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _rowDetailsTemplate, _physicalCountVal)'
       ];
     }
 
@@ -52,24 +52,24 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _expandedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate, physicalCount) {
+    _detailsOpenedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate, physicalCount) {
       if (dataProvider === undefined || !rowDetailsTemplate) {
         return;
       }
 
-      if (changeRecord.path === 'expandedItems.length') {
+      if (changeRecord.path === 'detailsOpenedItems.length') {
         // Let’s avoid duplicate work of both “.splices” and “.length” updates.
         return;
       }
 
       this._flushItemsDebouncer();
 
-      if (this._lastExpandedItems && physicalCount) {
+      if (this._lastDetailsOpenedItems && physicalCount) {
         this._physicalItems.forEach(this._toggleDetailsCell, this);
         this._render();
       }
 
-      this._lastExpandedItems = this.expandedItems;
+      this._lastDetailsOpenedItems = this.detailsOpenedItems;
     }
 
     _configureDetailsCell(cell) {
@@ -81,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _toggleDetailsCell(row, item) {
       const cell = row.querySelector('[part~="details-cell"]');
-      const detailsHidden = !this._isExpanded(item);
+      const detailsHidden = !this._isDetailsOpened(item);
       if (cell && cell.hidden !== detailsHidden) {
         cell.hidden = detailsHidden;
         if (detailsHidden) {
@@ -106,36 +106,36 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    _isExpanded(item) {
-      return this.expandedItems && this.expandedItems.indexOf(item) !== -1;
+    _isDetailsOpened(item) {
+      return this.detailsOpenedItems && this.detailsOpenedItems.indexOf(item) !== -1;
     }
 
     /**
-     * Expand the details row of a given item.
+     * Open the details row of a given item.
      */
-    expandItem(item) {
-      if (!this._isExpanded(item)) {
-        this.push('expandedItems', item);
+    openItemDetails(item) {
+      if (!this._isDetailsOpened(item)) {
+        this.push('detailsOpenedItems', item);
       }
     }
 
     /**
-     * Collapse the details row of a given item.
+     * Close the details row of a given item.
      */
-    collapseItem(item) {
-      if (this._isExpanded(item)) {
-        this.splice('expandedItems', this.expandedItems.indexOf(item), 1);
+    closeItemDetails(item) {
+      if (this._isDetailsOpened(item)) {
+        this.splice('detailsOpenedItems', this.detailsOpenedItems.indexOf(item), 1);
       }
     }
 
-    _expandedInstanceChangedCallback(instance, value) {
-      if (super._expandedInstanceChangedCallback) {
-        super._expandedInstanceChangedCallback(instance, value);
+    _detailsOpenedInstanceChangedCallback(instance, value) {
+      if (super._detailsOpenedInstanceChangedCallback) {
+        super._detailsOpenedInstanceChangedCallback(instance, value);
       }
       if (value) {
-        this.expandItem(instance.item);
+        this.openItemDetails(instance.item);
       } else {
-        this.collapseItem(instance.item);
+        this.closeItemDetails(instance.item);
       }
     }
   };

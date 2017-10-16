@@ -52,7 +52,7 @@ This program is available under Apache License Version 2.0, available at https:/
         super();
 
         this._instanceProps = {
-          expanded: true,
+          detailsOpened: true,
           index: true,
           item: true,
           selected: true
@@ -102,7 +102,7 @@ This program is available under Apache License Version 2.0, available at https:/
               const originalProp = `__${prop}__`;
 
               // Notify for only user-action changes, not for scrolling updates. E. g.,
-              // if `expanded` is different from `__expanded__`, which was set during render.
+              // if `detailsOpened` is different from `__detailsOpened__`, which was set during render.
               if (inst[originalProp] === value) {
                 return;
               }
