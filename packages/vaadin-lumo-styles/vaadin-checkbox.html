@@ -1,7 +1,5 @@
 <link rel="import" href="color.html">
-<link rel="import" href="sizing-and-spacing.html">
 <link rel="import" href="style.html">
-<link rel="import" href="typography.html">
 
 <dom-module id="valo-checkbox" theme-for="vaadin-checkbox">
   <template>
@@ -47,7 +45,7 @@
         flex: none;
         margin: 0.1875em;
         position: relative;
-        border-radius: 4px;
+        border-radius: var(--valo-border-radius);
         background-color: var(--valo-contrast-20pct);
         transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
         pointer-events: none;
@@ -126,7 +124,7 @@
       }
 
       :host([focus-ring]) [part="checkbox"] {
-        box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
+        box-shadow: 0 0 0 3px var(--valo-primary-color-50pct);
       }
 
       :host([indeterminate]) [part="checkbox"]::after {
