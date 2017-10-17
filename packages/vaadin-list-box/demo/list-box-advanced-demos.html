@@ -1,0 +1,20 @@
+<dom-module id="list-box-advanced-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+  </div>
+  </template>
+  <script>
+    class ListBoxAdvancedDemos extends DemoReadyEventEmitter(ListBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'list-box-advanced-demos';
+      }
+    }
+    customElements.define(ListBoxAdvancedDemos.is, ListBoxAdvancedDemos);
+  </script>
+</dom-module>

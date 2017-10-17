@@ -15,15 +15,13 @@
   </test-fixture>
 
   <script>
-    describe('sample test', function() {
-      var element;
+    describe('sample test', () => {
+      var listbox;
 
-      beforeEach(function() {
-        element = fixture('default');
-      });
+      beforeEach(() => listbox = fixture('default'));
 
-      it('should pass', function() {
-        expect(element.localName).to.be.equal('vaadin-list-box');
+      it('should have a valid localName', function() {
+        expect(listbox.localName).to.be.equal('vaadin-list-box');
       });
 
     });
