@@ -184,10 +184,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._scroll(-1 * this._scrollOffset);
         }
 
-        _scroll(pixels) {
-          this.vertical ? this._scrollerElement.scrollTop += pixels : this._scrollerElement.scrollLeft += pixels;
-        }
-
         get _scrollOffset() {
           return this.vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
         }
