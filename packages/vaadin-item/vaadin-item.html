@@ -6,38 +6,37 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-list-mixin/vaadin-list-item-mixin.html">
 
-<dom-module id="vaadin-item">
+<dom-module id="vaadin-item-default-theme">
   <template>
     <style>
       :host {
-        display: inline-block;
+        padding: 4px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        box-sizing: border-box;
       }
     </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-item">
+  <template>
     <slot></slot>
   </template>
-
   <script>
     {
-
       /**
-       * `<vaadin-item>` is a Polymer 2 element.
-       *
-       * ```
-       * <vaadin-item></vaadin-item>
-       * ```
+       * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
        *
        * @memberof Vaadin
-       * @demo demo/index.html
+       * @mixes Vaadin.ItemMixin
+       * @mixes Vaadin.ThemableMixin
        */
-      class VaadinItemElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class VaadinItemElement extends Vaadin.ItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-item';
-        }
-
-        static get properties() {
-          return {
-          };
         }
       }
 

@@ -1,26 +1,13 @@
 {
   "name": "Vaadin Element",
-  "pages": [
-  {
+  "pages": [{
     "name": "Basic Examples",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+    "url": "item-basic-demos",
+    "src": "item-basic-demos.html",
     "meta": {
       "title": "vaadin-item Basic Examples",
       "description": "",
       "image": ""
      }
-  }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-item Advanced Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ]
+  }]
 }

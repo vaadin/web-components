@@ -1,0 +1,49 @@
+<dom-module id="item-basic-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Simple Item</h3>
+    <vaadin-demo-snippet id='item-basic-demos-simple-item'>
+      <template preserve-content>
+        <vaadin-item>Foobar</vaadin-item>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Focusable Item</h3>
+    <vaadin-demo-snippet id='item-basic-demos-simple-item'>
+      <template preserve-content>
+        <style>
+          vaadin-item[focus-ring] {
+            outline-color: purple;
+          }
+        </style>
+        <vaadin-item tabindex="0">Foobar</vaadin-item>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Selectable Item</h3>
+    <vaadin-demo-snippet id='item-basic-demos-simple-item'>
+      <template preserve-content>
+        <style>
+          vaadin-item[selected] {
+            background: lightgray;
+          }
+        </style>
+        <vaadin-item tabindex="0">Foobar</vaadin-item>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ElementBasicDemos extends DemoReadyEventEmitter(ItemDemo(Polymer.Element)) {
+      static get is() {
+        return 'item-basic-demos';
+      }
+    }
+    customElements.define(ElementBasicDemos.is, ElementBasicDemos);
+  </script>
+</dom-module>
