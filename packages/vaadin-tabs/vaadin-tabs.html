@@ -6,9 +6,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-list-mixin/vaadin-list-mixin.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-tab.html">
-<link rel="import" href="vaadin-list-mixin.html">
 
 <dom-module id="vaadin-tabs-default-theme">
   <template>
@@ -167,7 +167,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this.addEventListener('iron-resize', () => this._updateOverflow());
-          this.$.scroll.addEventListener('scroll', () => this._updateOverflow());
+          this._scrollerElement.addEventListener('scroll', () => this._updateOverflow());
           this.setAttribute('role', 'tablist');
 
           // Wait for the vaadin-tab elements to upgrade and get styled
@@ -184,17 +184,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this._scroll(-1 * this._scrollOffset);
         }
 
-        _scroll(pixels) {
-          this.vertical ? this.$.scroll.scrollTop += pixels : this.$.scroll.scrollLeft += pixels;
+        get _scrollOffset() {
+          return this.vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
         }
 
-        get _scrollOffset() {
-          return this.vertical ? this.$.scroll.offsetHeight : this.$.scroll.offsetWidth;
+        get _scrollerElement() {
+          return this.$.scroll;
         }
 
         _updateOverflow() {
-          const scrollPosition = this.vertical ? this.$.scroll.scrollTop : this.$.scroll.scrollLeft;
-          let scrollSize = this.vertical ? this.$.scroll.scrollHeight : this.$.scroll.scrollWidth;
+          const scrollPosition = this.vertical ? this._scrollerElement.scrollTop : this._scrollerElement.scrollLeft;
+          let scrollSize = this.vertical ? this._scrollerElement.scrollHeight : this._scrollerElement.scrollWidth;
           // In Edge we need to adjust the size in 1 pixel
           scrollSize -= 1;
 
