@@ -44,8 +44,14 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this.addEventListener('focus', e => this._setFocused(true), true);
       this.addEventListener('blur', e => this._setFocused(false), true);
-      this.addEventListener('mousedown', e => this._setActive(this._mousedown = true));
-      this.addEventListener('mouseup', e => this._setActive(this._mousedown = false));
+      this.addEventListener('mousedown', e => {
+        this._setActive(this._mousedown = true);
+        const mouseUpListener = () => {
+          this._setActive(this._mousedown = false);
+          document.removeEventListener('mouseup', mouseUpListener);
+        };
+        document.addEventListener('mouseup', mouseUpListener);
+      });
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('keyup', e => this._onKeyup(e));
       this.addEventListener('click', e => this._toggle());
