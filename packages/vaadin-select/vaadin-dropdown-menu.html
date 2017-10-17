@@ -6,48 +6,149 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 
-<dom-module id="vaadin-dropdown-menu">
-  <template>
-    <style>
-      :host {
-        display: inline-block;
-      }
-    </style>
-    <slot></slot>
-  </template>
-
-  <script>
-    {
-
-      /**
-       * `<vaadin-dropdown-menu>` is a Polymer 2 element.
-       *
-       * ```
-       * <vaadin-dropdown-menu></vaadin-dropdown-menu>
-       * ```
-       *
-       * @memberof Vaadin
-       * @demo demo/index.html
-       */
-      class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
-        static get is() {
-          return 'vaadin-dropdown-menu';
+  <dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
+    <template>
+      <style>
+        :host {
+          align-items: flex-start;
+          justify-content: flex-start;
         }
 
-        static get properties() {
-          return {
-          };
+        :host([phone]) {
+          top: 0 !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          left: 0 !important;
+          padding: 24px;
+          align-items: stretch;
+          justify-content: flex-end;
         }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="vaadin-dropdown-menu-overlay">
+    <script>
+      {
+        /**
+         * The overlay element.
+         *
+         * ### Styling
+         *
+         * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+         * for `<vaadin-dropdown-menu-overlay>` parts.
+         *
+         * @memberof Vaadin
+         */
+        class VaadinDropdownMenuOverlayElement extends Vaadin.OverlayElement {
+          static get is() {
+            return 'vaadin-dropdown-menu-overlay';
+          }
+        }
+        customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
       }
+    </script>
+  </dom-module>
 
-      customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
+  <dom-module id="vaadin-dropdown-menu">
+    <template>
+      <style>
+        :host {
+          display: inline-block;
+        }
+      </style>
 
-      /**
-       * @namespace Vaadin
-       */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinDropdownMenuElement = VaadinDropdownMenuElement;
-    }
-  </script>
-</dom-module>
+      <vaadin-text-field readonly id="input"></vaadin-text-field>
+      <vaadin-dropdown-menu-overlay opened="{{opened}}" id="overlay">
+      </vaadin-dropdown-menu-overlay>
+    </template>
+
+    <script>
+      {
+
+        /**
+        * `<vaadin-dropdown-menu>` is a Polymer 2 element.
+        *
+        * ```
+        * <vaadin-dropdown-menu></vaadin-dropdown-menu>
+        * ```
+        *
+        * @memberof Vaadin
+        * @demo demo/index.html
+        */
+        class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
+          static get is() {
+            return 'vaadin-dropdown-menu';
+          }
+
+          static get properties() {
+            return {
+              opened: {
+                type: Boolean,
+                value: false,
+                notify: true
+              },
+
+              _contentTemplate: Object
+            };
+          }
+
+          static get observers() {
+            return ['_openedChanged(opened)'];
+          }
+
+          ready() {
+            super.ready();
+
+            this.inputElement.addEventListener('click', e => this._toggleOverlay());
+          }
+
+          _openedChanged(opened) {
+            if (opened && !this._instance) {
+              this._contentTemplate = this.querySelector('template');
+              const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
+                instanceProps: {
+                  detail: true,
+                  target: true
+                },
+                forwardHostProp: function(prop, value) {
+                  if (this._instance) {
+                    this._instance.forwardHostProp(prop, value);
+                  }
+                }
+              });
+              this._instance = new Templatizer({});
+              this.overlayElement.content = this._instance.root;
+            }
+            this.overlayElement.opened = opened;
+          }
+
+          _toggleOverlay() {
+            this.overlayElement.style.left = this.inputElement.getBoundingClientRect().left + "px";
+            this.overlayElement.style.top = this.inputElement.getBoundingClientRect().top + "px";
+
+            this.opened = !this.opened;
+          }
+
+          get overlayElement() {
+            return this.$.overlay;
+          }
+
+          get inputElement() {
+            return this.$.input;
+          }
+        }
+
+        customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
+
+        /**
+        * @namespace Vaadin
+        */
+        window.Vaadin = window.Vaadin || {};
+        Vaadin.VaadinDropdownMenuElement = VaadinDropdownMenuElement;
+      }
+    </script>
+  </dom-module>

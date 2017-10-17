@@ -32,7 +32,9 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
+    "vaadin-text-field": "^1.1.0",
+    "vaadin-overlay": "^1.4.1"
   },
   "resolutions": {
     "web-component-tester": "^6.1.5"
