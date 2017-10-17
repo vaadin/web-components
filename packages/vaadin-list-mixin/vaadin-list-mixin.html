@@ -126,6 +126,11 @@ This program is available under Apache License Version 2.0, available at https:/
       items[idx].focus();
     }
 
+    /* @protected */
+    get _scrollerElement() {
+      // Returning scroller element of the component
+    }
+
     // Scroll the container to have the next item by the edge of the viewport
     _scrollToItem(idx) {
       const item = this._navItems[idx];
@@ -134,7 +139,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       const props = this.vertical ? ['top', 'bottom'] : ['left', 'right'];
-      const scrollerRect = this.$.scroll.getBoundingClientRect();
+      const scrollerRect = this._scrollerElement.getBoundingClientRect();
       const nextItemRect = (this._navItems[idx + 1] || item).getBoundingClientRect();
       const prevItemRect = (this._navItems[idx - 1] || item).getBoundingClientRect();
 
