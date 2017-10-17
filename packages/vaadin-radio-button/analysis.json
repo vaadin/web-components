@@ -6,13 +6,13 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-radio-button-group.html",
+        "file": "vaadin-radio-group.html",
         "start": {
-          "line": 236,
+          "line": 237,
           "column": 6
         },
         "end": {
-          "line": 236,
+          "line": 237,
           "column": 42
         }
       },
@@ -455,7 +455,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 187,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -468,11 +468,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 189,
                   "column": 8
                 },
                 "end": {
-                  "line": 195,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -522,7 +522,7 @@
               "column": 6
             },
             "end": {
-              "line": 196,
+              "line": 192,
               "column": 7
             }
           },
@@ -669,9 +669,9 @@
           ]
         },
         {
-          "description": "`<vaadin-radio-button-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-button-group name=\"radio-group\" value=\"bar\">\n  <vaadin-radio-button value=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button value=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button value=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-button-group>\n```\n\n### Styling\n\nThe following attributes are exposed for styling:\n\nAttribute    | Description\n-------------|------------\n`disabled`   | Set when the radio button group and its children are disabled.\n`invalid`    | Set when the radio button group is required and submitted, but does not have value.\n`required`   | Set when the radio group is required for submission of the form and must have value.",
+          "description": "`<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-group name=\"radio-group\" value=\"bar\">\n  <vaadin-radio-button value=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button value=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button value=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-group>\n```\n\n### Styling\n\nThe following attributes are exposed for styling:\n\nAttribute    | Description\n-------------|------------\n`disabled`   | Set when the radio button group and its children are disabled.\n`invalid`    | Set when the radio button group is required and submitted, but does not have value.\n`required`   | Set when the radio group is required for submission of the form and must have value.",
           "summary": "",
-          "path": "vaadin-radio-button-group.html",
+          "path": "vaadin-radio-group.html",
           "properties": [
             {
               "name": "disabled",
@@ -802,11 +802,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 124,
+                  "line": 129,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 135,
                   "column": 9
                 }
               },
@@ -819,11 +819,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 137,
                   "column": 8
                 },
                 "end": {
-                  "line": 134,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -840,11 +840,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 141,
                   "column": 8
                 },
                 "end": {
-                  "line": 142,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -861,11 +861,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 149,
                   "column": 8
                 },
                 "end": {
-                  "line": 164,
+                  "line": 169,
                   "column": 9
                 }
               },
@@ -878,11 +878,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 171,
                   "column": 8
                 },
                 "end": {
-                  "line": 170,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -899,11 +899,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 177,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -920,11 +920,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 180,
+                  "line": 185,
                   "column": 8
                 },
                 "end": {
-                  "line": 186,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -936,37 +936,16 @@
               ]
             },
             {
-              "name": "_forEachButton",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 188,
-                  "column": 8
-                },
-                "end": {
-                  "line": 190,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "fn"
-                }
-              ]
-            },
-            {
               "name": "_setValueFromButton",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 192,
+                  "line": 193,
                   "column": 8
                 },
                 "end": {
-                  "line": 196,
+                  "line": 197,
                   "column": 9
                 }
               },
@@ -983,11 +962,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 202,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -1004,11 +983,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 205,
                   "column": 8
                 },
                 "end": {
-                  "line": 215,
+                  "line": 216,
                   "column": 9
                 }
               },
@@ -1025,11 +1004,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 221,
                   "column": 8
                 },
                 "end": {
-                  "line": 228,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -1075,13 +1054,13 @@
               "column": 6
             },
             "end": {
-              "line": 229,
+              "line": 230,
               "column": 7
             }
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.RadioButtonGroupElement",
+          "name": "Vaadin.RadioGroupElement",
           "attributes": [
             {
               "name": "disabled",
@@ -1165,7 +1144,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-radio-button-group.html",
+                "file": "vaadin-radio-group.html",
                 "start": {
                   "line": 25,
                   "column": 4
@@ -1177,7 +1156,7 @@
               }
             }
           ],
-          "tagname": "vaadin-radio-button-group",
+          "tagname": "vaadin-radio-group",
           "mixins": [
             "Vaadin.ThemableMixin"
           ]

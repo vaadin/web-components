@@ -17,21 +17,21 @@
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-radio-button.html">
-    <link rel="import" href="vaadin-radio-button-group.html">
+    <link rel="import" href="vaadin-radio-group.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<vaadin-radio-button-group name="radio-group" value="bar">
+<vaadin-radio-group name="radio-group" value="bar">
   <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
   <vaadin-radio-button value="bar">Bar</vaadin-radio-button>
   <vaadin-radio-button value="baz">Baz</vaadin-radio-button>
-</vaadin-radio-button-group>
+</vaadin-radio-group>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="162" alt="Screenshot of vaadin-radio-button-group">](https://vaadin.com/elements/-/element/vaadin-radio-button)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="162" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/elements/-/element/vaadin-radio-button)
 
 
 ## Running demos and tests in browser

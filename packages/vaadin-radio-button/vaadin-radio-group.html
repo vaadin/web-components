@@ -6,7 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="vaadin-radio-button.html">
 
-<dom-module id="vaadin-radio-button-group-default-theme" theme-for="vaadin-radio-button-group">
+<dom-module id="vaadin-radio-group-default-theme" theme-for="vaadin-radio-group">
   <template>
     <style>
       :host {
@@ -21,7 +21,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-radio-button-group">
+<dom-module id="vaadin-radio-group">
   <template>
     <slot></slot>
   </template>
@@ -29,14 +29,14 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
-       * `<vaadin-radio-button-group>` is a Polymer element for grouping vaadin-radio-buttons.
+       * `<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.
        *
        * ```html
-       * <vaadin-radio-button-group name="radio-group" value="bar">
+       * <vaadin-radio-group name="radio-group" value="bar">
        *   <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
        *   <vaadin-radio-button value="bar">Bar</vaadin-radio-button>
        *   <vaadin-radio-button value="baz">Baz</vaadin-radio-button>
-       * </vaadin-radio-button-group>
+       * </vaadin-radio-group>
        * ```
        *
        * ### Styling
@@ -51,12 +51,12 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
-       * @element vaadin-radio-button-group
+       * @element vaadin-radio-group
        * @demo demo/index.html
        */
-      class RadioButtonGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class RadioGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-radio-button-group';
+          return 'vaadin-radio-group';
         }
 
         static get properties() {
@@ -122,6 +122,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('role', 'radiogroup');
         }
 
+        get _radioButtons() {
+          return Array.from(this.children)
+            .filter(child => child.localName === 'vaadin-radio-button');
+        }
+
         _checkForInitialValue() {
           var checkedButton = this.querySelector('[checked]');
 
@@ -139,7 +144,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('aria-disabled', disabled);
 
-          this._forEachButton(button => button.disabled = disabled);
+          this._radioButtons.forEach(button => button.disabled = disabled);
         }
 
         _addActiveListeners() {
@@ -186,10 +191,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _forEachButton(fn) {
-          Array.from(this.children).filter(child => child.localName === 'vaadin-radio-button').forEach(fn);
-        }
-
         _setValueFromButton(button) {
           this._checkedButton = button;
 
@@ -199,7 +200,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _checkedButtonChanged(checkedButton) {
           this.validate();
 
-          this._forEachButton(button => button.checked = button === checkedButton);
+          this._radioButtons.forEach(button => button.checked = button === checkedButton);
         }
 
         _valueChanged(value) {
@@ -229,13 +230,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(RadioButtonGroupElement.is, RadioButtonGroupElement);
+      customElements.define(RadioGroupElement.is, RadioGroupElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.RadioButtonGroupElement = RadioButtonGroupElement;
+      Vaadin.RadioGroupElement = RadioGroupElement;
     }
   </script>
 </dom-module>

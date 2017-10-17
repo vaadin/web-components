@@ -1,66 +1,62 @@
-<dom-module id="radio-button-group-demos">
+<dom-module id="radio-group-demos">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
       }
-
     </style>
 
-
     <h3>Radio Group</h3>
-    <vaadin-demo-snippet id='radio-button-group-demos-radio-group'>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group'>
       <template preserve-content>
-        <vaadin-radio-button-group name="radio-group" value="bar">
+        <vaadin-radio-group name="radio-group" value="bar">
           <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
           <vaadin-radio-button value="bar">Bar</vaadin-radio-button>
           <vaadin-radio-button value="baz">Baz</vaadin-radio-button>
-        </vaadin-radio-button-group>
+        </vaadin-radio-group>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Radio Group with Custom Tabindex</h3>
-    <vaadin-demo-snippet id='radio-button-group-demos-radio-group-custom-tabindex'>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-custom-tabindex'>
       <template preserve-content>
-        <vaadin-radio-button-group name="radio-group">
+        <vaadin-radio-group name="radio-group">
           <vaadin-radio-button tabindex="1">1</vaadin-radio-button>
           <vaadin-radio-button tabindex="3">2</vaadin-radio-button>
           <vaadin-radio-button tabindex="2">3</vaadin-radio-button>
-        </vaadin-radio-button-group>
+        </vaadin-radio-group>
       </template>
     </vaadin-demo-snippet>
 
-
     <h3>Radio Group Disabled</h3>
-    <vaadin-demo-snippet id='radio-button-group-demos-radio-group-disabled'>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-disabled'>
       <template preserve-content>
-        <vaadin-radio-button-group name="radio-group" disabled>
+        <vaadin-radio-group name="radio-group" disabled>
           <vaadin-radio-button>1</vaadin-radio-button>
           <vaadin-radio-button>2</vaadin-radio-button>
           <vaadin-radio-button>3</vaadin-radio-button>
           <vaadin-radio-button>4</vaadin-radio-button>
-        </vaadin-radio-button-group>
+        </vaadin-radio-group>
       </template>
     </vaadin-demo-snippet>
 
-
     <h3>Radio Group with Iron Form</h3>
-    <vaadin-demo-snippet id='radio-button-group-demos-radio-group-with-iron-form'>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-with-iron-form'>
       <template preserve-content>
         <iron-form id="test-form">
           <form>
-            <vaadin-radio-button-group name="radio-group" required>
+            <vaadin-radio-group name="radio-group" required>
               <vaadin-radio-button value="first">1</vaadin-radio-button>
               <vaadin-radio-button value="second">2</vaadin-radio-button>
               <vaadin-radio-button value="third">3</vaadin-radio-button>
               <vaadin-radio-button value="fourth">4</vaadin-radio-button>
-            </vaadin-radio-button-group>
+            </vaadin-radio-group>
             <vaadin-button id="submit-button">Submit</vaadin-button>
           </form>
           <div class="output"></div>
         </iron-form>
         <script>
-          window.addDemoReadyListener('#radio-button-group-demos-radio-group-with-iron-form', function(document) {
+          window.addDemoReadyListener('#radio-group-demos-radio-group-with-iron-form', function(document) {
             var testForm = document.getElementById('test-form');
             var submitButton = document.getElementById('submit-button');
 
@@ -79,11 +75,11 @@
   </div>
   </template>
   <script>
-    class RadioButtonGroupDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
+    class RadioGroupDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
       static get is() {
-        return 'radio-button-group-demos';
+        return 'radio-group-demos';
       }
     }
-    customElements.define(RadioButtonGroupDemos.is, RadioButtonGroupDemos);
+    customElements.define(RadioGroupDemos.is, RadioGroupDemos);
   </script>
 </dom-module>
