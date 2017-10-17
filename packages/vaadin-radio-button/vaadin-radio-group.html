@@ -132,6 +132,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (checkedButton) {
             this._setValueFromButton(checkedButton);
+          } else if (this._radioButtons.length) {
+            this._setFocusable(0);
           }
         }
 
@@ -194,6 +196,8 @@ This program is available under Apache License Version 2.0, available at https:/
         _setValueFromButton(button) {
           this._checkedButton = button;
 
+          this._setFocusable(this._radioButtons.indexOf(button));
+
           this.value = button.value;
         }
 
@@ -228,6 +232,12 @@ This program is available under Apache License Version 2.0, available at https:/
             return true;
           }
         }
+
+        _setFocusable(idx) {
+          const items = this._radioButtons;
+          items.forEach(e => e.tabindex = e === items[idx] ? 0 : -1);
+        }
+
       }
 
       customElements.define(RadioGroupElement.is, RadioGroupElement);
