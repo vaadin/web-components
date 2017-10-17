@@ -5,7 +5,6 @@
   <title>vaadin-tabs tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../vaadin-tab.html">
   <link rel="import" href="../vaadin-tabs.html">
 </head>
 
@@ -59,7 +58,7 @@
         nav.selected = 5;
         nav._focus(5);
         arrowRight(nav);
-        expect(nav.$.scroll.getBoundingClientRect().right).to.be.closeTo(nav._navItems[7].getBoundingClientRect().right, 1);
+        expect(nav._scrollerElement.getBoundingClientRect().right).to.be.closeTo(nav._navItems[7].getBoundingClientRect().right, 1);
       });
 
       it('One item in advance should be displayed on the edge of the viewport on "arrow-left" on the last visible tab in viewport', () => {
@@ -72,7 +71,7 @@
         nav._focus(2);
 
         arrowLeft(nav);
-        expect(nav.$.scroll.getBoundingClientRect().left).to.be.closeTo(nav._navItems[0].getBoundingClientRect().left, 1);
+        expect(nav._scrollerElement.getBoundingClientRect().left).to.be.closeTo(nav._navItems[0].getBoundingClientRect().left, 1);
       });
 
       it('One item in advance should be displayed on the edge of the viewport on "arrow-down" on the last visible tab in viewport', () => {
@@ -80,7 +79,7 @@
         nav.selected = 5;
         nav._focus(5);
         arrowDown(nav);
-        expect(nav.$.scroll.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[7].getBoundingClientRect().bottom, 1);
+        expect(nav._scrollerElement.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[7].getBoundingClientRect().bottom, 1);
       });
 
       it('One item in advance should be displayed on the edge of the viewport on "arrow-up" on the last visible tab in viewport', () => {
@@ -94,7 +93,7 @@
         nav._focus(2);
 
         arrowUp(nav);
-        expect(nav.$.scroll.getBoundingClientRect().top).to.be.closeTo(nav._navItems[0].getBoundingClientRect().top, 1);
+        expect(nav._scrollerElement.getBoundingClientRect().top).to.be.closeTo(nav._navItems[0].getBoundingClientRect().top, 1);
       });
     });
   </script>

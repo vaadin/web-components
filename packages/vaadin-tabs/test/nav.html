@@ -24,38 +24,6 @@
   <script>
     const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
 
-    function arrowDown(target) {
-      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
-    }
-
-    function arrowRight(target) {
-      MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
-    }
-
-    function arrowRightIE(target) {
-      MockInteractions.keyDownOn(target, 39, [], 'Right');
-    }
-
-    function arrowUp(target) {
-      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
-    }
-
-    function arrowLeft(target) {
-      MockInteractions.keyDownOn(target, 37, [], 'ArrowLeft');
-    }
-
-    function home(target) {
-      MockInteractions.keyDownOn(target, 36, [], 'Home');
-    }
-
-    function end(target) {
-      MockInteractions.keyDownOn(target, 35, [], 'End');
-    }
-
-    function keyDownChar(target, letter, modifier) {
-      MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
-    }
-
     describe('vaadin-tabs', () => {
       var nav;
 
@@ -117,152 +85,24 @@
             });
 
             it(`when vertical=${isVertical} should have overflow="start end" if scroll is at the middle`, done => {
-              const listener = nav.$.scroll.addEventListener('scroll', () => {
+              const listener = nav._scrollerElement.addEventListener('scroll', () => {
                 expect(nav.getAttribute('overflow')).to.be.equal('start end');
-                nav.$.scroll.removeEventListener('scroll', listener);
+                nav._scrollerElement.removeEventListener('scroll', listener);
                 done();
               });
               nav._scroll(2);
             });
 
             it(`when vertical=${isVertical} should have overflow="start" if scroll is at the end`, done => {
-              const listener = nav.$.scroll.addEventListener('scroll', () => {
+              const listener = nav._scrollerElement.addEventListener('scroll', () => {
                 expect(nav.getAttribute('overflow')).to.be.equal('start');
-                nav.$.scroll.removeEventListener('scroll', listener);
+                nav._scrollerElement.removeEventListener('scroll', listener);
                 done();
               });
               nav._scroll(400);
             });
           });
 
-        });
-      });
-
-      describe('vaadin-list-mixin', () => {
-        beforeEach(() => nav._focus(0));
-
-        it('should select first item by default', () => {
-          expect(nav._navItems[0].selected).to.be.true;
-        });
-
-        it('should set tabIndex=-1 to all items, but the first', () => {
-          [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
-        });
-
-        it('should move tabIndex when moving focus', () => {
-          nav._focus(3);
-          [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
-        });
-
-        it('select an item when `selected` property is set', () => {
-          nav.selected = 2;
-          expect(nav._navItems[2].selected).to.be.true;
-        });
-
-        it('should move focus to next element on "arrow-right" keydown', () => {
-          arrowRight(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
-          arrowRightIE(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('should move focus to prev element on "arrow-left" keydown', () => {
-          arrowRight(nav);
-          arrowLeft(nav);
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('should move focus to next element on "arrow-down" keydown', () => {
-          nav.vertical = true;
-          arrowDown(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('should move focus to prev element on "arrow-up" keydown', () => {
-          nav.vertical = true;
-          arrowDown(nav);
-          arrowUp(nav);
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('should move focus to first element on "home" keydown', () => {
-          nav._focus(3);
-          home(nav);
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('should move focus to second element if first is disabled on "home" keydown', () => {
-          nav._navItems[0].disabled = true;
-          nav._focus(3);
-          home(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('should move focus to last element on "end" keydown', () => {
-          end(nav);
-          expect(nav._navItems[3].focused).to.be.true;
-        });
-
-        it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
-          nav._navItems[3].disabled = true;
-          end(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('if focus is in last element should move focus to first element on arrow-right', () => {
-          nav._focus(nav._navItems.length - 1);
-          arrowRight(nav);
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('if focus is in first element should move focus to last element on arrow-left', () => {
-          arrowLeft(nav);
-          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
-        });
-
-        it('focus loop should skip disabled items', () => {
-          arrowRight(nav);
-          arrowRight(nav);
-          expect(nav._navItems[3].focused).to.be.true;
-        });
-
-        it('should focus the next item whose first letter matches the key pressed', () => {
-          keyDownChar(nav, 'b');
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('key search should be case insensitive', () => {
-          keyDownChar(nav, 'B');
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('key search should not happen if a modifier key is pressed', () => {
-          keyDownChar(nav, 'b', 'shift');
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('key search should skip disabled items', () => {
-          keyDownChar(nav, 'b');
-          keyDownChar(nav, 'b');
-          expect(nav._navItems[3].focused).to.be.true;
-        });
-
-        it('focus should loop when search by first letter', () => {
-          nav._focus(nav._navItems.length - 1);
-          keyDownChar(nav, 'b');
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('if not vertically oriented, aria-orientation attribute should be set to horizontal', () => {
-          expect(nav.getAttribute('aria-orientation')).to.be.equal('horizontal');
-        });
-
-        it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
-          nav.vertical = true;
-          expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
         });
       });
     });
