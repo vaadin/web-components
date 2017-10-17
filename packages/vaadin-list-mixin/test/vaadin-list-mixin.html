@@ -24,10 +24,6 @@
             return 'test-wrapper';
           }
 
-          _scroll(pixels) {
-            this.vertical ? this._scrollerElement.scrollTop += pixels : this._scrollerElement.scrollLeft += pixels;
-          }
-
           get _scrollerElement() {
             return this.$.scroll;
           }
