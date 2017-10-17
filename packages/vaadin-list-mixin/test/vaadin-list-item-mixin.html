@@ -5,16 +5,32 @@
   <title>vaadin-list-item-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-list-item-mixin.html">
 </head>
 
 <body>
+  <dom-module id="test-element">
+    <template>
+      <slot></slot>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class TestElement extends Vaadin.ItemMixin(Polymer.Element) {
+          static get is() {
+            return 'test-element';
+          }
+        }
+        customElements.define('test-element', TestElement);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="navItem">
     <template>
-      <vaadin-tab>
+      <test-element>
         text-content
-      </vaadin-tab>
+      </test-element>
     </template>
   </test-fixture>
 

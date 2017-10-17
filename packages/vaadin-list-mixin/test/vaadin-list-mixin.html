@@ -5,38 +5,71 @@
   <title>vaadin-list-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-list-item-mixin.html">
   <link rel="import" href="../vaadin-list-mixin.html">
 </head>
 
 <body>
+  <dom-module id="test-wrapper">
+    <template>
+      <div id="scroll">
+        <slot></slot>
+      </div>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class TestWrapper extends Vaadin.ListMixin(Polymer.Element) {
+          static get is() {
+            return 'test-wrapper';
+          }
+
+          _scroll(pixels) {
+            this.vertical ? this._scrollerElement.scrollTop += pixels : this._scrollerElement.scrollLeft += pixels;
+          }
+
+          get _scrollerElement() {
+            return this.$.scroll;
+          }
+        }
+        customElements.define('test-wrapper', TestWrapper);
+      });
+    </script>
+  </dom-module>
+
+  <dom-module id="test-element">
+      <template>
+        <slot></slot>
+      </template>
+      <script>
+        document.addEventListener('WebComponentsReady', () => {
+          class TestElement extends Vaadin.ItemMixin(Polymer.Element) {
+            static get is() {
+              return 'test-element';
+            }
+          }
+          customElements.define('test-element', TestElement);
+
+          /**
+           * @namespace Vaadin
+           */
+          window.Vaadin = window.Vaadin || {};
+          Vaadin.TabElement = TestElement;
+        });
+      </script>
+    </dom-module>
+
   <test-fixture id="nav">
     <template>
-      <vaadin-tabs style="width: 400px; height: 400px;">
-        <vaadin-tab>Foo</vaadin-tab>
-        <vaadin-tab>Bar</vaadin-tab>
+      <test-wrapper style="width: 400px; height: 400px;">
+        <test-element>Foo</test-element>
+        <test-element>Bar</test-element>
         <separator>___</separator>
-        <vaadin-tab disabled>Baz</vaadin-tab>
-        <vaadin-tab>Baz</vaadin-tab>
-      </vaadin-tabs>
+        <test-element disabled>Baz</test-element>
+        <test-element>Baz</test-element>
+      </test-wrapper>
     </template>
   </test-fixture>
-
-  <test-fixture id="scrollable_nav">
-      <template>
-        <vaadin-tabs style="width: 400px; height: 150px;">
-          <vaadin-tab>Foo</vaadin-tab>
-          <vaadin-tab>Bar</vaadin-tab>
-          <separator>___</separator>
-          <vaadin-tab disabled>Baz</vaadin-tab>
-          <vaadin-tab>Foo1</vaadin-tab>
-          <vaadin-tab>Bar1</vaadin-tab>
-          <vaadin-tab>Baz1</vaadin-tab>
-          <vaadin-tab>Foo2</vaadin-tab>
-          <vaadin-tab>Bar2</vaadin-tab>
-        </vaadin-tabs>
-      </template>
-    </test-fixture>
 
   <script>
     function arrowDown(target) {
@@ -201,54 +234,6 @@
       it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
         nav.vertical = true;
         expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
-      });
-
-      describe('scrollable-nav', () => {
-        var nav;
-
-        beforeEach(() => nav = fixture('scrollable_nav'));
-
-        it('One item in advance should be displayed on the edge of the viewport on "arrow-right" on the last visible item in viewport', () => {
-          nav.selected = 5;
-          nav._focus(5);
-          arrowRight(nav);
-          expect(nav._scrollerElement.getBoundingClientRect().right).to.be.closeTo(nav._navItems[7].getBoundingClientRect().right, 1);
-        });
-
-        it('One item in advance should be displayed on the edge of the viewport on "arrow-left" on the last visible item in viewport', () => {
-          // Move scroller so the first item will be out of visible part
-          nav.selected = 7;
-          nav._focus(7);
-          // Move focus and choose the first visible item selected
-          nav._navItems[2].disabled = false;
-          nav.selected = 2;
-          nav._focus(2);
-
-          arrowLeft(nav);
-          expect(nav._scrollerElement.getBoundingClientRect().left).to.be.closeTo(nav._navItems[0].getBoundingClientRect().left, 1);
-        });
-
-        it('One item in advance should be displayed on the edge of the viewport on "arrow-down" on the last visible item in viewport', () => {
-          nav.vertical = true;
-          nav.selected = 5;
-          nav._focus(5);
-          arrowDown(nav);
-          expect(nav._scrollerElement.getBoundingClientRect().bottom).to.be.closeTo(nav._navItems[7].getBoundingClientRect().bottom, 1);
-        });
-
-        it('One item in advance should be displayed on the edge of the viewport on "arrow-up" on the last visible item in viewport', () => {
-          nav.vertical = true;
-          // Move scroller so the first item will be out of visible part
-          nav.selected = 7;
-          nav._focus(7);
-          // Move focus and choose the first visible item selected
-          nav._navItems[2].disabled = false;
-          nav.selected = 2;
-          nav._focus(2);
-
-          arrowUp(nav);
-          expect(nav._scrollerElement.getBoundingClientRect().top).to.be.closeTo(nav._navItems[0].getBoundingClientRect().top, 1);
-        });
       });
     });
   </script>
