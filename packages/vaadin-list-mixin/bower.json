@@ -35,8 +35,5 @@
     "vaadin-list-box": "vaadin/vaadin-list-box#master",
     "vaadin-tabs": "vaadin/vaadin-tabs#master",
     "vaadin-item": "vaadin/vaadin-item#master"
-  },
-  "resolutions": {
-    "web-component-tester": "^6.1.5"
   }
 }
