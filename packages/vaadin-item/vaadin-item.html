@@ -36,10 +36,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
        *
        * @memberof Vaadin
-       * @mixes Vaadin.ItemMixin
+       * @mixes Vaadin.ListItemMixin
        * @mixes Vaadin.ThemableMixin
        */
-      class VaadinItemElement extends Vaadin.ItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class VaadinItemElement extends Vaadin.ListItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-item';
         }

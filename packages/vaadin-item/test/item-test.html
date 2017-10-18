@@ -24,6 +24,10 @@
         expect(item.localName).to.be.equal('vaadin-item');
       });
 
+      it('should extend list-item-mixin', () => {
+        expect(item._hasVaadinListItemMixin).to.be.true;
+      });
+
       it('should have an unnamed slot for label', () => {
         const slot = item.root.querySelector('slot:not([name])');
         const content = slot.assignedNodes()[0];
