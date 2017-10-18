@@ -15,6 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
   Vaadin.ListMixin = superClass => class VaadinListMixin extends superClass {
     static get properties() {
       return {
+
         /**
          * The index of the item selected in the items array
          */
@@ -73,8 +74,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get _navItems() {
-      return Array.from(this.childNodes)
-        .filter(e => Vaadin.TabElement && e instanceof Vaadin.TabElement);
+      return Array.from(this.childNodes).filter(e => e._hasVaadinListItemMixin);
     }
 
     _onKeydown(event) {
