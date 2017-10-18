@@ -1,6 +1,6 @@
 {
   "name": "vaadin-grid",
-  "version": "4.0.0-alpha4",
+  "version": "4.0.0-alpha5",
   "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
