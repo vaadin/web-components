@@ -16,6 +16,16 @@ This program is available under Apache License Version 2.0, available at https:/
   Vaadin.ListItemMixin = superClass => class VaadinListItemMixin extends superClass {
     static get properties() {
       return {
+
+        /**
+         * Used for mixin detection because `instanceof` does not work with mixins.
+         * e.g. in VaadinListMixin it filters items by using the
+         * `element._hasVaadinListItemMixin` condition.
+         */
+        _hasVaadinListItemMixin: {
+          value: true
+        },
+
         /**
          * If true, the user cannot interact with this element.
          */

@@ -108,6 +108,10 @@
         nav._focus(0);
       });
 
+      it('should filter appropriate items from its children in dom', () => {
+        expect(nav._navItems.length).to.be.equal(4);
+      });
+
       it('should select first item by default', () => {
         expect(nav._navItems[0].selected).to.be.true;
       });
