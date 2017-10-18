@@ -16,7 +16,7 @@
     </template>
     <script>
       document.addEventListener('WebComponentsReady', () => {
-        class TestElement extends Vaadin.ItemMixin(Polymer.Element) {
+        class TestElement extends Vaadin.ListItemMixin(Polymer.Element) {
           static get is() {
             return 'test-element';
           }
