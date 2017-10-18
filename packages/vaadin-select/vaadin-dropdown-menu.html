@@ -68,17 +68,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <script>
       {
-
         /**
-        * `<vaadin-dropdown-menu>` is a Polymer 2 element.
-        *
-        * ```
-        * <vaadin-dropdown-menu></vaadin-dropdown-menu>
-        * ```
-        *
-        * @memberof Vaadin
-        * @demo demo/index.html
-        */
+         * `<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.
+         *
+         * ```
+         * <vaadin-dropdown-menu>
+         *  <template>
+         *  </template>
+         * </vaadin-dropdown-menu>
+         * ```
+         *
+         * @memberof Vaadin
+         * @demo demo/index.html
+         */
         class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
           static get is() {
             return 'vaadin-dropdown-menu';
@@ -104,6 +106,11 @@ This program is available under Apache License Version 2.0, available at https:/
             super.ready();
 
             this.inputElement.addEventListener('click', e => this._toggleOverlay());
+            this.inputElement.addEventListener('keydown', e => this._onKeyDown(e));
+          }
+
+          _onKeyDown(e) {
+            !this.opened && /^(ArrowDown|Down)$/.test(e.key) && this._toggleOverlay();
           }
 
           _openedChanged(opened) {
@@ -145,10 +152,10 @@ This program is available under Apache License Version 2.0, available at https:/
         customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
 
         /**
-        * @namespace Vaadin
-        */
+         * @namespace Vaadin
+         */
         window.Vaadin = window.Vaadin || {};
-        Vaadin.VaadinDropdownMenuElement = VaadinDropdownMenuElement;
+        Vaadin.DropdownMenuElement = VaadinDropdownMenuElement;
       }
     </script>
   </dom-module>
