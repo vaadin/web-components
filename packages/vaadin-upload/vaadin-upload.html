@@ -96,32 +96,31 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * `<vaadin-upload>` is a Polymer 2 element for uploading multiple files with drag and drop support.
        *
+       * Example:
+       *
        * ```
        * <vaadin-upload></vaadin-upload>
        * ```
-       *
        *
        * ### Styling
        *
        * The following shadow DOM parts are available for styling:
        *
-       * Part name         | Description                      | Theme for Element
-       * ------------------|----------------------------------|--------------------
-       * `primary-buttons` | Upload container                 | vaadin-upload
-       * `upload-button`   | Upload button                    | vaadin-upload
-       * `drop-label`      | Label for drop indicator         | vaadin-upload
-       * `drop-label-icon` | Icon for drop indicator          | vaadin-upload
-       * `file-list`       | File list container              | vaadin-upload
-       * `file-row`        | File container                   | vaadin-upload-file
-       * `file-info`       | File info icon                   | vaadin-upload-file
-       * `done-icon`       | File done icon                   | vaadin-upload-file
-       * `warning-icon`    | File warning icon                | vaadin-upload-file
-       * `file-meta`       | Container for file status icons  | vaadin-upload-file
-       * `file-commands`   | Container for file command icons | vaadin-upload-file
-       * `start-button`    | Start file upload button         | vaadin-upload-file
-       * `retry-button`    | Retry file upload button         | vaadin-upload-file
-       * `clear-button`    | Clear file button                | vaadin-upload-file
-       * `progress`        | Progress bar                     | vaadin-upload-file
+       * Part name | Description
+       * ---|---
+       * `primary-buttons` | Upload container
+       * `upload-button` | Upload button
+       * `drop-label` | Label for drop indicator
+       * `drop-label-icon` | Icon for drop indicator
+       * `file-list` | File list container
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute | Description | Part name
+       * ---|---|---
+       * `nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`
+       * `dragover` | A file is being dragged over the element | `:host`
+       * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
