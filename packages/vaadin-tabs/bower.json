@@ -26,9 +26,8 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
-    "vaadin-item": "^1.0.0",
     "vaadin-themable-mixin": "^1.1.4",
-    "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^1.0.0"
+    "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^1.1.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
