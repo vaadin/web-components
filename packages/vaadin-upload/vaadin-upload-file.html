@@ -7,7 +7,27 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-progress-bar/vaadin-progress-bar.html">
-<link rel="import" href="vaadin-upload-styles.html">
+<link rel="import" href="vaadin-upload-icons.html">
+
+<dom-module id="vaadin-upload-file-default-theme" theme-for="vaadin-upload-file">
+  <template>
+    <style>
+      [part="start-button"],
+      [part="retry-button"],
+      [part="clear-button"] {
+        cursor: pointer;
+      }
+
+      [part="name"] {
+        font-weight: bold;
+      }
+
+      [part="error"] {
+        color: red;
+      }
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-upload-file">
   <template>
@@ -16,20 +36,20 @@ This program is available under Apache License Version 2.0, available at https:/
         display: block;
       }
 
-      div[hidden] {
+      [hidden] {
         display: none;
       }
 
-      [part="file-row"] {
+      [part="row"] {
         display: flex;
         justify-content: space-between;
       }
 
-      [part="file-info"] {
+      [part="info"] {
         display: flex;
       }
 
-      [part="file-commands"] {
+      [part="commands"] {
         display: flex;
       }
 
@@ -61,18 +81,18 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e904";
       }
     </style>
-    <div part="file-row">
-      <div part="file-info">
+    <div part="row">
+      <div part="info">
         <div part="done-icon" hidden$="[[!file.complete]]"></div>
         <div part="warning-icon" hidden$="[[!file.error]]"></div>
 
-        <div part="file-meta">
-          <div id="name">[[file.name]]</div>
-          <div id="status" hidden$="[[!file.status]]">[[file.status]]</div>
-          <div id="error" hidden$="[[!file.error]]">[[file.error]]</div>
+        <div part="meta">
+          <div part="name" id="name">[[file.name]]</div>
+          <div part="status" hidden$="[[!file.status]]" id="status">[[file.status]]</div>
+          <div part="error" id="error" hidden$="[[!file.error]]">[[file.error]]</div>
         </div>
       </div>
-      <div part="file-commands">
+      <div part="commands">
         <div part="start-button" file-event="file-start" on-click="_fireFileEvent" hidden$="[[!file.held]]"></div>
         <div part="retry-button" file-event="file-retry" on-click="_fireFileEvent" hidden$="[[!file.error]]"></div>
         <div part="clear-button" file-event="file-abort" on-click="_fireFileEvent"></div>
@@ -95,6 +115,35 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /**
        * `<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ---|---
+       * `row` | File container
+       * `info` | Container for file status icon, file name, status and error messages
+       * `done-icon` | File done status icon
+       * `warning-icon` | File warning status icon
+       * `meta` | Container for file name, status and error messages
+       * `name` | File name
+       * `error` | Error message, shown when error happens
+       * `status` | Status message
+       * `commands` | Container for file command icons
+       * `start-button` | Start file upload button
+       * `retry-button` | Retry file upload button
+       * `clear-button` | Clear file button
+       * `progress`| Progress bar
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute | Description | Part name
+       * ---|---|---
+       * `error` | An error has happened during uploading | `progress`
+       * `indeterminate` | Uploading is in progress, but the progress value is unknown | `progress`
+       * `uploading` | Uploading is in progress | `progress`
+       * `complete` | Uploading has finished successfully | `progress`
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin

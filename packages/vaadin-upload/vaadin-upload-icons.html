@@ -4,8 +4,6 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer-element.html">
-
 <style>
   @font-face {
     font-family: 'vaadin-upload-icons';
@@ -14,34 +12,3 @@ This program is available under Apache License Version 2.0, available at https:/
     font-style: normal;
   }
 </style>
-
-<dom-module id="vaadin-upload-default-theme" theme-for="vaadin-upload">
-  <template>
-    <style>
-      :host {
-        text-align: left;
-      }
-
-      :host(:not([nodrop])) {
-        border: 1px dashed;
-        padding: 1em;
-      }
-
-      [part="drop-label-icon"] {
-        margin: 0 1em;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-upload-file-default-theme" theme-for="vaadin-upload-file">
-  <template>
-    <style>
-      [part="start-button"],
-      [part="retry-button"],
-      [part="clear-button"] {
-        cursor: pointer;
-      }
-    </style>
-  </template>
-</dom-module>
