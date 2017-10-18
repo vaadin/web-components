@@ -1,8 +1,7 @@
 {
   "name": "Vaadin List Box",
-  "pages": [
-  {
-    "name": "Basic Examples",
+  "pages": [{
+    "name": "Examples",
     "url": "list-box-basic-demos",
     "src": "list-box-basic-demos.html",
     "meta": {
@@ -10,17 +9,5 @@
       "description": "",
       "image": ""
      }
-  }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "list-box-advanced-demos",
-    "src": "list-box-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-list-box Advanced Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ]
+  }]
 }

@@ -6,12 +6,53 @@
       }
     </style>
 
-    <h3>Basic demo</h3>
-    <vaadin-demo-snippet id='list-box-basic-demos-sample-example'>
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-basic'>
       <template preserve-content>
-        <vaadin-list-box>Foobar</vaadin-list-box>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <vaadin-item>Item three</vaadin-item>
+        </vaadin-list-box>
       </template>
     </vaadin-demo-snippet>
+
+    <h3>Selected</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-selected'>
+      <template preserve-content>
+        <vaadin-list-box selected="1">
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <vaadin-item>Item three</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Arbitrary Content: Header and Separator</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-basic'>
+      <template preserve-content>
+        <style>
+          vaadin-list-box {
+            width: 140px;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          }
+          .header {
+            font-weight: bold;
+            padding: 5px;
+          }
+        </style>
+        <vaadin-list-box>
+          <div class="header">Select an Item</div>
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <hr>
+          <vaadin-item>Item three</vaadin-item>
+          <vaadin-item>Item four</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+
   </div>
   </template>
   <script>
