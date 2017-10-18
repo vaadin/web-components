@@ -43,6 +43,9 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
+      this.shadowRoot.querySelectorAll('slot').forEach(slot => {
+        slot.addEventListener('slotchange', this._updateItemsVertical.bind(this));
+      });
 
       if (this._navItems.length) {
         this._selectedChanged(this.selected);
@@ -52,6 +55,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _verticalChanged(vertical) {
       this.setAttribute('aria-orientation', vertical ? 'vertical' : 'horizontal');
+      this._updateItemsVertical();
+    }
+
+    _updateItemsVertical() {
+      this._navItems.forEach(item => {
+        if (this.vertical) {
+          item.setAttribute('vertical', '');
+        } else {
+          item.removeAttribute('vertical');
+        }
+      });
     }
 
     get focused() {
