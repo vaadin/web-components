@@ -85,8 +85,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+
+            // We need to set this property, but don't want users to override it.
+            /** @private */
             vertical: {
-              value: true
+              value: true,
+              readOnly: true
             }
           };
         }

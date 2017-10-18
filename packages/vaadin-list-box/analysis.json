@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-list-box.html",
         "start": {
-          "line": 108,
+          "line": 112,
           "column": 6
         },
         "end": {
-          "line": 108,
+          "line": 112,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-list-box>` is a Polymer 2 element for menus\n\n```\n  <vaadin-list-box selected=\"4\">\n    <vaadin-item>Item 1</vaadin-item>\n    <vaadin-item>Item 2</vaadin-item>\n    <vaadin-item>Item 3</vaadin-item>\n    <vaadin-item>Item 4</vaadin-item>\n  </vaadin-list-box>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description                          | Theme for Element\n------------------|--------------------------------------|--------------------\n`items`           | The items container                  | vaadin-list-box",
+          "description": "`<vaadin-list-box>` is a Polymer 2 element for menus\n\n```\n  <vaadin-list-box selected=\"2\">\n    <vaadin-item>Item 1</vaadin-item>\n    <vaadin-item>Item 2</vaadin-item>\n    <vaadin-item>Item 3</vaadin-item>\n    <vaadin-item>Item 4</vaadin-item>\n  </vaadin-list-box>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description                          | Theme for Element\n------------------|--------------------------------------|--------------------\n`items`           | The items container                  | vaadin-list-box",
           "summary": "",
           "path": "vaadin-list-box.html",
           "properties": [
@@ -51,19 +51,21 @@
               "name": "vertical",
               "type": "?",
               "description": "",
-              "privacy": "public",
+              "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 87,
+                  "line": 90,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 93,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "readOnly": true
+                }
               },
               "defaultValue": "true"
             }
@@ -75,11 +77,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 97,
                   "column": 8
                 },
                 "end": {
-                  "line": 96,
+                  "line": 100,
                   "column": 9
                 }
               },
@@ -328,7 +330,7 @@
               "column": 6
             },
             "end": {
-              "line": 101,
+              "line": 105,
               "column": 7
             }
           },
@@ -356,18 +358,21 @@
             },
             {
               "name": "vertical",
-              "description": "",
+              "description": "When true changes the disposition of items in dom from horizontal\nto vertical.\nIt also changes navigation keys from left/right to up/down.",
               "sourceRange": {
+                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 87,
-                  "column": 12
+                  "line": 33,
+                  "column": 8
                 },
                 "end": {
-                  "line": 89,
-                  "column": 13
+                  "line": 38,
+                  "column": 9
                 }
               },
-              "metadata": {}
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ListMixin"
             }
           ],
           "events": [],
