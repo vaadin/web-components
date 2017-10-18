@@ -34,6 +34,6 @@
     "vaadin-dropdown-menu": "vaadin/vaadin-dropdown-menu#master",
     "vaadin-list-box": "vaadin/vaadin-list-box#master",
     "vaadin-tabs": "vaadin/vaadin-tabs#master",
-    "vaadin-item": "vaadin/vaadin-item#master"
+    "vaadin-item": "vaadin/vaadin-item#^1.0.0"
   }
 }

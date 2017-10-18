@@ -34,26 +34,26 @@
   </dom-module>
 
   <dom-module id="test-element">
-      <template>
-        <slot></slot>
-      </template>
-      <script>
-        document.addEventListener('WebComponentsReady', () => {
-          class TestElement extends Vaadin.ItemMixin(Polymer.Element) {
-            static get is() {
-              return 'test-element';
-            }
+    <template>
+      <slot></slot>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class TestElement extends Vaadin.ItemMixin(Polymer.Element) {
+          static get is() {
+            return 'test-element';
           }
-          customElements.define('test-element', TestElement);
+        }
+        customElements.define('test-element', TestElement);
 
-          /**
-           * @namespace Vaadin
-           */
-          window.Vaadin = window.Vaadin || {};
-          Vaadin.TabElement = TestElement;
-        });
-      </script>
-    </dom-module>
+        /**
+         * @namespace Vaadin
+         */
+        window.Vaadin = window.Vaadin || {};
+        Vaadin.TabElement = TestElement;
+      });
+    </script>
+  </dom-module>
 
   <test-fixture id="nav">
     <template>
@@ -231,6 +231,35 @@
         nav.vertical = true;
         expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
       });
+
+      it('should have vertical attribute on each item', () => {
+        nav.vertical = true;
+        nav.querySelectorAll('test-element').forEach(item => {
+          expect(item.hasAttribute('vertical')).to.be.true;
+        });
+      });
+
+      it('should not have vertical attribute on each item', () => {
+        nav.vertical = true;
+        nav.vertical = false;
+        nav.querySelectorAll('test-element').forEach(item => {
+          expect(item.hasAttribute('vertical')).to.be.false;
+        });
+      });
+
+      it('should have vertical attribute on newly added item', done => {
+        nav.vertical = true;
+
+        const item = document.createElement('test-element');
+        item.innerText = 'foo';
+        nav.appendChild(item);
+
+        setTimeout(() => {
+          expect(item.hasAttribute('vertical')).to.be.true;
+          done();
+        }, 0);
+      });
+
     });
   </script>
 </body>
