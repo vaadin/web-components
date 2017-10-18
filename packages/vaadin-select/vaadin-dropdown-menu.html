@@ -65,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       </style>
 
-      <vaadin-text-field readonly id="input"></vaadin-text-field>
+      <vaadin-text-field readonly value="[[value]]" id="input"></vaadin-text-field>
       <vaadin-dropdown-menu-overlay opened="{{opened}}" id="overlay">
       </vaadin-dropdown-menu-overlay>
     </template>
@@ -98,7 +98,13 @@ This program is available under Apache License Version 2.0, available at https:/
                 notify: true
               },
 
-              _contentTemplate: Object
+              _contentTemplate: Object,
+
+              value: {
+                type: String,
+                value: '',
+                notify: true
+              }
             };
           }
 
@@ -114,7 +120,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           _onKeyDown(e) {
-            !this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|Space)$/.test(e.code) && this._toggleOverlay();
+            if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|Space)$/.test(e.code)) {
+              e.preventDefault();
+              this._toggleOverlay();
+            }
           }
 
           _openedChanged(opened) {
@@ -134,7 +143,36 @@ This program is available under Apache License Version 2.0, available at https:/
               this._instance = new Templatizer({});
               this.overlayElement.content = this._instance.root;
             }
+
             this.overlayElement.opened = opened;
+
+            let menu;
+            const selectedChangedListener = (e) => {
+              const selectedItem = menu._navItems[e.detail.value];
+              this.value = selectedItem ? selectedItem.textContent : '';
+
+              this.opened = false;
+            };
+
+            if (opened) {
+              menu = this.$.overlay.$.content.lastElementChild;
+              if (!menu || !menu._navItems) {
+                return;
+              }
+
+              menu.addEventListener('selected-changed', selectedChangedListener);
+
+              const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
+              if (itemToFocus) {
+                itemToFocus.focus();
+              }
+            } else {
+              if (menu) {
+                menu.removeEventListener('selected-changed', selectedChangedListener);
+              }
+
+              this.inputElement.focus();
+            }
           }
 
           _toggleOverlay() {

@@ -18,7 +18,22 @@
         </vaadin-dropdown-menu>
       </template>
     </vaadin-demo-snippet>
-  </div>
+
+    <h3>Example with vaadin-tabs</h3>
+    <vaadin-demo-snippet id='element-basic-demos-sample-example'>
+      <template preserve-content>
+        <vaadin-dropdown-menu>
+          <template>
+            <vaadin-tabs vertical>
+              <vaadin-tab>Option 1</vaadin-tab>
+              <vaadin-tab>Option 2</vaadin-tab>
+              <vaadin-tab>Option 3</vaadin-tab>
+            </vaadin-tabs>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
