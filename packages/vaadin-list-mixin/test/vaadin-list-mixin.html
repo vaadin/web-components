@@ -11,7 +11,7 @@
 </head>
 
 <body>
-  <dom-module id="test-wrapper">
+  <dom-module id="test-list-element">
     <template>
       <div id="scroll">
         <slot></slot>
@@ -21,19 +21,19 @@
       document.addEventListener('WebComponentsReady', () => {
         class TestWrapper extends Vaadin.ListMixin(Polymer.Element) {
           static get is() {
-            return 'test-wrapper';
+            return 'test-list-element';
           }
 
           get _scrollerElement() {
             return this.$.scroll;
           }
         }
-        customElements.define('test-wrapper', TestWrapper);
+        customElements.define('test-list-element', TestWrapper);
       });
     </script>
   </dom-module>
 
-  <dom-module id="test-element">
+  <dom-module id="test-item-element">
     <template>
       <slot></slot>
     </template>
@@ -41,10 +41,10 @@
       document.addEventListener('WebComponentsReady', () => {
         class TestElement extends Vaadin.ListItemMixin(Polymer.Element) {
           static get is() {
-            return 'test-element';
+            return 'test-item-element';
           }
         }
-        customElements.define('test-element', TestElement);
+        customElements.define('test-item-element', TestElement);
 
         /**
          * @namespace Vaadin
@@ -57,13 +57,13 @@
 
   <test-fixture id="nav">
     <template>
-      <test-wrapper style="width: 400px; height: 400px;">
-        <test-element>Foo</test-element>
-        <test-element>Bar</test-element>
+      <test-list-element style="width: 400px; height: 400px;">
+        <test-item-element>Foo</test-item-element>
+        <test-item-element>Bar</test-item-element>
         <separator>___</separator>
-        <test-element disabled>Baz</test-element>
-        <test-element>Baz</test-element>
-      </test-wrapper>
+        <test-item-element disabled>Baz</test-item-element>
+        <test-item-element>Baz</test-item-element>
+      </test-list-element>
     </template>
   </test-fixture>
 
@@ -112,8 +112,8 @@
         expect(nav._navItems.length).to.be.equal(4);
       });
 
-      it('should select first item by default', () => {
-        expect(nav._navItems[0].selected).to.be.true;
+      it('should not select any item by default', () => {
+        nav._navItems.forEach(e => expect(nav._navItems[0].selected).to.be.false);
       });
 
       it('should set tabIndex=-1 to all items, but the first', () => {
@@ -238,7 +238,7 @@
 
       it('should have vertical attribute on each item', () => {
         nav.vertical = true;
-        nav.querySelectorAll('test-element').forEach(item => {
+        nav.querySelectorAll('test-item-element').forEach(item => {
           expect(item.hasAttribute('vertical')).to.be.true;
         });
       });
@@ -246,7 +246,7 @@
       it('should not have vertical attribute on each item', () => {
         nav.vertical = true;
         nav.vertical = false;
-        nav.querySelectorAll('test-element').forEach(item => {
+        nav.querySelectorAll('test-item-element').forEach(item => {
           expect(item.hasAttribute('vertical')).to.be.false;
         });
       });
@@ -254,7 +254,7 @@
       it('should have vertical attribute on newly added item', done => {
         nav.vertical = true;
 
-        const item = document.createElement('test-element');
+        const item = document.createElement('test-item-element');
         item.innerText = 'foo';
         nav.appendChild(item);
 
