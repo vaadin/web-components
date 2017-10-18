@@ -32,7 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.
        *
        * ```html
-       * <vaadin-radio-group name="radio-group" value="bar">
+       * <vaadin-radio-group name="radio-group">
        *   <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
        *   <vaadin-radio-button value="bar">Bar</vaadin-radio-button>
        *   <vaadin-radio-button value="baz">Baz</vaadin-radio-button>
@@ -85,16 +85,6 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               observer: '_requiredChanged'
-            },
-
-            /**
-             * The value given to the data submitted with the radio button group's name to the server when the control is inside a form.
-             */
-            value: {
-              type: String,
-              notify: true,
-              observer: '_valueChanged',
-              reflectToAttribute: true
             },
 
             _checkedButton: {
@@ -197,27 +187,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this._checkedButton = button;
 
           this._setFocusable(this._radioButtons.indexOf(button));
-
-          this.value = button.value;
         }
 
         _checkedButtonChanged(checkedButton) {
           this.validate();
 
           this._radioButtons.forEach(button => button.checked = button === checkedButton);
-        }
-
-        _valueChanged(value) {
-          this.validate();
-
-          var buttonWithValue = this.querySelector(`[value='${value}']`);
-          if (!buttonWithValue) {
-            return;
-          }
-
-          if (!this._checkedButton || this._checkedButton.value !== value) {
-            buttonWithValue.setAttribute('checked', '');
-          }
         }
 
         /**

@@ -114,22 +114,19 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
-
-            /**
-             * The name of the control, which is submitted with the form data.
-             */
-            name: {
-              type: String
-            },
-
-            /**
-             * The value passed to `<vaadin-radio-group>` and submitted as form data.
-             */
             value: {
               type: String,
-              reflectToAttribute: true
+              value: "on"
             }
           };
+        }
+
+        get name() {
+          return this.checked ? this._storedName : "";
+        }
+
+        set name(name) {
+          this._storedName = name;
         }
 
         ready() {
@@ -138,16 +135,12 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('role', 'radio');
 
           this._addActiveListeners();
+
+          this.name = this.getAttribute('name');
         }
 
         _checkedChanged(checked) {
           this.setAttribute('aria-checked', checked);
-
-          if (checked && !this.value) {
-            this.value = 'on';
-          } else if (!checked && this.value == 'on') {
-            this.value = undefined;
-          }
 
           this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
         }
