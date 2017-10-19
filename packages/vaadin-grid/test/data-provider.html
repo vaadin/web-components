@@ -317,6 +317,170 @@
       });
 
     });
+
+    describe('hierarchy', () => {
+      let grid;
+
+      function finiteDataProvider(params, callback) {
+        // Provides fixed size data set of 10 items
+        infiniteDataProvider(params, (items) => {
+          callback(items.map(item => {
+            item.level = params.parentItem ? ((params.parentItem.level || 0) + 1) : 0;
+            return item;
+          }), 10);
+        });
+      }
+
+      function deepAsyncFiniteDataProvider(params, callback) {
+        // Async, but first level is sync to simplfy expanding tests init
+        if (params.parentItem) {
+          setTimeout(() => finiteDataProvider(params, callback));
+        } else {
+          finiteDataProvider(params, callback);
+        }
+      }
+
+      beforeEach(() => {
+        grid = fixture('grid');
+        grid.pageSize = 5;
+        grid.dataProvider = sinon.spy(finiteDataProvider);
+        flushGrid(grid);
+      });
+
+      describe('first level', () => {
+        it('should have collapsed items by default', () => {
+          for (let i = 0; i < grid._fullSize; i++) {
+            expect(grid.isIndexExpanded(i)).to.be.false;
+          }
+        });
+
+        it('should request first level items', () => {
+          expect(grid.dataProvider.callCount).to.equal(2);
+          expect(grid.dataProvider.getCall(0).args[0].parentItem).to.be.undefined;
+        });
+
+        it('should request pages from 0', () => {
+          expect(grid.dataProvider.getCall(0).args[0].page).to.equal(0);
+          expect(grid.dataProvider.getCall(1).args[0].page).to.equal(1);
+        });
+
+        it('should have full size set to first level size provided by data provider', () => {
+          expect(grid._fullSize).to.equal(10);
+        });
+
+        it('should have first level items in cache', () => {
+          for (let i = 0; i < grid._fullSize; i++) {
+            expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
+          }
+        });
+      });
+
+      describe('expanding', () => {
+        it('should expand an item', () => {
+          grid.expandIndex(0);
+          expect(grid.isIndexExpanded(0)).to.be.true;
+        });
+
+        it('should request second level items', () => {
+          grid.expandIndex(7);
+          expect(grid.dataProvider.callCount).to.equal(4);
+          expect(grid.dataProvider.getCall(2).args[0].parentItem.value).to.equal('foo7');
+          expect(grid.dataProvider.getCall(3).args[0].parentItem.value).to.equal('foo7');
+        });
+
+        it('should request pages from 0', () => {
+          grid.expandIndex(7); // pageSize is 5, index 7 is on the second page
+          expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
+          expect(grid.dataProvider.getCall(3).args[0].page).to.equal(1);
+        });
+
+        describe('before async request completes', () => {
+          beforeEach(() => {
+            grid.dataProvider = deepAsyncFiniteDataProvider;
+          });
+
+          it('should not increase size', () => {
+            grid.expandIndex(7);
+            expect(grid._fullSize).to.equal(10);
+          });
+
+          it('should have first level items in cache', () => {
+            grid.expandIndex(7);
+            for (let i = 0; i < grid._fullSize; i++) {
+              const item = grid._cache.getItemForIndex(i);
+              expect(item.level).to.equal(0);
+              expect(item.value).to.equal(`foo${i}`);
+            }
+          });
+        });
+
+        it('should increase full size', () => {
+          grid.expandIndex(0);
+          expect(grid._fullSize).to.equal(20);
+        });
+
+        it('should have first and second level items in cache', () => {
+          grid.expandIndex(7);
+          for (let i = 0; i < grid._fullSize; i++) {
+            const level = (8 <= i && i < 18) ? 1 : 0;
+            const scaledIndex = (i < 8) ? i : (i < 18) ? i - 8 : i - 10;
+            expect(grid._cache.getItemForIndex(i)).to.eql({level, value: `foo${scaledIndex}`});
+          }
+        });
+      });
+
+      describe('collapsing', () => {
+        beforeEach(() => grid.expandIndex(7));
+
+        it('should collapse an expanded item', () => {
+          grid.collapseIndex(7);
+          expect(grid.isIndexExpanded(7)).to.be.false;
+        });
+
+        it('should not request', () => {
+          grid.collapseIndex(7);
+          expect(grid.dataProvider.callCount).to.equal(4);
+        });
+
+        it('should decrease full size', () => {
+          grid.collapseIndex(7);
+          expect(grid._fullSize).to.equal(10);
+        });
+
+        it('should have first level items in cache', () => {
+          grid.collapseIndex(7);
+          for (let i = 0; i < grid._fullSize; i++) {
+            expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
+          }
+        });
+      });
+
+      describe('reexpanding', () => {
+        beforeEach(() => {
+          grid.expandIndex(7);
+          grid.collapseIndex(7);
+        });
+
+        it('should not request', () => {
+          grid.expandIndex(7);
+          expect(grid.dataProvider.callCount).to.equal(4);
+        });
+
+        it('should increase full size', () => {
+          grid.expandIndex(7);
+          expect(grid._fullSize).to.equal(20);
+        });
+
+        it('should have first and second level items in cache', () => {
+          grid.expandIndex(7);
+          for (let i = 0; i < grid._fullSize; i++) {
+            const level = (8 <= i && i < 18) ? 1 : 0;
+            const scaledIndex = (i < 8) ? i : (i < 18) ? i - 8 : i - 10;
+            expect(grid._cache.getItemForIndex(i)).to.eql({level, value: `foo${scaledIndex}`});
+          }
+        });
+      });
+    });
   </script>
 
 </body>
