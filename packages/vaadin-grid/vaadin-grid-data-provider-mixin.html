@@ -14,7 +14,8 @@ This program is available under Apache License Version 2.0, available at https:/
     constructor() {
       this.expandedItems = {};
       this.map = {};
-      this.size = -1; // Size must include all expanded items sizes
+      this.ownSize = 0;
+      this.size = null; // Size must include all expanded items sizes
     }
 
     getItemForIndex(index) {
@@ -27,7 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     getEffectiveSize() {
-      return this.collapsed ? 0 : this.size;
+      return this.collapsed ? 0 : Number(this.size);
     }
 
     updateSize() {
@@ -47,12 +48,14 @@ This program is available under Apache License Version 2.0, available at https:/
       cache.expandedItems[scaledIndex].parentCache = cache;
       cache.expandedItems[scaledIndex].parentItem = cache.map[scaledIndex];
       cache.updateSize();
+      return cache.expandedItems[scaledIndex];
     }
 
     collapseIndex(index) {
       const {cache, scaledIndex} = this.getCacheAndIndex(index);
       cache.expandedItems[scaledIndex].collapsed = true;
       cache.updateSize();
+      return cache.expandedItems[scaledIndex];
     }
 
     getCacheAndIndex(index) {
@@ -68,8 +71,8 @@ This program is available under Apache License Version 2.0, available at https:/
         const subCache = this.expandedItems[expandedIndex];
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
-        } else if (subCache.size === -1) {
-          return {cache: subCache, scaledIndex: thisLevelIndex - expandedIndex - 1};
+        } else if (subCache.size === null) {
+          continue;
         } else if (thisLevelIndex <= expandedIndex + subCache.getEffectiveSize()) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
@@ -128,7 +131,7 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Object,
           value: function() {
             const cache = new CacheItem();
-            cache.size = 100000000; // TODO:
+            // cache.size = 100000000; // TODO:
             return cache;
           }
         },
@@ -165,6 +168,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItem(index, el) {
+      if (this._fullSize && index >= this._fullSize) {
+        return;
+      }
 
       el.index = index;
       const item = this._cache.getItemForIndex(index);
@@ -220,8 +226,12 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _hierarchyExpandedInstanceChangedCallback(inst, value) {
+      if (inst.index === undefined) return;
       if (value) {
-        this._cache.expandIndex(inst.index);
+        const cache = this._cache.expandIndex(inst.index);
+        if (cache.size === null) {
+          this._loadPage(0, cache);
+        }
       } else {
         this._cache.collapseIndex(inst.index);
       }
