@@ -1,0 +1,35 @@
+<dom-module id="dropdown-menu-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+
+    <h3>Sample example with vaadin-list-box</h3>
+    <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
+      <template preserve-content>
+          <vaadin-dropdown-menu>
+            <template>
+              <vaadin-list-box vertical>
+                <vaadin-item>Option 1</vaadin-item>
+                <vaadin-item>Option 2</vaadin-item>
+                <vaadin-item>Option 3</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DropdownMenuBasicDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'dropdown-menu-basic-demos';
+      }
+    }
+    customElements.define(DropdownMenuBasicDemos.is, DropdownMenuBasicDemos);
+  </script>
+</dom-module>

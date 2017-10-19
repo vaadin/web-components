@@ -3,21 +3,10 @@
   "pages": [
   {
     "name": "Basic Examples",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+    "url": "dropdown-menu-basic-demos",
+    "src": "dropdown-menu-basic-demos.html",
     "meta": {
       "title": "vaadin-dropdown-menu Basic Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-dropdown-menu Advanced Examples",
       "description": "",
       "image": ""
      }
