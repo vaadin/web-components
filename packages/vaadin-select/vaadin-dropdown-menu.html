@@ -119,6 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.inputElement.addEventListener('keydown', e => this._onKeyDown(e));
         }
 
+
         _onKeyDown(e) {
           if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|Space)$/.test(e.code)) {
             e.preventDefault();
@@ -126,15 +127,27 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _onSelectValue(e) {
+        _onKeyDownInside(e) {
           const menu = this.$.overlay.$.content.lastElementChild;
           const eventFromSelected = e.composedPath()[0].hasAttribute('selected');
+
+          const focusListener = e => {
+            const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
+            if (itemToFocus) {
+              itemToFocus.focus();
+            }
+
+            this.inputElement.removeEventListener('focus', focusListener);
+          }
 
           if ((e.type === 'keydown' && /^(Enter|Space)$/.test(e.code) || e.type === 'click') && eventFromSelected) {
             if (this.value === '') {
               this.value = e.composedPath()[0].textContent;
             }
             this.opened = false;
+          } else if (e.type === 'keydown' && /^(Tab)$/.test(e.code)) {
+            this.inputElement.focus();
+            this.inputElement.addEventListener('focus', focusListener);
           }
         }
 
@@ -158,7 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.overlayElement.opened = opened;
 
-          let menu;
+          let menu = this.$.overlay.$.content.lastElementChild;
           const selectedChangedListener = (e) => {
             const selectedItem = menu._navItems[e.detail.value];
             this.value = selectedItem ? selectedItem.textContent : '';
@@ -167,27 +180,25 @@ This program is available under Apache License Version 2.0, available at https:/
           };
 
           if (opened) {
-            menu = this.$.overlay.$.content.lastElementChild;
             if (!menu || !menu._navItems) {
               return;
             }
 
             menu.addEventListener('selected-changed', selectedChangedListener);
-            menu.addEventListener('keydown', this._onSelectValue.bind(this));
-            menu.addEventListener('click', this._onSelectValue.bind(this));
+            menu.addEventListener('keydown', this._onKeyDownInside.bind(this));
+            menu.addEventListener('click', this._onKeyDownInside.bind(this));
 
             const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
             if (itemToFocus) {
               itemToFocus.focus();
             }
           } else {
-            if (menu) {
+            if (menu && menu._navItems) {
               menu.removeEventListener('selected-changed', selectedChangedListener);
-              menu.removeEventListener('keydown', this._onSelectValue.bind(this));
-              menu.removeEventListener('click', this._onSelectValue.bind(this));
+              menu.removeEventListener('keydown', this._onKeyDownInside.bind(this));
+              menu.removeEventListener('click', this._onKeyDownInside.bind(this));
+              this.inputElement.focus();
             }
-
-            this.inputElement.focus();
           }
         }
 
