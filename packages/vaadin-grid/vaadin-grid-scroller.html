@@ -98,6 +98,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _sizeChanged(size) {
         const fvi = this._firstVisibleIndex;
+        let fviOffset = 0;
+        this._iterateItems((pidx, vidx) => {
+          if (vidx === fvi) {
+            fviOffset = this._physicalItems[pidx].getBoundingClientRect().top;
+          }
+        });
+
         if (this.items && size < this.items.length) {
           // Size was reduced, scroll to 0 first
           this._scrollTop = 0;
@@ -114,6 +121,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (this._scrollTop === 0) {
           this._accessIronListAPI(() => this._scrollToIndex(Math.min(size - 1, fvi)));
+          this._iterateItems((pidx, vidx) => {
+            if (vidx === fvi) {
+              this.$.table.scrollTop += this._physicalItems[pidx].getBoundingClientRect().top - fviOffset;
+            }
+          });
         }
         this._assignModels();
       }
