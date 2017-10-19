@@ -173,7 +173,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const activeRow = activeCell.parentNode;
 
       const activeRowGroup = activeRow.parentNode;
-      const maxRowIndex = (activeRowGroup === this.$.items ? this.size : activeRowGroup.children.length) - 1;
+      const maxRowIndex = (activeRowGroup === this.$.items ? this._fullSize : activeRowGroup.children.length) - 1;
 
       // Body rows have index property, otherwise DOM child index of the row is used.
       const rowIndex = (activeRowGroup === this.$.items) ?
