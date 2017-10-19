@@ -6,38 +6,104 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-list-mixin/vaadin-list-mixin.html">
+<dom-module id="vaadin-list-box-default-theme">
+  <template>
+    <style>
+      :host {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Firefox requires the extra [part="items"] before the ::slotted */
+      [part="items"] ::slotted(vaadin-item) {
+        border-left: 2px solid transparent;
+        outline: none;
+      }
+
+      [part="items"] ::slotted(vaadin-item[focused]) {
+        background: lightgray;
+      }
+
+      [part="items"] ::slotted(vaadin-item[selected]) {
+        font-weight: 600;
+      }
+    </style>
+  </template>
+</dom-module>
 
 <dom-module id="vaadin-list-box">
   <template>
     <style>
-      :host {
-        display: inline-block;
-      }
+    :host {
+      display: flex;
+      align-items: center;
+    }
+
+    [part="items"] {
+      height: 100%;
+      width: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     </style>
-    <slot></slot>
+    <div part="items">
+      <slot></slot>
+    </div>
   </template>
 
   <script>
     {
-
       /**
-       * `<vaadin-list-box>` is a Polymer 2 element.
+       * `<vaadin-list-box>` is a Polymer 2 element for menus
        *
        * ```
-       * <vaadin-list-box></vaadin-list-box>
+       *   <vaadin-list-box selected="2">
+       *     <vaadin-item>Item 1</vaadin-item>
+       *     <vaadin-item>Item 2</vaadin-item>
+       *     <vaadin-item>Item 3</vaadin-item>
+       *     <vaadin-item>Item 4</vaadin-item>
+       *   </vaadin-list-box>
        * ```
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name         | Description                          | Theme for Element
+       * ------------------|--------------------------------------|--------------------
+       * `items`           | The items container                  | vaadin-list-box
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ListMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinListBoxElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class VaadinListBoxElement extends Vaadin.ListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-list-box';
         }
 
         static get properties() {
           return {
+
+            // We need to set this property, but don't want users to override it.
+            /** @private */
+            vertical: {
+              value: true,
+              readOnly: true
+            }
           };
+        }
+
+        ready() {
+          super.ready();
+          this.setAttribute('role', 'list');
+        }
+
+        get _scrollerElement() {
+          return this.shadowRoot.querySelector('[part="items"]');
         }
       }
 

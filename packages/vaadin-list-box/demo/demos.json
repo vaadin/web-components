@@ -1,26 +1,13 @@
 {
-  "name": "Vaadin Element",
-  "pages": [
-  {
-    "name": "Basic Examples",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+  "name": "Vaadin List Box",
+  "pages": [{
+    "name": "Examples",
+    "url": "list-box-basic-demos",
+    "src": "list-box-basic-demos.html",
     "meta": {
       "title": "vaadin-list-box Basic Examples",
       "description": "",
       "image": ""
      }
-  }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-list-box Advanced Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ]
+  }]
 }

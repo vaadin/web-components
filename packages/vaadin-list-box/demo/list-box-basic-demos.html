@@ -1,0 +1,62 @@
+<dom-module id="list-box-basic-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-basic'>
+      <template preserve-content>
+        <vaadin-list-box>
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <vaadin-item>Item three</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Selected</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-selected'>
+      <template preserve-content>
+        <vaadin-list-box selected="1">
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <vaadin-item>Item three</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Arbitrary Content: Header and Separator</h3>
+    <vaadin-demo-snippet id='list-box-basic-demos-arbitrary'>
+      <template preserve-content>
+        <style>
+          .header {
+            font-weight: bold;
+            padding: 5px;
+          }
+        </style>
+        <vaadin-list-box>
+          <div class="header">Select an Item</div>
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <hr>
+          <vaadin-item>Item three</vaadin-item>
+          <vaadin-item>Item four</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-demo-snippet>
+
+
+  </div>
+  </template>
+  <script>
+    class ListBoxBasicDemos extends DemoReadyEventEmitter(ListBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'list-box-basic-demos';
+      }
+    }
+    customElements.define(ListBoxBasicDemos.is, ListBoxBasicDemos);
+  </script>
+</dom-module>

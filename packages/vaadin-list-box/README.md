@@ -24,9 +24,12 @@
 ```
 -->
 ```html
-<vaadin-list-box>
-  ...
-</vaadin-list-box>
+  <vaadin-list-box selected="2">
+    <vaadin-item>Item 1</vaadin-item>
+    <vaadin-item>Item 2</vaadin-item>
+    <vaadin-item>Item 3</vaadin-item>
+    <vaadin-item>Item 4</vaadin-item>
+  </vaadin-list-box>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="200" alt="Screenshot of vaadin-list-box">](https://vaadin.com/elements/-/element/vaadin-list-box)
