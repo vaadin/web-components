@@ -13,8 +13,8 @@
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'vaadin-radio-button_test.html',
-      'vaadin-radio-button-group_test.html'
+      'vaadin-radio-button.html',
+      'vaadin-radio-button-group.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
