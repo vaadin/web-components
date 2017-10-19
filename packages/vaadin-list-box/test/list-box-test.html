@@ -19,7 +19,7 @@
   </test-fixture>
 
   <script>
-    describe('sample test', () => {
+    describe('list-box', () => {
       var listbox;
 
       beforeEach(() => listbox = fixture('default'));
@@ -28,8 +28,8 @@
         expect(listbox.localName).to.be.equal('vaadin-list-box');
       });
 
-      it('should have an unnamed slot for label', () => {
-        const slot = listbox.root.querySelector('slot:not([name])');
+      it('should have an unnamed slot for content', () => {
+        const slot = listbox.shadowRoot.querySelector('slot:not([name])');
         expect(slot.assignedNodes().length).to.be.equal(5);
       });
     });
