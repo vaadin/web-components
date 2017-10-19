@@ -30,7 +30,6 @@
 
       it('should have an unnamed slot for label', () => {
         const slot = listbox.root.querySelector('slot:not([name])');
-        const content = slot.assignedNodes()[0];
         expect(slot.assignedNodes().length).to.be.equal(5);
       });
     });
