@@ -38,6 +38,6 @@
     "vaadin-list-box": "vaadin/vaadin-list-box#mvp"
   },
   "resolutions": {
-    "web-component-tester": "^6.1.5"
+    "vaadin-list-mixin": "^1.1.1"
   }
 }
