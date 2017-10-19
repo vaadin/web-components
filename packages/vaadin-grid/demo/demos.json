@@ -24,7 +24,7 @@
   }
   ,
   {
-    "name": "Selection Demos",
+    "name": "Selection",
     "url": "grid-selection-demos",
     "src": "grid-selection-demos.html",
     "meta": {
@@ -72,14 +72,14 @@
     "url": "grid-crud-demos",
     "src": "grid-crud-demos.html",
     "meta": {
-      "title": "vaadin-grid – crud",
+      "title": "vaadin-grid – CRUD",
       "description": "",
       "image": ""
      }
   }
   ,
   {
-    "name": "Pagination Demos",
+    "name": "Pagination",
     "url": "grid-pagination-demos",
     "src": "grid-pagination-demos.html",
     "meta": {
@@ -87,6 +87,17 @@
       "description": "",
       "image": ""
      }
+  }
+  ,
+  {
+    "name": "Hierarchy",
+    "url": "grid-hierarchy-demos",
+    "src": "grid-hierarchy-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Hierarchy",
+      "description": "",
+      "image": ""
+    }
   }
   ]
 }
