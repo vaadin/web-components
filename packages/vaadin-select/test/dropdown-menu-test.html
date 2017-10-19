@@ -1,0 +1,39 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-dropdown-menu tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../vaadin-item/vaadin-item.html">
+  <link rel="import" href="../vaadin-dropdown-menu.html">
+</head>
+
+<body>
+  <test-fixture id="dropdown">
+    <template>
+      <vaadin-dropdown-menu>
+        <vaadin-list-box>
+          <vaadin-item>Option 1</vaadin-item>
+          <vaadin-item>Option 2</vaadin-item>
+          <vaadin-item>Option 3</vaadin-item>
+        </vaadin-list-box>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-dropdown-menu', function() {
+      var dropdown;
+
+      beforeEach(function() {
+        dropdown = fixture('dropdown');
+      });
+
+      it('should have a valid localName', function() {
+        expect(dropdown.localName).to.be.equal('vaadin-dropdown-menu');
+      });
+
+    });
+  </script>
+</body>
