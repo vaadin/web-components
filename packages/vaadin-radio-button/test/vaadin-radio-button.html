@@ -13,7 +13,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-radio-button>Radio <b>Button</b></vaadin-radio-button>
+      <vaadin-radio-button name="test-radio">Radio <b>Button</b></vaadin-radio-button>
     </template>
   </test-fixture>
 
@@ -32,6 +32,27 @@
         vaadinRadioButton = fixture('default');
         nativeRadio = vaadinRadioButton.shadowRoot.querySelector('[part="native-radio"]');
         label = vaadinRadioButton.shadowRoot.querySelector('[part="label"]');
+      });
+
+      it('should have proper role', () => {
+        expect(vaadinRadioButton.getAttribute('role')).to.be.eql('radio');
+      });
+
+      it('should have proper name', () => {
+        expect(vaadinRadioButton.name).to.be.eql('');
+        vaadinRadioButton.checked = true;
+        expect(vaadinRadioButton.name).to.be.eql('test-radio');
+      });
+
+      it('should set aria-checked on check', () => {
+        expect(vaadinRadioButton.getAttribute('aria-checked')).to.eq('false');
+        vaadinRadioButton.checked = true;
+        expect(vaadinRadioButton.getAttribute('aria-checked')).to.eq('true');
+      });
+
+      it('should fire event on check', (done) => {
+        vaadinRadioButton.addEventListener('change', () => done());
+        vaadinRadioButton.checked = true;
       });
 
       it('can be disabled imperatively', () => {
