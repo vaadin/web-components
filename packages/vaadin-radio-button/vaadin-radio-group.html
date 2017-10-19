@@ -99,7 +99,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._addActiveListeners();
 
-          this._checkForInitialValue();
+          if (this._radioButtons.length) {
+            this._setFocusable(0);
+          }
 
           this.addEventListener('change', e => {
             var radioButton = e.target;
@@ -113,22 +115,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get _radioButtons() {
-          return Array.from(this.children)
-            .filter(child => child.localName === 'vaadin-radio-button');
-        }
-
-        _checkForInitialValue() {
-          var checkedButton = this.querySelector('[checked]');
-
-          if (checkedButton) {
-            this._setValueFromButton(checkedButton);
-          } else if (this._radioButtons.length) {
-            this._setFocusable(0);
-          }
+          return Array.from(this.querySelectorAll('*'))
+            .filter(child => child instanceof Vaadin.RadioButtonElement);
         }
 
         _requiredChanged(required) {
           this.setAttribute('aria-required', required);
+
+          this.validate();
         }
 
         _disabledChanged(disabled) {
@@ -169,7 +163,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _selectNextButton(element) {
           if (element.nextElementSibling) {
-            this._selectButton(element.nextElementSibling);
+            if (element.nextElementSibling.disabled) {
+              this._selectNextButton(element.nextElementSibling);
+            } else {
+              this._selectButton(element.nextElementSibling);
+            }
           } else {
             this._selectButton(this.firstElementChild);
           }
@@ -177,7 +175,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _selectPreviousButton(element) {
           if (element.previousElementSibling) {
-            this._selectButton(element.previousElementSibling);
+            if (element.previousElementSibling.disabled) {
+              this._selectPreviousButton(element.previousElementSibling);
+            } else {
+              this._selectButton(element.previousElementSibling);
+            }
           } else {
             this._selectButton(this.lastElementChild);
           }
