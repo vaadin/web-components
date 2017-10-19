@@ -21,7 +21,6 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         selected: {
           type: Number,
-          value: 0,
           reflectToAttribute: true,
           notify: true,
           observer: '_selectedChanged'
@@ -129,7 +128,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _setFocusable(idx) {
       const items = this._navItems;
-      items.forEach(e => e.tabIndex = e === items[idx] ? 0 : -1);
+      const item = items[idx] || items[0];
+      items.forEach(e => e.tabIndex = e === item ? 0 : -1);
     }
 
     _focus(idx) {
