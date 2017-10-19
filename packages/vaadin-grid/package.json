@@ -25,7 +25,7 @@
     "wct-random-output": "^0.1.1",
     "web-component-tester": "6.1.5",
     "web-component-tester-istanbul": "https://github.com/t2ym/web-component-tester-istanbul/tarball/0.10.1",
-    "yargs": "latest"
+    "yargs": "^8.0.0"
   },
   "scripts": {
     "test": "wct"
