@@ -9,197 +9,197 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 
-  <dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
-    <template>
-      <style>
-        :host {
-          align-items: flex-start;
-          justify-content: flex-start;
-        }
-
-        [part~="overlay"] {
-          min-width: 175px;
-        }
-
-        :host([phone]) {
-          top: 0 !important;
-          right: 0 !important;
-          bottom: 0 !important;
-          left: 0 !important;
-          padding: 24px;
-          align-items: stretch;
-          justify-content: flex-end;
-        }
-      </style>
-    </template>
-  </dom-module>
-
-  <dom-module id="vaadin-dropdown-menu-overlay">
-    <script>
-      {
-        /**
-         * The overlay element.
-         *
-         * ### Styling
-         *
-         * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
-         * for `<vaadin-dropdown-menu-overlay>` parts.
-         *
-         * @memberof Vaadin
-         */
-        class VaadinDropdownMenuOverlayElement extends Vaadin.OverlayElement {
-          static get is() {
-            return 'vaadin-dropdown-menu-overlay';
-          }
-        }
-        customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
+<dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
       }
-    </script>
-  </dom-module>
 
-  <dom-module id="vaadin-dropdown-menu">
-    <template>
-      <style>
-        :host {
-          display: inline-block;
+      [part~="overlay"] {
+        min-width: 175px;
+      }
+
+      :host([phone]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        padding: 24px;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-dropdown-menu-overlay">
+  <script>
+    {
+      /**
+        * The overlay element.
+        *
+        * ### Styling
+        *
+        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+        * for `<vaadin-dropdown-menu-overlay>` parts.
+        *
+        * @memberof Vaadin
+        */
+      class VaadinDropdownMenuOverlayElement extends Vaadin.OverlayElement {
+        static get is() {
+          return 'vaadin-dropdown-menu-overlay';
         }
-      </style>
+      }
+      customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
+    }
+  </script>
+</dom-module>
 
-      <vaadin-text-field readonly value="[[value]]" id="input"></vaadin-text-field>
-      <vaadin-dropdown-menu-overlay opened="{{opened}}" id="overlay">
-      </vaadin-dropdown-menu-overlay>
-    </template>
+<dom-module id="vaadin-dropdown-menu">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+    </style>
 
-    <script>
-      {
-        /**
-         * `<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.
-         *
-         * ```
-         * <vaadin-dropdown-menu>
-         *  <template>
-         *  </template>
-         * </vaadin-dropdown-menu>
-         * ```
-         *
-         * @memberof Vaadin
-         * @demo demo/index.html
-         */
-        class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
-          static get is() {
-            return 'vaadin-dropdown-menu';
+    <vaadin-text-field readonly value="[[value]]" id="input"></vaadin-text-field>
+    <vaadin-dropdown-menu-overlay opened="{{opened}}" id="overlay">
+    </vaadin-dropdown-menu-overlay>
+  </template>
+
+  <script>
+    {
+      /**
+        * `<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.
+        *
+        * ```
+        * <vaadin-dropdown-menu>
+        *  <template>
+        *  </template>
+        * </vaadin-dropdown-menu>
+        * ```
+        *
+        * @memberof Vaadin
+        * @demo demo/index.html
+        */
+      class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-dropdown-menu';
+        }
+
+        static get properties() {
+          return {
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true
+            },
+
+            _contentTemplate: Object,
+
+            value: {
+              type: String,
+              value: '',
+              notify: true
+            }
+          };
+        }
+
+        static get observers() {
+          return ['_openedChanged(opened)'];
+        }
+
+        ready() {
+          super.ready();
+
+          this.inputElement.addEventListener('click', e => this._toggleOverlay());
+          this.inputElement.addEventListener('keydown', e => this._onKeyDown(e));
+        }
+
+        _onKeyDown(e) {
+          if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|Space)$/.test(e.code)) {
+            e.preventDefault();
+            this._toggleOverlay();
           }
+        }
 
-          static get properties() {
-            return {
-              opened: {
-                type: Boolean,
-                value: false,
-                notify: true
+        _openedChanged(opened) {
+          if (opened && !this._instance) {
+            this._contentTemplate = this.querySelector('template');
+            const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
+              instanceProps: {
+                detail: true,
+                target: true
               },
-
-              _contentTemplate: Object,
-
-              value: {
-                type: String,
-                value: '',
-                notify: true
-              }
-            };
-          }
-
-          static get observers() {
-            return ['_openedChanged(opened)'];
-          }
-
-          ready() {
-            super.ready();
-
-            this.inputElement.addEventListener('click', e => this._toggleOverlay());
-            this.inputElement.addEventListener('keydown', e => this._onKeyDown(e));
-          }
-
-          _onKeyDown(e) {
-            if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|Space)$/.test(e.code)) {
-              e.preventDefault();
-              this._toggleOverlay();
-            }
-          }
-
-          _openedChanged(opened) {
-            if (opened && !this._instance) {
-              this._contentTemplate = this.querySelector('template');
-              const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
-                instanceProps: {
-                  detail: true,
-                  target: true
-                },
-                forwardHostProp: function(prop, value) {
-                  if (this._instance) {
-                    this._instance.forwardHostProp(prop, value);
-                  }
+              forwardHostProp: function(prop, value) {
+                if (this._instance) {
+                  this._instance.forwardHostProp(prop, value);
                 }
-              });
-              this._instance = new Templatizer({});
-              this.overlayElement.content = this._instance.root;
+              }
+            });
+            this._instance = new Templatizer({});
+            this.overlayElement.content = this._instance.root;
+          }
+
+          this.overlayElement.opened = opened;
+
+          let menu;
+          const selectedChangedListener = (e) => {
+            const selectedItem = menu._navItems[e.detail.value];
+            this.value = selectedItem ? selectedItem.textContent : '';
+
+            this.opened = false;
+          };
+
+          if (opened) {
+            menu = this.$.overlay.$.content.lastElementChild;
+            if (!menu || !menu._navItems) {
+              return;
             }
 
-            this.overlayElement.opened = opened;
+            menu.addEventListener('selected-changed', selectedChangedListener);
 
-            let menu;
-            const selectedChangedListener = (e) => {
-              const selectedItem = menu._navItems[e.detail.value];
-              this.value = selectedItem ? selectedItem.textContent : '';
-
-              this.opened = false;
-            };
-
-            if (opened) {
-              menu = this.$.overlay.$.content.lastElementChild;
-              if (!menu || !menu._navItems) {
-                return;
-              }
-
-              menu.addEventListener('selected-changed', selectedChangedListener);
-
-              const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
-              if (itemToFocus) {
-                itemToFocus.focus();
-              }
-            } else {
-              if (menu) {
-                menu.removeEventListener('selected-changed', selectedChangedListener);
-              }
-
-              this.inputElement.focus();
+            const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
+            if (itemToFocus) {
+              itemToFocus.focus();
             }
-          }
+          } else {
+            if (menu) {
+              menu.removeEventListener('selected-changed', selectedChangedListener);
+            }
 
-          _toggleOverlay() {
-            this.opened = !this.opened;
-            const inputRect = this.inputElement.getBoundingClientRect();
-
-            this.overlayElement.style.left = inputRect.left + 'px';
-            this.overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
-              this.overlayElement.style.top = inputRect.bottom - this.overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
-          }
-
-          get overlayElement() {
-            return this.$.overlay;
-          }
-
-          get inputElement() {
-            return this.$.input;
+            this.inputElement.focus();
           }
         }
 
-        customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
+        _toggleOverlay() {
+          this.opened = !this.opened;
+          const inputRect = this.inputElement.getBoundingClientRect();
 
-        /**
-         * @namespace Vaadin
-         */
-        window.Vaadin = window.Vaadin || {};
-        Vaadin.DropdownMenuElement = VaadinDropdownMenuElement;
+          this.overlayElement.style.left = inputRect.left + 'px';
+          this.overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
+            this.overlayElement.style.top = inputRect.bottom - this.overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
+        }
+
+        get overlayElement() {
+          return this.$.overlay;
+        }
+
+        get inputElement() {
+          return this.$.input;
+        }
       }
-    </script>
-  </dom-module>
+
+      customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
+
+      /**
+        * @namespace Vaadin
+        */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.DropdownMenuElement = VaadinDropdownMenuElement;
+    }
+  </script>
+</dom-module>
