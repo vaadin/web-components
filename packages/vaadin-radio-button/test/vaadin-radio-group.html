@@ -21,16 +21,6 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="with-default-checked">
-    <template>
-      <vaadin-radio-group>
-        <vaadin-radio-button>Button 1</vaadin-radio-button>
-        <vaadin-radio-button value='2'>Button 2</vaadin-radio-button>
-        <vaadin-radio-button checked>Button 3</vaadin-radio-button>
-      </vaadin-radio-group>
-    </template>
-  </test-fixture>
-
   <test-fixture id="with-disabled-button">
     <template>
       <vaadin-radio-group>
@@ -44,14 +34,12 @@
 
   <script>
     describe('vaadin-radio-group', () => {
-      var vaadinRadioButtonGroup, vaadinRadioButtonList;
+      var vaadinRadioButtonGroup, vaadinRadioButtonList,
+        buttonsListWithDisabled, groupWithDisabledButton;
 
       beforeEach(() => {
         vaadinRadioButtonGroup = fixture('default');
         vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
-
-        groupWithDefaultChecked = fixture('with-default-checked');
-        buttonsListWithDefaultChecked = groupWithDefaultChecked.querySelectorAll('vaadin-radio-button');
 
         groupWithDisabledButton = fixture('with-disabled-button');
         buttonsListWithDisabled = groupWithDisabledButton.querySelectorAll('vaadin-radio-button');
