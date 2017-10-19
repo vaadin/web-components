@@ -65,11 +65,6 @@
         expect(vaadinRadioButtonGroup.getAttribute('aria-disabled')).to.eq('true');
       });
 
-      it('should be invailid after setting group as required', () => {
-        vaadinRadioButtonGroup.required = true;
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
-      });
-
       it('should be valid after setting group as disabled', () => {
         vaadinRadioButtonGroup.required = true;
         vaadinRadioButtonGroup.disabled = true;
