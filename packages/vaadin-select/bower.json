@@ -35,9 +35,9 @@
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
     "vaadin-text-field": "^1.1.0",
     "vaadin-overlay": "^1.4.1",
-    "vaadin-list-box": "vaadin/vaadin-list-box#mvp"
+    "vaadin-list-box": "vaadin/vaadin-list-box#master"
   },
   "resolutions": {
-    "vaadin-list-mixin": "^1.1.1"
+    "vaadin-list-mixin": "^1.2.0"
   }
 }
