@@ -1,14 +1,14 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-notification",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-notification",
+  "main": "vaadin-notification.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-notification",
     "web-components",
     "web-component",
     "polymer"
