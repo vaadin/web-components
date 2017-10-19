@@ -8,7 +8,7 @@
 <!-- Example: Overlay stays hidden. -->
 
 ### Live Demo
-<!-- Example: https://jsbin.com/nafuwadebi/edit?html,output -->
+<!-- Example: https://jsfiddle.net/6r5htd05/62/ -->
 
 ### Steps to reproduce
 <!-- Example
