@@ -126,6 +126,18 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _onSelectValue(e) {
+          const menu = this.$.overlay.$.content.lastElementChild;
+          const eventFromSelected = e.composedPath()[0].hasAttribute('selected');
+
+          if ((e.type === 'keydown' && /^(Enter|Space)$/.test(e.code) || e.type === 'click') && eventFromSelected) {
+            if (this.value === '') {
+              this.value = e.composedPath()[0].textContent;
+            }
+            this.opened = false;
+          }
+        }
+
         _openedChanged(opened) {
           if (opened && !this._instance) {
             this._contentTemplate = this.querySelector('template');
@@ -161,6 +173,8 @@ This program is available under Apache License Version 2.0, available at https:/
             }
 
             menu.addEventListener('selected-changed', selectedChangedListener);
+            menu.addEventListener('keydown', this._onSelectValue.bind(this));
+            menu.addEventListener('click', this._onSelectValue.bind(this));
 
             const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
             if (itemToFocus) {
@@ -169,6 +183,8 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             if (menu) {
               menu.removeEventListener('selected-changed', selectedChangedListener);
+              menu.removeEventListener('keydown', this._onSelectValue.bind(this));
+              menu.removeEventListener('click', this._onSelectValue.bind(this));
             }
 
             this.inputElement.focus();
