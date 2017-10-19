@@ -520,6 +520,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this._documentPointerEvents = document.body.style.pointerEvents;
       document.body.style.pointerEvents = 'none';
 
+      // Workarond for Chrome 62+, without it clicks on date cells don't work
+      var _pointerEvents = this.style.pointerEvents;
+      this.style.pointerEvents = 'auto';
+      this.style.pointerEvents = _pointerEvents;
+
       this._ignoreAnnounce = false;
     }
 
