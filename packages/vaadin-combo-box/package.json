@@ -31,7 +31,7 @@
     "stylelint-config-vaadin": "latest",
     "wct-random-output": "^0.2.0",
     "web-component-tester": "^6.1.5",
-    "yargs": "latest"
+    "yargs": "^8.0.0"
   },
   "scripts": {
     "test": "wct"
