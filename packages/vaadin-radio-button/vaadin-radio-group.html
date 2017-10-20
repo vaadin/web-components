@@ -174,11 +174,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _hasEnabledButtons() {
-          return !_radioButtons.every((button) => button.disabled);
+          return !this._radioButtons.every((button) => button.disabled);
         }
 
         _selectNextButton(element) {
-          if (!this._hasEnabledButtons) return;
+          if (!this._hasEnabledButtons) {
+            return;
+          }
 
           var nextButton = element.nextElementSibling || this.firstElementChild;
 
@@ -190,7 +192,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _selectPreviousButton(element) {
-          if (!this._hasEnabledButtons) return;
+          if (!this._hasEnabledButtons) {
+            return;
+          }
 
           var previousButton = element.previousElementSibling || this.lastElementChild;
 
