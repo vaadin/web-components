@@ -80,7 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinListBoxElement extends Vaadin.ListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ListBoxElement extends Vaadin.ListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-list-box';
         }
@@ -107,13 +107,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinListBoxElement.is, VaadinListBoxElement);
+      customElements.define(ListBoxElement.is, ListBoxElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.ListBoxElement = VaadinListBoxElement;
+      Vaadin.ListBoxElement = ListBoxElement;
     }
   </script>
 </dom-module>
