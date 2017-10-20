@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>vaadin-dropdown-menu tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
   <link rel="import" href="../../vaadin-item/vaadin-item.html">
   <link rel="import" href="../vaadin-dropdown-menu.html">
@@ -13,27 +14,144 @@
   <test-fixture id="dropdown">
     <template>
       <vaadin-dropdown-menu>
-        <vaadin-list-box>
-          <vaadin-item>Option 1</vaadin-item>
-          <vaadin-item>Option 2</vaadin-item>
-          <vaadin-item>Option 3</vaadin-item>
-        </vaadin-list-box>
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>Option 1</vaadin-item>
+            <vaadin-item>Option 2</vaadin-item>
+            <vaadin-item>Option 3</vaadin-item>
+          </vaadin-list-box>
+        </template>
       </vaadin-dropdown-menu>
     </template>
   </test-fixture>
 
   <script>
+    function arrowUp(target) {
+      MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
+    }
+    function arrowDown(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'ArrowDown');
+    }
+    function Space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+    function Enter(target) {
+      MockInteractions.keyDownOn(target, 13, [], 'Enter');
+    }
+    function Tab(target) {
+      MockInteractions.keyDownOn(target, 9, [], 'Tab');
+    }
+    function Escape(target) {
+      MockInteractions.keyDownOn(target, 27, [], 'Escape');
+    }
+
     describe('vaadin-dropdown-menu', function() {
-      var dropdown;
+      var dropdown, input;
 
       beforeEach(function() {
         dropdown = fixture('dropdown');
+        input = dropdown._inputElement;
       });
 
       it('should have a valid localName', function() {
         expect(dropdown.localName).to.be.equal('vaadin-dropdown-menu');
       });
 
+      it('overlay should be opened on click event on input', function() {
+        input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+        expect(dropdown._overlayElement.opened).to.be.true;
+      });
+
+      it('should open the overlay on top left corner by default on input click', function() {
+        Enter(input);
+        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
+        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+      });
+
+      it('overlay should be opened on keydown events on input', function() {
+        arrowUp(input);
+        expect(dropdown._overlayElement.opened).to.be.true;
+
+        Escape(input);
+        expect(dropdown._overlayElement.opened).to.be.false;
+
+        arrowDown(input);
+        expect(dropdown._overlayElement.opened).to.be.true;
+
+        Escape(input);
+        expect(dropdown._overlayElement.opened).to.be.false;
+
+        Space(input);
+        expect(dropdown._overlayElement.opened).to.be.true;
+
+        Escape(input);
+        expect(dropdown._overlayElement.opened).to.be.false;
+
+        Enter(input);
+        expect(dropdown._overlayElement.opened).to.be.true;
+
+        Escape(input);
+        expect(dropdown._overlayElement.opened).to.be.false;
+      });
+
+      it('should disable the input and disable opening if dropdown-menu is disabled', function() {
+        dropdown.disabled = true;
+
+        expect(input.disabled).to.be.true;
+
+        Enter(input);
+        expect(dropdown._overlayElement.opened).to.be.false;
+
+        input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+        expect(dropdown._overlayElement.opened).to.be.false;
+      });
+
+      it('should change the value of dropdown-menu when list element selected property changed', function() {
+        Enter(input);
+        const menu = dropdown._overlayElement.$.content.lastElementChild;
+
+        menu.selected = 0;
+        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+
+        menu.selected = 1;
+        expect(dropdown.value).to.be.equal(menu._navItems[1].textContent);
+      });
+
+      it('should close the dropdown-menu on selecting the same value', function() {
+        Enter(input);
+        const menu = dropdown._overlayElement.$.content.lastElementChild;
+
+        menu.selected = 0;
+        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+        expect(dropdown._overlayElement.opened).to.be.false;
+
+        Enter(input);
+        expect(dropdown._overlayElement.opened).to.be.true;
+        menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
+        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+        expect(dropdown._overlayElement.opened).to.be.false;
+      });
+
+      it('should focus the input on selecting value and closing the overlay', function() {
+        Enter(input);
+        const menu = dropdown._overlayElement.$.content.lastElementChild;
+
+        menu.selected = 0;
+        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+        expect(dropdown._overlayElement.opened).to.be.false;
+        expect(input.focused).to.be.true;
+      });
+
+      it('should focus the input before moving the focus to next selectable element', function() {
+        Enter(input);
+        const focusedSpy = sinon.spy();
+        const menu = dropdown._overlayElement.$.content.lastElementChild;
+
+        input.addEventListener('focused-changed', focusedSpy);
+        Tab(menu);
+
+        expect(focusedSpy.calledOnce).to.be.true;
+      });
     });
   </script>
 </body>
