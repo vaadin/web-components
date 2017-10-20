@@ -239,7 +239,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItemKey(item) {
-      return this.itemIdPath ? this.get(itemIdPath, item) : item;
+      return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
     }
 
     _isExpanded(item) {
