@@ -470,7 +470,7 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            if (cell._instance.item === item) {
+            if (this._itemsEqual(cell._instance.item, item)) {
               // Force data system to pick up subproperty changes
               cell._instance._setPendingProperty('item', {}, false);
             }

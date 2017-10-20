@@ -111,7 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
               inst[originalProp] = value;
 
-              const row = Array.from(this._grid.$.items.children).filter(row => row._item === inst.item)[0];
+              const row = Array.from(this._grid.$.items.children).filter(row => this._grid._itemsEqual(row._item, inst.item))[0];
               if (row) {
                 Array.from(row.children).forEach(cell => {
                   if (cell._instance) {

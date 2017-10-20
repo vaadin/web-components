@@ -142,6 +142,14 @@ This program is available under Apache License Version 2.0, available at https:/
             return {};
           }
         },
+
+        /**
+         * The path to an item sub-property that should be used as the item's identity
+         */
+        itemIdPath: {
+          type: String,
+          value: null
+        }
       };
     }
 
@@ -370,6 +378,22 @@ This program is available under Apache License Version 2.0, available at https:/
       //   // Fixes possibly invalid cached lastVisibleIndex value in <iron-list>
       //   this._scrollToIndex(this._firstVisibleIndex);
       // }
+    }
+
+    _itemsEqual(item1, item2) {
+      return this.itemIdPath ?
+        Polymer.Base.get(this.itemIdPath, item1) === Polymer.Base.get(this.itemIdPath, item2) :
+        item1 === item2;
+    }
+
+    _getItemIndexInArray(item, array) {
+      let result = -1;
+      array.forEach((i, idx) => {
+        if (this._itemsEqual(i, item)) {
+          result = idx;
+        }
+      });
+      return result;
     }
 
   };
