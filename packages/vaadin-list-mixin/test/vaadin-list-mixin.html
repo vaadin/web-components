@@ -76,8 +76,8 @@
       MockInteractions.keyDownOn(target, 39, [], 'ArrowRight');
     }
 
-    function arrowRightIE(target) {
-      MockInteractions.keyDownOn(target, 39, [], 'Right');
+    function arrowDownIE(target) {
+      MockInteractions.keyDownOn(target, 40, [], 'Down');
     }
 
     function arrowUp(target) {
@@ -133,32 +133,32 @@
 
         beforeEach(() => nav._focus(0));
 
-        it('should move focus to next element on "arrow-right" keydown', () => {
-          arrowRight(nav);
+        it('should move focus to next element on "arrow-down" keydown', () => {
+          arrowDown(nav);
           expect(nav._navItems[1].focused).to.be.true;
         });
 
         it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
-          arrowRightIE(nav);
-          expect(nav._navItems[1].focused).to.be.true;
-        });
-
-        it('should move focus to prev element on "arrow-left" keydown', () => {
-          arrowRight(nav);
-          arrowLeft(nav);
-          expect(nav._navItems[0].focused).to.be.true;
-        });
-
-        it('should move focus to next element on "arrow-down" keydown', () => {
-          nav.vertical = true;
-          arrowDown(nav);
+          arrowDownIE(nav);
           expect(nav._navItems[1].focused).to.be.true;
         });
 
         it('should move focus to prev element on "arrow-up" keydown', () => {
-          nav.vertical = true;
           arrowDown(nav);
           arrowUp(nav);
+          expect(nav._navItems[0].focused).to.be.true;
+        });
+
+        it('should move focus to next element on "arrow-right" keydown', () => {
+          nav.orientation = 'horizontal';
+          arrowRight(nav);
+          expect(nav._navItems[1].focused).to.be.true;
+        });
+
+        it('should move focus to prev element on "arrow-right" keydown', () => {
+          nav.orientation = 'horizontal';
+          arrowRight(nav);
+          arrowLeft(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
 
@@ -186,20 +186,20 @@
           expect(nav._navItems[1].focused).to.be.true;
         });
 
-        it('if focus is in last element should move focus to first element on arrow-right', () => {
+        it('if focus is in last element should move focus to first element on arrow-down', () => {
           nav._focus(nav._navItems.length - 1);
-          arrowRight(nav);
+          arrowDown(nav);
           expect(nav._navItems[0].focused).to.be.true;
         });
 
-        it('if focus is in first element should move focus to last element on arrow-left', () => {
-          arrowLeft(nav);
+        it('if focus is in first element should move focus to last element on arrow-up', () => {
+          arrowUp(nav);
           expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
         });
 
         it('focus loop should skip disabled items', () => {
-          arrowRight(nav);
-          arrowRight(nav);
+          arrowDown(nav);
+          arrowDown(nav);
           expect(nav._navItems[3].focused).to.be.true;
         });
 
@@ -232,39 +232,50 @@
       });
 
       describe('orientation', () => {
-        it('if not vertically oriented, aria-orientation attribute should be set to horizontal', () => {
+        it('if not orientation set, aria-orientation attribute should set to vertical', () => {
+          expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
+        });
+
+        it('if horizontally oriented, aria-orientation attribute should be set to horizontal', () => {
+          nav.orientation = 'horizontal';
           expect(nav.getAttribute('aria-orientation')).to.be.equal('horizontal');
         });
 
         it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
-          nav.vertical = true;
+          nav.orientation = 'vertical';
           expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
         });
 
-        it('should have vertical attribute on each item', () => {
-          nav.vertical = true;
+        it('should not have orientation attribute on each item if orientation is not set', () => {
           nav.querySelectorAll('test-item-element').forEach(item => {
-            expect(item.hasAttribute('vertical')).to.be.true;
+            expect(item.hasAttribute('orientation')).to.be.false;
           });
         });
 
-        it('should not have vertical attribute on each item', () => {
-          nav.vertical = true;
-          nav.vertical = false;
+        it('should have orientation attribute on each item', () => {
+          nav.orientation = 'horizontal';
           nav.querySelectorAll('test-item-element').forEach(item => {
-            expect(item.hasAttribute('vertical')).to.be.false;
+            expect(item.getAttribute('orientation')).to.be.equal('horizontal');
+          });
+        });
+
+        it('should change orientation attribute on each item', () => {
+          nav.orientation = 'horizontal';
+          nav.orientation = 'vertical';
+          nav.querySelectorAll('test-item-element').forEach(item => {
+            expect(item.getAttribute('orientation')).to.be.equal('vertical');
           });
         });
 
         it('should have vertical attribute on newly added item', done => {
-          nav.vertical = true;
+          nav.orientation = 'vertical';
 
           const item = document.createElement('test-item-element');
           item.innerText = 'foo';
           nav.appendChild(item);
 
           setTimeout(() => {
-            expect(item.hasAttribute('vertical')).to.be.true;
+            expect(item.hasAttribute('orientation')).to.be.true;
             done();
           }, 0);
         });
