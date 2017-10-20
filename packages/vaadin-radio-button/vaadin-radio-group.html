@@ -32,10 +32,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.
        *
        * ```html
-       * <vaadin-radio-group name="radio-group">
-       *   <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
-       *   <vaadin-radio-button value="bar">Bar</vaadin-radio-button>
-       *   <vaadin-radio-button value="baz">Baz</vaadin-radio-button>
+       * <vaadin-radio-group>
+       *   <vaadin-radio-button name="foo">Foo</vaadin-radio-button>
+       *   <vaadin-radio-button name="bar">Bar</vaadin-radio-button>
+       *   <vaadin-radio-button name="baz">Baz</vaadin-radio-button>
        * </vaadin-radio-group>
        * ```
        *
@@ -113,11 +113,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this._setFocusable(0);
           }
 
-          this.addEventListener('change', e => {
+          this.addEventListener('radio-button-checked-changed', e => {
             var radioButton = e.target;
 
             if (radioButton.checked) {
-              this._setValueFromButton(radioButton);
+              this._changeSelectedButton(radioButton);
             }
           });
 
@@ -170,34 +170,38 @@ This program is available under Apache License Version 2.0, available at https:/
         _selectButton(element) {
           element.focus();
 
-          this._setValueFromButton(element);
+          this._changeSelectedButton(element);
+        }
+
+        _hasEnabledButtons() {
+          return !_radioButtons.every((button) => button.disabled);
         }
 
         _selectNextButton(element) {
-          if (element.nextElementSibling) {
-            if (element.nextElementSibling.disabled) {
-              this._selectNextButton(element.nextElementSibling);
-            } else {
-              this._selectButton(element.nextElementSibling);
-            }
+          if (!this._hasEnabledButtons) return;
+
+          var nextButton = element.nextElementSibling ? element.nextElementSibling : this.firstElementChild;
+
+          if (nextButton.disabled) {
+            this._selectNextButton(nextButton);
           } else {
-            this._selectButton(this.firstElementChild);
+            this._selectButton(nextButton);
           }
         }
 
         _selectPreviousButton(element) {
-          if (element.previousElementSibling) {
-            if (element.previousElementSibling.disabled) {
-              this._selectPreviousButton(element.previousElementSibling);
-            } else {
-              this._selectButton(element.previousElementSibling);
-            }
+          if (!this._hasEnabledButtons) return;
+
+          var previousButton = element.previousElementSibling ? element.previousElementSibling : this.lastElementChild;
+
+          if (previousButton.disabled) {
+            this._selectPreviousButton(previousButton);
           } else {
-            this._selectButton(this.lastElementChild);
+            this._selectButton(previousButton);
           }
         }
 
-        _setValueFromButton(button) {
+        _changeSelectedButton(button) {
           this._checkedButton = button;
 
           this._setFocusable(this._radioButtons.indexOf(button));

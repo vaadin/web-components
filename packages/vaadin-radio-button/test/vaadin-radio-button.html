@@ -51,7 +51,7 @@
       });
 
       it('should fire event on check', (done) => {
-        vaadinRadioButton.addEventListener('change', () => done());
+        vaadinRadioButton.addEventListener('radio-button-checked-changed', () => done());
         vaadinRadioButton.checked = true;
       });
 

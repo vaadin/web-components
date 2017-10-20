@@ -44,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-button">
   <template>
-    <label part="wrapper" id="label" on-click="_preventDefault">
+    <label part="wrapper" on-click="_preventDefault">
       <input
         id="nativeRadio"
         type="radio"
@@ -142,7 +142,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _checkedChanged(checked) {
           this.setAttribute('aria-checked', checked);
 
-          this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+          this.dispatchEvent(new CustomEvent('radio-button-checked-changed', {bubbles: true}));
         }
 
         _addActiveListeners() {
@@ -177,7 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.label;
+          return this.shadowRoot.querySelector('[part="wrapper"]');
         }
 
         _preventDefault(e) {
