@@ -625,7 +625,11 @@ This program is available under Apache License Version 2.0, available at https:/
       this._focusedIndex = this.filteredItems.indexOf(selectedItem);
     }
 
-    _valueChanged(value) {
+    _valueChanged(value, oldVal) {
+      if (value === '' && oldVal === undefined) { // initializing, no need to do anything (#554)
+        return;
+      }
+
       if (this._isValidValue(value)) {
         let item;
         if (this._getItemValue(this.selectedItem) !== value) {
