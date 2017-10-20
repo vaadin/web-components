@@ -220,12 +220,16 @@ This program is available under Apache License Version 2.0, available at https:/
           while (
               dstRowIndex < maxRowIndex &&
               activeRowGroup.children[dstRowIndex].hidden
-          ) dstRowIndex++;
+          ) {
+            dstRowIndex++;
+          }
         } else if (dstRowIndex < rowIndex) {
           while (
               dstRowIndex > 0 &&
               activeRowGroup.children[dstRowIndex].hidden
-          ) dstRowIndex--;
+          ) {
+            dstRowIndex--;
+          }
         }
       }
 

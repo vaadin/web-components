@@ -27,7 +27,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _a11yUpdateGridSize(size, _columnTree) {
-      if (size === undefined || _columnTree === undefined) return;
+      if (size === undefined || _columnTree === undefined) {
+        return;
+      }
 
       const bodyColumns = _columnTree[_columnTree.length - 1];
       this.$.table.setAttribute(

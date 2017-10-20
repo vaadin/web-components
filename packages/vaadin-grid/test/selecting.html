@@ -344,7 +344,7 @@
         firstBodyCheckbox.checked = false;
 
         const details = [];
-        const spy = sinon.spy( e => {
+        const spy = sinon.spy(e => {
           // event object gets reused so need to store the details before asserting.
           details.push(e.detail);
         });
