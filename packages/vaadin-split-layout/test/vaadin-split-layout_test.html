@@ -108,15 +108,15 @@
           expect(next.assignedNodes({flatten: true})[0] || next).to.equal(second);
         });
 
-        it('should set pointer-events: none to panels on start resize and restore after resize finished', () => {
+        it('should set pointer-events: none to panels on down event and restore on up event', () => {
           first.style.pointerEvents = 'visible';
           second.style.pointerEvents = 'visible';
 
-          Polymer.Base.fire('track', {state: 'start'}, {node: splitLayout.$.splitter});
+          Polymer.Base.fire('down', {}, {node: splitLayout.$.splitter});
           expect(getComputedStyle(first).pointerEvents).to.equal('none');
           expect(getComputedStyle(second).pointerEvents).to.equal('none');
 
-          Polymer.Base.fire('track', {state: 'end'}, {node: splitLayout.$.splitter});
+          Polymer.Base.fire('up', {}, {node: splitLayout.$.splitter});
           expect(getComputedStyle(first).pointerEvents).to.equal('visible');
           expect(getComputedStyle(second).pointerEvents).to.equal('visible');
         });

@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
@@ -77,7 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <slot id="primary" name="primary"></slot>
-    <div part="splitter" id="splitter" on-track="_onHandleTrack" on-down="_preventDefault">
+    <div part="splitter" id="splitter" on-track="_onHandleTrack" on-down="_setPointerEventsNone" on-up="_restorePointerEvents">
       <div part="handle"></div>
     </div>
     <slot id="secondary" name="secondary"></slot>
@@ -227,9 +228,15 @@ This program is available under Apache License Version 2.0, available at https:/
        * `handle` | The handle of the splitter | vaadin-split-layout
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class SplitLayoutElement extends Vaadin.ThemableMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
+      class SplitLayoutElement extends
+        Vaadin.ThemableMixin(
+          Polymer.GestureEventListeners(
+            Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
+
         static get is() {
           return 'vaadin-split-layout';
         }
@@ -278,6 +285,20 @@ This program is available under Apache License Version 2.0, available at https:/
           element.style.flex = '1 1 ' + flexBasis + 'px';
         }
 
+        _setPointerEventsNone(event) {
+          this._previousPrimaryPointerEvents = this._primaryChild.style.pointerEvents;
+          this._previousSecondaryPointerEvents = this._secondaryChild.style.pointerEvents;
+          this._primaryChild.style.pointerEvents = 'none';
+          this._secondaryChild.style.pointerEvents = 'none';
+
+          event.preventDefault();
+        }
+
+        _restorePointerEvents() {
+          this._primaryChild.style.pointerEvents = this._previousPrimaryPointerEvents;
+          this._secondaryChild.style.pointerEvents = this._previousSecondaryPointerEvents;
+        }
+
         _onHandleTrack(event) {
           if (!this._primaryChild || !this._secondaryChild) {
             return;
@@ -291,10 +312,6 @@ This program is available under Apache License Version 2.0, available at https:/
               secondary: this._secondaryChild.getBoundingClientRect()[size]
             };
 
-            this._previousPrimaryPointerEvents = this._primaryChild.style.pointerEvents;
-            this._previousSecondaryPointerEvents = this._secondaryChild.style.pointerEvents;
-            this._primaryChild.style.pointerEvents = 'none';
-            this._secondaryChild.style.pointerEvents = 'none';
             return;
           }
 
@@ -306,14 +323,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (event.detail.state === 'end') {
             delete this._startSize;
-
-            this._primaryChild.style.pointerEvents = this._previousPrimaryPointerEvents;
-            this._secondaryChild.style.pointerEvents = this._previousSecondaryPointerEvents;
           }
-        }
-
-        _preventDefault(event) {
-          event.preventDefault();
         }
 
         /**
