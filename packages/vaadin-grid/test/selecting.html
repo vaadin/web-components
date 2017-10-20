@@ -90,6 +90,21 @@
         expect(grid.selectedItems).to.be.empty;
       });
 
+      it('should select an equaling item', () => {
+        grid.itemIdPath = 'value';
+        const cells = getRowCells(rows[0]);
+        grid.selectedItems = [{value: 'foo0'}];
+        expect(cells[0]._instance.selected).to.be.true;
+      });
+
+      it('should deselect an equaling item', () => {
+        grid.itemIdPath = 'value';
+        const cells = getRowCells(rows[0]);
+        grid.selectedItems = [rows[0]._item];
+        grid.deselectItem({value: 'foo0'});
+        expect(grid.selectedItems).to.be.empty;
+      });
+
       describe('selectedItems', () => {
         it('should reflect changes', () => {
           grid.push('selectedItems', cachedItems[1]);

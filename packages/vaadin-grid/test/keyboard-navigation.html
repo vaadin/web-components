@@ -1234,6 +1234,15 @@
           expect(grid.activeItem).to.equal('foo');
         });
 
+        it('should toggle when equaling item is clicked', () => {
+          grid.itemIdPath = 'name';
+          grid.items = [{name: 'foo'}, {name: 'bar'}];
+          grid.activeItem = {name: 'foo'};
+          clickItem(0);
+
+          expect(grid.activeItem).to.be.null;
+        });
+
         describe('space click shortcut', () => {
           beforeEach(() => {
             header.children[0].children[1].focus();
