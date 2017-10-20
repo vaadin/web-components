@@ -13,6 +13,21 @@
 <body>
   <dom-module id="test-list-element">
     <template>
+      <style>
+        :host {
+          display: block;
+        }
+
+        #scroll {
+          overflow: auto;
+          display: flex;
+        }
+
+        :host([orientation="vertical"]) #scroll {
+          height: 100%;
+          flex-direction: column;
+        }
+      </style>
       <div id="scroll">
         <slot></slot>
       </div>
@@ -35,6 +50,11 @@
 
   <dom-module id="test-item-element">
     <template>
+      <style>
+        :host {
+          display: block;
+        }
+      </style>
       <slot></slot>
     </template>
     <script>
@@ -60,7 +80,7 @@
       <test-list-element style="width: 400px; height: 400px;">
         <test-item-element>Foo</test-item-element>
         <test-item-element>Bar</test-item-element>
-        <separator>___</separator>
+        <separator></separator>
         <test-item-element disabled>Baz</test-item-element>
         <test-item-element>Baz</test-item-element>
       </test-list-element>
@@ -281,6 +301,30 @@
         });
       });
 
+
+      describe('Scroll', () => {
+        beforeEach(() => {
+          nav.style.width = nav.style.height = '50px';
+        });
+
+        it(`when orientation is horizontal should move scroll horizontally`, () => {
+          nav.orientation = 'horizontal';
+          expect(nav._scrollerElement.scrollLeft).to.be.equal(0);
+          nav._scrollToItem(1);
+          expect(nav._scrollerElement.scrollLeft).to.be.greaterThan(0);
+        });
+
+        it(`when orientation is vertical should move scroll vertically`, () => {
+          nav.orientation = 'vertical';
+          expect(nav._scrollerElement.scrollTop).to.be.equal(0);
+
+          // FIXME: using _scroll because _scrollToItem does not work in IE11 in vertical mode.
+          // nav._scrollToItem(1);
+          nav._scroll(1);
+
+          expect(nav._scrollerElement.scrollTop).to.be.greaterThan(0);
+        });
+      });
     });
   </script>
 </body>
