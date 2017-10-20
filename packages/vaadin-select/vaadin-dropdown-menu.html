@@ -70,8 +70,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-text-field readonly value="[[value]]" id="input"></vaadin-text-field>
-    <vaadin-dropdown-menu-overlay opened="{{opened}}" id="overlay"></vaadin-dropdown-menu-overlay>
+    <vaadin-text-field readonly value="[[value]]"></vaadin-text-field>
+    <vaadin-dropdown-menu-overlay opened="{{opened}}"></vaadin-dropdown-menu-overlay>
   </template>
 
   <script>
@@ -129,31 +129,42 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * True if `vaadin-dropdown-menu` and `inputElement` are disabled
+             * True if `vaadin-dropdown-menu` and `vaadin-text-field` are disabled
              */
             disabled: {
               type: Boolean,
               value: false
-            }
+            },
+
+            _overlayElement: Object,
+
+            _inputElement: Object
           };
         }
 
         static get observers() {
           return [
-            '_openedChanged(opened)',
-            '_disabledChanged(disabled)',
+            '_openedChanged(opened, _overlayElement)',
+            '_disabledChanged(disabled, _inputElement)',
           ];
         }
 
         ready() {
           super.ready();
 
-          this.inputElement.addEventListener('click', e => this._toggleOverlay());
-          this.inputElement.addEventListener('keydown', e => this._onKeyDown(e));
+          this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
+          this._inputElement = this.shadowRoot.querySelector('vaadin-text-field');
+
+          this._inputElement.addEventListener('click', e => this._toggleOverlay());
+          this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
         }
 
-        _disabledChanged(disabled) {
-          this.inputElement.disabled = disabled;
+        _disabledChanged(disabled, inputElement) {
+          if (!inputElement) {
+            return;
+          }
+
+          inputElement.disabled = disabled;
         }
 
         _onKeyDown(e) {
@@ -172,12 +183,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
           } else if (e.type === 'keydown' && /^(Tab)$/.test(e.key)) {
             this.opened = false;
-            this.inputElement.focus();
+            this._inputElement.focus();
 
           }
         }
 
-        _openedChanged(opened) {
+        _openedChanged(opened, overlayElement) {
+          if (!overlayElement) {
+            return;
+          }
+
           if (opened && !this._instance) {
             const _contentTemplate = this.querySelector('template');
             const Templatizer = Polymer.Templatize.templatize(_contentTemplate, this, {
@@ -192,12 +207,13 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             });
             this._instance = new Templatizer({});
-            this.overlayElement.content = this._instance.root;
+            overlayElement.content = this._instance.root;
           }
 
-          this.overlayElement.opened = opened;
 
-          const menu = this.overlayElement.$.content.lastElementChild;
+          overlayElement.opened = opened;
+
+          const menu = overlayElement.$.content.lastElementChild;
           const selectedChangedListener = (e) => {
             const selectedItem = menu._navItems[e.detail.value];
             this.value = selectedItem ? selectedItem.textContent : '';
@@ -223,7 +239,7 @@ This program is available under Apache License Version 2.0, available at https:/
               menu.removeEventListener('selected-changed', selectedChangedListener);
               menu.removeEventListener('keydown', this._onKeyDownInside.bind(this));
               menu.removeEventListener('click', this._onKeyDownInside.bind(this));
-              this.inputElement.focus();
+              this._inputElement.focus();
             }
           }
         }
@@ -234,20 +250,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.opened = !this.opened;
-          const inputRect = this.inputElement.getBoundingClientRect();
+          const inputRect = this._inputElement.getBoundingClientRect();
 
-          this.overlayElement.style.left = inputRect.left + 'px';
-          this.overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
-            this.overlayElement.style.top = inputRect.bottom - this.overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
+          this._overlayElement.style.left = inputRect.left + 'px';
+          this._overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
+            this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
         }
 
-        get overlayElement() {
-          return this.$.overlay;
-        }
-
-        get inputElement() {
-          return this.$.input;
-        }
       }
 
       customElements.define(DropdownMenuElement.is, DropdownMenuElement);
