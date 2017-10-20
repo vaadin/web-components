@@ -480,8 +480,8 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleRowSelected(row, this._isSelected(item));
         this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
-        this._toggleRowHierarchyExpanded(row, this._isExpanded(item));
-        this._updateRowHierarchyLevel(row, this._getIndexHierarchyLevel(row.index));
+        this._toggleRowExpanded(row, this._isExpanded(item));
+        this._updateRowLevel(row, this._getIndexLevel(row.index));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
@@ -516,20 +516,20 @@ This program is available under Apache License Version 2.0, available at https:/
         this._a11yUpdateRowSelected(row, selected);
       }
 
-      _updateRowHierarchyLevel(row, level) {
+      _updateRowLevel(row, level) {
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            cell._instance.__hierarchyLevel__ = level;
-            cell._instance.hierarchyLevel = level;
+            cell._instance.__level__ = level;
+            cell._instance.level = level;
           }
         });
       }
 
-      _toggleRowHierarchyExpanded(row, expanded) {
+      _toggleRowExpanded(row, expanded) {
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            cell._instance.__hierarchyExpanded__ = expanded;
-            cell._instance.hierarchyExpanded = expanded;
+            cell._instance.__expanded__ = expanded;
+            cell._instance.expanded = expanded;
           }
         });
       }

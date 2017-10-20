@@ -229,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }, []);
     }
 
-    _hierarchyExpandedInstanceChangedCallback(inst, value) {
+    _expandedInstanceChangedCallback(inst, value) {
       if (inst.item === undefined) return;
       if (value) {
         this.expandItem(inst.item);
@@ -260,7 +260,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._assignModels();
     }
 
-    _getIndexHierarchyLevel(index) {
+    _getIndexLevel(index) {
       let {cache} = this._cache.getCacheAndIndex(index);
       let level = 0;
       while (cache.parentCache) {
