@@ -103,7 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * True if `vaadin-dropdown-menu` is opened
+             * Set when the dropdown menu is open
              */
             opened: {
               type: Boolean,
@@ -112,7 +112,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The value of the control, which is submitted with the form data.
+             * The String value for the selected item of the dropdown menu. Provides the value for iron-form.
+             * When there’s no item selected, the value is an empty string.
              */
             value: {
               type: String,
@@ -121,7 +122,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The name of the control, which is submitted with the form data.
+             * The name of this element.
              */
             name: {
               type: String,
@@ -129,7 +130,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * True if `vaadin-dropdown-menu` and `vaadin-text-field` are disabled
+             * Set to a disabled dropdown menu
              */
             disabled: {
               type: Boolean,
