@@ -39,19 +39,19 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ListItemMixin
        * @mixes Vaadin.ThemableMixin
        */
-      class VaadinItemElement extends Vaadin.ListItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ItemElement extends Vaadin.ListItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-item';
         }
       }
 
-      customElements.define(VaadinItemElement.is, VaadinItemElement);
+      customElements.define(ItemElement.is, ItemElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.ItemElement = VaadinItemElement;
+      Vaadin.ItemElement = ItemElement;
     }
   </script>
 </dom-module>
