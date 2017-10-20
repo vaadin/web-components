@@ -68,9 +68,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _toggle() {
-      this.selected = !this.selected;
-      const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: this.selected});
-      this.dispatchEvent(evt);
+      if (!this.disabled) {
+        this.selected = !this.selected;
+        const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: this.selected});
+        this.dispatchEvent(evt);
+      }
     }
 
     _selectedChanged(selected) {
@@ -79,6 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _disabledChanged(disabled) {
       if (disabled) {
+        this.selected = false;
         this.setAttribute('aria-disabled', 'true');
         this.blur();
       } else {
