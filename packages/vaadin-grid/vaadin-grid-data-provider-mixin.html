@@ -17,6 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.parentItem = parentItem;
       this.expandedItems = {};
       this.map = {};
+      this.size = 0; // Must include effective sizes of all subCaches
       this.ownSize = 0;
     }
 
@@ -30,13 +31,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     get effectiveSize() {
-      return this.grid._isExpanded(this.parentItem) ? Number(this.size) : 0;
+      return this.grid._isExpanded(this.parentItem) ? this.size : 0;
     }
 
-    get size() {
-      // Must include effective sizes of all subCaches
-      return this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
-        return prev + this.expandedItems[curr].effectiveSize;
+    updateSize() {
+      this.size = this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
+        const subCache = this.expandedItems[curr];
+        subCache.updateSize();
+        return prev + subCache.effectiveSize;
       }, 0);
     }
 
@@ -151,7 +153,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateCacheSize(size) {
-      this._cache.ownSize = size;
+      const delta = size - this._cache.ownSize;
+      this._cache.ownSize += delta;
+      this._cache.size += delta;
       this._fullSize = this._cache.size;
     }
 
@@ -244,12 +248,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
     expandItem(item) {
       this._expandedKeys.add(this._getItemKey(item));
+      this._cache.updateSize();
       this._fullSize = this._cache.size;
       this._assignModels();
     }
 
     collapseItem(item) {
       this._expandedKeys.delete(this._getItemKey(item));
+      this._cache.updateSize();
       this._fullSize = this._cache.size;
       this._assignModels();
     }
@@ -291,6 +297,7 @@ This program is available under Apache License Version 2.0, available at https:/
           items.forEach((item, itemsIndex) => {
             cache.setItemForScaledIndex(page * this.pageSize + itemsIndex, item);
           });
+          this._cache.updateSize();
           this._fullSize = this._cache.size;
 
           Array.from(this.$.items.children).forEach(row => {
@@ -320,6 +327,7 @@ This program is available under Apache License Version 2.0, available at https:/
     clearCache() {
       this._cache = new CacheItem(this);
       this._cache.ownSize = this.size;
+      this._cache.updateSize();
       this._pendingRequests = {};
       this._hasData = false;
       this._loading = true;
