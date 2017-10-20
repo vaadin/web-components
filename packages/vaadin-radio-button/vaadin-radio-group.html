@@ -180,7 +180,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _selectNextButton(element) {
           if (!this._hasEnabledButtons) return;
 
-          var nextButton = element.nextElementSibling ? element.nextElementSibling : this.firstElementChild;
+          var nextButton = element.nextElementSibling || this.firstElementChild;
 
           if (nextButton.disabled) {
             this._selectNextButton(nextButton);
@@ -192,7 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _selectPreviousButton(element) {
           if (!this._hasEnabledButtons) return;
 
-          var previousButton = element.previousElementSibling ? element.previousElementSibling : this.lastElementChild;
+          var previousButton = element.previousElementSibling || this.lastElementChild;
 
           if (previousButton.disabled) {
             this._selectPreviousButton(previousButton);
