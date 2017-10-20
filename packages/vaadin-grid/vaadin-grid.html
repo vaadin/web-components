@@ -480,7 +480,7 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleRowSelected(row, this._isSelected(item));
         this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
-        this._toggleRowHierarchyExpanded(row, this.isIndexExpanded(row.index));
+        this._toggleRowHierarchyExpanded(row, this._isExpanded(item));
         this._updateRowHierarchyLevel(row, this._getIndexHierarchyLevel(row.index));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);

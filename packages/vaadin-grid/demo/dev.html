@@ -239,18 +239,6 @@
               super.ready();
               this.$.component.size = dataBase.length;
             }
-
-            _toggle(e) {
-              // console.log(e.model);
-              e.stopPropagation();
-              // const item = e.target.item;
-              const grid = this.$.component;
-              // grid.expandHierarchyItem(item);
-              grid[grid.isIndexExpanded(e.target.index) ?
-                'collapseIndex' :
-                'expandIndex'
-              ](e.target.index);
-            }
           }
           window.customElements.define(XApp.is, XApp);
         });

@@ -11,11 +11,13 @@ This program is available under Apache License Version 2.0, available at https:/
   // TODO: Scope
   class CacheItem {
 
-    constructor() {
+    constructor(grid, parentCache, parentItem) {
+      this.grid = grid;
+      this.parentCache = parentCache;
+      this.parentItem = parentItem;
       this.expandedItems = {};
       this.map = {};
       this.ownSize = 0;
-      this.size = null; // Size must include all expanded items sizes
     }
 
     getItemForIndex(index) {
@@ -27,56 +29,41 @@ This program is available under Apache License Version 2.0, available at https:/
       this.map[scaledIndex] = item;
     }
 
-    getEffectiveSize() {
-      return this.collapsed ? 0 : Number(this.size);
+    get effectiveSize() {
+      return this.grid._isExpanded(this.parentItem) ? Number(this.size) : 0;
     }
 
-    updateSize() {
-      this.size = this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
-        return prev + this.expandedItems[curr].getEffectiveSize();
+    get size() {
+      // Must include effective sizes of all subCaches
+      return this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
+        return prev + this.expandedItems[curr].effectiveSize;
       }, 0);
+    }
 
-      if (this.parentCache) {
-        this.parentCache.updateSize();
+    getSubCacheForScaledIndex(scaledIndex) {
+      let subCache = this.expandedItems[scaledIndex];
+      if (!subCache) {
+        subCache = new CacheItem(this.grid, this, this.map[scaledIndex]);
+        this.expandedItems[scaledIndex] = subCache;
+        this.grid._loadPage(0, subCache);
       }
-    }
-
-    expandIndex(index) {
-      const {cache, scaledIndex} = this.getCacheAndIndex(index);
-      cache.expandedItems[scaledIndex] = cache.expandedItems[scaledIndex] || new CacheItem();
-      cache.expandedItems[scaledIndex].collapsed = false;
-      cache.expandedItems[scaledIndex].parentCache = cache;
-      cache.expandedItems[scaledIndex].parentItem = cache.map[scaledIndex];
-      cache.updateSize();
-      return cache.expandedItems[scaledIndex];
-    }
-
-    collapseIndex(index) {
-      const {cache, scaledIndex} = this.getCacheAndIndex(index);
-      cache.expandedItems[scaledIndex].collapsed = true;
-      cache.updateSize();
-      return cache.expandedItems[scaledIndex];
+      return subCache;
     }
 
     getCacheAndIndex(index) {
       let thisLevelIndex = index;
       const keys = Object.keys(this.expandedItems)
         .map(Number) // JS gotcha: Object.keys() are strings
-        .sort((b, a) => b - a) // JS gotcha: default sort() comparison is string-based
-        .filter(expandedIndex => {
-          return !this.expandedItems[expandedIndex].collapsed;
-        });
+        .sort((b, a) => b - a); // JS gotcha: default sort() comparison is string-based
       for (var i = 0; i < keys.length; i++) {
         const expandedIndex = keys[i];
         const subCache = this.expandedItems[expandedIndex];
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
-        } else if (subCache.size === null) {
-          continue;
-        } else if (thisLevelIndex <= expandedIndex + subCache.getEffectiveSize()) {
+        } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
-        thisLevelIndex -= subCache.getEffectiveSize();
+        thisLevelIndex -= subCache.effectiveSize;
       }
       return {cache: this, scaledIndex: thisLevelIndex};
     }
@@ -130,8 +117,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _cache: {
           type: Object,
           value: function() {
-            const cache = new CacheItem();
-            // cache.size = 100000000; // TODO:
+            const cache = new CacheItem(this);
             return cache;
           }
         },
@@ -149,6 +135,11 @@ This program is available under Apache License Version 2.0, available at https:/
         itemIdPath: {
           type: String,
           value: null
+        },
+
+        _expandedKeys: {
+          type: Set,
+          value: () => new Set()
         }
       };
     }
@@ -161,7 +152,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _updateCacheSize(size) {
       this._cache.ownSize = size;
-      this._cache.updateSize();
       this._fullSize = this._cache.size;
     }
 
@@ -181,13 +171,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       el.index = index;
-      const item = this._cache.getItemForIndex(index);
+      const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
+      const item = cache.map[scaledIndex];
       if (item) {
         this._updateItem(el, item);
+        if (this._isExpanded(item)) {
+          cache.getSubCacheForScaledIndex(scaledIndex);
+        }
       } else {
-        const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
-        const pageForIndex = this._getPageForIndex(scaledIndex);
-        this._loadPage(pageForIndex, cache);
+        this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
 
     }
@@ -234,23 +226,32 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _hierarchyExpandedInstanceChangedCallback(inst, value) {
-      if (inst.index === undefined) return;
+      if (inst.item === undefined) return;
       if (value) {
-        const cache = this._cache.expandIndex(inst.index);
-        if (cache.size === null) {
-          this._loadPage(0, cache);
-        }
+        this.expandItem(inst.item);
       } else {
-        this._cache.collapseIndex(inst.index);
+        this.collapseItem(inst.item);
       }
+    }
+
+    _getItemKey(item) {
+      return this.itemIdPath ? this.get(itemIdPath, item) : item;
+    }
+
+    _isExpanded(item) {
+      return this._expandedKeys.has(this._getItemKey(item));
+    }
+
+    expandItem(item) {
+      this._expandedKeys.add(this._getItemKey(item));
       this._fullSize = this._cache.size;
       this._assignModels();
     }
 
-    isIndexExpanded(index) {
-      const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
-      const subCache = cache.expandedItems[scaledIndex];
-      return Boolean(subCache && !subCache.collapsed);
+    collapseItem(item) {
+      this._expandedKeys.delete(this._getItemKey(item));
+      this._fullSize = this._cache.size;
+      this._assignModels();
     }
 
     _getIndexHierarchyLevel(index) {
@@ -287,7 +288,6 @@ This program is available under Apache License Version 2.0, available at https:/
               cache.ownSize = items.length;
             }
           }
-          cache.updateSize();
           items.forEach((item, itemsIndex) => {
             cache.setItemForScaledIndex(page * this.pageSize + itemsIndex, item);
           });
@@ -301,7 +301,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
           this._hasData = true;
-          this._increasePoolIfNeeded();
+          this._increasePoolIfNeeded(0);
 
           delete this._pendingRequests[page];
 
@@ -318,7 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache() {
-      this._cache = new CacheItem();
+      this._cache = new CacheItem(this);
       this._cache.ownSize = this.size;
       this._pendingRequests = {};
       this._hasData = false;
@@ -381,9 +381,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _itemsEqual(item1, item2) {
-      return this.itemIdPath ?
-        Polymer.Base.get(this.itemIdPath, item1) === Polymer.Base.get(this.itemIdPath, item2) :
-        item1 === item2;
+      return this._getItemKey(item1) === this._getItemKey(item2);
     }
 
     _getItemIndexInArray(item, array) {

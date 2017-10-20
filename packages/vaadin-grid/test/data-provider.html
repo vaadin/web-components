@@ -340,6 +340,18 @@
         }
       }
 
+      function isIndexExpanded(grid, index) {
+        return grid._isExpanded(grid._cache.getItemForIndex(index));
+      }
+
+      function expandIndex(grid, index) {
+        grid.expandItem(grid._cache.getItemForIndex(index));
+      }
+
+      function collapseIndex(grid, index) {
+        grid.collapseItem(grid._cache.getItemForIndex(index));
+      }
+
       beforeEach(() => {
         grid = fixture('grid');
         grid.pageSize = 5;
@@ -350,7 +362,7 @@
       describe('first level', () => {
         it('should have collapsed items by default', () => {
           for (let i = 0; i < grid._fullSize; i++) {
-            expect(grid.isIndexExpanded(i)).to.be.false;
+            expect(isIndexExpanded(grid, i)).to.be.false;
           }
         });
 
@@ -377,21 +389,19 @@
 
       describe('expanding', () => {
         it('should expand an item', () => {
-          grid.expandIndex(0);
-          expect(grid.isIndexExpanded(0)).to.be.true;
+          expandIndex(grid, 0);
+          expect(isIndexExpanded(grid, 0)).to.be.true;
         });
 
         it('should request second level items', () => {
-          grid.expandIndex(7);
-          expect(grid.dataProvider.callCount).to.equal(4);
+          expandIndex(grid, 7);
+          expect(grid.dataProvider.callCount).to.equal(3);
           expect(grid.dataProvider.getCall(2).args[0].parentItem.value).to.equal('foo7');
-          expect(grid.dataProvider.getCall(3).args[0].parentItem.value).to.equal('foo7');
         });
 
         it('should request pages from 0', () => {
-          grid.expandIndex(7); // pageSize is 5, index 7 is on the second page
+          expandIndex(grid, 7); // pageSize is 5, index 7 is on the second page
           expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
-          expect(grid.dataProvider.getCall(3).args[0].page).to.equal(1);
         });
 
         describe('before async request completes', () => {
@@ -400,84 +410,77 @@
           });
 
           it('should not increase size', () => {
-            grid.expandIndex(7);
+            expandIndex(grid, 7);
             expect(grid._fullSize).to.equal(10);
           });
 
           it('should have first level items in cache', () => {
-            grid.expandIndex(7);
+            expandIndex(grid, 7);
             for (let i = 0; i < grid._fullSize; i++) {
-              const item = grid._cache.getItemForIndex(i);
-              expect(item.level).to.equal(0);
-              expect(item.value).to.equal(`foo${i}`);
+              expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
             }
           });
         });
 
         it('should increase full size', () => {
-          grid.expandIndex(0);
+          expandIndex(grid, 0);
           expect(grid._fullSize).to.equal(20);
         });
 
         it('should have first and second level items in cache', () => {
-          grid.expandIndex(7);
-          for (let i = 0; i < grid._fullSize; i++) {
-            const level = (8 <= i && i < 18) ? 1 : 0;
-            const scaledIndex = (i < 8) ? i : (i < 18) ? i - 8 : i - 10;
-            expect(grid._cache.getItemForIndex(i)).to.eql({level, value: `foo${scaledIndex}`});
-          }
+          expandIndex(grid, 7);
+          expect(grid._cache.getItemForIndex(7)).to.deep.equal({level: 0, value: 'foo7'});
+          expect(grid._cache.getItemForIndex(8)).to.deep.equal({level: 1, value: 'foo0'});
+          expect(grid._cache.getItemForIndex(18)).to.deep.equal({level: 0, value: 'foo8'});
         });
       });
 
       describe('collapsing', () => {
-        beforeEach(() => grid.expandIndex(7));
+        beforeEach(() => expandIndex(grid, 7));
 
         it('should collapse an expanded item', () => {
-          grid.collapseIndex(7);
-          expect(grid.isIndexExpanded(7)).to.be.false;
+          collapseIndex(grid, 7);
+          expect(isIndexExpanded(grid, 7)).to.be.false;
         });
 
         it('should not request', () => {
-          grid.collapseIndex(7);
-          expect(grid.dataProvider.callCount).to.equal(4);
+          collapseIndex(grid, 7);
+          expect(grid.dataProvider.callCount).to.equal(3);
         });
 
         it('should decrease full size', () => {
-          grid.collapseIndex(7);
+          collapseIndex(grid, 7);
           expect(grid._fullSize).to.equal(10);
         });
 
         it('should have first level items in cache', () => {
-          grid.collapseIndex(7);
-          for (let i = 0; i < grid._fullSize; i++) {
-            expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
-          }
+          collapseIndex(grid, 7);
+          expect(grid._cache.getItemForIndex(7)).to.deep.equal({level: 0, value: 'foo7'});
+          expect(grid._cache.getItemForIndex(8)).to.deep.equal({level: 0, value: 'foo8'});
         });
       });
 
       describe('reexpanding', () => {
         beforeEach(() => {
-          grid.expandIndex(7);
-          grid.collapseIndex(7);
+          expandIndex(grid, 7);
+          collapseIndex(grid, 7);
         });
 
         it('should not request', () => {
-          grid.expandIndex(7);
-          expect(grid.dataProvider.callCount).to.equal(4);
+          expandIndex(grid, 7);
+          expect(grid.dataProvider.callCount).to.equal(3);
         });
 
         it('should increase full size', () => {
-          grid.expandIndex(7);
+          expandIndex(grid, 7);
           expect(grid._fullSize).to.equal(20);
         });
 
         it('should have first and second level items in cache', () => {
-          grid.expandIndex(7);
-          for (let i = 0; i < grid._fullSize; i++) {
-            const level = (8 <= i && i < 18) ? 1 : 0;
-            const scaledIndex = (i < 8) ? i : (i < 18) ? i - 8 : i - 10;
-            expect(grid._cache.getItemForIndex(i)).to.eql({level, value: `foo${scaledIndex}`});
-          }
+          expandIndex(grid, 7);
+          expect(grid._cache.getItemForIndex(7)).to.deep.equal({level: 0, value: 'foo7'});
+          expect(grid._cache.getItemForIndex(8)).to.deep.equal({level: 1, value: 'foo0'});
+          expect(grid._cache.getItemForIndex(18)).to.deep.equal({level: 0, value: 'foo8'});
         });
       });
     });
