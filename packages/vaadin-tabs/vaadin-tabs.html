@@ -175,14 +175,16 @@ This program is available under Apache License Version 2.0, available at https:/
              * Set tabs disposition. Possible values are `horizontal|vertical`
              */
             orientation: {
-              value: 'horizontal'
+              value: 'horizontal',
+              type: String
             },
 
             /**
              * The index of the selected tab.
              */
             selected: {
-              value: 0
+              value: 0,
+              type: Number
             }
           };
         }
@@ -212,7 +214,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get _scrollOffset() {
-          return this.orientation != 'horizontal' ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
+          return this._vertical ? this._scrollerElement.offsetHeight : this._scrollerElement.offsetWidth;
         }
 
         get _scrollerElement() {
