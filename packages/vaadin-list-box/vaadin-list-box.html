@@ -71,9 +71,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * The following shadow DOM parts are available for styling:
        *
-       * Part name         | Description                          | Theme for Element
-       * ------------------|--------------------------------------|--------------------
-       * `items`           | The items container                  | vaadin-list-box
+       * Part name         | Description
+       * ------------------|------------------------
+       * `items`           | The items container
        *
        * @memberof Vaadin
        * @mixes Vaadin.ListMixin
@@ -87,11 +87,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-
-            // We need to set this property, but don't want users to override it.
+            // We don't need to define this property since super default is vertical, 
+            // but we don't want it to be modified, or be shown in the API docs.
             /** @private */
-            vertical: {
-              value: true,
+            orientation: {
               readOnly: true
             }
           };
