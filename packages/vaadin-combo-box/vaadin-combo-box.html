@@ -197,22 +197,6 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set to true to disable the floating label.
-             */
-            noLabelFloat: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
-             * Set to true to always float the label.
-             */
-            alwaysFloatLabel: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
              * Set to true to disable this input.
              */
             disabled: {
@@ -257,11 +241,10 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * A placeholder string in addition to the label. If this is set, the label will always float.
+             * A placeholder string in addition to the label.
              */
             placeholder: {
               type: String,
-              // need to set a default so _computeAlwaysFloatLabel is run
               value: ''
             },
 
@@ -313,10 +296,6 @@ This program is available under Apache License Version 2.0, available at https:/
         disconnectedCallback() {
           super.disconnectedCallback();
           this._restoreInputBlur();
-        }
-
-        _computeAlwaysFloatLabel(alwaysFloatLabel, placeholder) {
-          return placeholder || alwaysFloatLabel;
         }
 
         _getPositionTarget() {
