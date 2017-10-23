@@ -147,6 +147,12 @@
           nav._focus(3);
           [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
         });
+
+        it('should have a `focus()` method focusing item with `tabIndex=0`', () => {
+          nav._setFocusable(2);
+          nav.focus();
+          expect(nav._navItems[2].focused).to.be.true;
+        });
       });
 
       describe('focus', () => {
