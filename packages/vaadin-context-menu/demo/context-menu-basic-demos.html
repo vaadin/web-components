@@ -12,10 +12,10 @@
       <template preserve-content>
         <vaadin-context-menu>
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           <p>This paragraph has the context menu provided in the above template.</p>
@@ -46,10 +46,10 @@
       <template preserve-content>
         <vaadin-context-menu id="customListener">
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
         </vaadin-context-menu>
 
@@ -70,10 +70,10 @@
       <template preserve-content>
         <vaadin-context-menu selector=".has-menu">
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           <p class="has-menu">This paragraph opens the context menu.</p>
@@ -88,9 +88,9 @@
       <template preserve-content>
         <vaadin-context-menu selector="li">
           <template>
-            <paper-listbox>
-              <paper-item>The menu target: [[target.textContent]]</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           <ul>
@@ -110,10 +110,10 @@
           <template preserve-content>
             <vaadin-context-menu selector="li">
               <template>
-                <paper-listbox>
-                  <paper-item on-click="_appendItem">Append item</paper-item>
-                  <paper-item list-item="[[target]]" on-click="_removeItem">Remove item</paper-item>
-                </paper-listbox>
+                <vaadin-list-box>
+                  <vaadin-item on-click="_appendItem">Append item</vaadin-item>
+                  <vaadin-item list-item="[[target]]" on-click="_removeItem">Remove item</vaadin-item>
+                </vaadin-list-box>
               </template>
 
               <ul>
@@ -142,8 +142,8 @@
                   this.push('items', 'New item');
                 },
 
-                _removeItem: function(e) {
-                  const menuItem = e.target; // `<paper-item>`
+                _removeItem(e) {
+                  const menuItem = e.target; // `<vaadin-item>`
                   const listItem = menuItem.listItem; // `<li>`
                   this.splice('items', listItem.index, 1);
                 }
@@ -162,10 +162,10 @@
       <template preserve-content>
         <vaadin-context-menu id="buttonMenu">
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
         </vaadin-context-menu>
 
@@ -192,10 +192,10 @@
       <template preserve-content>
         <vaadin-context-menu>
           <template>
-            <paper-listbox selected-class="no-selected-styles-please">
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box selected-class="no-selected-styles-please">
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           <p>The context menu of this paragraph does not change the items look when opened again.</p>
