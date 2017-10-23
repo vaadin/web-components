@@ -25,7 +25,9 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.1.3"
+    "vaadin-themable-mixin": "^1.1.3",
+    "vaadin-text-field": "^1.1.0",
+    "vaadin-overlay": "^1.4.1"
   },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
@@ -34,11 +36,9 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
-    "vaadin-text-field": "^1.1.0",
-    "vaadin-overlay": "^1.4.1",
     "vaadin-list-box": "vaadin/vaadin-list-box#master"
   },
   "resolutions": {
-    "vaadin-list-mixin": "^1.2.0"
+    "vaadin-list-mixin": "^1.3.0"
   }
 }
