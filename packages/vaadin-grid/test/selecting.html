@@ -169,7 +169,7 @@
       });
 
       it('should remove the item from selectedItems when row is clicked and auto-select is enabled', () => {
-        grid.selectItem(1);
+        grid.selectItem(grid.items[1]);
         const cell = getRowCells(rows[1])[1];
         cell.click();
         expect(grid.selectedItems).to.eql([]);

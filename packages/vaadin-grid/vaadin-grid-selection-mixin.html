@@ -40,10 +40,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * Selects the given item.
      *
      * @method selectItem
-     * @param {number|Object} item The item index or the item object
+     * @param {Object} item The item object
      */
     selectItem(item) {
-      item = this._takeItem(item);
       if (!this._isSelected(item)) {
         this.push('selectedItems', item);
       }
@@ -53,10 +52,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * Deselects the given item if it is already selected.
      *
      * @method deselect
-     * @param {number|Object} item The item index or the item object
+     * @param {Object} item The item object
      */
     deselectItem(item) {
-      item = this._takeItem(item);
       const index = this.selectedItems.indexOf(item);
       if (index > -1) {
         this.splice('selectedItems', index, 1);
@@ -67,28 +65,15 @@ This program is available under Apache License Version 2.0, available at https:/
      * Toggles the selected state of the given item.
      *
      * @method toggle
-     * @param {number|Object} item The item index or the item object
+     * @param {Object} item The item object
      */
     _toggleItem(item) {
-      item = this._takeItem(item);
       const index = this.selectedItems.indexOf(item);
       if (index === -1) {
         this.selectItem(item);
       } else {
         this.deselectItem(item);
       }
-    }
-
-    /**
-     * Returns item object itself or by the item index.
-     *
-     * @param {number|Object} item The item index or the item object
-     */
-    _takeItem(item) {
-      if (typeof item === 'number' && item >= 0 && this.items && this.items.length > item) {
-        return this.items[item];
-      }
-      return item;
     }
 
     _selectedItemsChanged(e) {
