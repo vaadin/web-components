@@ -14,10 +14,6 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
         outline: none;
       }
-
-      :host([invalid]) {
-        box-shadow: 0 0 1px red;
-      }
     </style>
   </template>
 </dom-module>
@@ -47,8 +43,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * Attribute    | Description
        * -------------|------------
        * `disabled`   | Set when the radio button group and its children are disabled.
-       * `invalid`    | Set when the radio button group is required and submitted, but does not have value.
-       * `required`   | Set when the radio group is required for submission of the form and must have value.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
@@ -77,25 +71,6 @@ This program is available under Apache License Version 2.0, available at https:/
             name: {
               type: String,
               reflectToAttribute: true
-            },
-
-            /**
-             * The current required state of the radio button group. True if required.
-             */
-            required: {
-              type: Boolean,
-              reflectToAttribute: true,
-              observer: '_requiredChanged'
-            },
-
-            /**
-             * This property is set to true when the control value is invalid.
-             */
-            invalid: {
-              type: Boolean,
-              reflectToAttribute: true,
-              notify: true,
-              value: false
             },
 
             _checkedButton: {
@@ -146,17 +121,7 @@ This program is available under Apache License Version 2.0, available at https:/
             .filter(child => child instanceof Vaadin.RadioButtonElement);
         }
 
-        _requiredChanged(required) {
-          this.setAttribute('aria-required', required);
-
-          if (this.invalid) {
-            this.validate();
-          }
-        }
-
         _disabledChanged(disabled) {
-          this.validate();
-
           this.setAttribute('aria-disabled', disabled);
 
           this._radioButtons.forEach(button => button.disabled = disabled);
@@ -229,16 +194,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _checkedButtonChanged(checkedButton) {
-          this.validate();
-
           this._radioButtons.forEach(button => button.checked = button === checkedButton);
-        }
-
-        /**
-         * @protected
-         */
-        validate() {
-          return !(this.invalid = !this._checkedButton && this.required && !this.disabled);
         }
 
         _setFocusable(idx) {

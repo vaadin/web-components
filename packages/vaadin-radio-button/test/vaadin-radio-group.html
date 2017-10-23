@@ -55,26 +55,9 @@
         expect(vaadinRadioButtonGroup.getAttribute('role')).to.eq('radiogroup');
       });
 
-      it('changes aria-required on required change', () => {
-        vaadinRadioButtonGroup.required = true;
-        expect(vaadinRadioButtonGroup.getAttribute('aria-required')).to.eq('true');
-      });
-
       it('changes aria-disabled on disabled change', () => {
         vaadinRadioButtonGroup.disabled = true;
         expect(vaadinRadioButtonGroup.getAttribute('aria-disabled')).to.eq('true');
-      });
-
-      it('should be valid after setting group as disabled', () => {
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonGroup.disabled = true;
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
-      });
-
-      it('should be valid after button is selected', () => {
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonList[0].checked = true;
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
       });
 
       it('can be disabled imperatively', () => {
@@ -97,44 +80,6 @@
         expect(vaadinRadioButtonList[0].tabindex).to.eq(-1);
         expect(vaadinRadioButtonList[1].tabindex).to.eq(-1);
         expect(vaadinRadioButtonList[2].tabindex).to.eq(0);
-      });
-
-      it('should have invalid state on submition if has required attribute, but does not have a value', () => {
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
-      });
-
-      it('should not have invalid state when is not required', () => {
-        vaadinRadioButtonGroup.required = false;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
-      });
-
-      it('should not have invalid state when disabled', () => {
-        vaadinRadioButtonGroup.disabled = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
-      });
-
-      it('should lose invalid state when a value assigned or group becomes disabled', () => {
-        vaadinRadioButtonGroup._observer.flush();
-
-        vaadinRadioButtonGroup.required = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
-
-        vaadinRadioButtonGroup.disabled = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
-
-        vaadinRadioButtonGroup.disabled = false;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
-
-        vaadinRadioButtonList[0].checked = true;
-        vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
       });
 
       it('next/first radio button should be focused and checked after right/down ', () => {

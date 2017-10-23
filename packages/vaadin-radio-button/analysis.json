@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-radio-group.html",
         "start": {
-          "line": 237,
+          "line": 211,
           "column": 6
         },
         "end": {
-          "line": 237,
+          "line": 211,
           "column": 42
         }
       },
@@ -141,11 +141,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 107,
                   "column": 12
                 },
                 "end": {
-                  "line": 114,
+                  "line": 113,
                   "column": 13
                 }
               },
@@ -158,42 +158,24 @@
               "defaultValue": "false"
             },
             {
-              "name": "name",
-              "type": "string",
-              "description": "The name of the control, which is submitted with the form data.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 120,
-                  "column": 12
-                },
-                "end": {
-                  "line": 122,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
               "name": "value",
               "type": "string",
-              "description": "The value passed to `<vaadin-radio-group>` and submitted as form data.",
+              "description": "",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 127,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 130,
+                  "line": 118,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {}
-              }
+              },
+              "defaultValue": "\"on\""
             }
           ],
           "methods": [
@@ -203,11 +185,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 130,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -430,11 +412,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 8
                 },
                 "end": {
-                  "line": 152,
+                  "line": 142,
                   "column": 9
                 }
               },
@@ -451,11 +433,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 144,
                   "column": 8
                 },
                 "end": {
-                  "line": 183,
+                  "line": 173,
                   "column": 9
                 }
               },
@@ -468,11 +450,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 189,
+                  "line": 179,
                   "column": 8
                 },
                 "end": {
-                  "line": 191,
+                  "line": 181,
                   "column": 9
                 }
               },
@@ -518,11 +500,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 98,
+              "line": 97,
               "column": 6
             },
             "end": {
-              "line": 192,
+              "line": 182,
               "column": 7
             }
           },
@@ -589,11 +571,11 @@
               "description": "True if the radio button is checked.",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 107,
                   "column": 12
                 },
                 "end": {
-                  "line": 114,
+                  "line": 113,
                   "column": 13
                 }
               },
@@ -601,31 +583,15 @@
               "type": "boolean"
             },
             {
-              "name": "name",
-              "description": "The name of the control, which is submitted with the form data.",
-              "sourceRange": {
-                "start": {
-                  "line": 120,
-                  "column": 12
-                },
-                "end": {
-                  "line": 122,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
               "name": "value",
-              "description": "The value passed to `<vaadin-radio-group>` and submitted as form data.",
+              "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 127,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 130,
+                  "line": 118,
                   "column": 13
                 }
               },
@@ -652,11 +618,11 @@
               "range": {
                 "file": "vaadin-radio-button.html",
                 "start": {
-                  "line": 59,
+                  "line": 58,
                   "column": 8
                 },
                 "end": {
-                  "line": 59,
+                  "line": 58,
                   "column": 21
                 }
               }
@@ -669,7 +635,7 @@
           ]
         },
         {
-          "description": "`<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-group name=\"radio-group\" value=\"bar\">\n  <vaadin-radio-button value=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button value=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button value=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-group>\n```\n\n### Styling\n\nThe following attributes are exposed for styling:\n\nAttribute    | Description\n-------------|------------\n`disabled`   | Set when the radio button group and its children are disabled.\n`invalid`    | Set when the radio button group is required and submitted, but does not have value.\n`required`   | Set when the radio group is required for submission of the form and must have value.",
+          "description": "`<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-group>\n  <vaadin-radio-button name=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button name=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button name=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-group>\n```\n\n### Styling\n\nThe following attributes are exposed for styling:\n\nAttribute    | Description\n-------------|------------\n`disabled`   | Set when the radio button group and its children are disabled.",
           "summary": "",
           "path": "vaadin-radio-group.html",
           "properties": [
@@ -680,11 +646,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 66,
+                  "line": 61,
                   "column": 12
                 },
                 "end": {
-                  "line": 70,
+                  "line": 65,
                   "column": 13
                 }
               },
@@ -701,59 +667,16 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 75,
+                  "line": 70,
                   "column": 12
                 },
                 "end": {
-                  "line": 78,
+                  "line": 73,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {}
-              }
-            },
-            {
-              "name": "required",
-              "type": "boolean",
-              "description": "The current required state of the radio button group. True if required.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 83,
-                  "column": 12
-                },
-                "end": {
-                  "line": 87,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "observer": "\"_requiredChanged\""
-                }
-              }
-            },
-            {
-              "name": "value",
-              "type": "string",
-              "description": "The value given to the data submitted with the radio button group's name to the server when the control is inside a form.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 92,
-                  "column": 12
-                },
-                "end": {
-                  "line": 97,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "observer": "\"_valueChanged\""
-                }
               }
             },
             {
@@ -763,11 +686,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 99,
+                  "line": 75,
                   "column": 12
                 },
                 "end": {
-                  "line": 102,
+                  "line": 78,
                   "column": 13
                 }
               },
@@ -780,16 +703,33 @@
           ],
           "methods": [
             {
+              "name": "connectedCallback",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 82,
+                  "column": 8
+                },
+                "end": {
+                  "line": 100,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
               "name": "ready",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 106,
+                  "line": 102,
                   "column": 8
                 },
                 "end": {
-                  "line": 122,
+                  "line": 112,
                   "column": 9
                 }
               },
@@ -797,40 +737,23 @@
               "params": []
             },
             {
-              "name": "_checkForInitialValue",
+              "name": "_filterRadioButtons",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 118,
                   "column": 8
                 },
                 "end": {
-                  "line": 135,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_requiredChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 137,
-                  "column": 8
-                },
-                "end": {
-                  "line": 139,
+                  "line": 121,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "required"
+                  "name": "nodes"
                 }
               ]
             },
@@ -840,11 +763,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 123,
                   "column": 8
                 },
                 "end": {
-                  "line": 147,
+                  "line": 127,
                   "column": 9
                 }
               },
@@ -861,11 +784,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 129,
                   "column": 8
                 },
                 "end": {
-                  "line": 169,
+                  "line": 149,
                   "column": 9
                 }
               },
@@ -878,11 +801,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 171,
+                  "line": 151,
                   "column": 8
                 },
                 "end": {
-                  "line": 175,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -894,16 +817,33 @@
               ]
             },
             {
+              "name": "_hasEnabledButtons",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 157,
+                  "column": 8
+                },
+                "end": {
+                  "line": 159,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
               "name": "_selectNextButton",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 161,
                   "column": 8
                 },
                 "end": {
-                  "line": 183,
+                  "line": 173,
                   "column": 9
                 }
               },
@@ -920,11 +860,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 185,
+                  "line": 175,
                   "column": 8
                 },
                 "end": {
-                  "line": 191,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -936,16 +876,16 @@
               ]
             },
             {
-              "name": "_setValueFromButton",
+              "name": "_changeSelectedButton",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 189,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 193,
                   "column": 9
                 }
               },
@@ -962,11 +902,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 199,
+                  "line": 195,
                   "column": 8
                 },
                 "end": {
-                  "line": 203,
+                  "line": 197,
                   "column": 9
                 }
               },
@@ -978,42 +918,25 @@
               ]
             },
             {
-              "name": "_valueChanged",
+              "name": "_setFocusable",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 216,
+                  "line": 202,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "value"
+                  "name": "idx"
                 }
               ]
-            },
-            {
-              "name": "validate",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 221,
-                  "column": 8
-                },
-                "end": {
-                  "line": 229,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
             }
           ],
           "staticMethods": [
@@ -1050,11 +973,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 56,
+              "line": 51,
               "column": 6
             },
             "end": {
-              "line": 230,
+              "line": 204,
               "column": 7
             }
           },
@@ -1067,11 +990,11 @@
               "description": "The current disabled state of the radio button group. True if group and all internal radio buttons are disabled.",
               "sourceRange": {
                 "start": {
-                  "line": 66,
+                  "line": 61,
                   "column": 12
                 },
                 "end": {
-                  "line": 70,
+                  "line": 65,
                   "column": 13
                 }
               },
@@ -1083,43 +1006,11 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 75,
+                  "line": 70,
                   "column": 12
                 },
                 "end": {
-                  "line": 78,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "required",
-              "description": "The current required state of the radio button group. True if required.",
-              "sourceRange": {
-                "start": {
-                  "line": 83,
-                  "column": 12
-                },
-                "end": {
-                  "line": 87,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            },
-            {
-              "name": "value",
-              "description": "The value given to the data submitted with the radio button group's name to the server when the control is inside a form.",
-              "sourceRange": {
-                "start": {
-                  "line": 92,
-                  "column": 12
-                },
-                "end": {
-                  "line": 97,
+                  "line": 73,
                   "column": 13
                 }
               },
@@ -1127,14 +1018,7 @@
               "type": "string"
             }
           ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "value-changed",
-              "description": "Fired when the `value` property changes.",
-              "metadata": {}
-            }
-          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
@@ -1146,12 +1030,12 @@
               "range": {
                 "file": "vaadin-radio-group.html",
                 "start": {
-                  "line": 25,
+                  "line": 22,
                   "column": 4
                 },
                 "end": {
-                  "line": 25,
-                  "column": 17
+                  "line": 22,
+                  "column": 27
                 }
               }
             }
