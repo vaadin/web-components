@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 267,
+          "line": 298,
           "column": 6
         },
         "end": {
-          "line": 267,
+          "line": 298,
           "column": 42
         }
       },
@@ -838,9 +838,9 @@
               "defaultValue": "\"\""
             },
             {
-              "name": "name",
-              "type": "string",
-              "description": "The name of this element.",
+              "name": "required",
+              "type": "boolean",
+              "description": "The current required state of the dropdown menu. True if required.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -848,7 +848,28 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 130,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_requiredChanged\""
+                }
+              }
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "description": "The name of this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 135,
+                  "column": 12
+                },
+                "end": {
+                  "line": 138,
                   "column": 13
                 }
               },
@@ -863,11 +884,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 143,
                   "column": 12
                 },
                 "end": {
-                  "line": 137,
+                  "line": 146,
                   "column": 13
                 }
               },
@@ -883,11 +904,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 148,
                   "column": 12
                 },
                 "end": {
-                  "line": 139,
+                  "line": 148,
                   "column": 35
                 }
               },
@@ -902,11 +923,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 150,
                   "column": 12
                 },
                 "end": {
-                  "line": 141,
+                  "line": 150,
                   "column": 33
                 }
               },
@@ -922,11 +943,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 152,
+                  "line": 161,
                   "column": 8
                 },
                 "end": {
-                  "line": 160,
+                  "line": 169,
                   "column": 9
                 }
               },
@@ -939,11 +960,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 171,
                   "column": 8
                 },
                 "end": {
-                  "line": 168,
+                  "line": 178,
                   "column": 9
                 }
               },
@@ -958,16 +979,37 @@
               ]
             },
             {
+              "name": "_requiredChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 180,
+                  "column": 8
+                },
+                "end": {
+                  "line": 182,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "required"
+                }
+              ]
+            },
+            {
               "name": "_onKeyDown",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 170,
+                  "line": 184,
                   "column": 8
                 },
                 "end": {
-                  "line": 175,
+                  "line": 189,
                   "column": 9
                 }
               },
@@ -984,11 +1026,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 191,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 205,
                   "column": 9
                 }
               },
@@ -1005,11 +1047,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 191,
+                  "line": 207,
                   "column": 8
                 },
                 "end": {
-                  "line": 245,
+                  "line": 263,
                   "column": 9
                 }
               },
@@ -1029,11 +1071,28 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 265,
                   "column": 8
                 },
                 "end": {
-                  "line": 258,
+                  "line": 276,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "validate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 281,
+                  "column": 8
+                },
+                "end": {
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -1079,7 +1138,7 @@
               "column": 6
             },
             "end": {
-              "line": 260,
+              "line": 291,
               "column": 7
             }
           },
@@ -1120,15 +1179,31 @@
               "type": "string"
             },
             {
-              "name": "name",
-              "description": "The name of this element.",
+              "name": "required",
+              "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
                   "line": 126,
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 130,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "name",
+              "description": "The name of this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 135,
+                  "column": 12
+                },
+                "end": {
+                  "line": 138,
                   "column": 13
                 }
               },
@@ -1140,11 +1215,11 @@
               "description": "Set to a disabled dropdown menu",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 143,
                   "column": 12
                 },
                 "end": {
-                  "line": 137,
+                  "line": 146,
                   "column": 13
                 }
               },

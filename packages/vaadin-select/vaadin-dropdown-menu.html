@@ -122,6 +122,15 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * The current required state of the dropdown menu. True if required.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_requiredChanged'
+            },
+
+            /**
              * The name of this element.
              */
             name: {
@@ -166,6 +175,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           inputElement.disabled = disabled;
+          this.setAttribute('aria-disabled', disabled);
+        }
+
+        _requiredChanged(required) {
+          this.setAttribute('aria-required', required);
         }
 
         _onKeyDown(e) {
@@ -187,6 +201,8 @@ This program is available under Apache License Version 2.0, available at https:/
             this._inputElement.focus();
 
           }
+
+          this.validate();
         }
 
         _openedChanged(opened, overlayElement) {
@@ -218,6 +234,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const selectedChangedListener = (e) => {
             const selectedItem = menu._navItems[e.detail.value];
             this.value = selectedItem ? selectedItem.textContent : '';
+            this.validate();
 
             this.opened = false;
           };
@@ -241,6 +258,7 @@ This program is available under Apache License Version 2.0, available at https:/
               menu.removeEventListener('keydown', this._onKeyDownInside.bind(this));
               menu.removeEventListener('click', this._onKeyDownInside.bind(this));
               this._inputElement.focus();
+              this.validate();
             }
           }
         }
@@ -256,6 +274,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this._overlayElement.style.left = inputRect.left + 'px';
           this._overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
             this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
+        }
+
+        /**
+         * @protected
+         */
+        validate() {
+          if (!this.value && this.required && !this.disabled) {
+            this.setAttribute('invalid', '');
+            return false;
+          } else {
+            this.removeAttribute('invalid');
+            return true;
+          }
         }
 
       }

@@ -152,6 +152,34 @@
 
         expect(focusedSpy.calledOnce).to.be.true;
       });
+
+      it('should have aria-required attribute set to true when required', function() {
+        dropdown.setAttribute('required', '');
+        expect(dropdown.getAttribute('aria-required')).to.be.equal('true');
+      });
+
+      it('should have aria-disabled attribute set to true when disabled', function() {
+        dropdown.setAttribute('disabled', '');
+        expect(dropdown.getAttribute('aria-disabled')).to.be.equal('true');
+      });
+
+      it('should have invalid attribute when is required but there is no value', function() {
+        expect(dropdown.hasAttribute('invalid')).to.be.false;
+        dropdown.setAttribute('required', '');
+
+        Enter(input);
+        Escape(input);
+        expect(dropdown.hasAttribute('invalid')).to.be.true;
+      });
+
+      it('should not have invalid attribute when is required, there is no value, but is disabled', function() {
+        expect(dropdown.hasAttribute('invalid')).to.be.false;
+        dropdown.setAttribute('required', '');
+        dropdown.setAttribute('disabled', '');
+
+        dropdown.validate();
+        expect(dropdown.hasAttribute('invalid')).to.be.false;
+      });
     });
   </script>
 </body>
