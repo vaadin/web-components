@@ -135,20 +135,26 @@ This program is available under Apache License Version 2.0, available at https:/
           value: null
         },
 
-        _expandedKeys: {
-          type: Set,
-          value: () => new Set()
+        /**
+         * An array that contains the expanded items.
+         */
+        expandedItems: {
+          type: Object,
+          notify: true,
+          value: () => []
         }
+
       };
     }
 
     static get observers() {
       return [
-        '_updateCacheSize(size)'
+        '_sizeChanged(size)',
+        '_expandedItemsChanged(expandedItems.*)'
       ];
     }
 
-    _updateCacheSize(size) {
+    _sizeChanged(size) {
       const delta = size - this._cache.ownSize;
       this._cache.ownSize += delta;
       this._cache.size += delta;
@@ -245,21 +251,31 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _isExpanded(item) {
-      return this._expandedKeys.has(this.getItemId(item));
+      return this.expandedItems && this._getItemIndexInArray(item, this.expandedItems) > -1;
     }
 
+    _expandedItemsChanged(e) {
+      this._cache.updateSize();
+      this._fullSize = this._cache.size;
+      this._assignModels();
+    }
+
+    /**
+     * Expands the given item hierarchy.
+     */
     expandItem(item) {
-      this._expandedKeys.add(this.getItemId(item));
-      this._cache.updateSize();
-      this._fullSize = this._cache.size;
-      this._assignModels();
+      if (!this._isExpanded(item)) {
+        this.push('expandedItems', item);
+      }
     }
 
+    /**
+     * Collapses the given item hierarchy.
+     */
     collapseItem(item) {
-      this._expandedKeys.delete(this.getItemId(item));
-      this._cache.updateSize();
-      this._fullSize = this._cache.size;
-      this._assignModels();
+      if (this._isExpanded(item)) {
+        this.splice('expandedItems', this._getItemIndexInArray(item, this.expandedItems), 1);
+      }
     }
 
     _getIndexLevel(index) {
