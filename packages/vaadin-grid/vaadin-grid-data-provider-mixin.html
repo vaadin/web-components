@@ -30,16 +30,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this.map[scaledIndex] = item;
     }
 
-    get effectiveSize() {
-      return this.grid._isExpanded(this.parentItem) ? this.size : 0;
-    }
-
     updateSize() {
-      this.size = this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
+      this.size = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ? this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
         const subCache = this.expandedItems[curr];
         subCache.updateSize();
-        return prev + subCache.effectiveSize;
-      }, 0);
+        return prev + subCache.size;
+      }, 0) : 0;
     }
 
     getSubCacheForScaledIndex(scaledIndex) {
@@ -62,10 +58,10 @@ This program is available under Apache License Version 2.0, available at https:/
         const subCache = this.expandedItems[expandedIndex];
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
-        } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
+        } else if (thisLevelIndex <= expandedIndex + subCache.size) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
-        thisLevelIndex -= subCache.effectiveSize;
+        thisLevelIndex -= subCache.size;
       }
       return {cache: this, scaledIndex: thisLevelIndex};
     }
