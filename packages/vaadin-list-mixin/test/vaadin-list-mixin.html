@@ -139,13 +139,22 @@
       });
 
       describe('tabIndex', () => {
-        it('should set tabIndex=-1 to all items, but the first', () => {
-          [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        it('should set tabIndex=-1 to all items, but the first', done => {
+          Polymer.RenderStatus.afterNextRender(nav, () => {
+            [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+            done();
+          });
         });
 
         it('should move tabIndex when moving focus', () => {
           nav._focus(3);
           [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        });
+
+        it('should have a `focus()` method focusing item with `tabIndex=0`', done => {
+          nav._setFocusable(2);
+          nav._navItems[2].focus = () => done();
+          nav.focus();
         });
       });
 
@@ -298,6 +307,12 @@
             expect(item.hasAttribute('orientation')).to.be.true;
             done();
           }, 0);
+        });
+
+        it('should have a protected boolean property to check vertical orientation', () => {
+          expect(nav._vertical).to.be.true;
+          nav.orientation = 'horizontal';
+          expect(nav._vertical).to.be.false;
         });
       });
 

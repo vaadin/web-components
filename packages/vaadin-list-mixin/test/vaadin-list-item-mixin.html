@@ -167,6 +167,11 @@
         item.click();
         expect(item.selected).to.be.false;
       });
+
+      it('should fire click event when it is selected with keyboard', done => {
+        item.addEventListener('click', () => done());
+        enter(item);
+      });
     });
   </script>
 </body>

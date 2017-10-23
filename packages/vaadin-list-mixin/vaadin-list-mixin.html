@@ -54,10 +54,13 @@ This program is available under Apache License Version 2.0, available at https:/
         slot.addEventListener('slotchange', () => this._updateItemsOrientiation());
       });
 
-      if (this._navItems.length) {
-        this._selectedChanged(this.selected);
-        this._setFocusable(this.selected);
-      }
+      // We need to wait until the dom is ready so as ListItemElements have been initialised.
+      Polymer.RenderStatus.afterNextRender(this, () => {
+        if (this._navItems.length) {
+          this._selectedChanged(this.selected);
+          this._setFocusable(this.selected);
+        }
+      });
     }
 
     _orientationChanged(orientation) {
@@ -143,6 +146,10 @@ This program is available under Apache License Version 2.0, available at https:/
       items[idx].focus();
     }
 
+    focus() {
+      (this.querySelector('[tabindex="0"]') || this._navItems[0]).focus();
+    }
+
     /* @protected */
     get _scrollerElement() {
       // Returning scroller element of the component
@@ -170,6 +177,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._scroll(scrollDistance);
     }
 
+    /* @protected */
     get _vertical() {
       return this.orientation !== 'horizontal';
     }
