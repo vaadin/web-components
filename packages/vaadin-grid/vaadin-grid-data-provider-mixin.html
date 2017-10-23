@@ -31,11 +31,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     updateSize() {
-      this.size = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ? this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
-        const subCache = this.expandedItems[curr];
-        subCache.updateSize();
-        return prev + subCache.size;
-      }, 0) : 0;
+      this.size = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ?
+        this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
+          const subCache = this.expandedItems[curr];
+          subCache.updateSize();
+          return prev + subCache.size;
+        }, 0) :
+        0;
     }
 
     getSubCacheForScaledIndex(scaledIndex) {
@@ -224,7 +226,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _expandedInstanceChangedCallback(inst, value) {
-      if (inst.item === undefined) return;
+      if (inst.item === undefined) {
+        return;
+      }
       if (value) {
         this.expandItem(inst.item);
       } else {
