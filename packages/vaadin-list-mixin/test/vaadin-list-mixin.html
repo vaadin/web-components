@@ -139,8 +139,11 @@
       });
 
       describe('tabIndex', () => {
-        it('should set tabIndex=-1 to all items, but the first', () => {
-          [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        it('should set tabIndex=-1 to all items, but the first', done => {
+          Polymer.RenderStatus.afterNextRender(nav, () => {
+            [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+            done();
+          });
         });
 
         it('should move tabIndex when moving focus', () => {

@@ -3,6 +3,7 @@
 Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
+<link rel="import" href="vaadin-list-item-mixin.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -54,10 +55,13 @@ This program is available under Apache License Version 2.0, available at https:/
         slot.addEventListener('slotchange', () => this._updateItemsOrientiation());
       });
 
-      if (this._navItems.length) {
-        this._selectedChanged(this.selected);
-        this._setFocusable(this.selected);
-      }
+      // We need to wait until the dom is ready so as ListItemElements have been initialised.
+      Polymer.RenderStatus.afterNextRender(this, () => {
+        if (this._navItems.length) {
+          this._selectedChanged(this.selected);
+          this._setFocusable(this.selected);
+        }
+      });
     }
 
     _orientationChanged(orientation) {
