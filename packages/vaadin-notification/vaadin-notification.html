@@ -19,18 +19,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
   <script>
     {
-
       /**
-       * `<vaadin-notification>` is a Polymer 2 element.
+       * `<vaadin-notification>` is a Polymer 2 element providing an accessible and customizable notifications (toasts).
        *
        * ```
        * <vaadin-notification></vaadin-notification>
        * ```
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinNotification extends Vaadin.ThemableMixin(Polymer.Element) {
+      class NotificationElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-notification';
         }
@@ -41,13 +41,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinNotification.is, VaadinNotification);
+      customElements.define(NotificationElement.is, NotificationElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinNotification = VaadinNotification;
+      Vaadin.NotificationElement = NotificationElement;
     }
   </script>
 </dom-module>

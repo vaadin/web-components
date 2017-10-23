@@ -25,7 +25,7 @@
 -->
 ```html
 <vaadin-notification>
-  ...
+  Your work has been saved
 </vaadin-notification>
 ```
 
