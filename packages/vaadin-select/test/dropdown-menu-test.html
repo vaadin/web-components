@@ -108,7 +108,7 @@
 
       it('should change the value of dropdown-menu when list element selected property changed', function() {
         Enter(input);
-        const menu = dropdown._overlayElement.$.content.lastElementChild;
+        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
         menu.selected = 0;
         expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
@@ -119,7 +119,7 @@
 
       it('should close the dropdown-menu on selecting the same value', function() {
         Enter(input);
-        const menu = dropdown._overlayElement.$.content.lastElementChild;
+        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
         menu.selected = 0;
         expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
@@ -134,7 +134,7 @@
 
       it('should focus the input on selecting value and closing the overlay', function() {
         Enter(input);
-        const menu = dropdown._overlayElement.$.content.lastElementChild;
+        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
         menu.selected = 0;
         expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
@@ -145,7 +145,7 @@
       it('should focus the input before moving the focus to next selectable element', function() {
         Enter(input);
         const focusedSpy = sinon.spy();
-        const menu = dropdown._overlayElement.$.content.lastElementChild;
+        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
         input.addEventListener('focused-changed', focusedSpy);
         Tab(menu);

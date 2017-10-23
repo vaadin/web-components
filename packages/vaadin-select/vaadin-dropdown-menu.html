@@ -230,7 +230,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           overlayElement.opened = opened;
 
-          const menu = overlayElement.$.content.lastElementChild;
+          const menu = overlayElement.$.content.querySelector('vaadin-list-box');
           const selectedChangedListener = (e) => {
             const selectedItem = menu._navItems[e.detail.value];
             this.value = selectedItem ? selectedItem.textContent : '';
