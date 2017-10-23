@@ -32,7 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_sizeChanged(_fullSize)'
+          '_fullSizeChanged(_fullSize)'
         ];
       }
 
@@ -96,12 +96,14 @@ This program is available under Apache License Version 2.0, available at https:/
         this._scrollingToIndex = false;
       }
 
-      _sizeChanged(size) {
-        const fvi = this._firstVisibleIndex;
+      _fullSizeChanged(size) {
+        let fvi; // first visible (adjusted) index
         let fviOffset = 0;
         this._iterateItems((pidx, vidx) => {
-          if (vidx === fvi) {
-            fviOffset = this._physicalItems[pidx].getBoundingClientRect().top;
+          if (vidx === this._firstVisibleIndex) {
+            const row = this._physicalItems[pidx];
+            fvi = row.index;
+            fviOffset = row.getBoundingClientRect().top;
           }
         });
 
@@ -122,8 +124,9 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._scrollTop === 0) {
           this._accessIronListAPI(() => this._scrollToIndex(Math.min(size - 1, fvi)));
           this._iterateItems((pidx, vidx) => {
-            if (vidx === fvi) {
-              this.$.table.scrollTop += this._physicalItems[pidx].getBoundingClientRect().top - fviOffset;
+            const row = this._physicalItems[pidx];
+            if (row.index === fvi) {
+              this.$.table.scrollTop += row.getBoundingClientRect().top - fviOffset;
             }
           });
         }

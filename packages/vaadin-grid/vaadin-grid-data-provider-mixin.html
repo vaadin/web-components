@@ -50,11 +50,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     getCacheAndIndex(index) {
       let thisLevelIndex = index;
-      const keys = Object.keys(this.expandedItems)
-        .map(Number) // JS gotcha: Object.keys() are strings
-        .sort((b, a) => b - a); // JS gotcha: default sort() comparison is string-based
+      const keys = Object.keys(this.expandedItems);
       for (var i = 0; i < keys.length; i++) {
-        const expandedIndex = keys[i];
+        const expandedIndex = Number(keys[i]);
         const subCache = this.expandedItems[expandedIndex];
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
@@ -128,7 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * The path to an item sub-property that should be used as the item's identity
+         * Path to an item sub-property that identifies the item.
          */
         itemIdPath: {
           type: String,
