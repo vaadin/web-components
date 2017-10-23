@@ -11,7 +11,7 @@
 - **Trial license** https://vaadin.com/pro/licenses
 
 
-## Using Vaadin Board in your project
+## Using Vaadin Charts in your project
 
 ### Install Vaadin Charts
 ```
