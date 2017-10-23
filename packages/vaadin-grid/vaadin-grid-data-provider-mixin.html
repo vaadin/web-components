@@ -234,23 +234,27 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _getItemKey(item) {
+    /**
+     * Returns a value that identifies the item. Uses `itemIdPath` if available.
+     * Can be customized by overriding.
+     */
+    getItemId(item) {
       return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
     }
 
     _isExpanded(item) {
-      return this._expandedKeys.has(this._getItemKey(item));
+      return this._expandedKeys.has(this.getItemId(item));
     }
 
     expandItem(item) {
-      this._expandedKeys.add(this._getItemKey(item));
+      this._expandedKeys.add(this.getItemId(item));
       this._cache.updateSize();
       this._fullSize = this._cache.size;
       this._assignModels();
     }
 
     collapseItem(item) {
-      this._expandedKeys.delete(this._getItemKey(item));
+      this._expandedKeys.delete(this.getItemId(item));
       this._cache.updateSize();
       this._fullSize = this._cache.size;
       this._assignModels();
@@ -385,7 +389,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _itemsEqual(item1, item2) {
-      return this._getItemKey(item1) === this._getItemKey(item2);
+      return this.getItemId(item1) === this.getItemId(item2);
     }
 
     _getItemIndexInArray(item, array) {
