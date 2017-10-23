@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="vaadin-radio-button.html">
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 
 <dom-module id="vaadin-radio-group-default-theme" theme-for="vaadin-radio-group">
   <template>
@@ -23,7 +24,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-group">
   <template>
-    <slot></slot>
+    <slot id="slot"></slot>
   </template>
 
   <script>
@@ -104,6 +105,26 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        connectedCallback() {
+          super.connectedCallback();
+          this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
+            var checkedChangedListener = (e) => {
+              if (e.target.checked) {
+                this._changeSelectedButton(e.target);
+              }
+            };
+
+            this._filterRadioButtons(info.addedNodes).forEach(button => {
+              button.addEventListener('checked-changed', checkedChangedListener);
+            });
+
+            this._filterRadioButtons(info.removedNodes).forEach(button => {
+              button.removeEventListener('checked-changed', checkedChangedListener);
+            });
+
+          });
+        }
+
         ready() {
           super.ready();
 
@@ -113,19 +134,15 @@ This program is available under Apache License Version 2.0, available at https:/
             this._setFocusable(0);
           }
 
-          this.addEventListener('radio-button-checked-changed', e => {
-            var radioButton = e.target;
-
-            if (radioButton.checked) {
-              this._changeSelectedButton(radioButton);
-            }
-          });
-
           this.setAttribute('role', 'radiogroup');
         }
 
         get _radioButtons() {
-          return Array.from(this.querySelectorAll('*'))
+          return this._filterRadioButtons(this.querySelectorAll('*'));
+        }
+
+        _filterRadioButtons(nodes) {
+          return Array.from(nodes)
             .filter(child => child instanceof Vaadin.RadioButtonElement);
         }
 
@@ -178,7 +195,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _selectNextButton(element) {
-          if (!this._hasEnabledButtons) {
+          if (!this._hasEnabledButtons()) {
             return;
           }
 
@@ -192,7 +209,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _selectPreviousButton(element) {
-          if (!this._hasEnabledButtons) {
+          if (!this._hasEnabledButtons()) {
             return;
           }
 

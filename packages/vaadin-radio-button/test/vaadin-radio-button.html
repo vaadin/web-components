@@ -35,13 +35,13 @@
       });
 
       it('should have proper role', () => {
-        expect(vaadinRadioButton.getAttribute('role')).to.be.eql('radio');
+        expect(vaadinRadioButton.getAttribute('role')).to.eq('radio');
       });
 
       it('should have proper name', () => {
-        expect(vaadinRadioButton.name).to.be.eql('');
+        expect(vaadinRadioButton.name).to.eq('');
         vaadinRadioButton.checked = true;
-        expect(vaadinRadioButton.name).to.be.eql('test-radio');
+        expect(vaadinRadioButton.name).to.eq('test-radio');
       });
 
       it('should set aria-checked on check', () => {
@@ -50,14 +50,9 @@
         expect(vaadinRadioButton.getAttribute('aria-checked')).to.eq('true');
       });
 
-      it('should fire event on check', (done) => {
-        vaadinRadioButton.addEventListener('radio-button-checked-changed', () => done());
-        vaadinRadioButton.checked = true;
-      });
-
       it('can be disabled imperatively', () => {
         vaadinRadioButton.disabled = true;
-        expect(vaadinRadioButton.hasAttribute('disabled')).to.be.eql(true);
+        expect(vaadinRadioButton.hasAttribute('disabled')).to.be.true;
       });
 
       it('should define radio button label using light DOM', () => {
@@ -68,10 +63,10 @@
 
       it('should bind checked to the native radio and vice versa', () => {
         vaadinRadioButton.checked = true;
-        expect(nativeRadio.checked).to.be.eql(true);
+        expect(nativeRadio.checked).to.be.true;
         nativeRadio.checked = false;
         nativeRadio.dispatchEvent(new CustomEvent('change'));
-        expect(vaadinRadioButton.checked).to.be.eql(false);
+        expect(vaadinRadioButton.checked).to.be.false;
       });
 
       it('should have active attribute on down', () => {

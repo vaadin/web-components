@@ -46,9 +46,9 @@
       });
 
       it('sets focus to the first element by default', () => {
-        expect(vaadinRadioButtonList[0].tabindex).to.be.eql(0);
-        expect(vaadinRadioButtonList[1].tabindex).to.be.eql(-1);
-        expect(vaadinRadioButtonList[2].tabindex).to.be.eql(-1);
+        expect(vaadinRadioButtonList[0].tabindex).to.eq(0);
+        expect(vaadinRadioButtonList[1].tabindex).to.eq(-1);
+        expect(vaadinRadioButtonList[2].tabindex).to.eq(-1);
       });
 
       it('sets role properly', () => {
@@ -79,105 +79,127 @@
 
       it('can be disabled imperatively', () => {
         vaadinRadioButtonGroup.disabled = true;
-        expect(vaadinRadioButtonGroup.hasAttribute('disabled')).to.be.eql(true);
-        expect(vaadinRadioButtonList[0].hasAttribute('disabled')).to.be.eql(true);
+        expect(vaadinRadioButtonGroup.hasAttribute('disabled')).to.be.true;
+        expect(vaadinRadioButtonList[0].hasAttribute('disabled')).to.be.true;
       });
 
       it('should have roving tabindex', () => {
+        vaadinRadioButtonGroup._observer.flush();
+
         vaadinRadioButtonList[1].checked = true;
 
-        expect(vaadinRadioButtonList[0].tabindex).to.be.eql(-1);
-        expect(vaadinRadioButtonList[1].tabindex).to.be.eql(0);
-        expect(vaadinRadioButtonList[2].tabindex).to.be.eql(-1);
+        expect(vaadinRadioButtonList[0].tabindex).to.eq(-1);
+        expect(vaadinRadioButtonList[1].tabindex).to.eq(0);
+        expect(vaadinRadioButtonList[2].tabindex).to.eq(-1);
 
         vaadinRadioButtonList[2].checked = true;
 
-        expect(vaadinRadioButtonList[0].tabindex).to.be.eql(-1);
-        expect(vaadinRadioButtonList[1].tabindex).to.be.eql(-1);
-        expect(vaadinRadioButtonList[2].tabindex).to.be.eql(0);
+        expect(vaadinRadioButtonList[0].tabindex).to.eq(-1);
+        expect(vaadinRadioButtonList[1].tabindex).to.eq(-1);
+        expect(vaadinRadioButtonList[2].tabindex).to.eq(0);
       });
 
       it('should have invalid state on submition if has required attribute, but does not have a value', () => {
         vaadinRadioButtonGroup.required = true;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
       });
 
       it('should not have invalid state when is not required', () => {
         vaadinRadioButtonGroup.required = false;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
       });
 
       it('should not have invalid state when disabled', () => {
         vaadinRadioButtonGroup.disabled = true;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
       });
 
       it('should lose invalid state when a value assigned or group becomes disabled', () => {
+        vaadinRadioButtonGroup._observer.flush();
+
         vaadinRadioButtonGroup.required = true;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
 
         vaadinRadioButtonGroup.disabled = true;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
 
         vaadinRadioButtonGroup.disabled = false;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(true);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.true;
 
         vaadinRadioButtonList[0].checked = true;
         vaadinRadioButtonGroup.validate();
-        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.eql(false);
+        expect(vaadinRadioButtonGroup.hasAttribute('invalid')).to.be.false;
       });
 
       it('next/first radio button should be focused and checked after right/down ', () => {
+        vaadinRadioButtonGroup._observer.flush();
+
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
         MockInteractions.keyUpOn(vaadinRadioButtonGroup, 39);
 
-        expect(vaadinRadioButtonList[2].checked).to.be.eql(true);
-        expect(vaadinRadioButtonList[0].checked).to.be.eql(false);
+        expect(vaadinRadioButtonList[2].checked).to.be.true;
+        expect(vaadinRadioButtonList[0].checked).to.be.false;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
         MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
-        expect(vaadinRadioButtonList[0].checked).to.be.eql(true);
-        expect(vaadinRadioButtonList[2].checked).to.be.eql(false);
+        expect(vaadinRadioButtonList[0].checked).to.be.true;
+        expect(vaadinRadioButtonList[2].checked).to.be.false;
       });
 
       it('previous/last radio button should be focused and checked after left/up ', () => {
+        vaadinRadioButtonGroup._observer.flush();
+
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
         MockInteractions.keyUpOn(vaadinRadioButtonGroup, 37);
-        expect(vaadinRadioButtonList[0].checked).to.be.eql(true);
-        expect(vaadinRadioButtonList[1].checked).to.be.eql(false);
+        expect(vaadinRadioButtonList[0].checked).to.be.true;
+        expect(vaadinRadioButtonList[1].checked).to.be.false;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
         MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
-        expect(vaadinRadioButtonList[2].checked).to.be.eql(true);
-        expect(vaadinRadioButtonList[0].checked).to.be.eql(false);
+        expect(vaadinRadioButtonList[2].checked).to.be.true;
+        expect(vaadinRadioButtonList[0].checked).to.be.false;
       });
 
       it('should miss disabled button after right/down', () => {
+        groupWithDisabledButton._observer.flush();
+
         buttonsListWithDisabled[1].checked = true;
 
         MockInteractions.keyDownOn(groupWithDisabledButton, 39);
         MockInteractions.keyUpOn(groupWithDisabledButton, 39);
 
-        expect(buttonsListWithDisabled[3].checked).to.be.eql(true);
+        expect(buttonsListWithDisabled[3].checked).to.be.true;
       });
 
       it('should miss disabled button after left/up ', () => {
+        groupWithDisabledButton._observer.flush();
+
         buttonsListWithDisabled[3].checked = true;
 
         MockInteractions.keyDownOn(groupWithDisabledButton, 37);
         MockInteractions.keyUpOn(groupWithDisabledButton, 37);
 
-        expect(buttonsListWithDisabled[1].checked).to.be.eql(true);
+        expect(buttonsListWithDisabled[1].checked).to.be.true;
+      });
+
+      it('should not have enabled buttons', () => {
+        vaadinRadioButtonGroup._observer.flush();
+
+        Array.from(vaadinRadioButtonList).map((btn) => btn.disabled = true);
+
+        expect(vaadinRadioButtonGroup._hasEnabledButtons()).to.be.false;
+        vaadinRadioButtonList[1].disabled = false;
+        expect(vaadinRadioButtonGroup._hasEnabledButtons()).to.be.true;
       });
     });
   </script>
