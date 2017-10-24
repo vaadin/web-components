@@ -199,14 +199,13 @@ This program is available under Apache License Version 2.0, available at https:/
           } else if (e.type === 'keydown' && /^(Tab)$/.test(e.key)) {
             this.opened = false;
             this._inputElement.focus();
-
           }
 
           this.validate();
         }
 
         _openedChanged(opened, overlayElement) {
-          if (!overlayElement) {
+          if (!overlayElement || !this._inputElement) {
             return;
           }
 
@@ -227,38 +226,29 @@ This program is available under Apache License Version 2.0, available at https:/
             overlayElement.content = this._instance.root;
           }
 
+          if (opened && !this._menuElement) {
+            this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+            if (!this._menuElement || !this._menuElement._navItems) {
+              return;
+            } else {
+              this._menuElement.addEventListener('selected-changed', (e) => {
+                const selectedItem = this._menuElement._navItems[e.detail.value];
+                this.value = selectedItem ? selectedItem.textContent : '';
+                this.validate();
+                this.opened = false;
+              });
+              this._menuElement.addEventListener('keydown', this._onKeyDownInside.bind(this));
+              this._menuElement.addEventListener('click', this._onKeyDownInside.bind(this));
+            }
+          }
 
           overlayElement.opened = opened;
 
-          const menu = overlayElement.$.content.querySelector('vaadin-list-box');
-          const selectedChangedListener = (e) => {
-            const selectedItem = menu._navItems[e.detail.value];
-            this.value = selectedItem ? selectedItem.textContent : '';
-            this.validate();
-
-            this.opened = false;
-          };
-
           if (opened) {
-            if (!menu || !menu._navItems) {
-              return;
-            }
-
-            menu.addEventListener('selected-changed', selectedChangedListener);
-            menu.addEventListener('keydown', this._onKeyDownInside.bind(this));
-            menu.addEventListener('click', this._onKeyDownInside.bind(this));
-
-            Polymer.RenderStatus.afterNextRender(menu, () => menu.focus());
-
-
+            Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
           } else {
-            if (menu && menu._navItems) {
-              menu.removeEventListener('selected-changed', selectedChangedListener);
-              menu.removeEventListener('keydown', this._onKeyDownInside.bind(this));
-              menu.removeEventListener('click', this._onKeyDownInside.bind(this));
-              this._inputElement.focus();
-              this.validate();
-            }
+            this._inputElement.focus();
+            this.validate();
           }
         }
 
