@@ -18,6 +18,13 @@ This program is available under Apache License Version 2.0, available at https:/
       this.items = {};
       this.effectiveSize = 0;
       this.size = 0;
+      this.pendingRequests = {};
+    }
+
+    isLoading() {
+      return Object.keys(this.pendingRequests).length || Object.keys(this.itemCaches).filter(index => {
+        return this.itemCaches[index].isLoading();
+      })[0];
     }
 
     getItemForIndex(index) {
@@ -110,13 +117,6 @@ This program is available under Apache License Version 2.0, available at https:/
           value: function() {
             const cache = new Vaadin.Grid.ItemCache(this);
             return cache;
-          }
-        },
-
-        _pendingRequests: {
-          type: Object,
-          value: function() {
-            return {};
           }
         },
 
@@ -265,8 +265,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
-      if (!this._pendingRequests[page] && this.dataProvider) {
-        this._pendingRequests[page] = true;
+      if (!cache.pendingRequests[page] && this.dataProvider) {
+        cache.pendingRequests[page] = true;
         const params = {
           page,
           pageSize: this.pageSize,
@@ -300,9 +300,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this._hasData = true;
           this._increasePoolIfNeeded(0);
 
-          delete this._pendingRequests[page];
+          delete cache.pendingRequests[page];
 
-          this._loading = this._pendingRequests.length > 0;
+          this._loading = this._cache.isLoading();
         });
       }
     }
@@ -318,7 +318,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._cache = new Vaadin.Grid.ItemCache(this);
       this._cache.size = this.size;
       this._cache.updateSize();
-      this._pendingRequests = {};
       this._hasData = false;
       this._loading = true;
       this._assignModels();

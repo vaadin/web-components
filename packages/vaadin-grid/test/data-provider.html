@@ -424,6 +424,16 @@
           expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
         });
 
+        it('should restore hierarchy after cache is cleared', () => {
+          grid.getItemId = item => {
+            return item !== undefined ? item.level + '-' + item.value : undefined;
+          };
+          expandIndex(grid, 0);
+          expect(getContainerCell(grid.$.items, 1, 0)._instance.level).to.equal(1);
+          grid.clearCache();
+          expect(getContainerCell(grid.$.items, 1, 0)._instance.level).to.equal(1);
+        });
+
         describe('before async request completes', () => {
           beforeEach(() => {
             grid.dataProvider = deepAsyncFiniteDataProvider;
