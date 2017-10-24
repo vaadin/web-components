@@ -366,6 +366,9 @@
           nav.orientation = 'vertical';
           expect(nav._scrollerElement.scrollTop).to.be.equal(0);
 
+          // iOS 10 needs change the display to work
+          nav.style.display = 'flex';
+
           // FIXME: using _scroll because _scrollToItem does not work in IE11 in vertical mode.
           // nav._scrollToItem(1);
           nav._scroll(1);
