@@ -248,10 +248,9 @@ This program is available under Apache License Version 2.0, available at https:/
             menu.addEventListener('keydown', this._onKeyDownInside.bind(this));
             menu.addEventListener('click', this._onKeyDownInside.bind(this));
 
-            const itemToFocus = this.value ? menu._navItems.filter(item => item.textContent === this.value)[0] : menu._navItems[0];
-            if (itemToFocus) {
-              itemToFocus.focus();
-            }
+            Polymer.RenderStatus.afterNextRender(menu, () => menu.focus());
+
+
           } else {
             if (menu && menu._navItems) {
               menu.removeEventListener('selected-changed', selectedChangedListener);
