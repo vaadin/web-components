@@ -15,8 +15,11 @@
 <!--
 ```
 <custom-element-demo>
-  <link rel="import" href="vaadin-dialog.html">
-  <next-code-block></next-code-block>
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="vaadin-dialog.html">
+    <next-code-block></next-code-block>
+  </template>
 </custom-element-demo>
 ```
 -->
