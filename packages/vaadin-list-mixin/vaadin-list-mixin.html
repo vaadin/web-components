@@ -69,18 +69,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _enhanceItems(items, orientation, selected) {
       if (items) {
-        // Set orientation
         this.setAttribute('aria-orientation', orientation || 'vertical');
         this._navItems.forEach(item => {
           orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
         });
 
-        // Set selected
-        items.forEach(item => item.selected = item === items[selected] && !item.disabled);
-        this._scrollToItem(selected);
-
-        // Set tabIndex
         this._setFocusable(selected);
+
+        const itemToSelect = items[selected];
+        if (itemToSelect && !itemToSelect.disabled) {
+          items.forEach(item => item.selected = item === itemToSelect);
+          this._scrollToItem(selected);
+        }
       }
     }
 
@@ -132,26 +132,32 @@ This program is available under Apache License Version 2.0, available at https:/
           item.textContent.toLowerCase().indexOf(key.toLowerCase()) === 0;
       }
 
-      if (increment) {
-        const totalItems = this._navItems.length;
-        for (let i = 0; i < totalItems; i++, idx += increment) {
-          if (idx < 0) {
-            idx = totalItems - 1;
-          } else if (idx >= totalItems) {
-            idx = 0;
-          }
-
-          const item = this._navItems[idx];
-          if (condition(item)) {
-            this._focus(idx);
-            event.preventDefault();
-            return;
-          }
-        }
+      idx = this._getAvailableIndex(idx, increment, condition);
+      if (idx >= 0) {
+        this._focus(idx);
+        event.preventDefault();
       }
     }
 
+    _getAvailableIndex(idx, increment, condition) {
+      const totalItems = this._navItems.length;
+      for (let i = 0; idx !== undefined && i < totalItems; i++, idx += (increment || 1)) {
+        if (idx < 0) {
+          idx = totalItems - 1;
+        } else if (idx >= totalItems) {
+          idx = 0;
+        }
+
+        const item = this._navItems[idx];
+        if (condition(item)) {
+          return idx;
+        }
+      }
+      return -1;
+    }
+
     _setFocusable(idx) {
+      idx = this._getAvailableIndex(idx, 1, item => !item.disabled);
       const item = this._navItems[idx] || this._navItems[0];
       this._navItems.forEach(e => e.tabIndex = e === item ? 0 : -1);
     }
