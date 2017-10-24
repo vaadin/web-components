@@ -37,68 +37,35 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-hierarchy-demos-data-provider', function(document) {
-              class XHierarchicalDataProviderExample extends Polymer.Element {
-                static get is() {
-                  return 'x-hierarchical-data-provider-example';
-                }
+              Polymer({
+                is: 'x-hierarchical-data-provider-example',
 
-                static get properties() {
-                  return {
-                    _dataProvider: {
-                      type: Function,
-                      value: () => {
-                        return (params, callback) => {
-                          const pkgName = params.parentItem ?
-                            params.parentItem.name :
-                            'vaadin-grid';
-                          console.log('...', pkgName);
-                          this._fetchDependencies(pkgName)
-                            .then(dependencies => {
-                              Promise.all(dependencies.map(pkg =>
-                                this._fetchDependencies(pkg.name)
-                                  .then(children => {
-                                    pkg.hasChildren = children.length > 0;
-                                    return pkg;
-                                  })
-                              )).then(dependencies => {
-                                console.log(pkgName, dependencies);
-                                callback(
-                                  dependencies.slice(
-                                    params.page * params.pageSize,
-                                    (params.page + 1) * params.pageSize
-                                  ),
-                                  dependencies.length
-                                );
-                              });
-                            });
-                        };
-                      }
+                properties: {
+                  _dataProvider: {
+                    type: Function,
+                    value: function() {
+                      return this._dataProvider.bind(this);
                     }
-                  };
-                }
+                  }
+                },
 
-                static _fetchDependencies(packageName) {
-                  return new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('GET', `${this.importPath}../../${packageName}/bower.json`);
-                    xhr.onload = function() {
-                      try {
-                        const json = JSON.parse(this.responseText);
-                        const deps = Object.keys(json.dependencies || []).map(dep => {
-                          return {
-                            name: dep,
-                            version: json.dependencies[dep].split('#').pop()
-                          };
-                        });
-                        resolve(deps);
-                      } catch(e) {}
-                    };
-                    xhr.onerror = reject;
-                    xhr.send();
+                _dataProvider: function(params, callback) {
+                  const pkgName = params.parentItem ?
+                    params.parentItem.name :
+                    'vaadin-grid';
+
+                  // Helper API that fetches dependencies for a package
+                  this._fetchDependencies(pkgName, function(dependencies) {
+                    callback(
+                      dependencies.slice(
+                        params.page * params.pageSize,
+                        (params.page + 1) * params.pageSize
+                      ),
+                      dependencies.length
+                    );
                   });
                 }
-              }
-              window.customElements.define(XHierarchicalDataProviderExample.is, XHierarchicalDataProviderExample);
+              });
             });
           </script>
         </dom-module>
@@ -110,6 +77,45 @@
     class GridHierarchyDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
       static get is() {
         return 'grid-hierarchy-demos';
+      }
+
+      ready() {
+        super.ready();
+
+        const snippet = this.shadowRoot.querySelector('#grid-hierarchy-demos-data-provider');
+        const dataProviderDemo = snippet.shadowRoot.querySelector('x-hierarchical-data-provider-example');
+
+        dataProviderDemo._fetchDependencies = (packageName, callback) => {
+          const requests = new Set;
+          dataProviderDemo._fetchFlatDependencies(packageName, deps => {
+            deps.forEach(dep => {
+              requests.add(dep);
+              dataProviderDemo._fetchFlatDependencies(dep.name, subDeps => {
+                dep.hasChildren = subDeps.length > 0;
+                requests.delete(dep);
+                if (requests.size === 0) {
+                  callback(deps);
+                }
+              });
+            });
+          });
+        };
+
+        dataProviderDemo._fetchFlatDependencies = (packageName, callback) => {
+          const xhr = new XMLHttpRequest();
+          xhr.open('GET', `${this.importPath}../../${packageName}/bower.json`);
+          xhr.onload = function() {
+            const json = JSON.parse(this.responseText);
+            const deps = Object.keys(json.dependencies || []).map(dep => {
+              return {
+                name: dep,
+                version: json.dependencies[dep].split('#').pop()
+              };
+            });
+            callback(deps);
+          };
+          xhr.send();
+        };
       }
     }
     customElements.define(GridHierarchyDemos.is, GridHierarchyDemos);
