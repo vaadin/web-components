@@ -51,13 +51,14 @@
         }, 1);
       });
 
-      describe('Overflow', () => {
+      ['horizontal', 'vertical'].forEach(orientation => {
 
-        [false, true].forEach(isVertical => {
-          beforeEach(() => nav.vertical = isVertical);
+        describe(`Overflow ${orientation}`, () => {
+
+          beforeEach(() => nav.orientation = orientation);
 
           describe('In large viewport', () => {
-            it(`when vertical=${isVertical} should not have overflow`, function(done) {
+            it(`when orientation=${orientation} should not have overflow`, function(done) {
               setTimeout(() => {
                 expect(nav.hasAttribute('overflow')).to.be.false;
                 done();
@@ -72,19 +73,21 @@
               return;
             }
 
-            beforeEach(() => {
-              nav.style.width = nav.style.height = '100px';
+            beforeEach(done => {
+              nav.style.width = '200px';
+              nav.style.height = '100px';
               nav._updateOverflow();
+              Polymer.RenderStatus.afterNextRender(this, done);
             });
 
-            it(`when vertical=${isVertical} should have overflow="end" if scroll is at the beginning`, done => {
+            it(`when orientation=${orientation} should have overflow="end" if scroll is at the beginning`, done => {
               setTimeout(() => {
                 expect(nav.getAttribute('overflow')).to.be.equal('end');
                 done();
-              }, 10);
+              }, 100);
             });
 
-            it(`when vertical=${isVertical} should have overflow="start end" if scroll is at the middle`, done => {
+            it(`when orientation=${orientation} should have overflow="start end" if scroll is at the middle`, done => {
               const listener = nav._scrollerElement.addEventListener('scroll', () => {
                 expect(nav.getAttribute('overflow')).to.be.equal('start end');
                 nav._scrollerElement.removeEventListener('scroll', listener);
@@ -93,7 +96,7 @@
               nav._scroll(2);
             });
 
-            it(`when vertical=${isVertical} should have overflow="start" if scroll is at the end`, done => {
+            it(`when orientation=${orientation} should have overflow="start" if scroll is at the end`, done => {
               const listener = nav._scrollerElement.addEventListener('scroll', () => {
                 expect(nav.getAttribute('overflow')).to.be.equal('start');
                 nav._scrollerElement.removeEventListener('scroll', listener);
