@@ -55,7 +55,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('click', e => this._onClick(e));
 
@@ -203,15 +202,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _scroll(pixels) {
       this._scrollerElement['scroll' + (this._vertical ? 'Top' : 'Left')] += pixels;
-    }
-
-    _onSelected(e) {
-      if (!e.detail) {
-        // Prevent the user to unselect the current item
-        e.target.selected = true;
-      } else {
-        this.selected = this._navItems.indexOf(e.target);
-      }
     }
   };
 </script>
