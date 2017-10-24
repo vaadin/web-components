@@ -52,8 +52,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _normalizedValueChanged(value, min, max) {
+        var newNormalizedValue = this._normalizeValue(value, min, max);
+
+        this.style.setProperty('--vaadin-progress-value', newNormalizedValue);
+
         this.updateStyles({
-          '--vaadin-progress-value': String(this._normalizeValue(value, min, max))
+          '--vaadin-progress-value': String(newNormalizedValue)
         });
       }
 
