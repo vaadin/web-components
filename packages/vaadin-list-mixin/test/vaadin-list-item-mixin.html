@@ -128,21 +128,6 @@
         expect(item._mousedown).to.be.false;
       });
 
-      it('should be selectable with mouse click', () => {
-        item.click();
-        expect(item.selected).to.be.true;
-      });
-
-      it('should be selectable with Enter key', () => {
-        enter(item);
-        expect(item.selected).to.be.true;
-      });
-
-      it('should be selectable with Space key', () => {
-        space(item);
-        expect(item.selected).to.be.true;
-      });
-
       it('should be not selected if disabled', () => {
         space(item);
         item.disabled = true;
