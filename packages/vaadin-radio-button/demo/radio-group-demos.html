@@ -1,0 +1,106 @@
+<dom-module id="radio-group-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Radio Group</h3>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group'>
+      <template preserve-content>
+        <vaadin-radio-group>
+          <vaadin-radio-button name="foo">Foo</vaadin-radio-button>
+          <vaadin-radio-button name="bar">Bar</vaadin-radio-button>
+          <vaadin-radio-button name="baz">Baz</vaadin-radio-button>
+        </vaadin-radio-group>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Radio Group Disabled</h3>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-disabled'>
+      <template preserve-content>
+        <vaadin-radio-group disabled>
+          <vaadin-radio-button>1</vaadin-radio-button>
+          <vaadin-radio-button>2</vaadin-radio-button>
+          <vaadin-radio-button>3</vaadin-radio-button>
+          <vaadin-radio-button>4</vaadin-radio-button>
+        </vaadin-radio-group>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Radio Group with Iron Form</h3>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-with-iron-form'>
+      <template preserve-content>
+        <iron-form id="test-form">
+          <form>
+            <vaadin-radio-group>
+              <vaadin-radio-button name="radio-group-first">1</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group-second">2</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group-third">3</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group-fourth">4</vaadin-radio-button>
+            </vaadin-radio-group>
+            <vaadin-button id="submit-button">Submit</vaadin-button>
+          </form>
+          <div id="iron-form-output"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#radio-group-demos-radio-group-with-iron-form', function(document) {
+            var testForm = document.getElementById('test-form');
+            var submitButton = document.getElementById('submit-button');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
+            testForm.addEventListener('iron-form-submit', function(event) {
+              this.querySelector('#iron-form-output').innerHTML = JSON.stringify(event.detail);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Radio Group with Iron Form with custom value</h3>
+    <vaadin-demo-snippet id='radio-group-demos-radio-group-with-iron-form-with-custom-value'>
+      <template preserve-content>
+        <iron-form id="test-form-custom-value">
+          <form>
+            <vaadin-radio-group>
+              <vaadin-radio-button name="radio-group" value="first">1</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group" value="second">2</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group" value="third">3</vaadin-radio-button>
+              <vaadin-radio-button name="radio-group" value="fourth">4</vaadin-radio-button>
+            </vaadin-radio-group>
+            <vaadin-button id="submit-button-custom-value">Submit</vaadin-button>
+          </form>
+          <div id="iron-form-output-custom-value"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#radio-group-demos-radio-group-with-iron-form-with-custom-value', function(document) {
+            var testForm = document.getElementById('test-form-custom-value');
+            var submitButton = document.getElementById('submit-button-custom-value');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
+            testForm.addEventListener('iron-form-submit', function(event) {
+              this.querySelector('#iron-form-output-custom-value').innerHTML = JSON.stringify(event.detail);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </div>
+  </template>
+  <script>
+    class RadioGroupDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
+      static get is() {
+        return 'radio-group-demos';
+      }
+    }
+    customElements.define(RadioGroupDemos.is, RadioGroupDemos);
+  </script>
+</dom-module>

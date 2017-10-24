@@ -14,7 +14,7 @@
 
     WCT.loadSuites([
       'vaadin-radio-button.html',
-      'vaadin-radio-button-group.html'
+      'vaadin-radio-group.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));

@@ -13,11 +13,11 @@
   }
   ,
   {
-    "name": "Radio Button Group",
-    "url": "radio-button-group-demos",
-    "src": "radio-button-group-demos.html",
+    "name": "Vaadin Radio Group",
+    "url": "radio-group-demos",
+    "src": "radio-group-demos.html",
     "meta": {
-      "title": "vaadin-radio-button-group Examples",
+      "title": "vaadin-radio-group Examples",
       "description": "",
       "image": ""
      }
