@@ -103,16 +103,7 @@
       });
 
       describe('themability', () => {
-        it('should extend themable mixin', () => {
-          const ctorNames = [];
-          let ctor = toggle.constructor;
-          while (ctor && ctor !== Polymer.Element) {
-            ctorNames.push(ctor.name);
-            ctor = Object.getPrototypeOf(ctor);
-          }
-          expect(ctorNames).to.include('VaadinThemableMixin');
-        });
-
+        
         it('should have shadow parts', () => {
           [
             'spacer',
