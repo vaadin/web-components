@@ -8,65 +8,58 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};
 
-  // TODO: Scope
-  class CacheItem {
+  Vaadin.Grid.ItemCache = class ItemCache {
 
     constructor(grid, parentCache, parentItem) {
       this.grid = grid;
       this.parentCache = parentCache;
       this.parentItem = parentItem;
-      this.expandedItems = {};
-      this.map = {};
-      this.size = 0; // Must include effective sizes of all subCaches
-      this.ownSize = 0;
+      this.itemCaches = {};
+      this.items = {};
+      this.effectiveSize = 0;
+      this.size = 0;
     }
 
     getItemForIndex(index) {
       const {cache, scaledIndex} = this.getCacheAndIndex(index);
-      return cache.map[scaledIndex];
-    }
-
-    setItemForScaledIndex(scaledIndex, item) {
-      this.map[scaledIndex] = item;
+      return cache.items[scaledIndex];
     }
 
     updateSize() {
-      this.size = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ?
-        this.ownSize + Object.keys(this.expandedItems).reduce((prev, curr) => {
-          const subCache = this.expandedItems[curr];
+      this.effectiveSize = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ?
+        this.size + Object.keys(this.itemCaches).reduce((prev, curr) => {
+          const subCache = this.itemCaches[curr];
           subCache.updateSize();
-          return prev + subCache.size;
+          return prev + subCache.effectiveSize;
         }, 0) :
         0;
     }
 
-    getSubCacheForScaledIndex(scaledIndex) {
-      let subCache = this.expandedItems[scaledIndex];
-      if (!subCache) {
-        subCache = new CacheItem(this.grid, this, this.map[scaledIndex]);
-        this.expandedItems[scaledIndex] = subCache;
+    ensureSubCacheForScaledIndex(scaledIndex) {
+      if (!this.itemCaches[scaledIndex]) {
+        const subCache = new Vaadin.Grid.ItemCache(this.grid, this, this.items[scaledIndex]);
+        this.itemCaches[scaledIndex] = subCache;
         this.grid._loadPage(0, subCache);
       }
-      return subCache;
     }
 
     getCacheAndIndex(index) {
       let thisLevelIndex = index;
-      const keys = Object.keys(this.expandedItems);
+      const keys = Object.keys(this.itemCaches);
       for (var i = 0; i < keys.length; i++) {
         const expandedIndex = Number(keys[i]);
-        const subCache = this.expandedItems[expandedIndex];
+        const subCache = this.itemCaches[expandedIndex];
         if (thisLevelIndex <= expandedIndex) {
           return {cache: this, scaledIndex: thisLevelIndex};
-        } else if (thisLevelIndex <= expandedIndex + subCache.size) {
+        } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
           return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
         }
-        thisLevelIndex -= subCache.size;
+        thisLevelIndex -= subCache.effectiveSize;
       }
       return {cache: this, scaledIndex: thisLevelIndex};
     }
 
-  }
+  };
 
 
   /**
@@ -115,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _cache: {
           type: Object,
           value: function() {
-            const cache = new CacheItem(this);
+            const cache = new Vaadin.Grid.ItemCache(this);
             return cache;
           }
         },
@@ -155,10 +148,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _sizeChanged(size) {
-      const delta = size - this._cache.ownSize;
-      this._cache.ownSize += delta;
+      const delta = size - this._cache.size;
       this._cache.size += delta;
-      this._fullSize = this._cache.size;
+      this._cache.effectiveSize += delta;
+      this._effectiveSize = this._cache.effectiveSize;
     }
 
     _loadingChanged(loading) {
@@ -172,45 +165,23 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItem(index, el) {
-      if (this._fullSize && index >= this._fullSize) {
+      if (this._effectiveSize && index >= this._effectiveSize) {
         return;
       }
 
       el.index = index;
       const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
-      const item = cache.map[scaledIndex];
+      const item = cache.items[scaledIndex];
       if (item) {
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
-          cache.getSubCacheForScaledIndex(scaledIndex);
+          cache.ensureSubCacheForScaledIndex(scaledIndex);
         }
       } else {
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
 
     }
-
-    // _cachedPagesForPhysicalItems() {
-    //   return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] !== undefined);
-    // }
-    //
-    // _uncachedPagesForPhysicalItems() {
-    //   return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] === undefined);
-    // }
-    //
-    // _eagerlyLoadPages() {
-    //   const pages = this._cachedPagesForPhysicalItems().slice(0);
-    //
-    //   if (pages.length > 0) {
-    //     pages.sort((a, b) => a > b);
-    //
-    //     const prev = Math.max(0, pages[0] - 1);
-    //     const next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));
-    //
-    //     this._loadPage(prev);
-    //     this._loadPage(next);
-    //   }
-    // }
 
     _pagesForPhysicalItems() {
       // TODO: potentially heavy operation to run first visible index,
@@ -221,7 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return [firstVisiblePage].concat(
         this._physicalItems
           .filter(row => row.index)
-          .map(row => this._getPageForIndex(row.index))
+          .items(row => this._getPageForIndex(row.index))
         ).reduce((prev, curr) => {
           if (prev.indexOf(curr) === -1) {
             prev.push(curr);
@@ -256,7 +227,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _expandedItemsChanged(e) {
       this._cache.updateSize();
-      this._fullSize = this._cache.size;
+      this._effectiveSize = this._cache.effectiveSize;
       this._assignModels();
     }
 
@@ -306,17 +277,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this.dataProvider(params, (items, size) => {
           if (size !== undefined) {
-            cache.ownSize = size;
+            cache.size = size;
           } else {
             if (params.parentItem) {
-              cache.ownSize = items.length;
+              cache.size = items.length;
             }
           }
+
           items.forEach((item, itemsIndex) => {
-            cache.setItemForScaledIndex(page * this.pageSize + itemsIndex, item);
+            cache.items[page * this.pageSize + itemsIndex] = item;
           });
           this._cache.updateSize();
-          this._fullSize = this._cache.size;
+          this._effectiveSize = this._cache.effectiveSize;
 
           Array.from(this.$.items.children).forEach(row => {
             const cachedItem = this._cache.getItemForIndex(row.index);
@@ -343,8 +315,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache() {
-      this._cache = new CacheItem(this);
-      this._cache.ownSize = this.size;
+      this._cache = new Vaadin.Grid.ItemCache(this);
+      this._cache.size = this.size;
       this._cache.updateSize();
       this._pendingRequests = {};
       this._hasData = false;
@@ -399,11 +371,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._checkSize.bind(this));
 
       this._scrollHandler();
-      //
-      // if (dataProvider && this.items && this.items.length) {
-      //   // Fixes possibly invalid cached lastVisibleIndex value in <iron-list>
-      //   this._scrollToIndex(this._firstVisibleIndex);
-      // }
     }
 
     _itemsEqual(item1, item2) {

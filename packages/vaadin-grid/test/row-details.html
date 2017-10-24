@@ -75,7 +75,7 @@
       describe('simple', () => {
 
         function openRowDetails(index) {
-          grid.openItemDetails(grid._cache.map[index]);
+          grid.openItemDetails(grid._cache.items[index]);
         }
 
         beforeEach(done => {
@@ -88,7 +88,7 @@
         });
 
         function closeRowDetails(index) {
-          grid.closeItemDetails(grid._cache.map[index]);
+          grid.closeItemDetails(grid._cache.items[index]);
         }
 
         it('should open details row', () => {

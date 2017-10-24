@@ -361,7 +361,7 @@
 
       describe('first level', () => {
         it('should have collapsed items by default', () => {
-          for (let i = 0; i < grid._fullSize; i++) {
+          for (let i = 0; i < grid._effectiveSize; i++) {
             expect(isIndexExpanded(grid, i)).to.be.false;
           }
         });
@@ -377,11 +377,11 @@
         });
 
         it('should have full size set to first level size provided by data provider', () => {
-          expect(grid._fullSize).to.equal(10);
+          expect(grid._effectiveSize).to.equal(10);
         });
 
         it('should have first level items in cache', () => {
-          for (let i = 0; i < grid._fullSize; i++) {
+          for (let i = 0; i < grid._effectiveSize; i++) {
             expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
           }
         });
@@ -431,12 +431,12 @@
 
           it('should not increase size', () => {
             expandIndex(grid, 7);
-            expect(grid._fullSize).to.equal(10);
+            expect(grid._effectiveSize).to.equal(10);
           });
 
           it('should have first level items in cache', () => {
             expandIndex(grid, 7);
-            for (let i = 0; i < grid._fullSize; i++) {
+            for (let i = 0; i < grid._effectiveSize; i++) {
               expect(grid._cache.getItemForIndex(i)).to.deep.equal({level: 0, value: `foo${i}`});
             }
           });
@@ -444,7 +444,7 @@
 
         it('should increase full size', () => {
           expandIndex(grid, 0);
-          expect(grid._fullSize).to.equal(20);
+          expect(grid._effectiveSize).to.equal(20);
         });
 
         it('should have first and second level items in cache', () => {
@@ -470,7 +470,7 @@
 
         it('should decrease full size', () => {
           collapseIndex(grid, 7);
-          expect(grid._fullSize).to.equal(10);
+          expect(grid._effectiveSize).to.equal(10);
         });
 
         it('should have first level items in cache', () => {
@@ -493,7 +493,7 @@
 
         it('should increase full size', () => {
           expandIndex(grid, 7);
-          expect(grid._fullSize).to.equal(20);
+          expect(grid._effectiveSize).to.equal(20);
         });
 
         it('should have first and second level items in cache', () => {
