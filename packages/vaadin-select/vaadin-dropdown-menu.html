@@ -35,6 +35,20 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
+<dom-module id="vaadin-dropdown-menu-text-field-styles" theme-for="vaadin-dropdown-menu-text-field">
+  <template>
+    <style>
+      [part~="value"] {
+        display: none;
+      }
+
+      [part~="input-field"] {
+        min-height: 21px;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-dropdown-menu-overlay">
   <script>
     {
@@ -63,6 +77,35 @@ This program is available under Apache License Version 2.0, available at https:/
   </script>
 </dom-module>
 
+<dom-module id="vaadin-dropdown-menu-text-field">
+  <script>
+    {
+      /**
+        * The text-field element.
+        *
+        * ### Styling
+        *
+        * The following shadow DOM parts are available for styling:
+        *
+        * Part name | Description
+        * ----------------|----------------
+        * `label` | The label element
+        * `value` | The input element
+        * `error-message` | The error message element
+        * `input-field` | The element that wraps prefix, value and suffix
+        *
+        * @memberof Vaadin
+        */
+      class VaadinDropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
+        static get is() {
+          return 'vaadin-dropdown-menu-text-field';
+        }
+      }
+      customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
+    }
+  </script>
+</dom-module>
+
 <dom-module id="vaadin-dropdown-menu">
   <template>
     <style>
@@ -71,7 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-text-field readonly value="[[value]]"></vaadin-text-field>
+    <vaadin-dropdown-menu-text-field readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
     <vaadin-dropdown-menu-overlay opened="{{opened}}"></vaadin-dropdown-menu-overlay>
   </template>
 
@@ -164,7 +207,7 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
-          this._inputElement = this.shadowRoot.querySelector('vaadin-text-field');
+          this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
 
           this._inputElement.addEventListener('click', e => this._toggleOverlay());
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
@@ -234,6 +277,31 @@ This program is available under Apache License Version 2.0, available at https:/
             } else {
               this._menuElement.addEventListener('selected-changed', (e) => {
                 const selectedItem = this._menuElement._navItems[e.detail.value];
+
+                if (this._inputElement.children.length) {
+                  // Removing previous element slotted to suffix
+                  Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0].remove();
+                }
+                if (!selectedItem.hasAttribute('label')) {
+                  const slottedSelectedItem = selectedItem.cloneNode(true);
+
+                  // Removing unneded attributes
+                  slottedSelectedItem.removeAttribute('focused');
+                  slottedSelectedItem.removeAttribute('focus-ring');
+                  slottedSelectedItem.removeAttribute('tabindex');
+                  slottedSelectedItem.removeAttribute('selected');
+
+                  slottedSelectedItem.slot = 'prefix';
+                  this._inputElement.appendChild(slottedSelectedItem);
+
+                } else {
+                  var slottedSelectedText = document.createElement('div');
+                  slottedSelectedText.slot = 'prefix';
+                  slottedSelectedText.textContent = selectedItem.getAttribute('label');
+                  this._inputElement.appendChild(slottedSelectedText);
+
+                }
+
                 this.value = selectedItem ? selectedItem.textContent : '';
                 this.validate();
                 this.opened = false;
