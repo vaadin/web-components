@@ -57,6 +57,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
+      this.addEventListener('click', e => this._onClick(e));
 
       Polymer.RenderStatus.afterNextRender(this, () => {
         this._observer = new Polymer.FlattenedNodesObserver(this, info => {
@@ -71,11 +72,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (items) {
         // Set orientation
         this.setAttribute('aria-orientation', orientation || 'vertical');
-        this._navItems.forEach(item =>
-          orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation'));
+        this._navItems.forEach(item => {
+          orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation');
+        });
 
         // Set selected
-        items.forEach(e => e.selected = e === items[selected]);
+        items.forEach(item => item.selected = item === items[selected] && !item.disabled);
         this._scrollToItem(selected);
 
         // Set tabIndex
@@ -87,6 +89,14 @@ This program is available under Apache License Version 2.0, available at https:/
       return this.getRootNode().activeElement;
     }
 
+    _onClick(event) {
+      const item = event.composedPath()[0];
+      let idx;
+      if (!item.disabled && ((idx = this._navItems.indexOf(item)) >= 0)) {
+        this.selected = idx;
+      }
+    }
+
     _onKeydown(event) {
       if (event.metaKey || event.shiftKey || event.ctrlKey) {
         return;
@@ -94,6 +104,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
+
+      if (/^( |SpaceBar|Enter)$/.test(key)) {
+        event.composedPath()[0].click();
+        return;
+      }
 
       const currentIdx = this._navItems.indexOf(this.focused);
       let condition = item => !item.disabled;

@@ -32,7 +32,6 @@ This program is available under Apache License Version 2.0, available at https:/
         disabled: {
           type: Boolean,
           value: false,
-          notify: true,
           observer: '_disabledChanged',
           reflectToAttribute: true
         },
@@ -43,7 +42,6 @@ This program is available under Apache License Version 2.0, available at https:/
         selected: {
           type: Boolean,
           value: false,
-          notify: true,
           reflectToAttribute: true,
           observer: '_selectedChanged'
         }
@@ -64,15 +62,6 @@ This program is available under Apache License Version 2.0, available at https:/
       });
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('keyup', e => this._onKeyup(e));
-      this.addEventListener('click', e => this._toggle());
-    }
-
-    _toggle() {
-      if (!this.disabled) {
-        this.selected = !this.selected;
-        const evt = new CustomEvent('selected', {bubbles: true, cancelable: true, composed: true, detail: this.selected});
-        this.dispatchEvent(evt);
-      }
     }
 
     _selectedChanged(selected) {
