@@ -5,7 +5,63 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/render-status.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
+
+<dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      [part~="overlay"] {
+        min-width: 175px;
+      }
+
+      :host([phone]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        padding: 24px;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-dropdown-menu-overlay">
+  <script>
+    {
+      /**
+        * The overlay element.
+        *
+        * ### Styling
+        *
+        * The following Shadow DOM parts are available for styling:
+        *
+        * Part name  | Description
+        * -----------|---------------------------------------------------------|
+        * `backdrop` | Backdrop of the overlay
+        * `overlay`  | Container for position/sizing/alignment of the content
+        * `content`  | Content of the overlay
+        *
+        * @memberof Vaadin
+        */
+      class VaadinDropdownMenuOverlayElement extends Vaadin.OverlayElement {
+        static get is() {
+          return 'vaadin-dropdown-menu-overlay';
+        }
+      }
+      customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
+    }
+  </script>
+</dom-module>
 
 <dom-module id="vaadin-dropdown-menu">
   <template>
@@ -14,40 +70,224 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
       }
     </style>
-    <slot></slot>
+
+    <vaadin-text-field readonly value="[[value]]"></vaadin-text-field>
+    <vaadin-dropdown-menu-overlay opened="{{opened}}"></vaadin-dropdown-menu-overlay>
   </template>
 
   <script>
     {
-
       /**
-       * `<vaadin-dropdown-menu>` is a Polymer 2 element.
-       *
-       * ```
-       * <vaadin-dropdown-menu></vaadin-dropdown-menu>
-       * ```
-       *
-       * @memberof Vaadin
-       * @demo demo/index.html
-       */
-      class VaadinDropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        * `<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.
+        *
+        * ```
+        * <vaadin-dropdown-menu>
+        *   <template>
+        *     <vaadin-list-box>
+        *       <vaadin-item>Foo</vaadin-item>
+        *       <vaadin-item>Bar</vaadin-item>
+        *       <vaadin-item>Baz</vaadin-item>
+        *     </vaadin-list-box>
+        *   </template>
+        * </vaadin-dropdown-menu>
+        * ```
+        *
+        * @memberof Vaadin
+        * @mixes Vaadin.ThemableMixin
+        * @demo demo/index.html
+        */
+      class DropdownMenuElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-dropdown-menu';
         }
 
         static get properties() {
           return {
+            /**
+             * Set when the dropdown menu is open
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true
+            },
+
+            /**
+             * The String value for the selected item of the dropdown menu. Provides the value for iron-form.
+             * When there’s no item selected, the value is an empty string.
+             */
+            value: {
+              type: String,
+              value: '',
+              notify: true
+            },
+
+            /**
+             * The current required state of the dropdown menu. True if required.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_requiredChanged'
+            },
+
+            /**
+             * The name of this element.
+             */
+            name: {
+              type: String,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Set to a disabled dropdown menu
+             */
+            disabled: {
+              type: Boolean,
+              value: false
+            },
+
+            _overlayElement: Object,
+
+            _inputElement: Object
           };
         }
+
+        static get observers() {
+          return [
+            '_openedChanged(opened, _overlayElement)',
+            '_disabledChanged(disabled, _inputElement)',
+          ];
+        }
+
+        ready() {
+          super.ready();
+
+          this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
+          this._inputElement = this.shadowRoot.querySelector('vaadin-text-field');
+
+          this._inputElement.addEventListener('click', e => this._toggleOverlay());
+          this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
+        }
+
+        _disabledChanged(disabled, inputElement) {
+          if (!inputElement) {
+            return;
+          }
+
+          inputElement.disabled = disabled;
+          this.setAttribute('aria-disabled', disabled);
+        }
+
+        _requiredChanged(required) {
+          this.setAttribute('aria-required', required);
+        }
+
+        _onKeyDown(e) {
+          if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
+            e.preventDefault();
+            this._toggleOverlay();
+          }
+        }
+
+        _onKeyDownInside(e) {
+          const eventFromSelected = e.composedPath()[0].hasAttribute('selected');
+
+          if (eventFromSelected && (e.type === 'keydown' && /^( |SpaceBar|Enter)$/.test(event.key) || e.type === 'click')) {
+            this.value = this.value || e.composedPath()[0].textContent;
+            this.opened = false;
+
+          } else if (e.type === 'keydown' && /^(Tab)$/.test(e.key)) {
+            this.opened = false;
+            this._inputElement.focus();
+          }
+
+          this.validate();
+        }
+
+        _openedChanged(opened, overlayElement) {
+          if (!overlayElement || !this._inputElement) {
+            return;
+          }
+
+          if (opened && !this._instance) {
+            const _contentTemplate = this.querySelector('template');
+            const Templatizer = Polymer.Templatize.templatize(_contentTemplate, this, {
+              instanceProps: {
+                detail: true,
+                target: true
+              },
+              forwardHostProp: function(prop, value) {
+                if (this._instance) {
+                  this._instance.forwardHostProp(prop, value);
+                }
+              }
+            });
+            this._instance = new Templatizer({});
+            overlayElement.content = this._instance.root;
+          }
+
+          if (opened && !this._menuElement) {
+            this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+            if (!this._menuElement || !this._menuElement._navItems) {
+              return;
+            } else {
+              this._menuElement.addEventListener('selected-changed', (e) => {
+                const selectedItem = this._menuElement._navItems[e.detail.value];
+                this.value = selectedItem ? selectedItem.textContent : '';
+                this.validate();
+                this.opened = false;
+              });
+              this._menuElement.addEventListener('keydown', this._onKeyDownInside.bind(this));
+              this._menuElement.addEventListener('click', this._onKeyDownInside.bind(this));
+            }
+          }
+
+          overlayElement.opened = opened;
+
+          if (opened) {
+            Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
+          } else {
+            this._inputElement.focus();
+            this.validate();
+          }
+        }
+
+        _toggleOverlay() {
+          if (this.disabled) {
+            return;
+          }
+
+          this.opened = !this.opened;
+          const inputRect = this._inputElement.getBoundingClientRect();
+
+          this._overlayElement.style.left = inputRect.left + 'px';
+          this._overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
+            this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
+        }
+
+        /**
+         * @protected
+         */
+        validate() {
+          if (!this.value && this.required && !this.disabled) {
+            this.setAttribute('invalid', '');
+            return false;
+          } else {
+            this.removeAttribute('invalid');
+            return true;
+          }
+        }
+
       }
 
-      customElements.define(VaadinDropdownMenuElement.is, VaadinDropdownMenuElement);
+      customElements.define(DropdownMenuElement.is, DropdownMenuElement);
 
       /**
-       * @namespace Vaadin
-       */
+        * @namespace Vaadin
+        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinDropdownMenuElement = VaadinDropdownMenuElement;
+      Vaadin.DropdownMenuElement = DropdownMenuElement;
     }
   </script>
 </dom-module>
