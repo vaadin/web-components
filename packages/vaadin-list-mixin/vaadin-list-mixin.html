@@ -28,8 +28,7 @@ This program is available under Apache License Version 2.0, available at https:/
         selected: {
           type: Number,
           reflectToAttribute: true,
-          notify: true,
-          observer: '_selectedChanged'
+          notify: true
         },
 
         /**
@@ -40,46 +39,52 @@ This program is available under Apache License Version 2.0, available at https:/
         orientation: {
           type: String,
           reflectToAttribute: true,
-          value: '',
-          observer: '_orientationChanged'
+          value: ''
+        },
+
+        /** @protected */
+        _navItems: {
+          type: Array
         }
       };
+    }
+
+    static get observers() {
+      return ['_enhanceItems(_navItems, orientation, selected)'];
     }
 
     ready() {
       super.ready();
       this.addEventListener('selected', e => this._onSelected(e));
       this.addEventListener('keydown', e => this._onKeydown(e));
-      this.shadowRoot.querySelectorAll('slot').forEach(slot => {
-        slot.addEventListener('slotchange', () => this._updateItemsOrientiation());
-      });
 
-      // We need to wait until the dom is ready so as ListItemElements have been initialised.
       Polymer.RenderStatus.afterNextRender(this, () => {
-        if (this._navItems.length) {
-          this._selectedChanged(this.selected);
-          this._setFocusable(this.selected);
-        }
+        this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+          this._navItems = (this._navItems || [])
+            .filter(e => info.removedNodes.indexOf(e) < 0)
+            .concat(info.addedNodes.filter(e => e._hasVaadinListItemMixin));
+        });
       });
     }
 
-    _orientationChanged(orientation) {
-      this.setAttribute('aria-orientation', orientation || 'vertical');
-      this._updateItemsOrientiation();
-    }
+    _enhanceItems(items, orientation, selected) {
+      if (items) {
+        // Set orientation
+        this.setAttribute('aria-orientation', orientation || 'vertical');
+        this._navItems.forEach(item =>
+          orientation ? item.setAttribute('orientation', orientation) : item.removeAttribute('orientation'));
 
-    _updateItemsOrientiation() {
-      this._navItems.forEach(item => {
-        this.orientation ? item.setAttribute('orientation', this.orientation) : item.removeAttribute('orientation');
-      });
+        // Set selected
+        items.forEach(e => e.selected = e === items[selected]);
+        this._scrollToItem(selected);
+
+        // Set tabIndex
+        this._setFocusable(selected);
+      }
     }
 
     get focused() {
       return this.getRootNode().activeElement;
-    }
-
-    get _navItems() {
-      return Array.from(this.childNodes).filter(e => e._hasVaadinListItemMixin);
     }
 
     _onKeydown(event) {
@@ -89,8 +94,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
-      const items = this._navItems;
-      const currentIdx = items.indexOf(this.focused);
+
+      const currentIdx = this._navItems.indexOf(this.focused);
       let condition = item => !item.disabled;
       let idx, increment;
 
@@ -114,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (increment) {
-        const totalItems = items.length;
+        const totalItems = this._navItems.length;
         for (let i = 0; i < totalItems; i++, idx += increment) {
           if (idx < 0) {
             idx = totalItems - 1;
@@ -122,7 +127,7 @@ This program is available under Apache License Version 2.0, available at https:/
             idx = 0;
           }
 
-          const item = items[idx];
+          const item = this._navItems[idx];
           if (condition(item)) {
             this._focus(idx);
             event.preventDefault();
@@ -133,17 +138,16 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _setFocusable(idx) {
-      const items = this._navItems;
-      const item = items[idx] || items[0];
-      items.forEach(e => e.tabIndex = e === item ? 0 : -1);
+      const item = this._navItems[idx] || this._navItems[0];
+      this._navItems.forEach(e => e.tabIndex = e === item ? 0 : -1);
     }
 
     _focus(idx) {
-      const items = this._navItems;
-      items.forEach(e => e.focused = e === items[idx]);
+      const item = this._navItems[idx];
+      this._navItems.forEach(e => e.focused = e === item);
       this._setFocusable(idx);
       this._scrollToItem(idx);
-      items[idx].focus();
+      item.focus();
     }
 
     focus() {
@@ -184,12 +188,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _scroll(pixels) {
       this._scrollerElement['scroll' + (this._vertical ? 'Top' : 'Left')] += pixels;
-    }
-
-    _selectedChanged(idx) {
-      const items = this._navItems;
-      items[idx] && items.forEach(e => e.selected = e === items[idx]);
-      this._scrollToItem(idx);
     }
 
     _onSelected(e) {

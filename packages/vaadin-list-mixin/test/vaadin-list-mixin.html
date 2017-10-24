@@ -123,7 +123,13 @@
     describe('vaadin-list-mixin', () => {
       var nav;
 
-      beforeEach(() => nav = fixture('nav'));
+      beforeEach(done => {
+        nav = fixture('nav');
+        Polymer.RenderStatus.afterNextRender(nav, () => {
+          nav._observer.flush();
+          done();
+        });
+      });
 
       it('should filter appropriate items from its children in dom', () => {
         expect(nav._navItems.length).to.be.equal(4);
