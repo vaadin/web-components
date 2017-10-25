@@ -118,7 +118,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
+    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
     <vaadin-dropdown-menu-overlay opened="{{opened}}"></vaadin-dropdown-menu-overlay>
   </template>
 
@@ -156,6 +156,16 @@ This program is available under Apache License Version 2.0, available at https:/
             opened: {
               type: Boolean,
               value: false,
+              notify: true
+            },
+
+            /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: '',
+              reflectToAttribute: true,
               notify: true
             },
 
