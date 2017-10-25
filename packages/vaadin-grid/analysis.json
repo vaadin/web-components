@@ -788,11 +788,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 23,
+                  "line": 24,
                   "column": 10
                 },
                 "end": {
-                  "line": 23,
+                  "line": 24,
                   "column": 26
                 }
               },
@@ -807,11 +807,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 25,
+                  "line": 26,
                   "column": 10
                 },
                 "end": {
-                  "line": 25,
+                  "line": 26,
                   "column": 26
                 }
               },
@@ -826,11 +826,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 27,
+                  "line": 28,
                   "column": 10
                 },
                 "end": {
-                  "line": 32,
+                  "line": 33,
                   "column": 11
                 }
               },
@@ -846,11 +846,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 34,
+                  "line": 35,
                   "column": 10
                 },
                 "end": {
-                  "line": 38,
+                  "line": 39,
                   "column": 11
                 }
               },
@@ -866,11 +866,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 40,
+                  "line": 41,
                   "column": 10
                 },
                 "end": {
-                  "line": 40,
+                  "line": 41,
                   "column": 23
                 }
               },
@@ -2787,11 +2787,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 6
                 },
                 "end": {
-                  "line": 67,
+                  "line": 68,
                   "column": 7
                 }
               },
@@ -2804,11 +2804,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 69,
+                  "line": 70,
                   "column": 6
                 },
                 "end": {
-                  "line": 74,
+                  "line": 75,
                   "column": 7
                 }
               },
@@ -2825,11 +2825,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 77,
                   "column": 6
                 },
                 "end": {
-                  "line": 79,
+                  "line": 80,
                   "column": 7
                 }
               },
@@ -2846,11 +2846,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 81,
+                  "line": 82,
                   "column": 6
                 },
                 "end": {
-                  "line": 128,
+                  "line": 129,
                   "column": 7
                 }
               },
@@ -2863,11 +2863,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 131,
                   "column": 6
                 },
                 "end": {
-                  "line": 133,
+                  "line": 134,
                   "column": 7
                 }
               },
@@ -2887,11 +2887,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 136,
                   "column": 6
                 },
                 "end": {
-                  "line": 153,
+                  "line": 154,
                   "column": 7
                 }
               },
@@ -3679,15 +3679,15 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 16,
+              "line": 17,
               "column": 4
             },
             "end": {
-              "line": 155,
+              "line": 156,
               "column": 5
             }
           },
-          "privacy": "public",
+          "privacy": "private",
           "superclass": "HTMLElement",
           "name": "Vaadin.GridTemplatizer",
           "attributes": [
@@ -3696,11 +3696,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 23,
+                  "line": 24,
                   "column": 10
                 },
                 "end": {
-                  "line": 23,
+                  "line": 24,
                   "column": 26
                 }
               },
@@ -3712,11 +3712,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 25,
+                  "line": 26,
                   "column": 10
                 },
                 "end": {
-                  "line": 25,
+                  "line": 26,
                   "column": 26
                 }
               },
@@ -11638,50 +11638,6 @@
               "inheritedFrom": "Vaadin.Grid.KeyboardNavigationMixin"
             },
             {
-              "name": "interacting",
-              "type": "boolean",
-              "description": "",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-grid-keyboard-navigation-mixin.html",
-                "start": {
-                  "line": 28,
-                  "column": 8
-                },
-                "end": {
-                  "line": 32,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.Grid.KeyboardNavigationMixin"
-            },
-            {
-              "name": "navigating",
-              "type": "boolean",
-              "description": "",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-grid-keyboard-navigation-mixin.html",
-                "start": {
-                  "line": 33,
-                  "column": 8
-                },
-                "end": {
-                  "line": 37,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.Grid.KeyboardNavigationMixin"
-            },
-            {
               "name": "_navigatingIsHidden",
               "type": "boolean",
               "description": "",
@@ -11689,11 +11645,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 38,
+                  "line": 28,
                   "column": 8
                 },
                 "end": {
-                  "line": 38,
+                  "line": 28,
                   "column": 36
                 }
               },
@@ -11710,11 +11666,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 39,
+                  "line": 29,
                   "column": 8
                 },
                 "end": {
-                  "line": 42,
+                  "line": 32,
                   "column": 9
                 }
               },
@@ -11732,11 +11688,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 43,
+                  "line": 33,
                   "column": 8
                 },
                 "end": {
-                  "line": 43,
+                  "line": 33,
                   "column": 35
                 }
               },
@@ -13471,11 +13427,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 66,
+                  "line": 56,
                   "column": 4
                 },
                 "end": {
-                  "line": 73,
+                  "line": 63,
                   "column": 5
                 }
               },
@@ -13497,11 +13453,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 75,
+                  "line": 65,
                   "column": 4
                 },
                 "end": {
-                  "line": 128,
+                  "line": 118,
                   "column": 5
                 }
               },
@@ -13520,11 +13476,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 130,
+                  "line": 120,
                   "column": 4
                 },
                 "end": {
-                  "line": 137,
+                  "line": 127,
                   "column": 5
                 }
               },
@@ -13543,11 +13499,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 139,
+                  "line": 129,
                   "column": 4
                 },
                 "end": {
-                  "line": 313,
+                  "line": 303,
                   "column": 5
                 }
               },
@@ -13569,11 +13525,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 315,
+                  "line": 305,
                   "column": 4
                 },
                 "end": {
-                  "line": 322,
+                  "line": 312,
                   "column": 5
                 }
               },
@@ -13592,11 +13548,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 324,
+                  "line": 314,
                   "column": 4
                 },
                 "end": {
-                  "line": 362,
+                  "line": 352,
                   "column": 5
                 }
               },
@@ -13618,11 +13574,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 364,
+                  "line": 354,
                   "column": 4
                 },
                 "end": {
-                  "line": 382,
+                  "line": 372,
                   "column": 5
                 }
               },
@@ -13644,11 +13600,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 384,
+                  "line": 374,
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 406,
                   "column": 5
                 }
               },
@@ -13667,11 +13623,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 418,
+                  "line": 408,
                   "column": 4
                 },
                 "end": {
-                  "line": 429,
+                  "line": 419,
                   "column": 5
                 }
               },
@@ -13690,11 +13646,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 431,
+                  "line": 421,
                   "column": 4
                 },
                 "end": {
-                  "line": 451,
+                  "line": 441,
                   "column": 5
                 }
               },
@@ -13713,11 +13669,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 453,
+                  "line": 443,
                   "column": 4
                 },
                 "end": {
-                  "line": 456,
+                  "line": 446,
                   "column": 5
                 }
               },
@@ -13736,11 +13692,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 458,
+                  "line": 448,
                   "column": 4
                 },
                 "end": {
-                  "line": 476,
+                  "line": 466,
                   "column": 5
                 }
               },
@@ -13759,11 +13715,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 478,
+                  "line": 468,
                   "column": 4
                 },
                 "end": {
-                  "line": 484,
+                  "line": 474,
                   "column": 5
                 }
               },
@@ -13782,11 +13738,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 486,
+                  "line": 476,
                   "column": 4
                 },
                 "end": {
-                  "line": 488,
+                  "line": 480,
                   "column": 5
                 }
               },
@@ -13805,11 +13761,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 490,
+                  "line": 482,
                   "column": 4
                 },
                 "end": {
-                  "line": 495,
+                  "line": 487,
                   "column": 5
                 }
               },
@@ -13828,11 +13784,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 497,
+                  "line": 489,
                   "column": 4
                 },
                 "end": {
-                  "line": 508,
+                  "line": 500,
                   "column": 5
                 }
               },
@@ -13854,11 +13810,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 510,
+                  "line": 502,
                   "column": 4
                 },
                 "end": {
-                  "line": 518,
+                  "line": 510,
                   "column": 5
                 }
               },
@@ -13880,11 +13836,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 520,
+                  "line": 512,
                   "column": 4
                 },
                 "end": {
-                  "line": 539,
+                  "line": 531,
                   "column": 5
                 }
               },
@@ -13899,11 +13855,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 541,
+                  "line": 533,
                   "column": 4
                 },
                 "end": {
-                  "line": 581,
+                  "line": 573,
                   "column": 5
                 }
               },
@@ -13922,11 +13878,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-keyboard-navigation-mixin.html",
                 "start": {
-                  "line": 583,
+                  "line": 575,
                   "column": 4
                 },
                 "end": {
-                  "line": 587,
+                  "line": 579,
                   "column": 5
                 }
               },
@@ -14900,42 +14856,6 @@
               "inheritedFrom": "Vaadin.Grid.RowDetailsMixin"
             },
             {
-              "name": "interacting",
-              "description": "",
-              "sourceRange": {
-                "file": "vaadin-grid-keyboard-navigation-mixin.html",
-                "start": {
-                  "line": 28,
-                  "column": 8
-                },
-                "end": {
-                  "line": 32,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.Grid.KeyboardNavigationMixin"
-            },
-            {
-              "name": "navigating",
-              "description": "",
-              "sourceRange": {
-                "file": "vaadin-grid-keyboard-navigation-mixin.html",
-                "start": {
-                  "line": 33,
-                  "column": 8
-                },
-                "end": {
-                  "line": 37,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.Grid.KeyboardNavigationMixin"
-            },
-            {
               "name": "column-reordering-allowed",
               "description": "Set to true to allow column reordering.",
               "sourceRange": {
@@ -15534,7 +15454,7 @@
           "column": 5
         }
       },
-      "privacy": "protected",
+      "privacy": "private",
       "superclass": "HTMLElement",
       "name": "GridScrollerElement",
       "attributes": [
@@ -19180,7 +19100,7 @@
           "column": 5
         }
       },
-      "privacy": "protected",
+      "privacy": "private",
       "superclass": "HTMLElement",
       "name": "GridOuterScrollerElement",
       "attributes": [
@@ -22371,57 +22291,17 @@
           }
         },
         {
-          "name": "interacting",
-          "type": "boolean",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 28,
-              "column": 8
-            },
-            "end": {
-              "line": 32,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "navigating",
-          "type": "boolean",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 33,
-              "column": 8
-            },
-            "end": {
-              "line": 37,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false"
-        },
-        {
           "name": "_navigatingIsHidden",
           "type": "boolean",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 38,
+              "line": 28,
               "column": 8
             },
             "end": {
-              "line": 38,
+              "line": 28,
               "column": 36
             }
           },
@@ -22436,11 +22316,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 39,
+              "line": 29,
               "column": 8
             },
             "end": {
-              "line": 42,
+              "line": 32,
               "column": 9
             }
           },
@@ -22456,11 +22336,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 43,
+              "line": 33,
               "column": 8
             },
             "end": {
-              "line": 43,
+              "line": 33,
               "column": 35
             }
           },
@@ -22476,11 +22356,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 47,
+              "line": 37,
               "column": 4
             },
             "end": {
-              "line": 64,
+              "line": 54,
               "column": 5
             }
           },
@@ -22493,11 +22373,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 66,
+              "line": 56,
               "column": 4
             },
             "end": {
-              "line": 73,
+              "line": 63,
               "column": 5
             }
           },
@@ -22517,11 +22397,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 75,
+              "line": 65,
               "column": 4
             },
             "end": {
-              "line": 128,
+              "line": 118,
               "column": 5
             }
           },
@@ -22538,11 +22418,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 130,
+              "line": 120,
               "column": 4
             },
             "end": {
-              "line": 137,
+              "line": 127,
               "column": 5
             }
           },
@@ -22559,11 +22439,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 139,
+              "line": 129,
               "column": 4
             },
             "end": {
-              "line": 313,
+              "line": 303,
               "column": 5
             }
           },
@@ -22583,11 +22463,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 315,
+              "line": 305,
               "column": 4
             },
             "end": {
-              "line": 322,
+              "line": 312,
               "column": 5
             }
           },
@@ -22604,11 +22484,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 324,
+              "line": 314,
               "column": 4
             },
             "end": {
-              "line": 362,
+              "line": 352,
               "column": 5
             }
           },
@@ -22628,11 +22508,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 364,
+              "line": 354,
               "column": 4
             },
             "end": {
-              "line": 382,
+              "line": 372,
               "column": 5
             }
           },
@@ -22652,11 +22532,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 384,
+              "line": 374,
               "column": 4
             },
             "end": {
-              "line": 416,
+              "line": 406,
               "column": 5
             }
           },
@@ -22673,11 +22553,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 418,
+              "line": 408,
               "column": 4
             },
             "end": {
-              "line": 429,
+              "line": 419,
               "column": 5
             }
           },
@@ -22694,11 +22574,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 431,
+              "line": 421,
               "column": 4
             },
             "end": {
-              "line": 451,
+              "line": 441,
               "column": 5
             }
           },
@@ -22715,11 +22595,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 453,
+              "line": 443,
               "column": 4
             },
             "end": {
-              "line": 456,
+              "line": 446,
               "column": 5
             }
           },
@@ -22736,11 +22616,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 458,
+              "line": 448,
               "column": 4
             },
             "end": {
-              "line": 476,
+              "line": 466,
               "column": 5
             }
           },
@@ -22757,11 +22637,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 478,
+              "line": 468,
               "column": 4
             },
             "end": {
-              "line": 484,
+              "line": 474,
               "column": 5
             }
           },
@@ -22778,11 +22658,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 486,
+              "line": 476,
               "column": 4
             },
             "end": {
-              "line": 488,
+              "line": 480,
               "column": 5
             }
           },
@@ -22799,11 +22679,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 490,
+              "line": 482,
               "column": 4
             },
             "end": {
-              "line": 495,
+              "line": 487,
               "column": 5
             }
           },
@@ -22820,11 +22700,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 497,
+              "line": 489,
               "column": 4
             },
             "end": {
-              "line": 508,
+              "line": 500,
               "column": 5
             }
           },
@@ -22844,11 +22724,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 510,
+              "line": 502,
               "column": 4
             },
             "end": {
-              "line": 518,
+              "line": 510,
               "column": 5
             }
           },
@@ -22868,11 +22748,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 520,
+              "line": 512,
               "column": 4
             },
             "end": {
-              "line": 539,
+              "line": 531,
               "column": 5
             }
           },
@@ -22885,11 +22765,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 541,
+              "line": 533,
               "column": 4
             },
             "end": {
-              "line": 581,
+              "line": 573,
               "column": 5
             }
           },
@@ -22906,11 +22786,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 583,
+              "line": 575,
               "column": 4
             },
             "end": {
-              "line": 587,
+              "line": 579,
               "column": 5
             }
           },
@@ -22934,46 +22814,13 @@
           "column": 2
         },
         "end": {
-          "line": 588,
+          "line": 580,
           "column": 3
         }
       },
       "privacy": "public",
       "name": "Vaadin.Grid.KeyboardNavigationMixin",
-      "attributes": [
-        {
-          "name": "interacting",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 28,
-              "column": 8
-            },
-            "end": {
-              "line": 32,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "navigating",
-          "description": "",
-          "sourceRange": {
-            "start": {
-              "line": 33,
-              "column": 8
-            },
-            "end": {
-              "line": 37,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        }
-      ],
+      "attributes": [],
       "events": [],
       "styling": {
         "cssVariables": [],

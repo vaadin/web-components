@@ -26,16 +26,6 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Object,
           observer: '_focusableChanged'
         },
-        interacting: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-        navigating: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
         _navigatingIsHidden: Boolean,
         _focusedItemIndex: {
           type: Number,
@@ -58,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.$.table.addEventListener('focusout', this._onCellFocusOut.bind(this));
 
       this.addEventListener('mousedown', () => {
-        this.navigating = false;
+        this._toggleAttribute('navigating', false, this);
         this._isMousedown = true;
       });
       this.addEventListener('mouseup', () => this._isMousedown = false);
@@ -118,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this._detectInteracting(e);
-      if (this.interacting && keyGroup !== 'Interaction') {
+      if (this.hasAttribute('interacting') && keyGroup !== 'Interaction') {
         // When in the interacting mode, only the “Interaction” keys are handled.
         keyGroup = undefined;
       }
@@ -271,7 +261,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       // This has to be set after scrolling, otherwise it can be removed by
       // `_preventScrollerRotatingCellFocus(item, index)` during scrolling.
-      this.navigating = true;
+      this._toggleAttribute('navigating', true, this);
 
       const columnIndexByOrder = dstColumns.reduce((acc, col, i) => (acc[col._order] = i, acc), {});
       const dstColumnIndex = columnIndexByOrder[dstSortedColumnOrders[dstOrderedColumnIndex]];
@@ -330,34 +320,34 @@ This program is available under Apache License Version 2.0, available at https:/
       let wantInteracting;
       switch (key) {
         case 'Enter':
-          wantInteracting = this.interacting ? !localTargetIsTextInput : true;
+          wantInteracting = this.hasAttribute('interacting') ? !localTargetIsTextInput : true;
           break;
         case 'Escape':
           wantInteracting = false;
           break;
         case 'F2':
-          wantInteracting = !this.interacting;
+          wantInteracting = !this.hasAttribute('interacting');
           break;
       }
 
       const {cell} = this._parseEventPath(e.composedPath());
 
-      if (this.interacting !== wantInteracting) {
+      if (this.hasAttribute('interacting') !== wantInteracting) {
         if (wantInteracting) {
           const focusTarget = cell._content.querySelector('[focus-target]') ||
             cell._content.firstElementChild;
           if (focusTarget) {
             e.preventDefault();
             focusTarget.focus();
-            this.interacting = true;
-            this.navigating = false;
+            this._toggleAttribute('interacting', true, this);
+            this._toggleAttribute('navigating', false, this);
           }
         } else {
           e.preventDefault();
           this._focusedColumnOrder = undefined;
           cell.focus();
-          this.interacting = false;
-          this.navigating = true;
+          this._toggleAttribute('interacting', false, this);
+          this._toggleAttribute('navigating', true, this);
         }
       }
     }
@@ -413,7 +403,7 @@ This program is available under Apache License Version 2.0, available at https:/
         focusTarget.focus();
       }
 
-      this.navigating = true;
+      this._toggleAttribute('navigating', true, this);
     }
 
     _onSpaceKeyDown(e) {
@@ -421,9 +411,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       const cell = e.composedPath()[0];
       if (cell._content && cell._content.firstElementChild) {
-        const wasNavigating = this.navigating;
+        const wasNavigating = this.hasAttribute('navigating');
         cell._content.firstElementChild.click();
-        this.navigating = wasNavigating;
+        this._toggleAttribute('navigating', wasNavigating, this);
       } else {
         this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
       }
@@ -431,7 +421,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _onFocusIn(e) {
       if (!this._isMousedown) {
-        this.navigating = true;
+        this._toggleAttribute('navigating', true, this);
       }
 
       const rootTarget = e.composedPath()[0];
@@ -445,14 +435,14 @@ This program is available under Apache License Version 2.0, available at https:/
           rootTarget,
           rootTarget === this.$.table ? 1 : -1
         ).focus();
-        this.interacting = false;
+        this._toggleAttribute('interacting', false, this);
       } else {
         this._detectInteracting(e);
       }
     }
 
     _onFocusOut(e) {
-      this.navigating = false;
+      this._toggleAttribute('navigating', false, this);
       this._detectInteracting(e);
     }
 
@@ -485,7 +475,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _detectInteracting(e) {
-      this.interacting = e.composedPath().some(el => el.localName === 'vaadin-grid-cell-content');
+      this._toggleAttribute('interacting',
+        e.composedPath().some(el => el.localName === 'vaadin-grid-cell-content'),
+        this);
     }
 
     _detectFocusedItemIndex(e) {
@@ -496,15 +488,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _preventScrollerRotatingCellFocus(item, index) {
-      if (item.index === this._focusedItemIndex && this.navigating) {
+      if (item.index === this._focusedItemIndex && this.hasAttribute('navigating')) {
         // Focused item has went, hide navigation mode
         this._navigatingIsHidden = true;
-        this.navigating = false;
+        this._toggleAttribute('navigating', false, this);
       }
       if (index === this._focusedItemIndex && this._navigatingIsHidden) {
         // Focused item is back, restore navigation mode
         this._navigatingIsHidden = false;
-        this.navigating = true;
+        this._toggleAttribute('navigating', true, this);
       }
     }
 
