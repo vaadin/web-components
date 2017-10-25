@@ -4,9 +4,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # vaadin-list-mixin
-A bundle of two mixins:
-- `vaadin-list-mixin` is a mixin for `nav` elements, facilitating navigation and selection of childNodes.
-- `vaadin-list-item-mixin` is a mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.
+`vaadin-list-mixin` is a mixin for `nav` elements, facilitating navigation and selection of childNodes.
 
 ## Contributing
 

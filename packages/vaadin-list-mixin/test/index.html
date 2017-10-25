@@ -13,8 +13,7 @@
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'vaadin-list-mixin.html',
-      'vaadin-list-item-mixin.html'
+      'vaadin-list-mixin.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
