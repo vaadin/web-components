@@ -313,29 +313,29 @@
 
       describe('navigation mode', () => {
         it('should not be in navigation mode by default', () => {
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should not enable navigation mode when cell is clicked', () => {
           focusFirstHeaderCell();
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should disable navigation mode when blurred', () => {
           focusFirstHeaderCell();
-          grid.navigating = true;
+          grid.setAttribute('navigating', '');
 
           focusable.focus();
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should enable navigation mode when tabbed into header', () => {
           // simulating tabbing into header
           tabToHeader();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside header', () => {
@@ -343,14 +343,14 @@
 
           tab();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode when tabbed into footer', () => {
           // simulating tabbing into header
           shiftTabToFooter();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode when tabbed inside footer', () => {
@@ -358,7 +358,7 @@
 
           tab();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode with page down', () => {
@@ -366,7 +366,7 @@
 
           pageDown();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode with page up', () => {
@@ -374,7 +374,7 @@
 
           pageUp();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode with home', () => {
@@ -382,7 +382,7 @@
 
           home();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should enable navigation mode with end', () => {
@@ -390,35 +390,35 @@
 
           end();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should not enable navigation mode on mouse cell focus', () => {
           focusWithMouse(getRowFirstCell(0));
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should not enable navigation mode on mouse cell content focus', () => {
           const cell = getRowFirstCell(0);
           focusWithMouse(cell, getCellContent(cell));
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should disable navigation mode on mousedown', () => {
           focusFirstHeaderCell();
-          grid.navigating = true;
+          grid.setAttribute('navigating', '');
 
           MockInteractions.down(grid);
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
       });
 
       describe('navigating with tab', () => {
         beforeEach(() => {
-          grid.navigating = true;
+          grid.setAttribute('navigating', '');
 
           if (Polymer.Element) {
             grid._observer.flush();
@@ -594,7 +594,7 @@
 
           down();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should navigate on down when navigation mode is off', () => {
@@ -610,7 +610,7 @@
 
           up();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should navigate on up when navigation mode is off', () => {
@@ -626,7 +626,7 @@
 
           left();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should navigate on left when navigation mode is off', () => {
@@ -642,7 +642,7 @@
 
           right();
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should navigate on right when navigation mode is off', () => {
@@ -1119,11 +1119,11 @@
               focusItem(0);
               right();
 
-              expect(grid.navigating).to.be.true;
+              expect(grid.hasAttribute('navigating')).to.be.true;
 
               grid._scrollToIndex(100);
 
-              expect(grid.navigating).to.be.false;
+              expect(grid.hasAttribute('navigating')).to.be.false;
             });
 
             it('should reveal navigation mode when a focused row is back on screen', () => {
@@ -1133,7 +1133,7 @@
 
               grid._scrollToIndex(0);
 
-              expect(grid.navigating).to.be.true;
+              expect(grid.hasAttribute('navigating')).to.be.true;
             });
           });
         });
@@ -1354,31 +1354,31 @@
 
           enter();
 
-          expect(grid.interacting).to.be.true;
+          expect(grid.hasAttribute('interacting')).to.be.true;
         });
 
         it('should exit interaction mode when blurred', () => {
-          grid.interacting = true;
+          grid.setAttribute('interacting', '');
 
           focusable.focus();
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should exit interaction mode when tabbed into', () => {
-          grid.interacting = true;
+          grid.setAttribute('interacting', '');
 
           tabToHeader();
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should exit interaction mode when shift-tabbed into', () => {
-          grid.interacting = true;
+          grid.setAttribute('interacting', '');
 
           shiftTabToFooter();
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should focus the first element when entering interaction mode with enter', () => {
@@ -1403,7 +1403,7 @@
 
           enter(input);
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should not exit interaction mode from focused non-single-line input with enter', () => {
@@ -1416,7 +1416,7 @@
 
           enter(input);
 
-          expect(grid.interacting).to.be.true;
+          expect(grid.hasAttribute('interacting')).to.be.true;
         });
 
         it('should focus the first element when entering interaction mode with f2', () => {
@@ -1571,7 +1571,7 @@
 
           f2();
 
-          expect(grid.interacting).to.be.true;
+          expect(grid.hasAttribute('interacting')).to.be.true;
         });
 
         it('should exit interaction mode with F2', () => {
@@ -1582,7 +1582,7 @@
 
           f2(input);
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should remove focus from cell when exiting interaction mode with F2', () => {
@@ -1597,11 +1597,11 @@
         });
 
         it('should exit interaction mode with escape', () => {
-          grid.interacting = true;
+          grid.setAttribute('interacting', '');
 
           escape();
 
-          expect(grid.interacting).to.be.false;
+          expect(grid.hasAttribute('interacting')).to.be.false;
         });
 
         it('should remove focus from cell with escape', () => {
@@ -1612,7 +1612,7 @@
           escape(); // unfortunately this does not trigger native blur
           focusable.focus(); // simulate native blur on escape
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should revert to navigation from interaction mode with escape', () => {
@@ -1620,7 +1620,7 @@
 
           escape(input);
 
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should revert to navigation from interaction mode with F2', () => {
@@ -1628,24 +1628,24 @@
 
           f2(input);
 
-          expect(grid.interacting).to.be.false;
-          expect(grid.navigating).to.be.true;
+          expect(grid.hasAttribute('interacting')).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.true;
         });
 
         it('should cancel navigation mode with escape', () => {
-          grid.navigating = true;
-          grid.interacting = false;
+          grid.setAttribute('navigating', '');
+          grid.removeAttribute('interacting');
 
           escape();
           focusable.focus(); // simulate native blur on escape
 
-          expect(grid.navigating).to.be.false;
+          expect(grid.hasAttribute('navigating')).to.be.false;
         });
 
         it('should enter interaction mode when cell contents are focused', () => {
           focusFirstBodyInput(0);
 
-          expect(grid.interacting).to.be.true;
+          expect(grid.hasAttribute('interacting')).to.be.true;
         });
       });
 
