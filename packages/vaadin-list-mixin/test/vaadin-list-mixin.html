@@ -165,7 +165,7 @@
 
       describe('selection', () => {
         it('should not select any item by default', () => {
-          nav._navItems.forEach(e => expect(nav._navItems[0].selected).to.be.false);
+          nav._navItems.forEach(e => expect(!!nav._navItems[0].selected).to.be.false);
         });
 
         it('should select an item when `selected` property is set', () => {
