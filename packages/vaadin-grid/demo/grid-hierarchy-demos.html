@@ -50,19 +50,18 @@
                 },
 
                 _dataProvider: function(params, callback) {
-                  const pkgName = params.parentItem ?
-                    params.parentItem.name :
-                    'vaadin-grid';
+                  const pkgName = params.parentItem ? params.parentItem.name : 'vaadin-grid';
 
-                  // Helper API that fetches dependencies for a package
-                  this._fetchDependencies(pkgName, function(dependencies) {
-                    callback(
-                      dependencies.slice(
-                        params.page * params.pageSize,
-                        (params.page + 1) * params.pageSize
-                      ),
-                      dependencies.length
-                    );
+                  // Helper API that fetches dependencies by package name
+                  Vaadin.GridDemo._fetchGridDependencies(pkgName, function(dependencies) {
+                    // Here the dependencies is an array consisting of items with the following structure:
+                    // {name: "vaadin-checkbox", version: "^1.0.0", hasChildren: true}
+
+                    // Splice out only the requested items
+                    const pageItems = dependencies.slice(params.page * params.pageSize, params.pageSize);
+                    // Inform grid of the requrested hierarchy level's full size
+                    const hierarchyLevelSize = dependencies.length;
+                    callback(pageItems, hierarchyLevelSize);
                   });
                 }
               });
@@ -82,15 +81,15 @@
       ready() {
         super.ready();
 
-        const snippet = this.shadowRoot.querySelector('#grid-hierarchy-demos-data-provider');
-        const dataProviderDemo = snippet.shadowRoot.querySelector('x-hierarchical-data-provider-example');
+        window.Vaadin = window.Vaadin || {};
+        window.Vaadin.GridDemo = window.Vaadin.GridDemo || {};
 
-        dataProviderDemo._fetchDependencies = (packageName, callback) => {
+        Vaadin.GridDemo._fetchGridDependencies = (packageName, callback) => {
           const requests = new Set;
-          dataProviderDemo._fetchFlatDependencies(packageName, deps => {
+          Vaadin.GridDemo._fetchGridFlatDependencies(packageName, deps => {
             deps.forEach(dep => {
               requests.add(dep);
-              dataProviderDemo._fetchFlatDependencies(dep.name, subDeps => {
+              Vaadin.GridDemo._fetchGridFlatDependencies(dep.name, subDeps => {
                 dep.hasChildren = subDeps.length > 0;
                 requests.delete(dep);
                 if (requests.size === 0) {
@@ -101,7 +100,7 @@
           });
         };
 
-        dataProviderDemo._fetchFlatDependencies = (packageName, callback) => {
+        Vaadin.GridDemo._fetchGridFlatDependencies = (packageName, callback) => {
           const xhr = new XMLHttpRequest();
           xhr.open('GET', `${this.importPath}../../${packageName}/bower.json`);
           xhr.onload = function() {
