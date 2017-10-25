@@ -128,6 +128,11 @@ This program is available under Apache License Version 2.0, available at https:/
             if (row.index === fvi) {
               this.$.table.scrollTop += row.getBoundingClientRect().top - fviOffset;
             }
+            // Restore keyboard focus to the right cell
+            if (row.index === this._focusedItemIndex && this._itemsFocusable) {
+              const cellIndex = Array.from(this._itemsFocusable.parentElement.children).indexOf(this._itemsFocusable);
+              row.children[cellIndex].focus();
+            }
           });
         }
         this._assignModels();
