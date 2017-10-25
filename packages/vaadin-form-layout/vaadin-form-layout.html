@@ -188,38 +188,32 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * #### Examples
              *
-             * <dl>
-             *   <dt>`[{columns: 1}]`</dt>
-             *   <dd>
-             *     <p>The layout is always a single column, labels aside.
-             *   </dd>
+             * ```javascript
+             * splitLayout.responsiveSteps = [{columns: 1}];
+             * // The layout is always a single column, labels aside.
+             * ```
              *
-             *   <dt><pre><code>[
+             * ```javascript
+             * splitLayout.responsiveSteps = [
              *   {minWidth: 0, columns: 1},
              *   {minWidth: '40em', columns: 2}
-             * ]</code></pre></dt>
-             *   <dd>
-             *     <p>Sets two responsive steps:
-             *     <ol>
-             *       <li>When the layout width is < 40em, one column, labels aside.
-             *       <li>Width >= 40em, two columns, labels aside.
-             *     </ol>
-             *   </dd>
+             * ];
+             * // Sets two responsive steps:
+             * // 1. When the layout width is < 40em, one column, labels aside.
+             * // 2. Width >= 40em, two columns, labels aside.
+             * ```
              *
-             *   <dt><pre><code>[
+             * ```javascript
+             * splitLayout.responsiveSteps = [
              *   {minWidth: 0, columns: 1, labelsPosition: 'top'},
              *   {minWidth: '20em', columns: 1},
              *   {minWidth: '40em', columns: 2}
-             * ]</code></pre></dt>
-             *   <dd>
-             *     <p>Default value. Three responsive steps:
-             *     <ol>
-             *       <li>Width < 20em, one column, labels on top.
-             *       <li>20em <= width < 40em, one column, labels aside.
-             *       <li>Width >= 40em, two columns, labels aside.
-             *     </ol>
-             *   </dd>
-             * </dl>
+             * ];
+             * // Default value. Three responsive steps:
+             * // 1. Width < 20em, one column, labels on top.
+             * // 2. 20em <= width < 40em, one column, labels aside.
+             * // 3. Width >= 40em, two columns, labels aside.
+             * ```
              *
              * @type {ResponsiveStep[]}
              */
