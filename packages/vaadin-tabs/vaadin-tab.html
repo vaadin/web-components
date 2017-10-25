@@ -6,7 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../vaadin-list-mixin/vaadin-list-item-mixin.html">
+<link rel="import" href="../vaadin-item/vaadin-item.html">
 
 <dom-module id="vaadin-tab-default-theme">
   <template>
@@ -21,6 +21,15 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-shrink: 0;
       }
 
+      :host([hidden]) {
+        display: none;
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+        opacity: 0.3;
+      }
+
       :host([selected]) {
         opacity: 1;
       }
@@ -28,79 +37,54 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([focus-ring]) {
         background-color: rgba(0, 0, 0, 0.1);
       }
-
-      :host([disabled]) {
-        opacity: 0.3;
-      }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="vaadin-tab">
-  <template>
-    <style>
-      :host {
-        display: inline-block;
-        cursor: pointer;
-        flex-shrink: 0;
+<script>
+  {
+    /**
+     * `<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.
+     *
+     * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+     *
+     * ```
+     *   <vaadin-tab>
+     *     Tab 1
+     *   </vaadin-tab>
+     * ```
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute  | Description | Part name
+     * -----------|-------------|------------
+     * `disabled` | Set to a disabled tab | :host
+     * `focused` | Set when the element is focused | :host
+     * `focus-ring` | Set when the element is keyboard focused | :host
+     * `selected` | Set when the tab is selected | :host
+     * `active` | Set when mousedown or enter/spacebar pressed | :host
+     * `orientation` | Set to `horizontal` or `vertical` dependinng on the direction of items  | :host
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.ItemElement
+     */
+    class TabElement extends Vaadin.ItemElement {
+      static get is() {
+        return 'vaadin-tab';
       }
 
-      :host([hidden]) {
-        display: none;
+      ready() {
+        super.ready();
+        this.setAttribute('role', 'tab');
       }
-
-      :host([disabled]) {
-        pointer-events: none;
-      }
-    </style>
-    <slot></slot>
-  </template>
-  <script>
-    {
-      /**
-       * `<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.
-       *
-       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
-       *
-       * ```
-       *   <vaadin-tab>
-       *     Tab 1
-       *   </vaadin-tab>
-       * ```
-       *
-       * The following state attributes are available for styling:
-       *
-       * Attribute  | Description | Part name
-       * -----------|-------------|------------
-       * `disabled` | Set to a disabled tab | :host
-       * `focused` | Set when the element is focused | :host
-       * `focus-ring` | Set when the element is keyboard focused | :host
-       * `selected` | Set when the tab is selected | :host
-       * `active` | Set when mousedown or enter/spacebar pressed | :host
-       * `orientation` | Set to `horizontal` or `vertical` dependinng on the direction of items  | :host
-       *
-       * @memberof Vaadin
-       * @mixes Vaadin.ListItemMixin
-       * @mixes Vaadin.ThemableMixin
-       */
-      class TabElement extends Vaadin.ListItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
-        static get is() {
-          return 'vaadin-tab';
-        }
-
-        ready() {
-          super.ready();
-          this.setAttribute('role', 'tab');
-        }
-      }
-
-      customElements.define(TabElement.is, TabElement);
-
-      /**
-       * @namespace Vaadin
-       */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.TabElement = TabElement;
     }
-  </script>
-</dom-module>
+
+    customElements.define(TabElement.is, TabElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.TabElement = TabElement;
+  }
+</script>

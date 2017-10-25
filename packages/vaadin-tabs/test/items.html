@@ -38,8 +38,8 @@
         expect(content.textContent.trim()).to.be.equal('text-content');
       });
 
-      it('should extend vaadin-list-item-mixin', () => {
-        expect(item instanceof Vaadin.TabElement).to.be.true;
+      it('should extend vaadin-item-mixin', () => {
+        expect(item._hasVaadinItemMixin).to.be.true;
       });
     });
   </script>

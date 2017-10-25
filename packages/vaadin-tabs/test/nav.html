@@ -27,7 +27,13 @@
     describe('vaadin-tabs', () => {
       var nav;
 
-      beforeEach(() => nav = fixture('nav'));
+      beforeEach(done => {
+        nav = fixture('nav');
+        Polymer.RenderStatus.afterNextRender(nav, () => {
+          nav._observer.flush();
+          done();
+        });
+      });
 
       it('should have a correct localName', () => {
         expect(nav.localName).to.equal('vaadin-tabs');
@@ -44,11 +50,8 @@
         });
       });
 
-      it('should not have attribute overflow when items fit in the viewport', function(done) {
-        setTimeout(() => {
-          expect(nav.hasAttribute('overflow')).to.be.false;
-          done();
-        }, 1);
+      it('should not have attribute overflow when items fit in the viewport', () => {
+        expect(nav.hasAttribute('overflow')).to.be.false;
       });
 
       ['horizontal', 'vertical'].forEach(orientation => {
