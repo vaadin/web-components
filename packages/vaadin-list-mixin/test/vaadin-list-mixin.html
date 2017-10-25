@@ -81,7 +81,7 @@
         <test-item-element>Foo</test-item-element>
         <test-item-element>Bar</test-item-element>
         <separator></separator>
-        <test-item-element disabled>Baz</test-item-element>
+        <test-item-element disabled>Bay</test-item-element>
         <test-item-element>Baz</test-item-element>
       </test-list-element>
     </template>
@@ -135,13 +135,18 @@
 
       beforeEach(done => {
         nav = fixture('nav');
-        Polymer.RenderStatus.afterNextRender(nav, () => {
-          nav._observer.flush();
-          done();
-        });
+        Polymer.RenderStatus.afterNextRender(nav, done);
       });
 
-      it('should filter appropriate items from its children in dom', () => {
+      it('should have a list of valid items after the DOM `_observer` has been run', () => {
+        // DOM _observer runs asynchronously, we need to flush to access items
+        nav._observer.flush();
+        expect(nav._navItems.length).to.be.equal(4);
+      });
+
+      it('`focus` should flush the `_observer` if it is called too soon', () => {
+        // focus flushes the observer in order to be run in 3rd party elements initialisation
+        nav.focus();
         expect(nav._navItems.length).to.be.equal(4);
       });
 
@@ -184,9 +189,14 @@
           [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
         });
 
+        it('should not set tabIndex=0 to disabled items, but the next one in the loop', () => {
+          nav._focus(2);
+          [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+        });
+
         it('should have a `focus()` method focusing item with `tabIndex=0`', done => {
-          nav._setFocusable(2);
-          nav._navItems[2].focus = () => done();
+          nav._setFocusable(3);
+          nav._navItems[3].focus = () => done();
           nav.focus();
         });
       });
