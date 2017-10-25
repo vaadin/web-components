@@ -10,7 +10,7 @@
 [API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-notification/)
 
 
-[&lt;vaadin-notification&gt;](https://vaadin.com/elements/-/element/vaadin-notification) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-notification&gt;](https://vaadin.com/elements/-/element/vaadin-notification) is a [Polymer 2](http://polymer-project.org) element providing accessible and customizable notifications (toasts), part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
