@@ -14,11 +14,11 @@ gemini.suite('vaadin-list-box', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
+  gemini.suite('list-box', function(suite) {
     suite
-      .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .setUrl('/list-box.html')
+      .setCaptureElements('#list-box-tests')
+      .capture('list-box');
   });
 
 });
