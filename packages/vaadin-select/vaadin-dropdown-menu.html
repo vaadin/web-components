@@ -294,8 +294,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
                 if (this._inputElement.children.length) {
                   // Removing previous element slotted to suffix
-                  Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0].remove();
+                  const prevSelected = Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0];
+                  prevSelected.parentElement.removeChild(prevSelected);
                 }
+
                 if (!selectedItem.hasAttribute('label')) {
                   const slottedSelectedItem = selectedItem.cloneNode(true);
 
