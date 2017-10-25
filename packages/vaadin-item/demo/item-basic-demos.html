@@ -14,7 +14,7 @@
     </vaadin-demo-snippet>
 
     <h3>Focusable Item</h3>
-    <vaadin-demo-snippet id='item-basic-demos-simple-item'>
+    <vaadin-demo-snippet id='item-basic-demos-focusable-item'>
       <template preserve-content>
         <style>
           vaadin-item[focus-ring] {
@@ -26,14 +26,22 @@
     </vaadin-demo-snippet>
 
     <h3>Selectable Item</h3>
-    <vaadin-demo-snippet id='item-basic-demos-simple-item'>
+    <vaadin-demo-snippet id='item-basic-demos-selectable-item'>
       <template preserve-content>
         <style>
           vaadin-item[selected] {
             background: lightgray;
           }
         </style>
-        <vaadin-item tabindex="0">Foobar</vaadin-item>
+
+        <vaadin-item id="selectable" tabindex="0">Foobar</vaadin-item>
+
+        <script>
+          window.addDemoReadyListener('#item-basic-demos-selectable-item', document => {
+            var item = document.querySelector('#selectable');
+            item.addEventListener('click', e => item.selected = !item.selected);
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
