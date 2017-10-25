@@ -62,7 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._observer = new Polymer.FlattenedNodesObserver(this, info => {
           this._navItems = (this._navItems || [])
             .filter(e => info.removedNodes.indexOf(e) < 0)
-            .concat(info.addedNodes.filter(e => e._hasVaadinItemMixin));
+            .concat(this._filterItems(info.addedNodes));
         });
       });
     }
@@ -88,8 +88,12 @@ This program is available under Apache License Version 2.0, available at https:/
       return this.getRootNode().activeElement;
     }
 
+    _filterItems(array) {
+      return array.filter(e => e._hasVaadinItemMixin);
+    }
+
     _onClick(event) {
-      const item = event.composedPath()[0];
+      const item = this._filterItems(event.composedPath())[0];
       let idx;
       if (!item.disabled && ((idx = this._navItems.indexOf(item)) >= 0)) {
         this.selected = idx;
@@ -105,7 +109,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const key = event.key.replace(/^Arrow/, '');
 
       if (/^( |SpaceBar|Enter)$/.test(key)) {
-        event.composedPath()[0].click();
+        this._filterItems(event.composedPath())[0].click();
         return;
       }
 

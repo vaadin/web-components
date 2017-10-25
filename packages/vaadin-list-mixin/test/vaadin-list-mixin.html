@@ -95,7 +95,7 @@
         <test-item-element>Bar</test-item-element>
         <separator></separator>
         <test-item-element disabled>Bay</test-item-element>
-        <test-item-element>Baz</test-item-element>
+        <test-item-element><span>Baz</span></test-item-element>
       </test-list-element>
     </template>
   </test-fixture>
@@ -178,6 +178,11 @@
           expect(nav.selected).to.be.equal(3);
         });
 
+        it('should be selectable with mouse click in child elements', () => {
+          nav._navItems[3].firstElementChild.click();
+          expect(nav.selected).to.be.equal(3);
+        });
+
         it('should be selectable with Enter key', () => {
           enter(nav._navItems[3]);
           expect(nav.selected).to.be.equal(3);
@@ -187,6 +192,8 @@
           space(nav._navItems[3]);
           expect(nav.selected).to.be.equal(3);
         });
+
+
       });
 
       describe('tabIndex', () => {
