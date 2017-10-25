@@ -39,11 +39,9 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       [part~="value"] {
-        display: none;
-      }
-
-      [part~="input-field"] {
-        min-height: 1.6em;
+        /* Setting the visibility instead of display:none in order to get rid of the setting min-height for input-field part */
+        visibility: hidden;
+        width: 0;
       }
     </style>
   </template>
@@ -57,13 +55,8 @@ This program is available under Apache License Version 2.0, available at https:/
         *
         * ### Styling
         *
-        * The following Shadow DOM parts are available for styling:
-        *
-        * Part name  | Description
-        * -----------|---------------------------------------------------------|
-        * `backdrop` | Backdrop of the overlay
-        * `overlay`  | Container for position/sizing/alignment of the content
-        * `content`  | Content of the overlay
+        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+        * for `<vaadin-dropdown-menu-overlay>` parts.
         *
         * @memberof Vaadin
         */
@@ -85,14 +78,8 @@ This program is available under Apache License Version 2.0, available at https:/
         *
         * ### Styling
         *
-        * The following shadow DOM parts are available for styling:
-        *
-        * Part name | Description
-        * ----------------|----------------
-        * `label` | The label element
-        * `value` | The input element
-        * `error-message` | The error message element
-        * `input-field` | The element that wraps prefix, value and suffix
+        * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/vaadin-text-field.html)
+        * for `<vaadin-dropdown-menu-text-field>` parts.
         *
         * @memberof Vaadin
         */
@@ -164,9 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             label: {
               type: String,
-              value: '',
-              reflectToAttribute: true,
-              notify: true
+              value: ''
             },
 
             /**
@@ -320,7 +305,7 @@ This program is available under Apache License Version 2.0, available at https:/
                     this._inputElement.appendChild(slottedSelectedText);
 
                   }
-                  
+
                   this.value = selectedItem ? selectedItem.textContent : '';
                   this.validate();
                   this.opened = false;
