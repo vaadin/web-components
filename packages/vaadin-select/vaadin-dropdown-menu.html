@@ -284,52 +284,52 @@ This program is available under Apache License Version 2.0, available at https:/
             overlayElement.content = this._instance.root;
           }
 
-          if (opened && !this._menuElement) {
-            this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
-            if (!this._menuElement || !this._menuElement._navItems) {
-              return;
-            } else {
-              this._menuElement.addEventListener('selected-changed', (e) => {
-                const selectedItem = this._menuElement._navItems[e.detail.value];
-
-                if (this._inputElement.children.length) {
-                  // Removing previous element slotted to suffix
-                  const prevSelected = Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0];
-                  prevSelected.parentElement.removeChild(prevSelected);
-                }
-
-                if (!selectedItem.hasAttribute('label')) {
-                  const slottedSelectedItem = selectedItem.cloneNode(true);
-
-                  // Removing unneded attributes
-                  slottedSelectedItem.removeAttribute('focused');
-                  slottedSelectedItem.removeAttribute('focus-ring');
-                  slottedSelectedItem.removeAttribute('tabindex');
-                  slottedSelectedItem.removeAttribute('selected');
-
-                  slottedSelectedItem.slot = 'prefix';
-                  this._inputElement.appendChild(slottedSelectedItem);
-
-                } else {
-                  var slottedSelectedText = document.createElement('div');
-                  slottedSelectedText.slot = 'prefix';
-                  slottedSelectedText.textContent = selectedItem.getAttribute('label');
-                  this._inputElement.appendChild(slottedSelectedText);
-
-                }
-
-                this.value = selectedItem ? selectedItem.textContent : '';
-                this.validate();
-                this.opened = false;
-              });
-              this._menuElement.addEventListener('keydown', this._onKeyDownInside.bind(this));
-              this._menuElement.addEventListener('click', this._onKeyDownInside.bind(this));
-            }
-          }
-
           overlayElement.opened = opened;
 
           if (opened) {
+            if (!this._menuElement) {
+              this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+              if (!this._menuElement) {
+                return;
+              } else {
+                this._menuElement.addEventListener('selected-changed', (e) => {
+                  const selectedItem = this._menuElement._navItems[e.detail.value];
+
+                  if (this._inputElement.children.length) {
+                    // Removing previous element slotted to suffix
+                    const prevSelected = Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0];
+                    prevSelected.parentElement.removeChild(prevSelected);
+                  }
+
+                  if (!selectedItem.hasAttribute('label')) {
+                    const slottedSelectedItem = selectedItem.cloneNode(true);
+
+                    // Removing unneded attributes
+                    slottedSelectedItem.removeAttribute('focused');
+                    slottedSelectedItem.removeAttribute('focus-ring');
+                    slottedSelectedItem.removeAttribute('tabindex');
+                    slottedSelectedItem.removeAttribute('selected');
+
+                    slottedSelectedItem.slot = 'prefix';
+                    this._inputElement.appendChild(slottedSelectedItem);
+
+                  } else {
+                    var slottedSelectedText = document.createElement('div');
+                    slottedSelectedText.slot = 'prefix';
+                    slottedSelectedText.textContent = selectedItem.getAttribute('label');
+                    this._inputElement.appendChild(slottedSelectedText);
+
+                  }
+                  
+                  this.value = selectedItem ? selectedItem.textContent : '';
+                  this.validate();
+                  this.opened = false;
+                });
+                this._menuElement.addEventListener('keydown', this._onKeyDownInside.bind(this));
+                this._menuElement.addEventListener('click', this._onKeyDownInside.bind(this));
+              }
+            }
+
             Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
           } else {
             this._inputElement.focus();
