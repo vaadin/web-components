@@ -69,6 +69,14 @@ This program is available under Apache License Version 2.0, available at https:/
       );
     }
 
+    _a11yUpdateRowLevel(row, level) {
+      Array.from(row.children).forEach(cell =>
+        // aria-level indexing starts from 1
+        cell.setAttribute('aria-level', level + 1)
+      );
+      row.setAttribute('aria-level', level + 1)
+    }
+
     _a11yUpdateRowDetailsOpened(row, detailsOpened) {
       Array.from(row.children).forEach(cell => {
         if (typeof detailsOpened === 'boolean') {

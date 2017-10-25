@@ -426,6 +426,17 @@
           expect(getRows(grid.$.items)[0].hasAttribute('expanded')).to.be.false;
         });
 
+        it('should toggle aria-level attribute on the row', () => {
+          expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal('1');
+          expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('1');
+          expandIndex(grid, 0);
+          expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal('2');
+          expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('2');
+          expandIndex(grid, 1);
+          expect(getRowCells(getRows(grid.$.items)[2])[0].getAttribute('aria-level')).to.equal('3');
+          expect(getRows(grid.$.items)[2].getAttribute('aria-level')).to.equal('3');
+        });
+
         it('should request pages from 0', () => {
           expandIndex(grid, 7); // pageSize is 5, index 7 is on the second page
           expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
