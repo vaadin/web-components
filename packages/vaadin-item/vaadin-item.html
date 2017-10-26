@@ -8,33 +8,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-item-mixin.html">
 
-<dom-module id="vaadin-item-default-theme">
-  <template>
-    <style>
-      :host {
-        padding: 4px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        box-sizing: border-box;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-item">
   <template>
     <style>
       :host {
-        display: block;
-        cursor: pointer;
-      }
-
-      :host([hidden]) {
-        display: none;
-      }
-
-      :host([disabled]) {
-        pointer-events: none;
+        display: flex;
+        align-items: center;
       }
     </style>
     <slot></slot>
