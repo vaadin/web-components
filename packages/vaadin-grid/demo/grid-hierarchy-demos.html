@@ -1,12 +1,10 @@
 <dom-module id="grid-hierarchy-demos">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
       }
-
     </style>
-
 
     <h3>Assigning Hierarchical Data Using Data Provider</h3>
     <vaadin-demo-snippet id="grid-hierarchy-demos-data-provider">
@@ -50,16 +48,25 @@
                 },
 
                 _dataProvider: function(params, callback) {
+                  // If the data request concerns a hierarchy sub-level, `params` has an additional
+                  // `parentItem` property that refers to the sub-level's parent item
                   const pkgName = params.parentItem ? params.parentItem.name : 'vaadin-grid';
 
-                  // Helper API that fetches dependencies by package name
+                  // Demo helper API that fetches dependencies by package name
                   Vaadin.GridDemo._fetchGridDependencies(pkgName, function(dependencies) {
-                    // Here the dependencies is an array consisting of items with the following structure:
-                    // {name: "vaadin-checkbox", version: "^1.0.0", hasChildren: true}
+                    // Here `dependencies` is an array consisting of items with the following structure:
+                    // {
+                    //   name: "vaadin-checkbox",
+                    //   version: "^1.0.0",
+                    //   hasChildren: true
+                    // }
+                    // This demo uses the `hasChildren` flag as an indicator of the item having child items.
+                    // The property is bound to `<vaadin-grid-hierarchy-toggle>`'s `enabled` property in
+                    // the template above.
 
                     // Splice out only the requested items
                     const pageItems = dependencies.slice(params.page * params.pageSize, params.pageSize);
-                    // Inform grid of the requrested hierarchy level's full size
+                    // Inform grid of the requested hierarchy level's full size
                     const hierarchyLevelSize = dependencies.length;
                     callback(pageItems, hierarchyLevelSize);
                   });
