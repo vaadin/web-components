@@ -43,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const clickedItem = model ? model.item : null;
 
       if (clickedItem) {
-        this.activeItem = this.activeItem !== clickedItem ? clickedItem : null;
+        this.activeItem = !this._itemsEqual(this.activeItem, clickedItem) ? clickedItem : null;
       }
     }
 

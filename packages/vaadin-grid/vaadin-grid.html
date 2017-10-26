@@ -162,6 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `last-frozen` | Last frozen cell | cell
      * `last-column` | Last visible cell on a row | cell
      * `selected` | Selected row | row
+     * `expanded` | Expanded row | row
      * `odd` | Odd row | row
      *
      *
@@ -470,7 +471,7 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            if (cell._instance.item === item) {
+            if (this._itemsEqual(cell._instance.item, item)) {
               // Force data system to pick up subproperty changes
               cell._instance._setPendingProperty('item', {}, false);
             }
@@ -480,9 +481,19 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleRowSelected(row, this._isSelected(item));
         this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
+        this._toggleRowExpanded(row, this._isExpanded(item));
+        this._updateRowLevel(row, this._getIndexLevel(row.index));
         if (this._rowDetailsTemplate) {
           this._toggleDetailsCell(row, item);
         }
+
+        this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
+          Polymer.Async.timeOut.after(1), () => {
+            this._updateMetrics();
+            this._positionItems();
+            this._updateScrollerSize();
+          }
+        );
       }
 
       _toggleRowDetailsOpened(row, detailsOpened) {
@@ -504,6 +515,26 @@ This program is available under Apache License Version 2.0, available at https:/
         });
         this._toggleAttribute('selected', selected, row);
         this._a11yUpdateRowSelected(row, selected);
+      }
+
+      _updateRowLevel(row, level) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__level__ = level;
+            cell._instance.level = level;
+          }
+        });
+        this._a11yUpdateRowLevel(row, level);
+      }
+
+      _toggleRowExpanded(row, expanded) {
+        Array.from(row.children).forEach(cell => {
+          if (cell._instance) {
+            cell._instance.__expanded__ = expanded;
+            cell._instance.expanded = expanded;
+          }
+        });
+        this._toggleAttribute('expanded', expanded, row);
       }
 
       _resizeHandler() {

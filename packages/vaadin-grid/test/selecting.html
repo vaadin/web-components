@@ -65,7 +65,7 @@
         grid = fixture('default');
 
         grid.dataProvider = infiniteDataProvider;
-        cachedItems = grid._cache[0];
+        cachedItems = grid._cache.items;
         grid.selectedItems = [cachedItems[0]];
         flushGrid(grid);
         rows = getRows(grid.$.items);
@@ -87,6 +87,21 @@
         const cells = getRowCells(rows[0]);
         cells[0]._instance.selected = false;
         expect(cells[0]._instance.selected).to.be.false;
+        expect(grid.selectedItems).to.be.empty;
+      });
+
+      it('should select an equaling item', () => {
+        grid.itemIdPath = 'value';
+        const cells = getRowCells(rows[0]);
+        grid.selectedItems = [{value: 'foo0'}];
+        expect(cells[0]._instance.selected).to.be.true;
+      });
+
+      it('should deselect an equaling item', () => {
+        grid.itemIdPath = 'value';
+        const cells = getRowCells(rows[0]);
+        grid.selectedItems = [rows[0]._item];
+        grid.deselectItem({value: 'foo0'});
         expect(grid.selectedItems).to.be.empty;
       });
 
@@ -139,7 +154,7 @@
         flushGrid(grid);
 
         selectionColumn = grid._columnTree[0][0];
-        cachedItems = grid._cache[0];
+        cachedItems = grid._cache.items;
         rows = getRows(grid.$.items);
         headerRows = getRows(grid.$.header);
 

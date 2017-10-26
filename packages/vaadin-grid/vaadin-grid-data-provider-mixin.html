@@ -8,6 +8,67 @@ This program is available under Apache License Version 2.0, available at https:/
   window.Vaadin = window.Vaadin || {};
   window.Vaadin.Grid = window.Vaadin.Grid || {};
 
+  Vaadin.Grid.ItemCache = class ItemCache {
+
+    constructor(grid, parentCache, parentItem) {
+      this.grid = grid;
+      this.parentCache = parentCache;
+      this.parentItem = parentItem;
+      this.itemCaches = {};
+      this.items = {};
+      this.effectiveSize = 0;
+      this.size = 0;
+      this.pendingRequests = {};
+    }
+
+    isLoading() {
+      return Object.keys(this.pendingRequests).length || Object.keys(this.itemCaches).filter(index => {
+        return this.itemCaches[index].isLoading();
+      })[0];
+    }
+
+    getItemForIndex(index) {
+      const {cache, scaledIndex} = this.getCacheAndIndex(index);
+      return cache.items[scaledIndex];
+    }
+
+    updateSize() {
+      this.effectiveSize = (!this.parentItem || this.grid._isExpanded(this.parentItem)) ?
+        this.size + Object.keys(this.itemCaches).reduce((prev, curr) => {
+          const subCache = this.itemCaches[curr];
+          subCache.updateSize();
+          return prev + subCache.effectiveSize;
+        }, 0) :
+        0;
+    }
+
+    ensureSubCacheForScaledIndex(scaledIndex) {
+      if (!this.itemCaches[scaledIndex]) {
+        const subCache = new Vaadin.Grid.ItemCache(this.grid, this, this.items[scaledIndex]);
+        this.itemCaches[scaledIndex] = subCache;
+        this.grid._loadPage(0, subCache);
+      }
+    }
+
+    getCacheAndIndex(index) {
+      let thisLevelIndex = index;
+      const keys = Object.keys(this.itemCaches);
+      for (var i = 0; i < keys.length; i++) {
+        const expandedIndex = Number(keys[i]);
+        const subCache = this.itemCaches[expandedIndex];
+        if (thisLevelIndex <= expandedIndex) {
+          return {cache: this, scaledIndex: thisLevelIndex};
+        } else if (thisLevelIndex <= expandedIndex + subCache.effectiveSize) {
+          return subCache.getCacheAndIndex(thisLevelIndex - expandedIndex - 1);
+        }
+        thisLevelIndex -= subCache.effectiveSize;
+      }
+      return {cache: this, scaledIndex: thisLevelIndex};
+    }
+
+  };
+
+
   /**
    * @polymerMixin
    */
@@ -54,106 +115,72 @@ This program is available under Apache License Version 2.0, available at https:/
         _cache: {
           type: Object,
           value: function() {
-            return {};
+            const cache = new Vaadin.Grid.ItemCache(this);
+            return cache;
           }
         },
 
-        _pendingRequests: {
-          type: Object,
-          value: function() {
-            return {};
-          }
+        /**
+         * Path to an item sub-property that identifies the item.
+         */
+        itemIdPath: {
+          type: String,
+          value: null
         },
+
+        /**
+         * An array that contains the expanded items.
+         */
+        expandedItems: {
+          type: Object,
+          notify: true,
+          value: () => []
+        }
+
       };
     }
 
-    ready() {
-      super.ready();
-      this.addEventListener('item-changed', this._templateItemChanged.bind(this));
+    static get observers() {
+      return [
+        '_sizeChanged(size)',
+        '_expandedItemsChanged(expandedItems.*)'
+      ];
+    }
+
+    _sizeChanged(size) {
+      const delta = size - this._cache.size;
+      this._cache.size += delta;
+      this._cache.effectiveSize += delta;
+      this._effectiveSize = this._cache.effectiveSize;
     }
 
     _loadingChanged(loading) {
       this._toggleAttribute('loading', loading, this);
     }
 
-    _templateItemChanged(e) {
-      const item = e.detail.item;
-
-      // TODO: We could avoid iterating rows by fixing _physicalIndexForKey mapping
-      // in iron-list-behavior so that vidx could be used to fetch the correct row element.
-      Array.prototype.forEach.call(Polymer.dom(this.$.items).children, row => {
-        if (row.item === item) {
-          row.iterateCells(cell => {
-            // prevent _forwardInstancePath from firing duplicate `item-changed`
-            // events on all the sibling cells.
-            cell._templatizer._suppressItemChangeEvent = true;
-            cell.instance.notifyPath('item.' + e.detail.path, e.detail.value);
-            cell._templatizer._suppressItemChangeEvent = false;
-          });
-        }
+    _updateRowItem(item, el) {
+      el.children.forEach(cell => {
+        cell._instance && (cell._instance.item = item);
       });
     }
 
-    _getCachedItem(index) {
-      const page = this._getPageForIndex(index);
-
-      const p = this._cache && this._cache[page];
-
-      if (p) {
-        return p[index - page * this.pageSize];
-      } else {
-        return null;
-      }
-    }
-
     _getItem(index, el) {
-      this._virtualIndexToItem = this._virtualIndexToItem || {};
-
-      if (el.index) {
-        delete this._virtualIndexToItem[el.index];
+      if (this._effectiveSize && index >= this._effectiveSize) {
+        return;
       }
+
       el.index = index;
-      this._virtualIndexToItem[el.index] = el;
-
-      const item = this._getCachedItem(index);
-      item && this._updateItem(el, item);
-      this._eagerlyLoadPages();
-      //
-      const uncachedPages = this._uncachedPagesForPhysicalItems();
-      if (uncachedPages.length > 0) {
-        this._loading = true;
-        // avoid debounce during scroll to mitigate scrollbar flickering on iOS.
-        // debouncing only when data is needed to be fetched. eager loading
-        // should somewhat prevent from getting here when scrolling slowly.
-        this._debouncerLoad = Polymer.Debouncer.debounce(
-          this._debouncerLoad,
-          Polymer.Async.timeOut.after(100),
-          () => {
-            uncachedPages.forEach(i => this._loadPage(i));
-          });
+      const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
+      const item = cache.items[scaledIndex];
+      if (item) {
+        this._updateItem(el, item);
+        if (this._isExpanded(item)) {
+          cache.ensureSubCacheForScaledIndex(scaledIndex);
+        }
+      } else {
+        this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
-    }
 
-    _cachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] !== undefined);
-    }
-
-    _uncachedPagesForPhysicalItems() {
-      return this._pagesForPhysicalItems().filter(page => this._cache !== undefined && this._cache[page] === undefined);
-    }
-
-    _eagerlyLoadPages() {
-      const pages = this._cachedPagesForPhysicalItems().slice(0);
-
-      if (pages.length > 0) {
-        pages.sort((a, b) => a > b);
-
-        const prev = Math.max(0, pages[0] - 1);
-        const next = Math.min(pages[pages.length - 1] + 1, Math.max(0, Math.floor(this.size / this.pageSize) - 1));
-
-        this._loadPage(prev);
-        this._loadPage(next);
-      }
     }
 
     _pagesForPhysicalItems() {
@@ -165,7 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return [firstVisiblePage].concat(
         this._physicalItems
           .filter(row => row.index)
-          .map(row => this._getPageForIndex(row.index))
+          .items(row => this._getPageForIndex(row.index))
         ).reduce((prev, curr) => {
           if (prev.indexOf(curr) === -1) {
             prev.push(curr);
@@ -175,53 +202,108 @@ This program is available under Apache License Version 2.0, available at https:/
         }, []);
     }
 
-    _updateItems(page, items) {
-      for (let i = 0; i < this.pageSize; i++) {
-        const index = page * this.pageSize + i;
-        const row = this._virtualIndexToItem && this._virtualIndexToItem[index];
-        if (row) {
-          this._updateItem(row, items[i]);
-
-          this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
-            Polymer.Async.timeOut.after(1), () => {
-              this._updateMetrics();
-              this._positionItems();
-              this._updateScrollerSize();
-            }
-          );
-        }
+    _expandedInstanceChangedCallback(inst, value) {
+      if (inst.item === undefined) {
+        return;
       }
+      if (value) {
+        this.expandItem(inst.item);
+      } else {
+        this.collapseItem(inst.item);
+      }
+    }
+
+    /**
+     * Returns a value that identifies the item. Uses `itemIdPath` if available.
+     * Can be customized by overriding.
+     */
+    getItemId(item) {
+      return this.itemIdPath ? this.get(this.itemIdPath, item) : item;
+    }
+
+    _isExpanded(item) {
+      return this.expandedItems && this._getItemIndexInArray(item, this.expandedItems) > -1;
+    }
+
+    _expandedItemsChanged(e) {
+      this._cache.updateSize();
+      this._effectiveSize = this._cache.effectiveSize;
+      this._assignModels();
+    }
+
+    /**
+     * Expands the given item hierarchy.
+     */
+    expandItem(item) {
+      if (!this._isExpanded(item)) {
+        this.push('expandedItems', item);
+      }
+    }
+
+    /**
+     * Collapses the given item hierarchy.
+     */
+    collapseItem(item) {
+      if (this._isExpanded(item)) {
+        this.splice('expandedItems', this._getItemIndexInArray(item, this.expandedItems), 1);
+      }
+    }
+
+    _getIndexLevel(index) {
+      let {cache} = this._cache.getCacheAndIndex(index);
+      let level = 0;
+      while (cache.parentCache) {
+        cache = cache.parentCache;
+        level++;
+      }
+      return level;
     }
 
     _canPopulate() {
       return this._hasData;
     }
 
-    _loadPage(page, cb) {
-      cb = cb || this._updateItems.bind(this);
-      if (!this._cache[page]) {
-        // make sure same page isn't requested multiple times.
-        if (!this._pendingRequests[page] && this.dataProvider) {
-          this._pendingRequests[page] = true;
-          const params = {
-            page: page,
-            pageSize: this.pageSize,
-            sortOrders: this._mapSorters(),
-            filters: this._mapFilters()
-          };
-          this.dataProvider(params, (items) => {
-            this._cache[page] = items;
-            delete this._pendingRequests[page];
-            cb(page, items);
+    _loadPage(page, cache) {
+      // make sure same page isn't requested multiple times.
+      if (!cache.pendingRequests[page] && this.dataProvider) {
+        cache.pendingRequests[page] = true;
+        const params = {
+          page,
+          pageSize: this.pageSize,
+          sortOrders: this._mapSorters(),
+          filters: this._mapFilters(),
+          parentItem: cache.parentItem
+        };
 
-            this._loading = this._pendingRequests.length > 0;
+        this.dataProvider(params, (items, size) => {
+          if (size !== undefined) {
+            cache.size = size;
+          } else {
+            if (params.parentItem) {
+              cache.size = items.length;
+            }
+          }
 
-            this._debouncerCheckSize = Polymer.Debouncer.debounce(
-              this._debouncerCheckSize,
-              Polymer.Async.timeOut.after(2000),
-              this._checkSize.bind(this));
+          items.forEach((item, itemsIndex) => {
+            cache.items[page * this.pageSize + itemsIndex] = item;
           });
-        }
+          this._cache.updateSize();
+          this._effectiveSize = this._cache.effectiveSize;
+
+          Array.from(this.$.items.children).forEach(row => {
+            const cachedItem = this._cache.getItemForIndex(row.index);
+            if (items.indexOf(cachedItem) > -1) {
+              this._updateItem(row, cachedItem);
+            }
+          });
+
+          this._hasData = true;
+          this._increasePoolIfNeeded(0);
+
+          delete cache.pendingRequests[page];
+
+          this._loading = this._cache.isLoading();
+        });
       }
     }
 
@@ -233,19 +315,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * Clears the cached pages and reloads data from dataprovider when needed.
      */
     clearCache() {
-      this._cache = {};
-      this._pendingRequests = {};
-      if (this._hasData) {
-        this._loading = true;
-        const firstVisiblePage = this._getPageForIndex(this._firstVisibleIndex + this._vidxOffset);
-        this._loadPage(firstVisiblePage, (page, items) => {
-          // Update items for the first visible page
-          this._updateItems(page, items);
-          // Request items for rest of the pages to be updated
-          this._eagerlyLoadPages();
-        });
-      }
-      this._flushItemsDebouncer();
+      this._cache = new Vaadin.Grid.ItemCache(this);
+      this._cache.size = this.size;
+      this._cache.updateSize();
+      this._hasData = false;
+      this._loading = true;
+      this._assignModels();
     }
 
     _flushItemsDebouncer() {
@@ -280,7 +355,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // load data before adding rows to make sure they have content when
         // rendered for the first time.
         this._loading = true;
-        this._loadPage(0, () => {
+        this._loadPage(0, this._cache, () => {
           const hadData = this._hasData;
           this._hasData = true;
           if (!hadData) {
@@ -288,6 +363,27 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+
+      this._debouncerCheckSize = Polymer.Debouncer.debounce(
+        this._debouncerCheckSize,
+        Polymer.Async.timeOut.after(2000),
+        this._checkSize.bind(this));
+
+      this._scrollHandler();
+    }
+
+    _itemsEqual(item1, item2) {
+      return this.getItemId(item1) === this.getItemId(item2);
+    }
+
+    _getItemIndexInArray(item, array) {
+      let result = -1;
+      array.forEach((i, idx) => {
+        if (this._itemsEqual(i, item)) {
+          result = idx;
+        }
+      });
+      return result;
     }
 
   };

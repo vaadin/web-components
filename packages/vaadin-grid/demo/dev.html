@@ -42,7 +42,7 @@
         </style>
         <input value="{{foobar::input}}">
         <label>[[foobar]]</label>
-        <vaadin-grid id="component" items="[[items]]" multi-selection column-reordering-allowed>
+        <vaadin-grid id="component" item-id-path="name.first" data-provider="[[hierarchicalDataProvider]]" multi-selection column-reordering-allowed>
 
           <template class="row-details">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -56,11 +56,16 @@
           </vaadin-grid-selection-column>
 
           <vaadin-grid-column width="145px" flex-grow="0" frozen resizable>
-            <template>
-              [[index]] [[foobar]]
-            </template>
             <template class="header">
-              Index [[foobar]]
+              Index
+            </template>
+            <template>
+              <vaadin-grid-hierarchy-toggle
+                  level="[[level]]"
+                  enabled="[[item.hasChildren]]"
+                  expanded="{{expanded}}">
+                [[index]]
+              </vaadin-grid-hierarchy-toggle>
             </template>
           </vaadin-grid-column>
 
@@ -169,16 +174,70 @@
       </template>
       <script>
         window.addEventListener('WebComponentsReady', () => {
+
+          // const dataBase = [
+          //   {name: {first: 'foo-0', last: 'bar-0'}},
+          //   {name: {first: 'foo-1', last: 'bar-1'}, hasChildren: true, children: [
+          //     {name: {first: 'foo-1-0', last: 'bar-1-0'}},
+          //     {name: {first: 'foo-1-1', last: 'bar-1-1'}},
+          //     {name: {first: 'foo-1-2', last: 'bar-1-2'}},
+          //   ]},
+          //   {name: {first: 'foo-2', last: 'bar-2'}},
+          //   {name: {first: 'foo-3', last: 'bar-3'}},
+          // ];
+
+          function generateItem(level, index) {
+            const levelPrefix = Array(...new Array(level)).map(() => '🔳 ').join('');
+            const item = {
+              name: {
+                first: `${levelPrefix}foo-${level}-${index}`,
+                last: `${levelPrefix}bar-${level}-${index}`
+              }
+            };
+            item.hasChildren = level < 3 && index % 3 === 2;
+            if (item.hasChildren) {
+              const childrenCount = 5;
+              item.children = Array(...new Array(childrenCount))
+                .map((v, i) => generateItem(level + 1, i));
+            }
+            return item;
+          }
+
+          const dataBase = Array(...new Array(1000)).map((v, i) => generateItem(0, i));
+          window.dataBase = dataBase;
+
           class XApp extends Polymer.Element {
             static get is() {
               return 'x-app';
             }
+
             static get properties() {
               return {
-                items: {
-                  value: window.users.results
+
+                hierarchicalDataProvider: {
+                  value: function() {
+                    return this.hierarchicalDataProvider.bind(this);
+                  }
                 }
               };
+            }
+
+            hierarchicalDataProvider(params, cb) {
+              const parentItem = params.parentItem;
+              const array = parentItem ? parentItem.children : dataBase;
+              const pageOffset = params.page * params.pageSize;
+              cb(
+                array.slice(
+                  pageOffset, // start
+                  pageOffset + params.pageSize // end
+                ),
+                array.length
+              );
+            }
+
+            ready() {
+              super.ready();
+              this.$.component.size = dataBase.length;
             }
           }
           window.customElements.define(XApp.is, XApp);

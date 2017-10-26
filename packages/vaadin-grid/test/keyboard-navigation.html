@@ -1114,6 +1114,20 @@
             });
           });
 
+          it('should have the right cell focused after size change', () => {
+            scrollToEnd(grid);
+            getCell(grid, 0).focus();
+            up();
+
+            let focusedRow = grid.$.items.children[getFocusedRowIndex()];
+            const focusedContent = getCellContent(getRowCells(focusedRow)[0]).textContent;
+
+            grid.size *= 2;
+
+            focusedRow = grid.$.items.children[getFocusedRowIndex()];
+            expect(getCellContent(getRowCells(focusedRow)[0]).textContent).to.equal(focusedContent);
+          });
+
           describe('rotating focus indicator prevention', () => {
             it('should hide navigation mode when a focused row goes off screen', () => {
               focusItem(0);
@@ -1232,6 +1246,15 @@
           focusFirstHeaderCell();
 
           expect(grid.activeItem).to.equal('foo');
+        });
+
+        it('should toggle when equaling item is clicked', () => {
+          grid.itemIdPath = 'name';
+          grid.items = [{name: 'foo'}, {name: 'bar'}];
+          grid.activeItem = {name: 'foo'};
+          clickItem(0);
+
+          expect(grid.activeItem).to.be.null;
         });
 
         describe('space click shortcut', () => {

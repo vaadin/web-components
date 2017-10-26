@@ -75,7 +75,7 @@
       describe('simple', () => {
 
         function openRowDetails(index) {
-          grid.openItemDetails(grid._cache[0][index]);
+          grid.openItemDetails(grid._cache.items[index]);
         }
 
         beforeEach(done => {
@@ -88,7 +88,7 @@
         });
 
         function closeRowDetails(index) {
-          grid.closeItemDetails(grid._cache[0][index]);
+          grid.closeItemDetails(grid._cache.items[index]);
         }
 
         it('should open details row', () => {
@@ -140,6 +140,22 @@
           bodyRows = getRows(grid.$.items);
 
           expect(grid._frozenCells).to.contain(getRowCells(bodyRows[1])[1]);
+        });
+
+        it('should open details for equaling item', () => {
+          const cells = getRowCells(bodyRows[0]);
+          grid.itemIdPath = 'value';
+          grid.openItemDetails({value: 'foo0'});
+          expect(cells[1].hidden).to.be.false;
+        });
+
+        it('should close details for equaling item', () => {
+          const cells = getRowCells(bodyRows[0]);
+          grid.itemIdPath = 'value';
+          grid.openItemDetails(bodyRows[0]._item);
+          expect(cells[1].hidden).to.be.false;
+          grid.closeItemDetails({value: 'foo0'});
+          expect(cells[1].hidden).to.be.true;
         });
       });
 

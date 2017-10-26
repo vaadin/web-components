@@ -90,6 +90,19 @@
             );
           });
 
+          it('should retain virtual scroll position on size change', () => {
+            const index = grid.size / 2;
+            grid._scrollToIndex(index);
+            flushGrid(grid);
+            grid.scrollTop += 1; // Scroll a little to validate the test
+            let row = Array.from(grid.$.items.children).filter(r => r.index === index)[0];
+            const rowTop = row.getBoundingClientRect().top;
+
+            grid.size -= ~~(grid.size / 4);
+            row = Array.from(grid.$.items.children).filter(r => r.index === index)[0];
+            expect(row.getBoundingClientRect().top).to.equal(rowTop);
+          });
+
         });
 
       });
