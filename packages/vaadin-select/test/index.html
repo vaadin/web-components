@@ -13,7 +13,8 @@
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
     WCT.loadSuites([
-      'dropdown-menu-test.html'
+      'dropdown-menu-test.html',
+      'scrollable-viewport-test.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
