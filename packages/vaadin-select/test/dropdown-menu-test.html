@@ -106,51 +106,52 @@
         expect(dropdown._overlayElement.opened).to.be.false;
       });
 
-      it('should change the value of dropdown-menu when list element selected property changed', function() {
-        Enter(input);
-        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+      describe('overlay opened', function() {
+        var menu;
+        beforeEach(function(done) {
+          Enter(input);
+          menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
-        menu.selected = 0;
-        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
 
-        menu.selected = 1;
-        expect(dropdown.value).to.be.equal(menu._navItems[1].textContent);
-      });
+        it('should change the value of dropdown-menu when list element selected property changed', function() {
+          menu.selected = 0;
+          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
 
-      it('should close the dropdown-menu on selecting the same value', function() {
-        Enter(input);
-        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal(menu._navItems[1].textContent);
+        });
 
-        menu.selected = 0;
-        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
-        expect(dropdown._overlayElement.opened).to.be.false;
+        it('should close the dropdown-menu on selecting the same value', function() {
+          menu.selected = 0;
+          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          expect(dropdown._overlayElement.opened).to.be.false;
 
-        Enter(input);
-        expect(dropdown._overlayElement.opened).to.be.true;
-        menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
-        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
-        expect(dropdown._overlayElement.opened).to.be.false;
-      });
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+          menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
 
-      it('should focus the input on selecting value and closing the overlay', function() {
-        Enter(input);
-        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+        it('should focus the input on selecting value and closing the overlay', function() {
+          menu.selected = 0;
+          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          expect(dropdown._overlayElement.opened).to.be.false;
+          expect(input.focused).to.be.true;
+        });
 
-        menu.selected = 0;
-        expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
-        expect(dropdown._overlayElement.opened).to.be.false;
-        expect(input.focused).to.be.true;
-      });
+        it('should focus the input before moving the focus to next selectable element', function() {
+          Enter(input);
+          const focusedSpy = sinon.spy();
+          const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
 
-      it('should focus the input before moving the focus to next selectable element', function() {
-        Enter(input);
-        const focusedSpy = sinon.spy();
-        const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+          input.addEventListener('focused-changed', focusedSpy);
+          Tab(menu);
 
-        input.addEventListener('focused-changed', focusedSpy);
-        Tab(menu);
-
-        expect(focusedSpy.calledOnce).to.be.true;
+          expect(focusedSpy.calledOnce).to.be.true;
+        });
       });
 
       it('should have aria-required attribute set to true when required', function() {
