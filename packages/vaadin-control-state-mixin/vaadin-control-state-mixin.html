@@ -56,6 +56,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * If true, the element currently has focus.
          * This property is @deprecated and will not be accessible in the next major version
          * of the component.
+         * @private
          */
         focused: {
           type: Boolean,
@@ -125,6 +126,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this._boundKeyupListener = this._bodyKeyupListener.bind(this);
     }
 
+    /**
+     * @private
+     */
     connectedCallback() {
       super.connectedCallback();
 
@@ -132,6 +136,9 @@ This program is available under Apache License Version 2.0, available at https:/
       document.body.addEventListener('keyup', this._boundKeyupListener, true);
     }
 
+    /**
+     * @private
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
 
