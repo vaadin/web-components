@@ -72,7 +72,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * The following shadow DOM parts are exposed for styling:
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following shadow DOM parts are available for styling:
        *
        * Part name         | Description
        * ------------------|----------------
@@ -81,13 +83,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * `radio`           | The `<span>` element for a custom graphical radio button
        * `label`           | The `<span>` element for slotted text/HTML label
        *
-       * The following attributes are exposed for styling:
+       * The following state attributes are available for styling:
        *
-       * Attribute    | Description
-       * -------------|------------
-       * `disabled`   | Set when the radio button is disabled.
-       * `focus-ring` | Set when the radio button is focused using the keyboard.
-       * `focused`    | Set when the radio button is focused.
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled`   | Set when the radio button is disabled. | :host
+       * `focus-ring` | Set when the radio button is focused using the keyboard. | :host
+       * `focused`    | Set when the radio button is focused. | :host
+       * `checked`    | Set when the radio button is checked. | :host
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
@@ -113,11 +116,28 @@ This program is available under Apache License Version 2.0, available at https:/
               reflectToAttribute: true
             },
 
+            /**
+             * The value for this element.
+             */
             value: {
               type: String,
               value: 'on'
             }
           };
+        }
+
+        /**
+         * @private
+         */
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        /**
+         * @private
+         */
+        disconnectedCallback() {
+          super.disconnectedCallback();
         }
 
         get name() {

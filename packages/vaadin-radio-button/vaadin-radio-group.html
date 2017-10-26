@@ -38,11 +38,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * The following attributes are exposed for styling:
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
-       * Attribute    | Description
-       * -------------|------------
-       * `disabled`   | Set when the radio button group and its children are disabled.
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled`   | Set when the radio button group and its children are disabled. | :host
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
@@ -65,14 +67,6 @@ This program is available under Apache License Version 2.0, available at https:/
               observer: '_disabledChanged'
             },
 
-            /**
-             * The name of the control, which is submitted with the form data.
-             */
-            name: {
-              type: String,
-              reflectToAttribute: true
-            },
-
             _checkedButton: {
               type: Object,
               observer: '_checkedButtonChanged'
@@ -80,6 +74,9 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
+        /**
+         * @private
+         */
         connectedCallback() {
           super.connectedCallback();
           this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
