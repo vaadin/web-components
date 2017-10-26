@@ -158,7 +158,7 @@
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
-              "name": "_onClick",
+              "name": "_filterItems",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -168,7 +168,30 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 96,
+                  "line": 92,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "array"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ListMixin"
+            },
+            {
+              "name": "_onClick",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "start": {
+                  "line": 94,
+                  "column": 4
+                },
+                "end": {
+                  "line": 100,
                   "column": 5
                 }
               },
@@ -187,11 +210,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 98,
+                  "line": 102,
                   "column": 4
                 },
                 "end": {
-                  "line": 139,
+                  "line": 143,
                   "column": 5
                 }
               },
@@ -210,11 +233,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 141,
+                  "line": 145,
                   "column": 4
                 },
                 "end": {
-                  "line": 156,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -239,11 +262,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 162,
+                  "line": 166,
                   "column": 5
                 }
               },
@@ -262,11 +285,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 168,
                   "column": 4
                 },
                 "end": {
-                  "line": 170,
+                  "line": 174,
                   "column": 5
                 }
               },
@@ -285,11 +308,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 172,
+                  "line": 176,
                   "column": 4
                 },
                 "end": {
-                  "line": 176,
+                  "line": 180,
                   "column": 5
                 }
               },
@@ -304,11 +327,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 203,
+                  "line": 207,
                   "column": 5
                 }
               },
@@ -327,11 +350,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 210,
+                  "line": 214,
                   "column": 4
                 },
                 "end": {
-                  "line": 212,
+                  "line": 216,
                   "column": 5
                 }
               },
