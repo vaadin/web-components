@@ -36,9 +36,6 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
-    "vaadin-list-box": "vaadin/vaadin-list-box#master"
-  },
-  "resolutions": {
-    "vaadin-list-mixin": "^1.3.1"
+    "vaadin-list-box": "vaadin/vaadin-list-box#^1.0.0"
   }
 }
