@@ -127,7 +127,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _levelChanged(level) {
-        this.updateStyles({'--level': Number(level) + 'em'});
+        const value = Number(level) + 'em';
+        this.updateStyles({'--level': value});
+        this.style['--level'] = value;
       }
     }
 
