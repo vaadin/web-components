@@ -45,13 +45,17 @@
     describe('scrollable-vaadin-tabs', () => {
       var nav;
 
-      beforeEach(() => nav = fixture('scrollable_nav'));
+      beforeEach(done => {
+        nav = fixture('scrollable_nav');
+        Polymer.RenderStatus.afterNextRender(nav, () => {
+          nav._observer.flush();
+          done();
+        });
+      });
 
       it(`Should have overflow`, function(done) {
-        setTimeout(() => {
-          expect(nav.hasAttribute('overflow')).to.be.true;
-          done();
-        }, 10);
+        expect(nav.hasAttribute('overflow')).to.be.true;
+        done();
       });
 
       it('One item in advance should be displayed on the edge of the viewport on "arrow-right" on the last visible tab in viewport', () => {
