@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-element">
+<dom-module id="vaadin-notification">
   <template>
     <style>
       :host {
@@ -19,20 +19,22 @@ This program is available under Apache License Version 2.0, available at https:/
 
   <script>
     {
-
       /**
-       * `<vaadin-element>` is a Polymer 2 element.
+       * `<vaadin-notification>` is a Polymer 2 element providing accessible and customizable notifications (toasts).
        *
        * ```
-       * <vaadin-element></vaadin-element>
+       * <vaadin-notification>
+       *   Your work has been saved
+       * </vaadin-notification>
        * ```
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class NotificationElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-element';
+          return 'vaadin-notification';
         }
 
         static get properties() {
@@ -41,13 +43,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinElement.is, VaadinElement);
+      customElements.define(NotificationElement.is, NotificationElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinElement = VaadinElement;
+      Vaadin.NotificationElement = NotificationElement;
     }
   </script>
 </dom-module>
