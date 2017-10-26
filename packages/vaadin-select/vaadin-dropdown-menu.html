@@ -113,7 +113,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
-    <vaadin-dropdown-menu-overlay opened="{{opened}}" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
+    <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
     <iron-media-query
       query="[[_phoneMediaQuery]]"
@@ -318,9 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (opened) {
             if (!this._menuElement) {
               this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
-              if (!this._menuElement) {
-                return;
-              } else {
+              if (this._menuElement) {
                 this._menuElement.addEventListener('selected-changed', (e) => {
                   const selectedItem = this._menuElement._navItems[e.detail.value];
 
@@ -332,12 +330,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
                   if (!selectedItem.hasAttribute('label')) {
                     const slottedSelectedItem = selectedItem.cloneNode(true);
-
-                    // Removing unneded attributes
-                    slottedSelectedItem.removeAttribute('focused');
-                    slottedSelectedItem.removeAttribute('focus-ring');
-                    slottedSelectedItem.removeAttribute('tabindex');
-                    slottedSelectedItem.removeAttribute('selected');
 
                     slottedSelectedItem.slot = 'prefix';
                     this._inputElement.appendChild(slottedSelectedItem);
