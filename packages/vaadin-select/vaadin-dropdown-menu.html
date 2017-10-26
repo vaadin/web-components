@@ -296,72 +296,70 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          if (opened && !this._instance) {
-            const _contentTemplate = this.querySelector('template');
-            const Templatizer = Polymer.Templatize.templatize(_contentTemplate, this, {
-              instanceProps: {
-                detail: true,
-                target: true
-              },
-              forwardHostProp: function(prop, value) {
-                if (this._instance) {
-                  this._instance.forwardHostProp(prop, value);
-                }
-              }
-            });
-            this._instance = new Templatizer({});
-            overlayElement.content = this._instance.root;
-          }
-
-          overlayElement.opened = opened;
-
           if (opened) {
+            if (!this._instance) {
+              this._instance = this._createTemplateInstance();
+              overlayElement.content = this._instance.root;
+            }
+
             if (!this._menuElement) {
               this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
               if (this._menuElement) {
-                this._menuElement.addEventListener('selected-changed', (e) => {
-                  const selectedItem = this._menuElement._navItems[e.detail.value];
-
-                  if (this._inputElement.children.length) {
-                    // Removing previous element slotted to suffix
-                    const prevSelected = Array.from(this._inputElement.children).filter(e => e.getAttribute('slot') === 'prefix')[0];
-                    prevSelected.parentElement.removeChild(prevSelected);
-                  }
-
-                  if (!selectedItem.hasAttribute('label')) {
-                    const slottedSelectedItem = selectedItem.cloneNode(true);
-
-                    slottedSelectedItem.slot = 'prefix';
-                    this._inputElement.appendChild(slottedSelectedItem);
-
-                  } else {
-                    var slottedSelectedText = document.createElement('div');
-                    slottedSelectedText.slot = 'prefix';
-                    slottedSelectedText.textContent = selectedItem.getAttribute('label');
-                    this._inputElement.appendChild(slottedSelectedText);
-
-                  }
-
-                  this.value = selectedItem ? selectedItem.textContent : '';
-                  this.validate();
-                  this.opened = false;
-                  selectedItem.removeAttribute('focused');
-
-                });
-                this._menuElement.addEventListener('keydown', this._onKeyDownInside.bind(this));
-                this._menuElement.addEventListener('click', this._onKeyDownInside.bind(this));
+                this._menuElement.addEventListener('selected-changed', e => this._setInputValue(e));
+                this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
+                this._menuElement.addEventListener('click', e => this._onKeyDownInside(e));
               }
             }
 
-            Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
-            window.addEventListener('scroll', this._boundSetPosition, true);
+            this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
 
+            window.addEventListener('scroll', this._boundSetPosition, true);
           } else {
             this._inputElement.focus();
             this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
+          }
+
+          overlayElement.opened = opened;
+        }
+
+        _createTemplateInstance() {
+          const template = this.querySelector('template');
+          const Templatizer = Polymer.Templatize.templatize(template, this, {
+            instanceProps: {
+              detail: true,
+              target: true
+            },
+            forwardHostProp: function(prop, value) {
+              this._instance && this._instance.forwardHostProp(prop, value);
+            }
+          });
+          return new Templatizer({});
+        }
+
+        _setInputValue() {
+          const selected = this._menuElement._navItems[this._menuElement.selected];
+          if (selected) {
+            if (this._slotted) {
+              this._slotted.parentElement.removeChild(this._slotted);
+            }
+
+            if (selected.hasAttribute('label')) {
+              this._slotted = document.createElement('div');
+              this._slotted.textContent = selected.getAttribute('label');
+            } else {
+              this._slotted = selected.cloneNode(true);
+              this._slotted.removeAttribute('tabindex');
+            }
+
+            this._slotted.slot = 'prefix';
+            this._inputElement.appendChild(this._slotted);
 
           }
+
+          this.value = selected ? selected.textContent : '';
+          this.opened = false;
+          this.validate();
         }
 
         _toggleOverlay() {
