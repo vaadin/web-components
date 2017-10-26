@@ -25,10 +25,12 @@
 -->
 ```html
   <vaadin-list-box selected="2">
-    <vaadin-item>Item 1</vaadin-item>
-    <vaadin-item>Item 2</vaadin-item>
-    <vaadin-item>Item 3</vaadin-item>
-    <vaadin-item>Item 4</vaadin-item>
+    <b>Select an Item</b>
+    <vaadin-item>Item one</vaadin-item>
+    <vaadin-item>Item two</vaadin-item>
+    <hr>
+    <vaadin-item>Item three</vaadin-item>
+    <vaadin-item>Item four</vaadin-item>
   </vaadin-list-box>
 ```
 
