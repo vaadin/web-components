@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-item.html",
         "start": {
-          "line": 52,
+          "line": 40,
           "column": 6
         },
         "end": {
-          "line": 52,
+          "line": 40,
           "column": 42
         }
       },
@@ -71,7 +71,7 @@
             {
               "name": "selected",
               "type": "boolean",
-              "description": "If true, the button is in the selected state.",
+              "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
@@ -281,11 +281,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 41,
+              "line": 29,
               "column": 6
             },
             "end": {
-              "line": 45,
+              "line": 33,
               "column": 7
             }
           },
@@ -313,7 +313,7 @@
             },
             {
               "name": "selected",
-              "description": "If true, the button is in the selected state.",
+              "description": "If true, the item is in selected state.",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
@@ -342,11 +342,11 @@
               "range": {
                 "file": "vaadin-item.html",
                 "start": {
-                  "line": 30,
+                  "line": 18,
                   "column": 4
                 },
                 "end": {
-                  "line": 30,
+                  "line": 18,
                   "column": 17
                 }
               }
@@ -410,7 +410,7 @@
             {
               "name": "selected",
               "type": "boolean",
-              "description": "If true, the button is in the selected state.",
+              "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -609,7 +609,7 @@
             },
             {
               "name": "selected",
-              "description": "If true, the button is in the selected state.",
+              "description": "If true, the item is in selected state.",
               "sourceRange": {
                 "start": {
                   "line": 41,
