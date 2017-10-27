@@ -15,6 +15,7 @@
     "eslint": "^3.19.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^2.0.0",
+    "faker": "^4.1.0",
     "gulp": "latest",
     "gulp-eslint": "^3.0.1",
     "gulp-html-extract": "^0.3.0",
@@ -42,5 +43,6 @@
     "datatable",
     "data-grid",
     "data-table"
-  ]
+  ],
+  "dependencies": {}
 }
