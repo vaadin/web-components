@@ -42,18 +42,6 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-dropdown-menu-text-field-styles" theme-for="vaadin-dropdown-menu-text-field">
-  <template>
-    <style>
-      [part~="value"] {
-        /* Setting the visibility instead of display:none in order to get rid of the setting min-height for input-field part */
-        visibility: hidden;
-        width: 0;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-dropdown-menu-overlay">
   <script>
     {
@@ -246,8 +234,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_openedChanged(opened, _overlayElement)',
-            '_disabledChanged(disabled, _inputElement)',
-            '_placeholderChanged(placeholder, _nativeInput)',
+            '_disabledChanged(disabled, _inputElement)'
           ];
         }
 
@@ -269,18 +256,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
           this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
-          this._nativeInput = this._inputElement.shadowRoot.querySelector('[part~="value"]');
+          this._nativeInput = this._inputElement.shadowRoot.querySelector('input');
 
           this._inputElement.addEventListener('click', e => this._toggleOverlay());
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
-        }
-
-        _placeholderChanged(placeholder, nativeInput) {
-          if (!placeholder || !nativeInput) {
-            return;
-          }
-
-          nativeInput.style.visibility = 'visible';
         }
 
         /** @private */
@@ -399,6 +378,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.value = selected ? selected.textContent.trim() : '';
+          this._nativeInput.style.visibility = selected ? 'hidden' : 'visible';
+
           this.opened = false;
           this.validate();
         }
