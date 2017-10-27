@@ -17,7 +17,7 @@
           <template preserve-content>
             <vaadin-grid aria-label="Array Data Example" items="[[items]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -58,7 +58,7 @@
 
     <h3>Dynamic Array Data</h3>
     <p>
-      The <code>items</code> property can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/model-data#array-mutation" target="_blank">Polymer's array mutation methods</a>.
+      The <code>items</code> property can be modified using Polymer's array mutation methods.
     </p>
     <vaadin-demo-snippet id='grid-data-demos-dynamic-array-data'>
       <template preserve-content>
@@ -66,16 +66,16 @@
         <dom-module id="x-dynamic-data-example">
           <template preserve-content>
             <style>
-              paper-button {
+              vaadin-button {
                 margin-bottom: 20px;
               }
             </style>
-            <paper-button raised on-tap="_add">Add Item</paper-button>
-            <paper-button raised on-tap="_remove">Remove Item</paper-button>
+            <vaadin-button raised on-click="_add">Add Item</vaadin-button>
+            <vaadin-button raised on-click="_remove">Remove Item</vaadin-button>
 
             <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -137,16 +137,16 @@
                 height: auto;
               }
 
-              paper-button {
+              vaadin-button {
                 margin-bottom: 20px;
               }
             </style>
-            <paper-button raised on-tap="_add">Add Item</paper-button>
-            <paper-button raised on-tap="_remove">Remove Item</paper-button>
+            <vaadin-button raised on-click="_add">Add Item</vaadin-button>
+            <vaadin-button raised on-click="_remove">Remove Item</vaadin-button>
 
             <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -209,7 +209,7 @@
           <template preserve-content>
             <vaadin-grid aria-label="Remote Data Example" data-provider="[[dataProvider]]" size="[[size]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>

@@ -33,7 +33,7 @@
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -97,16 +97,16 @@
         <dom-bind>
           <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
+            <vaadin-checkbox checked="{{frozen}}">Freeze First Two Columns</vaadin-checkbox>
 
             <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -150,17 +150,17 @@
         <dom-bind>
           <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
+            <vaadin-checkbox checked="{{hidden}}">Hide First Two Columns</vaadin-checkbox>
             <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
 
             <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -216,7 +216,7 @@
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" resizable>
+              <vaadin-grid-column width="60px" flex-grow="0" resizable>
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>

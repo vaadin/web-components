@@ -27,7 +27,7 @@
             <!-- The array is set as the <vaadin-grid>'s "items" property -->
             <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
                 <!-- If necessary, the footer could be set using <template class="footer"> -->
@@ -63,7 +63,7 @@
 
     <h3>Two-Way Binding</h3>
     <p>
-      Some template variables, like the item properties, can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/data-binding" target="_blank">Polymer's two-way binding</a>.
+      Some template variables, like the item properties, can be modified using Polymer's two-way binding.
     </p>
     <vaadin-demo-snippet id='grid-basic-demos-two-way-binding'>
       <template preserve-content>
@@ -82,7 +82,7 @@
 
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
+            <vaadin-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</vaadin-checkbox>
 
             <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
 

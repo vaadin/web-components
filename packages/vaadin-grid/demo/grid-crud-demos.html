@@ -34,13 +34,17 @@
               input {
                 font: inherit;
               }
+
+              vaadin-button[hidden] {
+                display: none;
+              }
             </style>
             <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
 
             <div style="margin-bottom: 20px">
-              <input id="firstname" placeholder="First Name">
-              <input id="lastname" placeholder="Last Name">
-              <button on-click="_add">Add</button>
+              <vaadin-text-field id="firstname" placeholder="First Name"></vaadin-text-field>
+              <vaadin-text-field id="lastname" placeholder="Last Name"></vaadin-text-field>
+              <vaadin-button on-click="_add">Add</vaadin-button>
             </div>
 
             <vaadin-grid id="grid" items="[[items]]">
@@ -69,10 +73,10 @@
               <vaadin-grid-column>
                 <template>
                   <div style="display: flex">
-                    <button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</button>
-                    <button hidden="[[editing]]" on-click="_remove">Remove</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</button>
+                    <vaadin-button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</vaadin-button>
+                    <vaadin-button hidden="[[editing]]" on-click="_remove">Remove</vaadin-button>
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</vaadin-button>
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
                   </div>
                 </template>
               </vaadin-grid-column>
