@@ -36,13 +36,11 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-data-demos-assigning-array-data', function(document) {
-              class XArrayDataExample extends Polymer.Element {
-                static get is() {
-                  return 'x-array-data-example';
-                }
-                ready() {
-                  super.ready();
-                  const items = [];
+              Polymer({
+                is: 'x-array-data-example',
+
+                ready: function() {
+                  var items = [];
 
                   for (var i = 0; i < 100; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
@@ -50,8 +48,7 @@
 
                   this.items = items;
                 }
-              }
-              window.customElements.define(XArrayDataExample.is, XArrayDataExample);
+              });
             });
           </script>
         </dom-module>
@@ -97,31 +94,27 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-data-demos-dynamic-array-data', function(document) {
-              class XDynamicDataExample extends Polymer.Element {
-                static get is() {
-                  return 'x-dynamic-data-example';
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-dynamic-data-example',
 
-                  const items = [];
+                ready: function() {
+                  var items = [];
 
                   for (var i = 0; i < 10; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
                   }
 
                   this.items = items;
-                }
+                },
 
-                _add() {
+                _add: function() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                }
+                },
 
-                _remove() {
+                _remove: function() {
                   this.pop('items');
                 }
-              }
-              window.customElements.define(XDynamicDataExample.is, XDynamicDataExample);
+              });
             });
           </script>
         </dom-module>
@@ -172,31 +165,27 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-data-demos-dynamic-height', function(document) {
-              class XDynamicHeightExample extends Polymer.Element {
-                static get is() {
-                  return 'x-dynamic-height-example';
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-dynamic-height-example',
 
-                  const items = [];
+                ready: function() {
+                  var items = [];
 
                   for (var i = 0; i < 5; i++) {
                     items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
                   }
 
                   this.items = items;
-                }
+                },
 
-                _add() {
+                _add: function() {
                   this.push('items', {firstName: 'First Name ' + this.items.length, lastName: 'Last Name ' + this.items.length});
-                }
+                },
 
-                _remove() {
+                _remove: function() {
                   this.pop('items');
                 }
-              }
-              window.customElements.define(XDynamicHeightExample.is, XDynamicHeightExample);
+              });
             });
           </script>
         </dom-module>
@@ -239,23 +228,23 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-data-demos-assigning-remotefunction-data', function(document) {
-              class XRemoteDataExample extends Polymer.Element {
-                static get is() {
-                  return 'x-remote-data-example';
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-remote-data-example',
+
+                ready: function() {
                   this.size = 200;
-                  this.dataProvider = (params, callback) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = () => callback(JSON.parse(xhr.responseText).result);
-                    const index = params.page * params.pageSize;
+                  this.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      callback(JSON.parse(xhr.responseText).result);
+                    };
+                    var index = params.page * params.pageSize;
                     xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
                     xhr.send();
                   };
                 }
-              }
-              window.customElements.define(XRemoteDataExample.is, XRemoteDataExample);
+
+              });
             });
           </script>
         </dom-module>

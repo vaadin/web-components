@@ -20,7 +20,7 @@
     <vaadin-demo-snippet id='grid-basic-demos-basic-binding'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <!-- Fetch an array of users to be shown in the grid -->
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
@@ -68,18 +68,18 @@
     <vaadin-demo-snippet id='grid-basic-demos-two-way-binding'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
-            <custom-style>
-              <style is="custom-style">
-                input[readonly] {
-                  border: 2px solid transparent;
-                }
+          <template>
+            <style>
+              .vaadin-demo-input[readonly] {
+                border: 2px solid transparent;
+                pointer-events: none;
+              }
 
-                input {
-                  font: inherit;
-                }
-              </style>
-            </custom-style>
+              .vaadin-demo-input {
+                font: inherit;
+              }
+            </style>
+
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
             <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
@@ -89,14 +89,14 @@
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
-                  <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
+                  <input class="vaadin-demo-input" value="{{item.firstName::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
-                  <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
+                  <input class="vaadin-demo-input" value="{{item.lastName::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
 
