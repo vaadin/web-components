@@ -15,20 +15,20 @@
             <vaadin-grid aria-label="Hierarchical Data Grid Example" data-provider="[[_dataProvider]]">
 
               <vaadin-grid-column>
-                <template class="header">Package name</template>
+                <template class="header">Name</template>
                 <template>
                   <vaadin-grid-hierarchy-toggle
                       enabled="[[item.hasChildren]]"
                       expanded="{{expanded}}"
                       level="[[level]]">
-                    [[item.name]]
+                    [[_getIconFor(item, expanded)]]&nbsp;&nbsp;[[item.name]]
                   </vaadin-grid-hierarchy-toggle>
                 </template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
-                <template class="header">Version specified</template>
-                <template>[[item.version]]</template>
+                <template class="header">Size</template>
+                <template>[[item.size]]</template>
               </vaadin-grid-column>
 
             </vaadin-grid>
@@ -38,40 +38,49 @@
               Polymer({
                 is: 'x-hierarchical-data-provider-example',
 
-                properties: {
-                  _dataProvider: {
-                    type: Function,
-                    value: function() {
-                      return this._dataProvider.bind(this);
-                    }
-                  }
-                },
-
                 _dataProvider: function(params, callback) {
                   // If the data request concerns a hierarchy sub-level, `params` has an additional
                   // `parentItem` property that refers to the sub-level's parent item
-                  const pkgName = params.parentItem ? params.parentItem.name : 'vaadin-grid';
+                  const parentUuid = params.parentItem ? params.parentItem.uuid : null;
 
-                  // Demo helper API that fetches dependencies by package name
-                  Vaadin.GridDemo._fetchGridDependencies(pkgName, function(dependencies) {
-                    // Here `dependencies` is an array consisting of items with the following structure:
+                  // Demo helper API that fetches filesystem data
+                  Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
+                    // Here `fsItems` is an array consisting of items with the following structure:
                     // {
-                    //   name: "vaadin-checkbox",
-                    //   version: "^1.0.0",
-                    //   hasChildren: true
+                    //   type: "file"
+                    //   hasChildren: false
+                    //   name: "foo.txt",
+                    //   size: "1 MB",
+                    //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
+                    //   parentUuid: null
                     // }
                     // This demo uses the `hasChildren` flag as an indicator of the item having child items.
                     // The property is bound to `<vaadin-grid-hierarchy-toggle>`'s `enabled` property in
                     // the template above.
 
-
                     // Slice out only the requested items
                     const startIndex = params.page * params.pageSize;
-                    const pageItems = dependencies.slice(startIndex, startIndex + params.pageSize);
+                    const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
                     // Inform grid of the requested hierarchy level's full size
-                    const hierarchyLevelSize = dependencies.length;
+                    const hierarchyLevelSize = fsItems.length;
                     callback(pageItems, hierarchyLevelSize);
                   });
+                },
+
+                _getIconFor: function(item, expanded) {
+                  if (!item) {
+                    return;
+                  }
+
+                  if (item.type === 'dir') {
+                    if (expanded) {
+                      return '📂';
+                    } else {
+                      return '📁';
+                    }
+                  } else {
+                    return '📄';
+                  }
                 }
               });
             });
@@ -81,6 +90,7 @@
     </vaadin-demo-snippet>
 
   </template>
+  <script src="fs-data.js"></script>
   <script>
     class GridHierarchyDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
       static get is() {
@@ -92,37 +102,14 @@
 
         window.Vaadin = window.Vaadin || {};
         window.Vaadin.GridDemo = window.Vaadin.GridDemo || {};
-
-        Vaadin.GridDemo._fetchGridDependencies = (packageName, callback) => {
-          const requests = new Set;
-          Vaadin.GridDemo._fetchGridFlatDependencies(packageName, deps => {
-            deps.forEach(dep => {
-              requests.add(dep);
-              Vaadin.GridDemo._fetchGridFlatDependencies(dep.name, subDeps => {
-                dep.hasChildren = subDeps.length > 0;
-                requests.delete(dep);
-                if (requests.size === 0) {
-                  callback(deps);
-                }
-              });
-            });
-          });
-        };
-
-        Vaadin.GridDemo._fetchGridFlatDependencies = (packageName, callback) => {
-          const xhr = new XMLHttpRequest();
-          xhr.open('GET', `${this.importPath}../../${packageName}/bower.json`);
-          xhr.onload = function() {
-            const json = JSON.parse(this.responseText);
-            const deps = Object.keys(json.dependencies || []).map(dep => {
-              return {
-                name: dep,
-                version: json.dependencies[dep].split('#').pop()
-              };
-            });
-            callback(deps);
-          };
-          xhr.send();
+        window.Vaadin.GridDemo._fetchFilesystem = function(parentUuid, callback) {
+          callback(window.Vaadin.GridDemo._fsData.filter(function(fsItem) {
+            if (parentUuid) {
+              return fsItem.parentUuid === parentUuid;
+            } else {
+              return !fsItem.parentUuid;
+            }
+          }));
         };
       }
     }
