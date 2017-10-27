@@ -143,14 +143,9 @@ This program is available under Apache License Version 2.0, available at https:/
         _checkedNameObserver(checked, name) {
           if (name) {
             this._storedName = name;
-            if (!checked) {
-              this.name = '';
-            }
-          } else {
-            if (checked && this._storedName) {
-              this.name = this._storedName;
-            }
           }
+
+          this.name = this.checked ? this._storedName : '';
         }
 
         ready() {
