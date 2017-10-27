@@ -80,6 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown-menu-text-field">
   <script>
     {
+      let memoizedTemplate;
       /**
         * The text-field element.
         *
@@ -93,6 +94,23 @@ This program is available under Apache License Version 2.0, available at https:/
       class VaadinDropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
         static get is() {
           return 'vaadin-dropdown-menu-text-field';
+        }
+
+        static get template() {
+          if (!memoizedTemplate) {
+            // Clone the superclass template
+            memoizedTemplate = super.template.cloneNode(true);
+
+            // Create a slot for the value element
+            const slot = document.createElement('slot');
+            slot.name = 'selected';
+            slot.setAttribute('part', 'selected');
+
+            // Insert the slot before the text-field
+            const input = memoizedTemplate.content.querySelector('input');
+            input.parentElement.insertBefore(slot, input);
+          }
+          return memoizedTemplate;
         }
 
         get focusElement() {
@@ -355,7 +373,7 @@ This program is available under Apache License Version 2.0, available at https:/
               this._slotted.removeAttribute('tabindex');
             }
 
-            this._slotted.slot = 'prefix';
+            this._slotted.slot = 'selected';
             this._inputElement.appendChild(this._slotted);
 
           }
