@@ -220,11 +220,13 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /** @private */
         constructor() {
           super();
           this._boundSetPosition = this._setPosition.bind(this);
         }
 
+        /** @private */
         connectedCallback() {
           super.connectedCallback();
           this.addEventListener('iron-resize', this._boundSetPosition);
@@ -240,6 +242,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
         }
 
+        /** @private */
         disconnectedCallback() {
           super.disconnectedCallback();
           this.removeEventListener('iron-resize', this._boundSetPosition);
@@ -247,6 +250,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
         }
 
+        /** @private */
         notifyResize() {
           super.notifyResize();
           if (this.positionTarget && this.opened) {
