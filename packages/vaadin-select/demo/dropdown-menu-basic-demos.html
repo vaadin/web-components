@@ -11,12 +11,40 @@
     <h3>Basic Usage</h3>
     <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
       <template preserve-content>
-          <vaadin-dropdown-menu>
+          <vaadin-dropdown-menu label="Select a Name">
             <template>
               <vaadin-list-box vertical>
-                <vaadin-item><i>Option</i> 1</vaadin-item>
-                <vaadin-item label='option 2'>Option 2</vaadin-item>
-                <vaadin-item>Option 3</vaadin-item>
+                <vaadin-item>Jose</vaadin-item>
+                <vaadin-item label='Manuel'>Manolo</vaadin-item>
+                <vaadin-item>Pedro</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Content</h3>
+    <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
+      <template preserve-content>
+          <vaadin-dropdown-menu label="Select a Country">
+            <template>
+              <vaadin-list-box vertical>
+                <vaadin-item>
+                  <img style="width: 24px" src="http://www.sciencekids.co.nz/images/pictures/flags96/Spain.jpg" />
+                  &nbsp;Spain
+                </vaadin-item>
+                <vaadin-item>
+                  <img style="width: 24px" src="http://www.sciencekids.co.nz/images/pictures/flags96/Finland.jpg" />
+                  &nbsp;Finland
+                </vaadin-item>
+                <vaadin-item>
+                  <img style="width: 24px" src="http://www.sciencekids.co.nz/images/pictures/flags96/United_States.jpg" />
+                  &nbsp;U.S.A.
+                </vaadin-item>
+                <vaadin-item>
+                  <img style="width: 24px" src="http://www.sciencekids.co.nz/images/pictures/flags96/Germany.jpg" />
+                  &nbsp;Germany
+                </vaadin-item>
               </vaadin-list-box>
             </template>
           </vaadin-dropdown-menu>
