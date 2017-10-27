@@ -64,8 +64,10 @@
                     // The property is bound to `<vaadin-grid-hierarchy-toggle>`'s `enabled` property in
                     // the template above.
 
-                    // Splice out only the requested items
-                    const pageItems = dependencies.slice(params.page * params.pageSize, params.pageSize);
+
+                    // Slice out only the requested items
+                    const startIndex = params.page * params.pageSize;
+                    const pageItems = dependencies.slice(startIndex, startIndex + params.pageSize);
                     // Inform grid of the requested hierarchy level's full size
                     const hierarchyLevelSize = dependencies.length;
                     callback(pageItems, hierarchyLevelSize);
