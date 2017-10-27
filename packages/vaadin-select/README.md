@@ -24,12 +24,18 @@
 ```
 -->
 ```html
-<vaadin-dropdown-menu>
-  ...
+<vaadin-dropdown-menu placeholder="Name" label="Select a Name">
+  <template>
+    <vaadin-list-box vertical>
+      <vaadin-item>Jose</vaadin-item>
+      <vaadin-item>Manolo</vaadin-item>
+      <vaadin-item>Pedro</vaadin-item>
+    </vaadin-list-box>
+  </template>
 </vaadin-dropdown-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.png" width="200" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="200" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
 
 
 ## Running demos and tests in browser
