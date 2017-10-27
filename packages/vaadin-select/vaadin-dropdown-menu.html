@@ -372,9 +372,9 @@ This program is available under Apache License Version 2.0, available at https:/
             if (selected.hasAttribute('label')) {
               this._selectionElement.textContent = selected.getAttribute('label');
             } else {
-              const clon = selected.cloneNode(true);
-              clon.removeAttribute('tabindex');
-              this._selectionElement.appendChild(clon);
+              const clone = selected.cloneNode(true);
+              clone.removeAttribute('tabindex');
+              this._selectionElement.appendChild(clone);
             }
           }
 
