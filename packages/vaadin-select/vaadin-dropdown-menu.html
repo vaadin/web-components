@@ -336,6 +336,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setInputValue() {
+          this._inputElement.focus();
           const selected = this._menuElement._navItems[this._menuElement.selected];
           if (selected) {
             if (this._slotted) {
