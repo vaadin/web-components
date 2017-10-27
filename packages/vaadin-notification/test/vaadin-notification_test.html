@@ -1,0 +1,89 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-notification tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-notification.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-notification>
+        <template>
+          Your work has been <strong>saved</strong>
+        </template>
+      </vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-notification', function() {
+      var notification, overlay;
+
+      beforeEach(() => {
+        notification = fixture('default');
+        overlay = notification.shadowRoot.querySelector('vaadin-notification-overlay');
+        notification.open();
+      });
+
+      describe('vaadin-notification-overlay', () => {
+        it('vaadin-notification-overlay is in the body after opening', () => {
+          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
+        });
+
+        it('vaadin-notification-overlay is visible after opening', () => {
+          var isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+          expect(isVisible(document.body.querySelector('vaadin-notification-overlay'))).to.be.true;
+        });
+      });
+
+      describe('a11y', () => {
+        it('overlay should have the `alert` role', () => {
+          expect(overlay.getAttribute('role')).to.be.equal('alert');
+        });
+
+        it('overlay should have `aria-live="polite"`', () => {
+          expect(overlay.getAttribute('aria-live')).to.be.equal('polite');
+        });
+
+        it('overlay should have correct `aria-label`', () => {
+          expect(overlay.getAttribute('aria-label')).to.be.equal('Your work has been saved');
+        });
+      });
+
+      describe('methods', () => {
+        it('open() set opened true', () => {
+          expect(notification.opened).to.be.true;
+        });
+
+        it('close() set opened false', () => {
+          notification.close();
+          expect(notification.opened).to.be.false;
+        });
+      });
+
+      describe('duration', () => {
+        it('should set _durationTimeoutId and close itself after 10ms', (done) => {
+          notification.duration = 10;
+          expect(notification._durationTimeoutId).not.to.be.null;
+          setTimeout(() => {
+            expect(notification.opened).to.eql(false);
+            done();
+          }, 10);
+        });
+
+        it('should set _durationTimeoutId to null if duration is negative', () => {
+          notification.duration = -10;
+          expect(notification._durationTimeoutId).to.be.undefined;
+        });
+
+        it('should set _durationTimeoutId to null if duration is 0', () => {
+          notification.duration = 0;
+          expect(notification._durationTimeoutId).to.be.undefined;
+        });
+      });
+    });
+  </script>
+</body>

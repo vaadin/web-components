@@ -25,6 +25,7 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
+    "vaadin-overlay": "^1.5.0",
     "vaadin-themable-mixin": "^1.1.3"
   },
   "devDependencies": {
@@ -32,6 +33,8 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
+    "vaadin-button": "^1.0.0",
+    "vaadin-checkbox": "^1.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
   }
 }

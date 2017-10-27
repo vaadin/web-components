@@ -1,8 +1,9 @@
 {
   "rules": {
+    "no-unused-vars": 0
   },
   "globals": {
-    "ElementDemo": false,
+    "NotificationDemo": false,
     "DemoReadyEventEmitter": false
   }
 }
