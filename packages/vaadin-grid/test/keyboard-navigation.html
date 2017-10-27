@@ -1128,6 +1128,14 @@
             expect(getCellContent(getRowCells(focusedRow)[0]).textContent).to.equal(focusedContent);
           });
 
+          it('should not focus a cell on size change if the focus is outside the body', () => {
+            getContainerCell(grid.$.header, 0, 0).focus();
+            up();
+
+            grid.size *= 2;
+            expect(grid.shadowRoot.activeElement).to.equal(getContainerCell(grid.$.header, 0, 0));
+          });
+
           describe('rotating focus indicator prevention', () => {
             it('should hide navigation mode when a focused row goes off screen', () => {
               focusItem(0);
