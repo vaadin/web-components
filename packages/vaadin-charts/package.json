@@ -1,6 +1,6 @@
 {
   "name": "vaadin-charts",
-  "version": "5.0.0-preview",
+  "version": "6.0.0-alpha1",
   "description": "vaadin-charts",
   "main": "vaadin-chart.html",
   "repository": "vaadin/vaadin-charts",
