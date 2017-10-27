@@ -258,7 +258,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
           this._nativeInput = this._inputElement.shadowRoot.querySelector('input');
 
-          this._inputElement.addEventListener('click', e => this._toggleOverlay());
+          this._inputElement.addEventListener('click', e => this.opened = true);
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
         }
 
@@ -287,6 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           inputElement.disabled = disabled;
           this.setAttribute('aria-disabled', disabled);
+          this.opened = false;
         }
 
         _requiredChanged(required) {
@@ -296,25 +297,20 @@ This program is available under Apache License Version 2.0, available at https:/
         _onKeyDown(e) {
           if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
             e.preventDefault();
-            this._toggleOverlay();
+            this.opened = true;
           }
         }
 
         _onKeyDownInside(e) {
-          const eventFromSelected = e.composedPath()[0].hasAttribute('selected');
-
-          if (eventFromSelected && (e.type === 'keydown' && /^( |SpaceBar|Enter)$/.test(event.key) || e.type === 'click')) {
-            this.opened = false;
-          } else if (e.type === 'keydown' && /^(Tab)$/.test(e.key)) {
+          if (/^(Tab)$/.test(e.key)) {
             this.opened = false;
             this._inputElement.focus();
           }
-
-          this.validate();
         }
 
         _openedChanged(opened, overlayElement) {
-          if (!overlayElement || !this._inputElement) {
+          if (!overlayElement || !this._inputElement || this.disabled) {
+            this.opened = false;
             return;
           }
 
@@ -329,16 +325,20 @@ This program is available under Apache License Version 2.0, available at https:/
               if (this._menuElement) {
                 this._menuElement.addEventListener('selected-changed', e => this._setInputValue(e));
                 this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
-                this._menuElement.addEventListener('click', e => this._onKeyDownInside(e));
+                this._menuElement.addEventListener('click', e => this.opened = false);
               }
             }
 
-            this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
-
-            window.addEventListener('scroll', this._boundSetPosition, true);
+            if (this._menuElement) {
+              this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
+              this._setPosition();
+              window.addEventListener('scroll', this._boundSetPosition, true);
+            }
           } else {
-            this._inputElement.focus();
-            this.validate();
+            if (!this.disabled) {
+              this._inputElement.focus();
+              this.validate();
+            }
             window.removeEventListener('scroll', this._boundSetPosition, true);
           }
 
@@ -360,68 +360,51 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setInputValue() {
-          this._inputElement.focus();
-
+          this.opened = false;
           this._selectionElement.innerHTML = '';
 
+          // FIXME: don't rely in private API, listbox should provide a selectedElement property
           const selected = this._menuElement._navItems[this._menuElement.selected];
           if (selected) {
-            this._nativeInput.style.visibility = 'hidden';
-
             if (selected.hasAttribute('label')) {
-              this._selectionElement.textContent = selected.getAttribute('label');
+              this.value = this._selectionElement.textContent = selected.getAttribute('label');
             } else {
+              this.value = selected.textContent.trim();
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
               this._selectionElement.appendChild(clone);
             }
+          } else {
+            this.value = '';
           }
 
-          this.value = selected ? selected.textContent.trim() : '';
-          this._nativeInput.style.visibility = selected ? 'hidden' : 'visible';
-
-          this.opened = false;
+          this._nativeInput.style.visibility = this.value ? 'hidden' : 'visible';
           this.validate();
-        }
-
-        _toggleOverlay() {
-          if (this.disabled) {
-            return;
-          }
-
-          this.opened = !this.opened;
-
-          this._setPosition();
         }
 
         _setPosition() {
           const inputRect = this._inputElement.getBoundingClientRect();
 
           this._overlayElement.style.left = inputRect.left + 'px';
-          this._overlayElement.style.top = (inputRect.top > window.innerHeight - inputRect.top) ?
-            this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight + 'px' : inputRect.top + 'px';
+          this._overlayElement.style.top = (inputRect.top <= window.innerHeight - inputRect.top ? inputRect.top :
+             this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight) + 'px'
         }
 
-        /**
-         * @protected
-         */
+        /** @protected */
         validate() {
-          if (!this.value && this.required && !this.disabled) {
-            this.setAttribute('invalid', '');
-            return false;
-          } else {
+          if (this.disabled || !this.required || this.value) {
             this.removeAttribute('invalid');
             return true;
           }
+          this.setAttribute('invalid', '');
         }
-
       }
 
       customElements.define(DropdownMenuElement.is, DropdownMenuElement);
 
       /**
-        * @namespace Vaadin
-        */
+       * @namespace Vaadin
+       */
       window.Vaadin = window.Vaadin || {};
       Vaadin.DropdownMenuElement = DropdownMenuElement;
     }
