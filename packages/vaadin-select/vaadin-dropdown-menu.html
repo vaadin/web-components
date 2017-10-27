@@ -42,18 +42,6 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-dropdown-menu-text-field-styles" theme-for="vaadin-dropdown-menu-text-field">
-  <template>
-    <style>
-      [part~="value"] {
-        /* Setting the visibility instead of display:none in order to get rid of the setting min-height for input-field part */
-        visibility: hidden;
-        width: 0;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-dropdown-menu-overlay">
   <script>
     {
@@ -130,11 +118,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]">
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]">
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
-
     <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
     <iron-media-query
@@ -223,6 +210,13 @@ This program is available under Apache License Version 2.0, available at https:/
               value: false
             },
 
+            /**
+             * A hint to the user of what can be entered in the control.
+             */
+            placeholder: {
+              type: String
+            },
+
             _phone: Boolean,
 
             _phoneMediaQuery: {
@@ -231,14 +225,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _overlayElement: Object,
 
-            _inputElement: Object
+            _inputElement: Object,
+
+            _nativeInput: Object
           };
         }
 
         static get observers() {
           return [
             '_openedChanged(opened, _overlayElement)',
-            '_disabledChanged(disabled, _inputElement)',
+            '_disabledChanged(disabled, _inputElement)'
           ];
         }
 
@@ -260,6 +256,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
           this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
+          this._nativeInput = this._inputElement.shadowRoot.querySelector('input');
 
           this._inputElement.addEventListener('click', e => this._toggleOverlay());
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
@@ -369,6 +366,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const selected = this._menuElement._navItems[this._menuElement.selected];
           if (selected) {
+            this._nativeInput.style.visibility = 'hidden';
+
             if (selected.hasAttribute('label')) {
               this._selectionElement.textContent = selected.getAttribute('label');
             } else {
@@ -379,6 +378,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.value = selected ? selected.textContent.trim() : '';
+          this._nativeInput.style.visibility = selected ? 'hidden' : 'visible';
+
           this.opened = false;
           this.validate();
         }
