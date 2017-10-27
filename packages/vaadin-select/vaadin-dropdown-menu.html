@@ -280,9 +280,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const eventFromSelected = e.composedPath()[0].hasAttribute('selected');
 
           if (eventFromSelected && (e.type === 'keydown' && /^( |SpaceBar|Enter)$/.test(event.key) || e.type === 'click')) {
-            this.value = this.value || e.composedPath()[0].textContent;
             this.opened = false;
-
           } else if (e.type === 'keydown' && /^(Tab)$/.test(e.key)) {
             this.opened = false;
             this._inputElement.focus();
@@ -357,7 +355,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           }
 
-          this.value = selected ? selected.textContent : '';
+          this.value = selected ? selected.textContent.trim() : '';
           this.opened = false;
           this.validate();
         }
