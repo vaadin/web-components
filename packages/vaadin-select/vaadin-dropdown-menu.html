@@ -80,6 +80,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown-menu-text-field">
   <script>
     {
+      let memoizedTemplate;
       /**
         * The text-field element.
         *
@@ -93,6 +94,23 @@ This program is available under Apache License Version 2.0, available at https:/
       class VaadinDropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
         static get is() {
           return 'vaadin-dropdown-menu-text-field';
+        }
+
+        static get template() {
+          if (!memoizedTemplate) {
+            // Clone the superclass template
+            memoizedTemplate = super.template.cloneNode(true);
+
+            // Create a slot for the value element
+            const slot = document.createElement('slot');
+            slot.name = 'selected';
+            slot.setAttribute('part', 'selected');
+
+            // Insert the slot before the text-field
+            const input = memoizedTemplate.content.querySelector('input');
+            input.parentElement.insertBefore(slot, input);
+          }
+          return memoizedTemplate;
         }
 
         get focusElement() {
@@ -112,7 +130,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
+    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]">
+      <slot name="prefix" slot="prefix"></slot>
+      <div slot="selected"></div>
+    </vaadin-dropdown-menu-text-field>
+
     <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
     <iron-media-query
@@ -237,6 +259,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
           this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
+          this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
 
           this._inputElement.addEventListener('click', e => this._toggleOverlay());
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
@@ -341,23 +364,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _setInputValue() {
           this._inputElement.focus();
+
+          this._selectionElement.innerHTML = '';
+
           const selected = this._menuElement._navItems[this._menuElement.selected];
           if (selected) {
-            if (this._slotted) {
-              this._slotted.parentElement.removeChild(this._slotted);
-            }
-
             if (selected.hasAttribute('label')) {
-              this._slotted = document.createElement('div');
-              this._slotted.textContent = selected.getAttribute('label');
+              this._selectionElement.textContent = selected.getAttribute('label');
             } else {
-              this._slotted = selected.cloneNode(true);
-              this._slotted.removeAttribute('tabindex');
+              const clone = selected.cloneNode(true);
+              clone.removeAttribute('tabindex');
+              this._selectionElement.appendChild(clone);
             }
-
-            this._slotted.slot = 'prefix';
-            this._inputElement.appendChild(this._slotted);
-
           }
 
           this.value = selected ? selected.textContent.trim() : '';

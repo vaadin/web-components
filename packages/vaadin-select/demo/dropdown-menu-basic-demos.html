@@ -4,9 +4,7 @@
        :host {
         display: block;
       }
-
     </style>
-
 
     <h3>Basic Usage</h3>
     <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
@@ -27,6 +25,7 @@
     <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
       <template preserve-content>
           <vaadin-dropdown-menu label="Select a Country">
+            <div slot="prefix">🌍 &nbsp;</div>
             <template>
               <vaadin-list-box vertical>
                 <vaadin-item>
