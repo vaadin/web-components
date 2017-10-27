@@ -130,7 +130,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]"></vaadin-dropdown-menu-text-field>
+    <vaadin-dropdown-menu-text-field label="[[label]]" readonly value="[[value]]">
+      <slot name="prefix" slot="prefix"></slot>
+    </vaadin-dropdown-menu-text-field>
     <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
     <iron-media-query
