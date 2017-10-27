@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 405,
+          "line": 424,
           "column": 6
         },
         "end": {
-          "line": 405,
+          "line": 424,
           "column": 42
         }
       },
@@ -627,11 +627,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 69,
+              "line": 57,
               "column": 6
             },
             "end": {
-              "line": 73,
+              "line": 61,
               "column": 7
             }
           },
@@ -818,15 +818,15 @@
               "name": "focused",
               "type": "boolean",
               "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
-              "privacy": "public",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 59,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 66,
+                  "line": 67,
                   "column": 9
                 }
               },
@@ -848,11 +848,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 71,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 73,
+                  "line": 74,
                   "column": 9
                 }
               },
@@ -869,11 +869,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 78,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -892,11 +892,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 84,
+                  "line": 85,
                   "column": 8
                 },
                 "end": {
-                  "line": 84,
+                  "line": 85,
                   "column": 32
                 }
               },
@@ -1404,11 +1404,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 141,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 149,
+                  "line": 156,
                   "column": 5
                 }
               },
@@ -1427,11 +1427,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 151,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 153,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -1450,11 +1450,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 155,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 157,
+                  "line": 164,
                   "column": 5
                 }
               },
@@ -1469,11 +1469,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 168,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -1492,11 +1492,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 181,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 188,
+                  "line": 195,
                   "column": 5
                 }
               },
@@ -1511,11 +1511,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 202,
                   "column": 4
                 },
                 "end": {
-                  "line": 198,
+                  "line": 205,
                   "column": 5
                 }
               },
@@ -1530,11 +1530,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 200,
+                  "line": 207,
                   "column": 4
                 },
                 "end": {
-                  "line": 213,
+                  "line": 220,
                   "column": 5
                 }
               },
@@ -1553,11 +1553,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 215,
+                  "line": 222,
                   "column": 4
                 },
                 "end": {
-                  "line": 231,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -1774,11 +1774,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 92,
+              "line": 81,
               "column": 6
             },
             "end": {
-              "line": 100,
+              "line": 106,
               "column": 7
             }
           },
@@ -1805,34 +1805,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "focused",
-              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 59,
-                  "column": 8
-                },
-                "end": {
-                  "line": 66,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 78,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -2203,11 +2185,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 158,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -2225,11 +2207,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 163,
+                  "line": 172,
                   "column": 12
                 },
                 "end": {
-                  "line": 166,
+                  "line": 175,
                   "column": 13
                 }
               },
@@ -2245,11 +2227,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 181,
                   "column": 12
                 },
                 "end": {
-                  "line": 176,
+                  "line": 185,
                   "column": 13
                 }
               },
@@ -2267,11 +2249,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 181,
+                  "line": 190,
                   "column": 12
                 },
                 "end": {
-                  "line": 185,
+                  "line": 194,
                   "column": 13
                 }
               },
@@ -2288,11 +2270,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -2307,11 +2289,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 201,
+                  "line": 210,
                   "column": 13
                 }
               },
@@ -2321,17 +2303,36 @@
               "defaultValue": "false"
             },
             {
+              "name": "placeholder",
+              "type": "string",
+              "description": "A hint to the user of what can be entered in the control.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 215,
+                  "column": 12
+                },
+                "end": {
+                  "line": 217,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
               "name": "_phone",
               "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 219,
                   "column": 12
                 },
                 "end": {
-                  "line": 203,
+                  "line": 219,
                   "column": 27
                 }
               },
@@ -2346,11 +2347,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -2366,11 +2367,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 209,
+                  "line": 225,
                   "column": 12
                 },
                 "end": {
-                  "line": 209,
+                  "line": 225,
                   "column": 35
                 }
               },
@@ -2385,12 +2386,31 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 227,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 227,
                   "column": 33
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_nativeInput",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 229,
+                  "column": 12
+                },
+                "end": {
+                  "line": 229,
+                  "column": 32
                 }
               },
               "metadata": {
@@ -2405,11 +2425,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 229,
+                  "line": 247,
                   "column": 8
                 },
                 "end": {
-                  "line": 232,
+                  "line": 250,
                   "column": 9
                 }
               },
@@ -2422,11 +2442,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 234,
+                  "line": 252,
                   "column": 8
                 },
                 "end": {
-                  "line": 242,
+                  "line": 262,
                   "column": 9
                 }
               },
@@ -2439,11 +2459,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 265,
                   "column": 8
                 },
                 "end": {
-                  "line": 250,
+                  "line": 270,
                   "column": 9
                 }
               },
@@ -2456,11 +2476,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 273,
                   "column": 8
                 },
                 "end": {
-                  "line": 260,
+                  "line": 280,
                   "column": 9
                 }
               },
@@ -2473,11 +2493,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 262,
+                  "line": 282,
                   "column": 8
                 },
                 "end": {
-                  "line": 269,
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -2497,11 +2517,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 291,
                   "column": 8
                 },
                 "end": {
-                  "line": 273,
+                  "line": 293,
                   "column": 9
                 }
               },
@@ -2518,11 +2538,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 295,
                   "column": 8
                 },
                 "end": {
-                  "line": 280,
+                  "line": 300,
                   "column": 9
                 }
               },
@@ -2539,11 +2559,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 302,
                   "column": 8
                 },
                 "end": {
-                  "line": 293,
+                  "line": 313,
                   "column": 9
                 }
               },
@@ -2560,11 +2580,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 295,
+                  "line": 315,
                   "column": 8
                 },
                 "end": {
-                  "line": 325,
+                  "line": 345,
                   "column": 9
                 }
               },
@@ -2584,11 +2604,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 327,
+                  "line": 347,
                   "column": 8
                 },
                 "end": {
-                  "line": 339,
+                  "line": 359,
                   "column": 9
                 }
               },
@@ -2601,11 +2621,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 361,
                   "column": 8
                 },
                 "end": {
-                  "line": 365,
+                  "line": 384,
                   "column": 9
                 }
               },
@@ -2618,11 +2638,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 367,
+                  "line": 386,
                   "column": 8
                 },
                 "end": {
-                  "line": 375,
+                  "line": 394,
                   "column": 9
                 }
               },
@@ -2635,11 +2655,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 377,
+                  "line": 396,
                   "column": 8
                 },
                 "end": {
-                  "line": 383,
+                  "line": 402,
                   "column": 9
                 }
               },
@@ -2652,11 +2672,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 388,
+                  "line": 407,
                   "column": 8
                 },
                 "end": {
-                  "line": 396,
+                  "line": 415,
                   "column": 9
                 }
               },
@@ -2698,11 +2718,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 144,
+              "line": 153,
               "column": 6
             },
             "end": {
-              "line": 398,
+              "line": 417,
               "column": 7
             }
           },
@@ -2715,11 +2735,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 158,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -2731,11 +2751,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 163,
+                  "line": 172,
                   "column": 12
                 },
                 "end": {
-                  "line": 166,
+                  "line": 175,
                   "column": 13
                 }
               },
@@ -2747,11 +2767,11 @@
               "description": "The String value for the selected item of the dropdown menu. Provides the value for iron-form.\nWhen there’s no item selected, the value is an empty string.",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 181,
                   "column": 12
                 },
                 "end": {
-                  "line": 176,
+                  "line": 185,
                   "column": 13
                 }
               },
@@ -2763,11 +2783,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 181,
+                  "line": 190,
                   "column": 12
                 },
                 "end": {
-                  "line": 185,
+                  "line": 194,
                   "column": 13
                 }
               },
@@ -2779,11 +2799,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 193,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -2795,16 +2815,32 @@
               "description": "Set to a disabled dropdown menu",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 201,
+                  "line": 210,
                   "column": 13
                 }
               },
               "metadata": {},
               "type": "boolean"
+            },
+            {
+              "name": "placeholder",
+              "description": "A hint to the user of what can be entered in the control.",
+              "sourceRange": {
+                "start": {
+                  "line": 215,
+                  "column": 12
+                },
+                "end": {
+                  "line": 217,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
             }
           ],
           "events": [
@@ -2825,7 +2861,23 @@
             "cssVariables": [],
             "selectors": []
           },
-          "slots": [],
+          "slots": [
+            {
+              "description": "",
+              "name": "prefix",
+              "range": {
+                "file": "vaadin-dropdown-menu.html",
+                "start": {
+                  "line": 121,
+                  "column": 6
+                },
+                "end": {
+                  "line": 121,
+                  "column": 47
+                }
+              }
+            }
+          ],
           "tagname": "vaadin-dropdown-menu",
           "mixins": [
             "Vaadin.ThemableMixin"
