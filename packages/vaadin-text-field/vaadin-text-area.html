@@ -29,16 +29,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="input-field"] {
         display: flex;
-        line-height: var(--vaadin-text-area-line-height​​, 1.5);
+        box-sizing: border-box;
       }
 
       [part="value"] {
         width: 100%;
         box-sizing: border-box;
         flex: 1;
-        min-width: 0;
-        min-height: calc(3em * var(--vaadin-text-area-line-height​​, 1.5));
-        max-height: var(--vaadin-text-area-max-height, auto);
+        min-height: 4.5em;
         align-self: center;
         resize: none;
       }
@@ -47,14 +45,10 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      .mirror-container {
+      .mirror-text {
         visibility: hidden;
         word-wrap: break-word;
         position: absolute;
-      }
-
-      .mirror-text {
-        line-height: var(--vaadin-text-area-line-height​​, 1.5);
       }
     </style>
 
@@ -87,8 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot name="suffix"></slot>
 
       </div>
-      <div class="mirror-container" aria-hidden="true" part="value">
-        <div class="mirror-text"></div>
+      <div class="mirror-text" aria-hidden="true" part="value">
       </div>
 
       <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
@@ -110,13 +103,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * ### Styling
        *
        * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
-       *
-       * The following custom properties are available for styling:
-       *
-       * Custom property | Description | Default
-       * ----------------|-------------|-------------
-       * `--vaadin-text-area-line-height` | Property that determines the line height of the textarea element | `1.5`
-       * `--vaadin-text-area-max-height` | Property that determines the max height of the textarea element | `auto`
        *
        * The following shadow DOM parts are available for styling:
        *
@@ -161,7 +147,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _setInputHeight() {
           const input = this.focusElement;
-          const mirror = this.shadowRoot.querySelector('.mirror-text');
+          const inputField = this.root.querySelector('[part=input-field]');
+          const mirror = this.root.querySelector('.mirror-text');
+          const label = this.root.querySelector('[part=label]');
+          const error = this.root.querySelector('[part=error-message]');
+
           const rows = (input && input.value) ?
             input.value
               .replace(/&/gm, '&amp;')
@@ -172,9 +162,40 @@ This program is available under Apache License Version 2.0, available at https:/
               .split('\n')
             : [''];
 
+          const minHeight = parseFloat(window.getComputedStyle(this).minHeight);
+          const maxHeight = parseFloat(window.getComputedStyle(this).maxHeight);
+
           mirror.innerHTML = rows.join('<br/>') + '<br/>';
           mirror.style.width = window.getComputedStyle(input).width;
-          input.style.height = window.getComputedStyle(mirror).height;
+
+          const mirrorHeight = this._getElementHeight(mirror);
+          const labelHeight = this._getElementHeight(label);
+          const errorHeight = this._getElementHeight(error);
+          const totalHeight = mirrorHeight + labelHeight + errorHeight;
+          const inputFieldMargins = this._getElementHeight(inputField) - this._getElementHeight(input);
+
+          if (minHeight || maxHeight) {
+            if (minHeight && totalHeight < minHeight) {
+              input.style.height = (minHeight - labelHeight - errorHeight - inputFieldMargins) + 'px';
+            } else if (maxHeight && totalHeight > maxHeight) {
+              input.style.height = (maxHeight - labelHeight - errorHeight - inputFieldMargins) + 'px';
+            } else {
+              input.style.height = mirrorHeight + 'px';
+            }
+          } else {
+            input.style.height = mirrorHeight + 'px';
+          }
+        }
+
+        _getElementHeight(el) {
+          const height = parseFloat(window.getComputedStyle(el).height);
+          if (height) {
+            return height
+              + (parseFloat(window.getComputedStyle(el).marginTop) || 0)
+              + (parseFloat(window.getComputedStyle(el).marginBottom) || 0);
+          } else {
+            return 0;
+          }
         }
 
         /**
@@ -197,6 +218,7 @@ This program is available under Apache License Version 2.0, available at https:/
           var uniqueId = TextAreaElement._uniqueId = 1 + TextAreaElement._uniqueId || 0;
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
           this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+          this._setInputHeight();
         }
       }
 

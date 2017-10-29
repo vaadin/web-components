@@ -16,25 +16,37 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="line-height">
+  <test-fixture id="min-height">
     <style>
-      vaadin-text-area.line-height {
-        --vaadin-text-area-line-height​​: 1;
+      vaadin-text-area.min-height {
+        min-height: 125px;
       }
     </style>
     <template>
-      <vaadin-text-area class="line-height"></vaadin-text-area>
+      <vaadin-text-area class="min-height"></vaadin-text-area>
     </template>
   </test-fixture>
 
   <test-fixture id="max-height">
     <style>
       vaadin-text-area.max-height {
-        --vaadin-text-area-max-height: 80px;
+        max-height: 100px;
       }
     </style>
     <template>
       <vaadin-text-area class="max-height"></vaadin-text-area>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="min-max-height">
+    <style>
+      vaadin-text-area.min-max-height {
+        min-height: 100px;
+        max-height: 175px;
+      }
+    </style>
+    <template>
+      <vaadin-text-area class="min-max-height"></vaadin-text-area>
     </template>
   </test-fixture>
 
@@ -163,34 +175,69 @@
         expect(newHeight).to.be.at.least(originalHeight + 10);
       });
 
-      it('should use --vaadin-text-area-line-height​​ property', () => {
-        const textArea = fixture('line-height');
-        const input = textArea.focusElement;
-        const originalHeight = parseInt(window.getComputedStyle(input).height);
-
-        textArea.value = `
-        rows and height
-        should
-        double
-        here
-        3*2=6`;
-
-        const newHeight = parseInt(window.getComputedStyle(input).height);
-        expect(newHeight).to.be.equal(originalHeight * 2);
-      });
-
       it('should not grow over max-height', () => {
         const textArea = fixture('max-height');
         const input = textArea.focusElement;
+        const container = textArea.root.querySelector('.vaadin-text-area-container');
 
         textArea.value = `
         there
         should
         be
-        6
+        a
+        lot
+        of
         rows`;
 
-        expect(window.getComputedStyle(input).height).to.be.equal('80px');
+        expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
+        expect(window.getComputedStyle(container).height).to.be.equal('100px');
+        expect(parseFloat(window.getComputedStyle(input).height)).to.be.below(100);
+      });
+
+      it('should not shrink less than min-height', () => {
+        const textArea = fixture('min-height');
+        const input = textArea.focusElement;
+        const container = textArea.root.querySelector('.vaadin-text-area-container');
+
+        expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
+        expect(window.getComputedStyle(container).height).to.be.equal('125px');
+        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(100);
+
+        // Check that value modification doesn't break min-height rule
+        textArea.value = `1 row`;
+
+        expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
+        expect(window.getComputedStyle(container).height).to.be.equal('125px');
+        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(100);
+      });
+
+      it('should not stay between min and max height', () => {
+        const textArea = fixture('min-max-height');
+        const input = textArea.focusElement;
+        const container = textArea.root.querySelector('.vaadin-text-area-container');
+
+        expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
+        expect(window.getComputedStyle(container).height).to.be.equal('100px');
+        expect(parseFloat(window.getComputedStyle(input).height)).to.be.below(100);
+
+        // Check that value modification doesn't break min-height rule
+        textArea.value = `
+        there
+        should
+        be
+        a
+        lot
+        of
+        rows
+        and
+        more
+        and
+        even
+        more`;
+
+        expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
+        expect(window.getComputedStyle(container).height).to.be.equal('175px');
+        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(150);
       });
     });
   </script>

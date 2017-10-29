@@ -22,29 +22,29 @@
       <template preserve-content>
         <style>
           vaadin-text-area.max-height {
-            --vaadin-text-area-max-height: 75px;
+            max-height: 100px;
           }
         </style>
         <vaadin-text-area
             class="max-height"
-            label="Text area growing stops at 75px"
+            label="Text area growing stops at 100px"
             placeholder="Add more text here">
         </vaadin-text-area>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Text area with custom line height</h3>
-    <vaadin-demo-snippet id='text-area-demos-custom-line-height'>
+    <h3>Text area with min height</h3>
+    <vaadin-demo-snippet id='text-area-demos-text-area-with-min-height'>
       <template preserve-content>
         <style>
-          vaadin-text-area.line-height {
-            --vaadin-text-area-line-height​​: 3;
+          vaadin-text-area.min-height {
+            min-height: 125px;
           }
         </style>
         <vaadin-text-area
-            class="line-height"
-            label="Write a description"
-            placeholder="Line height has doubled!">
+            class="min-height"
+            label="Text area won't shrink under 125px"
+            placeholder="Add more text here">
         </vaadin-text-area>
       </template>
     </vaadin-demo-snippet>
