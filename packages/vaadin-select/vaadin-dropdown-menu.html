@@ -317,7 +317,9 @@ This program is available under Apache License Version 2.0, available at https:/
           if (opened) {
             if (!this._instance) {
               this._instance = this._createTemplateInstance();
-              overlayElement.content = this._instance.root;
+              if (this._instance) {
+                overlayElement.content = this._instance.root;
+              }
             }
 
             if (!this._menuElement) {
@@ -347,16 +349,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _createTemplateInstance() {
           const template = this.querySelector('template');
-          const Templatizer = Polymer.Templatize.templatize(template, this, {
-            instanceProps: {
-              detail: true,
-              target: true
-            },
-            forwardHostProp: function(prop, value) {
-              this._instance && this._instance.forwardHostProp(prop, value);
-            }
-          });
-          return new Templatizer({});
+          if (template) {
+            const Templatizer = Polymer.Templatize.templatize(template, this, {
+              instanceProps: {
+                detail: true,
+                target: true
+              },
+              forwardHostProp: function(prop, value) {
+                this._instance && this._instance.forwardHostProp(prop, value);
+              }
+            });
+            return new Templatizer({});
+          }
         }
 
         _setInputValue() {
