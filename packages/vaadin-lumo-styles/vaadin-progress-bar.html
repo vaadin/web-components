@@ -1,0 +1,95 @@
+<link rel="import" href="color.html">
+<link rel="import" href="style.html">
+
+<dom-module id="valo-progress-bar" theme-for="vaadin-progress-bar">
+  <template>
+    <style>
+      :host {
+        height: 0.25em;
+        margin: 0.5em 0;
+      }
+
+      [part="bar"] {
+        border-radius: var(--valo-border-radius);
+        background-color: var(--valo-contrast-10pct);
+      }
+
+      [part="value"] {
+        border-radius: var(--valo-border-radius);
+        background-color: var(--valo-contrast-50pct);
+        /* Use width instead of transform to preserve border radius */
+        transform: none;
+        width: calc(var(--vaadin-progress-value) * 100%);
+        min-width: 0.25em;
+        will-change: width;
+        transition: 0.2s width;
+      }
+
+      /* aria-valuenow is always reflected as an attribute, value is not */
+      :host(:not([aria-valuenow])) [part="value"],
+      :host([indeterminate]) [part="value"] {
+        width: 100%;
+        background-color: transparent;
+        background-image: linear-gradient(to right, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct));
+        opacity: 0.55;
+        will-change: transform;
+        animation: vaadin-progress-slide 1.6s infinite cubic-bezier(.645, .045, .355, 1), vaadin-progress-scale 1.6s infinite cubic-bezier(.645, .045, .355, 1);
+      }
+
+      @keyframes vaadin-progress-slide {
+        0% { transform-origin: 0% 0%; }
+        50% { transform-origin: 100% 0%; background-image: linear-gradient(to right, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
+        50.1% { transform-origin: 100% 0%; background-image: linear-gradient(to left, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
+        100% { transform-origin: 0% 0%; background-image: linear-gradient(to left, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
+      }
+
+      @keyframes vaadin-progress-scale {
+        0% { transform: scaleX(0.015); }
+        25% { transform: scaleX(0.4); }
+        50% { transform: scaleX(0.015); }
+        50.1% { transform: scaleX(0.015); }
+        75% { transform: scaleX(0.4); }
+        100% { transform: scaleX(0.015); }
+      }
+
+      :host(:not([aria-valuenow])) [part="value"]::before,
+      :host([indeterminate]) [part="value"]::before {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background-color: var(--valo-contrast-90pct);
+        will-change: opacity;
+        animation: vaadin-progress-pulse3 1.6s infinite cubic-bezier(.645, .045, .355, 1);
+      }
+
+      @keyframes vaadin-progress-pulse3 {
+        0% { opacity: 1; }
+        10% { opacity: 0; }
+        40% { opacity: 0; }
+        50% { opacity: 1; }
+        50.1% { opacity: 1; }
+        60% { opacity: 0; }
+        90% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<!-- Safari fails to declare animations for pseudo elements inside a shadow DOM -->
+<custom-style>
+  <style>
+    @keyframes vaadin-progress-pulse3 {
+      0% { opacity: 1; }
+      10% { opacity: 0; }
+      40% { opacity: 0; }
+      50% { opacity: 1; }
+      50.1% { opacity: 1; }
+      60% { opacity: 0; }
+      90% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+  </style>
+</custom-style>
