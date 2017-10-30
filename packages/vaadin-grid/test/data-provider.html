@@ -273,12 +273,25 @@
         expect(spy.called).to.be.true;
       });
 
-      it('should not warn about missing size', () => {
+      it('should not warn about missing size if size property is set', () => {
         const _warn = console.warn;
         const spy = console.warn = sinon.spy();
 
         grid.dataProvider = infiniteDataProvider;
         grid.size = 1;
+        grid._debouncerCheckSize.flush();
+        console.warn = _warn;
+
+        expect(spy.called).to.be.false;
+      });
+
+      it('should not warn about missing size if size is given in callback', () => {
+        const _warn = console.warn;
+        const spy = console.warn = sinon.spy();
+
+        grid.dataProvider = (params, callback) => {
+          infiniteDataProvider(params, (items) => callback(items, 1));
+        };
         grid._debouncerCheckSize.flush();
         console.warn = _warn;
 

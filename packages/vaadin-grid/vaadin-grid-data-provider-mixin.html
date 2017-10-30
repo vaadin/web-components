@@ -97,6 +97,15 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * `params.sortOrders` Currently applied sorting orders
          *
+         * `params.parentItem` When hierarchy is used, and sublevel items
+         * are requested, reference to parent item of the requested sublevel.
+         * Otherwise `undefined`.
+         *
+         * `callback(items, size)` Callback function with arguments:
+         *   - `items` Current page of items
+         *   - `size` Total number of items. When hierarchy sublevel items
+         *     are requested, total number of items in the requested sublevel.
+         *     Optional when hierarchy is not used, required for hierarchy.
          */
         dataProvider: {
           type: Object,
@@ -336,8 +345,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _checkSize() {
-      if (this.size === undefined) {
-        console.warn('The <vaadin-grid> needs a value for "size" property in order to display rows.');
+      if (this.size === undefined && this._effectiveSize === 0) {
+        console.warn(
+          'The <vaadin-grid> needs the total number of items' +
+          ' in order to display rows. Set the total number of items' +
+          ' to the `size` property, or provide the total number of items' +
+          ' in the second argument of the `dataProvider`’s `callback` call.'
+        );
       }
     }
 
