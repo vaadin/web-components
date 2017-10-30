@@ -91,7 +91,8 @@
 
       /* Disabled state */
 
-      :host([disabled]) {
+      :host([disabled]),
+      [part="date"][disabled] {
         color: var(--valo-disabled-text-color);
         cursor: default;
       }
