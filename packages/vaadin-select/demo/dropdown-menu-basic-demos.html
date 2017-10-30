@@ -7,13 +7,13 @@
     </style>
 
     <h3>Basic Usage</h3>
-    <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
+    <vaadin-demo-snippet id='dropdown-menu-list-box-basic'>
       <template preserve-content>
-          <vaadin-dropdown-menu placeholder="Name" label="Select a Name">
+          <vaadin-dropdown-menu>
             <template>
-              <vaadin-list-box vertical>
+              <vaadin-list-box>
                 <vaadin-item>Jose</vaadin-item>
-                <vaadin-item label='Manuel'>Manolo</vaadin-item>
+                <vaadin-item>Manolo</vaadin-item>
                 <vaadin-item>Pedro</vaadin-item>
               </vaadin-list-box>
             </template>
@@ -21,13 +21,59 @@
         </template>
     </vaadin-demo-snippet>
 
+    <h3>Configuring the Dropdown</h3>
+    <vaadin-demo-snippet id='dropdown-menu-list-box-configuring'>
+      <template preserve-content>
+          <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item>Option one</vaadin-item>
+                <vaadin-item>Option two</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+          <vaadin-dropdown-menu label="Disabled" disabled>
+            <template>
+              <vaadin-list-box >
+                <vaadin-item>Option one</vaadin-item>
+                <vaadin-item>Option two</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+          <vaadin-dropdown-menu label="Required">
+            <template>
+              <vaadin-list-box >
+                <vaadin-item>Option one</vaadin-item>
+                <vaadin-item>Option two</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Value</h3>
+    <vaadin-demo-snippet id='dropdown-menu-list-box-custom-value'>
+      <template preserve-content>
+          <vaadin-dropdown-menu placeholder="Language">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item label="">&nbsp;</vaadin-item>
+                <vaadin-item label="ES">Spanish</vaadin-item>
+                <vaadin-item label="FI">Finish</vaadin-item>
+                <vaadin-item label="EN">English</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </template>
+    </vaadin-demo-snippet>
+
     <h3>Custom Content</h3>
-    <vaadin-demo-snippet id='dropdown-menu-list-box -example'>
+    <vaadin-demo-snippet id='dropdown-menu-list-box-custom-content'>
       <template preserve-content>
           <vaadin-dropdown-menu label="Select a Country">
             <div slot="prefix">🌍 &nbsp;</div>
             <template>
-              <vaadin-list-box vertical>
+              <vaadin-list-box>
                 <vaadin-item>
                   <img style="width: 24px" src="http://www.sciencekids.co.nz/images/pictures/flags96/Spain.jpg" />
                   &nbsp;Spain
