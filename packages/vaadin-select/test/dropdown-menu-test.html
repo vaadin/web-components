@@ -25,6 +25,22 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="notemplate">
+    <template>
+      <vaadin-dropdown-menu>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="nomenu">
+    <template>
+      <vaadin-dropdown-menu>
+        <template>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
   <script>
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
@@ -44,6 +60,29 @@
     function Escape(target) {
       MockInteractions.keyDownOn(target, 27, [], 'Escape');
     }
+
+    describe('vaadin-dropdown-menu no-template', () => {
+      var dropdown;
+      beforeEach(() => dropdown = fixture('notemplate'));
+
+      it('should not throw an exception if template is not present', () => {
+        dropdown.opened = true;
+        dropdown.value = 'foo';
+        dropdown.opened = false;
+      });
+
+    });
+
+    describe('vaadin-dropdown-menu no-menu', () => {
+      var dropdown;
+      beforeEach(() => dropdown = fixture('nomenu'));
+
+      it('should not throw an exception if menu list is not present', () => {
+        dropdown.opened = true;
+        dropdown.value = 'foo';
+        dropdown.opened = false;
+      });
+    });
 
     describe('vaadin-dropdown-menu', () => {
       var dropdown, input;
@@ -183,7 +222,7 @@
 
         beforeEach(done => {
           Enter(input);
-          menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+          menu = dropdown._menuElement;
           Polymer.RenderStatus.afterNextRender(menu, done);
         });
 
