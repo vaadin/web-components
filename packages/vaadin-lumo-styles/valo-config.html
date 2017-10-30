@@ -515,7 +515,7 @@
         if (!this._getColor(theme, 'tint').userDefined) {
           // Always use base color hue, saturation and lightness as the base for tints
           const hue = baseColorHsl.h;
-          const saturation = baseColorHsl.s / 2 * 100;
+          const saturation = theme == 'dark' ? Math.min(100, baseColorHsl.s * 3 * 100) : baseColorHsl.s / 2 * 100;
           const lightness = Math.min(1, baseColorHsl.l + (1 - baseColorHsl.l) * 0.95) * 100;
 
           const tintColor = window.tinycolor(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
@@ -531,7 +531,7 @@
           const saturation = baseColorHsl.s > 0 && baseColorHsl.l < 1 ? baseColorHsl.s : primaryColorHsl.s;
           const lightness = parseInt(saturation / 3.33 * 100);
 
-          const shadeColor = window.tinycolor(`hsl(${hue}, ${parseInt(saturation / 3.33 * 100)}%, ${lightness}%)`);
+          const shadeColor = window.tinycolor(`hsl(${hue}, ${parseInt(saturation / 2 * 100)}%, ${lightness}%)`);
           shadeColor.darken(contrast / 10);
           this._setColor(theme, 'shade', shadeColor.toHslString());
         }
