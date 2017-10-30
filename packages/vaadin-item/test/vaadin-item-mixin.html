@@ -158,6 +158,13 @@
         item.addEventListener('click', () => done());
         enter(item);
       });
+
+      it('should not fire click event if keyup does not happen after a keydown in the element', () => {
+        item.addEventListener('click', () => {
+          throw new Error('click fired!');
+        });
+        spaceUp(item);
+      });
     });
   </script>
 </body>
