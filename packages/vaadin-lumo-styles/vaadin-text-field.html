@@ -256,6 +256,14 @@
       [part="input-field"] ::slotted(iron-icon[icon^="valo"]) {
         color: var(--valo-contrast-50pct);
       }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+
+      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
+        width: 1em;
+        height: 1em;
+        padding: 4px;
+      }
     </style>
   </template>
 </dom-module>
