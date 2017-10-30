@@ -122,16 +122,30 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               value: 'on'
+            },
+
+            /**
+             * Name of the element.
+             */
+            name: {
+              type: String
             }
+
           };
         }
 
-        get name() {
-          return this.checked ? this._storedName : '';
+        static get observers() {
+          return [
+            '_checkedNameObserver(checked, name)'
+          ];
         }
 
-        set name(name) {
-          this._storedName = name;
+        _checkedNameObserver(checked, name) {
+          if (name) {
+            this._storedName = name;
+          }
+
+          this.name = this.checked ? this._storedName : '';
         }
 
         ready() {
