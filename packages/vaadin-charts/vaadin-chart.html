@@ -258,6 +258,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *    if existing configuration should be discarded.
         */
         update(jsonConfiguration, resetConfiguration) {
+          this.__inflateFunctions(jsonConfiguration);
           if (resetConfiguration) {
             this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
             return;
@@ -274,6 +275,24 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
           if (jsonConfiguration.series) {
             this.__updateOrAddSeries(jsonConfiguration.series);
+          }
+        }
+
+        __inflateFunctions(jsonConfiguration) {
+          for (var attr in jsonConfiguration) {
+            if (jsonConfiguration.hasOwnProperty(attr)) {
+              const targetProperty = jsonConfiguration[attr];
+              if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
+                try {
+                  jsonConfiguration[attr.substr(4)] = eval('(' + targetProperty + ')');
+                } catch (e) {
+                  jsonConfiguration[attr.substr(4)] = eval('(function(){' + targetProperty + '})');
+                }
+                delete jsonConfiguration[attr];
+              } else if (targetProperty instanceof Object) {
+                this.__inflateFunctions(targetProperty);
+              }
+            }
           }
         }
 

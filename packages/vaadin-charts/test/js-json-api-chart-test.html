@@ -101,6 +101,30 @@
         });
       });
 
+      it('should inflate whole function strings', function() {
+        chart.update({'tooltip': {'_fn_formatter': 'function() {return "awesome chart"}'}}, true);
+        expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
+        expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+      });
+
+      it('should inflate function body strings', function() {
+        chart.update({'tooltip': {'_fn_formatter': 'return "awesome chart"'}}, true);
+        expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
+        expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+      });
+
+      it('should inflate ES6 arrow function strings', function() {
+        chart.update({'tooltip': {'_fn_formatter': 'x => x + x'}}, true);
+        expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
+        expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+      });
+
+      it('should inflate empty function strings', function() {
+        chart.update({'tooltip': {'_fn_formatter': ''}}, true);
+        expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
+        expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+      });
+
     });
   </script>
 </body>
