@@ -32,6 +32,21 @@
       </template>
     </demo-snippet>
 
+    <h3>Modeless (Non-Modal) Overlay</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay modeless id="modeless-overlay">
+          <template>
+            This overlay won't disable the main content.
+          </template>
+        </vaadin-overlay>
+
+        <vaadin-button onclick="document.querySelector('#modeless-overlay').opened = !document.querySelector('#modeless-overlay').opened">
+          Toggle the modeless overlay
+        </vaadin-button>
+      </template>
+    </demo-snippet>
+
     <h3>Show and Hide Overlay with backdrop and focus trap</h3>
     <demo-snippet>
       <template>

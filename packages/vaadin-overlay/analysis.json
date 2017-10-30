@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-overlay.html",
         "start": {
-          "line": 464,
+          "line": 497,
           "column": 4
         },
         "end": {
-          "line": 464,
+          "line": 497,
           "column": 40
         }
       },
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -50,11 +50,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -71,11 +71,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 148,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -92,16 +92,38 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 154,
+                  "line": 152,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "modeless",
+              "type": "boolean",
+              "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 158,
+                  "column": 10
+                },
+                "end": {
+                  "line": 163,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_modelessChanged\""
+                }
               },
               "defaultValue": "false"
             },
@@ -112,11 +134,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 161,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 164,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -128,44 +150,6 @@
             {
               "name": "_focusedElement",
               "type": "Object",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 166,
-                  "column": 10
-                },
-                "end": {
-                  "line": 168,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "_mouseDownInside",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 170,
-                  "column": 10
-                },
-                "end": {
-                  "line": 172,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "_mouseUpInside",
-              "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -183,8 +167,8 @@
               }
             },
             {
-              "name": "_instance",
-              "type": "Object",
+              "name": "_mouseDownInside",
+              "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -202,8 +186,8 @@
               }
             },
             {
-              "name": "_boundIronOverlayCanceledListener",
-              "type": "Object",
+              "name": "_mouseUpInside",
+              "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -219,6 +203,44 @@
               "metadata": {
                 "polymer": {}
               }
+            },
+            {
+              "name": "_instance",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 186,
+                  "column": 10
+                },
+                "end": {
+                  "line": 188,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_boundIronOverlayCanceledListener",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 190,
+                  "column": 10
+                },
+                "end": {
+                  "line": 192,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
             }
           ],
           "methods": [
@@ -228,11 +250,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 210,
+                  "line": 218,
                   "column": 6
                 },
                 "end": {
-                  "line": 221,
+                  "line": 229,
                   "column": 7
                 }
               },
@@ -245,11 +267,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 223,
+                  "line": 231,
                   "column": 6
                 },
                 "end": {
-                  "line": 225,
+                  "line": 233,
                   "column": 7
                 }
               },
@@ -266,11 +288,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 231,
+                  "line": 239,
                   "column": 6
                 },
                 "end": {
-                  "line": 237,
+                  "line": 245,
                   "column": 7
                 }
               },
@@ -287,11 +309,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 239,
+                  "line": 247,
                   "column": 6
                 },
                 "end": {
-                  "line": 245,
+                  "line": 253,
                   "column": 7
                 }
               },
@@ -304,11 +326,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 255,
                   "column": 6
                 },
                 "end": {
-                  "line": 261,
+                  "line": 269,
                   "column": 7
                 }
               },
@@ -321,11 +343,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 263,
+                  "line": 271,
                   "column": 6
                 },
                 "end": {
-                  "line": 265,
+                  "line": 273,
                   "column": 7
                 }
               },
@@ -342,11 +364,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 275,
                   "column": 6
                 },
                 "end": {
-                  "line": 269,
+                  "line": 277,
                   "column": 7
                 }
               },
@@ -363,11 +385,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 279,
+                  "line": 287,
                   "column": 6
                 },
                 "end": {
-                  "line": 293,
+                  "line": 301,
                   "column": 7
                 }
               },
@@ -384,11 +406,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 299,
+                  "line": 307,
                   "column": 6
                 },
                 "end": {
-                  "line": 325,
+                  "line": 333,
                   "column": 7
                 }
               },
@@ -405,7 +427,7 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 331,
+                  "line": 339,
                   "column": 6
                 },
                 "end": {
@@ -421,7 +443,7 @@
               ]
             },
             {
-              "name": "_templateChanged",
+              "name": "_modelessChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -430,7 +452,62 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 382,
+                  "line": 379,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "modeless"
+                }
+              ]
+            },
+            {
+              "name": "_enterModalState",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 381,
+                  "column": 6
+                },
+                "end": {
+                  "line": 391,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_exitModalState",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 393,
+                  "column": 6
+                },
+                "end": {
+                  "line": 402,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_templateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 404,
+                  "column": 6
+                },
+                "end": {
+                  "line": 415,
                   "column": 7
                 }
               },
@@ -447,11 +524,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 384,
+                  "line": 417,
                   "column": 6
                 },
                 "end": {
-                  "line": 386,
+                  "line": 419,
                   "column": 7
                 }
               },
@@ -468,11 +545,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 388,
+                  "line": 421,
                   "column": 6
                 },
                 "end": {
-                  "line": 419,
+                  "line": 452,
                   "column": 7
                 }
               },
@@ -492,11 +569,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 422,
+                  "line": 455,
                   "column": 6
                 },
                 "end": {
-                  "line": 424,
+                  "line": 457,
                   "column": 7
                 }
               },
@@ -513,11 +590,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 426,
+                  "line": 459,
                   "column": 6
                 },
                 "end": {
-                  "line": 450,
+                  "line": 483,
                   "column": 7
                 }
               },
@@ -530,11 +607,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 452,
+                  "line": 485,
                   "column": 6
                 },
                 "end": {
-                  "line": 456,
+                  "line": 489,
                   "column": 7
                 }
               },
@@ -580,11 +657,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 127,
+              "line": 125,
               "column": 4
             },
             "end": {
-              "line": 457,
+              "line": 490,
               "column": 5
             }
           },
@@ -597,11 +674,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -613,11 +690,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -629,11 +706,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 148,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -645,11 +722,27 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 154,
+                  "line": 152,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "modeless",
+              "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
+              "sourceRange": {
+                "start": {
+                  "line": 158,
+                  "column": 10
+                },
+                "end": {
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -661,11 +754,11 @@
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "sourceRange": {
                 "start": {
-                  "line": 161,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 164,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -721,23 +814,7 @@
             "cssVariables": [],
             "selectors": []
           },
-          "slots": [
-            {
-              "description": "",
-              "name": "",
-              "range": {
-                "file": "vaadin-overlay.html",
-                "start": {
-                  "line": 98,
-                  "column": 8
-                },
-                "end": {
-                  "line": 98,
-                  "column": 31
-                }
-              }
-            }
-          ],
+          "slots": [],
           "tagname": "vaadin-overlay",
           "mixins": [
             "Vaadin.ThemableMixin"

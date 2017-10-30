@@ -152,6 +152,16 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true
           },
 
+          /**
+           * When true the overlay won't disable the main content, showing
+           * it doesn’t change the functionality of the user interface.
+           */
+          modeless: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true,
+            observer: '_modelessChanged'
+          },
 
           /**
            * When true move focus to the first focusable element in the overlay,
@@ -333,38 +343,63 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
 
-          document.addEventListener('mousedown', this._boundMouseDownListener);
-          document.addEventListener('mouseup', this._boundMouseUpListener);
-          document.addEventListener('click', this._boundOutsideClickListener, true);
-          document.addEventListener('keydown', this._boundKeydownListener);
-
-          // Set body pointer-events to 'none' to disable mouse interactions with
-          // other document nodes (combo-box is "modal")
-          this._previousDocumentPointerEvents = document.body.style.pointerEvents;
-          document.body.style.pointerEvents = 'none';
-
           Polymer.Async.idlePeriod.run(() => {
-            // Focus
-            //  - the overlay content by default
-            //  - or the first focusable element if focusTrap is true
-            this._setFocus(-1, 1);
+            if (this.focusTrap) {
+              // Focus
+              //  - the overlay content by default
+              //  - or the first focusable element if focusTrap is true
+              this._setFocus(-1, 1);
+            }
 
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
             this.dispatchEvent(evt);
           });
 
-        } else if (this._placeholder) {
-          document.removeEventListener('mousedown', this._boundMouseDownListener);
-          document.removeEventListener('mouseup', this._boundMouseUpListener);
-          document.removeEventListener('click', this._boundOutsideClickListener, true);
-          document.removeEventListener('keydown', this._boundKeydownListener);
+          if (!this.modeless) {
+            this._enterModalState();
+          }
 
-          this._placeholder.parentNode.insertBefore(this, this._placeholder);
-          this._processPendingMutationObserversFor(document.body);
-          this._placeholder.parentNode.removeChild(this._placeholder);
-
-          document.body.style.pointerEvents = this._previousDocumentPointerEvents;
+        } else {
+          if (this._placeholder) {
+            this._placeholder.parentNode.insertBefore(this, this._placeholder);
+            this._processPendingMutationObserversFor(document.body);
+            this._placeholder.parentNode.removeChild(this._placeholder);
+          }
+          this._exitModalState();
         }
+      }
+
+      _modelessChanged(modeless) {
+        if (!modeless) {
+          if (this.opened) {
+            this._enterModalState();
+          }
+        } else {
+          this._exitModalState();
+        }
+      }
+
+      _enterModalState() {
+        document.addEventListener('mousedown', this._boundMouseDownListener);
+        document.addEventListener('mouseup', this._boundMouseUpListener);
+        document.addEventListener('click', this._boundOutsideClickListener, true);
+        document.addEventListener('keydown', this._boundKeydownListener);
+
+        // Set body pointer-events to 'none' to disable mouse interactions with
+        // other document nodes.
+        this._previousDocumentPointerEvents = document.body.style.pointerEvents;
+        document.body.style.pointerEvents = 'none';
+      }
+
+      _exitModalState() {
+        document.removeEventListener('mousedown', this._boundMouseDownListener);
+        document.removeEventListener('mouseup', this._boundMouseUpListener);
+        document.removeEventListener('click', this._boundOutsideClickListener, true);
+        document.removeEventListener('keydown', this._boundKeydownListener);
+
+        // Restore body pointer-events
+        document.body.style.pointerEvents = this._previousDocumentPointerEvents;
+        delete this._previousDocumentPointerEvents;
       }
 
       _templateChanged(template) {
