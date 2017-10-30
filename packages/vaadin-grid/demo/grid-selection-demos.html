@@ -31,7 +31,7 @@
 
             <vaadin-grid aria-label="Selection using Active Item Example" id="grid" data-provider="[[dataProvider]]" active-item="{{activeItem}}" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -50,22 +50,19 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-selection-demos-selection-using-active-item', function(document) {
-              class XSelection extends Polymer.Element {
-                static get is() {
-                  return 'x-selection';
-                }
-                static get properties() {
-                  return {
-                    activeItem: {
-                      observer: '_activeItemChanged'
-                    }
-                  };
-                }
-                _activeItemChanged(item) {
+              Polymer({
+                is: 'x-selection',
+
+                properties: {
+                  activeItem: {
+                    observer: '_activeItemChanged'
+                  }
+                },
+
+                _activeItemChanged: function(item) {
                   this.$.grid.selectedItems = item ? [item] : [];
                 }
-              }
-              window.customElements.define(XSelection.is, XSelection);
+              });
             });
           </script>
         </dom-module>
@@ -82,12 +79,12 @@
     <vaadin-demo-snippet id='grid-selection-demos-selection-using-templates'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
             <vaadin-grid aria-label="Selection using Templates Example" data-provider="[[dataProvider]]" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -104,7 +101,7 @@
 
               <vaadin-grid-column>
                 <template>
-                  <paper-checkbox aria-label="Select Row" checked="{{selected}}">Selected</paper-checkb>
+                  <vaadin-checkbox aria-label="Select Row" checked="{{selected}}">Selected</vaadin-checkbox>
                 </template>
               </vaadin-grid-column>
 
@@ -131,7 +128,7 @@
     <vaadin-demo-snippet id='grid-selection-demos-multi-selection-column'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
 
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
@@ -139,7 +136,7 @@
               <vaadin-grid-selection-column auto-select>
               </vaadin-grid-selection-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -181,7 +178,7 @@
 
             <vaadin-grid  aria-label="Select All with Data Example" id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
 
-              <vaadin-grid-column width="40px" flex-grow="0" >
+              <vaadin-grid-column width="60px" flex-grow="0" >
                 <template class="header">
                   <input aria-label="Select All" type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
                 </template>
@@ -204,53 +201,50 @@
           </template>
           <script>
           window.addDemoReadyListener('#grid-selection-demos-custom-select-all-with-data-provider', function(document) {
-            class DataproviderSelectAll extends Polymer.Element {
-              static get is() {
-                return 'dataprovider-select-all';
-              }
-              static get properties() {
-                return {
-                  inverted: {
-                    type: Boolean,
-                    value: false
-                  },
-                  indeterminate: {
-                    type: Boolean,
-                    value: false
-                  }
-                };
-              }
-              static get observers() {
-                return ['_resetSelection(inverted)'];
-              }
-              _resetSelection(inverted) {
+            Polymer({
+              is: 'dataprovider-select-all',
+
+              properties: {
+                inverted: {
+                  type: Boolean,
+                  value: false
+                },
+                indeterminate: {
+                  type: Boolean,
+                  value: false
+                }
+              },
+
+              observers: ['_resetSelection(inverted)'],
+
+              _resetSelection: function(inverted) {
                 this.$.grid.selectedItems = [];
+                this.updateStyles();
                 this.indeterminate = false;
-              }
+              },
 
-              _invert(e) {
+              _invert: function(e) {
                 this.inverted = !this.inverted;
-              }
+              },
 
-              // iOS needs indeterminated + checked at the same time
-              _isChecked(inverted, indeterminate) {
+                // iOS needs indeterminate + checked at the same time
+              _isChecked: function(inverted, indeterminate) {
                 return indeterminate || inverted;
-              }
+              },
 
-              _selectItem(e) {
+              _selectItem: function(e) {
                 if (e.target.checked === this.inverted) {
                   this.$.grid.deselectItem(e.model.item);
                 } else {
                   this.$.grid.selectItem(e.model.item);
                 }
                 this.indeterminate = this.$.grid.selectedItems.length > 0;
-              }
+              },
 
-              _isSelected(inverted, selected) {
+              _isSelected: function(inverted, selected) {
                 return inverted != selected;
               }
-            }
-            window.customElements.define(DataproviderSelectAll.is, DataproviderSelectAll);
+            });
           });
           </script>
         </dom-module>
@@ -323,31 +317,28 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-selection-demos-space-key-action-and-click-to-activate', function(document) {
-              class XSpaceAction extends Polymer.Element {
-                static get is() {
-                  return 'x-space-action';
-                }
-                static get properties() {
-                  return {
-                    activeItem: {
-                      observer: '_activeItemChanged'
-                    }
-                  };
-                }
-                _alert(e) {
-                  alert(e.target.textContent + ' clicked');
-                }
+              Polymer({
+                is: 'x-space-action',
 
-                _alertAndPreventDefault(e) {
+                properties: {
+                  activeItem: {
+                    observer: '_activeItemChanged'
+                  }
+                },
+
+                _alert: function(e) {
+                  alert(e.target.textContent + ' clicked');
+                },
+
+                _alertAndPreventDefault: function(e) {
                   e.preventDefault();
                   this._alert(e);
-                }
+                },
 
-                _activeItemChanged(item) {
+                _activeItemChanged: function(item) {
                   this.$.grid.selectedItems = item ? [item] : [];
                 }
-              }
-              window.customElements.define(XSpaceAction.is, XSpaceAction);
+              });
             });
           </script>
         </dom-module>

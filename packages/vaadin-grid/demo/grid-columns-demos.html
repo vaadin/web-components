@@ -22,7 +22,7 @@
     <vaadin-demo-snippet id='grid-columns-demos-column-grouping'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
 
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
@@ -33,7 +33,7 @@
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -95,18 +95,18 @@
     <vaadin-demo-snippet id='grid-columns-demos-freezing-columns'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <paper-checkbox checked="{{frozen}}">Freeze First Two Columns</paper-checkbox>
+            <vaadin-checkbox checked="{{frozen}}">Freeze First Two Columns</vaadin-checkbox>
 
             <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" frozen="[[frozen]]">
+              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -148,19 +148,19 @@
     <vaadin-demo-snippet id='grid-columns-demos-hiding-columns'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <paper-checkbox checked="{{hidden}}">Hide First Two Columns</paper-checkbox>
+            <vaadin-checkbox checked="{{hidden}}">Hide First Two Columns</vaadin-checkbox>
             <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
 
             <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
 
-              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" hidden="[[hidden]]">
+              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -206,7 +206,7 @@
     <vaadin-demo-snippet id='grid-columns-demos-reordering-and-resizing-columns'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
             <vaadin-grid aria-label="Reordering and Resizing Columns Example" data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
@@ -216,7 +216,7 @@
                 <template>[[index]]</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="50px" flex-grow="0" resizable>
+              <vaadin-grid-column width="60px" flex-grow="0" resizable>
                 <template class="header">
                   <div aria-label="Picture"></div>
                 </template>
@@ -285,21 +285,17 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-columns-demos-dynamic-columns-using-dom-repeat', function(document) {
-              class XDynamicColumns extends Polymer.Element {
-                static get is() {
-                  return 'x-dynamic-columns';
-                }
-                static get properties() {
-                  return {
-                    columns: Array
-                  };
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-dynamic-columns',
+
+                properties: {
+                  columns: Array
+                },
+
+                ready: function() {
                   this.columns = ['name.first', 'name.last', 'email'];
                 }
-              }
-              window.customElements.define(XDynamicColumns.is, XDynamicColumns);
+              });
             });
           </script>
         </dom-module>

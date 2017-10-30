@@ -20,14 +20,14 @@
     <vaadin-demo-snippet id='grid-basic-demos-basic-binding'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
             <!-- Fetch an array of users to be shown in the grid -->
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
             <!-- The array is set as the <vaadin-grid>'s "items" property -->
             <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
                 <!-- If necessary, the footer could be set using <template class="footer"> -->
@@ -63,40 +63,40 @@
 
     <h3>Two-Way Binding</h3>
     <p>
-      Some template variables, like the item properties, can be modified using <a href="https://www.polymer-project.org/1.0/docs/devguide/data-binding" target="_blank">Polymer's two-way binding</a>.
+      Some template variables, like the item properties, can be modified using Polymer's two-way binding.
     </p>
     <vaadin-demo-snippet id='grid-basic-demos-two-way-binding'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
-            <custom-style>
-              <style is="custom-style">
-                input[readonly] {
-                  border: 2px solid transparent;
-                }
+          <template>
+            <style>
+              .vaadin-demo-input[readonly] {
+                border: 2px solid transparent;
+                pointer-events: none;
+              }
 
-                input {
-                  font: inherit;
-                }
-              </style>
-            </custom-style>
+              .vaadin-demo-input {
+                font: inherit;
+              }
+            </style>
+
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <paper-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</paper-checkbox>
+            <vaadin-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</vaadin-checkbox>
 
             <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
-                  <input value="{{item.firstName::input}}" readonly$="[[!editing]]">
+                  <input class="vaadin-demo-input" value="{{item.firstName::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
                 <template>
-                  <input value="{{item.lastName::input}}" readonly$="[[!editing]]">
+                  <input class="vaadin-demo-input" value="{{item.lastName::input}}" readonly$="[[!editing]]">
                 </template>
               </vaadin-grid-column>
 

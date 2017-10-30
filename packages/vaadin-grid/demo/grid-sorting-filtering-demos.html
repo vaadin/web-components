@@ -8,7 +8,7 @@
     </style>
 
     <style>
-      paper-checkbox {
+      vaadin-checkbox {
         margin-bottom: 10px;
       }
     </style>
@@ -26,15 +26,15 @@
     <vaadin-demo-snippet id='grid-sorting-filtering-demos-sorting'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
 
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
-            <paper-checkbox checked="{{multiSort}}">Enable Multi-Sorting</paper-checkbox>
+            <vaadin-checkbox checked="{{multiSort}}">Enable Multi-Sorting</vaadin-checkbox>
 
             <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort="[[multiSort]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -82,11 +82,11 @@
         <x-remote-sorting-example></x-remote-sorting-example>
         <dom-module id="x-remote-sorting-example">
           <template preserve-content>
-            <paper-checkbox checked="{{multiSort}}">Enable Multi-Sorting</paper-checkbox>
+            <vaadin-checkbox checked="{{multiSort}}">Enable Multi-Sorting</vaadin-checkbox>
 
             <vaadin-grid aria-label="Sorting with Data Provider Example" id="grid" multi-sort="[[multiSort]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -109,33 +109,33 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-sorting-filtering-demos-sorting-with-data-provider', function(document) {
-              class XRemoteSortingExample extends Polymer.Element {
-                static get is() {
-                  return 'x-remote-sorting-example';
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-remote-sorting-example',
 
-                  const grid = this.$.grid;
+                ready: function() {
+                  var grid = this.$.grid;
 
                   grid.size = 200;
 
-                  grid.dataProvider = (params, callback) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = () => callback(JSON.parse(xhr.responseText).result);
+                  grid.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      callback(JSON.parse(xhr.responseText).result);
+                    };
 
-                    const index = params.page * params.pageSize;
-                    let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+                    var index = params.page * params.pageSize;
+                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
-                    params.sortOrders.forEach(sort => url += '&orders[]=' + sort.path + ' ' + sort.direction);
+                    params.sortOrders.forEach(function(sort) {
+                      url += '&orders[]=' + sort.path + ' ' + sort.direction;
+                    });
 
                     xhr.open('GET', url, true);
                     xhr.send();
                   };
                 }
-              }
-              window.customElements.define(XRemoteSortingExample.is, XRemoteSortingExample);
+              });
             });
           </script>
         </dom-module>
@@ -154,13 +154,13 @@
     <vaadin-demo-snippet id='grid-sorting-filtering-demos-filtering'>
       <template preserve-content>
         <dom-bind>
-          <template is="dom-bind">
+          <template>
 
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
             <vaadin-grid aria-label="Filtering Example" items="[[items]]">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -177,7 +177,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Last Name" path="name.last" value="[[_filterLastName]]">
-                    <input slot="filter" placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
+                    <vaadin-text-field slot="filter" placeholder="Last Name" value="{{_filterLastName}}" focus-target></vaadin-text-field>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.name.last]]</template>
@@ -212,7 +212,7 @@
           <template preserve-content>
             <vaadin-grid aria-label="Filtering with Data Provider Example" id="grid">
 
-              <vaadin-grid-column width="50px" flex-grow="0">
+              <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
                 <template>[[index]]</template>
               </vaadin-grid-column>
@@ -220,7 +220,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Fist Name" path="firstName" value="[[_filterFirstName]]">
-                    <input slot="filter" placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>
+                    <vaadin-text-field slot="filter" placeholder="First Name" value="{{_filterFirstName}}" focus-target></vaadin-text-field>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.firstName]]</template>
@@ -229,7 +229,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="Last Name" path="lastName" value="[[_filterLastName]]">
-                    <input slot="filter" placeholder="Last Name" value="{{_filterLastName::input}}" focus-target>
+                    <vaadin-text-field slot="filter" placeholder="Last Name" value="{{_filterLastName}}" focus-target></vaadin-text-field>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.lastName]]</template>
@@ -239,21 +239,18 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-sorting-filtering-demos-filtering-with-data-provider', function(document) {
-              class XRemoteFilteringExample extends Polymer.Element {
-                static get is() {
-                  return 'x-remote-filtering-example';
-                }
+              Polymer({
+                is: 'x-remote-filtering-example',
 
-                ready() {
-                  super.ready();
-                  const grid = this.$.grid;
+                ready: function() {
+                  var grid = this.$.grid;
 
                   grid.size = 200;
 
-                  grid.dataProvider = (params, callback) => {
-                    const xhr = new XMLHttpRequest();
-                    xhr.onload = () => {
-                      const response = JSON.parse(xhr.responseText);
+                  grid.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      var response = JSON.parse(xhr.responseText);
 
                       // Number of items changes after filtering. We need
                       // to update the grid size based on server response.
@@ -262,18 +259,19 @@
                       callback(response.result);
                     };
 
-                    const index = params.page * params.pageSize;
-                    let url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+                    var index = params.page * params.pageSize;
+                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
 
                     // `params.filters` format: [{path: 'lastName', direction: 'asc'}, ...];
-                    params.filters.forEach(filter => url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value));
+                    params.filters.forEach(function(filter) {
+                      url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
+                    });
 
                     xhr.open('GET', url, true);
                     xhr.send();
                   };
                 }
-              }
-              window.customElements.define(XRemoteFilteringExample.is, XRemoteFilteringExample);
+              });
             });
           </script>
         </dom-module>

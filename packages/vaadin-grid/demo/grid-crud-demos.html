@@ -34,13 +34,17 @@
               input {
                 font: inherit;
               }
+
+              vaadin-button[hidden] {
+                display: none;
+              }
             </style>
             <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
 
             <div style="margin-bottom: 20px">
-              <input id="firstname" placeholder="First Name">
-              <input id="lastname" placeholder="Last Name">
-              <button on-click="_add">Add</button>
+              <vaadin-text-field id="firstname" placeholder="First Name"></vaadin-text-field>
+              <vaadin-text-field id="lastname" placeholder="Last Name"></vaadin-text-field>
+              <vaadin-button on-click="_add">Add</vaadin-button>
             </div>
 
             <vaadin-grid id="grid" items="[[items]]">
@@ -69,10 +73,10 @@
               <vaadin-grid-column>
                 <template>
                   <div style="display: flex">
-                    <button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</button>
-                    <button hidden="[[editing]]" on-click="_remove">Remove</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</button>
-                    <button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</button>
+                    <vaadin-button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</vaadin-button>
+                    <vaadin-button hidden="[[editing]]" on-click="_remove">Remove</vaadin-button>
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</vaadin-button>
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
                   </div>
                 </template>
               </vaadin-grid-column>
@@ -81,43 +85,40 @@
           </template>
           <script>
             window.addDemoReadyListener('#grid-crud-demos-crud', function(document) {
-              class XCrud extends Polymer.Element {
-                static get is() {
-                  return 'x-crud';
-                }
-                static get properties() {
-                  return {
-                    editing: Object
-                  };
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-crud',
+
+                properties: {
+                  editing: Object
+                },
+
+                ready: function() {
                   this.editing = null;
-                }
+                },
 
-                _storeFirst(e) {
+                _storeFirst: function(e) {
                   this._first = e.target.value;
-                }
+                },
 
-                _storeLast(e) {
+                _storeLast: function(e) {
                   this._last = e.target.value;
-                }
+                },
 
-                _isEditing(editing, item) {
+                _isEditing: function(editing, item) {
                   return item === editing;
-                }
+                },
 
-                _edit(e) {
+                _edit: function(e) {
                   var item = e.model.item;
                   this.editing = item;
 
                   this._first = item.name.first;
                   this._last = item.name.last;
 
-                  requestAnimationFrame(() => this.$.grid.querySelector('#first-' + e.model.index).focus());
-                }
+                  this.$.grid.querySelector('#first-' + e.model.index).focus();
+                },
 
-                _save(e) {
+                _save: function(e) {
                   var item = e.model.item;
                   item.name.first = this._first;
                   item.name.last = this._last;
@@ -125,15 +126,15 @@
                   this.editing = null;
 
                   this.$.grid.clearCache();
-                }
+                },
 
-                _cancel() {
+                _cancel: function() {
                   this.editing = null;
 
                   this.$.grid.clearCache();
-                }
+                },
 
-                _add(e) {
+                _add: function(e) {
                   if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
                     this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
                     this.$.grid.clearCache();
@@ -143,16 +144,15 @@
                   } else {
                     alert('First Name and Last Name required');
                   }
-                }
+                },
 
-                _remove(e) {
+                _remove: function(e) {
                   var index = this.items.indexOf(e.model.item);
                   this.items.splice(index, 1);
 
                   this.$.grid.clearCache();
                 }
-              }
-              window.customElements.define(XCrud.is, XCrud);
+              });
             });
           </script>
         </dom-module>
