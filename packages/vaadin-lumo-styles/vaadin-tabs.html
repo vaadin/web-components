@@ -5,11 +5,7 @@
 <dom-module id="valo-tabs" theme-for="vaadin-tabs">
   <template>
     <style include="vaadin-tabs-default-theme">
-      :host {
-        ---valo-tab-marker-display: block;
-      }
-
-      :host(:not([vertical])) {
+      :host(:not([orientation="vertical"])) {
         box-shadow: inset 0 -1px 0 0 var(--valo-contrast-10pct);
         position: relative;
         min-height: var(--valo-size-l);
@@ -57,34 +53,34 @@
       /* Horizontal tabs overflow */
 
       /* Both ends overflowing */
-      :host([overflow~="start"][overflow~="end"]:not([vertical])) [part="tabs"] {
+      :host([overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px, #000 calc(100% - 60px), transparent calc(100% - 30px));
       }
 
       /* End overflowing */
-      :host([overflow~="end"]:not([vertical])) [part="tabs"] {
+      :host([overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 60px), transparent calc(100% - 30px));
       }
 
       /* Start overflowing */
-      :host([overflow~="start"]:not([vertical])) [part="tabs"] {
+      :host([overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px);
       }
 
       /* Vertical tabs overflow */
 
       /* Both ends overflowing */
-      :host([overflow~="start"][overflow~="end"][vertical]) [part="tabs"] {
+      :host([overflow~="start"][overflow~="end"][orientation="vertical"]) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px, #000 calc(100% - 30px), transparent);
       }
 
       /* End overflowing */
-      :host([overflow~="end"][vertical]) [part="tabs"] {
+      :host([overflow~="end"][orientation="vertical"]) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 30px), transparent);
       }
 
       /* Start overflowing */
-      :host([overflow~="start"][vertical]) [part="tabs"] {
+      :host([overflow~="start"][orientation="vertical"]) [part="tabs"] {
         --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px);
       }
 
@@ -92,16 +88,6 @@
 
       :host [part="tabs"][part="tabs"] ::slotted(vaadin-tab) {
         border: 0;
-      }
-
-      :host([vertical]) [part="tabs"] ::slotted(vaadin-tab) {
-        ---valo-tab-marker-left: 0;
-        ---valo-tab-marker-bottom: 50%;
-        ---valo-tab-marker-transform: translateY(50%);
-        ---valo-tab-marker-width: 2px;
-        ---valo-tab-marker-height: 3em;
-        ---valo-tab-marker-border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
-        ---valo-tab-marker-transform-origin: 100% 50%;
       }
 
       /* Small theme */
@@ -115,12 +101,16 @@
       :host([theme~="minimal"]),
       :host([theme~="pill"]) {
         box-shadow: none;
-        ---valo-tab-marker-display: none;
+        /* This doesn't work with ShadyCSS */
+        --_valo-tab-marker-display: none;
       }
 
-      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected]),
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        color: var(--valo-primary-text-color);
+      /* Workaround for the above ShadyCSS issue */
+      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
+      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after,
+      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
+        display: none;
       }
 
       /* Pill theme */
@@ -185,6 +175,7 @@
         display: flex;
         align-items: center;
         position: relative;
+        cursor: pointer;
       }
 
       :host(:hover),
@@ -193,7 +184,7 @@
       }
 
       :host([focus-ring]) {
-        background-color: var(--valo-contrast-5pct);
+        background-color: var(--valo-primary-color-10pct);
       }
 
       :host([selected]) {
@@ -210,19 +201,30 @@
       :host::after {
         content: "";
         position: absolute;
-        display: var(---valo-tab-marker-display, block);
-        bottom: var(---valo-tab-marker-bottom, 0);
-        left: var(---valo-tab-marker-left, 50%);
-        width: var(---valo-tab-marker-width, 2.5em);
+        display: var(--_valo-tab-marker-display, block);
+        bottom: 0;
+        left: 50%;
+        width: 2.5em;
         max-width: 80%;
-        height: var(---valo-tab-marker-height, 2px);
+        height: 2px;
         max-height: 80%;
         background-color: var(--valo-primary-color);
-        border-radius: var(---valo-tab-marker-border-radius, var(--valo-border-radius) var(--valo-border-radius) 0 0);
-        transform: var(---valo-tab-marker-transform, translateX(-50%)) scale(0);
-        transform-origin: var(---valo-tab-marker-transform-origin, 50% 100%);
+        border-radius: var(--valo-border-radius) var(--valo-border-radius) 0 0;
+        transform: translateX(-50%) scale(0);
+        transform-origin: 50% 100%;
         transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
         will-change: transform;
+      }
+
+      :host([orientation="vertical"])::before,
+      :host([orientation="vertical"])::after {
+        left: 0;
+        bottom: 50%;
+        transform: translateY(50%) scale(0);
+        width: 2px;
+        height: 3em;
+        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+        transform-origin: 100% 50%;
       }
 
       :host::after {
@@ -233,8 +235,13 @@
 
       :host([selected])::before,
       :host([selected])::after {
-        transform: var(---valo-tab-marker-transform, translateX(-50%)) scale(1);
+        transform: translateX(-50%) scale(1);
         transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
+      }
+
+      :host([orientation="vertical"][selected])::before,
+      :host([orientation="vertical"][selected])::after {
+        transform: translateY(50%) scale(1);
       }
 
       :host([selected])::after {
