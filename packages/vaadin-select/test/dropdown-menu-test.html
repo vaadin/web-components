@@ -19,6 +19,7 @@
             <vaadin-item>Option 1</vaadin-item>
             <vaadin-item>Option 2</vaadin-item>
             <vaadin-item>Option 3</vaadin-item>
+            <vaadin-item></vaadin-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -165,16 +166,34 @@
       });
 
       describe('focus', () => {
+
         it('Should be focusable', () => {
-          // FIXME:
+          // FIXME: The element is not focusable yet. Uncomment after fixing #14
+          // dropdown.focus();
+          // expect(dropdown.focused).to.be.true;
+          // expect(input.focused).to.be.true;
         });
 
         it('Should focus the next focusable element when tabbing', () => {
-          // FIXME:
+          // We should use here dropdown.focus(), but need to fix after #14
+          input.focus();
+          expect(input.focused).to.be.true;
+
+          // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
+          const ev = MockInteractions.keyboardEventFor(9, [], 'Tab');
+          input.dispatchEvent(ev);
+          expect(ev.defaultPrevented).to.be.false;
         });
 
         it('Should focus the previous element when shift tabbing', () => {
-          // FIXME:
+          // We should use here dropdown.focus(), but need to fix after #14
+          input.focus();
+          expect(input.focused).to.be.true;
+
+          // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
+          const ev = MockInteractions.keyboardEventFor(9, ['shift'], 'Tab');
+          input.dispatchEvent(ev);
+          expect(ev.defaultPrevented).to.be.false;
         });
       });
 
@@ -223,6 +242,19 @@
           Tab(menu);
 
           expect(focusedSpy.calledOnce).to.be.true;
+        });
+
+        it('Should hidde native input when selecting an item', () => {
+          menu.selected = 1;
+          expect(input.focusElement.style.opacity).to.be.equal('0');
+
+        });
+
+        it('Should show native input when value is empty', () => {
+          menu.selected = 1;
+
+          menu.selected = 3;
+          expect(input.focusElement.style.opacity).to.be.equal('1');
         });
 
         it('Should close the overlay when clicking on the overlay', () => {

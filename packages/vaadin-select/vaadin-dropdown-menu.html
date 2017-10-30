@@ -100,10 +100,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           return memoizedTemplate;
         }
-
-        get focusElement() {
-          return this.shadowRoot.querySelector('[part~="input-field"]');
-        }
       }
       customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
     }
@@ -378,7 +374,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = '';
           }
 
-          this._nativeInput.style.visibility = this.value ? 'hidden' : 'visible';
+          this._nativeInput.style.opacity = this.value ? 0 : 1;
           this.validate();
         }
 
