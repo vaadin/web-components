@@ -110,9 +110,10 @@ This program is available under Apache License Version 2.0, available at https:/
     _checkImports() {
       [
         'vaadin-grid-column-group',
-        'vaadin-grid-sorter',
         'vaadin-grid-filter',
-        'vaadin-grid-selection-column'
+        'vaadin-grid-hierarchy-toggle',
+        'vaadin-grid-selection-column',
+        'vaadin-grid-sorter'
       ].forEach(elementName => {
         var element = this.querySelector(elementName);
         if (element && !(element instanceof Polymer.Element)) {

@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-grid.html",
         "start": {
-          "line": 592,
+          "line": 613,
           "column": 4
         },
         "end": {
-          "line": 592,
+          "line": 613,
           "column": 40
         }
       },
@@ -11441,7 +11441,7 @@
           "tagname": "vaadin-grid-sorter"
         },
         {
-          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, `size` always needs to be\nset manually.__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
+          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
           "summary": "",
           "path": "vaadin-grid.html",
           "properties": [
@@ -11472,16 +11472,16 @@
             {
               "name": "dataProvider",
               "type": "Object",
-              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 100,
+                  "line": 109,
                   "column": 8
                 },
                 "end": {
-                  "line": 104,
+                  "line": 113,
                   "column": 9
                 }
               },
@@ -11501,11 +11501,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 109,
+                  "line": 118,
                   "column": 8
                 },
                 "end": {
-                  "line": 112,
+                  "line": 121,
                   "column": 9
                 }
               },
@@ -11524,11 +11524,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 114,
+                  "line": 123,
                   "column": 8
                 },
                 "end": {
-                  "line": 120,
+                  "line": 129,
                   "column": 9
                 }
               },
@@ -11545,11 +11545,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 125,
+                  "line": 134,
                   "column": 8
                 },
                 "end": {
-                  "line": 128,
+                  "line": 137,
                   "column": 9
                 }
               },
@@ -11567,11 +11567,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 133,
+                  "line": 142,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 146,
                   "column": 9
                 }
               },
@@ -12073,11 +12073,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 237,
                   "column": 10
                 },
                 "end": {
-                  "line": 219,
+                  "line": 240,
                   "column": 11
                 }
               },
@@ -12092,63 +12092,6 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 221,
-                  "column": 10
-                },
-                "end": {
-                  "line": 226,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "_ios",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 228,
-                  "column": 10
-                },
-                "end": {
-                  "line": 233,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "_edge",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 235,
-                  "column": 10
-                },
-                "end": {
-                  "line": 240,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "_ie",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
                   "line": 242,
                   "column": 10
                 },
@@ -12159,11 +12102,10 @@
               },
               "metadata": {
                 "polymer": {}
-              },
-              "defaultValue": "false"
+              }
             },
             {
-              "name": "_firefox",
+              "name": "_ios",
               "type": "boolean",
               "description": "",
               "privacy": "protected",
@@ -12180,6 +12122,64 @@
               "metadata": {
                 "polymer": {}
               }
+            },
+            {
+              "name": "_edge",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 256,
+                  "column": 10
+                },
+                "end": {
+                  "line": 261,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_ie",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 263,
+                  "column": 10
+                },
+                "end": {
+                  "line": 268,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "_firefox",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 270,
+                  "column": 10
+                },
+                "end": {
+                  "line": 275,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
             }
           ],
           "methods": [
@@ -12190,11 +12190,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 163,
                   "column": 5
                 }
               },
@@ -12213,11 +12213,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 165,
                   "column": 4
                 },
                 "end": {
-                  "line": 158,
+                  "line": 167,
                   "column": 5
                 }
               },
@@ -12236,11 +12236,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 160,
+                  "line": 169,
                   "column": 4
                 },
                 "end": {
-                  "line": 164,
+                  "line": 173,
                   "column": 5
                 }
               },
@@ -12262,11 +12262,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 166,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 183,
+                  "line": 192,
                   "column": 5
                 }
               },
@@ -12288,11 +12288,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 185,
+                  "line": 194,
                   "column": 4
                 },
                 "end": {
-                  "line": 202,
+                  "line": 211,
                   "column": 5
                 }
               },
@@ -12307,11 +12307,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 204,
+                  "line": 213,
                   "column": 4
                 },
                 "end": {
-                  "line": 213,
+                  "line": 222,
                   "column": 5
                 }
               },
@@ -12333,11 +12333,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 219,
+                  "line": 228,
                   "column": 4
                 },
                 "end": {
-                  "line": 221,
+                  "line": 230,
                   "column": 5
                 }
               },
@@ -12356,11 +12356,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 223,
+                  "line": 232,
                   "column": 4
                 },
                 "end": {
-                  "line": 225,
+                  "line": 234,
                   "column": 5
                 }
               },
@@ -12379,11 +12379,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 227,
+                  "line": 236,
                   "column": 4
                 },
                 "end": {
-                  "line": 231,
+                  "line": 240,
                   "column": 5
                 }
               },
@@ -12398,29 +12398,6 @@
             {
               "name": "expandItem",
               "description": "Expands the given item hierarchy.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-grid-data-provider-mixin.html",
-                "start": {
-                  "line": 236,
-                  "column": 4
-                },
-                "end": {
-                  "line": 240,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "item"
-                }
-              ],
-              "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
-            },
-            {
-              "name": "collapseItem",
-              "description": "Collapses the given item hierarchy.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
@@ -12442,17 +12419,40 @@
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
             },
             {
+              "name": "collapseItem",
+              "description": "Collapses the given item hierarchy.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-grid-data-provider-mixin.html",
+                "start": {
+                  "line": 254,
+                  "column": 4
+                },
+                "end": {
+                  "line": 258,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "item"
+                }
+              ],
+              "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
+            },
+            {
               "name": "_getIndexLevel",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 251,
+                  "line": 260,
                   "column": 4
                 },
                 "end": {
-                  "line": 259,
+                  "line": 268,
                   "column": 5
                 }
               },
@@ -12471,11 +12471,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 261,
+                  "line": 270,
                   "column": 4
                 },
                 "end": {
-                  "line": 263,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -12490,11 +12490,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 265,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 307,
+                  "line": 316,
                   "column": 5
                 }
               },
@@ -12516,11 +12516,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 309,
+                  "line": 318,
                   "column": 4
                 },
                 "end": {
-                  "line": 311,
+                  "line": 320,
                   "column": 5
                 }
               },
@@ -12539,11 +12539,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 316,
+                  "line": 325,
                   "column": 4
                 },
                 "end": {
-                  "line": 323,
+                  "line": 332,
                   "column": 5
                 }
               },
@@ -12558,11 +12558,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 325,
+                  "line": 334,
                   "column": 4
                 },
                 "end": {
-                  "line": 329,
+                  "line": 338,
                   "column": 5
                 }
               },
@@ -12577,11 +12577,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 331,
+                  "line": 340,
                   "column": 4
                 },
                 "end": {
-                  "line": 335,
+                  "line": 344,
                   "column": 5
                 }
               },
@@ -12603,11 +12603,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 337,
+                  "line": 346,
                   "column": 4
                 },
                 "end": {
-                  "line": 341,
+                  "line": 355,
                   "column": 5
                 }
               },
@@ -12622,11 +12622,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 343,
+                  "line": 357,
                   "column": 4
                 },
                 "end": {
-                  "line": 372,
+                  "line": 386,
                   "column": 5
                 }
               },
@@ -12648,11 +12648,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 374,
+                  "line": 388,
                   "column": 4
                 },
                 "end": {
-                  "line": 376,
+                  "line": 390,
                   "column": 5
                 }
               },
@@ -12674,11 +12674,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 378,
+                  "line": 392,
                   "column": 4
                 },
                 "end": {
-                  "line": 386,
+                  "line": 400,
                   "column": 5
                 }
               },
@@ -12883,11 +12883,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 576,
+                  "line": 597,
                   "column": 6
                 },
                 "end": {
-                  "line": 584,
+                  "line": 605,
                   "column": 7
                 }
               },
@@ -13057,7 +13057,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 121,
+                  "line": 122,
                   "column": 5
                 }
               },
@@ -13072,11 +13072,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 123,
+                  "line": 124,
                   "column": 4
                 },
                 "end": {
-                  "line": 132,
+                  "line": 133,
                   "column": 5
                 }
               },
@@ -13091,11 +13091,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 134,
+                  "line": 135,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 137,
                   "column": 5
                 }
               },
@@ -14808,11 +14808,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 263,
+                  "line": 284,
                   "column": 6
                 },
                 "end": {
-                  "line": 284,
+                  "line": 305,
                   "column": 7
                 }
               },
@@ -14829,11 +14829,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 307,
                   "column": 6
                 },
                 "end": {
-                  "line": 288,
+                  "line": 309,
                   "column": 7
                 }
               },
@@ -14846,11 +14846,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 290,
+                  "line": 311,
                   "column": 6
                 },
                 "end": {
-                  "line": 335,
+                  "line": 356,
                   "column": 7
                 }
               },
@@ -14867,11 +14867,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 337,
+                  "line": 358,
                   "column": 6
                 },
                 "end": {
-                  "line": 413,
+                  "line": 434,
                   "column": 7
                 }
               },
@@ -14900,11 +14900,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 415,
+                  "line": 436,
                   "column": 6
                 },
                 "end": {
-                  "line": 430,
+                  "line": 451,
                   "column": 7
                 }
               },
@@ -14924,11 +14924,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 432,
+                  "line": 453,
                   "column": 6
                 },
                 "end": {
-                  "line": 467,
+                  "line": 488,
                   "column": 7
                 }
               },
@@ -14948,11 +14948,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 469,
+                  "line": 490,
                   "column": 6
                 },
                 "end": {
-                  "line": 496,
+                  "line": 517,
                   "column": 7
                 }
               },
@@ -14972,11 +14972,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 498,
+                  "line": 519,
                   "column": 6
                 },
                 "end": {
-                  "line": 506,
+                  "line": 527,
                   "column": 7
                 }
               },
@@ -14996,11 +14996,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 508,
+                  "line": 529,
                   "column": 6
                 },
                 "end": {
-                  "line": 517,
+                  "line": 538,
                   "column": 7
                 }
               },
@@ -15020,11 +15020,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 519,
+                  "line": 540,
                   "column": 6
                 },
                 "end": {
-                  "line": 527,
+                  "line": 548,
                   "column": 7
                 }
               },
@@ -15044,11 +15044,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 529,
+                  "line": 550,
                   "column": 6
                 },
                 "end": {
-                  "line": 537,
+                  "line": 558,
                   "column": 7
                 }
               },
@@ -15068,11 +15068,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 539,
+                  "line": 560,
                   "column": 6
                 },
                 "end": {
-                  "line": 543,
+                  "line": 564,
                   "column": 7
                 }
               },
@@ -15085,11 +15085,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 545,
+                  "line": 566,
                   "column": 6
                 },
                 "end": {
-                  "line": 558,
+                  "line": 579,
                   "column": 7
                 }
               },
@@ -15102,11 +15102,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 560,
+                  "line": 581,
                   "column": 6
                 },
                 "end": {
-                  "line": 566,
+                  "line": 587,
                   "column": 7
                 }
               },
@@ -15123,11 +15123,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 568,
+                  "line": 589,
                   "column": 6
                 },
                 "end": {
-                  "line": 574,
+                  "line": 595,
                   "column": 7
                 }
               },
@@ -15179,11 +15179,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 185,
+              "line": 206,
               "column": 4
             },
             "end": {
-              "line": 586,
+              "line": 607,
               "column": 5
             }
           },
@@ -15211,15 +15211,15 @@
             },
             {
               "name": "data-provider",
-              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 100,
+                  "line": 109,
                   "column": 8
                 },
                 "end": {
-                  "line": 104,
+                  "line": 113,
                   "column": 9
                 }
               },
@@ -15233,11 +15233,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 125,
+                  "line": 134,
                   "column": 8
                 },
                 "end": {
-                  "line": 128,
+                  "line": 137,
                   "column": 9
                 }
               },
@@ -15251,11 +15251,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 133,
+                  "line": 142,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 146,
                   "column": 9
                 }
               },
@@ -20665,7 +20665,7 @@
               "column": 4
             },
             "end": {
-              "line": 121,
+              "line": 122,
               "column": 5
             }
           },
@@ -20678,11 +20678,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 123,
+              "line": 124,
               "column": 4
             },
             "end": {
-              "line": 132,
+              "line": 133,
               "column": 5
             }
           },
@@ -20695,11 +20695,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 135,
               "column": 4
             },
             "end": {
-              "line": 136,
+              "line": 137,
               "column": 5
             }
           },
@@ -20720,7 +20720,7 @@
           "column": 2
         },
         "end": {
-          "line": 137,
+          "line": 138,
           "column": 3
         }
       },
@@ -20764,15 +20764,15 @@
         {
           "name": "dataProvider",
           "type": "Object",
-          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders",
+          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 100,
+              "line": 109,
               "column": 8
             },
             "end": {
-              "line": 104,
+              "line": 113,
               "column": 9
             }
           },
@@ -20790,11 +20790,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 118,
               "column": 8
             },
             "end": {
-              "line": 112,
+              "line": 121,
               "column": 9
             }
           },
@@ -20811,11 +20811,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 114,
+              "line": 123,
               "column": 8
             },
             "end": {
-              "line": 120,
+              "line": 129,
               "column": 9
             }
           },
@@ -20830,11 +20830,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 125,
+              "line": 134,
               "column": 8
             },
             "end": {
-              "line": 128,
+              "line": 137,
               "column": 9
             }
           },
@@ -20850,11 +20850,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 133,
+              "line": 142,
               "column": 8
             },
             "end": {
-              "line": 137,
+              "line": 146,
               "column": 9
             }
           },
@@ -20873,11 +20873,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 149,
+              "line": 158,
               "column": 4
             },
             "end": {
-              "line": 154,
+              "line": 163,
               "column": 5
             }
           },
@@ -20894,11 +20894,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 156,
+              "line": 165,
               "column": 4
             },
             "end": {
-              "line": 158,
+              "line": 167,
               "column": 5
             }
           },
@@ -20915,11 +20915,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 160,
+              "line": 169,
               "column": 4
             },
             "end": {
-              "line": 164,
+              "line": 173,
               "column": 5
             }
           },
@@ -20939,11 +20939,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 166,
+              "line": 175,
               "column": 4
             },
             "end": {
-              "line": 183,
+              "line": 192,
               "column": 5
             }
           },
@@ -20963,11 +20963,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 185,
+              "line": 194,
               "column": 4
             },
             "end": {
-              "line": 202,
+              "line": 211,
               "column": 5
             }
           },
@@ -20980,11 +20980,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 204,
+              "line": 213,
               "column": 4
             },
             "end": {
-              "line": 213,
+              "line": 222,
               "column": 5
             }
           },
@@ -21004,11 +21004,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 219,
+              "line": 228,
               "column": 4
             },
             "end": {
-              "line": 221,
+              "line": 230,
               "column": 5
             }
           },
@@ -21025,11 +21025,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 223,
+              "line": 232,
               "column": 4
             },
             "end": {
-              "line": 225,
+              "line": 234,
               "column": 5
             }
           },
@@ -21046,11 +21046,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 227,
+              "line": 236,
               "column": 4
             },
             "end": {
-              "line": 231,
+              "line": 240,
               "column": 5
             }
           },
@@ -21064,27 +21064,6 @@
         {
           "name": "expandItem",
           "description": "Expands the given item hierarchy.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 236,
-              "column": 4
-            },
-            "end": {
-              "line": 240,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "item"
-            }
-          ]
-        },
-        {
-          "name": "collapseItem",
-          "description": "Collapses the given item hierarchy.",
           "privacy": "public",
           "sourceRange": {
             "start": {
@@ -21104,16 +21083,37 @@
           ]
         },
         {
+          "name": "collapseItem",
+          "description": "Collapses the given item hierarchy.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 254,
+              "column": 4
+            },
+            "end": {
+              "line": 258,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "item"
+            }
+          ]
+        },
+        {
           "name": "_getIndexLevel",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 251,
+              "line": 260,
               "column": 4
             },
             "end": {
-              "line": 259,
+              "line": 268,
               "column": 5
             }
           },
@@ -21130,11 +21130,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 261,
+              "line": 270,
               "column": 4
             },
             "end": {
-              "line": 263,
+              "line": 272,
               "column": 5
             }
           },
@@ -21147,11 +21147,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 265,
+              "line": 274,
               "column": 4
             },
             "end": {
-              "line": 307,
+              "line": 316,
               "column": 5
             }
           },
@@ -21171,11 +21171,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 309,
+              "line": 318,
               "column": 4
             },
             "end": {
-              "line": 311,
+              "line": 320,
               "column": 5
             }
           },
@@ -21192,11 +21192,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 316,
+              "line": 325,
               "column": 4
             },
             "end": {
-              "line": 323,
+              "line": 332,
               "column": 5
             }
           },
@@ -21209,11 +21209,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 325,
+              "line": 334,
               "column": 4
             },
             "end": {
-              "line": 329,
+              "line": 338,
               "column": 5
             }
           },
@@ -21226,11 +21226,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 331,
+              "line": 340,
               "column": 4
             },
             "end": {
-              "line": 335,
+              "line": 344,
               "column": 5
             }
           },
@@ -21250,11 +21250,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 337,
+              "line": 346,
               "column": 4
             },
             "end": {
-              "line": 341,
+              "line": 355,
               "column": 5
             }
           },
@@ -21267,11 +21267,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 343,
+              "line": 357,
               "column": 4
             },
             "end": {
-              "line": 372,
+              "line": 386,
               "column": 5
             }
           },
@@ -21291,11 +21291,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 374,
+              "line": 388,
               "column": 4
             },
             "end": {
-              "line": 376,
+              "line": 390,
               "column": 5
             }
           },
@@ -21315,11 +21315,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 378,
+              "line": 392,
               "column": 4
             },
             "end": {
-              "line": 386,
+              "line": 400,
               "column": 5
             }
           },
@@ -21343,7 +21343,7 @@
           "column": 2
         },
         "end": {
-          "line": 388,
+          "line": 402,
           "column": 3
         }
       },
@@ -21368,14 +21368,14 @@
         },
         {
           "name": "data-provider",
-          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders",
+          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
           "sourceRange": {
             "start": {
-              "line": 100,
+              "line": 109,
               "column": 8
             },
             "end": {
-              "line": 104,
+              "line": 113,
               "column": 9
             }
           },
@@ -21387,11 +21387,11 @@
           "description": "Path to an item sub-property that identifies the item.",
           "sourceRange": {
             "start": {
-              "line": 125,
+              "line": 134,
               "column": 8
             },
             "end": {
-              "line": 128,
+              "line": 137,
               "column": 9
             }
           },
@@ -21403,11 +21403,11 @@
           "description": "An array that contains the expanded items.",
           "sourceRange": {
             "start": {
-              "line": 133,
+              "line": 142,
               "column": 8
             },
             "end": {
-              "line": 137,
+              "line": 146,
               "column": 9
             }
           },
