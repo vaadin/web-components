@@ -22,6 +22,10 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       :host([opened]) {
         pointer-events: auto;
       }
