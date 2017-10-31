@@ -100,10 +100,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           return memoizedTemplate;
         }
-
-        get focusElement() {
-          return this.shadowRoot.querySelector('[part~="input-field"]');
-        }
       }
       customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
     }
@@ -261,6 +257,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
           this._nativeInput = this._inputElement.shadowRoot.querySelector('input');
+          this._nativeInput.setAttribute('aria-hidden', true);
 
           this._inputElement.addEventListener('click', e => this.opened = true);
           this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
@@ -386,7 +383,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = '';
           }
 
-          this._nativeInput.style.visibility = this.value ? 'hidden' : 'visible';
+          this._nativeInput.style.opacity = this.value ? 0 : 1;
           this.validate();
         }
 
