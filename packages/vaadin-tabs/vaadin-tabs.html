@@ -55,6 +55,10 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: center;
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       :host([orientation="vertical"]) {
         display: block;
       }
