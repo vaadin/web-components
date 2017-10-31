@@ -276,6 +276,10 @@
           dropdown.setAttribute('disabled', '');
           expect(dropdown.getAttribute('aria-disabled')).to.be.equal('true');
         });
+
+        it('should have aria-hidden attribute to the native input', () => {
+          expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
+        });
       });
 
       describe('validation', () => {
