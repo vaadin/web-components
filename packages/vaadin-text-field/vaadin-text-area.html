@@ -164,6 +164,17 @@ This program is available under Apache License Version 2.0, available at https:/
           mirror.innerHTML = rows.join('<br/>') + '<br/>';
           mirror.style.width = window.getComputedStyle(input).width;
           inputField.style.height = window.getComputedStyle(mirror).height;
+
+          const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
+          if (isIE) {
+            // IE11 flexbox doesn't respect max-height constraints. Enforce the
+            // constraints with an explicit height value
+            const container = this.root.querySelector('.vaadin-text-area-container');
+            const st = input.scrollTop;
+            container.style.height = '';
+            container.style.height = container.clientHeight + 'px';
+            input.scrollTop = st;
+          }
         }
 
         /**
