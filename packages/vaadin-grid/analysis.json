@@ -11457,14 +11457,12 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 86,
+                  "line": 85,
                   "column": 9
                 }
               },
               "metadata": {
-                "polymer": {
-                  "observer": "\"_pageSizeChanged\""
-                }
+                "polymer": {}
               },
               "defaultValue": "50",
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
@@ -11477,18 +11475,17 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 109,
+                  "line": 108,
                   "column": 8
                 },
                 "end": {
-                  "line": 113,
+                  "line": 111,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true,
-                  "observer": "\"_dataProviderChanged\""
+                  "notify": true
                 }
               },
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
@@ -11501,11 +11498,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 118,
+                  "line": 116,
                   "column": 8
                 },
                 "end": {
-                  "line": 121,
+                  "line": 119,
                   "column": 9
                 }
               },
@@ -11524,11 +11521,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 123,
+                  "line": 121,
                   "column": 8
                 },
                 "end": {
-                  "line": 129,
+                  "line": 127,
                   "column": 9
                 }
               },
@@ -11545,11 +11542,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 134,
+                  "line": 132,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 135,
                   "column": 9
                 }
               },
@@ -11567,11 +11564,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 8
                 },
                 "end": {
-                  "line": 146,
+                  "line": 144,
                   "column": 9
                 }
               },
@@ -12190,11 +12187,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 158,
+                  "line": 157,
                   "column": 4
                 },
                 "end": {
-                  "line": 163,
+                  "line": 162,
                   "column": 5
                 }
               },
@@ -12213,11 +12210,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 165,
+                  "line": 164,
                   "column": 4
                 },
                 "end": {
-                  "line": 167,
+                  "line": 166,
                   "column": 5
                 }
               },
@@ -12236,11 +12233,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 168,
                   "column": 4
                 },
                 "end": {
-                  "line": 173,
+                  "line": 172,
                   "column": 5
                 }
               },
@@ -12262,11 +12259,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 174,
                   "column": 4
                 },
                 "end": {
-                  "line": 192,
+                  "line": 191,
                   "column": 5
                 }
               },
@@ -12288,11 +12285,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 194,
+                  "line": 193,
                   "column": 4
                 },
                 "end": {
-                  "line": 211,
+                  "line": 210,
                   "column": 5
                 }
               },
@@ -12307,11 +12304,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 213,
+                  "line": 212,
                   "column": 4
                 },
                 "end": {
-                  "line": 222,
+                  "line": 221,
                   "column": 5
                 }
               },
@@ -12333,11 +12330,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 228,
+                  "line": 227,
                   "column": 4
                 },
                 "end": {
-                  "line": 230,
+                  "line": 229,
                   "column": 5
                 }
               },
@@ -12356,11 +12353,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 232,
+                  "line": 231,
                   "column": 4
                 },
                 "end": {
-                  "line": 234,
+                  "line": 233,
                   "column": 5
                 }
               },
@@ -12379,11 +12376,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 236,
+                  "line": 235,
                   "column": 4
                 },
                 "end": {
-                  "line": 240,
+                  "line": 239,
                   "column": 5
                 }
               },
@@ -12402,11 +12399,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 245,
+                  "line": 244,
                   "column": 4
                 },
                 "end": {
-                  "line": 249,
+                  "line": 248,
                   "column": 5
                 }
               },
@@ -12425,11 +12422,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 254,
+                  "line": 253,
                   "column": 4
                 },
                 "end": {
-                  "line": 258,
+                  "line": 257,
                   "column": 5
                 }
               },
@@ -12448,11 +12445,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 260,
+                  "line": 259,
                   "column": 4
                 },
                 "end": {
-                  "line": 268,
+                  "line": 267,
                   "column": 5
                 }
               },
@@ -12471,11 +12468,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 270,
+                  "line": 269,
                   "column": 4
                 },
                 "end": {
-                  "line": 272,
+                  "line": 271,
                   "column": 5
                 }
               },
@@ -12490,11 +12487,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 274,
+                  "line": 273,
                   "column": 4
                 },
                 "end": {
-                  "line": 316,
+                  "line": 315,
                   "column": 5
                 }
               },
@@ -12516,11 +12513,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 318,
+                  "line": 317,
                   "column": 4
                 },
                 "end": {
-                  "line": 320,
+                  "line": 319,
                   "column": 5
                 }
               },
@@ -12539,11 +12536,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 325,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 332,
+                  "line": 333,
                   "column": 5
                 }
               },
@@ -12558,42 +12555,16 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 334,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 338,
+                  "line": 339,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
-            },
-            {
-              "name": "_pageSizeChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-grid-data-provider-mixin.html",
-                "start": {
-                  "line": 340,
-                  "column": 4
-                },
-                "end": {
-                  "line": 344,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "pageSize"
-                },
-                {
-                  "name": "oldPageSize"
-                }
-              ],
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
             },
             {
@@ -12603,11 +12574,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 346,
+                  "line": 341,
                   "column": 4
                 },
                 "end": {
-                  "line": 355,
+                  "line": 350,
                   "column": 5
                 }
               },
@@ -12616,17 +12587,17 @@
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
             },
             {
-              "name": "_dataProviderChanged",
+              "name": "_needsReload",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 357,
+                  "line": 352,
                   "column": 4
                 },
                 "end": {
-                  "line": 386,
+                  "line": 383,
                   "column": 5
                 }
               },
@@ -12636,7 +12607,10 @@
                   "name": "dataProvider"
                 },
                 {
-                  "name": "oldDataProvider"
+                  "name": "pageSize"
+                },
+                {
+                  "name": "isAttached"
                 }
               ],
               "inheritedFrom": "Vaadin.Grid.DataProviderMixin"
@@ -12648,11 +12622,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 388,
+                  "line": 385,
                   "column": 4
                 },
                 "end": {
-                  "line": 390,
+                  "line": 387,
                   "column": 5
                 }
               },
@@ -12674,11 +12648,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 392,
+                  "line": 389,
                   "column": 4
                 },
                 "end": {
-                  "line": 400,
+                  "line": 397,
                   "column": 5
                 }
               },
@@ -12704,7 +12678,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 47,
+                  "line": 46,
                   "column": 5
                 }
               },
@@ -12726,11 +12700,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 49,
+                  "line": 48,
                   "column": 4
                 },
                 "end": {
-                  "line": 66,
+                  "line": 65,
                   "column": 5
                 }
               },
@@ -12752,11 +12726,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 74,
+                  "line": 73,
                   "column": 4
                 },
                 "end": {
-                  "line": 97,
+                  "line": 96,
                   "column": 5
                 }
               },
@@ -12786,11 +12760,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 99,
+                  "line": 98,
                   "column": 4
                 },
                 "end": {
-                  "line": 110,
+                  "line": 109,
                   "column": 5
                 }
               },
@@ -12812,11 +12786,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 112,
+                  "line": 111,
                   "column": 4
                 },
                 "end": {
-                  "line": 120,
+                  "line": 119,
                   "column": 5
                 }
               },
@@ -12835,11 +12809,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 122,
+                  "line": 121,
                   "column": 4
                 },
                 "end": {
-                  "line": 133,
+                  "line": 132,
                   "column": 5
                 }
               },
@@ -12861,11 +12835,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-array-data-provider-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 134,
                   "column": 4
                 },
                 "end": {
-                  "line": 142,
+                  "line": 141,
                   "column": 5
                 }
               },
@@ -15201,7 +15175,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 86,
+                  "line": 85,
                   "column": 9
                 }
               },
@@ -15215,11 +15189,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 109,
+                  "line": 108,
                   "column": 8
                 },
                 "end": {
-                  "line": 113,
+                  "line": 111,
                   "column": 9
                 }
               },
@@ -15233,11 +15207,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 134,
+                  "line": 132,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 135,
                   "column": 9
                 }
               },
@@ -15251,11 +15225,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 8
                 },
                 "end": {
-                  "line": 146,
+                  "line": 144,
                   "column": 9
                 }
               },
@@ -20750,14 +20724,12 @@
               "column": 8
             },
             "end": {
-              "line": 86,
+              "line": 85,
               "column": 9
             }
           },
           "metadata": {
-            "polymer": {
-              "observer": "\"_pageSizeChanged\""
-            }
+            "polymer": {}
           },
           "defaultValue": "50"
         },
@@ -20768,18 +20740,17 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 108,
               "column": 8
             },
             "end": {
-              "line": 113,
+              "line": 111,
               "column": 9
             }
           },
           "metadata": {
             "polymer": {
-              "notify": true,
-              "observer": "\"_dataProviderChanged\""
+              "notify": true
             }
           }
         },
@@ -20790,11 +20761,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 118,
+              "line": 116,
               "column": 8
             },
             "end": {
-              "line": 121,
+              "line": 119,
               "column": 9
             }
           },
@@ -20811,11 +20782,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 123,
+              "line": 121,
               "column": 8
             },
             "end": {
-              "line": 129,
+              "line": 127,
               "column": 9
             }
           },
@@ -20830,11 +20801,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 132,
               "column": 8
             },
             "end": {
-              "line": 137,
+              "line": 135,
               "column": 9
             }
           },
@@ -20850,11 +20821,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 142,
+              "line": 140,
               "column": 8
             },
             "end": {
-              "line": 146,
+              "line": 144,
               "column": 9
             }
           },
@@ -20873,11 +20844,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 158,
+              "line": 157,
               "column": 4
             },
             "end": {
-              "line": 163,
+              "line": 162,
               "column": 5
             }
           },
@@ -20894,11 +20865,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 165,
+              "line": 164,
               "column": 4
             },
             "end": {
-              "line": 167,
+              "line": 166,
               "column": 5
             }
           },
@@ -20915,11 +20886,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 169,
+              "line": 168,
               "column": 4
             },
             "end": {
-              "line": 173,
+              "line": 172,
               "column": 5
             }
           },
@@ -20939,11 +20910,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 175,
+              "line": 174,
               "column": 4
             },
             "end": {
-              "line": 192,
+              "line": 191,
               "column": 5
             }
           },
@@ -20963,11 +20934,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 194,
+              "line": 193,
               "column": 4
             },
             "end": {
-              "line": 211,
+              "line": 210,
               "column": 5
             }
           },
@@ -20980,11 +20951,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 213,
+              "line": 212,
               "column": 4
             },
             "end": {
-              "line": 222,
+              "line": 221,
               "column": 5
             }
           },
@@ -21004,11 +20975,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 228,
+              "line": 227,
               "column": 4
             },
             "end": {
-              "line": 230,
+              "line": 229,
               "column": 5
             }
           },
@@ -21025,11 +20996,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 232,
+              "line": 231,
               "column": 4
             },
             "end": {
-              "line": 234,
+              "line": 233,
               "column": 5
             }
           },
@@ -21046,11 +21017,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 236,
+              "line": 235,
               "column": 4
             },
             "end": {
-              "line": 240,
+              "line": 239,
               "column": 5
             }
           },
@@ -21067,11 +21038,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 245,
+              "line": 244,
               "column": 4
             },
             "end": {
-              "line": 249,
+              "line": 248,
               "column": 5
             }
           },
@@ -21088,11 +21059,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 254,
+              "line": 253,
               "column": 4
             },
             "end": {
-              "line": 258,
+              "line": 257,
               "column": 5
             }
           },
@@ -21109,11 +21080,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 260,
+              "line": 259,
               "column": 4
             },
             "end": {
-              "line": 268,
+              "line": 267,
               "column": 5
             }
           },
@@ -21130,11 +21101,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 270,
+              "line": 269,
               "column": 4
             },
             "end": {
-              "line": 272,
+              "line": 271,
               "column": 5
             }
           },
@@ -21147,11 +21118,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 274,
+              "line": 273,
               "column": 4
             },
             "end": {
-              "line": 316,
+              "line": 315,
               "column": 5
             }
           },
@@ -21171,11 +21142,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 318,
+              "line": 317,
               "column": 4
             },
             "end": {
-              "line": 320,
+              "line": 319,
               "column": 5
             }
           },
@@ -21192,11 +21163,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 325,
+              "line": 324,
               "column": 4
             },
             "end": {
-              "line": 332,
+              "line": 333,
               "column": 5
             }
           },
@@ -21209,40 +21180,16 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 334,
+              "line": 335,
               "column": 4
             },
             "end": {
-              "line": 338,
+              "line": 339,
               "column": 5
             }
           },
           "metadata": {},
           "params": []
-        },
-        {
-          "name": "_pageSizeChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 340,
-              "column": 4
-            },
-            "end": {
-              "line": 344,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "pageSize"
-            },
-            {
-              "name": "oldPageSize"
-            }
-          ]
         },
         {
           "name": "_checkSize",
@@ -21250,11 +21197,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 346,
+              "line": 341,
               "column": 4
             },
             "end": {
-              "line": 355,
+              "line": 350,
               "column": 5
             }
           },
@@ -21262,16 +21209,16 @@
           "params": []
         },
         {
-          "name": "_dataProviderChanged",
+          "name": "_needsReload",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 357,
+              "line": 352,
               "column": 4
             },
             "end": {
-              "line": 386,
+              "line": 383,
               "column": 5
             }
           },
@@ -21281,7 +21228,10 @@
               "name": "dataProvider"
             },
             {
-              "name": "oldDataProvider"
+              "name": "pageSize"
+            },
+            {
+              "name": "isAttached"
             }
           ]
         },
@@ -21291,11 +21241,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 388,
+              "line": 385,
               "column": 4
             },
             "end": {
-              "line": 390,
+              "line": 387,
               "column": 5
             }
           },
@@ -21315,11 +21265,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 392,
+              "line": 389,
               "column": 4
             },
             "end": {
-              "line": 400,
+              "line": 397,
               "column": 5
             }
           },
@@ -21343,7 +21293,7 @@
           "column": 2
         },
         "end": {
-          "line": 402,
+          "line": 399,
           "column": 3
         }
       },
@@ -21359,7 +21309,7 @@
               "column": 8
             },
             "end": {
-              "line": 86,
+              "line": 85,
               "column": 9
             }
           },
@@ -21371,11 +21321,11 @@
           "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 108,
               "column": 8
             },
             "end": {
-              "line": 113,
+              "line": 111,
               "column": 9
             }
           },
@@ -21387,11 +21337,11 @@
           "description": "Path to an item sub-property that identifies the item.",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 132,
               "column": 8
             },
             "end": {
-              "line": 137,
+              "line": 135,
               "column": 9
             }
           },
@@ -21403,11 +21353,11 @@
           "description": "An array that contains the expanded items.",
           "sourceRange": {
             "start": {
-              "line": 142,
+              "line": 140,
               "column": 8
             },
             "end": {
-              "line": 146,
+              "line": 144,
               "column": 9
             }
           },
@@ -21458,7 +21408,7 @@
               "column": 4
             },
             "end": {
-              "line": 47,
+              "line": 46,
               "column": 5
             }
           },
@@ -21478,11 +21428,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 49,
+              "line": 48,
               "column": 4
             },
             "end": {
-              "line": 66,
+              "line": 65,
               "column": 5
             }
           },
@@ -21502,11 +21452,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 74,
+              "line": 73,
               "column": 4
             },
             "end": {
-              "line": 97,
+              "line": 96,
               "column": 5
             }
           },
@@ -21534,11 +21484,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 99,
+              "line": 98,
               "column": 4
             },
             "end": {
-              "line": 110,
+              "line": 109,
               "column": 5
             }
           },
@@ -21558,11 +21508,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 112,
+              "line": 111,
               "column": 4
             },
             "end": {
-              "line": 120,
+              "line": 119,
               "column": 5
             }
           },
@@ -21579,11 +21529,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 122,
+              "line": 121,
               "column": 4
             },
             "end": {
-              "line": 133,
+              "line": 132,
               "column": 5
             }
           },
@@ -21603,11 +21553,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 135,
+              "line": 134,
               "column": 4
             },
             "end": {
-              "line": 142,
+              "line": 141,
               "column": 5
             }
           },
@@ -21628,7 +21578,7 @@
           "column": 2
         },
         "end": {
-          "line": 144,
+          "line": 143,
           "column": 3
         }
       },
