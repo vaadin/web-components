@@ -20,6 +20,10 @@ This program is available under Apache License Version 2.0, available at https:/
         transform: translateZ(0);
       }
 
+      :host([hidden]) {
+        display: none !important;
+      }
+
       #scroller {
         display: block;
         position: relative;
