@@ -21,6 +21,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         flex-direction: column;
         position: relative;
+        max-height: inherit;
+        min-height: inherit;
       }
 
       [part="label"]:empty {
@@ -29,15 +31,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="input-field"] {
         display: flex;
-        box-sizing: border-box;
+        flex-grow: 1;
+        min-height: 4.5em;
       }
 
       [part="value"] {
         width: 100%;
         box-sizing: border-box;
         flex: 1;
-        min-height: 4.5em;
-        align-self: center;
         resize: none;
       }
 
@@ -80,8 +81,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         <slot name="suffix"></slot>
 
-      </div>
-      <div class="mirror-text" aria-hidden="true" part="value">
+        <div class="mirror-text" aria-hidden="true" part="value">
+        </div>
       </div>
 
       <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
@@ -149,8 +150,6 @@ This program is available under Apache License Version 2.0, available at https:/
           const input = this.focusElement;
           const inputField = this.root.querySelector('[part=input-field]');
           const mirror = this.root.querySelector('.mirror-text');
-          const label = this.root.querySelector('[part=label]');
-          const error = this.root.querySelector('[part=error-message]');
 
           const rows = (input && input.value) ?
             input.value
@@ -162,40 +161,9 @@ This program is available under Apache License Version 2.0, available at https:/
               .split('\n')
             : [''];
 
-          const minHeight = parseFloat(window.getComputedStyle(this).minHeight);
-          const maxHeight = parseFloat(window.getComputedStyle(this).maxHeight);
-
           mirror.innerHTML = rows.join('<br/>') + '<br/>';
           mirror.style.width = window.getComputedStyle(input).width;
-
-          const mirrorHeight = this._getElementHeight(mirror);
-          const labelHeight = this._getElementHeight(label);
-          const errorHeight = this._getElementHeight(error);
-          const totalHeight = mirrorHeight + labelHeight + errorHeight;
-          const inputFieldMargins = this._getElementHeight(inputField) - this._getElementHeight(input);
-
-          if (minHeight || maxHeight) {
-            if (minHeight && totalHeight < minHeight) {
-              input.style.height = (minHeight - labelHeight - errorHeight - inputFieldMargins) + 'px';
-            } else if (maxHeight && totalHeight > maxHeight) {
-              input.style.height = (maxHeight - labelHeight - errorHeight - inputFieldMargins) + 'px';
-            } else {
-              input.style.height = mirrorHeight + 'px';
-            }
-          } else {
-            input.style.height = mirrorHeight + 'px';
-          }
-        }
-
-        _getElementHeight(el) {
-          const height = parseFloat(window.getComputedStyle(el).height);
-          if (height) {
-            return height
-              + (parseFloat(window.getComputedStyle(el).marginTop) || 0)
-              + (parseFloat(window.getComputedStyle(el).marginBottom) || 0);
-          } else {
-            return 0;
-          }
+          inputField.style.height = window.getComputedStyle(mirror).height;
         }
 
         /**
