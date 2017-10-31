@@ -12,6 +12,10 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: flex;
       }
+
+      :host([hidden]) {
+        display: none !important;
+      }
     </style>
     <slot></slot>
   </template>
