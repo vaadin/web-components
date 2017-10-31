@@ -154,16 +154,18 @@
         expect(item.selected).to.be.false;
       });
 
-      it('should fire click event when it is selected with keyboard', done => {
-        item.addEventListener('click', () => done());
+      it('should fire click event when it is selected with keyboard', () => {
+        const clickSpy = sinon.spy();
+        item.addEventListener('click', clickSpy);
         enter(item);
+        expect(clickSpy).to.be.calledOnce;
       });
 
       it('should not fire click event if keyup does not happen after a keydown in the element', () => {
-        item.addEventListener('click', () => {
-          throw new Error('click fired!');
-        });
+        const clickSpy = sinon.spy();
+        item.addEventListener('click', clickSpy);
         spaceUp(item);
+        expect(clickSpy).not.to.be.called;
       });
     });
   </script>
