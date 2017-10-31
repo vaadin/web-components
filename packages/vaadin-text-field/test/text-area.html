@@ -169,7 +169,8 @@
         const input = textArea.focusElement;
         const originalHeight = parseInt(window.getComputedStyle(input).height);
 
-        textArea.value = 'asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd';
+        // Make sure there are enough characters to grow the textarea
+        textArea.value = Array(400).join('400');
 
         const newHeight = parseInt(window.getComputedStyle(input).height);
         expect(newHeight).to.be.at.least(originalHeight + 10);
@@ -211,7 +212,7 @@
         expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(100);
       });
 
-      it('should not stay between min and max height', () => {
+      it('should stay between min and max height', () => {
         const textArea = fixture('min-max-height');
         const input = textArea.focusElement;
         const container = textArea.root.querySelector('.vaadin-text-area-container');
