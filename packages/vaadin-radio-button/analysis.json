@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-radio-group.html",
         "start": {
-          "line": 208,
+          "line": 228,
           "column": 6
         },
         "end": {
-          "line": 208,
+          "line": 228,
           "column": 42
         }
       },
@@ -135,17 +135,38 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
+              "name": "name",
+              "type": "string",
+              "description": "Name of the element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 140,
+                  "column": 10
+                },
+                "end": {
+                  "line": 140,
+                  "column": 20
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              }
+            },
+            {
               "name": "checked",
               "type": "boolean",
               "description": "True if the radio button is checked.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 114,
                   "column": 12
                 },
                 "end": {
-                  "line": 116,
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -164,11 +185,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 125,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -176,25 +197,6 @@
                 "polymer": {}
               },
               "defaultValue": "\"on\""
-            },
-            {
-              "name": "name",
-              "type": "string",
-              "description": "Name of the element.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 129,
-                  "column": 12
-                },
-                "end": {
-                  "line": 131,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
             }
           ],
           "methods": [
@@ -204,11 +206,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 151,
                   "column": 8
                 },
                 "end": {
-                  "line": 163,
+                  "line": 159,
                   "column": 9
                 }
               },
@@ -426,40 +428,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "_checkedNameObserver",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 142,
-                  "column": 8
-                },
-                "end": {
-                  "line": 153,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "checked"
-                },
-                {
-                  "name": "name"
-                }
-              ]
-            },
-            {
               "name": "_checkedChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 161,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 163,
                   "column": 9
                 }
               },
@@ -476,11 +454,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 169,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 198,
+                  "line": 194,
                   "column": 9
                 }
               },
@@ -493,11 +471,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 200,
                   "column": 8
                 },
                 "end": {
-                  "line": 206,
+                  "line": 202,
                   "column": 9
                 }
               },
@@ -543,11 +521,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 100,
+              "line": 104,
               "column": 6
             },
             "end": {
-              "line": 207,
+              "line": 203,
               "column": 7
             }
           },
@@ -596,11 +574,11 @@
               "description": "True if the radio button is checked.",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 114,
                   "column": 12
                 },
                 "end": {
-                  "line": 116,
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -612,27 +590,11 @@
               "description": "The value for this element.",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 125,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "name",
-              "description": "Name of the element.",
-              "sourceRange": {
-                "start": {
-                  "line": 129,
-                  "column": 12
-                },
-                "end": {
-                  "line": 131,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -659,11 +621,11 @@
               "range": {
                 "file": "vaadin-radio-button.html",
                 "start": {
-                  "line": 58,
+                  "line": 62,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 62,
                   "column": 21
                 }
               }
@@ -687,11 +649,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 63,
+                  "line": 67,
                   "column": 12
                 },
                 "end": {
-                  "line": 67,
+                  "line": 71,
                   "column": 13
                 }
               },
@@ -708,17 +670,38 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 69,
+                  "line": 73,
                   "column": 12
                 },
                 "end": {
-                  "line": 72,
+                  "line": 76,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
                   "observer": "\"_checkedButtonChanged\""
+                }
+              }
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 78,
+                  "column": 12
+                },
+                "end": {
+                  "line": 82,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_valueChanged\""
                 }
               }
             }
@@ -730,11 +713,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 79,
+                  "line": 89,
                   "column": 8
                 },
                 "end": {
-                  "line": 97,
+                  "line": 107,
                   "column": 9
                 }
               },
@@ -747,11 +730,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 99,
+                  "line": 109,
                   "column": 8
                 },
                 "end": {
-                  "line": 109,
+                  "line": 119,
                   "column": 9
                 }
               },
@@ -764,11 +747,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 115,
+                  "line": 125,
                   "column": 8
                 },
                 "end": {
-                  "line": 118,
+                  "line": 128,
                   "column": 9
                 }
               },
@@ -785,11 +768,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 120,
+                  "line": 130,
                   "column": 8
                 },
                 "end": {
-                  "line": 124,
+                  "line": 134,
                   "column": 9
                 }
               },
@@ -806,11 +789,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 126,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 146,
+                  "line": 156,
                   "column": 9
                 }
               },
@@ -823,11 +806,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 158,
                   "column": 8
                 },
                 "end": {
-                  "line": 152,
+                  "line": 162,
                   "column": 9
                 }
               },
@@ -844,11 +827,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 164,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 166,
                   "column": 9
                 }
               },
@@ -861,11 +844,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 168,
                   "column": 8
                 },
                 "end": {
-                  "line": 170,
+                  "line": 180,
                   "column": 9
                 }
               },
@@ -882,11 +865,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 184,
+                  "line": 194,
                   "column": 9
                 }
               },
@@ -903,11 +886,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 186,
+                  "line": 196,
                   "column": 8
                 },
                 "end": {
-                  "line": 190,
+                  "line": 200,
                   "column": 9
                 }
               },
@@ -924,11 +907,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 192,
+                  "line": 202,
                   "column": 8
                 },
                 "end": {
-                  "line": 194,
+                  "line": 206,
                   "column": 9
                 }
               },
@@ -940,16 +923,40 @@
               ]
             },
             {
+              "name": "_valueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 208,
+                  "column": 8
+                },
+                "end": {
+                  "line": 214,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ]
+            },
+            {
               "name": "_setFocusable",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 196,
+                  "line": 216,
                   "column": 8
                 },
                 "end": {
-                  "line": 199,
+                  "line": 219,
                   "column": 9
                 }
               },
@@ -995,11 +1002,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 53,
+              "line": 57,
               "column": 6
             },
             "end": {
-              "line": 201,
+              "line": 221,
               "column": 7
             }
           },
@@ -1012,16 +1019,32 @@
               "description": "The current disabled state of the radio button group. True if group and all internal radio buttons are disabled.",
               "sourceRange": {
                 "start": {
-                  "line": 63,
+                  "line": 67,
                   "column": 12
                 },
                 "end": {
-                  "line": 67,
+                  "line": 71,
                   "column": 13
                 }
               },
               "metadata": {},
               "type": "boolean"
+            },
+            {
+              "name": "value",
+              "description": "",
+              "sourceRange": {
+                "start": {
+                  "line": 78,
+                  "column": 12
+                },
+                "end": {
+                  "line": 82,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
             }
           ],
           "events": [],
@@ -1036,11 +1059,11 @@
               "range": {
                 "file": "vaadin-radio-group.html",
                 "start": {
-                  "line": 22,
+                  "line": 26,
                   "column": 4
                 },
                 "end": {
-                  "line": 22,
+                  "line": 26,
                   "column": 27
                 }
               }
