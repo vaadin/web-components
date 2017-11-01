@@ -91,7 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             // Create a slot for the value element
             const slot = document.createElement('slot');
-            slot.name = 'selected';
+            slot.setAttribute('name', 'selected');
             slot.setAttribute('part', 'selected');
 
             // Insert the slot before the text-field
