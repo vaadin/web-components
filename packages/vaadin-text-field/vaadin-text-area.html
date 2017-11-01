@@ -21,6 +21,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         flex-direction: column;
         position: relative;
+        height: 100%;
         max-height: inherit;
         min-height: inherit;
       }
@@ -44,12 +45,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="value"]::-ms-clear {
         display: none;
-      }
-
-      .mirror-text {
-        visibility: hidden;
-        word-wrap: break-word;
-        position: absolute;
       }
     </style>
 
@@ -80,9 +75,6 @@ This program is available under Apache License Version 2.0, available at https:/
             aria-invalid$="[[invalid]]"></textarea>
 
         <slot name="suffix"></slot>
-
-        <div class="mirror-text" aria-hidden="true" part="value">
-        </div>
       </div>
 
       <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
@@ -143,38 +135,30 @@ This program is available under Apache License Version 2.0, available at https:/
             this.validate();
           }
           this._setHasValue(newVal !== '' && newVal != null);
-          this._setInputHeight();
+          this._updateHeight();
         }
 
-        _setInputHeight() {
-          const input = this.focusElement;
+        _updateHeight() {
+          const scrollTop = this.focusElement.scrollTop;
+          const container = this.root.querySelector('.vaadin-text-area-container');
+          // Clear container enforced height
+          container.style.height = '';
+
           const inputField = this.root.querySelector('[part=input-field]');
-          const mirror = this.root.querySelector('.mirror-text');
 
-          const rows = (input && input.value) ?
-            input.value
-              .replace(/&/gm, '&amp;')
-              .replace(/"/gm, '&quot;')
-              .replace(/'/gm, '&#39;')
-              .replace(/</gm, '&lt;')
-              .replace(/>/gm, '&gt;')
-              .split('\n')
-            : [''];
-
-          mirror.innerHTML = rows.join('<br/>') + '<br/>';
-          mirror.style.width = window.getComputedStyle(input).width;
-          inputField.style.height = window.getComputedStyle(mirror).height;
-
-          const isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
-          if (isIE) {
-            // IE11 flexbox doesn't respect max-height constraints. Enforce the
-            // constraints with an explicit height value
-            const container = this.root.querySelector('.vaadin-text-area-container');
-            const st = input.scrollTop;
-            container.style.height = '';
-            container.style.height = container.clientHeight + 'px';
-            input.scrollTop = st;
+          const valueLength = this.value ? this.value.length : 0;
+          if (this._oldValueLength >= valueLength) {
+            // Only clear the height when the content shortens to minimize scrollbar flickering.
+            inputField.style.height = '';
           }
+          this._oldValueLength = valueLength;
+
+          inputField.style.height = this.focusElement.scrollHeight + 'px';
+
+          // IE11 flexbox doesn't respect max-height constraints. Enforce the
+          // constraints with an explicit height value
+          container.style.height = container.clientHeight + 'px';
+          this.focusElement.scrollTop = scrollTop;
         }
 
         /**
@@ -197,7 +181,7 @@ This program is available under Apache License Version 2.0, available at https:/
           var uniqueId = TextAreaElement._uniqueId = 1 + TextAreaElement._uniqueId || 0;
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
           this._labelId = `${this.constructor.is}-label-${uniqueId}`;
-          this._setInputHeight();
+          this._updateHeight();
         }
       }
 
