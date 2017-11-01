@@ -299,17 +299,16 @@
           expect(focusedSpy).to.be.calledOnce;
         });
 
-        it('Should hidde native input when selecting an item', () => {
+        it('Should hide native input when selecting an item', () => {
           menu.selected = 1;
-          expect(input.focusElement.style.opacity).to.be.equal('0');
-
+          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
         });
 
         it('Should show native input when value is empty', () => {
           menu.selected = 1;
 
           menu.selected = 3;
-          expect(input.focusElement.style.opacity).to.be.equal('1');
+          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 
         it('Should close the overlay when clicking on the overlay', () => {

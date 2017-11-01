@@ -43,6 +43,20 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
+<dom-module id="vaadin-dropdown-menu-text-field-default-theme" theme-for="vaadin-dropdown-menu-text-field">
+  <template>
+    <style>
+      :host([has-value]) [part="value"] {
+        visibility: hidden;
+      }
+
+      [part="input-field"] {
+        outline: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-dropdown-menu-overlay">
   <script>
     {
@@ -97,9 +111,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
             // Insert the slot before the text-field
             const input = memoizedTemplate.content.querySelector('input');
+
+            // We don't want the focus in tabIndex to avoid problems in iOS
+            input.tabIndex = -1;
+
             input.parentElement.insertBefore(slot, input);
           }
           return memoizedTemplate;
+        }
+
+        get focusElement() {
+          return this.root.querySelector('[part=input-field]');
         }
       }
       customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
@@ -379,8 +401,6 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.value = '';
           }
-
-          this._nativeInput.style.opacity = this.value ? 0 : 1;
 
           this.validate();
         }
