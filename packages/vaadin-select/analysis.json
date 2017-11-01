@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 410,
+          "line": 419,
           "column": 6
         },
         "end": {
-          "line": 410,
+          "line": 419,
           "column": 42
         }
       },
@@ -627,11 +627,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 58,
+              "line": 78,
               "column": 6
             },
             "end": {
-              "line": 62,
+              "line": 82,
               "column": 7
             }
           },
@@ -1774,11 +1774,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 82,
+              "line": 103,
               "column": 6
             },
             "end": {
-              "line": 103,
+              "line": 129,
               "column": 7
             }
           },
@@ -2249,22 +2249,25 @@
             {
               "name": "disabled",
               "type": "boolean",
-              "description": "Set to a disabled dropdown menu",
+              "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 212,
-                  "column": 12
+                  "line": 79,
+                  "column": 8
                 },
                 "end": {
-                  "line": 215,
-                  "column": 13
+                  "line": 83,
+                  "column": 9
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "observer": "\"_disabledChanged\""
+                }
               },
-              "defaultValue": "false"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_isShiftTabbing",
@@ -2294,17 +2297,18 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 168,
+                  "line": 194,
                   "column": 12
                 },
                 "end": {
-                  "line": 172,
+                  "line": 199,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "observer": "\"_openedChanged\""
                 }
               },
               "defaultValue": "false"
@@ -2316,11 +2320,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 204,
                   "column": 12
                 },
                 "end": {
-                  "line": 180,
+                  "line": 207,
                   "column": 13
                 }
               },
@@ -2336,11 +2340,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 186,
+                  "line": 213,
                   "column": 12
                 },
                 "end": {
-                  "line": 190,
+                  "line": 217,
                   "column": 13
                 }
               },
@@ -2358,11 +2362,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 222,
                   "column": 12
                 },
                 "end": {
-                  "line": 199,
+                  "line": 226,
                   "column": 13
                 }
               },
@@ -2379,11 +2383,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 231,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 234,
                   "column": 13
                 }
               },
@@ -2398,11 +2402,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 239,
                   "column": 12
                 },
                 "end": {
-                  "line": 222,
+                  "line": 241,
                   "column": 13
                 }
               },
@@ -2417,11 +2421,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 224,
+                  "line": 243,
                   "column": 27
                 }
               },
@@ -2436,11 +2440,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 226,
+                  "line": 245,
                   "column": 12
                 },
                 "end": {
-                  "line": 228,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -2456,11 +2460,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 230,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 230,
+                  "line": 249,
                   "column": 35
                 }
               },
@@ -2475,11 +2479,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 251,
                   "column": 12
                 },
                 "end": {
-                  "line": 232,
+                  "line": 251,
                   "column": 33
                 }
               },
@@ -2494,11 +2498,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 234,
+                  "line": 253,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 253,
                   "column": 32
                 }
               },
@@ -2514,11 +2518,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 256,
+                  "line": 269,
                   "column": 8
                 },
                 "end": {
-                  "line": 266,
+                  "line": 282,
                   "column": 9
                 }
               },
@@ -2531,11 +2535,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 264,
                   "column": 8
                 },
                 "end": {
-                  "line": 254,
+                  "line": 267,
                   "column": 9
                 }
               },
@@ -2548,11 +2552,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 279,
+                  "line": 295,
                   "column": 9
                 }
               },
@@ -2737,11 +2741,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 305,
                   "column": 9
                 }
               },
@@ -2754,11 +2758,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 291,
+                  "line": 307,
                   "column": 8
                 },
                 "end": {
-                  "line": 293,
+                  "line": 309,
                   "column": 9
                 }
               },
@@ -2775,11 +2779,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 295,
+                  "line": 311,
                   "column": 8
                 },
                 "end": {
-                  "line": 300,
+                  "line": 316,
                   "column": 9
                 }
               },
@@ -2796,11 +2800,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 302,
+                  "line": 318,
                   "column": 8
                 },
                 "end": {
-                  "line": 306,
+                  "line": 322,
                   "column": 9
                 }
               },
@@ -2817,11 +2821,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 324,
                   "column": 8
                 },
                 "end": {
-                  "line": 345,
+                  "line": 357,
                   "column": 9
                 }
               },
@@ -2831,7 +2835,7 @@
                   "name": "opened"
                 },
                 {
-                  "name": "overlayElement"
+                  "name": "wasOpened"
                 }
               ]
             },
@@ -2841,11 +2845,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 347,
+                  "line": 359,
                   "column": 8
                 },
                 "end": {
-                  "line": 361,
+                  "line": 373,
                   "column": 9
                 }
               },
@@ -2858,11 +2862,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 363,
+                  "line": 375,
                   "column": 8
                 },
                 "end": {
-                  "line": 385,
+                  "line": 394,
                   "column": 9
                 }
               },
@@ -2875,11 +2879,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 387,
+                  "line": 396,
                   "column": 8
                 },
                 "end": {
-                  "line": 393,
+                  "line": 402,
                   "column": 9
                 }
               },
@@ -2892,11 +2896,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 396,
+                  "line": 405,
                   "column": 8
                 },
                 "end": {
-                  "line": 402,
+                  "line": 411,
                   "column": 9
                 }
               },
@@ -2938,11 +2942,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 155,
+              "line": 181,
               "column": 6
             },
             "end": {
-              "line": 403,
+              "line": 412,
               "column": 7
             }
           },
@@ -2970,74 +2974,28 @@
             },
             {
               "name": "disabled",
-              "description": "Set to a disabled dropdown menu",
+              "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 212,
-                  "column": 12
+                  "line": 79,
+                  "column": 8
                 },
                 "end": {
-                  "line": 215,
-                  "column": 13
+                  "line": 83,
+                  "column": 9
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "opened",
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 168,
-                  "column": 12
-                },
-                "end": {
-                  "line": 172,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            },
-            {
-              "name": "label",
-              "description": "String used for the label element.",
-              "sourceRange": {
-                "start": {
-                  "line": 177,
-                  "column": 12
-                },
-                "end": {
-                  "line": 180,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "value",
-              "description": "The String value for the selected item of the dropdown menu. Provides the value for iron-form.\nWhen there’s no item selected, the value is an empty string.",
-              "sourceRange": {
-                "start": {
-                  "line": 186,
-                  "column": 12
-                },
-                "end": {
-                  "line": 190,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "required",
-              "description": "The current required state of the dropdown menu. True if required.",
-              "sourceRange": {
-                "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 12
                 },
                 "end": {
@@ -3049,8 +3007,8 @@
               "type": "boolean"
             },
             {
-              "name": "name",
-              "description": "The name of this element.",
+              "name": "label",
+              "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
                   "line": 204,
@@ -3065,15 +3023,63 @@
               "type": "string"
             },
             {
+              "name": "value",
+              "description": "The String value for the selected item of the dropdown menu. Provides the value for iron-form.\nWhen there’s no item selected, the value is an empty string.",
+              "sourceRange": {
+                "start": {
+                  "line": 213,
+                  "column": 12
+                },
+                "end": {
+                  "line": 217,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "required",
+              "description": "The current required state of the dropdown menu. True if required.",
+              "sourceRange": {
+                "start": {
+                  "line": 222,
+                  "column": 12
+                },
+                "end": {
+                  "line": 226,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "name",
+              "description": "The name of this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 231,
+                  "column": 12
+                },
+                "end": {
+                  "line": 234,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
               "name": "placeholder",
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 239,
                   "column": 12
                 },
                 "end": {
-                  "line": 222,
+                  "line": 241,
                   "column": 13
                 }
               },
@@ -3106,11 +3112,11 @@
               "range": {
                 "file": "vaadin-dropdown-menu.html",
                 "start": {
-                  "line": 122,
+                  "line": 148,
                   "column": 6
                 },
                 "end": {
-                  "line": 122,
+                  "line": 148,
                   "column": 47
                 }
               }

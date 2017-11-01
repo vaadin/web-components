@@ -235,6 +235,10 @@
           expect(input.focused).to.be.true;
         });
 
+        it('should not focus the input by default', () => {
+          expect(dropdown.focusElement.focused).not.to.be.ok;
+        });
+
         it('Should focus the next focusable element when tabbing', () => {
           dropdown.focus();
 
