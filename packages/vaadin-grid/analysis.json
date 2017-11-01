@@ -9630,11 +9630,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 98,
                   "column": 10
                 },
                 "end": {
-                  "line": 95,
+                  "line": 102,
                   "column": 11
                 }
               },
@@ -9652,11 +9652,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 107,
                   "column": 10
                 },
                 "end": {
-                  "line": 104,
+                  "line": 111,
                   "column": 11
                 }
               },
@@ -9672,11 +9672,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 116,
                   "column": 10
                 },
                 "end": {
-                  "line": 114,
+                  "line": 121,
                   "column": 11
                 }
               },
@@ -9695,11 +9695,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 125,
                   "column": 6
                 },
                 "end": {
-                  "line": 122,
+                  "line": 129,
                   "column": 7
                 }
               },
@@ -9712,11 +9712,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 124,
+                  "line": 131,
                   "column": 6
                 },
                 "end": {
-                  "line": 131,
+                  "line": 138,
                   "column": 7
                 }
               },
@@ -9733,11 +9733,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 140,
                   "column": 6
                 },
                 "end": {
-                  "line": 137,
+                  "line": 144,
                   "column": 7
                 }
               },
@@ -9778,11 +9778,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 80,
+              "line": 87,
               "column": 4
             },
             "end": {
-              "line": 138,
+              "line": 145,
               "column": 5
             }
           },
@@ -9795,11 +9795,11 @@
               "description": "Current level of the hierarchy represented with a horizontal offset\nof the toggle button.",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 98,
                   "column": 10
                 },
                 "end": {
-                  "line": 95,
+                  "line": 102,
                   "column": 11
                 }
               },
@@ -9811,11 +9811,11 @@
               "description": "Enables toggling a hierarchy sublevel.",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 107,
                   "column": 10
                 },
                 "end": {
-                  "line": 104,
+                  "line": 111,
                   "column": 11
                 }
               },
@@ -9827,11 +9827,11 @@
               "description": "Sublevel toggle state.",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 116,
                   "column": 10
                 },
                 "end": {
-                  "line": 114,
+                  "line": 121,
                   "column": 11
                 }
               },
@@ -9858,12 +9858,12 @@
               "range": {
                 "file": "vaadin-grid-hierarchy-toggle.html",
                 "start": {
-                  "line": 51,
-                  "column": 6
+                  "line": 59,
+                  "column": 25
                 },
                 "end": {
-                  "line": 51,
-                  "column": 19
+                  "line": 59,
+                  "column": 38
                 }
               }
             }
