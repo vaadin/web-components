@@ -281,21 +281,22 @@
         });
 
         it('should focus the input on selecting value and closing the overlay', () => {
+          const focusedSpy = sinon.spy();
+          dropdown.focusElement.focus = focusedSpy;
+
           menu.selected = 0;
           expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
           expect(dropdown._overlayElement.opened).to.be.false;
-          expect(input.focused).to.be.true;
+
+          expect(focusedSpy).to.be.calledOnce;
         });
 
         it('should focus the input before moving the focus to next selectable element', () => {
-          Enter(input);
           const focusedSpy = sinon.spy();
-          const menu = dropdown._overlayElement.$.content.querySelector('vaadin-list-box');
+          dropdown.focusElement.focus = focusedSpy;
 
-          input.addEventListener('focused-changed', focusedSpy);
           Tab(menu);
-
-          expect(focusedSpy.calledOnce).to.be.true;
+          expect(focusedSpy).to.be.calledOnce;
         });
 
         it('Should hidde native input when selecting an item', () => {

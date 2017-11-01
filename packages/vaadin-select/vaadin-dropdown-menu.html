@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/utils/render-status.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
@@ -118,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]">
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]" disabled="[[disabled]]">
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
@@ -148,10 +149,14 @@ This program is available under Apache License Version 2.0, available at https:/
         * ```
         *
         * @memberof Vaadin
+        * @mixes Vaadin.ControlStateMixin
         * @mixes Vaadin.ThemableMixin
         * @demo demo/index.html
         */
-      class DropdownMenuElement extends Vaadin.ThemableMixin(Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)) {
+      class DropdownMenuElement extends
+        Vaadin.ControlStateMixin(
+          Vaadin.ThemableMixin(
+            Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element))) {
         static get is() {
           return 'vaadin-dropdown-menu';
         }
@@ -234,7 +239,6 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_openedChanged(opened, _overlayElement)',
-            '_disabledChanged(disabled, _inputElement)'
           ];
         }
 
@@ -254,13 +258,17 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
-          this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field');
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
-          this._nativeInput = this._inputElement.shadowRoot.querySelector('input');
+          this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
 
-          this._inputElement.addEventListener('click', e => this.opened = true);
-          this._inputElement.addEventListener('keydown', e => this._onKeyDown(e));
+          this.focusElement.addEventListener('click', e => this.opened = true);
+          this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
+        }
+
+        get focusElement() {
+          return this._inputElement ||
+            (this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field'));
         }
 
         /** @private */
@@ -281,16 +289,6 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _disabledChanged(disabled, inputElement) {
-          if (!inputElement) {
-            return;
-          }
-
-          inputElement.disabled = disabled;
-          this.setAttribute('aria-disabled', disabled);
-          this.opened = false;
-        }
-
         _requiredChanged(required) {
           this.setAttribute('aria-required', required);
         }
@@ -305,12 +303,11 @@ This program is available under Apache License Version 2.0, available at https:/
         _onKeyDownInside(e) {
           if (/^(Tab)$/.test(e.key)) {
             this.opened = false;
-            this._inputElement.focus();
           }
         }
 
         _openedChanged(opened, overlayElement) {
-          if (!overlayElement || !this._inputElement || this.disabled) {
+          if (!overlayElement || !this.focusElement || this.disabled) {
             this.opened = false;
             return;
           }
@@ -339,7 +336,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           } else {
             if (!this.disabled) {
-              this._inputElement.focus();
+              this.focusElement.focus();
               this.validate();
             }
             window.removeEventListener('scroll', this._boundSetPosition, true);
@@ -384,11 +381,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this._nativeInput.style.opacity = this.value ? 0 : 1;
+
           this.validate();
         }
 
         _setPosition() {
-          const inputRect = this._inputElement.getBoundingClientRect();
+          const inputRect = this.focusElement.getBoundingClientRect();
 
           this._overlayElement.style.left = inputRect.left + 'px';
           this._overlayElement.style.top = (inputRect.top <= window.innerHeight - inputRect.top ? inputRect.top :
