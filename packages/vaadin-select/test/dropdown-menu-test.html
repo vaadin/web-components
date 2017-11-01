@@ -97,6 +97,11 @@
         expect(dropdown.localName).to.be.equal('vaadin-dropdown-menu');
       });
 
+      it('should have a modified template with a slot for selected', () => {
+        const modifiedTemplate = dropdown._inputElement.constructor.template;
+        expect(modifiedTemplate.content.querySelector('slot[name="selected"]')).to.be.ok;
+      });
+
       describe('selection', () => {
 
         var menu;
