@@ -17,8 +17,8 @@
         <template>
           <vaadin-list-box>
             <vaadin-item>Option 1</vaadin-item>
-            <vaadin-item>Option 2</vaadin-item>
-            <vaadin-item>Option 3</vaadin-item>
+            <vaadin-item label="o2">Option 2</vaadin-item>
+            <vaadin-item> Option 3 </vaadin-item>
             <vaadin-item></vaadin-item>
           </vaadin-list-box>
         </template>
@@ -98,94 +98,112 @@
       });
 
       describe('selection', () => {
-        it('Should show the native input when value is empty', () => {
-          // FIXME:
-        });
 
-        it('Should hide the native input when value is empty', () => {
-          // FIXME:
+        var menu;
+
+        beforeEach(done => {
+          dropdown.opened = true;
+          menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
         });
 
         it('Should close the overlay when selecting a new item', () => {
-          // FIXME:
+          menu.selected = 2;
+          expect(dropdown._overlayElement.opened).to.be.false;
         });
 
         it('Should update selection slot with a clone of the selected item', () => {
-          // FIXME:
+          menu.selected = 2;
+          const itemElement = menu._navItems[menu.selected];
+          const valueElement = dropdown._selectionElement.firstChild;
+          expect(valueElement).not.to.be.equal(itemElement);
+          expect(valueElement.localName).to.be.equal(itemElement.localName);
+          expect(valueElement.textContent).to.be.equal(itemElement.textContent);
         });
 
-        it('Should update value with the textConetent of the selected item', () => {
-          // FIXME:
+        it('Should update value with the textContent of the selected item', () => {
+          menu.selected = 2;
+          expect(dropdown.value).to.be.equal('Option 3');
+        });
+
+        it('Should remove tabindex when cloning the value element', () => {
+          menu.selected = 2;
+          const itemElement = menu._navItems[menu.selected];
+          const valueElement = dropdown._selectionElement.firstChild;
+          expect(itemElement.tabIndex).to.be.equal(0);
+          expect(valueElement.hasAttribute('tabindex')).to.be.false;
         });
 
         it('Should update selection slot textContent with the selected item `label` value', () => {
-          // FIXME:
+          menu.selected = 1;
+          expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
         });
 
         it('Should update value with the `label` value of the selected item', () => {
-          // FIXME:
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal('o2');
         });
 
         it('Should update selection slot when value is provided', () => {
-          // FIXME:
+          // FIXME: when component supports setting value after #15
         });
 
         it('Should update overlay selected item when value is provided', () => {
-          // FIXME:
+          // FIXME: when component supports setting value after #15
         });
 
       });
 
       describe('opening the overlay', () => {
 
+        it('should keep synchronized opened properties in overlay and dropdown', () => {
+          dropdown.opened = true;
+          expect(dropdown.opened).to.be.true;
+          expect(dropdown._overlayElement.opened).to.be.true;
+
+          dropdown.opened = false;
+          expect(dropdown._overlayElement.opened).to.be.false;
+          expect(dropdown.opened).to.be.false;
+        });
+
         it('overlay should be opened on click event on input', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+
           input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
           expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On ArrowUp Should open the overlay, not select any item, and keep opened', () => {
+          arrowUp(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On ArrowDown Should open the overlay, not select any item, and keep opened', () => {
+          arrowDown(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Space Should open the overlay, not select any item, and keep opened', () => {
+          Space(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Enter Should open the overlay, not select any item, and keep opened', () => {
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('On Escape Should close the overlay', () => {
+          dropdown.opened = true;
+
+          Escape(input);
+          expect(dropdown._overlayElement.opened).to.be.false;
         });
 
         it('should open the overlay on top left corner by default on input click', () => {
           Enter(input);
           expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
           expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
-        });
-
-        it('overlay should be opened on keydown events on input', () => {
-          arrowUp(input);
-          expect(dropdown._overlayElement.opened).to.be.true;
-
-          Escape(input);
-          expect(dropdown._overlayElement.opened).to.be.false;
-
-          arrowDown(input);
-          expect(dropdown._overlayElement.opened).to.be.true;
-
-          Escape(input);
-          expect(dropdown._overlayElement.opened).to.be.false;
-
-          Space(input);
-          expect(dropdown._overlayElement.opened).to.be.true;
-
-          Escape(input);
-          expect(dropdown._overlayElement.opened).to.be.false;
-
-          Enter(input);
-          expect(dropdown._overlayElement.opened).to.be.true;
-
-          Escape(input);
-          expect(dropdown._overlayElement.opened).to.be.false;
-        });
-
-        it('On ArrowUp Should open the overlay, not select any item, and keep opened', () => {
-          // FIXME:
-        });
-        it('On ArrowDown Should open the overlay, not select any item, and keep opened', () => {
-          // FIXME:
-        });
-        it('On Space Should open the overlay, not select any item, and keep opened', () => {
-          // FIXME:
-        });
-        it('On Enter Should open the overlay, not select any item, and keep opened', () => {
-          // FIXME:
         });
 
       });
@@ -245,14 +263,6 @@
           Polymer.RenderStatus.afterNextRender(menu, done);
         });
 
-        it('should change the value of dropdown-menu when list element selected property changed', () => {
-          menu.selected = 0;
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
-
-          menu.selected = 1;
-          expect(dropdown.value).to.be.equal(menu._navItems[1].textContent);
-        });
-
         it('should close the dropdown-menu on selecting the same value', () => {
           menu.selected = 0;
           expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
@@ -297,11 +307,9 @@
         });
 
         it('Should close the overlay when clicking on the overlay', () => {
-          // FIXME:
-        });
-
-        it('Should close the overlay when clicking on the overlay', () => {
-          // FIXME:
+          dropdown.opened = false;
+          dropdown._overlayElement.click();
+          expect(dropdown.opened).to.be.false;
         });
       });
 
@@ -341,7 +349,12 @@
         });
 
         it('Should validate when closing the overlay', () => {
-          // FIXME:
+          const spy = sinon.spy();
+          dropdown.validate = spy;
+          dropdown.opened = true;
+
+          dropdown.opened = false;
+          expect(spy).to.be.calledOnce;
         });
 
       });
