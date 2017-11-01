@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "vaadin-progress-bar.html",
         "start": {
-          "line": 95,
+          "line": 121,
           "column": 6
         },
         "end": {
-          "line": 95,
+          "line": 121,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar value=\"30\" min=\"10\" max=\"100\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0",
+          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar value=\"30\" min=\"10\" max=\"100\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar | :host",
           "summary": "",
           "path": "vaadin-progress-bar.html",
           "properties": [
@@ -92,6 +92,28 @@
               },
               "defaultValue": "1",
               "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "indeterminate",
+              "type": "boolean",
+              "description": "Indeterminate state of the progress bar.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 41,
+                  "column": 10
+                },
+                "end": {
+                  "line": 45,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.ProgressMixin"
             }
           ],
           "methods": [
@@ -102,11 +124,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 47,
+                  "line": 55,
                   "column": 6
                 },
                 "end": {
-                  "line": 51,
+                  "line": 59,
                   "column": 7
                 }
               },
@@ -121,11 +143,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 53,
+                  "line": 61,
                   "column": 6
                 },
                 "end": {
-                  "line": 57,
+                  "line": 69,
                   "column": 7
                 }
               },
@@ -150,11 +172,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 59,
+                  "line": 71,
                   "column": 6
                 },
                 "end": {
-                  "line": 61,
+                  "line": 73,
                   "column": 7
                 }
               },
@@ -176,11 +198,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 63,
+                  "line": 75,
                   "column": 6
                 },
                 "end": {
-                  "line": 65,
+                  "line": 77,
                   "column": 7
                 }
               },
@@ -202,11 +224,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 67,
+                  "line": 79,
                   "column": 6
                 },
                 "end": {
-                  "line": 69,
+                  "line": 81,
                   "column": 7
                 }
               },
@@ -228,11 +250,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 74,
+                  "line": 86,
                   "column": 6
                 },
                 "end": {
-                  "line": 88,
+                  "line": 100,
                   "column": 7
                 }
               },
@@ -285,11 +307,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 84,
+              "line": 110,
               "column": 6
             },
             "end": {
-              "line": 88,
+              "line": 114,
               "column": 7
             }
           },
@@ -349,6 +371,24 @@
               },
               "metadata": {},
               "type": "number",
+              "inheritedFrom": "Vaadin.ProgressMixin"
+            },
+            {
+              "name": "indeterminate",
+              "description": "Indeterminate state of the progress bar.",
+              "sourceRange": {
+                "file": "vaadin-progress-mixin.html",
+                "start": {
+                  "line": 41,
+                  "column": 10
+                },
+                "end": {
+                  "line": 45,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
               "inheritedFrom": "Vaadin.ProgressMixin"
             }
           ],
@@ -435,6 +475,26 @@
                 }
               },
               "defaultValue": "1"
+            },
+            {
+              "name": "indeterminate",
+              "type": "boolean",
+              "description": "Indeterminate state of the progress bar.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 41,
+                  "column": 10
+                },
+                "end": {
+                  "line": 45,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
             }
           ],
           "methods": [
@@ -444,11 +504,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 47,
+                  "line": 55,
                   "column": 6
                 },
                 "end": {
-                  "line": 51,
+                  "line": 59,
                   "column": 7
                 }
               },
@@ -461,11 +521,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 53,
+                  "line": 61,
                   "column": 6
                 },
                 "end": {
-                  "line": 57,
+                  "line": 69,
                   "column": 7
                 }
               },
@@ -488,11 +548,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 59,
+                  "line": 71,
                   "column": 6
                 },
                 "end": {
-                  "line": 61,
+                  "line": 73,
                   "column": 7
                 }
               },
@@ -512,11 +572,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 63,
+                  "line": 75,
                   "column": 6
                 },
                 "end": {
-                  "line": 65,
+                  "line": 77,
                   "column": 7
                 }
               },
@@ -536,11 +596,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 67,
+                  "line": 79,
                   "column": 6
                 },
                 "end": {
-                  "line": 69,
+                  "line": 81,
                   "column": 7
                 }
               },
@@ -560,11 +620,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 74,
+                  "line": 86,
                   "column": 6
                 },
                 "end": {
-                  "line": 88,
+                  "line": 100,
                   "column": 7
                 }
               },
@@ -591,7 +651,7 @@
               "column": 2
             },
             "end": {
-              "line": 89,
+              "line": 101,
               "column": 5
             }
           },
@@ -645,6 +705,22 @@
               },
               "metadata": {},
               "type": "number"
+            },
+            {
+              "name": "indeterminate",
+              "description": "Indeterminate state of the progress bar.",
+              "sourceRange": {
+                "start": {
+                  "line": 41,
+                  "column": 10
+                },
+                "end": {
+                  "line": 45,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
             }
           ],
           "events": [],

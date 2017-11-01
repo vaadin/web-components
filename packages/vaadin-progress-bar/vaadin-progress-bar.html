@@ -20,6 +20,25 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="value"] {
         background: currentColor;
       }
+
+      @keyframes indeterminate-progress-bar {
+        0% {
+          transform: translateX(-100%);
+        }
+
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      [part="bar"] {
+        overflow: hidden;
+      }
+
+      :host([indeterminate]) [part="value"] {
+        animation: indeterminate-progress-bar 1s infinite;
+        width: 100%;
+      }
     </style>
   </template>
 </dom-module>
@@ -77,6 +96,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * Custom property | Description | Default
        * ----------------|-------------|-------------
        * `--vaadin-progress-value` | current progress value (between 0 and 1) | 0
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute       | Description | Part name
+       * ----------------|-------------|------------
+       * `indeterminate` | Set to an indeterminate progress bar | :host
        *
        * @memberof Vaadin
        * @mixes Vaadin.ProgressMixin
