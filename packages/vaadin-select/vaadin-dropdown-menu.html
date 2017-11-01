@@ -141,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]" disabled="[[disabled]]">
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]">
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
@@ -191,7 +191,8 @@ This program is available under Apache License Version 2.0, available at https:/
             opened: {
               type: Boolean,
               value: false,
-              notify: true
+              notify: true,
+              observer: '_openedChanged'
             },
 
             /**
@@ -230,14 +231,6 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set to a disabled dropdown menu
-             */
-            disabled: {
-              type: Boolean,
-              value: false
-            },
-
-            /**
              * A hint to the user of what can be entered in the control.
              */
             placeholder: {
@@ -256,12 +249,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _nativeInput: Object
           };
-        }
-
-        static get observers() {
-          return [
-            '_openedChanged(opened, _overlayElement)',
-          ];
         }
 
         /** @private */
@@ -283,6 +270,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
+
+          // Disabling the input fixes iOS zooming
+          this._nativeInput.disabled = true;
 
           this.focusElement.addEventListener('click', e => this.opened = true);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
@@ -328,8 +318,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _openedChanged(opened, overlayElement) {
-          if (!overlayElement || !this.focusElement || this.disabled) {
+        _openedChanged(opened, wasOpened) {
+          if (!this._overlayElement || !this.focusElement || this.disabled) {
             this.opened = false;
             return;
           }
@@ -338,12 +328,12 @@ This program is available under Apache License Version 2.0, available at https:/
             if (!this._instance) {
               this._instance = this._createTemplateInstance();
               if (this._instance) {
-                overlayElement.content = this._instance.root;
+                this._overlayElement.content = this._instance.root;
               }
             }
 
             if (!this._menuElement) {
-              this._menuElement = Array.from(overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+              this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
               if (this._menuElement) {
                 this._menuElement.addEventListener('selected-changed', e => this._setInputValue(e));
                 this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
@@ -356,15 +346,11 @@ This program is available under Apache License Version 2.0, available at https:/
               this._setPosition();
               window.addEventListener('scroll', this._boundSetPosition, true);
             }
-          } else {
-            if (!this.disabled) {
-              this.focusElement.focus();
-              this.validate();
-            }
+          } else if (wasOpened) {
+            !this._phone && this.focusElement.focus();
+            this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
           }
-
-          overlayElement.opened = opened;
         }
 
         _createTemplateInstance() {

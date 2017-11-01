@@ -230,16 +230,13 @@
       describe('focus', () => {
 
         it('Should be focusable', () => {
-          // FIXME: The element is not focusable yet. Uncomment after fixing #14
-          // dropdown.focus();
-          // expect(dropdown.focused).to.be.true;
-          // expect(input.focused).to.be.true;
+          dropdown.focus();
+          expect(dropdown.focused).to.be.true;
+          expect(input.focused).to.be.true;
         });
 
         it('Should focus the next focusable element when tabbing', () => {
-          // We should use here dropdown.focus(), but need to fix after #14
-          input.focus();
-          expect(input.focused).to.be.true;
+          dropdown.focus();
 
           // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
           const ev = MockInteractions.keyboardEventFor(9, [], 'Tab');
@@ -248,14 +245,16 @@
         });
 
         it('Should focus the previous element when shift tabbing', () => {
-          // We should use here dropdown.focus(), but need to fix after #14
-          input.focus();
-          expect(input.focused).to.be.true;
+          dropdown.focus();
 
           // Tabbing does not nativelly move the focus, hence we only can check that the event is not prevented
           const ev = MockInteractions.keyboardEventFor(9, ['shift'], 'Tab');
           input.dispatchEvent(ev);
           expect(ev.defaultPrevented).to.be.false;
+        });
+
+        it('Should disable native input to fix iOS Zooming', () => {
+          expect(dropdown._nativeInput.disabled).to.be.true;
         });
       });
 
@@ -289,6 +288,15 @@
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
+        });
+
+        it('should not focus the input on closing the overlay if phone', () => {
+          const focusedSpy = sinon.spy();
+          dropdown.focusElement.focus = focusedSpy;
+
+          dropdown._phone = true;
+          menu.selected = 0;
+          expect(focusedSpy).not.to.be.called;
         });
 
         it('should focus the input before moving the focus to next selectable element', () => {
