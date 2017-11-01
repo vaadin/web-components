@@ -24,24 +24,21 @@
 
   <test-fixture id="trivialGrid">
     <template>
-      <div hidden>
-        <vaadin-grid hidden size="1">
-          <vaadin-grid-column>
-            <template class="header">foo</template>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
-        </vaadin-grid>
-      <div>
+      <vaadin-grid hidden size="1">
+        <vaadin-grid-column>
+          <template class="header">foo</template>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
     </template>
   </test-fixture>
 
   <script>
     describe('hidden grid', () => {
-      let container, grid;
+      let grid;
 
       beforeEach(() => {
-        container = fixture('trivialGrid');
-        grid = container.firstElementChild;
+        grid = fixture('trivialGrid');
         grid.dataProvider = infiniteDataProvider;
         flushGrid(grid);
       });
@@ -55,7 +52,7 @@
 
         beforeEach(done => {
           listenOnce(grid, 'animationend', () => flush(done));
-          container.removeAttribute('hidden');
+          grid.removeAttribute('hidden');
         });
 
         it('should have content on appear', () => {

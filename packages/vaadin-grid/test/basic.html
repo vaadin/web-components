@@ -181,55 +181,64 @@
         });
       });
 
-      it('should warn about missing imports', () => {
-        const _warn = console.warn;
-        const spy = console.warn = sinon.spy();
+      const describeMissingImportWarning = (elementName) => {
+        describe(`import warning for ${elementName}`, () => {
+          it('should not warn if not in use', () => {
+            sinon.stub(console, 'warn');
 
-        Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
-        Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
+            grid._observer && grid._observer.flush && grid._observer.flush();
+            grid._debouncerCheckImports.flush();
+            expect(console.warn.called).to.be.false;
 
-        grid._debouncerCheckImports.flush();
-        console.warn = _warn;
+            console.warn.restore();
+          });
 
-        expect(spy.callCount).to.equal(1);
-      });
+          it('should warn once if in use', () => {
+            sinon.stub(console, 'warn');
 
-      it('should warn about missing imports after adding new content', () => {
-        const _warn = console.warn;
-        const spy = console.warn = sinon.spy();
-        grid.flushDebouncer('check-imports');
+            grid.appendChild(document.createElement(elementName));
+            grid.appendChild(document.createElement(elementName));
+            grid._observer && grid._observer.flush && grid._observer.flush();
+            grid._debouncerCheckImports.flush();
 
-        Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
-        Polymer.dom.flush();
-        if (grid._observer.flush) {
-          grid._observer.flush();
-        }
+            expect(console.warn.callCount).to.equal(1);
 
-        grid._debouncerCheckImports.flush();
-        console.warn = _warn;
+            console.warn.restore();
+          });
 
-        expect(spy.called).to.be.true;
-      });
+          it('should warn after adding', () => {
+            sinon.stub(console, 'warn');
 
-      it('should not warn about missing imports', done => {
-        Polymer.Base.importHref('../vaadin-grid-sorter.html', () => {
-          const _warn = console.warn;
-          const spy = console.warn = sinon.spy();
+            grid._observer && grid._observer.flush && grid._observer.flush();
+            grid._debouncerCheckImports.flush();
 
-          Polymer.dom(grid).appendChild(document.createElement('vaadin-grid-sorter'));
-          Polymer.dom.flush();
-          if (grid._observer.flush) {
-            grid._observer.flush();
-          }
+            grid.appendChild(document.createElement(elementName));
+            grid._observer && grid._observer.flush && grid._observer.flush();
+            grid._debouncerCheckImports.flush();
 
-          grid._debouncerCheckImports.flush();
-          console.warn = _warn;
+            expect(console.warn.called).to.be.true;
 
-          expect(spy.called).to.be.false;
-          done();
+            console.warn.restore();
+          });
+
+          it('should not warn for present import', (done) => {
+            Polymer.Base.importHref(`../${elementName}.html`, () => {
+              sinon.stub(console, 'warn');
+
+              grid.appendChild(document.createElement(elementName));
+              grid._observer && grid._observer.flush && grid._observer.flush();
+              grid._debouncerCheckImports.flush();
+
+              expect(console.warn.called).to.be.false;
+              console.warn.restore();
+              done();
+            });
+          });
         });
-      });
+      };
 
+      describeMissingImportWarning('vaadin-grid-sorter');
+      describeMissingImportWarning('vaadin-grid-hierarchy-toggle');
     });
   </script>
 
