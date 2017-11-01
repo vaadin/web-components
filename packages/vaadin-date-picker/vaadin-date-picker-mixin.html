@@ -62,6 +62,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Indicates whether this date picker has a value.
+         * @private
          */
         hasValue: {
           type: Boolean,
@@ -593,6 +594,7 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.
      *
+     * @param {string} value Value to validate. Optional, defaults to user's input value.
      * @return {boolean} True if the value is valid and sets the `invalid` flag appropriatelly
      */
     validate(value) {
@@ -604,6 +606,9 @@ This program is available under Apache License Version 2.0, available at https:/
      * Returns true if the current input value satisfies all constraints (if any)
      *
      * Override the `checkValidity` method for custom validations.
+     *
+     * @param {string} value Value to validate. Optional, defaults to the selected date.
+     * @return {boolean} True if the value is valid
      */
     checkValidity(value) {
       var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
