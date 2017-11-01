@@ -211,12 +211,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _valueChanged(newV, oldV) {
           if (!this._checkedButton || newV != this._checkedButton.value) {
-            let newCheckedButton = this._radioButtons.filter(button => button.value == newV)[0];
+            const newCheckedButton = this._radioButtons.filter(button => button.value == newV)[0];
 
             if (newCheckedButton) {
               this._selectButton(newCheckedButton);
             } else {
-              console.warn("There is no nested button which value suits setted one.");
+              console.warn('There is no nested button which value suits setted one.');
             }
           }
         }
