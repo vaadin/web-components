@@ -48,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute  | Description | Part name
        * -----------|-------------|------------
-       * `disabled`   | Set when the radio button group and its children are disabled. | :host
+       * `disabled`   | Set when the radio group and its children are disabled. | :host
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
@@ -63,7 +63,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * The current disabled state of the radio button group. True if group and all internal radio buttons are disabled.
+             * The current disabled state of the radio group. True if group and all internal radio buttons are disabled.
              */
             disabled: {
               type: Boolean,
@@ -74,6 +74,15 @@ This program is available under Apache License Version 2.0, available at https:/
             _checkedButton: {
               type: Object,
               observer: '_checkedButtonChanged'
+            },
+
+            /**
+             * Value of the radio group.
+             */
+            value: {
+              type: String,
+              reflectToAttribute: true,
+              observer: '_valueChanged'
             }
           };
         }
@@ -196,6 +205,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _checkedButtonChanged(checkedButton) {
           this._radioButtons.forEach(button => button.checked = button === checkedButton);
+
+          this.value = checkedButton.value;
+        }
+
+        _valueChanged(newV, oldV) {
+          if (!this._checkedButton || newV != this._checkedButton.value) {
+            let newCheckedButton = this._radioButtons.filter(button => button.value == newV)[0];
+
+            if (newCheckedButton) {
+              this._selectButton(newCheckedButton);
+            } else {
+              console.warn("There is no nested button which value suits setted one.");
+            }
+          }
         }
 
         _setFocusable(idx) {

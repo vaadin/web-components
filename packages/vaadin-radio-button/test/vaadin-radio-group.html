@@ -43,6 +43,9 @@
 
         groupWithDisabledButton = fixture('with-disabled-button');
         buttonsListWithDisabled = groupWithDisabledButton.querySelectorAll('vaadin-radio-button');
+
+        vaadinRadioButtonGroup._observer.flush();
+        groupWithDisabledButton._observer.flush();
       });
 
       it('sets focus to the first element by default', () => {
@@ -67,8 +70,6 @@
       });
 
       it('should have roving tabindex', () => {
-        vaadinRadioButtonGroup._observer.flush();
-
         vaadinRadioButtonList[1].checked = true;
 
         expect(vaadinRadioButtonList[0].tabindex).to.eq(-1);
@@ -83,8 +84,6 @@
       });
 
       it('next/first radio button should be focused and checked after right/down ', () => {
-        vaadinRadioButtonGroup._observer.flush();
-
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
@@ -100,8 +99,6 @@
       });
 
       it('previous/last radio button should be focused and checked after left/up ', () => {
-        vaadinRadioButtonGroup._observer.flush();
-
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
@@ -116,8 +113,6 @@
       });
 
       it('should miss disabled button after right/down', () => {
-        groupWithDisabledButton._observer.flush();
-
         buttonsListWithDisabled[1].checked = true;
 
         MockInteractions.keyDownOn(groupWithDisabledButton, 39);
@@ -127,8 +122,6 @@
       });
 
       it('should miss disabled button after left/up ', () => {
-        groupWithDisabledButton._observer.flush();
-
         buttonsListWithDisabled[3].checked = true;
 
         MockInteractions.keyDownOn(groupWithDisabledButton, 37);
@@ -138,14 +131,13 @@
       });
 
       it('should not have enabled buttons', () => {
-        vaadinRadioButtonGroup._observer.flush();
-
         Array.from(vaadinRadioButtonList).map((btn) => btn.disabled = true);
 
         expect(vaadinRadioButtonGroup._hasEnabledButtons()).to.be.false;
         vaadinRadioButtonList[1].disabled = false;
         expect(vaadinRadioButtonGroup._hasEnabledButtons()).to.be.true;
       });
+
     });
   </script>
 </body>
