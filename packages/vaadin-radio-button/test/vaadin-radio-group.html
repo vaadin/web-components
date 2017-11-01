@@ -138,6 +138,26 @@
         expect(vaadinRadioButtonGroup._hasEnabledButtons()).to.be.true;
       });
 
+      it('should set proper value to radio-group', () => {
+        vaadinRadioButtonList[0].checked = true;
+
+        expect(vaadinRadioButtonGroup.value).to.eq('on');
+
+        vaadinRadioButtonList[1].checked = true;
+
+        expect(vaadinRadioButtonGroup.value).to.eq('2');
+      });
+
+      it('should check proper button when value is setted', () => {
+        vaadinRadioButtonGroup.value = '2';
+        
+        expect(vaadinRadioButtonList[1].checked).to.be.true;
+
+        vaadinRadioButtonGroup.value = 'on';
+
+        expect(vaadinRadioButtonList[0].checked).to.be.true;
+      });
+
     });
   </script>
 </body>
