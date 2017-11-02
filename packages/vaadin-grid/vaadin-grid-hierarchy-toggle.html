@@ -7,23 +7,32 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
+<style>
+  @font-face {
+    font-family: "vaadin-grid-hierarchy-toggle-icons";
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASkAAsAAAAABFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIEaGNtYXAAAAFoAAAAVAAAAFQYmtABZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAJAAAACQjc80tmhlYWQAAAJUAAAANgAAADYOnDBhaGhlYQAAAowAAAAkAAAAJAcCA8hobXR4AAACsAAAABwAAAAcEgADAGxvY2EAAALMAAAAEAAAABAAYgCIbWF4cAAAAtwAAAAgAAAAIAAJAAVuYW1lAAAC/AAAAYYAAAGGmUoJ+3Bvc3QAAASEAAAAIAAAACAAAwAAAAMDgAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA574DwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOe+//3//wAAAAAAIOe8//3//wAB/+MYSAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQDAAQADQALAAAIAABMhAcACgP7AAsD+QAAAAAEBAACAAsADAAACAAABEQECwP5AAwD9gAFAAAABAUAAgAMAAwAAAgAAJREBAUABwIACgP7AAAAAAQAAAAAAAFCRiO9fDzz1AAsEAAAAAADWH3YyAAAAANYfdjIAAAAAA0ADAAAAAAgAAgAAAAAAAAABAAADwP/AAAAEAAAAAAADQAABAAAAAAAAAAAAAAAAAAAABwQAAAAAAAAAAAAAAAIAAAAEAADABAABAAQAAUAAAAAAAAoAFAAeACwAOgBIAAEAAAAHAAMAAQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAOAK4AAQAAAAAAAQAHAAAAAQAAAAAAAgAHAGAAAQAAAAAAAwAHADYAAQAAAAAABAAHAHUAAQAAAAAABQALABUAAQAAAAAABgAHAEsAAQAAAAAACgAaAIoAAwABBAkAAQAOAAcAAwABBAkAAgAOAGcAAwABBAkAAwAOAD0AAwABBAkABAAOAHwAAwABBAkABQAWACAAAwABBAkABgAOAFIAAwABBAkACgA0AKRpY29tb29uAGkAYwBvAG0AbwBvAG5WZXJzaW9uIDEuMABWAGUAcgBzAGkAbwBuACAAMQAuADBpY29tb29uAGkAYwBvAG0AbwBvAG5pY29tb29uAGkAYwBvAG0AbwBvAG5SZWd1bGFyAFIAZQBnAHUAbABhAHJpY29tb29uAGkAYwBvAG0AbwBvAG5Gb250IGdlbmVyYXRlZCBieSBJY29Nb29uLgBGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAC4AAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
+
 <dom-module id="vaadin-grid-hierarchy-toggle-default-theme">
   <template>
     <style>
       [part="toggle"]::before {
-        display: inline-block;
-        width: 1em;
-        text-align: center;
+        font-family: "vaadin-grid-hierarchy-toggle-icons";
       }
 
       :host(:not([expanded])) [part="toggle"]::before {
-        /* TODO: Enhance using icon font. */
-        content: "▸";
+        content: "\e7be";
+      }
+
+      :host(:not([expanded])) [part="toggle"]:dir(rtl)::before {
+        content: "\e7bd";
       }
 
       :host([expanded]) [part="toggle"]::before {
-        /* TODO: Enhance using icon font. */
-        content: "▾";
+        content: "\e7bc";
       }
 
       :host(:not([enabled])) [part="toggle"] {
@@ -46,11 +55,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <span part="spacer"></span>
-    <span part="toggle"></span>
-    <span part="content">
-      <slot></slot>
-    </span>
+    <!-- Please keep formatting and spacing. Do not insert spaces. Thanks. -->
+    <span part="spacer"></span><span part="toggle"></span>
+    <span part="content"><slot></slot></span>
   </template>
 </dom-module>
 
