@@ -1,0 +1,43 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-chart tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-chart.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-chart title="My title" subtitle="My subtitle"></vaadin-chart>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('High-level API', function() {
+      var element;
+
+      beforeEach(function() {
+        element = fixture('default');
+      });
+
+      it('should be defined', function() {
+        expect(element.constructor.is).to.be.equal(element.localName);
+      });
+
+      it('should have custom title', done => {
+        setTimeout(() => {
+          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+          done();
+        }, 15);
+      });
+
+      it('should have custom subtitle', function() {
+        setTimeout(() => {
+          expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
+        }, 30);
+      });
+    });
+  </script>
+</body>

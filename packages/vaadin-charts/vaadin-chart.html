@@ -26,7 +26,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <dom-module id="vaadin-chart">
   <template>
     <style include="vaadin-charts-default-theme">
-       :host {
+      :host {
         display: block;
       }
     </style>
@@ -177,7 +177,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get properties() {
           return {
             /** @private */
-            _configuration: Object
+            _configuration: Object,
+
+            /**
+             * Represents the title of the chart.
+             */
+            title: {
+              type: String,
+              observer: '__updateTitle',
+              reflectToAttribute: true
+            },
+
+            /**
+             * Represents the subtitle of the chart.
+             */
+            subtitle: {
+              type: String,
+              observer: '__updateSubtitle',
+              reflectToAttribute: true
+            }
           };
         }
 
@@ -314,6 +332,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        __invertForBarSeries(series) {
+          this._configuration.chart = this._configuration.chart || {};
+          this._configuration.chart.inverted = (series !== undefined) && Array.isArray(series)
+            && series.some(e => e.type === 'bar');
+          this._configuration.chart.type = this._configuration.chart.inverted ? 'column' : this._configuration.chart.type;
+        }
+
         __updateOrAddCredits(credits) {
           if (this._configuration.credits) {
             this._configuration.credits.update(credits);
@@ -355,11 +380,24 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
-        __invertForBarSeries(series) {
-          this._configuration.chart = this._configuration.chart || {};
-          this._configuration.chart.inverted = (series !== undefined) && Array.isArray(series)
-            && series.some(e => e.type === 'bar');
-          this._configuration.chart.type = this._configuration.chart.inverted ? 'column' : this._configuration.chart.type;
+        __updateTitle(newValue) {
+          Polymer.RenderStatus.beforeNextRender(this.configuration, () => {
+            if (newValue && newValue.length > 0) {
+              this.configuration.title.update({text: newValue});
+            }
+          });
+        }
+
+        __updateSubtitle(newValue) {
+          Polymer.RenderStatus.beforeNextRender(this.configuration, () => {
+            if (newValue && newValue.length > 0) {
+              if (!this.configuration.subtitle) {
+                this.configuration.setSubtitle({text: newValue});
+              } else {
+                this.configuration.subtitle.update({text: newValue});
+              }
+            }
+          });
         }
       }
 

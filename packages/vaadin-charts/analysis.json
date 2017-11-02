@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 349,
+          "line": 408,
           "column": 6
         },
         "end": {
-          "line": 349,
+          "line": 408,
           "column": 42
         }
       },
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 213,
+                  "line": 231,
                   "column": 10
                 },
                 "end": {
-                  "line": 213,
+                  "line": 231,
                   "column": 29
                 }
               },
@@ -61,6 +61,48 @@
               "metadata": {
                 "polymer": {}
               }
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "description": "Represents the title of the chart.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 184,
+                  "column": 12
+                },
+                "end": {
+                  "line": 188,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"__updateTitle\""
+                }
+              }
+            },
+            {
+              "name": "subtitle",
+              "type": "string",
+              "description": "Represents the subtitle of the chart.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 193,
+                  "column": 12
+                },
+                "end": {
+                  "line": 197,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"__updateSubtitle\""
+                }
+              }
             }
           ],
           "methods": [
@@ -70,11 +112,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 235,
                   "column": 8
                 },
                 "end": {
-                  "line": 221,
+                  "line": 239,
                   "column": 9
                 }
               },
@@ -87,11 +129,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 242,
+                  "line": 260,
                   "column": 9
                 }
               },
@@ -104,11 +146,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 294,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 314,
                   "column": 9
                 }
               },
@@ -127,16 +169,58 @@
               ]
             },
             {
+              "name": "__inflateFunctions",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 316,
+                  "column": 8
+                },
+                "end": {
+                  "line": 332,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "jsonConfiguration"
+                }
+              ]
+            },
+            {
+              "name": "__invertForBarSeries",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 334,
+                  "column": 8
+                },
+                "end": {
+                  "line": 339,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "series"
+                }
+              ]
+            },
+            {
               "name": "__updateOrAddCredits",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 297,
+                  "line": 341,
                   "column": 8
                 },
                 "end": {
-                  "line": 303,
+                  "line": 347,
                   "column": 9
                 }
               },
@@ -153,11 +237,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 305,
+                  "line": 349,
                   "column": 8
                 },
                 "end": {
-                  "line": 318,
+                  "line": 362,
                   "column": 9
                 }
               },
@@ -177,11 +261,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 320,
+                  "line": 364,
                   "column": 8
                 },
                 "end": {
-                  "line": 334,
+                  "line": 380,
                   "column": 9
                 }
               },
@@ -193,23 +277,44 @@
               ]
             },
             {
-              "name": "__invertForBarSeries",
+              "name": "__updateTitle",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 336,
+                  "line": 382,
                   "column": 8
                 },
                 "end": {
-                  "line": 341,
+                  "line": 388,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "series"
+                  "name": "newValue"
+                }
+              ]
+            },
+            {
+              "name": "__updateSubtitle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 390,
+                  "column": 8
+                },
+                "end": {
+                  "line": 400,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newValue"
                 }
               ]
             }
@@ -228,14 +333,47 @@
               "column": 6
             },
             "end": {
-              "line": 342,
+              "line": 401,
               "column": 7
             }
           },
           "privacy": "public",
           "superclass": "HTMLElement",
           "name": "Vaadin.VaadinChart",
-          "attributes": [],
+          "attributes": [
+            {
+              "name": "title",
+              "description": "Represents the title of the chart.",
+              "sourceRange": {
+                "start": {
+                  "line": 184,
+                  "column": 12
+                },
+                "end": {
+                  "line": 188,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "subtitle",
+              "description": "Represents the subtitle of the chart.",
+              "sourceRange": {
+                "start": {
+                  "line": 193,
+                  "column": 12
+                },
+                "end": {
+                  "line": 197,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            }
+          ],
           "events": [],
           "styling": {
             "cssVariables": [],
