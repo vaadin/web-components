@@ -16,40 +16,6 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="min-height">
-    <style>
-      vaadin-text-area.min-height {
-        min-height: 125px;
-      }
-    </style>
-    <template>
-      <vaadin-text-area class="min-height"></vaadin-text-area>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="max-height">
-    <style>
-      vaadin-text-area.max-height {
-        max-height: 100px;
-      }
-    </style>
-    <template>
-      <vaadin-text-area class="max-height"></vaadin-text-area>
-    </template>
-  </test-fixture>
-
-  <test-fixture id="min-max-height">
-    <style>
-      vaadin-text-area.min-max-height {
-        min-height: 100px;
-        max-height: 175px;
-      }
-    </style>
-    <template>
-      <vaadin-text-area class="min-max-height"></vaadin-text-area>
-    </template>
-  </test-fixture>
-
   <script>
 
     describe('properties', () => {
@@ -164,9 +130,14 @@
     });
 
     describe('multi-line', () => {
+      let textArea, input;
+
+      beforeEach(() => {
+        textArea = fixture('default');
+        input = textArea.focusElement;
+      });
+
       it('should grow height with unwrapped text', () => {
-        const textArea = fixture('default');
-        const input = textArea.focusElement;
         const originalHeight = parseInt(window.getComputedStyle(input).height);
 
         // Make sure there are enough characters to grow the textarea
@@ -177,8 +148,7 @@
       });
 
       it('should not grow over max-height', () => {
-        const textArea = fixture('max-height');
-        const input = textArea.focusElement;
+        textArea.style.maxHeight = '100px';
         const container = textArea.root.querySelector('.vaadin-text-area-container');
 
         textArea.value = `
@@ -196,8 +166,7 @@
       });
 
       it('should not shrink less than min-height', () => {
-        const textArea = fixture('min-height');
-        const input = textArea.focusElement;
+        textArea.style.minHeight = '125px';
         const container = textArea.root.querySelector('.vaadin-text-area-container');
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
@@ -213,8 +182,8 @@
       });
 
       it('should stay between min and max height', () => {
-        const textArea = fixture('min-max-height');
-        const input = textArea.focusElement;
+        textArea.style.minHeight = '100px';
+        textArea.style.maxHeight = '175px';
         const container = textArea.root.querySelector('.vaadin-text-area-container');
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
@@ -239,6 +208,27 @@
         expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
         expect(window.getComputedStyle(container).height).to.be.equal('175px');
         expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(150);
+      });
+
+      it('should increase input height', () => {
+        textArea.style.height = '200px';
+        textArea.value = 'foo';
+        expect(input.clientHeight).to.be.closeTo(200, 10);
+      });
+
+      it('should maintain scroll top', () => {
+        textArea.style.maxHeight = '100px';
+        textArea.value = Array(400).join('400');
+        input.scrollTop = 200;
+        textArea.value += 'foo';
+        expect(input.scrollTop).to.equal(200);
+      });
+
+      it('should decrease height automatically', () => {
+        textArea.value = Array(400).join('400');
+        const height = textArea.clientHeight;
+        textArea.value = '';
+        expect(textArea.clientHeight).to.be.below(height);
       });
     });
   </script>
