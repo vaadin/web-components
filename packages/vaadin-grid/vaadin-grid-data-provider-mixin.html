@@ -82,8 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         pageSize: {
           type: Number,
-          value: 50,
-          observer: '_pageSizeChanged'
+          value: 50
         },
 
         /**
@@ -109,8 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         dataProvider: {
           type: Object,
-          notify: true,
-          observer: '_dataProviderChanged'
+          notify: true
         },
 
         /**
@@ -152,7 +150,8 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_sizeChanged(size)',
-        '_expandedItemsChanged(expandedItems.*)'
+        '_expandedItemsChanged(expandedItems.*)',
+        '_needsReload(dataProvider, pageSize, isAttached)'
       ];
     }
 
@@ -325,7 +324,9 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     clearCache() {
       this._cache = new Vaadin.Grid.ItemCache(this);
-      this._cache.size = this.size;
+      if (this.size !== undefined) {
+        this._cache.size = this.size;
+      }
       this._cache.updateSize();
       this._hasData = false;
       this._loading = true;
@@ -335,12 +336,6 @@ This program is available under Apache License Version 2.0, available at https:/
     _flushItemsDebouncer() {
       if (this._debouncerLoad) {
         this._debouncerLoad.flush();
-      }
-    }
-
-    _pageSizeChanged(pageSize, oldPageSize) {
-      if (oldPageSize !== undefined && pageSize !== oldPageSize) {
-        this.clearCache();
       }
     }
 
@@ -355,10 +350,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _dataProviderChanged(dataProvider, oldDataProvider) {
-      if (oldDataProvider !== undefined) {
-        this.clearCache();
+    _needsReload(dataProvider, pageSize, isAttached) {
+      if (!dataProvider || !pageSize || !isAttached) {
+        return;
       }
+
+      this.clearCache();
 
       if (dataProvider && this.items && this.items.length) {
         // Fixes possibly invalid cached lastVisibleIndex value in <iron-list>
