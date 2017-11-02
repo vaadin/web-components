@@ -225,19 +225,15 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
 
-      .sizer [part~="cell"] {
-        display: block;
-        flex-shrink: 0;
-        line-height: 0;
-        font-size: 1px;
-        margin-top: -1em;
-      }
-
       .sizer [part~="cell"][hidden] {
         display: none;
       }
 
       .sizer [part~="cell"] {
+        display: block;
+        flex-shrink: 0;
+        line-height: 0;
+        margin-top: -1em;
         height: 0 !important;
         min-height: 0 !important;
         max-height: 0 !important;
