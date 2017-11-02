@@ -216,7 +216,7 @@ This program is available under Apache License Version 2.0, available at https:/
             if (newCheckedButton) {
               this._selectButton(newCheckedButton);
             } else {
-              console.warn('There is no nested button which value suits setted one.');
+              console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
             }
           }
         }
