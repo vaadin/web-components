@@ -37,23 +37,23 @@
         toggle = fixture('default');
       });
 
-      it('should have enabled false by default', () => {
-        expect(toggle.enabled).to.not.be.ok;
+      it('should have icon-hidden false by default', () => {
+        expect(toggle.iconHidden).to.not.be.ok;
       });
 
       it('should have expanded false by default', () => {
         expect(toggle.expanded).to.not.be.ok;
       });
 
-      it('should not toggle on click if not enabled', () => {
+      it('should not toggle on click if icon-hidden', () => {
+        toggle.iconHidden = true;
+
         const clickEvent = click(toggle);
         expect(toggle.expanded).to.not.be.ok;
         expect(clickEvent.defaultPrevented).to.be.false;
       });
 
-      it('should toggle on click if enabled', () => {
-        toggle.enabled = true;
-
+      it('should toggle on click if not ', () => {
         let clickEvent = click(toggle);
         expect(toggle.expanded).to.be.true;
         expect(clickEvent.defaultPrevented).to.be.true;
@@ -64,7 +64,6 @@
       });
 
       it('should notify for expanded on toggle', () => {
-        toggle.enabled = true;
         const spy = sinon.spy();
         toggle.addEventListener('expanded-changed', spy);
 
@@ -103,7 +102,6 @@
       });
 
       describe('themability', () => {
-        
         it('should have shadow parts', () => {
           [
             'spacer',

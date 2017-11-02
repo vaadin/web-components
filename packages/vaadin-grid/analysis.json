@@ -9619,7 +9619,7 @@
           "tagname": "vaadin-grid-filter"
         },
         {
-          "description": "`<vaadin-grid-hierarchy-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item hierarchy.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-hierarchy-toggle\n        enabled=\"[[item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-hierarchy-toggle>\n  </template>\n</vaadin-grid-column>\n```",
+          "description": "`<vaadin-grid-hierarchy-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item hierarchy.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-hierarchy-toggle\n        icon-hidden=\"[[!item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-hierarchy-toggle>\n  </template>\n</vaadin-grid-column>\n```",
           "summary": "",
           "path": "vaadin-grid-hierarchy-toggle.html",
           "properties": [
@@ -9646,9 +9646,9 @@
               "defaultValue": "0"
             },
             {
-              "name": "enabled",
+              "name": "iconHidden",
               "type": "boolean",
-              "description": "Enables toggling a hierarchy sublevel.",
+              "description": "Hides the toggle icon and disables toggling a hierarchy sublevel.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -9807,8 +9807,8 @@
               "type": "number"
             },
             {
-              "name": "enabled",
-              "description": "Enables toggling a hierarchy sublevel.",
+              "name": "icon-hidden",
+              "description": "Hides the toggle icon and disables toggling a hierarchy sublevel.",
               "sourceRange": {
                 "start": {
                   "line": 100,

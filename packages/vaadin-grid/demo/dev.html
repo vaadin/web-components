@@ -62,7 +62,7 @@
             <template>
               <vaadin-grid-hierarchy-toggle
                   level="[[level]]"
-                  enabled="[[item.hasChildren]]"
+                  icon-hidden="[[!item.hasChildren]]"
                   expanded="{{expanded}}">
                 [[index]]
               </vaadin-grid-hierarchy-toggle>
