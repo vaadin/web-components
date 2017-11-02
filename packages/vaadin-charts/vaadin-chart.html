@@ -39,7 +39,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     {
-      
+
       /**
        * `<vaadin-chart>` is a Polymer 2 element for creating high quality charts.
        *
@@ -66,25 +66,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * ```html
        * <vaadin-chart></vaadin-chart>
        * ```
-       * 1. Run your app with: 
+       * 1. Run your app with:
        * ```
        * polymer serve --open
        * ```
        * Congratulations! You have your first Vaadin Chart setup.
        *
        * ### Basic use
-       * 
+       *
        * Now that we covered the basic steps to create an empty chart, let us show how you can configure it.
-       * 
+       *
        * There are two ways of configuring your `<vaadin-chart>` element: **JS API** and **JSON API**.
        * Note that you can make use of both APIs in your element.
-       * 
+       *
        * #### Configuring your chart using JS API
-       * 
+       *
        * Using as a base the project created with in Quick Start
-       * 
+       *
        * Do the following changes in `my-app.html`
-       * 
+       *
        * 1. Set and id for the `<vaadin-chart>` in the template
        * ```html
        *     <vaadin-chart id="mychart"></vaadin-chart>
@@ -109,20 +109,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *     this.initChartWithJSApi();
        * }
        * ```
-       * 1. And finally run your app with: 
+       * 1. And finally run your app with:
        * ```
        * polymer serve --open
        * ```
-       * 
-       * 
+       *
+       *
        * #### Configuring your chart using JS JSON API
-       * 
+       *
        * JS JSON API is a simple alternative to the JS API.
-       * 
+       *
        * Using as a base the project created with in Quick Start
-       * 
+       *
        * Do the following changes in `my-app.html`
-       * 
+       *
        * 1. Set and id for the `<vaadin-chart>` in the template
        * ```html
        *     <vaadin-chart id="mychart"></vaadin-chart>
@@ -154,18 +154,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *     this.initChartWithJSJSONApi();
        * }
        * ```
-       * 1. And finally run your app with: 
+       * 1. And finally run your app with:
        * ```
        * polymer serve --open
        * ```
-       * 
+       *
        * ### Install License Key
-       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. 
-       * 
+       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key.
+       *
        * You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
-       * 
+       *
        * If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again
-       * 
+       *
        * @memberof Vaadin
        * @demo demo/index.html
        */
@@ -176,28 +176,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get properties() {
           return {
-
-            /**
-            * Configuration object that exposes the JS Api to configure the chart.
-            * 
-            * Most important methods are:
-            * - `addSeries (Object options, [Boolean redraw], [Mixed animation])`
-            * - `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`
-            * - `setTitle (Object title, object subtitle, Boolean redraw)`
-            *
-            * Most important properties are:
-            * - `configuration.series`: An array of the chart's series. Detailed API for Series object is
-            *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Series)
-            * - `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is
-            *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
-            * - `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is
-            *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
-            * - `configuration.title`: The chart title.
-            * 
-            * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
-            * @readonly
-            */
-            configuration: Object
+            /** @private */
+            _configuration: Object
           };
         }
 
@@ -206,15 +186,52 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._baseConfig = {
             credits: {
               enabled: false
-            },
+            }
           };
+
+          /**
+           * Configuration object that exposes the JS Api to configure the chart.
+           *
+           * Most important methods are:
+           * - `addSeries (Object options, [Boolean redraw], [Mixed animation])`
+           * - `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`
+           * - `setTitle (Object title, object subtitle, Boolean redraw)`
+           *
+           * Most important properties are:
+           * - `configuration.series`: An array of the chart's series. Detailed API for Series object is
+           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Series)
+           * - `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is
+           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
+           * - `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is
+           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
+           * - `configuration.title`: The chart title.
+           *
+           * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
+           * @readonly
+           * @public
+           * @type {Object}
+           */
+          this.configuration;
         }
 
         /** @private */
         connectedCallback() {
           super.connectedCallback();
-          this.configuration = Highcharts.chart(this.$.chart, this._baseConfig);
+          this._configuration = Highcharts.chart(this.$.chart, this._baseConfig);
           this.__addLicenseChecker();
+        }
+
+        get configuration() {
+          if (this._accessed) {
+            this._dirty = true;
+          }
+          this._accessed = true;
+          return this._configuration;
+        }
+
+        set configuration(value) {
+          this._dirty = true;
+          this._configuration = value;
         }
 
         __addLicenseChecker() {
@@ -228,39 +245,40 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Update the chart configuration.
          * This JSON API provides a simple single-argument alternative to the configuration property.
-         * 
+         *
          * @param {Object} jsonConfiguration Object chart configuration. Most important properties are:
-         *  
-         * - chart `Object` with options regarding the chart area and plot area as well as general chart options.  
+         *
+         * - chart `Object` with options regarding the chart area and plot area as well as general chart options.
          *    Detailed API for chart object is available in [API Site](http://api.highcharts.com/highcharts/chart)
-         * - credits `Object` with options regarding the chart area and plot area as well as general chart options.  
+         * - credits `Object` with options regarding the chart area and plot area as well as general chart options.
          *    Detailed API for credits object is available in [API Site](http://api.highcharts.com/highcharts/credits)
          * - labels `Object[]` with HTML labels that can be positioned anywhere in the chart area
          *    Detailed API for labels object is available in [API Site](http://api.highcharts.com/highcharts/labels)
-         * - plotOptions `Object` wrapper for config objects for each series type.  
+         * - plotOptions `Object` wrapper for config objects for each series type.
          *    Detailed API for plotOptions object is available in [API Site](http://api.highcharts.com/highcharts/plotOptions)
-         * - series `Object[]` the actual series to append to the chart. 
+         * - series `Object[]` the actual series to append to the chart.
          *    Detailed API for series object is available in [API Site](http://api.highcharts.com/highcharts/series)
-         * - subtitle `Object` the chart's subtitle.  
+         * - subtitle `Object` the chart's subtitle.
          *    Detailed API for subtitle object is available in [API Site](http://api.highcharts.com/highcharts/subtitle)
          * - title `Object` the chart's main title.
          *    Detailed API for title object is available in [API Site](http://api.highcharts.com/highcharts/title)
-         * - tooltip `Object` Options for the tooltip that appears when the user hovers over a series or point.  
+         * - tooltip `Object` Options for the tooltip that appears when the user hovers over a series or point.
          *    Detailed API for tooltip object is available in [API Site](http://api.highcharts.com/highcharts/tooltip)
-         * - xAxis `Object[]` The X axis or category axis. Normally this is the horizontal axis.  
+         * - xAxis `Object[]` The X axis or category axis. Normally this is the horizontal axis.
          *    Detailed API for xAxis object is available in [API Site](http://api.highcharts.com/highcharts/xAxis)
-         * - yAxis `Object[]` The Y axis or value axis. Normally this is the vertical axis.  
+         * - yAxis `Object[]` The Y axis or value axis. Normally this is the vertical axis.
          *    Detailed API for yAxis object is available in [API Site](http://api.highcharts.com/highcharts/yAxis)
-         * - zAxis `Object[]` The Z axis or depth axis for 3D plots.  
+         * - zAxis `Object[]` The Z axis or depth axis for 3D plots.
          *    Detailed API for zAxis object is available in [API Site](http://api.highcharts.com/highcharts/zAxis)
-         * 
-         * @param {Boolean} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or 
+         *
+         * @param {Boolean} resetConfiguration Optional boolean that should be set to true if no other chart configuration was set before or
          *    if existing configuration should be discarded.
-        */
+         */
         update(jsonConfiguration, resetConfiguration) {
           this.__inflateFunctions(jsonConfiguration);
-          if (resetConfiguration) {
+          if (!this._dirty || resetConfiguration) {
             this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
+            this.__invertForBarSeries(jsonConfiguration.series);
             return;
           }
           this.configuration.update(jsonConfiguration);
@@ -297,10 +315,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateOrAddCredits(credits) {
-          if (this.configuration.credits) {
-            this.configuration.credits.update(credits);
+          if (this._configuration.credits) {
+            this._configuration.credits.update(credits);
           } else {
-            this.configuration.addCredits(credits);
+            this._configuration.addCredits(credits);
           }
         }
 
@@ -308,13 +326,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (!Array.isArray(axes)) {
             axes = [axes];
           }
-          var confAxes = isX ? this.configuration.xAxis : this.configuration.yAxis;
+          var confAxes = isX ? this._configuration.xAxis : this._configuration.yAxis;
           for (var i = 0; i < axes.length; i++) {
             var axis = axes[i];
             if (confAxes[i]) {
               confAxes[i].update(axis);
             } else {
-              this.configuration.addAxis(axis, isX);
+              this._configuration.addAxis(axis, isX);
             }
           }
         }
@@ -323,14 +341,25 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (!Array.isArray(series)) {
             throw new Error('The type of jsonConfiguration.series should be Object[]');
           }
+          this.__invertForBarSeries(series);
           for (var i = 0; i < series.length; i++) {
             var currentSeries = series[i];
-            if (this.configuration.series[i]) {
-              this.configuration.series[i].update(currentSeries);
+            if (currentSeries.type === 'bar') {
+              currentSeries.type = 'column';
+            }
+            if (this._configuration.series[i]) {
+              this._configuration.series[i].update(currentSeries);
             } else {
-              this.configuration.addSeries(currentSeries);
+              this._configuration.addSeries(currentSeries);
             }
           }
+        }
+
+        __invertForBarSeries(series) {
+          this._configuration.chart = this._configuration.chart || {};
+          this._configuration.chart.inverted = (series !== undefined) && Array.isArray(series)
+            && series.some(e => e.type === 'bar');
+          this._configuration.chart.type = this._configuration.chart.inverted ? 'column' : this._configuration.chart.type;
         }
       }
 

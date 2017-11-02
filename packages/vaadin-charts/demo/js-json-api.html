@@ -35,7 +35,7 @@
                 super.connectedCallback();
                 this.$.mychart.update({
                   title: {
-                    text: 'The chart title'
+                    text: 'Column chart'
                   },
                   subtitle: {
                     text: 'Subtitle'
@@ -52,6 +52,45 @@
             }
             addEventListener('WebComponentsReady', () => {
               customElements.define(JSJSONApiDemoElement.is, JSJSONApiDemoElement);
+            });
+          </script>
+        </dom-module>
+      </template>
+    </demo-snippet>
+
+
+    <h3>Using JS JSON API with bar type</h3>
+    <demo-snippet>
+      <template>
+        <js-json-api-bar-demo> </js-json-api-bar-demo>
+        <dom-module id="js-json-api-bar-demo">
+          <template>
+            <vaadin-chart id="barchart"></vaadin-chart>
+          </template>
+
+          <script>
+            class JSJSONApiBarDemoElement extends Polymer.Element {
+              static get is() {
+                return 'js-json-api-bar-demo';
+              }
+              connectedCallback() {
+                super.connectedCallback();
+                this.$.barchart.update({
+                  title: {
+                    text: 'Bar chart'
+                  },
+                  xAxis: {
+                    categories: ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']
+                  },
+                  series: [{
+                    type: 'bar',
+                    data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6]
+                  }]
+                });
+              }
+            }
+            addEventListener('WebComponentsReady', () => {
+              customElements.define(JSJSONApiBarDemoElement.is, JSJSONApiBarDemoElement);
             });
           </script>
         </dom-module>
