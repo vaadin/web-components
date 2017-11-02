@@ -35,7 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e7bc";
       }
 
-      :host(:not([enabled])) [part="toggle"] {
+      :host([icon-hidden]) [part="toggle"] {
         visibility: hidden;
       }
     </style>
@@ -45,7 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-grid-hierarchy-toggle">
   <template>
     <style>
-      :host([enabled]) {
+      :host(:not([icon-hidden])) {
         cursor: pointer;
       }
 
@@ -73,7 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *   <template class="header">Package name</template>
      *   <template>
      *     <vaadin-grid-hierarchy-toggle
-     *         enabled="[[item.hasChildren]]"
+     *         icon-hidden="[[!item.hasChildren]]"
      *         expanded="{{expanded}}"
      *         level="[[level]]">
      *       [[item.name]]
@@ -103,9 +103,9 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * Enables toggling a hierarchy sublevel.
+           * Hides the toggle icon and disables toggling a hierarchy sublevel.
            */
-          enabled: {
+          iconHidden: {
             type: Boolean,
             value: false,
             reflectToAttribute: true
@@ -130,7 +130,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onClick(e) {
-        if (!this.enabled) {
+        if (this.iconHidden) {
           return;
         }
 

@@ -18,7 +18,7 @@
                 <template class="header">Name</template>
                 <template>
                   <vaadin-grid-hierarchy-toggle
-                      enabled="[[item.hasChildren]]"
+                      icon-hidden="[[!item.hasChildren]]"
                       expanded="{{expanded}}"
                       level="[[level]]">
                     [[_getIconFor(item, expanded)]]&nbsp;&nbsp;[[item.name]]
@@ -55,7 +55,7 @@
                     //   parentUuid: null
                     // }
                     // This demo uses the `hasChildren` flag as an indicator of the item having child items.
-                    // The property is bound to `<vaadin-grid-hierarchy-toggle>`'s `enabled` property in
+                    // The property is bound to `<vaadin-grid-hierarchy-toggle>`'s `iconHidden` property in
                     // the template above.
 
                     // Slice out only the requested items
