@@ -88,6 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * - [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)
      * - [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)
      * - [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)
+     * - [`<vaadin-grid-hierarchy-toggle>`](#/elements/vaadin-grid-hierarchy-toggle)
      *
      * __Note that the helper elements must be explicitly imported.__
      * If you want to import everything at once you can use the `all-imports.html` bundle.
@@ -102,6 +103,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * - `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)
      * - `{{selected}}`: True if the item is selected (can be two-way bound)
      * - `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)
+     * - `{{expanded}}`: True if the item has hierarchy sublevel expanded (can be two-way bound)
+     * - `[[level]]`: Number of the hierarchy sublevel of the item, first level-items have 0
      *
      * ### Lazy Loading with Function Data Provider
      *
