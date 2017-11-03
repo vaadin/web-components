@@ -1,0 +1,276 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="vaadin-form-element-mixin.html">
+
+<dom-module id="vaadin-text-field-default-theme-common">
+  <template>
+    <style>
+      [part="label"] {
+        font-size: 0.875em;
+        font-weight: 600;
+        margin-bottom: 0.25em;
+      }
+
+      [part="input-field"] {
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        padding: 0.25em;
+      }
+
+      :host([focused]) [part="input-field"] {
+        box-shadow: 0 0 2px 2px Highlight;
+      }
+
+      :host([invalid]) [part="input-field"] {
+        border-color: red;
+      }
+
+      :host([disabled]) {
+        opacity: 0.5;
+      }
+
+      [part="value"] {
+        border: 0;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        outline: none;
+        box-shadow: none;
+      }
+
+      [part="error-message"] {
+        font-size: 0.875em;
+        margin-top: 0.25em;
+        color: red;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<script>
+    window.Vaadin = window.Vaadin || {};
+
+    /**
+     * @polymerMixin
+     * @memberof Vaadin
+     * @mixes Vaadin.ControlStateMixin
+     * @mixes Vaadin.FormElementMixin
+     */
+    Vaadin.TextFieldMixin = subclass => class VaadinTextFieldMixin extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(subclass)) {
+      static get properties() {
+        return {
+          /**
+           * Whether the value of the control can be automatically completed by the browser.
+           * List of available options at:
+           * https://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete
+           */
+          autocomplete: {
+            type: String
+          },
+
+          /**
+           * Error to show when the input value is invalid.
+           */
+          errorMessage: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * String used for the label element.
+           */
+          label: {
+            type: String,
+            value: ''
+          },
+
+          /**
+           * Maximum number of characters (in Unicode code points) that the user can enter.
+           */
+          maxlength: {
+            type: Number
+          },
+
+          /**
+           * Minimum number of characters (in Unicode code points) that the user can enter.
+           */
+          minlength: {
+            type: Number
+          },
+
+          /**
+           * The name of the control, which is submitted with the form data.
+           */
+          name: {
+            type: String
+          },
+
+          /**
+           * A hint to the user of what can be entered in the control.
+           */
+          placeholder: {
+            type: String
+          },
+
+          /**
+           * This attribute indicates that the user cannot modify the value of the control.
+           */
+          readonly: {
+            type: Boolean
+          },
+
+          /**
+           * Specifies that the user must fill in a value.
+           */
+          required: {
+            type: Boolean
+          },
+
+
+          /**
+           * The initial value of the control.
+           * It can be used for two-way data binding.
+           */
+          value: {
+            type: String,
+            value: '',
+            observer: '_valueChanged',
+            notify: true
+          },
+
+          /**
+           * This property is set to true when the control value is invalid.
+           */
+          invalid: {
+            type: Boolean,
+            reflectToAttribute: true,
+            notify: true,
+            value: false
+          },
+
+          /**
+           * A read-only property indicating whether this input has a non empty value.
+           * It can be used for example in styling of the component.
+           */
+          hasValue: {
+            type: Boolean,
+            value: false,
+            notify: true,
+            readOnly: true,
+            reflectToAttribute: true
+          },
+
+          /**
+           * When set to true, user is prevented from typing a value that
+           * conflicts with the given `pattern`.
+           */
+          preventInvalidInput: {
+            type: Boolean
+          },
+
+          _labelId: {
+            type: String
+          },
+
+          _errorId: {
+            type: String
+          }
+        };
+      }
+
+      get focusElement() {
+        return this.root.querySelector('[part=value]');
+      }
+
+      _onInput(e) {
+        if (this.preventInvalidInput) {
+          const input = this.focusElement;
+          if (input.value.length > 0 && !this.checkValidity()) {
+            input.value = this.value || '';
+          }
+        }
+      }
+
+      _valueChanged(newVal, oldVal) {
+        // setting initial value to empty string, skip validation
+        if (newVal === '' && oldVal === undefined) {
+          return;
+        }
+        if (this.invalid) {
+          this.validate();
+        }
+        this._setHasValue(newVal !== '' && newVal != null);
+      }
+
+      /**
+       * Returns true if the current input value satisfies all constraints (if any)
+       */
+      checkValidity() {
+        if (this.required || this.pattern || this.maxlength || this.minlength) {
+          return this.focusElement.checkValidity();
+        } else {
+          return !this.invalid;
+        }
+      }
+
+
+      ready() {
+        super.ready();
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
+          this.updateStyles();
+        }
+
+        var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
+        this._errorId = `${this.constructor.is}-error-${uniqueId}`;
+        this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+      }
+
+      /**
+       * Returns true if `value` is valid.
+       * `<iron-form>` uses this to check the validity or all its elements.
+       *
+       * @return {boolean} True if the value is valid.
+       */
+      validate() {
+        return !(this.invalid = !this.checkValidity());
+      }
+
+      _getActiveErrorId(invalid, errorMessage, errorId) {
+        return errorMessage && invalid ? errorId : undefined;
+      }
+
+      _getActiveLabelId(label, labelId) {
+        return label ? labelId : undefined;
+      }
+
+      /**
+       * @protected
+       */
+      attributeChangedCallback(prop, oldVal, newVal) {
+        super.attributeChangedCallback(prop, oldVal, newVal);
+        // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+        if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
+          /^(focused|focus-ring|invalid|disabled|placeholder|has-value)$/.test(prop)) {
+          this.updateStyles();
+        }
+
+        // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+        // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari && this.root) {
+          const WEBKIT_PROPERTY = '-webkit-backface-visibility';
+          this.root.querySelectorAll('*').forEach(el => {
+            el.style[WEBKIT_PROPERTY] = 'visible';
+            el.style[WEBKIT_PROPERTY] = '';
+          });
+        }
+      }
+    };
+  </script>

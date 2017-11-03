@@ -273,6 +273,14 @@
       static get is() {
         return 'text-field-validators-demos';
       }
+
+      static get template() {
+        if (Array.prototype.find) {
+          return super.template;
+        } else {
+          return '<p>This demo must be viewed with an ES6 compatible browser</p>';
+        }
+      }
     }
     customElements.define(TextFieldValidatorsDemos.is, TextFieldValidatorsDemos);
   </script>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <script src="../../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../../vaadin-text-area.html" rel="import">
+  <link href="../common.html" rel="import">
+</head>
+
+<body>
+
+  <custom-style>
+    <style>
+      fieldset {
+        font-family: sans-serif;
+        font-size: 16px;
+        width: 550px;
+        border: solid 1px grey;
+      }
+    </style>
+  </custom-style>
+
+  <form>
+    <fieldset id="text-area">
+      label and value: <vaadin-text-area label="Foo" value="Bar"></vaadin-text-area>
+      <p>
+      prefix and suffix:
+        <vaadin-text-area label="Foo" value="Bar">
+          <span slot="prefix">prefix</span>
+          <span slot="suffix">suffix</span>
+        </vaadin-text-area>
+      <p>
+      long: <vaadin-text-area label="Foo" value="Bar" style="width: 300px;"></vaadin-text-area>
+    </fieldset>
+  </form>
+
+</body>

@@ -23,10 +23,8 @@ before_script:
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
       npm i --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
-      gemini test test/visual --component=vaadin-text-field &&
-      gemini test test/visual --component=vaadin-text-field -c .gemini-ie.yml &&
-      gemini test test/visual --component=vaadin-password-field &&
-      gemini test test/visual --component=vaadin-password-field -c .gemini-ie.yml &&
+      gemini test test/visual &&
+      gemini test test/visual -c .gemini-2.yml &&
       xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then

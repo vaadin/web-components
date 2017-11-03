@@ -29,11 +29,17 @@
       };
     }
 
+    /**
+     * @protected
+     */
     connectedCallback() {
       super.connectedCallback();
       this.dispatchEvent(new CustomEvent('iron-form-element-register'), {bubbles: true});
     }
 
+    /**
+     * @protected
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
       if (this._parentForm) {

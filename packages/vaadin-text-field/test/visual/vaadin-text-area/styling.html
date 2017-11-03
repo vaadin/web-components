@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
 
   <script src="../../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../../vaadin-text-field.html" rel="import">
+  <link href="../../../vaadin-text-area.html" rel="import">
 </head>
 
 <body>
 
-  <dom-module id="text-field-styles" theme-for="vaadin-text-field">
+  <dom-module id="text-area-styles" theme-for="vaadin-text-area">
     <template>
       <style>
         [part~="label"] {
@@ -32,13 +32,13 @@
     </template>
   </dom-module>
 
-  <div id="text-field">
-    <vaadin-text-field error-message="error" label="Label" required></vaadin-text-field>
+  <div id="text-area">
+    <vaadin-text-area error-message="error" label="Label" required></vaadin-text-area>
   </div>
 
   <script>
     document.addEventListener('WebComponentsReady', function() {
-      document.querySelector('vaadin-text-field').validate();
+      document.querySelector('vaadin-text-area').validate();
     });
   </script>
 
