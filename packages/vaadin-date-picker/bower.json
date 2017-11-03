@@ -42,7 +42,6 @@
     "iron-test-helpers": "^2.0.0",
     "sugar": "^2.0.0",
     "vaadin-button": "^1.0.0",
-    "vaadin-themes": "vaadin/vaadin-themes",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
   }
