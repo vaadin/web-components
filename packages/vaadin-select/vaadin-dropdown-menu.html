@@ -339,7 +339,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (opened) {
-            this._menuElement.addEventListener('selected-changed', e => this._onSelectedChanged(e));
+            this._menuElement.addEventListener('selected-changed', e => this._onSelected(e));
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
 
@@ -369,7 +369,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _onSelectedChanged(e) {
+        _onSelected(e) {
           this.opened = false;
           this._selectionElement.innerHTML = '';
 
@@ -384,8 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
-          // TODO: use property in vaadin-item when we implement that
-          this.value = selected && selected.hasAttribute('value') ? selected.getAttribute('value') : '';
+          this.value = selected && selected.value || '';
           this.validate();
         }
 

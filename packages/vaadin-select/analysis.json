@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 422,
+          "line": 421,
           "column": 6
         },
         "end": {
-          "line": 422,
+          "line": 421,
           "column": 42
         }
       },
@@ -2858,7 +2858,7 @@
               "params": []
             },
             {
-              "name": "_onSelectedChanged",
+              "name": "_onSelected",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2867,7 +2867,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 389,
+                  "line": 388,
                   "column": 9
                 }
               },
@@ -2884,11 +2884,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 391,
+                  "line": 390,
                   "column": 8
                 },
                 "end": {
-                  "line": 397,
+                  "line": 396,
                   "column": 9
                 }
               },
@@ -2905,11 +2905,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 399,
+                  "line": 398,
                   "column": 8
                 },
                 "end": {
-                  "line": 405,
+                  "line": 404,
                   "column": 9
                 }
               },
@@ -2922,11 +2922,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 408,
+                  "line": 407,
                   "column": 8
                 },
                 "end": {
-                  "line": 414,
+                  "line": 413,
                   "column": 9
                 }
               },
@@ -2972,7 +2972,7 @@
               "column": 6
             },
             "end": {
-              "line": 415,
+              "line": 414,
               "column": 7
             }
           },
