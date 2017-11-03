@@ -71,6 +71,13 @@
         });
       });
 
+      it('should not have credits by default', function(done) {
+        setTimeout(function() {
+          expect(chart.$.chart.querySelector('.highcharts-credits')).to.be.null;
+          done();
+        });
+      });
+
       it('should have one column series and twelve points', function(done) {
         setTimeout(function() {
           const series = chartContainer.querySelectorAll('.highcharts-series');

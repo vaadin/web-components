@@ -297,6 +297,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (!this._dirty || resetConfiguration) {
             this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
             this.__invertForBarSeries(jsonConfiguration.series);
+            if (!jsonConfiguration.credits) {
+              this.__updateOrAddCredits({enabled: false});
+            }
             return;
           }
           this.configuration.update(jsonConfiguration);
