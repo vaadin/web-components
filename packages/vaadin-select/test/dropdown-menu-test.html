@@ -17,7 +17,7 @@
         <template>
           <vaadin-list-box>
             <vaadin-item>Option 1</vaadin-item>
-            <vaadin-item label="o2">Option 2</vaadin-item>
+            <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
             <vaadin-item> Option 3 </vaadin-item>
             <vaadin-item></vaadin-item>
           </vaadin-list-box>
@@ -126,12 +126,23 @@
           expect(valueElement.textContent).to.be.equal(itemElement.textContent);
         });
 
-        it('Should update value with the textContent of the selected item', () => {
+        it('Should not update value if the selected item has not a `value` attribute', () => {
           menu.selected = 2;
-          expect(dropdown.value).to.be.equal('Option 3');
+          expect(dropdown.value).to.be.empty;
         });
 
-        it('Should remove tabindex when cloning the value element', () => {
+        it('Should update value with the `value` value of the selected item', () => {
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal('v2');
+        });
+
+        it('Should set empty value if a item without `value` is selected', () => {
+          menu.selected = 1;
+          menu.selected = 2;
+          expect(dropdown.value).to.be.empty;
+        });
+
+        it('Should remove tabindex when cloning the selected element', () => {
           menu.selected = 2;
           const itemElement = menu._navItems[menu.selected];
           const valueElement = dropdown._selectionElement.firstChild;
@@ -139,22 +150,19 @@
           expect(valueElement.hasAttribute('tabindex')).to.be.false;
         });
 
-        it('Should update selection slot textContent with the selected item `label` value', () => {
+        it('Should update selection slot textContent with the selected item `label` string', () => {
           menu.selected = 1;
           expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
         });
 
-        it('Should update value with the `label` value of the selected item', () => {
-          menu.selected = 1;
-          expect(dropdown.value).to.be.equal('o2');
-        });
-
         it('Should update selection slot when value is provided', () => {
-          // FIXME: when component supports setting value after #15
+          dropdown.value = 'v2';
+          expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
         });
 
         it('Should update overlay selected item when value is provided', () => {
-          // FIXME: when component supports setting value after #15
+          dropdown.value = 'v2';
+          expect(menu.selected).to.be.equal(1);
         });
 
       });
@@ -273,13 +281,11 @@
 
         it('should close the dropdown-menu on selecting the same value', () => {
           menu.selected = 0;
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
           expect(dropdown._overlayElement.opened).to.be.false;
 
           Enter(input);
           expect(dropdown._overlayElement.opened).to.be.true;
           menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
@@ -287,8 +293,8 @@
           const focusedSpy = sinon.spy();
           dropdown.focusElement.focus = focusedSpy;
 
-          menu.selected = 0;
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal(menu._navItems[menu.selected].getAttribute('value'));
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;

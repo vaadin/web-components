@@ -208,13 +208,16 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The String value for the selected item of the dropdown menu. Provides the value for iron-form.
-             * When there’s no item selected, the value is an empty string.
+             * It stores the string of the value property in the selected item.
+             * It provides the value for iron-form.
+             * When there’s an item selected, it's the value of that item, otherwise
+             * it's an empty string.
              */
             value: {
               type: String,
               value: '',
-              notify: true
+              notify: true,
+              observer: '_valueChanged'
             },
 
             /**
@@ -280,6 +283,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.focusElement.addEventListener('click', e => this.opened = true);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
+
+          this._instance = this._createTemplateInstance();
+          if (this._instance) {
+            this._overlayElement.content = this._instance.root;
+            this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+            this._valueChanged(this.value);
+          }
         }
 
         get focusElement() {
@@ -323,33 +333,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _openedChanged(opened, wasOpened) {
-          if (!this._overlayElement || !this.focusElement || this.disabled) {
+          if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled) {
             this.opened = false;
             return;
           }
 
           if (opened) {
-            if (!this._instance) {
-              this._instance = this._createTemplateInstance();
-              if (this._instance) {
-                this._overlayElement.content = this._instance.root;
-              }
-            }
+            this._menuElement.addEventListener('selected-changed', e => this._onSelectedChanged(e));
+            this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
+            this._menuElement.addEventListener('click', e => this.opened = false);
 
-            if (!this._menuElement) {
-              this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
-              if (this._menuElement) {
-                this._menuElement.addEventListener('selected-changed', e => this._setInputValue(e));
-                this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
-                this._menuElement.addEventListener('click', e => this.opened = false);
-              }
-            }
-
-            if (this._menuElement) {
-              this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
-              this._setPosition();
-              window.addEventListener('scroll', this._boundSetPosition, true);
-            }
+            this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
+            this._setPosition();
+            window.addEventListener('scroll', this._boundSetPosition, true);
           } else if (wasOpened) {
             !this._phone && this.focusElement.focus();
             this.validate();
@@ -373,25 +369,32 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _setInputValue() {
+        _onSelectedChanged(e) {
           this.opened = false;
           this._selectionElement.innerHTML = '';
 
           const selected = this._menuElement._navItems[this._menuElement.selected];
           if (selected) {
             if (selected.hasAttribute('label')) {
-              this.value = this._selectionElement.textContent = selected.getAttribute('label');
+              this._selectionElement.textContent = selected.getAttribute('label');
             } else {
-              this.value = selected.textContent.trim();
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
               this._selectionElement.appendChild(clone);
             }
-          } else {
-            this.value = '';
           }
 
+          // TODO: use property in vaadin-item when we implement that
+          this.value = selected && selected.hasAttribute('value') ? selected.getAttribute('value') : '';
           this.validate();
+        }
+
+        _valueChanged(value) {
+          if (this._menuElement && this._menuElement._navItems) {
+            this._menuElement.selected = this._menuElement._navItems.reduce((prev, item, idx) => {
+              return item.getAttribute('value') == value ? idx : prev;
+            }, -1);
+          }
         }
 
         _setPosition() {
