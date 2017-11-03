@@ -29,7 +29,7 @@
 
   <test-fixture id="navItem">
     <template>
-      <test-element>
+      <test-element value="foo">
         text-content
       </test-element>
     </template>
@@ -166,6 +166,10 @@
         item.addEventListener('click', clickSpy);
         spaceUp(item);
         expect(clickSpy).not.to.be.called;
+      });
+
+      it('should have value property', () => {
+        expect(item.value).to.be.equal('foo');
       });
     });
   </script>
