@@ -1,0 +1,61 @@
+<dom-module id="notification-basic-demos">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+    </style>
+
+    <h3>Simple Notification</h3>
+    <vaadin-demo-snippet id='notification-basic-demos-simple-notification'>
+      <template preserve-content>
+        <vaadin-notification opened duration="4000">
+          <template>
+            <h3>Notice</h3>
+            This notification has HTML content
+          </template>
+        </vaadin-notification>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Binding the `opened` property</h3>
+    <vaadin-demo-snippet id='notification-basic-demos-binding'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <vaadin-checkbox checked="{{notificationOpened}}">Show notification</vaadin-checkbox>
+            <vaadin-notification opened="{{notificationOpened}}">
+              <template>
+                The checkbox stays checked the time this notification is shown
+              </template>
+            </vaadin-notification>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Using from JavaScript</h3>
+    <vaadin-demo-snippet id='notification-basic-demos-using-from-js'>
+      <template preserve-content>
+        <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
+        <script>
+          function showNotification() {
+            const notify = document.createElement('vaadin-notification');
+            notify.innerHTML = '<template>Settings saved!</template>';
+            document.body.appendChild(notify);
+            notify.open();
+          }
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </template>
+  <script>
+    class NotificationBasicDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
+      static get is() {
+        return 'notification-basic-demos';
+      }
+    }
+    customElements.define(NotificationBasicDemos.is, NotificationBasicDemos);
+  </script>
+</dom-module>
