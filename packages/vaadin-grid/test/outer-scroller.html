@@ -136,6 +136,12 @@
         expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
       });
 
+      it('should have the same scrollHeight/scrollWidth as the target (em column width)', () => {
+        grid.querySelector('vaadin-grid-column').width = '10em';
+        expect(outerScroller.scrollHeight).to.eql(target.scrollHeight);
+        expect(outerScroller.scrollWidth).to.eql(target.scrollWidth);
+      });
+
       it('should have correct scrollWidth with hidden columns', () => {
         grid.querySelector('vaadin-grid-column').hidden = true;
         // Hide the table's sizer and rely on the cells to size properly
