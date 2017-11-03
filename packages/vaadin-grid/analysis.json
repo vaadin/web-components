@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-grid.html",
         "start": {
-          "line": 613,
+          "line": 616,
           "column": 4
         },
         "end": {
-          "line": 613,
+          "line": 616,
           "column": 40
         }
       },
@@ -11441,7 +11441,7 @@
           "tagname": "vaadin-grid-sorter"
         },
         {
-          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
+          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-hierarchy-toggle>`](#/elements/vaadin-grid-hierarchy-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n- `{{expanded}}`: True if the item has hierarchy sublevel expanded (can be two-way bound)\n- `[[level]]`: Number of the hierarchy sublevel of the item, first level-items have 0\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
           "summary": "",
           "path": "vaadin-grid.html",
           "properties": [
@@ -12070,11 +12070,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 240,
                   "column": 10
                 },
                 "end": {
-                  "line": 240,
+                  "line": 243,
                   "column": 11
                 }
               },
@@ -12089,11 +12089,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 245,
                   "column": 10
                 },
                 "end": {
-                  "line": 247,
+                  "line": 250,
                   "column": 11
                 }
               },
@@ -12108,11 +12108,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 249,
+                  "line": 252,
                   "column": 10
                 },
                 "end": {
-                  "line": 254,
+                  "line": 257,
                   "column": 11
                 }
               },
@@ -12127,11 +12127,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 256,
+                  "line": 259,
                   "column": 10
                 },
                 "end": {
-                  "line": 261,
+                  "line": 264,
                   "column": 11
                 }
               },
@@ -12146,11 +12146,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 263,
+                  "line": 266,
                   "column": 10
                 },
                 "end": {
-                  "line": 268,
+                  "line": 271,
                   "column": 11
                 }
               },
@@ -12166,11 +12166,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 273,
                   "column": 10
                 },
                 "end": {
-                  "line": 275,
+                  "line": 278,
                   "column": 11
                 }
               },
@@ -12857,11 +12857,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 597,
+                  "line": 600,
                   "column": 6
                 },
                 "end": {
-                  "line": 605,
+                  "line": 608,
                   "column": 7
                 }
               },
@@ -14782,11 +14782,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 284,
+                  "line": 287,
                   "column": 6
                 },
                 "end": {
-                  "line": 305,
+                  "line": 308,
                   "column": 7
                 }
               },
@@ -14803,11 +14803,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 307,
+                  "line": 310,
                   "column": 6
                 },
                 "end": {
-                  "line": 309,
+                  "line": 312,
                   "column": 7
                 }
               },
@@ -14820,11 +14820,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 311,
+                  "line": 314,
                   "column": 6
                 },
                 "end": {
-                  "line": 356,
+                  "line": 359,
                   "column": 7
                 }
               },
@@ -14841,11 +14841,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 358,
+                  "line": 361,
                   "column": 6
                 },
                 "end": {
-                  "line": 434,
+                  "line": 437,
                   "column": 7
                 }
               },
@@ -14874,11 +14874,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 436,
+                  "line": 439,
                   "column": 6
                 },
                 "end": {
-                  "line": 451,
+                  "line": 454,
                   "column": 7
                 }
               },
@@ -14898,11 +14898,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 453,
+                  "line": 456,
                   "column": 6
                 },
                 "end": {
-                  "line": 488,
+                  "line": 491,
                   "column": 7
                 }
               },
@@ -14922,11 +14922,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 490,
+                  "line": 493,
                   "column": 6
                 },
                 "end": {
-                  "line": 517,
+                  "line": 520,
                   "column": 7
                 }
               },
@@ -14946,11 +14946,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 519,
+                  "line": 522,
                   "column": 6
                 },
                 "end": {
-                  "line": 527,
+                  "line": 530,
                   "column": 7
                 }
               },
@@ -14970,11 +14970,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 529,
+                  "line": 532,
                   "column": 6
                 },
                 "end": {
-                  "line": 538,
+                  "line": 541,
                   "column": 7
                 }
               },
@@ -14994,11 +14994,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 540,
+                  "line": 543,
                   "column": 6
                 },
                 "end": {
-                  "line": 548,
+                  "line": 551,
                   "column": 7
                 }
               },
@@ -15018,11 +15018,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 550,
+                  "line": 553,
                   "column": 6
                 },
                 "end": {
-                  "line": 558,
+                  "line": 561,
                   "column": 7
                 }
               },
@@ -15042,11 +15042,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 560,
+                  "line": 563,
                   "column": 6
                 },
                 "end": {
-                  "line": 564,
+                  "line": 567,
                   "column": 7
                 }
               },
@@ -15059,11 +15059,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 566,
+                  "line": 569,
                   "column": 6
                 },
                 "end": {
-                  "line": 579,
+                  "line": 582,
                   "column": 7
                 }
               },
@@ -15076,11 +15076,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 581,
+                  "line": 584,
                   "column": 6
                 },
                 "end": {
-                  "line": 587,
+                  "line": 590,
                   "column": 7
                 }
               },
@@ -15097,11 +15097,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 589,
+                  "line": 592,
                   "column": 6
                 },
                 "end": {
-                  "line": 595,
+                  "line": 598,
                   "column": 7
                 }
               },
@@ -15153,11 +15153,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 206,
+              "line": 209,
               "column": 4
             },
             "end": {
-              "line": 607,
+              "line": 610,
               "column": 5
             }
           },
