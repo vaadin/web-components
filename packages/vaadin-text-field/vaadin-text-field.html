@@ -173,39 +173,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           };
         }
-
-        _valueChanged(newVal, oldVal) {
-          // setting initial value to empty string, skip validation
-          if (newVal === '' && oldVal === undefined) {
-            return;
-          }
-          if (this.invalid) {
-            this.validate();
-          }
-          this._setHasValue(newVal !== '' && newVal != null);
-        }
-
-        /**
-         * Returns true if the current input value satisfies all constraints (if any)
-         */
-        checkValidity() {
-          if (this.required || this.pattern || this.maxlength || this.minlength) {
-            return this.focusElement.checkValidity();
-          } else {
-            return !this.invalid;
-          }
-        }
-
-        ready() {
-          super.ready();
-          if (!(window.ShadyCSS && window.ShadyCSS.nativeCss)) {
-            this.updateStyles();
-          }
-
-          var uniqueId = TextFieldElement._uniqueId = 1 + TextFieldElement._uniqueId || 0;
-          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
-          this._labelId = `${this.constructor.is}-label-${uniqueId}`;
-        }
       }
 
       customElements.define(TextFieldElement.is, TextFieldElement);
