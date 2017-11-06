@@ -55,6 +55,11 @@
       it('should not auto focus overlay', () => {
         expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
       });
+
+      it('should show week numbers', () => {
+        datepicker.showWeekNumbers = true;
+        expect(datepicker.$.overlay.showWeekNumbers).to.equal(true);
+      });
     });
   </script>
 
