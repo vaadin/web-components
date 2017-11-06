@@ -166,6 +166,8 @@
         vaadinRadioButtonGroup.value = '2';
 
         expect(document.activeElement).to.be.equal(focusInput);
+
+        document.body.removeChild(focusInput);
       });
 
     });
