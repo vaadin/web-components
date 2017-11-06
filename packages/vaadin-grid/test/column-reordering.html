@@ -254,6 +254,12 @@
         expect(e.defaultPrevented).to.be.true;
       });
 
+      it('should prevent activating column resize while reordering', () => {
+        const resize = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+        dragOver(headerContent[0], resize);
+        expect(window.getComputedStyle(resize).pointerEvents).to.equal('none');
+      });
+
       it('should cancel touchmove', () => {
         dragStart(headerContent[0]);
         const e = makeSoloTouchEvent('touchmove', {x: 0, y: 0}, headerContent[0]);
