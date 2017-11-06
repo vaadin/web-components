@@ -16,26 +16,25 @@
       font-family: sans-serif;
     }
 
+    .space {
+      display: inline-block;
+      width: 175px;
+    }
+
     .capture-block {
       display: inline-block;
       width: 800px;
+      height: 200px;
     }
   </style>
 
   <div class="capture-block" id="dropdown-menu">
-    <vaadin-dropdown-menu label="Open" placeholder="Placeholder" id="drop1">
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>Item one</vaadin-item>
-          <vaadin-item>Item two</vaadin-item>
-          <vaadin-item disabled>Item three</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-dropdown-menu>
 
     <vaadin-dropdown-menu label="Normal" placeholder="Placeholder">
       <div slot="prefix">prefix &nbsp;</div>
     </vaadin-dropdown-menu>
+
+    <div class="space"></div>
 
     <vaadin-dropdown-menu label="Disabled" placeholder="Placeholder" disabled>
     </vaadin-dropdown-menu>
@@ -43,6 +42,7 @@
     <vaadin-dropdown-menu label="Selected and Focused" placeholder="Placeholder" id="drop2">
       <template>
         <vaadin-list-box>
+          <vaadin-item>default item</vaadin-item>
           <vaadin-item>Selected and Focused</vaadin-item>
         </vaadin-list-box>
       </template>
@@ -50,30 +50,38 @@
 
     <br/>
 
-    <vaadin-dropdown-menu label="Space">
-      This is intentional
-    </vaadin-dropdown-menu>
-
-    <vaadin-dropdown-menu label="Item as value" placeholder="Placeholder" id="drop3">
+    <vaadin-dropdown-menu label="Item as value" placeholder="Placeholder">
       <template>
         <vaadin-list-box>
-          <vaadin-item><strong>Item</strong>&nbsp;as&nbsp;<i>Value</i></vaadin-item>
+          <vaadin-item><strong>Html</strong>&nbsp;as&nbsp;<i>Content</i></vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-dropdown-menu>
 
-    <vaadin-dropdown-menu label="Text as value" placeholder="Placeholder" id="drop4">
+    <vaadin-dropdown-menu label="Open" placeholder="Placeholder" id="drop1">
       <template>
         <vaadin-list-box>
-          <vaadin-item>Text as value</vaadin-item>
+          <strong>Opened menu</strong>
+          <vaadin-item>Item one</vaadin-item>
+          <vaadin-item>Item two</vaadin-item>
+          <vaadin-item disabled>Disabled item</vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-dropdown-menu>
 
-    <vaadin-dropdown-menu label="Label as value" placeholder="Placeholder" id="drop5">
+    <vaadin-dropdown-menu label="Text as Content" placeholder="Placeholder" value="v2">
       <template>
         <vaadin-list-box>
-          <vaadin-item label="Label as value">Option three</vaadin-item>
+          <vaadin-item>default item</vaadin-item>
+          <vaadin-item value="v2">Text as Content Two</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-dropdown-menu>
+
+    <vaadin-dropdown-menu label="Label as Content" placeholder="Placeholder">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item label="Label as Content">Option one</vaadin-item>
         </vaadin-list-box>
       </template>
     </vaadin-dropdown-menu>
@@ -81,22 +89,17 @@
     <script>
       window.addEventListener('WebComponentsReady', () => {
         const drop1 = document.getElementById('drop1');
-        drop1.opened = true;
+        Polymer.RenderStatus.afterNextRender(drop1._menuElement, () => {
+          drop1.opened = true;
 
-        function select(id, cb, idx) {
-          const drop = document.getElementById(id);
-          drop.opened = true;
-          Polymer.RenderStatus.afterNextRender(drop._menuElement, () => {
-            drop._menuElement.selected = idx || 0;
-            cb && cb(drop);
+          const drop2 = document.getElementById('drop2');
+          Polymer.RenderStatus.afterNextRender(drop2._menuElement, () => {
+            drop2.opened = true;
+            drop2._menuElement.selected = 1;
+            window.webComponentsAreReady = true;
           });
-        }
+        });
 
-        // This opens and selects an item. Then it removes focus (needed in FF)
-        ['drop3', 'drop4', 'drop5'].forEach(id => select(id, drop => drop.focusElement.blur()));
-
-        // Using a timeout to so the the last dropdown selected keeps the focus in the screenshot
-        setTimeout(() => select('drop2', drop => window.webComponentsAreReady = true), 100);
       });
     </script>
 

@@ -8,8 +8,7 @@ gemini.suite('vaadin-dropdown-menu', function(rootSuite) {
         actions
           .waitForJSCondition(function(window) {
             return window.webComponentsAreReady;
-          }, 120000)
-          .wait(10000);
+          }, 120000);
       })
       .capture('dropdown-menu');
   });
