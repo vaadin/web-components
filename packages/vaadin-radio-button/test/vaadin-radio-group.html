@@ -148,7 +148,7 @@
         expect(vaadinRadioButtonGroup.value).to.eq('2');
       });
 
-      it('should check proper button when value is setted', () => {
+      it('should check proper button when value is set', () => {
         vaadinRadioButtonGroup.value = '2';
 
         expect(vaadinRadioButtonList[1].checked).to.be.true;
@@ -156,6 +156,18 @@
         vaadinRadioButtonGroup.value = 'on';
 
         expect(vaadinRadioButtonList[0].checked).to.be.true;
+      });
+
+      it('should NOT steal focus from currently focused element', () => {
+        const focusInput = document.createElement('input');
+        document.body.appendChild(focusInput);
+        focusInput.focus();
+
+        vaadinRadioButtonGroup.value = '2';
+
+        expect(document.activeElement).to.be.equal(focusInput);
+
+        document.body.removeChild(focusInput);
       });
 
     });
