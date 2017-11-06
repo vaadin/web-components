@@ -158,7 +158,7 @@
         expect(vaadinRadioButtonList[0].checked).to.be.true;
       });
 
-      it('should NOT steal focus from currently focused component', () => {
+      it('should NOT steal focus from currently focused element', () => {
         const focusInput = document.createElement('input');
         document.body.appendChild(focusInput);
         focusInput.focus();
