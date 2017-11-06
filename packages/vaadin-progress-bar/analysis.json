@@ -18,7 +18,7 @@
       },
       "elements": [
         {
-          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar value=\"30\" min=\"10\" max=\"100\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar | :host",
+          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar.| :host",
           "summary": "",
           "path": "vaadin-progress-bar.html",
           "properties": [
@@ -96,16 +96,16 @@
             {
               "name": "indeterminate",
               "type": "boolean",
-              "description": "Indeterminate state of the progress bar.",
+              "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 41,
+                  "line": 42,
                   "column": 10
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 11
                 }
               },
@@ -124,11 +124,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 6
                 },
                 "end": {
-                  "line": 59,
+                  "line": 60,
                   "column": 7
                 }
               },
@@ -143,11 +143,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 6
                 },
                 "end": {
-                  "line": 69,
+                  "line": 70,
                   "column": 7
                 }
               },
@@ -172,11 +172,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 71,
+                  "line": 72,
                   "column": 6
                 },
                 "end": {
-                  "line": 73,
+                  "line": 74,
                   "column": 7
                 }
               },
@@ -198,11 +198,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 75,
+                  "line": 76,
                   "column": 6
                 },
                 "end": {
-                  "line": 77,
+                  "line": 78,
                   "column": 7
                 }
               },
@@ -224,11 +224,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 79,
+                  "line": 80,
                   "column": 6
                 },
                 "end": {
-                  "line": 81,
+                  "line": 82,
                   "column": 7
                 }
               },
@@ -250,11 +250,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 86,
+                  "line": 87,
                   "column": 6
                 },
                 "end": {
-                  "line": 100,
+                  "line": 101,
                   "column": 7
                 }
               },
@@ -375,15 +375,15 @@
             },
             {
               "name": "indeterminate",
-              "description": "Indeterminate state of the progress bar.",
+              "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 41,
+                  "line": 42,
                   "column": 10
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 11
                 }
               },
@@ -479,15 +479,15 @@
             {
               "name": "indeterminate",
               "type": "boolean",
-              "description": "Indeterminate state of the progress bar.",
+              "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 41,
+                  "line": 42,
                   "column": 10
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 11
                 }
               },
@@ -504,11 +504,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 6
                 },
                 "end": {
-                  "line": 59,
+                  "line": 60,
                   "column": 7
                 }
               },
@@ -521,11 +521,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 6
                 },
                 "end": {
-                  "line": 69,
+                  "line": 70,
                   "column": 7
                 }
               },
@@ -548,11 +548,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 71,
+                  "line": 72,
                   "column": 6
                 },
                 "end": {
-                  "line": 73,
+                  "line": 74,
                   "column": 7
                 }
               },
@@ -572,11 +572,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 75,
+                  "line": 76,
                   "column": 6
                 },
                 "end": {
-                  "line": 77,
+                  "line": 78,
                   "column": 7
                 }
               },
@@ -596,11 +596,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 79,
+                  "line": 80,
                   "column": 6
                 },
                 "end": {
-                  "line": 81,
+                  "line": 82,
                   "column": 7
                 }
               },
@@ -620,11 +620,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 86,
+                  "line": 87,
                   "column": 6
                 },
                 "end": {
-                  "line": 100,
+                  "line": 101,
                   "column": 7
                 }
               },
@@ -651,7 +651,7 @@
               "column": 2
             },
             "end": {
-              "line": 101,
+              "line": 102,
               "column": 5
             }
           },
@@ -708,14 +708,14 @@
             },
             {
               "name": "indeterminate",
-              "description": "Indeterminate state of the progress bar.",
+              "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "sourceRange": {
                 "start": {
-                  "line": 41,
+                  "line": 42,
                   "column": 10
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 11
                 }
               },
