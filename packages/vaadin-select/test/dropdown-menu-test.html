@@ -353,7 +353,6 @@
 
         it('Should hide native input when a item is selected, and it has content', () => {
           menu.selected = 2;
-          expect(dropdown._inputElement.hasAttribute('has-value')).to.be.true;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
         });
 
@@ -361,7 +360,6 @@
           menu.selected = 2;
 
           menu.selected = 3;
-          expect(dropdown._inputElement.hasAttribute('has-value')).to.be.false;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 

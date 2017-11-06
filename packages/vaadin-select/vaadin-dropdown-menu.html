@@ -46,10 +46,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown-menu-text-field-default-theme" theme-for="vaadin-dropdown-menu-text-field">
   <template>
     <style>
-      :host([has-value]) [part="value"] {
-        visibility: hidden;
-      }
-
       /* Override native styling for disabled-inputs so as placeholder looks ok */
       [part="value"]:disabled {
         opacity: 1;
@@ -145,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[_valueForInput]]">
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly>
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
@@ -208,7 +204,7 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * It stores the string of the value property in the selected item.
+             * It stores the string of the `value` property in the selected item.
              * It provides the value for iron-form.
              * When there’s an item selected, it's the value of that item, otherwise
              * it's an empty string.
@@ -385,17 +381,20 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectionElement.innerHTML = '';
 
           const selected = this._menuElement._navItems[this._menuElement.selected];
+          let hasContent;
           if (selected) {
             if (selected.hasAttribute('label')) {
-              this._selectionElement.textContent = selected.getAttribute('label');
-              this._valueForInput = this._selectionElement.textContent;
+              hasContent = this._selectionElement.textContent = selected.getAttribute('label');
             } else {
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
               this._selectionElement.appendChild(clone);
-              this._valueForInput = selected.children.length || selected.textContent.trim() || '';
+              hasContent = selected.textContent.trim() || selected.children.length;
             }
           }
+
+          // Toggle input visibility to show/hide the placeholder
+          this._nativeInput.style.visibility = this.placeholder && !hasContent ? 'visible' : 'hidden';
 
           if (!this._valueChanging) {
             this._selectedChanging = true;
