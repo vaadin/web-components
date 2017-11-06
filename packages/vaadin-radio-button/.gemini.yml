@@ -21,13 +21,6 @@ browsers:
       version: "47.0"
       platform: "Windows 10"
 
-  # TODO: @limonte revisit, there's currently some issue with webcomponentsjs 1.0.1
-  # ie:
-  #   desiredCapabilities:
-  #     browserName: "internet explorer"
-  #     version: "11.0"
-  #     platform: "Windows 10"
-
   edge:
     desiredCapabilities:
       browserName: "microsoftedge"
