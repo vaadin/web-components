@@ -13,7 +13,7 @@
 <body>
   <test-fixture id="dropdown">
     <template>
-      <vaadin-dropdown-menu>
+      <vaadin-dropdown-menu placeholder="placeholder">
         <template>
           <vaadin-list-box>
             <vaadin-item>Option 1</vaadin-item>
@@ -37,6 +37,19 @@
     <template>
       <vaadin-dropdown-menu>
         <template>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="withvalue">
+    <template>
+      <vaadin-dropdown-menu value="v2">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item value="v1">t1</vaadin-item>
+            <vaadin-item value="v2" label="o2">t2</vaadin-item>
+          </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
     </template>
@@ -82,6 +95,21 @@
         dropdown.opened = true;
         dropdown.value = 'foo';
         dropdown.opened = false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu with-value', () => {
+      var dropdown, menu;
+
+      beforeEach(done => {
+        dropdown = fixture('withvalue');
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, done);
+      });
+
+      it('should be possible to set value declaratively', () => {
+        expect(menu.selected).to.be.equal(1);
+        expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
       });
     });
 
@@ -165,6 +193,11 @@
           expect(menu.selected).to.be.equal(1);
         });
 
+        it('Should empty selection slot when value is not found in items', () => {
+          dropdown.value = 'v2';
+          dropdown.value = 'foo';
+          expect(dropdown._selectionElement.textContent.trim()).to.be.empty;
+        });
       });
 
       describe('opening the overlay', () => {
@@ -294,7 +327,7 @@
           dropdown.focusElement.focus = focusedSpy;
 
           menu.selected = 1;
-          expect(dropdown.value).to.be.equal(menu._navItems[menu.selected].getAttribute('value'));
+          expect(dropdown.value).to.be.equal(menu._navItems[menu.selected].value);
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
@@ -319,7 +352,16 @@
 
         it('Should hide native input when selecting an item', () => {
           menu.selected = 1;
+          expect(dropdown._inputElement.hasAttribute('has-value')).to.be.true;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
+        });
+
+        it('Should show native input when value is empty', () => {
+          menu.selected = 1;
+
+          menu.selected = 3;
+          expect(dropdown._inputElement.hasAttribute('has-value')).to.be.false;
+          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 
         it('Should show native input when value is empty', () => {
