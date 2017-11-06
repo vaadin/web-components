@@ -16,9 +16,18 @@ This program is available under Apache License Version 2.0, available at https:/
   }
 </style>
 
-<dom-module id="vaadin-grid-hierarchy-toggle-default-theme">
+<dom-module id="vaadin-grid-hierarchy-toggle">
   <template>
     <style>
+      :host(:not([icon-hidden])) {
+        cursor: pointer;
+      }
+
+      [part="spacer"] {
+        display: inline-block;
+        width: var(--level, '0em');
+      }
+
       [part="toggle"]::before {
         font-family: "vaadin-grid-hierarchy-toggle-icons";
       }
@@ -39,25 +48,10 @@ This program is available under Apache License Version 2.0, available at https:/
         visibility: hidden;
       }
     </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-grid-hierarchy-toggle">
-  <template>
-    <style>
-      :host(:not([icon-hidden])) {
-        cursor: pointer;
-      }
-
-      [part="spacer"] {
-        display: inline-block;
-        width: var(--level, '0em');
-      }
-    </style>
 
     <!-- Please keep formatting and spacing. Do not insert spaces. Thanks. -->
     <span part="spacer"></span><span part="toggle"></span>
-    <span part="content"><slot></slot></span>
+    <slot></slot>
   </template>
 </dom-module>
 
