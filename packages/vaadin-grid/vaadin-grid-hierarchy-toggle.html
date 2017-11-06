@@ -23,6 +23,9 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-flex;
         align-items: baseline;
 
+        /* CSS API for :host */
+        --vaadin-grid-hierarchy-toggle-level-offset: 1em;
+
         /*
           ShadyCSS seems to polyfill :dir(rtl) only for :host, thus using
           a host custom CSS property for ltr/rtl toggle icon choice.
@@ -42,14 +45,14 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
 
-      [part="spacer"],
+      #level-spacer,
       [part="toggle"] {
         flex: none;
       }
 
-      [part="spacer"] {
+      #level-spacer {
         display: inline-block;
-        width: var(---level, '0em');
+        width: calc(var(---level, '0') * var(--vaadin-grid-hierarchy-toggle-level-offset));
       }
 
       [part="toggle"]::before {
@@ -70,7 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <span part="spacer"></span>
+    <span id="level-spacer"></span>
     <span part="toggle"></span>
     <slot></slot>
   </template>
@@ -154,7 +157,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _levelChanged(level) {
-        const value = Number(level) + 'em';
+        const value = Number(level).toString();
         this.style['---level'] = value;
         // Async is to make DOM updates applied before evaluating the style
         // update, requered for polyfilled RTL support in MSIE and Edge.
