@@ -19,8 +19,22 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-grid-hierarchy-toggle">
   <template>
     <style>
+      :host {
+        display: inline-flex;
+        align-items: baseline;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
       :host(:not([icon-hidden])) {
         cursor: pointer;
+      }
+
+      [part="spacer"],
+      [part="toggle"] {
+        flex: none;
       }
 
       [part="spacer"] {
@@ -30,18 +44,19 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="toggle"]::before {
         font-family: "vaadin-grid-hierarchy-toggle-icons";
+        line-height: 1em; /* make icon font metrics not affect baseline */
       }
 
       :host(:not([expanded])) [part="toggle"]::before {
-        content: "\e7be";
+        content: "\e7be\00a0"; /* icon glyph + single non-breaking space */
       }
 
       :host(:not([expanded])) [part="toggle"]:dir(rtl)::before {
-        content: "\e7bd";
+        content: "\e7bd\00a0";
       }
 
       :host([expanded]) [part="toggle"]::before {
-        content: "\e7bc";
+        content: "\e7bc\00a0";
       }
 
       :host([icon-hidden]) [part="toggle"] {
@@ -49,8 +64,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <!-- Please keep formatting and spacing. Do not insert spaces. Thanks. -->
-    <span part="spacer"></span><span part="toggle"></span>
+    <span part="spacer"></span>
+    <span part="toggle"></span>
     <slot></slot>
   </template>
 </dom-module>
