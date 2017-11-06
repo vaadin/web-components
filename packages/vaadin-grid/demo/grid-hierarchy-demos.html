@@ -21,7 +21,7 @@
                       icon-hidden="[[!item.hasChildren]]"
                       expanded="{{expanded}}"
                       level="[[level]]">
-                    [[_getIconFor(item, expanded)]]&nbsp;&nbsp;[[item.name]]
+                    [[item.name]]
                   </vaadin-grid-hierarchy-toggle>
                 </template>
               </vaadin-grid-column>
@@ -65,22 +65,6 @@
                     const hierarchyLevelSize = fsItems.length;
                     callback(pageItems, hierarchyLevelSize);
                   });
-                },
-
-                _getIconFor: function(item, expanded) {
-                  if (!item) {
-                    return;
-                  }
-
-                  if (item.type === 'dir') {
-                    if (expanded) {
-                      return '📂';
-                    } else {
-                      return '📁';
-                    }
-                  } else {
-                    return '📄';
-                  }
                 }
               });
             });
