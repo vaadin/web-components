@@ -217,7 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: '',
               notify: true,
-              observer: '_valueChanged'
+              observer: '_updateSelectedMenu'
             },
 
             /**
@@ -288,7 +288,15 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._instance) {
             this._overlayElement.content = this._instance.root;
             this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
-            this._valueChanged(this.value);
+
+            // If we have an initial value, we need to update the selected slot with the menu item content
+            if (this.value && this._menuElement) {
+              // To read item content we need menu DOM updated
+              Polymer.RenderStatus.afterNextRender(this._menuElement, () => {
+                this._menuElement._observer.flush(); // Ensure observer was run
+                this._updateSelectedMenu();
+              });
+            }
           }
         }
 
@@ -339,7 +347,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (opened) {
-            this._menuElement.addEventListener('selected-changed', e => this._onSelected(e));
+            this._menuElement.addEventListener('selected-changed', () => this._updateSelectedSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
 
@@ -369,7 +377,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _onSelected(e) {
+        _updateSelectedSlot() {
           this.opened = false;
           this._selectionElement.innerHTML = '';
 
@@ -384,15 +392,25 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
-          this.value = selected && selected.value || '';
+          if (!this._valueChanging) {
+            this._selectedChanging = true;
+            this.value = (selected && selected.value) || ''
+            delete this._selectedChanging;
+          }
+
           this.validate();
         }
 
-        _valueChanged(value) {
+        _updateSelectedMenu() {
           if (this._menuElement && this._menuElement._navItems) {
             this._menuElement.selected = this._menuElement._navItems.reduce((prev, item, idx) => {
-              return item.getAttribute('value') == value ? idx : prev;
+              return item.value == this.value ? idx : prev;
             }, -1);
+            if (!this._selectedChanging) {
+              this._valueChanging = true;
+              this._updateSelectedSlot();
+              delete this._valueChanging;
+            }
           }
         }
 
