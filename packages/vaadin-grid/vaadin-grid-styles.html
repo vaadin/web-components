@@ -160,6 +160,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /* Reordering styles */
       :host([reordering]) [part~="cell"] ::slotted(vaadin-grid-cell-content),
+      :host([reordering]) [part~="resize-handle"],
       #scroller[no-content-pointer-events] [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         pointer-events: none;
       }
