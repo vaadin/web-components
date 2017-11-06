@@ -22,6 +22,16 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: inline-flex;
         align-items: baseline;
+
+        /*
+          ShadyCSS seems to polyfill :dir(rtl) only for :host, thus using
+          a host custom CSS property for ltr/rtl toggle icon choice.
+         */
+        ---collapsed-icon: "\e7be\00a0";
+      }
+
+      :host(:dir(rtl)) {
+        ---collapsed-icon: "\e7bd\00a0";
       }
 
       :host([hidden]) {
@@ -39,7 +49,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="spacer"] {
         display: inline-block;
-        width: var(--level, '0em');
+        width: var(---level, '0em');
       }
 
       [part="toggle"]::before {
@@ -48,15 +58,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host(:not([expanded])) [part="toggle"]::before {
-        content: "\e7be\00a0"; /* icon glyph + single non-breaking space */
-      }
-
-      :host(:not([expanded])) [part="toggle"]:dir(rtl)::before {
-        content: "\e7bd\00a0";
+        content: var(---collapsed-icon);
       }
 
       :host([expanded]) [part="toggle"]::before {
-        content: "\e7bc\00a0";
+        content: "\e7bc\00a0"; /* icon glyph + single non-breaking space */
       }
 
       :host([icon-hidden]) [part="toggle"] {
@@ -149,8 +155,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _levelChanged(level) {
         const value = Number(level) + 'em';
-        this.updateStyles({'--level': value});
-        this.style['--level'] = value;
+        this.style['---level'] = value;
+        // Async is to make DOM updates applied before evaluating the style
+        // update, requered for polyfilled RTL support in MSIE and Edge.
+        window.requestAnimationFrame(() => this.updateStyles({'---level': value}));
       }
     }
 
