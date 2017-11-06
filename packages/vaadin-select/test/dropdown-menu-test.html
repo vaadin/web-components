@@ -20,6 +20,7 @@
             <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
             <vaadin-item> Option 3 </vaadin-item>
             <vaadin-item></vaadin-item>
+            <vaadin-item label="">Empty</vaadin-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -154,7 +155,7 @@
           expect(valueElement.textContent).to.be.equal(itemElement.textContent);
         });
 
-        it('Should not update value if the selected item has not a `value` attribute', () => {
+        it('Should not update value if the selected item has not a value', () => {
           menu.selected = 2;
           expect(dropdown.value).to.be.empty;
         });
@@ -350,23 +351,21 @@
           expect(focusedSpy).to.be.calledOnce;
         });
 
-        it('Should hide native input when selecting an item', () => {
-          menu.selected = 1;
+        it('Should hide native input when a item is selected, and it has content', () => {
+          menu.selected = 2;
           expect(dropdown._inputElement.hasAttribute('has-value')).to.be.true;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
         });
 
-        it('Should show native input when value is empty', () => {
-          menu.selected = 1;
+        it('Should toggle native native input visibility when the content of the selected item is empty', () => {
+          menu.selected = 2;
 
           menu.selected = 3;
           expect(dropdown._inputElement.hasAttribute('has-value')).to.be.false;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 
-        it('Should show native input when value is empty', () => {
-          menu.selected = 1;
-
+        it('Should show native input when label of the selected items is an empty string', () => {
           menu.selected = 3;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });

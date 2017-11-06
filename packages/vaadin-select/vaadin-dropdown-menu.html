@@ -145,7 +145,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[value]]">
+    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly value="[[_valueForInput]]">
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
@@ -254,7 +254,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _inputElement: Object,
 
-            _nativeInput: Object
+            _nativeInput: Object,
+
+            // Used for setting a value to the input in order to show/hidde placeholder
+            _valueForInput: Object
           };
         }
 
@@ -385,16 +388,18 @@ This program is available under Apache License Version 2.0, available at https:/
           if (selected) {
             if (selected.hasAttribute('label')) {
               this._selectionElement.textContent = selected.getAttribute('label');
+              this._valueForInput = !!this._selectionElement.textContent;
             } else {
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
               this._selectionElement.appendChild(clone);
+              this._valueForInput = selected.children.length || selected.textContent.trim() || '';
             }
           }
 
           if (!this._valueChanging) {
             this._selectedChanging = true;
-            this.value = (selected && selected.value) || ''
+            this.value = selected && selected.value || '';
             delete this._selectedChanging;
           }
 
