@@ -85,15 +85,16 @@
         });
 
         it('should have zero spacer width by default', () => {
-          const spacer = toggle.shadowRoot.querySelector('[part~="spacer"]');
+          const spacer = toggle.shadowRoot.querySelector('#level-spacer');
           expect(spacer.getBoundingClientRect().width).to.equal(0);
         });
 
         it('should increase spacer width for each level step', () => {
-          const spacer = toggle.shadowRoot.querySelector('[part~="spacer"]');
+          const spacer = toggle.shadowRoot.querySelector('#level-spacer');
           let prevWidth = 0;
           for (let i = 1; i < 3; i++) {
             toggle.level = i;
+            toggle._debouncerUpdateLevel.flush();
             const width = spacer.getBoundingClientRect().width;
             expect(width).to.be.gt(prevWidth);
             prevWidth = width;
@@ -104,9 +105,7 @@
       describe('themability', () => {
         it('should have shadow parts', () => {
           [
-            'spacer',
-            'toggle',
-            'content'
+            'toggle'
           ].forEach(partName => {
             expect(toggle.shadowRoot.querySelector(`[part~="${partName}"]`)).to.not.be.null;
           });
