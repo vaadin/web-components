@@ -101,6 +101,28 @@ This program is available under Apache License Version 2.0, available at https:/
      * </vaadin-grid-column>
      * ```
      *
+     * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ---|---
+     * `toggle` | The hierarchy toggle icon
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute    | Description | Part name
+     * ---|---|---
+     * `expanded` | When present, the toggle is expanded | :host
+     * `icon-hidden` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
+     *
+     * The following custom CSS properties are available on
+     * the `<vaadin-grid-hierarchy-toggle>` element:
+     *
+     * Custom CSS property | Description | Default
+     * ---|---|---
+     * `--vaadin-grid-hierarchy-toggle-level-offset` | Visual offset step for each hierarchy sublevel | `1em`
+     *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
      */
