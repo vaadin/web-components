@@ -217,7 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: '',
               notify: true,
-              observer: '_updateSelectedMenu'
+              observer: '_valueChanged'
             },
 
             /**
@@ -256,7 +256,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _nativeInput: Object,
 
-            // Used for setting a value to the input in order to show/hidde placeholder
+            // Used for setting a value to the input in order to show/hide placeholder
             _valueForInput: Object
           };
         }
@@ -388,7 +388,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (selected) {
             if (selected.hasAttribute('label')) {
               this._selectionElement.textContent = selected.getAttribute('label');
-              this._valueForInput = !!this._selectionElement.textContent;
+              this._valueForInput = this._selectionElement.textContent;
             } else {
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
@@ -406,11 +406,15 @@ This program is available under Apache License Version 2.0, available at https:/
           this.validate();
         }
 
+        _valueChanged() {
+          this._updateSelectedMenu();
+        }
+
         _updateSelectedMenu() {
           if (this._menuElement && this._menuElement._navItems) {
             this._menuElement.selected = this._menuElement._navItems.reduce((prev, item, idx) => {
               return item.value == this.value ? idx : prev;
-            }, -1);
+            }, undefined);
             if (!this._selectedChanging) {
               this._valueChanging = true;
               this._updateSelectedSlot();

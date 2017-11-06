@@ -160,7 +160,7 @@
           expect(dropdown.value).to.be.empty;
         });
 
-        it('Should update value with the `value` value of the selected item', () => {
+        it('Should update value with the value of the selected item', () => {
           menu.selected = 1;
           expect(dropdown.value).to.be.equal('v2');
         });
@@ -366,7 +366,7 @@
         });
 
         it('Should show native input when label of the selected items is an empty string', () => {
-          menu.selected = 3;
+          menu.selected = 4;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 
