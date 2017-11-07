@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 438,
+          "line": 447,
           "column": 6
         },
         "end": {
-          "line": 438,
+          "line": 447,
           "column": 42
         }
       },
@@ -712,11 +712,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 78,
+              "line": 74,
               "column": 6
             },
             "end": {
-              "line": 82,
+              "line": 78,
               "column": 7
             }
           },
@@ -1877,11 +1877,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 103,
+              "line": 99,
               "column": 6
             },
             "end": {
-              "line": 129,
+              "line": 125,
               "column": 7
             }
           },
@@ -2400,11 +2400,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 190,
                   "column": 12
                 },
                 "end": {
-                  "line": 199,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -2423,11 +2423,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -2439,22 +2439,21 @@
             {
               "name": "value",
               "type": "string",
-              "description": "It stores the string of the value property in the selected item.\nIt provides the value for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.",
+              "description": "It stores the string of the `value` property in the selected item.\nIt provides the value for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 211,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 215,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true,
-                  "observer": "\"_updateSelectedMenu\""
+                  "notify": true
                 }
               },
               "defaultValue": "\"\""
@@ -2466,11 +2465,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 225,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 229,
+                  "line": 224,
                   "column": 13
                 }
               },
@@ -2487,11 +2486,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 234,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 237,
+                  "line": 232,
                   "column": 13
                 }
               },
@@ -2506,11 +2505,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 237,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 239,
                   "column": 13
                 }
               },
@@ -2525,11 +2524,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 241,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 241,
                   "column": 27
                 }
               },
@@ -2544,11 +2543,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 248,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 250,
+                  "line": 245,
                   "column": 13
                 }
               },
@@ -2564,11 +2563,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 252,
+                  "line": 247,
                   "column": 12
                 },
                 "end": {
-                  "line": 252,
+                  "line": 247,
                   "column": 35
                 }
               },
@@ -2583,12 +2582,31 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 254,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 254,
+                  "line": 249,
                   "column": 33
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "_items",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 251,
+                  "column": 12
+                },
+                "end": {
+                  "line": 251,
+                  "column": 26
                 }
               },
               "metadata": {
@@ -2602,11 +2620,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 256,
+                  "line": 253,
                   "column": 12
                 },
                 "end": {
-                  "line": 256,
+                  "line": 253,
                   "column": 32
                 }
               },
@@ -2617,15 +2635,15 @@
             {
               "name": "_valueForInput",
               "type": "Object",
-              "description": "Used for setting a value to the input in order to show/hidde placeholder",
+              "description": "Used for setting a value to the input in order to show/hide placeholder",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 256,
                   "column": 12
                 },
                 "end": {
-                  "line": 259,
+                  "line": 256,
                   "column": 34
                 }
               },
@@ -2641,7 +2659,7 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 276,
                   "column": 8
                 },
                 "end": {
@@ -2658,11 +2676,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 273,
+                  "line": 274,
                   "column": 9
                 }
               },
@@ -2989,7 +3007,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 400,
+                  "line": 409,
                   "column": 9
                 }
               },
@@ -2997,21 +3015,28 @@
               "params": []
             },
             {
-              "name": "_updateSelectedMenu",
+              "name": "_valueChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 402,
+                  "line": 411,
                   "column": 8
                 },
                 "end": {
-                  "line": 413,
+                  "line": 422,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "items"
+                }
+              ]
             },
             {
               "name": "_setPosition",
@@ -3019,11 +3044,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 415,
+                  "line": 424,
                   "column": 8
                 },
                 "end": {
-                  "line": 421,
+                  "line": 430,
                   "column": 9
                 }
               },
@@ -3036,11 +3061,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 424,
+                  "line": 433,
                   "column": 8
                 },
                 "end": {
-                  "line": 430,
+                  "line": 439,
                   "column": 9
                 }
               },
@@ -3082,11 +3107,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 181,
+              "line": 177,
               "column": 6
             },
             "end": {
-              "line": 431,
+              "line": 440,
               "column": 7
             }
           },
@@ -3135,11 +3160,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 190,
                   "column": 12
                 },
                 "end": {
-                  "line": 199,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -3151,11 +3176,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 204,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -3164,14 +3189,14 @@
             },
             {
               "name": "value",
-              "description": "It stores the string of the value property in the selected item.\nIt provides the value for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.",
+              "description": "It stores the string of the `value` property in the selected item.\nIt provides the value for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 211,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 215,
                   "column": 13
                 }
               },
@@ -3183,11 +3208,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 225,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 229,
+                  "line": 224,
                   "column": 13
                 }
               },
@@ -3199,11 +3224,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 234,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 237,
+                  "line": 232,
                   "column": 13
                 }
               },
@@ -3215,11 +3240,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 237,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 239,
                   "column": 13
                 }
               },
@@ -3252,11 +3277,11 @@
               "range": {
                 "file": "vaadin-dropdown-menu.html",
                 "start": {
-                  "line": 148,
+                  "line": 144,
                   "column": 6
                 },
                 "end": {
-                  "line": 148,
+                  "line": 144,
                   "column": 47
                 }
               }

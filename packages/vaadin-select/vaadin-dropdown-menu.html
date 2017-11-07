@@ -212,8 +212,7 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               value: '',
-              notify: true,
-              observer: '_valueChanged'
+              notify: true
             },
 
             /**
@@ -250,11 +249,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _inputElement: Object,
 
+            _items: Object,
+
             _nativeInput: Object,
 
             // Used for setting a value to the input in order to show/hide placeholder
             _valueForInput: Object
           };
+        }
+
+        static get observers() {
+          return ['_valueChanged(value, _items)'];
         }
 
         /** @private */
@@ -288,12 +293,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this._overlayElement.content = this._instance.root;
             this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
 
-            // If we have an initial value, we need to update the selected slot with the menu item content
-            if (this.value && this._menuElement) {
-              // To read item content we need menu DOM updated
+            if (this._menuElement) {
+              // To access items content we need menu DOM updated
               Polymer.RenderStatus.afterNextRender(this._menuElement, () => {
                 this._menuElement._observer.flush(); // Ensure observer was run
-                this._updateSelectedMenu();
+                this._items = this._menuElement._navItems;
               });
             }
           }
@@ -380,7 +384,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
           this._selectionElement.innerHTML = '';
 
-          const selected = this._menuElement._navItems[this._menuElement.selected];
+          const selected = this._items[this._menuElement.selected];
           let hasContent;
           if (selected) {
             if (selected.hasAttribute('label')) {
@@ -405,14 +409,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.validate();
         }
 
-        _valueChanged() {
-          this._updateSelectedMenu();
-        }
-
-        _updateSelectedMenu() {
-          if (this._menuElement && this._menuElement._navItems) {
-            this._menuElement.selected = this._menuElement._navItems.reduce((prev, item, idx) => {
-              return item.value == this.value ? idx : prev;
+        _valueChanged(value, items) {
+          if (items) {
+            this._menuElement.selected = items.reduce((prev, item, idx) => {
+              return item.value == value ? idx : prev;
             }, undefined);
             if (!this._selectedChanging) {
               this._valueChanging = true;

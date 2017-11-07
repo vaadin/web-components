@@ -148,7 +148,7 @@
 
         it('Should update selection slot with a clone of the selected item', () => {
           menu.selected = 2;
-          const itemElement = menu._navItems[menu.selected];
+          const itemElement = dropdown._items[menu.selected];
           const valueElement = dropdown._selectionElement.firstChild;
           expect(valueElement).not.to.be.equal(itemElement);
           expect(valueElement.localName).to.be.equal(itemElement.localName);
@@ -173,7 +173,7 @@
 
         it('Should remove tabindex when cloning the selected element', () => {
           menu.selected = 2;
-          const itemElement = menu._navItems[menu.selected];
+          const itemElement = dropdown._items[menu.selected];
           const valueElement = dropdown._selectionElement.firstChild;
           expect(itemElement.tabIndex).to.be.equal(0);
           expect(valueElement.hasAttribute('tabindex')).to.be.false;
@@ -308,9 +308,11 @@
         var menu;
 
         beforeEach(done => {
-          Enter(input);
           menu = dropdown._menuElement;
-          Polymer.RenderStatus.afterNextRender(menu, done);
+          Polymer.RenderStatus.afterNextRender(menu, () => {
+            dropdown.opened = true;
+            done();
+          });
         });
 
         it('should close the dropdown-menu on selecting the same value', () => {
@@ -319,7 +321,7 @@
 
           Enter(input);
           expect(dropdown._overlayElement.opened).to.be.true;
-          menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          dropdown._items[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
@@ -328,7 +330,7 @@
           dropdown.focusElement.focus = focusedSpy;
 
           menu.selected = 1;
-          expect(dropdown.value).to.be.equal(menu._navItems[menu.selected].value);
+          expect(dropdown.value).to.be.equal(dropdown._items[menu.selected].value);
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
