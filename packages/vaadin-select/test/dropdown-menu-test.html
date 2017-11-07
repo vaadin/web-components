@@ -13,13 +13,14 @@
 <body>
   <test-fixture id="dropdown">
     <template>
-      <vaadin-dropdown-menu>
+      <vaadin-dropdown-menu placeholder="placeholder">
         <template>
           <vaadin-list-box>
             <vaadin-item>Option 1</vaadin-item>
-            <vaadin-item label="o2">Option 2</vaadin-item>
+            <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
             <vaadin-item> Option 3 </vaadin-item>
             <vaadin-item></vaadin-item>
+            <vaadin-item label="">Empty</vaadin-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -37,6 +38,19 @@
     <template>
       <vaadin-dropdown-menu>
         <template>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="withvalue">
+    <template>
+      <vaadin-dropdown-menu value="v2">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item value="v1">t1</vaadin-item>
+            <vaadin-item value="v2" label="o2">t2</vaadin-item>
+          </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
     </template>
@@ -85,6 +99,21 @@
       });
     });
 
+    describe('vaadin-dropdown-menu with-value', () => {
+      var dropdown, menu;
+
+      beforeEach(done => {
+        dropdown = fixture('withvalue');
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, done);
+      });
+
+      it('should be possible to set value declaratively', () => {
+        expect(menu.selected).to.be.equal(1);
+        expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
+      });
+    });
+
     describe('vaadin-dropdown-menu', () => {
       var dropdown, input;
 
@@ -102,6 +131,7 @@
         expect(modifiedTemplate.content.querySelector('slot[name="selected"]')).to.be.ok;
       });
 
+
       describe('selection', () => {
 
         var menu;
@@ -112,6 +142,10 @@
           Polymer.RenderStatus.afterNextRender(menu, done);
         });
 
+        it('should select the first item with an empty value by default', () => {
+          expect(menu.selected).to.be.equal(0);
+        });
+
         it('Should close the overlay when selecting a new item', () => {
           menu.selected = 2;
           expect(dropdown._overlayElement.opened).to.be.false;
@@ -119,44 +153,57 @@
 
         it('Should update selection slot with a clone of the selected item', () => {
           menu.selected = 2;
-          const itemElement = menu._navItems[menu.selected];
+          const itemElement = dropdown._items[menu.selected];
           const valueElement = dropdown._selectionElement.firstChild;
           expect(valueElement).not.to.be.equal(itemElement);
           expect(valueElement.localName).to.be.equal(itemElement.localName);
           expect(valueElement.textContent).to.be.equal(itemElement.textContent);
         });
 
-        it('Should update value with the textContent of the selected item', () => {
+        it('Should not update value if the selected item has not a value', () => {
           menu.selected = 2;
-          expect(dropdown.value).to.be.equal('Option 3');
+          expect(dropdown.value).to.be.empty;
         });
 
-        it('Should remove tabindex when cloning the value element', () => {
+        it('Should update value with the value of the selected item', () => {
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal('v2');
+        });
+
+        it('Should set empty value if a item without `value` is selected', () => {
+          menu.selected = 1;
           menu.selected = 2;
-          const itemElement = menu._navItems[menu.selected];
+          expect(dropdown.value).to.be.empty;
+        });
+
+        it('Should remove tabindex when cloning the selected element', () => {
+          menu.selected = 2;
+          const itemElement = dropdown._items[menu.selected];
           const valueElement = dropdown._selectionElement.firstChild;
           expect(itemElement.tabIndex).to.be.equal(0);
           expect(valueElement.hasAttribute('tabindex')).to.be.false;
         });
 
-        it('Should update selection slot textContent with the selected item `label` value', () => {
+        it('Should update selection slot textContent with the selected item `label` string', () => {
           menu.selected = 1;
           expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
         });
 
-        it('Should update value with the `label` value of the selected item', () => {
-          menu.selected = 1;
-          expect(dropdown.value).to.be.equal('o2');
-        });
-
         it('Should update selection slot when value is provided', () => {
-          // FIXME: when component supports setting value after #15
+          dropdown.value = 'v2';
+          expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
         });
 
         it('Should update overlay selected item when value is provided', () => {
-          // FIXME: when component supports setting value after #15
+          dropdown.value = 'v2';
+          expect(menu.selected).to.be.equal(1);
         });
 
+        it('Should select first item with empty value when when value is not found in items', () => {
+          dropdown.value = 'v2';
+          dropdown.value = 'foo';
+          expect(menu.selected).to.be.equal(0);
+        });
       });
 
       describe('opening the overlay', () => {
@@ -266,20 +313,17 @@
         var menu;
 
         beforeEach(done => {
-          Enter(input);
           menu = dropdown._menuElement;
-          Polymer.RenderStatus.afterNextRender(menu, done);
+          Polymer.RenderStatus.afterNextRender(menu, () => {
+            Enter(input);
+            done();
+          });
         });
 
         it('should close the dropdown-menu on selecting the same value', () => {
-          menu.selected = 0;
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
-          expect(dropdown._overlayElement.opened).to.be.false;
-
           Enter(input);
           expect(dropdown._overlayElement.opened).to.be.true;
-          menu._navItems[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          dropdown._items[0].dispatchEvent(new CustomEvent('click', {bubbles: true}));
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
@@ -287,8 +331,8 @@
           const focusedSpy = sinon.spy();
           dropdown.focusElement.focus = focusedSpy;
 
-          menu.selected = 0;
-          expect(dropdown.value).to.be.equal(menu._navItems[0].textContent);
+          menu.selected = 1;
+          expect(dropdown.value).to.be.equal(dropdown._items[menu.selected].value);
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
@@ -299,7 +343,7 @@
           dropdown.focusElement.focus = focusedSpy;
 
           dropdown._phone = true;
-          menu.selected = 0;
+          menu.selected = 1;
           expect(focusedSpy).not.to.be.called;
         });
 
@@ -311,15 +355,20 @@
           expect(focusedSpy).to.be.calledOnce;
         });
 
-        it('Should hide native input when selecting an item', () => {
-          menu.selected = 1;
+        it('Should hide native input when a item is selected, and it has content', () => {
+          menu.selected = 2;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
         });
 
-        it('Should show native input when value is empty', () => {
-          menu.selected = 1;
+        it('Should toggle native native input visibility when the content of the selected item is empty', () => {
+          menu.selected = 2;
 
           menu.selected = 3;
+          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
+        });
+
+        it('Should show native input when label of the selected items is an empty string', () => {
+          menu.selected = 4;
           expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
         });
 

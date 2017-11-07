@@ -27,8 +27,8 @@
           <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
             <template>
               <vaadin-list-box>
-                <vaadin-item>Option one</vaadin-item>
-                <vaadin-item>Option two</vaadin-item>
+                <vaadin-item value="1">Option one</vaadin-item>
+                <vaadin-item value="2">Option two</vaadin-item>
               </vaadin-list-box>
             </template>
           </vaadin-dropdown-menu>
@@ -51,16 +51,32 @@
         </template>
     </vaadin-demo-snippet>
 
-    <h3>Custom Value</h3>
+    <h3>Custom Label</h3>
     <vaadin-demo-snippet id='dropdown-menu-list-box-custom-value'>
       <template preserve-content>
           <vaadin-dropdown-menu placeholder="Language">
             <template>
               <vaadin-list-box>
-                <vaadin-item label="">&nbsp;</vaadin-item>
+                <vaadin-item label="">Other</vaadin-item>
                 <vaadin-item label="ES">Spanish</vaadin-item>
-                <vaadin-item label="FI">Finish</vaadin-item>
+                <vaadin-item label="FI">Finnish</vaadin-item>
                 <vaadin-item label="EN">English</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </template>
+    </vaadin-demo-snippet>
+
+    <h3>The value property</h3>
+    <vaadin-demo-snippet id='dropdown-menu-list-box-custom-value'>
+      <template preserve-content>
+          <vaadin-dropdown-menu placeholder="Language" value="ES">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item value="" label="">Other</vaadin-item>
+                <vaadin-item value="ES" label="Spanish">Spanish (default)</vaadin-item>
+                <vaadin-item value="FI" label="Finnish">Finnish</vaadin-item>
+                <vaadin-item value="EN" label="English">English</vaadin-item>
               </vaadin-list-box>
             </template>
           </vaadin-dropdown-menu>
