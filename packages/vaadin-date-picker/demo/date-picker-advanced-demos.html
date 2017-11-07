@@ -65,12 +65,8 @@
           window.addDemoReadyListener('#date-picker-advanced-demos-custom-validator', function(document) {
             class DatePickerCurrentYearElement extends Vaadin.DatePickerElement {
               checkValidity(value) {
-                var valid = super.checkValidity();
-                if (valid) {
-                  var currentYear = new Date().getFullYear();
-                  valid = new Date(value).getFullYear() === currentYear;
-                }
-                return valid;
+                var currentYear = new Date().getFullYear();
+                return new Date(value).getFullYear() === currentYear;
               }
             }
             customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
