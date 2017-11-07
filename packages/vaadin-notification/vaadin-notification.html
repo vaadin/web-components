@@ -59,6 +59,15 @@ This program is available under Apache License Version 2.0, available at https:/
       modeless
       role="alert"
       aria-live="polite">
+      <template id="vaadin-notification-overlay-template">
+        <style media="screen">
+          .region-a {
+            background: red;
+          }
+        </style>
+        <div class="region-a">
+        </div>
+      </template>
     </vaadin-notification-overlay>
   </template>
 
@@ -81,7 +90,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * The container of the notification
+       * The container element for the notification
        *
        * ### Styling
        *
@@ -96,9 +105,6 @@ This program is available under Apache License Version 2.0, available at https:/
           return 'vaadin-notification-card';
         }
       }
-
-      customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
-      customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
 
       /**
        * `<vaadin-notification>` is a Polymer 2 element providing accessible and customizable notifications (toasts).
@@ -154,8 +160,13 @@ This program is available under Apache License Version 2.0, available at https:/
         get _overlay() {
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = this.$['vaadin-notification-overlay'];
+            this._overlay._regionA = this._overlay.root.querySelector('.region-a')
           }
           return NotificationElement._overlay;
+        }
+
+        get _regionA() {
+          return this._overlay._regionA;
         }
 
         _openedChanged(opened) {
@@ -175,12 +186,12 @@ This program is available under Apache License Version 2.0, available at https:/
               this._content.setAttribute('aria-label', this._instance.root.textContent.trim());
             }
 
-            this._overlay.$.content.appendChild(this._content);
+            Polymer.RenderStatus.beforeNextRender(this._overlay, () => this._regionA.appendChild(this._content));
 
             this._addAutocloseTimeout(this.duration);
           } else if (this._content) {
             this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
-            this._overlay.$.content.removeChild(this._content);
+            this._regionA.removeChild(this._content);
           }
         }
 
@@ -204,6 +215,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
+      customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
       customElements.define(NotificationElement.is, NotificationElement);
 
       /**
