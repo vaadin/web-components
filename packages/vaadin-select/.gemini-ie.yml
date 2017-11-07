@@ -9,15 +9,8 @@ system:
     sauce: true
 
 browsers:
-  chrome:
+  ie:
     desiredCapabilities:
-      browserName: "chrome"
-      version: "59.0"
-      platform: "Windows 10"
-
-
-  firefox:
-    desiredCapabilities:
-      browserName: "firefox"
-      version: "47.0"
+      browserName: "internet explorer"
+      version: "11.0"
       platform: "Windows 10"
