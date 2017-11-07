@@ -204,10 +204,14 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * It stores the string of the `value` property in the selected item.
-             * It provides the value for iron-form.
+             * It stores the the `value` property of the selected item, providing the
+             * value for iron-form.
              * When there’s an item selected, it's the value of that item, otherwise
              * it's an empty string.
+             * On change or initialisation, the component finds the item which matches the
+             * value and displays it.
+             * If no value is provided to the component, it selects the first item without
+             * value or empty value.
              */
             value: {
               type: String,
@@ -412,7 +416,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _valueChanged(value, items) {
           if (items) {
             this._menuElement.selected = items.reduce((prev, item, idx) => {
-              return item.value == value ? idx : prev;
+              return prev === undefined && item.value === value ? idx : prev;
             }, undefined);
             if (!this._selectedChanging) {
               this._valueChanging = true;
