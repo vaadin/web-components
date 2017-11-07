@@ -10,18 +10,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-notification-overlay-default-theme" theme-for="vaadin-notification-overlay">
   <template>
     <style>
-      :host {
-        align-items: flex-start;
-        justify-content: flex-end;
+      [part="backdrop"] {
+        display: none !important;
       }
 
       [part="overlay"] {
-        background: transparent;
+        background: transparent !important;
         box-shadow: none;
-      }
-
-      [part="content"] {
-        padding: 5px;
       }
     </style>
   </template>
@@ -31,12 +26,15 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        align-items: flex-start;
-        justify-content: flex-end;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        padding: 5px;
-        margin: 10px;
-        background: #fff;
+        padding: 12px 16px;
+        min-width: 18em;
+        max-width: 36em;
+        font-size: 12px;
+        font-weight: 500;
+        background: lightgrey;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+        margin: 5px 0;
+        max-height: 15em;
       }
     </style>
   </template>
@@ -47,6 +45,9 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
+        box-sizing: border-box;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
     </style>
     <slot></slot>
@@ -61,11 +62,92 @@ This program is available under Apache License Version 2.0, available at https:/
       aria-live="polite">
       <template id="vaadin-notification-overlay-template">
         <style media="screen">
-          .region-a {
-            background: red;
+
+          .notifications {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px;
+            pointer-events: none;
           }
+
+          div.start,
+          div.center,
+          div.end {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+          }
+
+          .notifications > div.start {
+            /* Alternatively, append to DOM in reverse order */
+            flex-direction: column-reverse;
+          }
+
+          div.start,
+          div.end {
+            flex: auto;
+            flex-shrink: 1;
+            flex-basis: 0;
+          }
+
+          vaadin-notification-card[start] {
+            align-self: flex-start;
+            order: 3;
+          }
+
+          vaadin-notification-card[end] {
+            align-self: flex-end;
+            order: 2;
+          }
+
+          vaadin-notification-card[center] {
+            align-self: center;
+            order: 1;
+          }
+
+          vaadin-notification-card[stretch] {
+            order: 4;
+            max-width: 100vw;
+          }
+
         </style>
-        <div class="region-a">
+        <div class="notifications">
+          <div class="start">
+            <vaadin-notification-card stretch>1</vaadin-notification-card>
+            <vaadin-notification-card start>1</vaadin-notification-card>
+            <vaadin-notification-card end>1</vaadin-notification-card>
+            <vaadin-notification-card start>2</vaadin-notification-card>
+            <vaadin-notification-card center>1</vaadin-notification-card>
+            <vaadin-notification-card stretch>2</vaadin-notification-card>
+            <vaadin-notification-card center>2</vaadin-notification-card>
+            <vaadin-notification-card end>2</vaadin-notification-card>
+          </div>
+
+          <div class="center">
+            <vaadin-notification-card center>1</vaadin-notification-card>
+            <vaadin-notification-card center>2</vaadin-notification-card>
+          </div>
+
+          <div class="end">
+            <vaadin-notification-card end>1</vaadin-notification-card>
+            <vaadin-notification-card stretch>1</vaadin-notification-card>
+            <vaadin-notification-card start>1</vaadin-notification-card>
+            <vaadin-notification-card center>1</vaadin-notification-card>
+            <vaadin-notification-card start>2</vaadin-notification-card>
+            <vaadin-notification-card center>2</vaadin-notification-card>
+            <vaadin-notification-card stretch>2</vaadin-notification-card>
+            <vaadin-notification-card end>2</vaadin-notification-card>
+          </div>
         </div>
       </template>
     </vaadin-notification-overlay>
@@ -160,7 +242,7 @@ This program is available under Apache License Version 2.0, available at https:/
         get _overlay() {
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = this.$['vaadin-notification-overlay'];
-            this._overlay._regionA = this._overlay.root.querySelector('.region-a')
+            this._overlay._regionA = this._overlay.root.querySelector('.center > [center]')
           }
           return NotificationElement._overlay;
         }
