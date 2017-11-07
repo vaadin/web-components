@@ -22,21 +22,74 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
+<dom-module id="vaadin-notification-mat-default-theme" theme-for="vaadin-notification-mat">
+  <template>
+    <style>
+      :host {
+        justify-content: space-between;
+        padding: 8px;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-notification-card-default-theme" theme-for="vaadin-notification-card">
   <template>
     <style>
       :host {
-        padding: 12px 16px;
+        padding: 8px;
         min-width: 18em;
         max-width: 36em;
         font-size: 12px;
-        font-weight: 500;
-        background: lightgrey;
+        background: #fff;
         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
         margin: 5px 0;
         max-height: 15em;
       }
     </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-notification-mat">
+  <template>
+    <style>
+      :host {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        box-sizing: border-box;
+        overflow: auto;
+
+        display: flex;
+        flex-direction: column;
+        pointer-events: none;
+      }
+
+      div[part="top"],
+      div[part="center"],
+      div[part="bottom"] {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+      }
+
+      div[part="top"] {
+        /* Alternatively, append to DOM in reverse order */
+        flex-direction: column-reverse;
+      }
+
+      div[part="top"],
+      div[part="bottom"] {
+        flex: auto;
+        flex-shrink: 1;
+        flex-basis: 0;
+      }
+    </style>
+    <div part="top"></div>
+    <div part="center"></div>
+    <div part="bottom"></div>
   </template>
 </dom-module>
 
@@ -49,6 +102,27 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
+
+      :host([start]) {
+        align-self: flex-start;
+        order: 3;
+      }
+
+      :host([end]) {
+        align-self: flex-end;
+        order: 2;
+      }
+
+      :host([center]) {
+        align-self: center;
+        order: 1;
+      }
+
+      :host([stretch]) {
+        order: 4;
+        max-width: 100vw;
+      }
+
     </style>
     <slot></slot>
   </template>
@@ -56,101 +130,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-notification">
   <template>
+    <style>
+      :host > * {
+        display: none;
+      }
+    </style>
     <vaadin-notification-overlay id="vaadin-notification-overlay"
       modeless
       role="alert"
       aria-live="polite">
       <template id="vaadin-notification-overlay-template">
-        <style media="screen">
-
-          .notifications {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            box-sizing: border-box;
-            overflow: auto;
-            -webkit-overflow-scrolling: touch;
-
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 8px;
-            pointer-events: none;
-          }
-
-          div.start,
-          div.center,
-          div.end {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-          }
-
-          .notifications > div.start {
-            /* Alternatively, append to DOM in reverse order */
-            flex-direction: column-reverse;
-          }
-
-          div.start,
-          div.end {
-            flex: auto;
-            flex-shrink: 1;
-            flex-basis: 0;
-          }
-
-          vaadin-notification-card[start] {
-            align-self: flex-start;
-            order: 3;
-          }
-
-          vaadin-notification-card[end] {
-            align-self: flex-end;
-            order: 2;
-          }
-
-          vaadin-notification-card[center] {
-            align-self: center;
-            order: 1;
-          }
-
-          vaadin-notification-card[stretch] {
-            order: 4;
-            max-width: 100vw;
-          }
-
-        </style>
-        <div class="notifications">
-          <div class="start">
-            <vaadin-notification-card stretch>1</vaadin-notification-card>
-            <vaadin-notification-card start>1</vaadin-notification-card>
-            <vaadin-notification-card end>1</vaadin-notification-card>
-            <vaadin-notification-card start>2</vaadin-notification-card>
-            <vaadin-notification-card center>1</vaadin-notification-card>
-            <vaadin-notification-card stretch>2</vaadin-notification-card>
-            <vaadin-notification-card center>2</vaadin-notification-card>
-            <vaadin-notification-card end>2</vaadin-notification-card>
-          </div>
-
-          <div class="center">
-            <vaadin-notification-card center>1</vaadin-notification-card>
-            <vaadin-notification-card center>2</vaadin-notification-card>
-          </div>
-
-          <div class="end">
-            <vaadin-notification-card end>1</vaadin-notification-card>
-            <vaadin-notification-card stretch>1</vaadin-notification-card>
-            <vaadin-notification-card start>1</vaadin-notification-card>
-            <vaadin-notification-card center>1</vaadin-notification-card>
-            <vaadin-notification-card start>2</vaadin-notification-card>
-            <vaadin-notification-card center>2</vaadin-notification-card>
-            <vaadin-notification-card stretch>2</vaadin-notification-card>
-            <vaadin-notification-card end>2</vaadin-notification-card>
-          </div>
-        </div>
+        <vaadin-notification-mat></vaadin-notification-mat>
       </template>
     </vaadin-notification-overlay>
+    <vaadin-notification-card id="vaadin-notification-card">
+    </vaadin-notification-card>
   </template>
 
   <script>
@@ -168,6 +162,39 @@ This program is available under Apache License Version 2.0, available at https:/
       class VaadinNotificationOverlay extends Vaadin.OverlayElement {
         static get is() {
           return 'vaadin-notification-overlay';
+        }
+      }
+
+      /**
+       * The surface element for notification regions
+       *
+       * ### Styling
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-notification-overlay>` parts.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       */
+      class VaadinNotificationMat extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-notification-mat';
+        }
+
+        get top() {
+          return this._top || (this._top = this.shadowRoot.querySelector('[part="top"]'));
+        }
+
+        get center() {
+          return this._center || (this._center = this.shadowRoot.querySelector('[part="center"]'));
+        }
+
+        get bottom() {
+          return this._bottom || (this._bottom = this.shadowRoot.querySelector('[part="bottom"]'));
+        }
+
+        hasNotifications() {
+          return [this.top, this.center, this.bottom].reduce((prev, region) => region.hasChildNodes() || prev, false);
         }
       }
 
@@ -227,6 +254,24 @@ This program is available under Apache License Version 2.0, available at https:/
               value: false,
               notify: true,
               observer: '_openedChanged'
+            },
+
+            /**
+             * Vertical alignment of the notification in the viewport
+             * Valid values are `top|center|bottom`
+             */
+            verticalAlign: {
+              type: String,
+              value: 'bottom',
+            },
+
+            /**
+             * Horizontal alignment of the notification in the viewport
+             * Valid values are `start|center|end|stretch`
+             */
+            horizontalAlign: {
+              type: String,
+              value: 'start'
             }
           };
         }
@@ -242,13 +287,13 @@ This program is available under Apache License Version 2.0, available at https:/
         get _overlay() {
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = this.$['vaadin-notification-overlay'];
-            this._overlay._regionA = this._overlay.root.querySelector('.center > [center]')
+            this._overlay._mat = this._overlay.root.querySelector('vaadin-notification-mat');
           }
           return NotificationElement._overlay;
         }
 
-        get _regionA() {
-          return this._overlay._regionA;
+        get _mat() {
+          return this._overlay._mat;
         }
 
         _openedChanged(opened) {
@@ -263,18 +308,28 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
               });
               this._instance = new Templatizer({});
-              this._content = document.createElement('vaadin-notification-card');
-              this._content.appendChild(this._instance.root);
-              this._content.setAttribute('aria-label', this._instance.root.textContent.trim());
+              this._card = this.$['vaadin-notification-card'];
+              this._card.appendChild(this._instance.root);
+              this._card.setAttribute('aria-label', this._instance.root.textContent.trim());
             }
 
-            Polymer.RenderStatus.beforeNextRender(this._overlay, () => this._regionA.appendChild(this._content));
-
+            this._appendNotificationCard();
             this._addAutocloseTimeout(this.duration);
-          } else if (this._content) {
-            this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
-            this._regionA.removeChild(this._content);
+          } else if (this._card) {
+            this._removeNotificationCard();
           }
+        }
+
+        _appendNotificationCard() {
+          ['start', 'center', 'end', 'stretch'].forEach(attr => this._card.removeAttribute(attr));
+          this._card.setAttribute(this.horizontalAlign, '');
+          this._mat[this.verticalAlign].appendChild(this._card);
+        }
+
+        _removeNotificationCard() {
+          this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+          this._card.parentNode && this._card.parentNode.removeChild(this._card);
+          this._overlay.opened = this._mat.hasNotifications();
         }
 
         _durationChanged(duration, oldVal) {
@@ -285,12 +340,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _addAutocloseTimeout(duration) {
           clearTimeout(this._durationTimeoutId);
-
           if (duration > 0) {
-            this._durationTimeoutId = setTimeout(() => {
-              this.close();
-              !this._overlay.$.content.childElementCount && this._overlay.close();
-            }, duration);
+            this._durationTimeoutId = setTimeout(() => this.close(), duration);
           } else {
             delete this._durationTimeoutId;
           }
@@ -298,6 +349,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
+      customElements.define(VaadinNotificationMat.is, VaadinNotificationMat);
       customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
       customElements.define(NotificationElement.is, NotificationElement);
 

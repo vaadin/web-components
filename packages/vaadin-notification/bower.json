@@ -35,6 +35,7 @@
     "web-component-tester": "^6.1.5",
     "vaadin-button": "^1.0.0",
     "vaadin-checkbox": "^1.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
+    "vaadin-radio-button": "^1.0.0-alpha7"
   }
 }
