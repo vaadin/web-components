@@ -25,6 +25,7 @@
 ```html
 <vaadin-progress-bar></vaadin-progress-bar>
 <vaadin-progress-bar value="0.3"></vaadin-progress-bar>
+<vaadin-progress-bar indeterminate></vaadin-progress-bar>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.png" width="780" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/-/element/vaadin-progress-bar)
