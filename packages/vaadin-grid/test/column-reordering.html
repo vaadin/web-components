@@ -398,6 +398,12 @@
           expect(cell.hasAttribute('last-frozen')).to.be.true;
         });
 
+        it('should not start reordering on frozen column resize handle move', () => {
+          const handle = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
+          const cell = getCellByCellContent(headerContent[1]);
+          dragOver(handle, cell);
+          expect(grid.hasAttribute('reordering')).to.be.false;
+        });
       });
 
     });
