@@ -5,59 +5,78 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/debounce.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <style>
   @font-face {
-    font-family: "vaadin-grid-hierarchy-toggle-icons";
-    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASkAAsAAAAABFgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIEaGNtYXAAAAFoAAAAVAAAAFQYmtABZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAJAAAACQjc80tmhlYWQAAAJUAAAANgAAADYOnDBhaGhlYQAAAowAAAAkAAAAJAcCA8hobXR4AAACsAAAABwAAAAcEgADAGxvY2EAAALMAAAAEAAAABAAYgCIbWF4cAAAAtwAAAAgAAAAIAAJAAVuYW1lAAAC/AAAAYYAAAGGmUoJ+3Bvc3QAAASEAAAAIAAAACAAAwAAAAMDgAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA574DwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOe+//3//wAAAAAAIOe8//3//wAB/+MYSAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQDAAQADQALAAAIAABMhAcACgP7AAsD+QAAAAAEBAACAAsADAAACAAABEQECwP5AAwD9gAFAAAABAUAAgAMAAwAAAgAAJREBAUABwIACgP7AAAAAAQAAAAAAAFCRiO9fDzz1AAsEAAAAAADWH3YyAAAAANYfdjIAAAAAA0ADAAAAAAgAAgAAAAAAAAABAAADwP/AAAAEAAAAAAADQAABAAAAAAAAAAAAAAAAAAAABwQAAAAAAAAAAAAAAAIAAAAEAADABAABAAQAAUAAAAAAAAoAFAAeACwAOgBIAAEAAAAHAAMAAQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAOAK4AAQAAAAAAAQAHAAAAAQAAAAAAAgAHAGAAAQAAAAAAAwAHADYAAQAAAAAABAAHAHUAAQAAAAAABQALABUAAQAAAAAABgAHAEsAAQAAAAAACgAaAIoAAwABBAkAAQAOAAcAAwABBAkAAgAOAGcAAwABBAkAAwAOAD0AAwABBAkABAAOAHwAAwABBAkABQAWACAAAwABBAkABgAOAFIAAwABBAkACgA0AKRpY29tb29uAGkAYwBvAG0AbwBvAG5WZXJzaW9uIDEuMABWAGUAcgBzAGkAbwBuACAAMQAuADBpY29tb29uAGkAYwBvAG0AbwBvAG5pY29tb29uAGkAYwBvAG0AbwBvAG5SZWd1bGFyAFIAZQBnAHUAbABhAHJpY29tb29uAGkAYwBvAG0AbwBvAG5Gb250IGdlbmVyYXRlZCBieSBJY29Nb29uLgBGAG8AbgB0ACAAZwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAC4AAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) format('woff');
+    font-family: "vaadin-grid-hierarchy-icons";
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAQoAA0AAAAABvgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAEDAAAABoAAAAcgGQ0kEdERUYAAAPwAAAAHAAAAB4AJwAOT1MvMgAAAZQAAAA/AAAAYA8TBIJjbWFwAAAB8AAAAFUAAAFeGJvXWmdhc3AAAAPoAAAACAAAAAgAAAAQZ2x5ZgAAAlwAAABLAAAAhIrPOhFoZWFkAAABMAAAACsAAAA2Dqpie2hoZWEAAAFcAAAAHQAAACQHAgPHaG10eAAAAdQAAAAZAAAAHAxVAgBsb2NhAAACSAAAABIAAAASAIAAVG1heHAAAAF8AAAAGAAAACAACgAFbmFtZQAAAqgAAAEGAAACi/tBDcRwb3N0AAADsAAAADYAAABZQ7Ajh3icY2BkYGAA4va5i9/F89t8ZeBmYQCBa2r89sg0swMziOJgYAJRAAAxB0oAeJxjYGRgYD7w/wADAwsDCDA7MDAyoAI2AFEEAtIAAAB4nGNgZGBg4GBgZgDRDAxMDGgAAAGbABB4nGNgZp7JOIGBlYGBaSbTGQYGhn4IzfiawZiRkwEVMAqgCTA4MDA+38d84P8BBgdmIAapQZJVYGAEAGc/C54AeJxjYYAAxlAIzQTELAwMBxgZGB0ACy0BYwAAAHicY2BgYGaAYBkGRgYQiADyGMF8FgYbIM3FwMHABISMDArP9/3/+/8/WJXC8z0Q9v8nEp5gHVwMMMAIMo+RDYiZoQJMQIKJARUA7WBhGN4AACFKDtoAAAAAAAAAAAgACAAQABgAJgA0AEIAAHichYvBEYBADAKBVHBjBT4swl9KS2k05o0XHd/yW1hAfBFwCv9sIlJu3nZaNS3PXAaXXHI8Lge7DlzF7C1RgXc7xkK6+gvcD2URmQB4nLWOQWrDMBRER4mT0gS6Kl00Gx2gNgmEkBMUssgmlO4VS8iCIBXbCfgOPUbXPUPpqbrs2PwrWEboaTwzXwAe8A2FfimssBee4A5WeEr9Szgj/wnPsFQvwnOs1IfwAs/qlymV3VPZDQ09TzjrTXhK/SKckX+EZ3hSj8Jz7NReeIGt+sQNhp9FQEQOj5pkSRVPx5vhLnnrqAVSoq8BbsbYEHNfB5tXwdWmLqsuD2WK/Hli0uPK1/RpnJy/XgxhjFljdL4PyYb+3q2xQYE1ZVc3IUW9KdbjzH0dXC0nenZE6Wl5Wmpndmkchq4jd+8tGEqx1d5FdrXO6nOnD2U6phQL/AOVkHyhAAB4nGNgYsAPOBgYGJkYmBiZGZgZWRhZGdnY0nMqCzIM2UvzMg0MDMC0q7mTM5R2gdKuAO+pC5cAAAABAAH//wAPeJxjYGRgYOABYjEgZmJgBEJ2IGYB8xgAA+sANnicY2BgYGQAgisSYoIg+poavz2MBgAn2AOpAAA=) format('woff');
     font-weight: normal;
     font-style: normal;
   }
 </style>
 
-<dom-module id="vaadin-grid-hierarchy-toggle-default-theme">
+<dom-module id="vaadin-grid-hierarchy-toggle">
   <template>
     <style>
+      :host {
+        display: inline-flex;
+        align-items: baseline;
+
+        /* CSS API for :host */
+        --vaadin-grid-hierarchy-toggle-level-offset: 1em;
+
+        /*
+          ShadyCSS seems to polyfill :dir(rtl) only for :host, thus using
+          a host custom CSS property for ltr/rtl toggle icon choice.
+         */
+        ---collapsed-icon: "\e7be\00a0";
+      }
+
+      :host(:dir(rtl)) {
+        ---collapsed-icon: "\e7bd\00a0";
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host(:not([icon-hidden])) {
+        cursor: pointer;
+      }
+
+      #level-spacer,
+      [part="toggle"] {
+        flex: none;
+      }
+
+      #level-spacer {
+        display: inline-block;
+        width: calc(var(---level, '0') * var(--vaadin-grid-hierarchy-toggle-level-offset));
+      }
+
       [part="toggle"]::before {
-        font-family: "vaadin-grid-hierarchy-toggle-icons";
+        font-family: "vaadin-grid-hierarchy-icons";
+        line-height: 1em; /* make icon font metrics not affect baseline */
       }
 
       :host(:not([expanded])) [part="toggle"]::before {
-        content: "\e7be";
-      }
-
-      :host(:not([expanded])) [part="toggle"]:dir(rtl)::before {
-        content: "\e7bd";
+        content: var(---collapsed-icon);
       }
 
       :host([expanded]) [part="toggle"]::before {
-        content: "\e7bc";
+        content: "\e7bc\00a0"; /* icon glyph + single non-breaking space */
       }
 
       :host([icon-hidden]) [part="toggle"] {
         visibility: hidden;
       }
     </style>
-  </template>
-</dom-module>
 
-<dom-module id="vaadin-grid-hierarchy-toggle">
-  <template>
-    <style>
-      :host(:not([icon-hidden])) {
-        cursor: pointer;
-      }
-
-      [part="spacer"] {
-        display: inline-block;
-        width: var(--level, '0em');
-      }
-    </style>
-
-    <!-- Please keep formatting and spacing. Do not insert spaces. Thanks. -->
-    <span part="spacer"></span><span part="toggle"></span>
-    <span part="content"><slot></slot></span>
+    <span id="level-spacer"></span>
+    <span part="toggle"></span>
+    <slot></slot>
   </template>
 </dom-module>
 
@@ -81,6 +100,28 @@ This program is available under Apache License Version 2.0, available at https:/
      *   </template>
      * </vaadin-grid-column>
      * ```
+     *
+     * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ---|---
+     * `toggle` | The hierarchy toggle icon
+     *
+     * The following state attributes are available for styling:
+     *
+     * Attribute    | Description | Part name
+     * ---|---|---
+     * `expanded` | When present, the toggle is expanded | :host
+     * `icon-hidden` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
+     *
+     * The following custom CSS properties are available on
+     * the `<vaadin-grid-hierarchy-toggle>` element:
+     *
+     * Custom CSS property | Description | Default
+     * ---|---|---
+     * `--vaadin-grid-hierarchy-toggle-level-offset` | Visual offset step for each hierarchy sublevel | `1em`
      *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
@@ -139,9 +180,15 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _levelChanged(level) {
-        const value = Number(level) + 'em';
-        this.updateStyles({'--level': value});
-        this.style['--level'] = value;
+        const value = Number(level).toString();
+        this.style['---level'] = value;
+        // Async is to make DOM updates applied before evaluating the style
+        // update, requered for polyfilled RTL support in MSIE and Edge.
+        this._debouncerUpdateLevel = Polymer.Debouncer.debounce(
+          this._debouncerUpdateLevel,
+          Polymer.Async.microTask,
+          () => this.updateStyles({'---level': value})
+        );
       }
     }
 
