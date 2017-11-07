@@ -15,6 +15,11 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-end;
       }
 
+      [part="overlay"] {
+        background: transparent;
+        box-shadow: none;
+      }
+
       [part="content"] {
         padding: 5px;
       }
@@ -22,11 +27,36 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
+<dom-module id="vaadin-notification-card-default-theme" theme-for="vaadin-notification-card">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-end;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        padding: 5px;
+        margin: 10px;
+        background: #fff;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-notification-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <slot></slot>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-notification">
   <template>
     <vaadin-notification-overlay id="vaadin-notification-overlay"
       modeless
-      opened="{{opened}}"
       role="alert"
       aria-live="polite">
     </vaadin-notification-overlay>
@@ -50,7 +80,25 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * The container of the notification
+       *
+       * ### Styling
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-notification-overlay>` parts.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       */
+      class VaadinNotificationCard extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-notification-card';
+        }
+      }
+
       customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
+      customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
 
       /**
        * `<vaadin-notification>` is a Polymer 2 element providing accessible and customizable notifications (toasts).
@@ -103,8 +151,16 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
         }
 
+        get _overlay() {
+          if (!NotificationElement._overlay) {
+            NotificationElement._overlay = this.$['vaadin-notification-overlay'];
+          }
+          return NotificationElement._overlay;
+        }
+
         _openedChanged(opened) {
           if (opened) {
+            this._overlay.opened = true;
             if (!this._instance) {
               const template = this.querySelector('template');
               const Templatizer = Polymer.Templatize.templatize(template, this, {
@@ -114,34 +170,33 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
               });
               this._instance = new Templatizer({});
-
-              const overlay = this.$['vaadin-notification-overlay'];
-
-              // a11y
-              overlay.setAttribute('aria-label', this._instance.root.textContent.trim());
-
-              overlay.content = this._instance.root;
+              this._content = document.createElement('vaadin-notification-card');
+              this._content.appendChild(this._instance.root);
+              this._content.setAttribute('aria-label', this._instance.root.textContent.trim());
             }
 
-            this._addAutocloseTimeout(this.duration);
+            this._overlay.$.content.appendChild(this._content);
 
-          } else {
+            this._addAutocloseTimeout(this.duration);
+          } else if (this._content) {
             this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+            this._overlay.$.content.removeChild(this._content);
           }
         }
 
         _durationChanged(duration, oldVal) {
-          if (oldVal === undefined) { // Initialization, do nothing
-            return;
+          if (oldVal !== undefined) { // Initialization, do nothing
+            this._addAutocloseTimeout(duration);
           }
-
-          this._addAutocloseTimeout(duration);
         }
 
         _addAutocloseTimeout(duration) {
+          clearTimeout(this._durationTimeoutId);
+
           if (duration > 0) {
             this._durationTimeoutId = setTimeout(() => {
               this.close();
+              !this._overlay.$.content.childElementCount && this._overlay.close();
             }, duration);
           } else {
             delete this._durationTimeoutId;
