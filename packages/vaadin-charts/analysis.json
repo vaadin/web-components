@@ -8,15 +8,198 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 408,
+          "line": 473,
           "column": 6
         },
         "end": {
-          "line": 408,
+          "line": 473,
           "column": 42
         }
       },
       "elements": [
+        {
+          "description": "`<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.\n\n### Basic use\n\nTo use `<vaadin-chart-series>`, simply add it inside a `<vaadin-chart>` element:\n\n```\n <vaadin-chart>\n   <vaadin-chart-series></vaadin-chart-series>\n </vaadin-chart>\n```\n\n`<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:\n\n```\n <vaadin-chart-series values=\"[10,20,30,40,50]\"></vaadin-chart-series>\n```\n\nwhich will add a new line series, where each value will be a data point. \nLook for the Properties session to see all available attributes.\n\n### Dynamically adding and removing series\n\nYou are also able to add and remove series by using DOM API.\n\nTo create a new series, simply call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const newSeries = document.createElement('vaadin-chart-series');\n newSeries.values = [10,20,30,40,50];\n chart.appendChild(newSeries);\n```\n\nIn order to remove it, you should use the series to be removed as a reference for the `#removeChild()` call:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const seriesToBeRemoved = \\* a <vaadin-chart-series> reference to remove*\\\n chart.removeChild(seriesToBeRemoved);\n```\n\n(There's an issue with `#remove()` method on Firefox, so we advice to remove the element from its parent)",
+          "summary": "",
+          "path": "vaadin-chart-series.html",
+          "properties": [
+            {
+              "name": "values",
+              "type": "Array",
+              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) \nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 97,
+                  "column": 12
+                },
+                "end": {
+                  "line": 100,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "[]"
+            },
+            {
+              "name": "options",
+              "type": "Object",
+              "description": "Object with the configured options defined and used to create a series.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 107,
+                  "column": 12
+                },
+                "end": {
+                  "line": 109,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "disconnectedCallback",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 120,
+                  "column": 8
+                },
+                "end": {
+                  "line": 125,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "setSeries",
+              "description": "Method to attach a series object of type `Highcharts.Series`.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 131,
+                  "column": 8
+                },
+                "end": {
+                  "line": 136,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "series",
+                  "description": "Object of type `Highcharts.Series`"
+                }
+              ]
+            },
+            {
+              "name": "__valuesObserver",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 138,
+                  "column": 8
+                },
+                "end": {
+                  "line": 142,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__hasSeriesConfig",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 144,
+                  "column": 8
+                },
+                "end": {
+                  "line": 146,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            }
+          ],
+          "staticMethods": [],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 6
+            },
+            "end": {
+              "line": 148,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.VaadinChartSeries",
+          "attributes": [
+            {
+              "name": "values",
+              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) \nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
+              "sourceRange": {
+                "start": {
+                  "line": 97,
+                  "column": 12
+                },
+                "end": {
+                  "line": 100,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "Array"
+            },
+            {
+              "name": "options",
+              "description": "Object with the configured options defined and used to create a series.",
+              "sourceRange": {
+                "start": {
+                  "line": 107,
+                  "column": 12
+                },
+                "end": {
+                  "line": 109,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "Object"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [],
+          "tagname": "vaadin-chart-series"
+        },
         {
           "description": "`<vaadin-chart>` is a Polymer 2 element for creating high quality charts.\n\n### Quick Start\n\n1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-2-application`\n```\n1. Install Vaadin Charts\n```\nbower install --save vaadin-charts#6.0-preview\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag\n```html\n<link rel=\"import\" href=\"../../bower_components/vaadin-charts/vaadin-chart.html\">\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.html` add the following snippet before the `</template>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with:\n```\npolymer serve --open\n```\nCongratulations! You have your first Vaadin Chart setup.\n\n### Basic use\n\nNow that we covered the basic steps to create an empty chart, let us show how you can configure it.\n\nThere are two ways of configuring your `<vaadin-chart>` element: **JS API** and **JSON API**.\nNote that you can make use of both APIs in your element.\n\n#### Configuring your chart using JS API\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data\n```\ninitChartWithJSApi() {\n    const configuration = this.$.mychart.configuration;\n    configuration.setTitle({ text: 'The chart title' });\n    // By default there is one x axis, it is referenced by configuration.xAxis[0].\n    configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);\n    configuration.addSeries({\n      type: 'column',\n      data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\n\n#### Configuring your chart using JS JSON API\n\nJS JSON API is a simple alternative to the JS API.\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data\n```\ninitChartWithJSJSONApi() {\n    this.$.mychart.update({\n      title: {\n        text: 'The chart title'\n      },\n      subtitle: {\n        text: 'Subtitle'\n      },\n      xAxis: {\n        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']\n      },\n      series: [{\n        type: 'column',\n        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n      }]\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSJSONApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\n### Install License Key\nAfter one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key.\n\nYou can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).\n\nIf the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again",
           "summary": "",
@@ -29,11 +212,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 231,
+                  "line": 236,
                   "column": 10
                 },
                 "end": {
-                  "line": 231,
+                  "line": 236,
                   "column": 29
                 }
               },
@@ -50,11 +233,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 184,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 184,
                   "column": 34
                 }
               },
@@ -69,11 +252,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 189,
                   "column": 12
                 },
                 "end": {
-                  "line": 188,
+                  "line": 193,
                   "column": 13
                 }
               },
@@ -90,11 +273,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 197,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -112,11 +295,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 235,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 239,
+                  "line": 245,
                   "column": 9
                 }
               },
@@ -129,11 +312,108 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 254,
+                  "line": 278,
                   "column": 8
                 },
                 "end": {
-                  "line": 260,
+                  "line": 284,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__addChildObserver",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 286,
+                  "column": 8
+                },
+                "end": {
+                  "line": 292,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__filterSeriesNodes",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 294,
+                  "column": 8
+                },
+                "end": {
+                  "line": 296,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node"
+                }
+              ]
+            },
+            {
+              "name": "__addSeries",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 298,
+                  "column": 8
+                },
+                "end": {
+                  "line": 308,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "series"
+                }
+              ]
+            },
+            {
+              "name": "__isSeriesEmpty",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 310,
+                  "column": 8
+                },
+                "end": {
+                  "line": 312,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "series"
+                }
+              ]
+            },
+            {
+              "name": "disconnectedCalllback",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 315,
+                  "column": 8
+                },
+                "end": {
+                  "line": 318,
                   "column": 9
                 }
               },
@@ -146,11 +426,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 294,
+                  "line": 352,
                   "column": 8
                 },
                 "end": {
-                  "line": 314,
+                  "line": 375,
                   "column": 9
                 }
               },
@@ -174,11 +454,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 316,
+                  "line": 377,
                   "column": 8
                 },
                 "end": {
-                  "line": 332,
+                  "line": 393,
                   "column": 9
                 }
               },
@@ -195,11 +475,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 334,
+                  "line": 395,
                   "column": 8
                 },
                 "end": {
-                  "line": 339,
+                  "line": 400,
                   "column": 9
                 }
               },
@@ -216,11 +496,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 402,
                   "column": 8
                 },
                 "end": {
-                  "line": 347,
+                  "line": 408,
                   "column": 9
                 }
               },
@@ -237,11 +517,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 349,
+                  "line": 410,
                   "column": 8
                 },
                 "end": {
-                  "line": 362,
+                  "line": 423,
                   "column": 9
                 }
               },
@@ -261,11 +541,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 364,
+                  "line": 425,
                   "column": 8
                 },
                 "end": {
-                  "line": 380,
+                  "line": 441,
                   "column": 9
                 }
               },
@@ -282,11 +562,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 382,
+                  "line": 443,
                   "column": 8
                 },
                 "end": {
-                  "line": 388,
+                  "line": 451,
                   "column": 9
                 }
               },
@@ -303,11 +583,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 390,
+                  "line": 453,
                   "column": 8
                 },
                 "end": {
-                  "line": 400,
+                  "line": 465,
                   "column": 9
                 }
               },
@@ -329,11 +609,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 171,
+              "line": 176,
               "column": 6
             },
             "end": {
-              "line": 401,
+              "line": 466,
               "column": 7
             }
           },
@@ -346,11 +626,11 @@
               "description": "Represents the title of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 189,
                   "column": 12
                 },
                 "end": {
-                  "line": 188,
+                  "line": 193,
                   "column": 13
                 }
               },
@@ -362,11 +642,11 @@
               "description": "Represents the subtitle of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 197,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -379,7 +659,23 @@
             "cssVariables": [],
             "selectors": []
           },
-          "slots": [],
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "file": "vaadin-chart.html",
+                "start": {
+                  "line": 37,
+                  "column": 4
+                },
+                "end": {
+                  "line": 37,
+                  "column": 27
+                }
+              }
+            }
+          ],
           "tagname": "vaadin-chart"
         }
       ]

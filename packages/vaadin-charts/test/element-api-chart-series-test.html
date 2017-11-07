@@ -1,0 +1,124 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-chart tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-chart.html">
+</head>
+
+<body>
+  <dom-module id="chart-series-api-demo">
+    <template>
+      <vaadin-chart id="mychart">
+        <vaadin-chart-series values="{{values}}"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+
+    <script>
+      HTMLImports.whenReady(() => {
+        class ChartSeriesApiDemoElement extends Polymer.Element {
+          static get is() {
+            return 'chart-series-api-demo';
+          }
+
+          static get properties() {
+            return {
+              values: {
+                type: Array,
+                value: [10, 20, 10, 30, 50]
+              }
+            };
+          }
+
+          changeValues() {
+            this.values = [10, 30, 50, 10, 20];
+          }
+
+        }
+
+        customElements.define(ChartSeriesApiDemoElement.is, ChartSeriesApiDemoElement);
+      });
+    </script>
+  </dom-module>
+  <chart-series-api-demo></chart-series-api-demo>
+ 
+  <script>
+    describe('High-level Charts Series API', function() {
+      let chart;
+      let chartContainer;
+      let element;
+
+      before(function() {
+        element = document.querySelector('chart-series-api-demo');
+        chart = element.$.mychart;
+        chartContainer = chart.$.chart;
+      });
+
+      it('should be defined', function(done) {
+        setTimeout(function() {
+          expect(chart.constructor.is).to.be.equal(chart.localName);
+          done();
+        });
+      });
+
+      it('should have one series', function(done) {
+        setTimeout(function() {
+          expect(chart.configuration.series.length).to.be.equal(1);
+          done();
+        });
+      });
+
+      it('should have one line series with 5 points', function(done) {
+        setTimeout(function() {
+          const series = chartContainer.querySelectorAll('.highcharts-series');
+          expect(series).to.have.lengthOf(1);
+
+          const firstSeries = series[0];
+          // IE11 doesn't support SVGElement.classList 
+          expect(firstSeries.getAttribute('class')).to.include('highcharts-line-series');
+          expect(chart.configuration.series[0].data).to.have.lengthOf(element.values.length);
+
+          done();
+        });
+      });
+
+      it('should have same values as passed', function(done) {
+        setTimeout(function() {
+          const values = chart.configuration.series[0].data.map(data => data.y);
+          expect(values).to.have.lengthOf(element.values.length);
+          expect(values).to.have.members(element.values);
+
+          done();
+        });
+      });
+
+      it('should update values on change', function(done) {
+        setTimeout(function() {
+          element.changeValues();
+          const changedValues = chart.configuration.series[0].data.map(data => data.y);
+          expect(changedValues).to.have.members(element.values);
+
+          done();
+        });
+      });
+
+      it('should remove series if element is removed from the tree', function(done) {
+        setTimeout(function() {
+          const series = chartContainer.querySelectorAll('.highcharts-series');
+          expect(series).to.have.lengthOf(1);
+
+          const seriesElement = chart.querySelector('vaadin-chart-series');
+          chart.removeChild(seriesElement);
+
+          Polymer.RenderStatus.beforeNextRender(this, () => {
+            const seriesEmpty = chartContainer.querySelectorAll('.highcharts-series');
+            expect(seriesEmpty).to.have.lengthOf(0);
+  
+            done();
+          });
+        });
+      });
+    });
+  </script>
+</body>

@@ -8,8 +8,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
+
 <link rel="import" href="vaadin-charts-default-theme.html">
 
 <script src="../highcharts/js/highstock.js"></script>
@@ -23,6 +25,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/modules/solid-gauge.js"></script>
 <script src="../highcharts/modules/treemap.js"></script>
 
+<link rel="import" href="vaadin-chart-series.html">
+
 <dom-module id="vaadin-chart">
   <template>
     <style include="vaadin-charts-default-theme">
@@ -31,6 +35,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
     <div id="chart"></div>
+    <slot id="slot"></slot>
   </template>
 
   <script>
@@ -235,8 +240,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /** @private */
         connectedCallback() {
           super.connectedCallback();
-          this._configuration = Highcharts.chart(this.$.chart, this._baseConfig);
           this.__addLicenseChecker();
+          this.__addChildObserver();
+          this._configuration = Highcharts.chart(this.$.chart, this.options);
+        }
+
+        get options() {
+          const options = Object.assign({}, this._baseConfig);
+
+          if (this.title) {
+            options.title = {
+              text: this.title
+            };
+          }
+
+          if (this.subtitle) {
+            options.subtitle = {
+              text: this.subtitle
+            };
+          }
+
+          return options;
         }
 
         get configuration() {
@@ -258,6 +282,40 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           licenseChecker.productVersion = '6.0.0';
           licenseChecker.productCaption = 'Vaadin Charts';
           this.shadowRoot.appendChild(licenseChecker);
+        }
+
+        __addChildObserver() {
+          Polymer.RenderStatus.beforeNextRender(this, () => {
+            this._childObserver = new Polymer.FlattenedNodesObserver(this.$.slot, (info) => {
+              this.__addSeries(info.addedNodes.filter(this.__filterSeriesNodes));
+            });
+          });
+        }
+
+        __filterSeriesNodes(node) {
+          return node.nodeType === Node.ELEMENT_NODE && node instanceof Vaadin.VaadinChartSeries;
+        }
+
+        __addSeries(series) {
+          if (this.__isSeriesEmpty(series)) {
+            return;
+          }
+          for (let i = 0, len = series.length; i < len; i++) {
+            const seriesElement = series[i];
+            const seriesAdded = this.configuration.addSeries(seriesElement.options);
+
+            seriesElement.setSeries(seriesAdded);
+          }
+        }
+
+        __isSeriesEmpty(series) {
+          return series === null || series.length === 0;
+        }
+
+        /** @private */
+        disconnectedCalllback() {
+          super.disconnectedCalllback();
+          this._childObserver.disconnect();
         }
 
         /**
@@ -384,23 +442,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateTitle(newValue) {
-          Polymer.RenderStatus.beforeNextRender(this.configuration, () => {
-            if (newValue && newValue.length > 0) {
-              this.configuration.title.update({text: newValue});
-            }
-          });
+          if (!this.configuration) {
+            return;
+          }
+
+          if (newValue && newValue.length > 0) {
+            this.configuration.title.update({text: newValue});
+          }
         }
 
         __updateSubtitle(newValue) {
-          Polymer.RenderStatus.beforeNextRender(this.configuration, () => {
-            if (newValue && newValue.length > 0) {
-              if (!this.configuration.subtitle) {
-                this.configuration.setSubtitle({text: newValue});
-              } else {
-                this.configuration.subtitle.update({text: newValue});
-              }
+          if (!this.configuration) {
+            return;
+          }
+
+          if (newValue && newValue.length > 0) {
+            if (!this.configuration.subtitle) {
+              this.configuration.setSubtitle({text: newValue});
+            } else {
+              this.configuration.subtitle.update({text: newValue});
             }
-          });
+          }
         }
       }
 

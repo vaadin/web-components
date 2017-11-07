@@ -20,7 +20,73 @@
     <h3>Using the high-level Element API</h3>
     <demo-snippet>
       <template>
-        <vaadin-chart title="Custom Title" subtitle="Custom Subtitle"></vaadin-chart>
+        <vaadin-chart title="Custom Title" subtitle="Custom Subtitle">
+          <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
+          <vaadin-chart-series values="[9,2,29,4,35]"></vaadin-chart-series>
+        </vaadin-chart>
+      </template>
+    </demo-snippet>
+
+    <h3>Using the DOM API</h3>
+    <demo-snippet>
+      <template>
+        <wc-api-demo></wc-api-demo>
+        <dom-module id="wc-api-demo">
+          <template>
+            <vaadin-chart id="mychart" title="Custom Title" subtitle="Custom Subtitle">
+              <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
+            </vaadin-chart>
+            <button on-click="_addSeries">Add series</button>
+            <button on-click="_addMultipleSeries">Add multiple series</button>
+            <button on-click="_removeSeries">Remove series</button>
+            <button on-click="_changeSeries">Change first series</button>
+          </template>
+
+          <script>
+            class WCApiDemoElement extends Polymer.Element {
+              static get is() {
+                return 'wc-api-demo';
+              }
+
+              _removeSeries() {
+                const series = this.$.mychart.querySelector('vaadin-chart-series');
+                series && this.$.mychart.removeChild(series);
+              }
+
+              _changeSeries() {
+                const series = this.$.mychart.querySelector('vaadin-chart-series');
+                if (series) {
+                  series.values = this._valuesGenerator;
+                } 
+              }
+
+              _addSeries() {
+                const newSeries = document.createElement('vaadin-chart-series');
+                newSeries.values = this._valuesGenerator;
+                this.$.mychart.appendChild(newSeries);
+              }
+
+              _addMultipleSeries() {
+                const frag = document.createDocumentFragment();
+                const numSeries = Math.floor(Math.random() * 10);
+                for (let i = 0; i < numSeries; i++) {
+                  const newSeries = document.createElement('vaadin-chart-series');
+                  newSeries.values = this._valuesGenerator;
+
+                  frag.appendChild(newSeries);
+                }
+                this.$.mychart.appendChild(frag);
+              }
+
+              get _valuesGenerator() {
+                return [Math.random() * 19, Math.random() * 12, Math.random() * 9, Math.random() * 24, Math.random() * 5];
+              }
+            }
+            addEventListener('WebComponentsReady', () => {
+              customElements.define(WCApiDemoElement.is, WCApiDemoElement);
+            });
+          </script>
+        </dom-module>
       </template>
     </demo-snippet>
   </div>

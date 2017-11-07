@@ -1,0 +1,160 @@
+<!--
+@license
+Vaadin Charts
+Copyright (C) 2015 Vaadin Ltd
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+See the file LICENSE.md distributed with this software for more information about licensing.
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
+-->
+
+<link rel="import" href="../polymer/polymer-element.html">
+
+<dom-module id="vaadin-chart-series">
+  <script>
+    if (!Polymer.Element) {
+      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
+    }
+
+    {
+
+      /**
+       * `<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.
+       *
+       * ### Basic use
+       *
+       * To use `<vaadin-chart-series>`, simply add it inside a `<vaadin-chart>` element:
+       *
+       * ```
+       *  <vaadin-chart>
+       *    <vaadin-chart-series></vaadin-chart-series>
+       *  </vaadin-chart>
+       * ```
+       *
+       * `<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:
+       * 
+       * ```
+       *  <vaadin-chart-series values="[10,20,30,40,50]"></vaadin-chart-series>
+       * ```
+       *
+       * which will add a new line series, where each value will be a data point. 
+       * Look for the Properties session to see all available attributes.
+       *
+       * ### Dynamically adding and removing series
+       *
+       * You are also able to add and remove series by using DOM API.
+       *
+       * To create a new series, simply call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:
+       *
+       * ```
+       *  const chart = \* a <vaadin-chart> reference *\
+       *  const newSeries = document.createElement('vaadin-chart-series');
+       *  newSeries.values = [10,20,30,40,50];
+       *  chart.appendChild(newSeries);
+       * ```
+       *
+       * In order to remove it, you should use the series to be removed as a reference for the `#removeChild()` call:
+       *
+       * ```
+       *  const chart = \* a <vaadin-chart> reference *\
+       *  const seriesToBeRemoved = \* a <vaadin-chart-series> reference to remove*\
+       *  chart.removeChild(seriesToBeRemoved);
+       * ```
+       *
+       * (There's an issue with `#remove()` method on Firefox, so we advice to remove the element from its parent)
+       *
+       *
+       * @polymer
+       * @customElement
+       * @extends {Polymer.Element}
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class VaadinChartSeries extends Polymer.Element {
+        static get is() {
+          return 'vaadin-chart-series';
+        }
+ 
+        get options() {
+          return {
+            data: this.values
+          };
+        }
+
+        static get properties() {
+          return {
+            /**
+             * An array of data used by the series.
+             * Formats dependends on the chart type and can be:
+             *   - An array of numerical values `[y0, y1, y2, y3,...]`
+             *   - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`
+             *   - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`
+             *
+             *  See more in [API Site](https://api.highcharts.com/highcharts/series)
+             *
+             * Note that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) 
+             * to mutate the values array in order to make the component aware of the
+             * change and be able to syncronize it.
+             */
+            values: {
+              type: Array,
+              value: () => []
+            },
+
+            /**
+             * Object with the configured options defined and used to create a series.
+             *
+             * @readonly
+             */
+            options: {
+              type: Object
+            }
+          };
+        }
+
+        static get observers() {
+          return [
+            '__valuesObserver(values.splices)'
+          ];
+        }
+
+        /** @private */
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          if (this.__hasSeriesConfig()) {
+            this._series.remove();
+          }
+        }
+
+        /**
+         * Method to attach a series object of type `Highcharts.Series`.
+         * @param series Object of type `Highcharts.Series`
+         */ 
+        setSeries(series) {
+          if (!(series instanceof Highcharts.Series)) {
+            throw new TypeError('series should be Highcharts.Series');
+          }
+          this._series = series;
+        }
+
+        __valuesObserver() {
+          if (this.__hasSeriesConfig()) {
+            this._series.setData(this.values);
+          }
+        }
+
+        __hasSeriesConfig() {
+          return this._series instanceof Highcharts.Series;
+        }
+
+      }
+
+      customElements.define(VaadinChartSeries.is, VaadinChartSeries);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.VaadinChartSeries = VaadinChartSeries;
+    }
+  </script>
+</dom-module>
