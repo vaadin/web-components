@@ -299,13 +299,13 @@
       it('should not start reordering on resize handle move', () => {
         const handle = getCellByCellContent(headerContent[0]).querySelector('[part~="resize-handle"]');
         dragStart(handle);
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+        expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
-      it('should start reordering on grid with no reorder allowed', () => {
+      it('should not start reordering on grid with no reorder allowed', () => {
         grid.columnReorderingAllowed = false;
         dragStart(headerContent[0]);
-        expect(grid.$.scroller.hasAttribute('reordering')).to.be.false;
+        expect(grid.hasAttribute('reordering')).to.be.false;
       });
 
       describe('basic reordering', () => {
