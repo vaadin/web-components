@@ -20,7 +20,6 @@ function filesystem(n, array, parentUuid) {
   if (nChildren > 0) {
     for (let i = 0; i < n / 2; i++) {
       const dir = {
-        type: 'dir',
         hasChildren: true,
         name: faker.system.commonFileName().split('.')[0],
         size: '',
@@ -34,7 +33,6 @@ function filesystem(n, array, parentUuid) {
 
   for (let i = 0; i < n / 2; i++) {
     array.push({
-      type: 'file',
       hasChildren: false,
       name: faker.system.commonFileName(),
       size: faker.random.number() / 1000 + ' MB',
