@@ -43,23 +43,31 @@ This program is available under Apache License Version 2.0, available at https:/
       justify-content: flex-end;
     }
 
-    [part$="stretch"] > * {
-      max-width: 100vw;
+    [part="middle"] {
+      position: absolute;
+      margin: auto;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      justify-content: center;
     }
 
-    [part="middle"] > * {
-      align-self: center;
+    [part="top"],
+    [part="bottom"] {
+      flex: auto;
     }
 
     [part="top"] {
       flex-direction: column-reverse;
     }
 
-    [part="top"],
-    [part="bottom"] {
-      flex: auto;
-      flex-shrink: 1;
-      flex-basis: 0;
+    [part$="stretch"] > * {
+      max-width: 100vw;
+    }
+
+    [part="middle"] > * {
+      align-self: center;
     }
   </style>
 
