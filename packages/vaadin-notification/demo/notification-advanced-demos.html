@@ -1,0 +1,120 @@
+<dom-module id="notification-advanced-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Notification Sampler</h3>
+    <vaadin-demo-snippet id='notification-advanced-demos-custom'>
+      <template preserve-content>
+        <dom-module id="notification-full-demo">
+          <template preserve-content>
+            <style>
+              .wrapper {
+                display: inline-flex;
+                flex-direction: column;
+              }
+              .space > * {
+                margin-top: 16px;
+              }
+              label {
+                font-size: 0.875em;
+                font-weight: 600;
+                margin-bottom: 0.25em;
+              }
+              button {
+                height: 30px;
+                max-width: 160px;
+                font-size: 0.9em;
+              }
+            </style>
+
+            <div class="wrapper space">
+              <div class="wrapper">
+                <label>Vertical Align</label>
+                <vaadin-radio-group value="{{verticalAlign}}">
+                  <vaadin-radio-button name="radio-group" value="top">top</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="center">center</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="bottom">bottom</vaadin-radio-button>
+                </vaadin-radio-group>
+              </div>
+              <div class="wrapper">
+                <label>Horizontal Align</label>
+                <vaadin-radio-group value="{{horizontalAlign}}">
+                  <vaadin-radio-button name="radio-group" value="start">start</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="center">center</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="end">end</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="stretch">stretch</vaadin-radio-button>
+                </vaadin-radio-group>
+              </div>
+              <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 80px">
+                <span slot="suffix">px</span>
+              </vaadin-text-field>
+              <vaadin-text-field label="Text" value="{{text}}" flex="1" style="width: 300px"></vaadin-text-field>
+              <button on-click="_show">Show Notificaton</button>
+            </div>
+          </template>
+
+          <script>
+            class NotificationSamplerElement extends Polymer.Element {
+              static get is() {
+                return 'notification-full-demo';
+              }
+
+              static get properties() {
+                return {
+                  verticalAlign: {
+                    value: 'bottom'
+                  },
+                  horizontalAlign: {
+                    value: 'start'
+                  },
+                  duration: {
+                    value: 3000
+                  },
+                  text: {
+                    value: 'Hello World'
+                  },
+                  counter: {
+                    value: 1
+                  }
+                };
+              }
+
+              _show() {
+                const notify = document.createElement('vaadin-notification');
+                notify.innerHTML = `<template>${this.counter ++} - ${this.text}</template>`;
+                document.body.appendChild(notify);
+                notify.verticalAlign = this.verticalAlign;
+                notify.horizontalAlign = this.horizontalAlign;
+                notify.duration = this.duration;
+                notify.open();
+              }
+            }
+
+            if (!Vaadin.NotificationSamplerElement) {
+              window.customElements.define(NotificationSamplerElement.is, NotificationSamplerElement);
+              Vaadin.NotificationSamplerElement = NotificationSamplerElement;
+            }
+          </script>
+        </dom-module>
+
+
+        <notification-full-demo></notification-full-demo>
+
+      </template>
+    </vaadin-demo-snippet>
+  </template>
+
+
+  <script>
+    class NotificationAdvancedDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
+      static get is() {
+        return 'notification-advanced-demos';
+      }
+    }
+    customElements.define(NotificationAdvancedDemos.is, NotificationAdvancedDemos);
+  </script>
+</dom-module>

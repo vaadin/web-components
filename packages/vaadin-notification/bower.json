@@ -36,6 +36,7 @@
     "vaadin-button": "^1.0.0",
     "vaadin-checkbox": "^1.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers",
-    "vaadin-radio-button": "^1.0.0-alpha7"
+    "vaadin-radio-button": "^1.0.0-alpha7",
+    "vaadin-text-field": "^1.1.0"
   }
 }
