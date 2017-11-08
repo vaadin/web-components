@@ -35,12 +35,20 @@ This program is available under Apache License Version 2.0, available at https:/
       pointer-events: none;
     }
 
-    [part="top"],
-    [part="center"],
-    [part="bottom"] {
+    [part^="top"],
+    [part^="bottom"],
+    [part="middle"] {
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+    }
+
+    [part$="stretch"] > * {
+      max-width: 100vw;
+    }
+
+    [part="middle"] > * {
+      align-self: center;
     }
 
     [part="top"] {
@@ -59,9 +67,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
   <div part="overlay" id="overlay">
     <div part="content" id="content">
+      <div part="top-stretch"></div>
       <div part="top"></div>
-      <div part="center"></div>
+      <div part="middle"></div>
       <div part="bottom"></div>
+      <div part="bottom-stretch"></div>
     </div>
   </div>
   </template>
@@ -75,7 +85,7 @@ This program is available under Apache License Version 2.0, available at https:/
         min-width: 18em;
         max-width: 36em;
         font-size: 12px;
-        background: #fff;
+        background: lightgrey;
         box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
         margin: 5px 0;
         max-height: 15em;
@@ -108,12 +118,6 @@ This program is available under Apache License Version 2.0, available at https:/
         align-self: center;
         order: 1;
       }
-
-      :host([stretch]) {
-        order: 4;
-        max-width: 100vw;
-      }
-
     </style>
     <slot></slot>
   </template>
@@ -245,8 +249,9 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
             document.body.appendChild(this._overlay);
-            ['top', 'center', 'bottom'].forEach(region =>
-              this._overlay[region] = this._overlay.shadowRoot.querySelector(`[part="${region}"]`));
+            NotificationElement._overlay.regions = {};
+            ['top-stretch', 'top', 'middle', 'bottom', 'bottom-stretch'].forEach(region =>
+              this._overlay.regions[region] = this._overlay.shadowRoot.querySelector(`[part="${region}"]`));
           }
           return NotificationElement._overlay;
         }
@@ -276,16 +281,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _appendNotificationCard() {
-          ['start', 'center', 'end', 'stretch'].forEach(attr => this._card.removeAttribute(attr));
-          this._card.setAttribute(this.horizontalAlign, '');
-          this._overlay[this.verticalAlign].appendChild(this._card);
+          ['start', 'center', 'end'].forEach(attr => this._card.removeAttribute(attr));
+          !/stretch|middle/.test(this.verticalAlign) && this._card.setAttribute(this.horizontalAlign, '');
+          console.log(this._card, this.verticalAlign, this._overlay.regions[this.verticalAlign]);
+          this._overlay.regions[this.verticalAlign].appendChild(this._card);
         }
 
         _removeNotificationCard() {
           this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
-          this._overlay.opened = ['top', 'center', 'bottom']
-            .reduce((prev, region) => this._overlay[region].hasChildNodes() || prev, false);
+          this._overlay.opened =
+            Object.values(this._overlay.regions).reduce((prev, region) => region.hasChildNodes() || prev, false);
         }
 
         _durationChanged(duration, oldVal) {
