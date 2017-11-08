@@ -1,0 +1,81 @@
+<link rel="import" href="typography.html">
+
+<custom-style>
+  <style include="valo-typography">
+    html {
+      --valo-space-xxs: 2px;
+      --valo-space-wide-xxs: 2px 6px;
+      --valo-font-size-xxs: .8rem;
+      --valo-badge-font-size: var(--valo-font-size-xxs);
+      --valo-badge-line-height: var(--valo-badge-font-size);
+    }
+  </style>
+</custom-style>
+
+<dom-module id="valo-badge">
+  <template>
+    <style>
+    [theme~="badge"] {
+      display: inline-block;
+      margin: var(--valo-space-xs);
+      padding: var(--valo-space-wide-xs);
+      color: var(--valo-base-color);
+      background-color: var(--valo-primary-color);
+      border-radius: var(--valo-border-radius);
+      font-size: var(--valo-badge-font-size);
+      line-height: var(--valo-badge-line-height);
+      font-weight: bold;
+      text-align: center;
+      box-shadow: 0 0 0 1px var(--valo-shade-5pct), 0 1px 2px 0 var(--valo-shade-20pct);
+    }
+    [theme~="badge"][href]:hover {
+      text-decoration: none;
+    }
+    [theme~="badge"]:empty {
+      width: var(--valo-badge-line-height);
+      height: var(--valo-badge-line-height);
+      padding: var(--valo-space-xs);
+    }
+    [theme~="badge"][theme~="contrast"] {
+      background-color: var(--valo-contrast);
+    }
+    [theme~="badge"][theme~="success"] {
+      background-color: var(--valo-success-color);
+    }
+    [theme~="badge"][theme~="danger"] {
+      background-color: var(--valo-error-color);
+    }
+    [theme~="badge"][theme~="outline"] {
+      color: var(--valo-primary-color);
+      background-color: var(--valo-base-color);
+    }
+    [theme~="badge"][theme~="outline"][theme~="contrast"] {
+      color: var(--valo-contrast);
+    }
+    [theme~="badge"][theme~="outline"][theme~="success"] {
+      color: var(--valo-success-color);
+    }
+    [theme~="badge"][theme~="outline"][theme~="danger"] {
+      color: var(--valo-error-color);
+    }
+    [theme~="badge"][theme~="pill"] {
+      border-radius: var(--valo-badge-line-height);
+    }
+    [theme~="badge"][theme*="top-"], [theme~="badge"][theme*="bottom-"] {
+      position: absolute;
+    }
+    [theme~="badge"][theme*="top-"] {
+      top: calc(var(--valo-badge-line-height) * -1);
+    }
+    [theme~="badge"][theme*="bottom-"] {
+      bottom: calc(var(--valo-badge-line-height) * -1);
+    }
+    [theme~="badge"][theme*="-right"] {
+      right: calc(var(--valo-badge-line-height) * -1);
+    }
+    [theme~="badge"][theme*="-left"] {
+      left: calc(var(--valo-badge-line-height) * -1);
+    }
+    </style>
+  </template>
+</dom-module>
