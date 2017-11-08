@@ -179,6 +179,36 @@
           expect(nav._navItems[3].selected).to.be.true;
         });
 
+        it('should clear selection when `selected` property is set to negative value', () => {
+          nav.selected = 3;
+          nav.selected = -1;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
+        it('should clear selection when `selected` property is set to out-of-range value', () => {
+          nav.selected = 3;
+          nav.selected = nav._navItems.length;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
+        it('should clear selection when `selected` property is set to undefined', () => {
+          nav.selected = 3;
+          nav.selected = undefined;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
+        it('should clear selection when `selected` property is set to null', () => {
+          nav.selected = 3;
+          nav.selected = null;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
+        it('should clear selection when `selected` property is set to NaN', () => {
+          nav.selected = 3;
+          nav.selected = null;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
         it('should be selectable with mouse click', () => {
           nav._navItems[3].click();
           expect(nav.selected).to.be.equal(3);
