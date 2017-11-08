@@ -47,6 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * for `<vaadin-dialog-overlay>` parts.
        *
        * @memberof Vaadin
+       * @private
        */
       class VaadinDialogOverlay extends Vaadin.OverlayElement {
         static get is() {
@@ -78,7 +79,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinDialog extends Polymer.Element {
+      class VaadinDialog extends (class extends Polymer.Element {}) {
         static get is() {
           return 'vaadin-dialog';
         }
