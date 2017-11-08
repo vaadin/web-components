@@ -35,8 +35,9 @@ This program is available under Apache License Version 2.0, available at https:/
         pointer-events: none;
       }
 
-      [part^="top-"],
-      [part^="bottom-"],
+      [part$="-stretch"],
+      [part="top"] [part],
+      [part="bottom"] [part],
       [part="middle"] {
         display: flex;
         flex-direction: column;
@@ -60,21 +61,23 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-end;
       }
 
-      [part$="-start"],
-      [part$="-center"],
-      [part$="-end"] {
+      [part="top"] [part],
+      [part="bottom"] [part] {
         flex: auto;
         flex-shrink: 1;
         flex-basis: 0;
       }
 
-      [part^="top-"] {
+      [part="top"] [part] {
         flex-direction: column-reverse;
-        align-self: start;
       }
 
-      [part^="botom-"] {
-        align-self: end;
+      [part$="-start"] > * {
+        align-self: flex-start;
+      }
+
+      [part$="-end"] > * {
+        align-self: flex-end;
       }
 
       [part$="-stretch"] > * {
@@ -82,7 +85,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="middle"] > *,
-      [part$="-center"] > *  {
+      [part$="-center"] > * {
         align-self: center;
       }
     </style>
