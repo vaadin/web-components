@@ -396,22 +396,22 @@
       });
 
       describe('validation', () => {
-        it('should have invalid attribute when is required but there is no value', () => {
-          expect(dropdown.hasAttribute('invalid')).to.be.false;
+        it('should set invalid to true when is required but there is no value', () => {
+          expect(dropdown.invalid).to.be.false;
           dropdown.setAttribute('required', '');
 
           Enter(input);
           Escape(input);
-          expect(dropdown.hasAttribute('invalid')).to.be.true;
+          expect(dropdown.invalid).to.be.true;
         });
 
-        it('should not have invalid attribute when is required, there is no value, but is disabled', () => {
-          expect(dropdown.hasAttribute('invalid')).to.be.false;
+        it('should not set invalid to true when is required, there is no value, but is disabled', () => {
+          expect(dropdown.invalid).to.be.false;
           dropdown.setAttribute('required', '');
           dropdown.setAttribute('disabled', '');
 
           dropdown.validate();
-          expect(dropdown.hasAttribute('invalid')).to.be.false;
+          expect(dropdown.invalid).to.be.false;
         });
 
         it('Should validate when closing the overlay', () => {

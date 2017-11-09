@@ -240,6 +240,16 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Set to true if the value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
              * The name of this element.
              */
             name: {
@@ -445,13 +455,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight) + 'px';
         }
 
-        /** @protected */
+        /**
+         * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+         *
+         * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
+         */
         validate() {
-          if (this.disabled || !this.required || this.value) {
-            this.removeAttribute('invalid');
-            return true;
-          }
-          this.setAttribute('invalid', '');
+          return !(this.invalid = !(this.disabled || !this.required || this.value));
         }
       }
 
