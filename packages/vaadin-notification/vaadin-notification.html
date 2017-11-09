@@ -117,11 +117,11 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         padding: 8px;
-        min-width: 18em;
+        min-width: calc(100vw / 6);
         max-width: 36em;
         font-size: 12px;
         background: lightgrey;
-        box-shadow: 0 2px 4px 0 rgba(0,0,0,0.3);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
         margin: 5px 0;
         max-height: 15em;
       }
@@ -173,8 +173,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this.setAttribute('role', 'alert');
-          this.setAttribute('aria-live', 'polite');
           this.modeless = true;
         }
       }
@@ -194,6 +192,12 @@ This program is available under Apache License Version 2.0, available at https:/
         static get is() {
           return 'vaadin-notification-card';
         }
+
+        ready() {
+          super.ready();
+          this.setAttribute('role', 'alert');
+          this.setAttribute('aria-live', 'polite');
+        }
       }
 
       /**
@@ -206,6 +210,25 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </template>
        * </vaadin-notification>
        * ```
+       *
+       * ### Styling
+       *
+       * The following Shadow DOM parts are available for styling:
+       *
+       * Part name  | Description | Theme for Element
+       * -----------|-------------|------------------
+       * `content`  | The container of all regions | vaadin-notification-overlay
+       * `top-stretch` | top-stretch container | vaadin-notification-overlay
+       * `top` | top container | vaadin-notification-overlay
+       * `top-start` | top-start container, child of top | vaadin-notification-overlay
+       * `top-center` | top-center container, child of top | vaadin-notification-overlay
+       * `top-end` | top-end container, child of top | vaadin-notification-overlay
+       * `middle` | middle container | vaadin-notification-overlay
+       * `bottom` | bottom container | vaadin-notification-overlay
+       * `bottom-start` | bottom-start container, child of bottom | vaadin-notification-overlay
+       * `bottom-center` | bottom-center container, child of bottom | vaadin-notification-overlay
+       * `bottom-end` | bottom-end container, child of bottom | vaadin-notification-overlay
+       * `bottom-stretch` | bottom-stretch container, child of bottom | vaadin-notification-overlay
        *
        * @memberof Vaadin
        * @demo demo/index.html
@@ -223,8 +246,7 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             duration: {
               type: Number,
-              value: 3000,
-              observer: '_durationChanged'
+              value: 3000
             },
 
             /**
@@ -239,7 +261,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Vertical alignment of the notification in the viewport
-             * Valid values are `top|center|bottom`
+             * Valid values are `top-stretch|top|center|bottom|bottom-stretch`
              */
             verticalAlign: {
               type: String,
@@ -248,13 +270,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Horizontal alignment of the notification in the viewport
-             * Valid values are `start|center|end|stretch`
+             * Only applies for notifications in `top` or `bottom` containers.
+             * Valid values are `start|center|end`
              */
             horizontalAlign: {
               type: String,
               value: 'start'
             }
           };
+        }
+
+        static get observers() {
+          return [
+            '_durationChanged(duration, opened)',
+            '_orientiationChanged(verticalAlign, horizontalAlign)'
+          ];
         }
 
         open() {
@@ -270,8 +300,11 @@ This program is available under Apache License Version 2.0, available at https:/
             NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
             document.body.appendChild(this._overlay);
             NotificationElement._overlay.regions = {};
-            ['top-stretch', 'top', 'top-start', 'top-center', 'top-end', 'middle', 'bottom', 'bottom-start', 'bottom-center', 'bottom-end', 'bottom-stretch']
-              .forEach(region => this._overlay.regions[region] = this._overlay.shadowRoot.querySelector(`[part="${region}"]`));
+            [
+              'top-stretch', 'top-start', 'top-center', 'top-end',
+              'middle',
+              'bottom-stretch', 'bottom-start', 'bottom-center', 'bottom-end'
+            ].forEach(region => this._overlay.regions[region] = this._overlay.shadowRoot.querySelector(`[part="${region}"]`));
           }
           return NotificationElement._overlay;
         }
@@ -290,11 +323,10 @@ This program is available under Apache License Version 2.0, available at https:/
               this._instance = new Templatizer({});
               this._card = this.$['vaadin-notification-card'];
               this._card.appendChild(this._instance.root);
-              this._card.setAttribute('aria-label', this._instance.root.textContent.trim());
+              this._card.setAttribute('aria-label', this._card.textContent.trim());
             }
 
             this._appendNotificationCard();
-            this._addAutocloseTimeout(this.duration);
           } else if (this._card) {
             this._removeNotificationCard();
           }
@@ -313,18 +345,18 @@ This program is available under Apache License Version 2.0, available at https:/
             Object.values(this._overlay.regions).reduce((prev, region) => region.hasChildNodes() || prev, false);
         }
 
-        _durationChanged(duration, oldVal) {
-          if (oldVal !== undefined) { // Initialization, do nothing
-            this._addAutocloseTimeout(duration);
+        _orientiationChanged(vertical, horizontal) {
+          if (this.opened) {
+            this._appendNotificationCard();
           }
         }
 
-        _addAutocloseTimeout(duration) {
-          clearTimeout(this._durationTimeoutId);
-          if (duration > 0) {
-            this._durationTimeoutId = setTimeout(() => this.close(), duration);
-          } else {
-            delete this._durationTimeoutId;
+        _durationChanged(duration, opened) {
+          if (opened) {
+            clearTimeout(this._durationTimeoutId);
+            if (duration > 0) {
+              this._durationTimeoutId = setTimeout(() => this.close(), duration);
+            }
           }
         }
       }
