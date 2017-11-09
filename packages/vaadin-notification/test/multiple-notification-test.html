@@ -34,11 +34,13 @@
 
   <script>
     describe('multiple notification', function() {
-      let notifications, overlay;
+      let notifications, overlay, regions;
 
       beforeEach(done => {
         notifications = Array.from(fixture('multiple'));
         overlay = notifications[0]._overlay;
+        // Object.values is unsupported in old browsers
+        regions = Object.keys(overlay.regions).map(part => overlay.regions[part]);
         // To ensure computed styles are applied.
         setTimeout(done);
       });
@@ -131,7 +133,6 @@
         });
 
         it('all regions should be flex containers', () => {
-          const regions = Object.values(overlay.regions);
           regions.push(overlay.$.content);
           regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
           regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
@@ -140,7 +141,6 @@
         });
 
         it('all regions but top ones should have flex-direction column', () => {
-          const regions = Object.values(overlay.regions);
           regions.push(overlay.$.content);
           regions.filter(e => !/top/.test(e.getAttribute('part'))).forEach(e =>
             expect(getComputedStyle(e)['flex-direction']).to.equal('column')
@@ -148,7 +148,6 @@
         });
 
         it('top regions should have flex-direction column-reverse', () => {
-          const regions = Object.values(overlay.regions);
           regions.push(overlay.$.content);
           regions.filter(e => /top/.test(e.getAttribute('part')))
             .forEach(e => expect(getComputedStyle(e)['flex-direction']).to.equal('column-reverse'));
@@ -162,7 +161,6 @@
         });
 
         it('all regions but middle should justify-content at end', () => {
-          const regions = Object.values(overlay.regions);
           regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
           regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
           regions.filter(e => e.getAttribute('part') != 'middle')

@@ -343,7 +343,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
           this._overlay.opened =
-            Object.values(this._overlay.regions).reduce((prev, region) => region.hasChildNodes() || prev, false);
+            Object.keys(this._overlay.regions).reduce((prev, part) => this._overlay.regions[part].hasChildNodes() || prev, false);
         }
 
         _orientiationChanged(vertical, horizontal) {
