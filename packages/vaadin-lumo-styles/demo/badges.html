@@ -22,6 +22,11 @@
       opacity: 0;
     }
   </style>
+  <custom-style>
+    <style include="valo-badge">
+      /* The <style> tag needs to be non-empty for IE11 */
+    </style>
+  </custom-style>
 </head>
 
 <body unresolved>
@@ -37,123 +42,149 @@
     <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/badge.html" class="theme-source-code">Theme source code</a>
     <h1>Badges</h1>
 
-    <h3 demo-section>Basic</h3>
+    <h3 demo-section>Default</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <span theme="badge">Primary</span>
-        <span theme="badge contrast">Contrast</span>
+        <span theme="badge">Default</span>
+        <span theme="badge primary">Primary</span>
         <span theme="badge success">Success</span>
-        <span theme="badge danger">Danger</span>
+        <span theme="badge error">Error</span>
+        <span theme="badge">1</span>
+        <span theme="badge primary">2</span>
+        <span theme="badge success">3</span>
+        <span theme="badge error">4</span>
+        <br>
+        <span theme="badge small">Default</span>
+        <span theme="badge primary small">Primary</span>
+        <span theme="badge success small">Success</span>
+        <span theme="badge error small">Error</span>
+        <span theme="badge small">1</span>
+        <span theme="badge primary small">2</span>
+        <span theme="badge success small">3</span>
+        <span theme="badge error small">4</span>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Outline</h3>
+    <h3 demo-section>Contrast</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <span theme="badge outline">Primary</span>
-        <span theme="badge outline contrast">Contrast</span>
-        <span theme="badge outline success">Success</span>
-        <span theme="badge outline danger">Danger</span>
+        <span theme="badge contrast">Default</span>
+        <span theme="badge primary contrast">Primary</span>
+        <span theme="badge success contrast">Success</span>
+        <span theme="badge error contrast">Error</span>
+        <span theme="badge contrast">1</span>
+        <span theme="badge primary contrast">2</span>
+        <span theme="badge success contrast">3</span>
+        <span theme="badge error contrast">4</span>
+        <br>
+        <span theme="badge contrast small">Default</span>
+        <span theme="badge primary contrast small">Primary</span>
+        <span theme="badge success contrast small">Success</span>
+        <span theme="badge error contrast small">Error</span>
+        <span theme="badge contrast small">1</span>
+        <span theme="badge primary contrast small">2</span>
+        <span theme="badge success contrast small">3</span>
+        <span theme="badge error contrast small">4</span>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Pills</h3>
+    <h3 demo-section>Icon</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <span theme="badge pill ">Primary</span>
-        <span theme="badge pill contrast">Contrast</span>
-        <span theme="badge pill success">Success</span>
-        <span theme="badge pill danger">Danger</span>
-        <span theme="badge outline pill ">Primary</span>
-        <span theme="badge outline pill contrast">Contrast</span>
-        <span theme="badge outline pill success">Success</span>
-        <span theme="badge outline pill danger">Danger</span>
+        <iron-icon icon="valo:bell" theme="badge"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary contrast"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success contrast"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error contrast"></iron-icon>
+        <br>
+        <iron-icon icon="valo:bell" theme="badge small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary contrast small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success contrast small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error contrast small"></iron-icon>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Used as links</h3>
+    <h3 demo-section>Empty</h3>
+
     <nice-demo-snippet>
       <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <p>Visit the new <a href="https://vaadin.com" theme="badge">Vaadin</a> website!</p>
+        <span theme="badge"></span>
+        <span theme="badge primary"></span>
+        <span theme="badge success"></span>
+        <span theme="badge error"></span>
+        <br>
+        <span theme="badge small"></span>
+        <span theme="badge primary small"></span>
+        <span theme="badge success small"></span>
+        <span theme="badge error small"></span>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Used with buttons</h3>
+    <h3 demo-section>Links</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <vaadin-button>
-          Bottom left
-          <span theme="badge pill bottom-left contrast">New</span>
-        </vaadin-button>
+        Visit the new <a href="https://vaadin.com" theme="badge primary">Vaadin</a> website!
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Pill</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span theme="badge pill">Default</span>
+        <span theme="badge primary pill">Primary</span>
+        <span theme="badge success pill">Success</span>
+        <span theme="badge error pill">Error</span>
+        <span theme="badge pill">1</span>
+        <span theme="badge primary pill">2</span>
+        <span theme="badge success pill">3</span>
+        <span theme="badge error pill">4</span>
+        <br>
+        <span theme="badge contrast pill">Default</span>
+        <span theme="badge primary contrast pill">Primary</span>
+        <span theme="badge success contrast pill">Success</span>
+        <span theme="badge error contrast pill">Error</span>
+        <span theme="badge contrast pill">1</span>
+        <span theme="badge primary contrast pill">2</span>
+        <span theme="badge success contrast pill">3</span>
+        <span theme="badge error contrast pill">4</span>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Positioning</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
         <vaadin-button>
           Top left
-          <span theme="badge pill danger top-left">!</span>
+          <span theme="badge error contrast pill top-left"></span>
+        </vaadin-button>
+        <vaadin-button>
+          Bottom left
+          <span theme="badge contrast small bottom-left">New</span>
         </vaadin-button>
         <vaadin-button>
           Top right
-          <span theme="badge pill top-right">5</span>
+          <span theme="badge primary contrast top-right">5</span>
         </vaadin-button>
         <vaadin-button>
-          Icon
-          <iron-icon icon="valo:checkmark" theme="badge pill success bottom-right"></iron-icon>
-        </vaadin-button>
-        <vaadin-button>
-          Empty
-          <span theme="badge pill top-right"></span>
+          Bottom right
+          <iron-icon icon="valo:checkmark" theme="badge success contrast pill bottom-right"></iron-icon>
         </vaadin-button>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Used with tabs</h3>
-
-    <nice-demo-snippet>
-      <template slot="source">
-        <custom-style>
-          <style include="valo-badge">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
-        </custom-style>
-        <vaadin-tabs>
-          <vaadin-tab>
-            <span theme="badge">4</span>
-            Issues
-          </vaadin-tab>
-          <vaadin-tab>
-            Products
-            <span theme="badge pill outline top-right">New!</span>
-          </vaadin-tab>
-        </vaadin-tabs>
-      </template>
-    </nice-demo-snippet>
 
   </div>
 </body>

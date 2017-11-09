@@ -1,81 +1,173 @@
+<link rel="import" href="color.html">
 <link rel="import" href="typography.html">
-
-<custom-style>
-  <style include="valo-typography">
-    html {
-      --valo-space-xxs: 2px;
-      --valo-space-wide-xxs: 2px 6px;
-      --valo-font-size-xxs: .8rem;
-      --valo-badge-font-size: var(--valo-font-size-xxs);
-      --valo-badge-line-height: var(--valo-badge-font-size);
-    }
-  </style>
-</custom-style>
+<link rel="import" href="sizing-and-spacing.html">
 
 <dom-module id="valo-badge">
   <template>
     <style>
-    [theme~="badge"] {
-      display: inline-block;
-      margin: var(--valo-space-xs);
-      padding: var(--valo-space-wide-xs);
-      color: var(--valo-base-color);
-      background-color: var(--valo-primary-color);
-      border-radius: var(--valo-border-radius);
-      font-size: var(--valo-badge-font-size);
-      line-height: var(--valo-badge-line-height);
-      font-weight: bold;
-      text-align: center;
-      box-shadow: 0 0 0 1px var(--valo-shade-5pct), 0 1px 2px 0 var(--valo-shade-20pct);
-    }
-    [theme~="badge"][href]:hover {
-      text-decoration: none;
-    }
-    [theme~="badge"]:empty {
-      width: var(--valo-badge-line-height);
-      height: var(--valo-badge-line-height);
-      padding: var(--valo-space-xs);
-    }
-    [theme~="badge"][theme~="contrast"] {
-      background-color: var(--valo-contrast);
-    }
-    [theme~="badge"][theme~="success"] {
-      background-color: var(--valo-success-color);
-    }
-    [theme~="badge"][theme~="danger"] {
-      background-color: var(--valo-error-color);
-    }
-    [theme~="badge"][theme~="outline"] {
-      color: var(--valo-primary-color);
-      background-color: var(--valo-base-color);
-    }
-    [theme~="badge"][theme~="outline"][theme~="contrast"] {
-      color: var(--valo-contrast);
-    }
-    [theme~="badge"][theme~="outline"][theme~="success"] {
-      color: var(--valo-success-color);
-    }
-    [theme~="badge"][theme~="outline"][theme~="danger"] {
-      color: var(--valo-error-color);
-    }
-    [theme~="badge"][theme~="pill"] {
-      border-radius: var(--valo-badge-line-height);
-    }
-    [theme~="badge"][theme*="top-"], [theme~="badge"][theme*="bottom-"] {
-      position: absolute;
-    }
-    [theme~="badge"][theme*="top-"] {
-      top: calc(var(--valo-badge-line-height) * -1);
-    }
-    [theme~="badge"][theme*="bottom-"] {
-      bottom: calc(var(--valo-badge-line-height) * -1);
-    }
-    [theme~="badge"][theme*="-right"] {
-      right: calc(var(--valo-badge-line-height) * -1);
-    }
-    [theme~="badge"][theme*="-left"] {
-      left: calc(var(--valo-badge-line-height) * -1);
-    }
+      [theme~="badge"] {
+        display: inline-flex;
+        align-items: center;
+        box-sizing: border-box;
+        height: var(--valo-size-xxs);
+        margin: var(--valo-space-xs);
+        padding: var(--valo-space-wide-xs);
+        color: var(--valo-contrast);
+        background-color: var(--valo-contrast-10pct);
+        border-radius: var(--valo-border-radius);
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size-xs);
+        line-height: 1;
+        font-weight: 500;
+        text-transform: initial;
+        letter-spacing: initial;
+      }
+      [theme~="badge"][theme~="small"] {
+        font-size: var(--valo-font-size-xxs);
+        padding: var(--valo-space-wide-xxs);
+        height: var(--valo-size-xxxs);
+      }
+
+      /* Default */
+
+      [theme~="badge"][theme~="primary"] {
+        color: var(--valo-primary-text-color);
+        background-color: var(--valo-primary-color-10pct);
+      }
+      [theme~="badge"][theme~="success"] {
+        color: var(--valo-success-text-color);
+        background-color: var(--valo-success-color-10pct);
+      }
+      [theme~="badge"][theme~="error"] {
+        color: var(--valo-error-text-color);
+        background-color: var(--valo-error-color-10pct);
+      }
+
+      /* Contrast */
+
+      [theme~="badge"][theme~="contrast"] {
+        color: var(--valo-base-color);
+        background-color: var(--valo-contrast);
+      }
+      [theme~="badge"][theme~="primary"][theme~="contrast"] {
+        color: var(--valo-primary-contrast-color);
+        background-color: var(--valo-primary-color);
+      }
+      [theme~="badge"][theme~="success"][theme~="contrast"] {
+        color: var(--valo-success-contrast-color);
+        background-color: var(--valo-success-color);
+      }
+      [theme~="badge"][theme~="error"][theme~="contrast"] {
+        color: var(--valo-error-contrast-color);
+        background-color: var(--valo-error-color);
+      }
+
+      /* Links */
+
+      [theme~="badge"][href]:hover {
+        text-decoration: none;
+      }
+
+      /* Icon */
+
+      [theme~="badge"][icon] {
+        width: var(--valo-size-xxs);
+        padding: var(--valo-space-xxs);
+      }
+      [theme~="badge"][icon][theme~="small"] {
+        width: var(--valo-size-xxxs);
+        height: var(--valo-size-xxxs);
+        padding: 0;
+      }
+
+      /* Empty */
+
+      [theme~="badge"]:not([icon]):empty::before {
+        /* Needed to align the badge nicely on the baseline */
+        content: "\2003";
+      }
+      [theme~="badge"]:not([icon]):empty {
+        width: 1em;
+        height: 1em;
+        padding: 0;
+        border-radius: 50%;
+        background-color: var(--valo-contrast);
+      }
+      [theme~="badge"][theme~="small"]:not([icon]):empty {
+        width: 0.75em;
+        height: 0.75em;
+      }
+      [theme~="badge"][theme~="primary"]:not([icon]):empty {
+        background-color: var(--valo-primary-color);
+      }
+      [theme~="badge"][theme~="success"]:not([icon]):empty {
+        background-color: var(--valo-success-color);
+      }
+      [theme~="badge"][theme~="error"]:not([icon]):empty {
+        background-color: var(--valo-error-color);
+      }
+
+      /* Pill */
+
+      [theme~="badge"][theme~="pill"] {
+        border-radius: 1rem;
+      }
+
+      /* Positioning */
+
+      [theme~="badge"][theme*="top-"],
+      [theme~="badge"][theme*="bottom-"] {
+        position: absolute;
+        margin: 0;
+      }
+      [theme~="badge"][theme*="top-"] {
+        top: calc(var(--valo-size-xxs) * -0.5);
+      }
+      [theme~="badge"][theme*="bottom-"] {
+        bottom: calc(var(--valo-size-xxs) * -0.5);
+      }
+      [theme~="badge"][theme*="-right"] {
+        right: calc(var(--valo-size-xxs) * -0.5);
+      }
+      [theme~="badge"][theme*="-left"] {
+        left: calc(var(--valo-size-xxs) * -0.5);
+      }
+      [theme~="badge"][theme*="top-"][theme~="small"] {
+        top: calc(var(--valo-size-xxxs) * -0.5);
+      }
+      [theme~="badge"][theme*="bottom-"][theme~="small"] {
+        bottom: calc(var(--valo-size-xxxs) * -0.5);
+      }
+      [theme~="badge"][theme*="-right"][theme~="small"] {
+        right: calc(var(--valo-size-xxxs) * -0.5);
+      }
+      [theme~="badge"][theme*="-left"][theme~="small"] {
+        left: calc(var(--valo-size-xxxs) * -0.5);
+      }
+      [theme~="badge"][theme*="top-"]:not([icon]):empty {
+        top: -0.5em;
+      }
+      [theme~="badge"][theme*="bottom-"]:not([icon]):empty {
+        bottom: -0.5em;
+      }
+      [theme~="badge"][theme*="-right"]:not([icon]):empty {
+        right: -0.5em;
+      }
+      [theme~="badge"][theme*="-left"]:not([icon]):empty {
+        left: -0.5em;
+      }
+      [theme~="badge"][theme*="top-"][theme~="small"]:not([icon]):empty {
+        top: -0.375em;
+      }
+      [theme~="badge"][theme*="bottom-"][theme~="small"]:not([icon]):empty {
+        bottom: -0.375em;
+      }
+      [theme~="badge"][theme*="-right"][theme~="small"]:not([icon]):empty {
+        right: -0.375em;
+      }
+      [theme~="badge"][theme*="-left"][theme~="small"]:not([icon]):empty {
+        left: -0.375em;
+      }
     </style>
   </template>
 </dom-module>
