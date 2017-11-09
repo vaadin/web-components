@@ -40,8 +40,13 @@
         <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
         <script>
           window.showNotification = function() {
+            const template = window.document.createElement('template');
+            template.innerHTML = '<h4>Alert</h4>This is a Dynamic Notification created with JS';
+
             const notify = document.createElement('vaadin-notification');
-            notify.innerHTML = '<template>Settings saved!</template>';
+            notify.verticalAlign = 'middle';
+            notify.appendChild(template);
+
             document.body.appendChild(notify);
             notify.open();
             notify.addEventListener('opened-changed', function() {
