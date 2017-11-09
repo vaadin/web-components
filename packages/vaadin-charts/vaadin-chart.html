@@ -97,13 +97,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * 1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data
        * ```
        * initChartWithJSApi() {
-       *     const configuration = this.$.mychart.configuration;
-       *     configuration.setTitle({ text: 'The chart title' });
-       *     // By default there is one x axis, it is referenced by configuration.xAxis[0].
-       *     configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
-       *     configuration.addSeries({
-       *       type: 'column',
-       *       data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+       *     Polymer.RenderStatus.beforeNextRender(this, () => {
+       *        const configuration = this.$.mychart.configuration;
+       *        configuration.setTitle({ text: 'The chart title' });
+       *        // By default there is one x axis, it is referenced by configuration.xAxis[0].
+       *        configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+       *        configuration.addSeries({
+       *            type: 'column',
+       *            data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+       *        });
        *     });
        * }
        * ```
@@ -358,6 +360,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __internalUpdate(jsonConfiguration, resetConfiguration) {
           this.__inflateFunctions(jsonConfiguration);
+          
           if (!this._dirty || resetConfiguration) {
             this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
             this.__invertForBarSeries(jsonConfiguration.series);
