@@ -41,12 +41,12 @@ This program is available under Apache License Version 2.0, available at https:/
         // Get the target column to resize
         if (column.localName === 'vaadin-grid-column-group') {
           column = Array.prototype.slice.call(column._childColumns, 0)
-          .sort(function(a, b) {
-            return a._order - b._order;
-          })
-          .filter(function(column) {
-            return !column.hidden;
-          }).pop();
+            .sort(function(a, b) {
+              return a._order - b._order;
+            })
+            .filter(function(column) {
+              return !column.hidden;
+            }).pop();
         }
 
         const columnRowCells = Array.from(this.$.header.querySelectorAll('[part~="row"]:last-child [part~="cell"]'));

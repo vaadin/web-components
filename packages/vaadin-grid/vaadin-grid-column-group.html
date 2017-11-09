@@ -187,7 +187,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._visibleChildColumns.length) {
             this._setWidth('calc(' + Array.prototype
               .reduce.call(this._visibleChildColumns, (prev, curr) => prev += ' + ' + (curr.width || '0px')
-              .replace('calc', ''), '')
+                .replace('calc', ''), '')
               .substring(3) + ')');
           } else {
             this._setWidth('0px');

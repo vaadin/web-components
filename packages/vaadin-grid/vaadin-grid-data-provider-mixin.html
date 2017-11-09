@@ -200,13 +200,13 @@ This program is available under Apache License Version 2.0, available at https:/
         this._physicalItems
           .filter(row => row.index)
           .items(row => this._getPageForIndex(row.index))
-        ).reduce((prev, curr) => {
-          if (prev.indexOf(curr) === -1) {
-            prev.push(curr);
-          }
+      ).reduce((prev, curr) => {
+        if (prev.indexOf(curr) === -1) {
+          prev.push(curr);
+        }
 
-          return prev;
-        }, []);
+        return prev;
+      }, []);
     }
 
     _expandedInstanceChangedCallback(inst, value) {

@@ -208,15 +208,15 @@ This program is available under Apache License Version 2.0, available at https:/
       if (activeRowGroup !== this.$.items) {
         if (dstRowIndex > rowIndex) {
           while (
-              dstRowIndex < maxRowIndex &&
-              activeRowGroup.children[dstRowIndex].hidden
+            dstRowIndex < maxRowIndex &&
+            activeRowGroup.children[dstRowIndex].hidden
           ) {
             dstRowIndex++;
           }
         } else if (dstRowIndex < rowIndex) {
           while (
-              dstRowIndex > 0 &&
-              activeRowGroup.children[dstRowIndex].hidden
+            dstRowIndex > 0 &&
+            activeRowGroup.children[dstRowIndex].hidden
           ) {
             dstRowIndex--;
           }
@@ -391,7 +391,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // scrolling. Focus the row for the stored focused item index instead.
           const columnIndex = Array.from(targetRow.children).indexOf(this._itemsFocusable);
           const focusedItemRow = Array.from(this.$.items.children)
-              .filter(row => row.index === this._focusedItemIndex)[0];
+            .filter(row => row.index === this._focusedItemIndex)[0];
           if (focusedItemRow) {
             itemsFocusTarget = focusedItemRow.children[columnIndex];
           }
@@ -575,8 +575,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _elementMatches(el, query) {
       return el.matches ? el.matches(query) :
-        Array.from(el.parentNode.querySelectorAll(query))
-        .indexOf(el) !== -1;
+        Array.from(el.parentNode.querySelectorAll(query)).indexOf(el) !== -1;
     }
   };
 </script>
