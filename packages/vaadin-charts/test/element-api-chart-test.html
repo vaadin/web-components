@@ -37,7 +37,7 @@
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
           done();
-        });
+        }, 10);
       });
     });
   </script>

@@ -1,6 +1,6 @@
 gemini.suite('vaadin-charts', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    actions.wait(7000);
   }
 
   function goToAboutBlank(actions, find) {

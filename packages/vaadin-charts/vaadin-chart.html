@@ -242,7 +242,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           super.connectedCallback();
           this.__addLicenseChecker();
           this.__addChildObserver();
-          this._configuration = Highcharts.chart(this.$.chart, this.options);
+          this.update(this.options, true);
         }
 
         get options() {
@@ -351,6 +351,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *    if existing configuration should be discarded.
          */
         update(jsonConfiguration, resetConfiguration) {
+          Polymer.RenderStatus.beforeNextRender(this, () => {
+            this.__internalUpdate(jsonConfiguration, resetConfiguration);
+          });
+        }
+
+        __internalUpdate(jsonConfiguration, resetConfiguration) {
           this.__inflateFunctions(jsonConfiguration);
           if (!this._dirty || resetConfiguration) {
             this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);

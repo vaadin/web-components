@@ -18,7 +18,7 @@
       </template>
   </dom-module>
 
-  <dom-module id="style-demo">
+  <dom-module id="chart-style-demo">
     <template>
       <vaadin-chart id="mychart"></vaadin-chart>
     </template>
@@ -27,19 +27,21 @@
       HTMLImports.whenReady(() => {
         class StyleDemoElement extends Polymer.Element {
           static get is() {
-            return 'style-demo';
+            return 'chart-style-demo';
           }
           connectedCallback() {
             super.connectedCallback();
-            var configuration = this.$.mychart.configuration;
-            configuration.setTitle({
-              text: 'The chart title'
-            });
-            // By default there is one x axis, it is referenced by configuration.xAxis[0].
-            configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
-            configuration.addSeries({
-              type: 'column',
-              data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+            Polymer.RenderStatus.beforeNextRender(this, () => {
+              var configuration = this.$.mychart.configuration;
+              configuration.setTitle({
+                text: 'The chart title'
+              });
+              // By default there is one x axis, it is referenced by configuration.xAxis[0].
+              configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+              configuration.addSeries({
+                type: 'column',
+                data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+              });
             });
           }
         }
@@ -48,7 +50,7 @@
       });
     </script>
   </dom-module>
-  <style-demo></style-demo>
+  <chart-style-demo></chart-style-demo>
 
   <script>
     describe('Styling HighCharts', function() {
@@ -57,7 +59,7 @@
 
 
       before(function() {
-        const el = document.querySelector('style-demo');
+        const el = document.querySelector('chart-style-demo');
         chart = el.$.mychart;
         chartContainer = chart.$.chart;
       });
