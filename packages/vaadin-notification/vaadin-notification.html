@@ -300,12 +300,11 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
             document.body.appendChild(this._overlay);
+
+            // To reduce DOM queries, we cache all regions eligible for appending notifications
             NotificationElement._overlay.regions = {};
-            [
-              'top-stretch', 'top-start', 'top-center', 'top-end',
-              'middle',
-              'bottom-stretch', 'bottom-start', 'bottom-center', 'bottom-end'
-            ].forEach(region => this._overlay.regions[region] = this._overlay.shadowRoot.querySelector(`[part="${region}"]`));
+            Array.from(this._overlay.$.content.querySelectorAll('[part]'))
+              .forEach(e => e.children.length == 0 && (this._overlay.regions[e.getAttribute('part')] = e));
           }
           return NotificationElement._overlay;
         }
