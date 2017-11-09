@@ -39,7 +39,7 @@
       <template preserve-content>
         <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
         <script>
-          function showNotification() {
+          window.showNotification = function() {
             const notify = document.createElement('vaadin-notification');
             notify.innerHTML = '<template>Settings saved!</template>';
             document.body.appendChild(notify);

@@ -54,7 +54,7 @@
                 </vaadin-radio-group>
               </div>
               <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 80px">
-                <span slot="suffix">px</span>
+                <span slot="suffix">ms</span>
               </vaadin-text-field>
               <vaadin-text-field label="Text" value="{{text}}" flex="1" style="width: 300px"></vaadin-text-field>
               <button on-click="_show">Show Notificaton</button>
@@ -108,7 +108,6 @@
             }
           </script>
         </dom-module>
-
 
         <notification-full-demo></notification-full-demo>
 
