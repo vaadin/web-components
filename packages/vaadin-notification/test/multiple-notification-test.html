@@ -34,15 +34,6 @@
 
   <script>
     describe('multiple notification', function() {
-      const alignments =
-        [['top-stretch'], ['top', ['start', 'center', 'end']], ['middle'], ['bottom', ['start', 'center', 'end']], ['bottom-stretch']];
-
-      const parts = alignments.reduce((prev, arr) => {
-        arr[1] && arr[1].forEach(val => prev.push(`${arr[0]}-${val}`))
-        !arr[1] && prev.push(arr[0]);
-        return prev;
-      }, []);
-
       let notifications, overlay;
 
       beforeEach(done => {
@@ -92,17 +83,23 @@
 
       describe('regions', () => {
         it('should have a DOM part per notification region', () => {
-          parts.forEach(part => {
+          [
+            'top-stretch',
+            'top-start', 'top-center', 'top-end',
+            'middle',
+            'bottom-start', 'bottom-center', 'bottom-end',
+            'bottom-stretch'
+          ].forEach(part => {
             expect(overlay.regions[part].getAttribute('part')).to.be.equal(part);
           });
         });
 
         it('should insert notifications in the correct region', () => {
-          notifications.forEach(noti => {
-            const horizontal = noti.getAttribute('horizontal-align');
-            const region = noti.verticalAlign + (horizontal ? `-${horizontal}` : '');
-            expect(noti._card.parentNode.getAttribute('part')).to.be.equal(region);
-          })
+          notifications.forEach(e => {
+            const horizontal = e.getAttribute('horizontal-align');
+            const region = e.verticalAlign + (horizontal ? `-${horizontal}` : '');
+            expect(e._card.parentNode.getAttribute('part')).to.be.equal(region);
+          });
         });
 
         it('should move notification if vertical alignment changes', () => {
@@ -176,19 +173,26 @@
           expect(getComputedStyle(overlay.regions['middle'])['justify-content']).to.equal('center');
         });
 
-        it('start/stretch notifications should align-self at start', () => {
+        it('start notifications should align-self at start', () => {
           notifications.forEach(e => {
-            if ( /stretch/.test(e.verticalAlign) ||  /top|bottom/.test(e.horizontalAlign) && 'start' == e.verticalAlign) {
-              console.log(e.verticalAlign, e.horizontalAlign, getComputedStyle(e._card)['align-self'])
-              expect(getComputedStyle(e._card)['align-self'], `${e.verticalAlign} - ${e.horizontalAlign}`).to.equal('flex-start')
+            if (/top|bottom/.test(e.horizontalAlign) && 'start' == e.verticalAlign) {
+              expect(getComputedStyle(e._card)['align-self']).to.equal('flex-start');
             }
           });
         });
 
-        it('middle/center notifications should align-self at start', () => {
+        it('stretch notifications should align-self auto', () => {
+          notifications.forEach(e => {
+            if (/stretch/.test(e.verticalAlign)) {
+              expect(getComputedStyle(e._card)['align-self']).to.match(/^(auto|normal)$/);
+            }
+          });
+        });
+
+        it('middle/center notifications should align-self at center', () => {
           notifications.forEach(e => {
             if (/middle/.test(e.verticalAlign) || /top|bottom/.test(e.horizontalAlign) && 'center' == e.verticalAlign) {
-              expect(getComputedStyle(e._card)['align-self']).to.equal('center')
+              expect(getComputedStyle(e._card)['align-self']).to.equal('center');
             }
           });
         });
@@ -196,7 +200,7 @@
         it('end notifications should align-self at end', () => {
           notifications.forEach(e => {
             if (/top|bottom/.test(e.horizontalAlign) && 'center' == e.verticalAlign) {
-              expect(getComputedStyle(e._card)['align-self']).to.equal('flex-end')
+              expect(getComputedStyle(e._card)['align-self']).to.equal('flex-end');
             }
           });
         });
