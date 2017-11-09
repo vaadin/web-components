@@ -68,11 +68,13 @@ This program is available under Apache License Version 2.0, available at https:/
         flex-basis: 0;
       }
 
+      [part="top-stretch"],
       [part="top"] [part] {
         flex-direction: column-reverse;
       }
 
-      [part$="-start"] > * {
+      [part$="-start"] > *,
+      [part$="-stretch"] > * {
         align-self: flex-start;
       }
 

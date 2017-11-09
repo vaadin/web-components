@@ -1,0 +1,117 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-notification tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-notification.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-notification duration="20" opened>
+        <template>
+          Your work has been <strong>saved</strong>
+        </template>
+      </vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="multiple">
+    <template>
+      <vaadin-notification duration="20" opened>
+        <template>
+          Notificaton 1
+        </template>
+      </vaadin-notification>
+      <vaadin-notification duration="20" opened>
+        <template>
+          Notificaton 2
+        </template>
+      </vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-notification', function() {
+      var notification;
+
+      beforeEach(() => notification = fixture('default'));
+      afterEach(() => {
+        // Close to stop all pending timers.
+        notification.close();
+        // Remove overlay from body
+        document.body.removeChild(notification.constructor._overlay);
+        // delete singleton reference, so as it's created in next test
+        delete notification.constructor._overlay;
+      });
+
+      describe('vaadin-notification-overlay', () => {
+        it('vaadin-notification-overlay is in the body', () => {
+          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
+        });
+
+        it('vaadin-notification-overlay is visible after opening', () => {
+          var isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
+          expect(isVisible(document.body.querySelector('vaadin-notification-overlay'))).to.be.true;
+        });
+      });
+
+      describe('a11y', () => {
+        it('overlay should have the `alert` role', () => {
+          expect(notification._card.getAttribute('role')).to.be.equal('alert');
+        });
+
+        it('overlay should have `aria-live="polite"`', () => {
+          expect(notification._card.getAttribute('aria-live')).to.be.equal('polite');
+        });
+
+        it('overlay should have correct `aria-label`', () => {
+          expect(notification._card.getAttribute('aria-label')).to.be.equal('Your work has been saved');
+        });
+      });
+
+      describe('methods', () => {
+        it('should close the noticication when close() is executed', () => {
+          expect(notification.opened).to.be.true;
+          notification.close();
+          expect(notification.opened).to.be.false;
+        });
+
+        it('should open the noticication when open() is executed', () => {
+          notification.close();
+          notification.open();
+          expect(notification.opened).to.be.true;
+        });
+      });
+
+      describe('duration', () => {
+        it('should close the notification after duration', done => {
+          setTimeout(() => {
+            expect(notification.opened).to.eql(false);
+            done();
+          }, 20);
+        });
+
+        it('should reconfigure the close timer if duration changes', done => {
+          notification.duration = 10;
+          setTimeout(() => {
+            expect(notification.opened).to.eql(false);
+            done();
+          }, 10);
+        });
+
+        [null, 0, NaN, undefined].forEach(timeout => {
+          it(`should not close the notification if duration is ${timeout}`, done => {
+            notification.duration = timeout;
+            setTimeout(() => {
+              expect(notification.opened).to.eql(true);
+              done();
+            }, 1);
+          });
+        });
+      });
+    });
+  </script>
+</body>

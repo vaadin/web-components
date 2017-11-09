@@ -1,0 +1,206 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-notification tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-notification.html">
+</head>
+
+<body>
+  <test-fixture id="multiple">
+    <template>
+      <vaadin-notification opened vertical-align="top-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="middle"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom-stretch"><template>Notificaton</template></vaadin-notification>
+
+      <vaadin-notification opened vertical-align="top-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="top" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="middle"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened vertical-align="bottom-stretch"><template>Notificaton</template></vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('multiple notification', function() {
+      const alignments =
+        [['top-stretch'], ['top', ['start', 'center', 'end']], ['middle'], ['bottom', ['start', 'center', 'end']], ['bottom-stretch']];
+
+      const parts = alignments.reduce((prev, arr) => {
+        arr[1] && arr[1].forEach(val => prev.push(`${arr[0]}-${val}`))
+        !arr[1] && prev.push(arr[0]);
+        return prev;
+      }, []);
+
+      let notifications, overlay;
+
+      beforeEach(done => {
+        notifications = Array.from(fixture('multiple'));
+        overlay = notifications[0]._overlay;
+        // To ensure computed styles are applied.
+        setTimeout(done);
+      });
+
+      afterEach(() => {
+        // Close everything to stop all pending timers.
+        notifications.forEach(e => e.close());
+        // Remove overlay from body
+        document.body.removeChild(notifications[0].constructor._overlay);
+        // delete singleton reference, so as it's created in next test
+        delete notifications[0].constructor._overlay;
+      });
+
+      describe('vaadin-notification-overlay', () => {
+        it('should be only one instance of vaadin-notification-overlay in the dom', () => {
+          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
+        });
+
+        it('overlay should be a singleton', () => {
+          expect(notifications[0]._overlay).to.be.equal(notifications[1]._overlay);
+        });
+
+        it('overlay should be modeless', () => {
+          expect(overlay.modeless).to.be.true;
+        });
+
+        it('should close the overlay when all active notifications dissapear', done => {
+          // Set the same duration to all notifications but one
+          notifications.forEach(elm => elm.duration = 2);
+          notifications[1].duration = 5;
+
+          expect(overlay.opened).to.be.true;
+          setTimeout(() => {
+            expect(overlay.opened).to.be.true;
+            setTimeout(() => {
+              expect(overlay.opened).to.be.false;
+              done();
+            }, 3);
+          }, 3);
+        });
+      });
+
+      describe('regions', () => {
+        it('should have a DOM part per notification region', () => {
+          parts.forEach(part => {
+            expect(overlay.regions[part].getAttribute('part')).to.be.equal(part);
+          });
+        });
+
+        it('should insert notifications in the correct region', () => {
+          notifications.forEach(noti => {
+            const horizontal = noti.getAttribute('horizontal-align');
+            const region = noti.verticalAlign + (horizontal ? `-${horizontal}` : '');
+            expect(noti._card.parentNode.getAttribute('part')).to.be.equal(region);
+          })
+        });
+
+        it('should move notification if vertical alignment changes', () => {
+          const e = notifications[0];
+          expect(e._card.parentNode.getAttribute('part')).to.be.equal('top-stretch');
+
+          e.verticalAlign = 'bottom-stretch';
+          expect(e._card.parentNode.getAttribute('part')).to.be.equal('bottom-stretch');
+        });
+
+        it('should move notification if horizontal alignment changes', () => {
+          const e = notifications[1];
+          expect(e._card.parentNode.getAttribute('part')).to.be.equal('top-start');
+
+          e.horizontalAlign = 'end';
+          expect(e._card.parentNode.getAttribute('part')).to.be.equal('top-end');
+        });
+
+        it('should remove notification from the region when it is closed', () => {
+          const e = notifications[1];
+          e.close();
+          expect(e._card.parentNode).not.to.be.ok;
+        });
+      });
+
+      describe('styles', () => {
+        it('content should ignore pointer events', () => {
+          expect(getComputedStyle(overlay.$.content)['pointer-events']).to.equal('none');
+        });
+
+        it('all regions should be flex containers', () => {
+          const regions = Object.values(overlay.regions);
+          regions.push(overlay.$.content);
+          regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
+          regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
+          // regions.forEach(e => console.log(e.getAttribute('part'), getComputedStyle(e)['flex-direction']));
+          regions.forEach(e => expect(getComputedStyle(e)['display']).to.equal('flex'));
+        });
+
+        it('all regions but top ones should have flex-direction column', () => {
+          const regions = Object.values(overlay.regions);
+          regions.push(overlay.$.content);
+          regions.filter(e => !/top/.test(e.getAttribute('part'))).forEach(e =>
+            expect(getComputedStyle(e)['flex-direction']).to.equal('column')
+          );
+        });
+
+        it('top regions should have flex-direction column-reverse', () => {
+          const regions = Object.values(overlay.regions);
+          regions.push(overlay.$.content);
+          regions.filter(e => /top/.test(e.getAttribute('part')))
+            .forEach(e => expect(getComputedStyle(e)['flex-direction']).to.equal('column-reverse'));
+        });
+
+        it('top and bottom regions should have flex-direction row', () => {
+          [
+            overlay.shadowRoot.querySelector('[part="top"]'),
+            overlay.shadowRoot.querySelector('[part="bottom"]')
+          ].forEach(e => expect(getComputedStyle(e)['flex-direction']).to.equal('row'));
+        });
+
+        it('all regions but middle should justify-content at end', () => {
+          const regions = Object.values(overlay.regions);
+          regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
+          regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
+          regions.filter(e => e.getAttribute('part') != 'middle')
+            .forEach(e => expect(getComputedStyle(e)['justify-content']).to.equal('flex-end'));
+        });
+
+        it('middle region should justify-content at center', () => {
+          expect(getComputedStyle(overlay.regions['middle'])['justify-content']).to.equal('center');
+        });
+
+        it('start/stretch notifications should align-self at start', () => {
+          notifications.forEach(e => {
+            if ( /stretch/.test(e.verticalAlign) ||  /top|bottom/.test(e.horizontalAlign) && 'start' == e.verticalAlign) {
+              console.log(e.verticalAlign, e.horizontalAlign, getComputedStyle(e._card)['align-self'])
+              expect(getComputedStyle(e._card)['align-self'], `${e.verticalAlign} - ${e.horizontalAlign}`).to.equal('flex-start')
+            }
+          });
+        });
+
+        it('middle/center notifications should align-self at start', () => {
+          notifications.forEach(e => {
+            if (/middle/.test(e.verticalAlign) || /top|bottom/.test(e.horizontalAlign) && 'center' == e.verticalAlign) {
+              expect(getComputedStyle(e._card)['align-self']).to.equal('center')
+            }
+          });
+        });
+
+        it('end notifications should align-self at end', () => {
+          notifications.forEach(e => {
+            if (/top|bottom/.test(e.horizontalAlign) && 'center' == e.verticalAlign) {
+              expect(getComputedStyle(e._card)['align-self']).to.equal('flex-end')
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
