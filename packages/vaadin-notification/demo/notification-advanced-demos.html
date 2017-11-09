@@ -60,52 +60,49 @@
               <button on-click="_show">Show Notificaton</button>
             </div>
           </template>
-
           <script>
-            class NotificationSamplerElement extends Polymer.Element {
-              static get is() {
-                return 'notification-full-demo';
-              }
+          window.addDemoReadyListener('#notification-advanced-demos-custom', function(document) {
+            Polymer({
+              is: 'notification-full-demo',
 
-              static get properties() {
-                return {
-                  verticalAlign: {
-                    value: 'bottom'
-                  },
-                  horizontalAlign: {
-                    value: 'start'
-                  },
-                  duration: {
-                    value: 3000
-                  },
-                  text: {
-                    value: 'Hello World'
-                  },
-                  counter: {
-                    value: 1
-                  }
-                };
-              }
+              properties: {
+                verticalAlign: {
+                  value: 'bottom'
+                },
+                horizontalAlign: {
+                  value: 'start'
+                },
+                duration: {
+                  value: 3000
+                },
+                text: {
+                  value: 'Hello World'
+                },
+                counter: {
+                  value: 1
+                }
+              },
 
-              _disabled(vertical) {
+              _disabled: function(vertical) {
                 return /stretch|middle/.test(vertical);
-              }
+              },
 
-              _show() {
-                const notify = document.createElement('vaadin-notification');
-                notify.innerHTML = `<template>${this.counter ++} - ${this.text}</template>`;
-                document.body.appendChild(notify);
+              _show: function() {
+                const notify = window.document.createElement('vaadin-notification');
+                notify.innerHTML = '<template>' + this.counter++ + '<br>' + this.text + '</template>';
+                window.document.body.appendChild(notify);
+
                 notify.verticalAlign = this.verticalAlign;
                 notify.horizontalAlign = this.horizontalAlign;
                 notify.duration = this.duration;
-                notify.open();
-              }
-            }
+                notify.opened = true;
 
-            if (!Vaadin.NotificationSamplerElement) {
-              window.customElements.define(NotificationSamplerElement.is, NotificationSamplerElement);
-              Vaadin.NotificationSamplerElement = NotificationSamplerElement;
-            }
+                notify.addEventListener('opened-changed', function() {
+                  window.document.body.removeChild(notify);
+                });
+              }
+            });
+          });
           </script>
         </dom-module>
 

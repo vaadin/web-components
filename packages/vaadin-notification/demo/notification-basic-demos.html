@@ -44,6 +44,9 @@
             notify.innerHTML = '<template>Settings saved!</template>';
             document.body.appendChild(notify);
             notify.open();
+            notify.addEventListener('opened-changed', function() {
+              document.body.removeChild(notify);
+            });
           };
         </script>
       </template>
