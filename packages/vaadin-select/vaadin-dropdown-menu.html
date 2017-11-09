@@ -141,7 +141,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly>
+    <vaadin-dropdown-menu-text-field
+        placeholder="[[placeholder]]"
+        label="[[label]]"
+        required="[[required]]"
+        invalid="[[invalid]]"
+        readonly
+      >
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
