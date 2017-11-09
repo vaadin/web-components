@@ -2,7 +2,7 @@
 
 org=vaadin
 repo=vaadin-charts
-branch=6.0-preview
+branch=master
 port=5199
 
 # make folder (same as input, no checking!)

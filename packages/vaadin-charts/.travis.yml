@@ -21,7 +21,7 @@ deploy:
     script: "./.travis.deploy.sh"
     skip_cleanup: true
     on:
-      branch: 6.0-preview
+      branch: master
 
 before_script:
   - gulp lint
