@@ -218,11 +218,16 @@
           expect(dropdown.opened).to.be.false;
         });
 
-        it('overlay should be opened on click event on input', () => {
+        it('overlay should be opened on click event on input field', () => {
           expect(dropdown._overlayElement.opened).to.be.false;
-
-          input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          MockInteractions.tap(input.root.querySelector('[part="input-field"]'));
           expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
+        it('overlay should not be opened on click event on underlying native input', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          MockInteractions.tap(dropdown._nativeInput);
+          expect(dropdown._overlayElement.opened).to.be.false;
         });
 
         it('On ArrowUp Should open the overlay, not select any item, and keep opened', () => {

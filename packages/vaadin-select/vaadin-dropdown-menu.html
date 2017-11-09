@@ -46,9 +46,13 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown-menu-text-field-default-theme" theme-for="vaadin-dropdown-menu-text-field">
   <template>
     <style>
-      /* Override native styling for disabled-inputs so as placeholder looks ok */
+      /**
+       * 1. Override native styling for disabled-inputs so as placeholder looks ok.
+       * 2. Prevent Firefox from preveting click event on the disabled input.
+       */
       [part="value"]:disabled {
-        opacity: 1;
+        opacity: 1; /* 1 */
+        pointer-events: none; /* 2 */
       }
 
       [part="input-field"] {
