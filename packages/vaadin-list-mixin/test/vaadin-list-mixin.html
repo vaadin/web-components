@@ -179,6 +179,12 @@
           expect(nav._navItems[3].selected).to.be.true;
         });
 
+        it('should clear selection when `selected` property is set to not numeric value', () => {
+          nav.selected = 3;
+          nav.selected = undefined;
+          expect(nav._navItems[3].selected).to.be.false;
+        });
+
         it('should be selectable with mouse click', () => {
           nav._navItems[3].click();
           expect(nav.selected).to.be.equal(3);

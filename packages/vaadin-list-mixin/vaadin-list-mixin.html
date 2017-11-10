@@ -77,8 +77,8 @@ This program is available under Apache License Version 2.0, available at https:/
         this._setFocusable(selected);
 
         const itemToSelect = items[selected];
+        items.forEach(item => item.selected = item === itemToSelect);
         if (itemToSelect && !itemToSelect.disabled) {
-          items.forEach(item => item.selected = item === itemToSelect);
           this._scrollToItem(selected);
         }
       }
@@ -145,7 +145,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _getAvailableIndex(idx, increment, condition) {
       const totalItems = this._navItems.length;
-      for (let i = 0; idx !== undefined && i < totalItems; i++, idx += (increment || 1)) {
+      for (let i = 0; typeof idx == 'number' && i < totalItems; i++, idx += (increment || 1)) {
         if (idx < 0) {
           idx = totalItems - 1;
         } else if (idx >= totalItems) {
