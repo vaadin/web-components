@@ -107,6 +107,23 @@
               });
               nav._scroll(400);
             });
+
+            it(`when orientation=${orientation} should not have overflow="start" when over-scrolling`, () => {
+              const scroll = nav._scrollerElement;
+
+              // Cannot set negative values to native scroll, monkey patching the properties
+              let pixels = 0;
+              Object.defineProperty(scroll, orientation == 'horizontal' ? 'scrollLeft' : 'scrollTop', {
+                get: () => pixels,
+                set: (v) => pixels = v
+              });
+
+              // Simulate over-scrolling
+              nav._scroll(-1);
+              scroll.dispatchEvent(new CustomEvent('scroll'));
+
+              expect(nav.getAttribute('overflow')).to.be.equal('end');
+            });
           });
 
         });
