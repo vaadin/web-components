@@ -101,6 +101,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * A read-only property indicating whether this combo box has a value
          * selected or not. It can be used for example in styling of the component.
+         * @private
          */
         hasValue: {
           type: Boolean,
@@ -167,15 +168,6 @@ This program is available under Apache License Version 2.0, available at https:/
         itemValuePath: {
           type: String,
           value: 'value'
-        },
-
-
-        /**
-         * Set to true to mark the input as required.
-         */
-        required: {
-          type: Boolean,
-          value: false
         },
 
         /**
@@ -757,8 +749,8 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * @return {boolean} True if the value is valid and sets the `invalid` flag appropriatelly
      */
-    validate(value) {
-      return !(this.invalid = !this.checkValidity(value));
+    validate() {
+      return !(this.invalid = !this.checkValidity());
     }
 
     /**
@@ -766,7 +758,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * You can override the `checkValidity` method for custom validations.
      */
-    checkValidity(value) {
+    checkValidity() {
       if (this._bindableInput.validate) {
         return this._bindableInput.validate();
       }

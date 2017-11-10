@@ -98,6 +98,15 @@
         });
       });
 
+      describe('pattern property', () => {
+        it('should work with the allowed pattern', () => {
+          comboBox.pattern = '[0-9]*';
+          comboBox.allowCustomValue = true;
+          comboBox.value = 'foo';
+          expect(comboBox.validate()).to.be.false;
+        });
+      });
+
       describe('hasValue property', () => {
         it('should be readOnly', () => {
           expect(comboBox.hasValue).to.be.false;

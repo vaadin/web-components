@@ -53,7 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <vaadin-text-field part="text-field" id="input"
-        allowed-pattern="[[allowedPattern]]"
+        pattern="[[pattern]]"
         prevent-invalid-input="[[preventInvalidInput]]"
 
         value="{{_inputElementValue}}"
@@ -71,7 +71,6 @@ This program is available under Apache License Version 2.0, available at https:/
         autocapitalize="none"
 
         autofocus="[[autofocus]]"
-        inputmode="[[inputmode]]"
 
         on-change="_stopPropagation"
         on-input="_inputValueChanged"
@@ -201,6 +200,14 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Set to true to mark the input as required.
+             */
+            required: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
              * Set to true to disable this input.
              */
             disabled: {
@@ -213,13 +220,6 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             preventInvalidInput: {
               type: Boolean
-            },
-
-            /**
-             * Set this to specify the pattern allowed by `preventInvalidInput`.
-             */
-            allowedPattern: {
-              type: String
             },
 
             /**
@@ -240,10 +240,6 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean
             },
 
-            inputmode: {
-              type: String
-            },
-
             /**
              * A placeholder string in addition to the label.
              */
@@ -255,10 +251,6 @@ This program is available under Apache License Version 2.0, available at https:/
             readonly: {
               type: Boolean,
               value: false
-            },
-
-            size: {
-              type: Number
             }
           };
         }
