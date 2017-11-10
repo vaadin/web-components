@@ -141,7 +141,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-dropdown-menu-text-field placeholder="[[placeholder]]" label="[[label]]" readonly>
+    <vaadin-dropdown-menu-text-field
+        placeholder="[[placeholder]]"
+        label="[[label]]"
+        required="[[required]]"
+        invalid="[[invalid]]"
+        readonly
+      >
       <slot name="prefix" slot="prefix"></slot>
       <div slot="selected"></div>
     </vaadin-dropdown-menu-text-field>
@@ -237,6 +243,16 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               observer: '_requiredChanged'
+            },
+
+            /**
+             * Set to true if the value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
             },
 
             /**
@@ -445,13 +461,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight) + 'px';
         }
 
-        /** @protected */
+        /**
+         * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+         *
+         * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
+         */
         validate() {
-          if (this.disabled || !this.required || this.value) {
-            this.removeAttribute('invalid');
-            return true;
-          }
-          this.setAttribute('invalid', '');
+          return !(this.invalid = !(this.disabled || !this.required || this.value));
         }
       }
 
