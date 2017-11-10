@@ -266,7 +266,7 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             verticalAlign: {
               type: String,
-              value: 'bottom',
+              value: 'bottom'
             },
 
             /**
@@ -335,7 +335,13 @@ This program is available under Apache License Version 2.0, available at https:/
         _appendNotificationCard() {
           const region = /^(top|bottom)$/.test(this.verticalAlign)
             ? this.verticalAlign + '-' + this.horizontalAlign : this.verticalAlign;
-          this._overlay.regions[region].appendChild(this._card);
+
+          if (this._overlay.regions[region]) {
+            this._overlay.regions[region].appendChild(this._card);
+          } else {
+            window.console.warn(
+              `Invalid alignment parameters provided: vertical-align=${this.verticalAlign} horizontal-align=${this.horizontalAlign}`);
+          }
         }
 
         _removeNotificationCard() {

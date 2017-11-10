@@ -120,6 +120,20 @@
           expect(e._card.parentNode.getAttribute('part')).to.be.equal('top-end');
         });
 
+        it('should not move notification and display a warning message on invalid orientation', () => {
+          const warnSpy = sinon.spy();
+          const warnOrig = window.console.warn;
+          window.console.warn = warnSpy;
+
+          const e = notifications[1];
+          const initialRegion = e._card.parentNode;
+          e.verticalAlign = 'foo';
+          expect(e._card.parentNode).to.be.equal(initialRegion);
+          expect(warnSpy).to.be.calledOnce;
+
+          window.console.warn = warnOrig;
+        });
+
         it('should remove notification from the region when it is closed', () => {
           const e = notifications[1];
           e.close();
@@ -136,7 +150,6 @@
           regions.push(overlay.$.content);
           regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
           regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
-          // regions.forEach(e => console.log(e.getAttribute('part'), getComputedStyle(e)['flex-direction']));
           regions.forEach(e => expect(getComputedStyle(e)['display']).to.equal('flex'));
         });
 
