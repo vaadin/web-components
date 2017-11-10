@@ -61,15 +61,15 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-end;
       }
 
-      [part="top"] [part],
-      [part="bottom"] [part] {
+      [part="top"] > [part],
+      [part="bottom"] > [part] {
         flex: auto;
         flex-shrink: 1;
         flex-basis: 0;
       }
 
       [part="top-stretch"],
-      [part="top"] [part] {
+      [part="top"] > [part] {
         flex-direction: column-reverse;
       }
 
@@ -88,6 +88,38 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="middle"] > *,
       [part$="-center"] > * {
         align-self: center;
+      }
+
+      @media screen and (max-width: 420px) {
+        [part=content] {
+          justify-content: flex-start;
+        }
+
+        [part="top"],
+        [part="bottom"] {
+          flex-direction: column;
+          flex: initial;
+          flex-basis: initial;
+        }
+
+        [part="top"] > [part],
+        [part="bottom"] > [part] {
+          flex: 1;
+          flex-basis: initial;
+        }
+
+        [part="middle"] {
+          position: relative;
+          margin: initial;
+          flex: 1;
+        }
+
+        [part="middle"] > *,
+        [part^="top-"] > *,
+        [part^="bottom-"] > *,
+        [part$="-center"] > * {
+          align-self: initial;
+        }
       }
     </style>
 
@@ -118,13 +150,19 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         padding: 8px;
-        min-width: calc(100vw / 6);
-        max-width: 36em;
+        min-width: 250px;
+        max-width: 100%;
         font-size: 12px;
         background: lightgrey;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
         margin: 5px 0;
         max-height: 15em;
+      }
+
+      @media screen and (max-width: 800px) {
+        :host {
+          min-width: calc(100% - 5px);
+        }
       }
     </style>
   </template>
