@@ -12,7 +12,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-checkbox>Vaadin <i>Checkbox</i></vaadin-checkbox>
+      <vaadin-checkbox name="test-checkbox">Vaadin <i>Checkbox</i></vaadin-checkbox>
     </template>
   </test-fixture>
 
@@ -54,6 +54,12 @@
           done();
         });
         MockInteractions.downAndUp(vaadinCheckbox);
+      });
+
+      it('should have proper name', () => {
+        expect(vaadinCheckbox.name).to.eq('');
+        vaadinCheckbox.checked = true;
+        expect(vaadinCheckbox.name).to.eq('test-checkbox');
       });
 
       it('should toggle on host click', () => {

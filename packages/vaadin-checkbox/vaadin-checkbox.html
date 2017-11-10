@@ -146,13 +146,6 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The name of the control, which is submitted with the form data.
-             */
-            name: {
-              type: String
-            },
-
-            /**
              * The value given to the data submitted with the checkbox's name to the server when the control is inside a form.
              */
             value: {
@@ -160,6 +153,23 @@ This program is available under Apache License Version 2.0, available at https:/
               value: 'on'
             }
           };
+        }
+
+        constructor() {
+          super();
+          /**
+           * @type {string}
+           * Name of the element.
+           */
+          this.name;
+        }
+
+        get name() {
+          return this.checked ? this._storedName : '';
+        }
+
+        set name(name) {
+          this._storedName = name;
         }
 
         ready() {
@@ -170,6 +180,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('click', this._handleClick.bind(this));
 
           this._addActiveListeners();
+
+          this.name = this.getAttribute('name');
         }
 
         _checkedChanged(checked) {
