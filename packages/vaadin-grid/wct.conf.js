@@ -13,7 +13,7 @@ module.exports = {
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.12/safari@10.0'
+      'macOS 10.12/safari@11.0'
     ];
 
     const cronPlatforms = [
