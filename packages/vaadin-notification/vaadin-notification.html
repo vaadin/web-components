@@ -11,8 +11,19 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       [part="content"] {
-        justify-content: space-between;
-        padding: 8px;
+        padding: 4px;
+      }
+
+      [part^="top-"],
+      [part^="bottom-"],
+      [part="middle"] {
+        padding: 0 4px;
+      }
+
+      [part^="top-"] > *,
+      [part^="bottom-"] > *,
+      [part="middle"] > * {
+        margin: 4px 0;
       }
     </style>
   </template>
@@ -90,35 +101,22 @@ This program is available under Apache License Version 2.0, available at https:/
         align-self: center;
       }
 
-      @media screen and (max-width: 420px) {
-        [part=content] {
-          justify-content: flex-start;
-        }
-
+      @media (max-width: 420px) {
         [part="top"],
         [part="bottom"] {
           flex-direction: column;
-          flex: initial;
-          flex-basis: initial;
+          flex: 0 1 auto;
         }
 
         [part="top"] > [part],
         [part="bottom"] > [part] {
-          flex: 1;
-          flex-basis: initial;
+          flex-basis: auto;
         }
 
         [part="middle"] {
           position: relative;
-          margin: initial;
+          margin: inherit;
           flex: 1;
-        }
-
-        [part="middle"] > *,
-        [part^="top-"] > *,
-        [part^="bottom-"] > *,
-        [part$="-center"] > * {
-          align-self: initial;
         }
       }
     </style>
@@ -150,18 +148,15 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         padding: 8px;
-        min-width: 250px;
-        max-width: 100%;
-        font-size: 12px;
+        width: 100%;
+        max-width: 250px;
         background: lightgrey;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-        margin: 5px 0;
-        max-height: 15em;
       }
 
-      @media screen and (max-width: 800px) {
+      @media (max-width: 420px) {
         :host {
-          min-width: calc(100% - 5px);
+          max-width: none;
         }
       }
     </style>
@@ -176,6 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
         box-sizing: border-box;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
+        pointer-events: auto;
       }
     </style>
     <slot></slot>
@@ -185,7 +181,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-notification">
   <template>
     <style>
-      vaadin-notification-card {
+      :host {
         display: none;
       }
     </style>

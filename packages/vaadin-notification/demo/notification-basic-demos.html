@@ -40,7 +40,7 @@
         <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
         <script>
           window.showNotification = function() {
-            const template = window.document.createElement('template');
+            const template = document.createElement('template');
             template.innerHTML = '<h4>Alert</h4>This is a Dynamic Notification created with JS';
 
             const notify = document.createElement('vaadin-notification');
