@@ -28,7 +28,7 @@
 
         container.appendChild(vaadinChart);
         setTimeout(() => {
-          expect(vaadinChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Chart title');
+          expect(vaadinChart.$.chart.querySelector('.highcharts-title')).to.be.null;
           done();
         });
       });

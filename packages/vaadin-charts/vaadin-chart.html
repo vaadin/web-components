@@ -211,6 +211,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._baseConfig = {
             credits: {
               enabled: false
+            },
+            exporting: {
+              enabled: false
+            },
+            title: {
+              text: null
             }
           };
 
@@ -248,7 +254,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         get options() {
-          const options = Object.assign({}, this._baseConfig);
+          const options = {};
 
           if (this.title) {
             options.title = {
@@ -362,11 +368,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__inflateFunctions(jsonConfiguration);
           
           if (!this._dirty || resetConfiguration) {
-            this.configuration = Highcharts.chart(this.$.chart, jsonConfiguration);
-            this.__invertForBarSeries(jsonConfiguration.series);
-            if (!jsonConfiguration.credits) {
-              this.__updateOrAddCredits({enabled: false});
-            }
+            const options = Object.assign({}, this._baseConfig);
+            Object.assign(options, jsonConfiguration);
+
+            this.configuration = Highcharts.chart(this.$.chart, options);
+            this.__invertForBarSeries(options.series);
             return;
           }
           this.configuration.update(jsonConfiguration);

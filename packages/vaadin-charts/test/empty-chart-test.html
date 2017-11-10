@@ -26,9 +26,9 @@
         expect(element.constructor.is).to.be.equal(element.localName);
       });
 
-      it('should have default title', done => {
+      it('should have no title', done => {
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Chart title');
+          expect(element.$.chart.querySelector('.highcharts-title')).to.be.null;
           done();
         });
       });
