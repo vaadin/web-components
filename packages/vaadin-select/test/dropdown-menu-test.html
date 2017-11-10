@@ -309,8 +309,8 @@
           expect(ev.defaultPrevented).to.be.false;
         });
 
-        it('Should disable native input to fix iOS Zooming', () => {
-          expect(dropdown._nativeInput.disabled).to.be.true;
+        it('Should set pointer-events to none on the native input to fix iOS Zooming', () => {
+          expect(getComputedStyle(dropdown._nativeInput)['pointer-events']).to.equal('none');
         });
       });
 

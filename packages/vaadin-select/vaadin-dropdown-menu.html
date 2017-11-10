@@ -46,13 +46,9 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-dropdown-menu-text-field-default-theme" theme-for="vaadin-dropdown-menu-text-field">
   <template>
     <style>
-      /**
-       * 1. Override native styling for disabled-inputs so as placeholder looks ok.
-       * 2. Prevent Firefox from preveting click event on the disabled input.
-       */
-      [part="value"]:disabled {
-        opacity: 1; /* 1 */
-        pointer-events: none; /* 2 */
+      /* Preventing click on the native input fixes iOS zooming */
+      [part="value"] {
+        pointer-events: none;
       }
 
       [part="input-field"] {
@@ -316,9 +312,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
-
-          // Disabling the input fixes iOS zooming
-          this._nativeInput.disabled = true;
 
           this.focusElement.addEventListener('click', e => this.opened = true);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
