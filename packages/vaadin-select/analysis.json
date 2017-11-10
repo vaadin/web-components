@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 451,
+          "line": 462,
           "column": 6
         },
         "end": {
-          "line": 451,
+          "line": 462,
           "column": 42
         }
       },
@@ -2277,7 +2277,7 @@
           "tagname": "vaadin-dropdown-menu-text-field"
         },
         {
-          "description": "`<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.\n\n```\n<vaadin-dropdown-menu>\n  <template>\n    <vaadin-list-box>\n      <vaadin-item>Foo</vaadin-item>\n      <vaadin-item>Bar</vaadin-item>\n      <vaadin-item>Baz</vaadin-item>\n    </vaadin-list-box>\n  </template>\n</vaadin-dropdown-menu>\n```",
+          "description": "`<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.\n\n```\n<vaadin-dropdown-menu>\n  <template>\n    <vaadin-list-box>\n      <vaadin-item>Foo</vaadin-item>\n      <vaadin-item>Bar</vaadin-item>\n      <vaadin-item>Baz</vaadin-item>\n    </vaadin-list-box>\n  </template>\n</vaadin-dropdown-menu>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`opened` | Set when the dropdown menu is open | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host",
           "summary": "",
           "path": "vaadin-dropdown-menu.html",
           "properties": [
@@ -2400,11 +2400,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 206,
                   "column": 13
                 }
               },
@@ -2423,11 +2423,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 211,
                   "column": 12
                 },
                 "end": {
-                  "line": 203,
+                  "line": 214,
                   "column": 13
                 }
               },
@@ -2443,11 +2443,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 219,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -2465,11 +2465,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 235,
                   "column": 12
                 },
                 "end": {
-                  "line": 228,
+                  "line": 239,
                   "column": 13
                 }
               },
@@ -2486,11 +2486,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 233,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -2505,11 +2505,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 241,
+                  "line": 252,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 254,
                   "column": 13
                 }
               },
@@ -2524,11 +2524,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 256,
                   "column": 12
                 },
                 "end": {
-                  "line": 245,
+                  "line": 256,
                   "column": 27
                 }
               },
@@ -2543,11 +2543,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 258,
                   "column": 12
                 },
                 "end": {
-                  "line": 249,
+                  "line": 260,
                   "column": 13
                 }
               },
@@ -2563,11 +2563,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 262,
                   "column": 12
                 },
                 "end": {
-                  "line": 251,
+                  "line": 262,
                   "column": 35
                 }
               },
@@ -2582,11 +2582,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 264,
                   "column": 12
                 },
                 "end": {
-                  "line": 253,
+                  "line": 264,
                   "column": 33
                 }
               },
@@ -2601,11 +2601,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 255,
+                  "line": 266,
                   "column": 12
                 },
                 "end": {
-                  "line": 255,
+                  "line": 266,
                   "column": 26
                 }
               },
@@ -2620,11 +2620,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 257,
+                  "line": 268,
                   "column": 12
                 },
                 "end": {
-                  "line": 257,
+                  "line": 268,
                   "column": 32
                 }
               },
@@ -2639,11 +2639,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 271,
                   "column": 12
                 },
                 "end": {
-                  "line": 260,
+                  "line": 271,
                   "column": 34
                 }
               },
@@ -2659,11 +2659,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 280,
+                  "line": 291,
                   "column": 8
                 },
                 "end": {
-                  "line": 307,
+                  "line": 318,
                   "column": 9
                 }
               },
@@ -2676,11 +2676,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 286,
                   "column": 8
                 },
                 "end": {
-                  "line": 278,
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -2693,11 +2693,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 315,
+                  "line": 326,
                   "column": 8
                 },
                 "end": {
-                  "line": 320,
+                  "line": 331,
                   "column": 9
                 }
               },
@@ -2882,11 +2882,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 323,
+                  "line": 334,
                   "column": 8
                 },
                 "end": {
-                  "line": 330,
+                  "line": 341,
                   "column": 9
                 }
               },
@@ -2899,11 +2899,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 332,
+                  "line": 343,
                   "column": 8
                 },
                 "end": {
-                  "line": 334,
+                  "line": 345,
                   "column": 9
                 }
               },
@@ -2920,11 +2920,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 336,
+                  "line": 347,
                   "column": 8
                 },
                 "end": {
-                  "line": 341,
+                  "line": 352,
                   "column": 9
                 }
               },
@@ -2941,11 +2941,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 343,
+                  "line": 354,
                   "column": 8
                 },
                 "end": {
-                  "line": 347,
+                  "line": 358,
                   "column": 9
                 }
               },
@@ -2962,11 +2962,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 349,
+                  "line": 360,
                   "column": 8
                 },
                 "end": {
-                  "line": 368,
+                  "line": 379,
                   "column": 9
                 }
               },
@@ -2986,11 +2986,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 370,
+                  "line": 381,
                   "column": 8
                 },
                 "end": {
-                  "line": 384,
+                  "line": 395,
                   "column": 9
                 }
               },
@@ -3003,11 +3003,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 386,
+                  "line": 397,
                   "column": 8
                 },
                 "end": {
-                  "line": 413,
+                  "line": 424,
                   "column": 9
                 }
               },
@@ -3020,11 +3020,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 415,
+                  "line": 426,
                   "column": 8
                 },
                 "end": {
-                  "line": 426,
+                  "line": 437,
                   "column": 9
                 }
               },
@@ -3044,11 +3044,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 428,
+                  "line": 439,
                   "column": 8
                 },
                 "end": {
-                  "line": 434,
+                  "line": 445,
                   "column": 9
                 }
               },
@@ -3061,11 +3061,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 437,
+                  "line": 448,
                   "column": 8
                 },
                 "end": {
-                  "line": 443,
+                  "line": 454,
                   "column": 9
                 }
               },
@@ -3107,11 +3107,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 177,
+              "line": 187,
               "column": 6
             },
             "end": {
-              "line": 444,
+              "line": 455,
               "column": 7
             }
           },
@@ -3160,11 +3160,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 200,
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 206,
                   "column": 13
                 }
               },
@@ -3176,11 +3176,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 211,
                   "column": 12
                 },
                 "end": {
-                  "line": 203,
+                  "line": 214,
                   "column": 13
                 }
               },
@@ -3192,11 +3192,11 @@
               "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.",
               "sourceRange": {
                 "start": {
-                  "line": 215,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 219,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -3208,11 +3208,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 224,
+                  "line": 235,
                   "column": 12
                 },
                 "end": {
-                  "line": 228,
+                  "line": 239,
                   "column": 13
                 }
               },
@@ -3224,11 +3224,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 233,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -3240,11 +3240,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 241,
+                  "line": 252,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 254,
                   "column": 13
                 }
               },
