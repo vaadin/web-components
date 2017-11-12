@@ -146,6 +146,12 @@
           expect(getComputedStyle(overlay.$.content)['pointer-events']).to.equal('none');
         });
 
+        it('notification should respomnd to pointer events', () => {
+          notifications.forEach(e => {
+            expect(getComputedStyle(e._card)['pointer-events']).to.be.equal('auto');
+          });
+        });
+
         it('all regions should be flex containers', () => {
           regions.push(overlay.$.content);
           regions.push(overlay.shadowRoot.querySelector('[part="top"]'));

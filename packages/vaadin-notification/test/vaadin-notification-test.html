@@ -102,7 +102,7 @@
           }, 10);
         });
 
-        [null, 0, NaN, undefined].forEach(timeout => {
+        [undefined, null, NaN, 0].forEach(timeout => {
           it(`should not close the notification if duration is ${timeout}`, done => {
             notification.duration = timeout;
             setTimeout(() => {

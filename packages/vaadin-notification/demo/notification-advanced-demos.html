@@ -89,7 +89,7 @@
 
               _show: function() {
                 const template = window.document.createElement('template');
-                template.innerHTML = this.counter++ + '<br>' + this.text;
+                template.innerHTML = this.counter++ + ' ' + this.text;
                 const notify = window.document.createElement('vaadin-notification');
                 notify.appendChild(template);
                 window.document.body.appendChild(notify);
