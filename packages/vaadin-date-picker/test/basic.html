@@ -269,6 +269,13 @@
         });
       });
 
+      it('should validate on clear button tap', () => {
+        datepicker.required = true;
+        datepicker.value = '1991-20-12';
+        tap(clearButton)
+        expect(datepicker.invalid).to.equal(true);
+      });
+
       describe('window scroll realign', () => {
 
         beforeEach(done => {
