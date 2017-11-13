@@ -15,12 +15,7 @@
 
       #container {
         width: 300px;
-        min-height: 50px;
-      }
-
-      #container > div {
-        width: 50px;
-        height: 50px;
+        height: 200px;
       }
     </style>
   </custom-style>
@@ -30,14 +25,14 @@
   <test-fixture id="default">
     <template>
       <vaadin-horizontal-layout id="container">
-        <div id="c1"></div>
-        <div id="c2"></div>
+        <div id="c1">c1</div>
+        <div id="c2">c2</div>
       </vaadin-horizontal-layout>
     </template>
   </test-fixture>
 
   <script>
-    describe('Basic tests', () => {
+    describe('basic tests', () => {
       let element, c1, c2;
 
       beforeEach(() => {
@@ -47,9 +42,93 @@
       });
 
       it('items are next to each other', () => {
-        expect(positionEquals(element, 0, 300, 50, 0)).to.be.true;
-        expect(positionEquals(c1, 0, 50, 50, 0)).to.be.true;
-        expect(positionEquals(c2, 0, 100, 50, 50)).to.be.true;
+        expect(getCoords(element)).to.include({top: 0, right: 300, bottom: 200, left: 0});
+        expect(getCoords(c1)).to.include({top: 0, right: (300 - 32) / 2, bottom: 200, left: 0});
+        expect(getCoords(c2)).to.include({top: 0, right: 300, bottom: 200, left: (300 + 32) / 2});
+      });
+
+      it('should extend Vaadin.ThemableMixin', () => {
+        expect(element.constructor.hasOwnProperty('_memoizedThemableMixinTemplate')).to.be.true;
+      });
+    });
+
+    describe('spacing', () => {
+      let element, c1, c2;
+
+      beforeEach(() => {
+        element = fixture('default');
+        c1 = element.querySelector('#c1');
+        c2 = element.querySelector('#c2');
+      });
+
+      it('should apply default column-gap', () => {
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('16px'); // 0.5 * 2em in px
+        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('16px');
+      });
+
+      it('should compensate for column-gap in layout wrapper', () => {
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('-16px');
+      });
+
+      it('should support updating with `updateStyles` call', () => {
+        element.updateStyles({
+          '--vaadin-horizontal-layout-column-gap': '20px'
+        });
+
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('10px'); // 0.5 * 20px in px
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('10px'); // 0.5 * 20px in px
+        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
+        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('-10px'); // -0.5 * 20px in px
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('-10px');
+      });
+    });
+
+    describe('theme variations', () => {
+      let element, c1, c2;
+
+      beforeEach(() => {
+        element = fixture('default');
+        c1 = element.querySelector('#c1');
+        c2 = element.querySelector('#c2');
+      });
+
+      it('should support theme="gap-none"', () => {
+        element.setAttribute('theme', 'gap-none');
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('0px');
+        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('0px');
+        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('0px');
+        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('0px');
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('0px');
+        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('0px');
+      });
+
+      it('should not have margin or padding by default', () => {
+        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('0px');
+        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('0px');
+      });
+
+      it('should support theme="margin"', () => {
+        element.setAttribute('theme', 'margin');
+        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal('32px'); // 2em in px
+        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal('32px');
+      });
+
+      it('should support theme="padding"', () => {
+        element.setAttribute('theme', 'padding');
+        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal('32px'); // 2em in px
+        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('32px');
       });
     });
   </script>

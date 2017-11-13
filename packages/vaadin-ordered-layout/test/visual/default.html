@@ -3,9 +3,18 @@
 <head lang="en">
   <meta charset="UTF-8">
   <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../vaadin-horizontal-layout.html" rel="import">
   <link href="../../vaadin-vertical-layout.html" rel="import">
+  <script>
+    addEventListener('WebComponentsReady', function() {
+      // Wait for the other 'WebComponentsReady' event listeners
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
+  </script>
 </head>
 
 <body>
@@ -19,6 +28,30 @@
         HL Block 2
       </div>
     </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="gap-none">
+      <div>
+        HL Block 1 gap-none
+      </div>
+      <div>
+        HL Block 2 gap-none
+      </div>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="margin">
+      <div>
+        HL Block 1 margin
+      </div>
+      <div>
+        HL Block 2 margin
+      </div>
+    </vaadin-horizontal-layout>
+    <vaadin-horizontal-layout theme="padding">
+      <div>
+        HL Block 1 padding
+      </div>
+      <div>
+        HL Block 2 padding
+      </div>
+    </vaadin-horizontal-layout>
   </div>
 
   <div id="vertical-layout">
@@ -28,6 +61,30 @@
       </div>
       <div>
         VL Block 2
+      </div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="gap-none">
+      <div>
+        VL Block 1 gap-none
+      </div>
+      <div>
+        VL Block 2 gap-none
+      </div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="margin">
+      <div>
+        VL Block 1 margin
+      </div>
+      <div>
+        VL Block 2 margin
+      </div>
+    </vaadin-vertical-layout>
+    <vaadin-vertical-layout theme="padding">
+      <div>
+        VL Block 1 padding
+      </div>
+      <div>
+        VL Block 2 padding
       </div>
     </vaadin-vertical-layout>
   </div>

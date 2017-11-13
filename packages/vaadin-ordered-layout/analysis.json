@@ -8,22 +8,46 @@
       "sourceRange": {
         "file": "vaadin-vertical-layout.html",
         "start": {
-          "line": 53,
+          "line": 121,
           "column": 6
         },
         "end": {
-          "line": 53,
+          "line": 121,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.\n\n```\n<vaadin-horizontal-layout>\n  <div>Block 1</div>\n  <div>Block 2</div>\n</vaadin-horizontal-layout>\n```",
+          "description": "`<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.\n\n```\n<vaadin-horizontal-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-horizontal-layout>\n```\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available\non the `<vaadin-horizontal-layout>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-horizontal-layout-column-gap` | Length of the gap between items | `2em`\n\n### Built-in Theme Variations\n\n`<vaadin-horizontal-layout>` supports the following theme variations:\n\nTheme variation | Description\n---|---\n`theme=\"gap-none\"` | Removes gaps between items\n`theme=\"margin\"` | Adds default margin around the layout\n`theme=\"padding\"` | Adds default padding around the layout",
           "summary": "",
           "path": "vaadin-horizontal-layout.html",
           "properties": [],
           "methods": [],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [
             {
               "url": "demo/index.html",
@@ -33,11 +57,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 41,
+              "line": 109,
               "column": 6
             },
             "end": {
-              "line": 45,
+              "line": 113,
               "column": 7
             }
           },
@@ -57,25 +81,52 @@
               "range": {
                 "file": "vaadin-horizontal-layout.html",
                 "start": {
-                  "line": 19,
-                  "column": 4
+                  "line": 66,
+                  "column": 6
                 },
                 "end": {
-                  "line": 19,
-                  "column": 17
+                  "line": 66,
+                  "column": 19
                 }
               }
             }
           ],
-          "tagname": "vaadin-horizontal-layout"
+          "tagname": "vaadin-horizontal-layout",
+          "mixins": [
+            "Vaadin.ThemableMixin"
+          ]
         },
         {
-          "description": "`<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.\n\n```\n<vaadin-vertical-layout>\n  <div>Block 1</div>\n  <div>Block 2</div>\n</vaadin-vertical-layout>\n```",
+          "description": "`<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.\n\n```\n<vaadin-vertical-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-vertical-layout>\n```\n\n### CSS Properties Reference\n\nThe following custom CSS properties are available\non the `<vaadin-vertical-layout>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-vertical-layout-row-gap` | Length of the gap between items | `2em`\n\n### Built-in Theme Variations\n\n`<vaadin-vertical-layout-row-gap>` supports the following theme variations:\n\nTheme variation | Description\n---|---\n`theme=\"gap-none\"` | Removes gaps between items\n`theme=\"margin\"` | Adds default margin around the layout\n`theme=\"padding\"` | Adds default padding around the layout",
           "summary": "",
           "path": "vaadin-vertical-layout.html",
           "properties": [],
           "methods": [],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [
             {
               "url": "demo/index.html",
@@ -85,11 +136,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 42,
+              "line": 110,
               "column": 6
             },
             "end": {
-              "line": 46,
+              "line": 114,
               "column": 7
             }
           },
@@ -109,17 +160,20 @@
               "range": {
                 "file": "vaadin-vertical-layout.html",
                 "start": {
-                  "line": 20,
-                  "column": 4
+                  "line": 67,
+                  "column": 6
                 },
                 "end": {
-                  "line": 20,
-                  "column": 17
+                  "line": 67,
+                  "column": 19
                 }
               }
             }
           ],
-          "tagname": "vaadin-vertical-layout"
+          "tagname": "vaadin-vertical-layout",
+          "mixins": [
+            "Vaadin.ThemableMixin"
+          ]
         }
       ]
     }
