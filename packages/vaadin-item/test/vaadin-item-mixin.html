@@ -104,7 +104,7 @@
 
       it('should not have active attribute when disconnected from the DOM', () => {
         spaceDown(item);
-        item.remove();
+        item.parentNode.removeChild(item);
         window.ShadyDOM && window.ShadyDOM.flush();
         expect(item.hasAttribute('active')).to.be.false;
       });
