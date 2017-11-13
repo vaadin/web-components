@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
-        min-width: 175px;
+        width: 175px;
         outline: none;
       }
 
@@ -38,14 +38,21 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="input-field"] {
         display: flex;
         flex-grow: 1;
+        width: 100%;
+        box-sizing: border-box;
         min-height: 4.5em;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       [part="value"] {
+        margin: 0;
         width: 100%;
         box-sizing: border-box;
         flex: 1;
         resize: none;
+        overflow: hidden;
+        min-height: 100%;
       }
 
       [part="value"]::-ms-clear {
@@ -144,6 +151,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
+          this._isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
           this._updateHeight();
         }
 
@@ -152,27 +160,41 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _updateHeight() {
-          const scrollTop = this.focusElement.scrollTop;
+          const inputField = this.root.querySelector('[part=input-field]');
+          const scrollTop = inputField.scrollTop;
           const container = this.root.querySelector('.vaadin-text-area-container');
+          const input = this.focusElement;
+
+          const inputWidth = getComputedStyle(input).width;
           // Clear container enforced height
           container.style.height = '';
 
-          const inputField = this.root.querySelector('[part=input-field]');
-
           const valueLength = this.value ? this.value.length : 0;
+          // Only clear the height when the content shortens to minimize scrollbar flickering.
           if (this._oldValueLength >= valueLength) {
-            // Only clear the height when the content shortens to minimize scrollbar flickering.
-            inputField.style.height = '';
+            // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
+            input.style.maxWidth = inputWidth;
+            input.style.height = '';
+            // Avoid a jumpy Safari rendering issue
+            inputField.style.display = 'block';
           }
           this._oldValueLength = valueLength;
 
-          inputField.style.height = this.focusElement.scrollHeight + 'px';
+          const inputHeight = input.scrollHeight;
+          if (inputHeight > input.clientHeight) {
+            input.style.height = inputHeight + 'px';
+          }
+          // Restore
+          input.style.maxWidth = '';
+          inputField.style.display = '';
 
           // IE11 flexbox doesn't respect max-height constraints. Enforce the
           // constraints with an explicit height value
-          const fixedHeight = container.clientHeight + 'px';
-          container.style.height = fixedHeight;
-          this.focusElement.scrollTop = scrollTop;
+          if (this._isIE) {
+            const containerHeight = container.clientHeight + 'px';
+            container.style.height = containerHeight;
+          }
+          inputField.scrollTop = scrollTop;
         }
       }
 
