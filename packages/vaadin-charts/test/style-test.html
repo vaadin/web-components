@@ -68,7 +68,8 @@
         setTimeout(function() {
           const rects = chartContainer.querySelectorAll('.highcharts-series > rect');
           expect(rects).to.have.lengthOf(12);
-          expect(window.getComputedStyle(rects[0]).stroke).to.equal('rgb(255, 0, 0)');
+          // Safari for iOS is returning the color in hexa format, so we need to test for both values
+          expect(['#ff0000', 'rgb(255, 0, 0)']).to.include(window.getComputedStyle(rects[0]).stroke);
           done();
         });
       });

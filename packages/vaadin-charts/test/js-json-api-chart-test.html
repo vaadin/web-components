@@ -105,41 +105,35 @@
         setTimeout(function() {
           expect(chart.$.chart.querySelector('.highcharts-title')).to.be.null;
           done();
-        }, 20);
+        }, 100);
       });
 
       it('should inflate whole function strings', function(done) {
-        chart.update({'tooltip': {'_fn_formatter': 'function() {return "awesome chart"}'}}, true);
+        const config = {'tooltip': {'_fn_formatter': 'function() {return "awesome chart"}'}};
+        chart.__inflateFunctions(config);
         setTimeout(() => {
-          expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
-          expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+          expect(config.tooltip.formatter).to.be.a('function');
+          expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
         }, 20);
       });
 
       it('should inflate function body strings', function(done) {
-        chart.update({'tooltip': {'_fn_formatter': 'return "awesome chart"'}}, true);
+        const config = {'tooltip': {'_fn_formatter': 'return "awesome chart"'}};
+        chart.__inflateFunctions(config);
         setTimeout(() => {
-          expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
-          expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
-          done();
-        });
-      });
-
-      it('should inflate ES6 arrow function strings', function(done) {
-        chart.update({'tooltip': {'_fn_formatter': 'x => x + x'}}, true);
-        setTimeout(() => {
-          expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
-          expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+          expect(config.tooltip.formatter).to.be.a('function');
+          expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
         });
       });
 
       it('should inflate empty function strings', function(done) {
-        chart.update({'tooltip': {'_fn_formatter': ''}}, true);
+        const config = {'tooltip': {'_fn_formatter': ''}};
+        chart.__inflateFunctions(config);
         setTimeout(() => {
-          expect(chart.configuration.tooltip.options.formatter).to.be.a('function');
-          expect(chart.configuration.tooltip.options).to.not.have.property('_fn_formatter');
+          expect(config.tooltip.formatter).to.be.a('function');
+          expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
         });
       });

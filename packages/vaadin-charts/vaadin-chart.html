@@ -394,7 +394,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           for (var attr in jsonConfiguration) {
             if (jsonConfiguration.hasOwnProperty(attr)) {
               const targetProperty = jsonConfiguration[attr];
-              if (attr.startsWith('_fn_') && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
+              if (attr.indexOf('_fn_') === 0 && (typeof targetProperty === 'string' || targetProperty instanceof String)) {
                 try {
                   jsonConfiguration[attr.substr(4)] = eval('(' + targetProperty + ')');
                 } catch (e) {
