@@ -250,11 +250,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           super.connectedCallback();
           this.__addLicenseChecker();
           this.__addChildObserver();
-          this.update(this.options, true);
+          Polymer.RenderStatus.beforeNextRender(this, () => {
+            this._configuration = Highcharts.chart(this.$.chart, this.options);
+          });
         }
 
         get options() {
-          const options = {};
+          const options = Object.assign({}, this._baseConfig);
 
           if (this.title) {
             options.title = {
@@ -360,34 +362,31 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          */
         update(jsonConfiguration, resetConfiguration) {
           Polymer.RenderStatus.beforeNextRender(this, () => {
-            this.__internalUpdate(jsonConfiguration, resetConfiguration);
+            this.__inflateFunctions(jsonConfiguration);
+
+            if (!this._dirty || resetConfiguration) {
+              const initialOptions = Object.assign({}, this.options);
+              Object.assign(initialOptions, jsonConfiguration);
+
+              this._configuration = Highcharts.chart(this.$.chart, initialOptions);
+              this._dirty = true;
+              return;
+            }
+
+            this.configuration.update(jsonConfiguration);
+            if (jsonConfiguration.credits) {
+              this.__updateOrAddCredits(jsonConfiguration.credits);
+            }
+            if (jsonConfiguration.xAxis) {
+              this.__updateOrAddAxes(jsonConfiguration.xAxis, true);
+            }
+            if (jsonConfiguration.yAxis) {
+              this.__updateOrAddAxes(jsonConfiguration.yAxis, false);
+            }
+            if (jsonConfiguration.series) {
+              this.__updateOrAddSeries(jsonConfiguration.series);
+            }
           });
-        }
-
-        __internalUpdate(jsonConfiguration, resetConfiguration) {
-          this.__inflateFunctions(jsonConfiguration);
-          
-          if (!this._dirty || resetConfiguration) {
-            const options = Object.assign({}, this._baseConfig);
-            Object.assign(options, jsonConfiguration);
-
-            this.configuration = Highcharts.chart(this.$.chart, options);
-            this.__invertForBarSeries(options.series);
-            return;
-          }
-          this.configuration.update(jsonConfiguration);
-          if (jsonConfiguration.credits) {
-            this.__updateOrAddCredits(jsonConfiguration.credits);
-          }
-          if (jsonConfiguration.xAxis) {
-            this.__updateOrAddAxes(jsonConfiguration.xAxis, true);
-          }
-          if (jsonConfiguration.yAxis) {
-            this.__updateOrAddAxes(jsonConfiguration.yAxis, false);
-          }
-          if (jsonConfiguration.series) {
-            this.__updateOrAddSeries(jsonConfiguration.series);
-          }
         }
 
         __inflateFunctions(jsonConfiguration) {
@@ -406,13 +405,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
             }
           }
-        }
-
-        __invertForBarSeries(series) {
-          this._configuration.chart = this._configuration.chart || {};
-          this._configuration.chart.inverted = (series !== undefined) && Array.isArray(series)
-            && series.some(e => e.type === 'bar');
-          this._configuration.chart.type = this._configuration.chart.inverted ? 'column' : this._configuration.chart.type;
         }
 
         __updateOrAddCredits(credits) {
@@ -442,7 +434,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (!Array.isArray(series)) {
             throw new Error('The type of jsonConfiguration.series should be Object[]');
           }
-          this.__invertForBarSeries(series);
           for (var i = 0; i < series.length; i++) {
             var currentSeries = series[i];
             if (currentSeries.type === 'bar') {
@@ -457,7 +448,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateTitle(newValue) {
-          if (!this.configuration) {
+          if (!this._configuration) {
             return;
           }
 
@@ -467,7 +458,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateSubtitle(newValue) {
-          if (!this.configuration) {
+          if (!this._configuration) {
             return;
           }
 
