@@ -1,10 +1,9 @@
 <dom-module id="notification-basic-demos">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
       }
-
     </style>
 
     <h3>Simple Notification</h3>
@@ -14,6 +13,17 @@
           <template>
             <h3>Notice</h3>
             This notification has HTML content
+          </template>
+        </vaadin-notification>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Position</h3>
+    <vaadin-demo-snippet id='notification-basic-demos-simple-notification'>
+      <template preserve-content>
+        <vaadin-notification opened duration="4000" vertical-align="top" horizontal-align="end">
+          <template>
+            This notification is shown in the top left corner
           </template>
         </vaadin-notification>
       </template>
@@ -35,17 +45,55 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Interacting with Content</h3>
+    <vaadin-demo-snippet id='notification-basic-demos-interaction'>
+      <template preserve-content>
+        <dom-bind id="bind-elm">
+          <template>
+            <vaadin-button on-click="_open">Open Notification</button>
+            <vaadin-notification id="noti-elm" duration="0" horizontal-align="end">
+              <template>
+                This notification remains opened until the button inside is clicked.
+                <br/>
+                <vaadin-button on-click="_close">Close</vaadin-button>
+              </template>
+            </vaadin-notification>
+          </template>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#notification-basic-demos-interaction', function(document) {
+            const domBind = document.querySelector('#bind-elm');
+            const notify = document.querySelector('#noti-elm');
+            domBind._open = function() {
+              notify.open();
+            };
+            domBind._close = function() {
+              notify.close();
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Using from JavaScript</h3>
     <vaadin-demo-snippet id='notification-basic-demos-using-from-js'>
       <template preserve-content>
         <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
         <script>
-          function showNotification() {
+          window.showNotification = function() {
+            const template = document.createElement('template');
+            template.innerHTML = '<h4>Alert</h4>This is a Dynamic Notification created with JS';
+
             const notify = document.createElement('vaadin-notification');
-            notify.innerHTML = '<template>Settings saved!</template>';
+            notify.verticalAlign = 'middle';
+            notify.appendChild(template);
+
             document.body.appendChild(notify);
             notify.open();
-          }
+            notify.addEventListener('opened-changed', function() {
+              document.body.removeChild(notify);
+            });
+          };
         </script>
       </template>
     </vaadin-demo-snippet>

@@ -11,5 +11,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Advanced Usage",
+    "url": "notification-advanced-demos",
+    "src": "notification-advanced-demos.html",
+    "meta": {
+      "title": "vaadin-notification Advanced Examples",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
