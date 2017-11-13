@@ -69,16 +69,12 @@
           <span slot="drop-label">Up to 3 PDF files, 1 MB each</span>
         </vaadin-upload>
 
-        <paper-toast id="rejectToast"></paper-toast>
-
         <script>
-          window.addDemoReadyListener('#upload-basic-demos-setting-restrictions-on-files-to-upload', document => {
+          window.addDemoReadyListener('#upload-basic-demos-setting-restrictions-on-files-to-upload', function(document) {
             var upload = document.querySelector('vaadin-upload#rejectEventDemo');
-            var toast = document.querySelector('paper-toast#rejectToast');
 
-            upload.addEventListener('file-reject', event => {
-              toast.text = event.detail.file.name + ' error: ' + event.detail.error;
-              toast.open();
+            upload.addEventListener('file-reject', function(event) {
+              window.alert(event.detail.file.name + ' error: ' + event.detail.error);
             });
           });
         </script>
