@@ -272,7 +272,7 @@
       it('should validate on clear button tap', () => {
         datepicker.required = true;
         datepicker.value = '1991-20-12';
-        tap(clearButton)
+        tap(clearButton);
         expect(datepicker.invalid).to.equal(true);
       });
 
