@@ -92,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ### Styling
        *
        * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/vaadin-text-field.html)
-       * for `<vaadin-dropdown-menu-text-field>` parts.
+       * for `<vaadin-dropdown-menu-text-field>` parts and available slots (prefix, suffix etc.)
        *
        * @memberof Vaadin
        * @extends Vaadin.TextFieldElement
@@ -168,13 +168,16 @@ This program is available under Apache License Version 2.0, available at https:/
        * <vaadin-dropdown-menu>
        *   <template>
        *     <vaadin-list-box>
-       *       <vaadin-item>Foo</vaadin-item>
+       *       <vaadin-item label="foo">Foo</vaadin-item>
        *       <vaadin-item>Bar</vaadin-item>
        *       <vaadin-item>Baz</vaadin-item>
        *     </vaadin-list-box>
        *   </template>
        * </vaadin-dropdown-menu>
        * ```
+       *
+       * Hint: By setting the `label` property of inner vaadin-items you will
+       * be able to change the visual representation of the selected value in the input part.
        *
        * ### Styling
        *
@@ -229,6 +232,9 @@ This program is available under Apache License Version 2.0, available at https:/
              * value and displays it.
              * If no value is provided to the component, it selects the first item without
              * value or empty value.
+             * Hint: If you do not want to select any item by default, you can either set all
+             * the values of inner vaadin-items, or set the vaadin-dropdown-menu value to
+             * an inexistent value in the items list.
              */
             value: {
               type: String,
@@ -265,6 +271,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * A hint to the user of what can be entered in the control.
+             * The placeholder will be displayed in the case that there
+             * is no item selected, or the selected item has an empty
+             * string label, or the selected item has no label and it's
+             * DOM content is empty.
              */
             placeholder: {
               type: String
