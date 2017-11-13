@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-dropdown-menu.html",
         "start": {
-          "line": 478,
+          "line": 485,
           "column": 6
         },
         "end": {
-          "line": 478,
+          "line": 485,
           "column": 42
         }
       },
@@ -892,7 +892,7 @@
           "tagname": "vaadin-dropdown-menu-overlay"
         },
         {
-          "description": "The text-field element.\n\n### Styling\n\nSee [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/vaadin-text-field.html)\nfor `<vaadin-dropdown-menu-text-field>` parts.",
+          "description": "The text-field element.\n\n### Styling\n\nSee [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/vaadin-text-field.html)\nfor `<vaadin-dropdown-menu-text-field>` parts and available slots (prefix, suffix etc.)",
           "summary": "",
           "path": "vaadin-dropdown-menu.html",
           "properties": [
@@ -2277,7 +2277,7 @@
           "tagname": "vaadin-dropdown-menu-text-field"
         },
         {
-          "description": "`<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.\n\n```\n<vaadin-dropdown-menu>\n  <template>\n    <vaadin-list-box>\n      <vaadin-item>Foo</vaadin-item>\n      <vaadin-item>Bar</vaadin-item>\n      <vaadin-item>Baz</vaadin-item>\n    </vaadin-list-box>\n  </template>\n</vaadin-dropdown-menu>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`opened` | Set when the dropdown menu is open | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host",
+          "description": "`<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.\n\n```\n<vaadin-dropdown-menu>\n  <template>\n    <vaadin-list-box>\n      <vaadin-item label=\"foo\">Foo</vaadin-item>\n      <vaadin-item>Bar</vaadin-item>\n      <vaadin-item>Baz</vaadin-item>\n    </vaadin-list-box>\n  </template>\n</vaadin-dropdown-menu>\n```\n\nHint: By setting the `label` property of inner vaadin-items you will\nbe able to change the visual representation of the selected value in the input part.\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`opened` | Set when the dropdown menu is open | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host",
           "summary": "",
           "path": "vaadin-dropdown-menu.html",
           "properties": [
@@ -2400,11 +2400,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 206,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 212,
+                  "line": 215,
                   "column": 13
                 }
               },
@@ -2423,11 +2423,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -2439,15 +2439,15 @@
             {
               "name": "value",
               "type": "string",
-              "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.",
+              "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.\nHint: If you do not want to select any item by default, you can either set all\nthe values of inner vaadin-items, or set the vaadin-dropdown-menu value to\nan inexistent value in the items list.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -2465,11 +2465,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 241,
+                  "line": 247,
                   "column": 12
                 },
                 "end": {
-                  "line": 245,
+                  "line": 251,
                   "column": 13
                 }
               },
@@ -2486,11 +2486,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 256,
                   "column": 12
                 },
                 "end": {
-                  "line": 255,
+                  "line": 261,
                   "column": 13
                 }
               },
@@ -2508,11 +2508,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 266,
                   "column": 12
                 },
                 "end": {
-                  "line": 263,
+                  "line": 269,
                   "column": 13
                 }
               },
@@ -2523,15 +2523,15 @@
             {
               "name": "placeholder",
               "type": "string",
-              "description": "A hint to the user of what can be entered in the control.",
+              "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be displayed in the case that there\nis no item selected, or the selected item has an empty\nstring label, or the selected item has no label and it's\nDOM content is empty.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 268,
+                  "line": 278,
                   "column": 12
                 },
                 "end": {
-                  "line": 270,
+                  "line": 280,
                   "column": 13
                 }
               },
@@ -2546,11 +2546,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 272,
+                  "line": 282,
                   "column": 12
                 },
                 "end": {
-                  "line": 272,
+                  "line": 282,
                   "column": 27
                 }
               },
@@ -2565,11 +2565,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 284,
                   "column": 12
                 },
                 "end": {
-                  "line": 276,
+                  "line": 286,
                   "column": 13
                 }
               },
@@ -2585,11 +2585,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 278,
+                  "line": 288,
                   "column": 12
                 },
                 "end": {
-                  "line": 278,
+                  "line": 288,
                   "column": 35
                 }
               },
@@ -2604,11 +2604,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 280,
+                  "line": 290,
                   "column": 12
                 },
                 "end": {
-                  "line": 280,
+                  "line": 290,
                   "column": 33
                 }
               },
@@ -2623,11 +2623,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 292,
                   "column": 12
                 },
                 "end": {
-                  "line": 282,
+                  "line": 292,
                   "column": 26
                 }
               },
@@ -2642,11 +2642,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 284,
+                  "line": 294,
                   "column": 12
                 },
                 "end": {
-                  "line": 284,
+                  "line": 294,
                   "column": 32
                 }
               },
@@ -2661,11 +2661,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 287,
+                  "line": 297,
                   "column": 12
                 },
                 "end": {
-                  "line": 287,
+                  "line": 297,
                   "column": 34
                 }
               },
@@ -2681,11 +2681,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 307,
+                  "line": 317,
                   "column": 8
                 },
                 "end": {
-                  "line": 334,
+                  "line": 341,
                   "column": 9
                 }
               },
@@ -2698,11 +2698,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 302,
+                  "line": 312,
                   "column": 8
                 },
                 "end": {
-                  "line": 305,
+                  "line": 315,
                   "column": 9
                 }
               },
@@ -2715,11 +2715,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 342,
+                  "line": 349,
                   "column": 8
                 },
                 "end": {
-                  "line": 347,
+                  "line": 354,
                   "column": 9
                 }
               },
@@ -2904,11 +2904,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 350,
+                  "line": 357,
                   "column": 8
                 },
                 "end": {
-                  "line": 357,
+                  "line": 364,
                   "column": 9
                 }
               },
@@ -2921,11 +2921,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 359,
+                  "line": 366,
                   "column": 8
                 },
                 "end": {
-                  "line": 361,
+                  "line": 368,
                   "column": 9
                 }
               },
@@ -2942,11 +2942,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 363,
+                  "line": 370,
                   "column": 8
                 },
                 "end": {
-                  "line": 368,
+                  "line": 375,
                   "column": 9
                 }
               },
@@ -2963,11 +2963,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 370,
+                  "line": 377,
                   "column": 8
                 },
                 "end": {
-                  "line": 374,
+                  "line": 381,
                   "column": 9
                 }
               },
@@ -2984,11 +2984,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 383,
                   "column": 8
                 },
                 "end": {
-                  "line": 395,
+                  "line": 402,
                   "column": 9
                 }
               },
@@ -3008,11 +3008,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 397,
+                  "line": 404,
                   "column": 8
                 },
                 "end": {
-                  "line": 411,
+                  "line": 418,
                   "column": 9
                 }
               },
@@ -3025,11 +3025,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 413,
+                  "line": 420,
                   "column": 8
                 },
                 "end": {
-                  "line": 440,
+                  "line": 447,
                   "column": 9
                 }
               },
@@ -3042,11 +3042,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 442,
+                  "line": 449,
                   "column": 8
                 },
                 "end": {
-                  "line": 453,
+                  "line": 460,
                   "column": 9
                 }
               },
@@ -3066,11 +3066,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 455,
+                  "line": 462,
                   "column": 8
                 },
                 "end": {
-                  "line": 461,
+                  "line": 468,
                   "column": 9
                 }
               },
@@ -3083,11 +3083,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 468,
+                  "line": 475,
                   "column": 8
                 },
                 "end": {
-                  "line": 470,
+                  "line": 477,
                   "column": 9
                 }
               },
@@ -3133,11 +3133,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 193,
+              "line": 196,
               "column": 6
             },
             "end": {
-              "line": 471,
+              "line": 478,
               "column": 7
             }
           },
@@ -3186,11 +3186,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 206,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 212,
+                  "line": 215,
                   "column": 13
                 }
               },
@@ -3202,11 +3202,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -3215,14 +3215,14 @@
             },
             {
               "name": "value",
-              "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.",
+              "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.\nHint: If you do not want to select any item by default, you can either set all\nthe values of inner vaadin-items, or set the vaadin-dropdown-menu value to\nan inexistent value in the items list.",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 238,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -3234,11 +3234,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 241,
+                  "line": 247,
                   "column": 12
                 },
                 "end": {
-                  "line": 245,
+                  "line": 251,
                   "column": 13
                 }
               },
@@ -3250,11 +3250,11 @@
               "description": "Set to true if the value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 256,
                   "column": 12
                 },
                 "end": {
-                  "line": 255,
+                  "line": 261,
                   "column": 13
                 }
               },
@@ -3266,11 +3266,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 266,
                   "column": 12
                 },
                 "end": {
-                  "line": 263,
+                  "line": 269,
                   "column": 13
                 }
               },
@@ -3279,14 +3279,14 @@
             },
             {
               "name": "placeholder",
-              "description": "A hint to the user of what can be entered in the control.",
+              "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be displayed in the case that there\nis no item selected, or the selected item has an empty\nstring label, or the selected item has no label and it's\nDOM content is empty.",
               "sourceRange": {
                 "start": {
-                  "line": 268,
+                  "line": 278,
                   "column": 12
                 },
                 "end": {
-                  "line": 270,
+                  "line": 280,
                   "column": 13
                 }
               },
