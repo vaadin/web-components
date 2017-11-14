@@ -249,11 +249,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 193,
+                  "line": 191,
                   "column": 6
                 },
                 "end": {
-                  "line": 197,
+                  "line": 198,
                   "column": 7
                 }
               },
@@ -262,17 +262,59 @@
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
+              "name": "updateStyles",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 44,
+                  "column": 4
+                },
+                "end": {
+                  "line": 59,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_getComputedStyle",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 4
+                },
+                "end": {
+                  "line": 65,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "name"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
               "name": "_setTemplateFromNodes",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 199,
+                  "line": 200,
                   "column": 6
                 },
                 "end": {
-                  "line": 201,
+                  "line": 202,
                   "column": 7
                 }
               },
@@ -291,11 +333,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 207,
+                  "line": 208,
                   "column": 6
                 },
                 "end": {
-                  "line": 213,
+                  "line": 214,
                   "column": 7
                 }
               },
@@ -314,11 +356,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 215,
+                  "line": 216,
                   "column": 6
                 },
                 "end": {
-                  "line": 221,
+                  "line": 222,
                   "column": 7
                 }
               },
@@ -333,62 +375,16 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 223,
+                  "line": 224,
                   "column": 6
                 },
                 "end": {
-                  "line": 237,
+                  "line": 238,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_mouseDownListener",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
-                "start": {
-                  "line": 239,
-                  "column": 6
-                },
-                "end": {
-                  "line": 241,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "event"
-                }
-              ],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_mouseUpListener",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
-                "start": {
-                  "line": 243,
-                  "column": 6
-                },
-                "end": {
-                  "line": 245,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "event"
-                }
-              ],
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -398,11 +394,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 255,
+                  "line": 248,
                   "column": 6
                 },
                 "end": {
-                  "line": 269,
+                  "line": 262,
                   "column": 7
                 }
               },
@@ -421,11 +417,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 275,
+                  "line": 268,
                   "column": 6
                 },
                 "end": {
-                  "line": 301,
+                  "line": 294,
                   "column": 7
                 }
               },
@@ -444,11 +440,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 307,
+                  "line": 300,
                   "column": 6
                 },
                 "end": {
-                  "line": 345,
+                  "line": 334,
                   "column": 7
                 }
               },
@@ -467,11 +463,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 347,
+                  "line": 336,
                   "column": 6
                 },
                 "end": {
-                  "line": 358,
+                  "line": 347,
                   "column": 7
                 }
               },
@@ -490,11 +486,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 360,
+                  "line": 349,
                   "column": 6
                 },
                 "end": {
-                  "line": 362,
+                  "line": 351,
                   "column": 7
                 }
               },
@@ -513,11 +509,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 364,
+                  "line": 353,
                   "column": 6
                 },
                 "end": {
-                  "line": 395,
+                  "line": 384,
                   "column": 7
                 }
               },
@@ -539,11 +535,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 398,
+                  "line": 387,
                   "column": 6
                 },
                 "end": {
-                  "line": 400,
+                  "line": 389,
                   "column": 7
                 }
               },
@@ -562,11 +558,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 402,
+                  "line": 391,
                   "column": 6
                 },
                 "end": {
-                  "line": 426,
+                  "line": 415,
                   "column": 7
                 }
               },
@@ -581,11 +577,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 428,
+                  "line": 417,
                   "column": 6
                 },
                 "end": {
-                  "line": 432,
+                  "line": 421,
                   "column": 7
                 }
               },
@@ -606,11 +602,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 40,
+                  "line": 67,
                   "column": 4
                 },
                 "end": {
-                  "line": 44,
+                  "line": 71,
                   "column": 5
                 }
               },
@@ -2953,7 +2949,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to push onto array"
             }
           ],
           "return": {
@@ -3024,7 +3023,10 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert into array."
             }
           ],
           "return": {
@@ -3085,7 +3087,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert info array"
             }
           ],
           "return": {
