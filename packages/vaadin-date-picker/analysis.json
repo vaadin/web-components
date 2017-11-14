@@ -6,17 +6,1937 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-date-picker.html",
+        "file": "vaadin-date-picker-light.html",
         "start": {
-          "line": 275,
+          "line": 134,
           "column": 6
         },
         "end": {
-          "line": 275,
+          "line": 134,
           "column": 42
         }
       },
       "elements": [
+        {
+          "description": "`<vaadin-date-picker>` is a date selection field which includes a scrollable\nmonth calendar view.\n```html\n<vaadin-date-picker label=\"Birthday\"></vaadin-date-picker>\n```\n```js\ndatePicker.value = '2016-03-02';\n```\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description | Theme for Element\n----------------|----------------|----------------\n`text-field` | Input element | vaadin-date-picker\n`clear-button` | Clear button | vaadin-date-picker\n`toggle-button` | Toggle button | vaadin-date-picker\n`overlay` | The overlay element | vaadin-date-picker\n`overlay` | The overlay element | vaadin-date-picker-light\n`overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay\n`label` | Fullscreen mode value/label | vaadin-date-picker-overlay\n`clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay\n`toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay\n`years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay\n`months` | Months scroller | vaadin-date-picker-overlay\n`years` | Years scroller | vaadin-date-picker-overlay\n`toolbar` | Footer bar with buttons | vaadin-date-picker-overlay\n`today-button` | Today button | vaadin-date-picker-overlay\n`cancel-button` | Cancel button | vaadin-date-picker-overlay\n`month` | Month calendar | vaadin-date-picker-overlay\n`year-number` | Year number | vaadin-date-picker-overlay\n`year-separator` | Year separator | vaadin-date-picker-overlay\n`month-header` | Month title | vaadin-month-calendar\n`weekdays` | Weekday container | vaadin-month-calendar\n`weekday` | Weekday element | vaadin-month-calendar\n`week-numbers` | Week numbers container | vaadin-month-calendar\n`week-number` | Week number element | vaadin-month-calendar\n`date` | Date element | vaadin-month-calendar\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`invalid` | Set when the element is invalid | :host\n`opened` | Set when the date selector overlay is opened | :host\n`readonly` | Set when the element is readonly | :host\n\nIf you want to replace the default input field with a custom implementation, you should use the\n[`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.",
+          "summary": "",
+          "path": "vaadin-date-picker.html",
+          "properties": [
+            {
+              "name": "_selectedDate",
+              "type": "Date",
+              "description": "The current selected date.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 25,
+                  "column": 8
+                },
+                "end": {
+                  "line": 27,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusedDate",
+              "type": "Date",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 29,
+                  "column": 8
+                },
+                "end": {
+                  "line": 29,
+                  "column": 26
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 40,
+                  "column": 8
+                },
+                "end": {
+                  "line": 45,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_valueChanged\""
+                }
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "required",
+              "type": "boolean",
+              "description": "Set to true to mark the input as required.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 50,
+                  "column": 8
+                },
+                "end": {
+                  "line": 53,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "description": "The name of this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 58,
+                  "column": 8
+                },
+                "end": {
+                  "line": 60,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "hasValue",
+              "type": "boolean",
+              "description": "Indicates whether this date picker has a value.",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 66,
+                  "column": 8
+                },
+                "end": {
+                  "line": 70,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "initialPosition",
+              "type": "string",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 77,
+                  "column": 8
+                },
+                "end": {
+                  "line": 77,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "description": "The label for this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 82,
+                  "column": 8
+                },
+                "end": {
+                  "line": 82,
+                  "column": 21
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "opened",
+              "type": "boolean",
+              "description": "Set true to open the date selector overlay.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 87,
+                  "column": 8
+                },
+                "end": {
+                  "line": 91,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "showWeekNumbers",
+              "type": "boolean",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 100,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreen",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 102,
+                  "column": 8
+                },
+                "end": {
+                  "line": 105,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_fullscreenChanged\""
+                }
+              },
+              "defaultValue": "false",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreenMediaQuery",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 107,
+                  "column": 8
+                },
+                "end": {
+                  "line": 109,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"(max-width: 420px), (max-height: 420px)\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_touchPrevented",
+              "type": "Array",
+              "description": "'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 113,
+                  "column": 8
+                },
+                "end": {
+                  "line": 113,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "i18n",
+              "type": "Object",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 191,
+                  "column": 8
+                },
+                "end": {
+                  "line": 244,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "min",
+              "type": "string",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 255,
+                  "column": 8
+                },
+                "end": {
+                  "line": 258,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_minChanged\""
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "max",
+              "type": "string",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 269,
+                  "column": 8
+                },
+                "end": {
+                  "line": 272,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_maxChanged\""
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_minDate",
+              "type": "Date",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 277,
+                  "column": 8
+                },
+                "end": {
+                  "line": 281,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_maxDate",
+              "type": "Date",
+              "description": "The latest date that can be selected. All later dates will be disabled.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 286,
+                  "column": 8
+                },
+                "end": {
+                  "line": 289,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "\"\"",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_noInput",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 291,
+                  "column": 8
+                },
+                "end": {
+                  "line": 294,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_ios",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 296,
+                  "column": 8
+                },
+                "end": {
+                  "line": 299,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_ignoreAnnounce",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 301,
+                  "column": 8
+                },
+                "end": {
+                  "line": 303,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "true",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusOverlayOnOpen",
+              "type": "boolean",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 305,
+                  "column": 8
+                },
+                "end": {
+                  "line": 305,
+                  "column": 36
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_documentPointerEvents",
+              "type": "string",
+              "description": "When datepicker is opened, we're setting body pointer-events to none\nto make the datepicker behave in \"modal\" way. This variable keeps the\nprevious state of body pointer-events to restore it when datepicker is\nclosed.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 313,
+                  "column": 8
+                },
+                "end": {
+                  "line": 313,
+                  "column": 38
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean",
+              "description": "Set to true to disable this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 191,
+                  "column": 12
+                },
+                "end": {
+                  "line": 195,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "errorMessage",
+              "type": "string",
+              "description": "The error message to display when the input is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 200,
+                  "column": 12
+                },
+                "end": {
+                  "line": 200,
+                  "column": 32
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "placeholder",
+              "type": "string",
+              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 205,
+                  "column": 12
+                },
+                "end": {
+                  "line": 205,
+                  "column": 31
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "readonly",
+              "type": "boolean",
+              "description": "Set to true to make this element read-only.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 210,
+                  "column": 12
+                },
+                "end": {
+                  "line": 214,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "invalid",
+              "type": "boolean",
+              "description": "This property is set to true when the control value invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 219,
+                  "column": 12
+                },
+                "end": {
+                  "line": 224,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "_userInputValue",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 226,
+                  "column": 12
+                },
+                "end": {
+                  "line": 226,
+                  "column": 35
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 236,
+                  "column": 8
+                },
+                "end": {
+                  "line": 241,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "open",
+              "description": "Opens the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 341,
+                  "column": 4
+                },
+                "end": {
+                  "line": 346,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_close",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 348,
+                  "column": 4
+                },
+                "end": {
+                  "line": 354,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "close",
+              "description": "Closes the dropdown.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 359,
+                  "column": 4
+                },
+                "end": {
+                  "line": 361,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_parseDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 377,
+                  "column": 4
+                },
+                "end": {
+                  "line": 389,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "str"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_isNoInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 391,
+                  "column": 4
+                },
+                "end": {
+                  "line": 393,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_formatISO",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 395,
+                  "column": 4
+                },
+                "end": {
+                  "line": 399,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_selectedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 401,
+                  "column": 4
+                },
+                "end": {
+                  "line": 408,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selectedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusedDateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 410,
+                  "column": 4
+                },
+                "end": {
+                  "line": 417,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "focusedDate"
+                },
+                {
+                  "name": "formatDate"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_hasValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 419,
+                  "column": 4
+                },
+                "end": {
+                  "line": 421,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_handleDateChange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 423,
+                  "column": 4
+                },
+                "end": {
+                  "line": 437,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "property"
+                },
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_valueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 439,
+                  "column": 4
+                },
+                "end": {
+                  "line": 441,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_minChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 443,
+                  "column": 4
+                },
+                "end": {
+                  "line": 445,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_maxChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 447,
+                  "column": 4
+                },
+                "end": {
+                  "line": 449,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "oldValue"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_updateAlignmentAndPosition",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 451,
+                  "column": 4
+                },
+                "end": {
+                  "line": 473,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_fullscreenChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 475,
+                  "column": 4
+                },
+                "end": {
+                  "line": 479,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onOverlayOpened",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 481,
+                  "column": 4
+                },
+                "end": {
+                  "line": 529,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventWebkitOverflowScrollingTouch",
+              "description": "ancestor container with -webkit-overflow-scrolling: touch;",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 533,
+                  "column": 4
+                },
+                "end": {
+                  "line": 547,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "element"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onOverlayClosed",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 549,
+                  "column": 4
+                },
+                "end": {
+                  "line": 587,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "detached",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 589,
+                  "column": 4
+                },
+                "end": {
+                  "line": 591,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "validate",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 599,
+                  "column": 4
+                },
+                "end": {
+                  "line": 602,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value",
+                  "type": "string",
+                  "description": "Value to validate. Optional, defaults to user's input value."
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "checkValidity",
+              "description": "Returns true if the current input value satisfies all constraints (if any)\n\nOverride the `checkValidity` method for custom validations.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 612,
+                  "column": 4
+                },
+                "end": {
+                  "line": 629,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value",
+                  "type": "string",
+                  "description": "Value to validate. Optional, defaults to the selected date."
+                }
+              ],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid"
+              },
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onScroll",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 631,
+                  "column": 4
+                },
+                "end": {
+                  "line": 635,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventCancelOnComponentAccess",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 637,
+                  "column": 4
+                },
+                "end": {
+                  "line": 642,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 644,
+                  "column": 4
+                },
+                "end": {
+                  "line": 650,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_focusAndSelect",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 652,
+                  "column": 4
+                },
+                "end": {
+                  "line": 655,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_setSelectionRange",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 657,
+                  "column": 4
+                },
+                "end": {
+                  "line": 661,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "a"
+                },
+                {
+                  "name": "b"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_preventDefault",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 663,
+                  "column": 4
+                },
+                "end": {
+                  "line": 665,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_eventKey",
+              "description": "Keyboard Navigation",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 670,
+                  "column": 4
+                },
+                "end": {
+                  "line": 679,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_isValidDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 681,
+                  "column": 4
+                },
+                "end": {
+                  "line": 683,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "d"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onKeydown",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 685,
+                  "column": 4
+                },
+                "end": {
+                  "line": 738,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_validateInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 740,
+                  "column": 4
+                },
+                "end": {
+                  "line": 744,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                },
+                {
+                  "name": "min"
+                },
+                {
+                  "name": "max"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_onUserInput",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 746,
+                  "column": 4
+                },
+                "end": {
+                  "line": 757,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_userInputValueChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 759,
+                  "column": 4
+                },
+                "end": {
+                  "line": 768,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_announceFocusedDate",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 770,
+                  "column": 4
+                },
+                "end": {
+                  "line": 774,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "_focusedDate"
+                },
+                {
+                  "name": "opened"
+                },
+                {
+                  "name": "_ignoreAnnounce"
+                }
+              ],
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "_addEventListenerToNode",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 47,
+                  "column": 6
+                },
+                "end": {
+                  "line": 51,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node"
+                },
+                {
+                  "name": "eventName"
+                },
+                {
+                  "name": "handler"
+                }
+              ],
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
+              "name": "_removeEventListenerFromNode",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 53,
+                  "column": 6
+                },
+                "end": {
+                  "line": 57,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node"
+                },
+                {
+                  "name": "eventName"
+                },
+                {
+                  "name": "handler"
+                }
+              ],
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
+              "name": "_clear",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 243,
+                  "column": 8
+                },
+                "end": {
+                  "line": 248,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_toggle",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 250,
+                  "column": 8
+                },
+                "end": {
+                  "line": 253,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_input",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 255,
+                  "column": 8
+                },
+                "end": {
+                  "line": 257,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_getAriaExpanded",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 267,
+                  "column": 8
+                },
+                "end": {
+                  "line": 269,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "opened"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 180,
+              "column": 6
+            },
+            "end": {
+              "line": 270,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.DatePickerElement",
+          "attributes": [
+            {
+              "name": "value",
+              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 40,
+                  "column": 8
+                },
+                "end": {
+                  "line": 45,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "required",
+              "description": "Set to true to mark the input as required.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 50,
+                  "column": 8
+                },
+                "end": {
+                  "line": 53,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "name",
+              "description": "The name of this element.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 58,
+                  "column": 8
+                },
+                "end": {
+                  "line": 60,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "initial-position",
+              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 77,
+                  "column": 8
+                },
+                "end": {
+                  "line": 77,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "label",
+              "description": "The label for this element.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 82,
+                  "column": 8
+                },
+                "end": {
+                  "line": 82,
+                  "column": 21
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "opened",
+              "description": "Set true to open the date selector overlay.",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 87,
+                  "column": 8
+                },
+                "end": {
+                  "line": 91,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "show-week-numbers",
+              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 98,
+                  "column": 8
+                },
+                "end": {
+                  "line": 100,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "i18n",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 191,
+                  "column": 8
+                },
+                "end": {
+                  "line": 244,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Object",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "min",
+              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 255,
+                  "column": 8
+                },
+                "end": {
+                  "line": 258,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "max",
+              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
+              "sourceRange": {
+                "file": "vaadin-date-picker-mixin.html",
+                "start": {
+                  "line": 269,
+                  "column": 8
+                },
+                "end": {
+                  "line": 272,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
+            {
+              "name": "disabled",
+              "description": "Set to true to disable this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 191,
+                  "column": 12
+                },
+                "end": {
+                  "line": 195,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "error-message",
+              "description": "The error message to display when the input is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 200,
+                  "column": 12
+                },
+                "end": {
+                  "line": 200,
+                  "column": 32
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "placeholder",
+              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
+              "sourceRange": {
+                "start": {
+                  "line": 205,
+                  "column": 12
+                },
+                "end": {
+                  "line": 205,
+                  "column": 31
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "readonly",
+              "description": "Set to true to make this element read-only.",
+              "sourceRange": {
+                "start": {
+                  "line": 210,
+                  "column": 12
+                },
+                "end": {
+                  "line": 214,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "invalid",
+              "description": "This property is set to true when the control value invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 219,
+                  "column": 12
+                },
+                "end": {
+                  "line": 224,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            }
+          ],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "metadata": {}
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [
+            {
+              "description": "",
+              "name": "prefix",
+              "range": {
+                "file": "vaadin-date-picker.html",
+                "start": {
+                  "line": 82,
+                  "column": 6
+                },
+                "end": {
+                  "line": 82,
+                  "column": 47
+                }
+              }
+            }
+          ],
+          "tagname": "vaadin-date-picker",
+          "mixins": [
+            "Vaadin.ThemableMixin",
+            "Vaadin.DatePickerMixin",
+            "Polymer.GestureEventListeners"
+          ]
+        },
         {
           "description": "`<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing\nonly the scrollable month calendar view and leaving the input field definition to the user.\n\nTo create a custom input field, you need to add a child element which has a two-way\ndata-bindable property representing the input value. The property name is expected\nto be `bindValue` by default. See the example below for a simplest possible example\nusing an `<input>` element extended with `iron-input`.\n\n```html\n<vaadin-date-picker-light>\n<iron-input>\n<input/>\n</iron-input>\n</vaadin-date-picker-light>\n```\n\nIf you are using other custom input fields like `<paper-input>`, you\nneed to define the name of value property using the `attrForValue` property.\n\n```html\n<vaadin-date-picker-light attr-for-value=\"value\">\n<paper-input label=\"Birthday\">\n</paper-input>\n</vaadin-date-picker-light>\n```",
           "summary": "",
@@ -1615,1926 +3535,6 @@
           "tagname": "vaadin-date-picker-light",
           "mixins": [
             "Vaadin.DatePickerMixin"
-          ]
-        },
-        {
-          "description": "`<vaadin-date-picker>` is a date selection field which includes a scrollable\nmonth calendar view.\n```html\n<vaadin-date-picker label=\"Birthday\"></vaadin-date-picker>\n```\n```js\ndatePicker.value = '2016-03-02';\n```\nWhen the selected `value` is changed, a `value-changed` event is triggered.\n\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description | Theme for Element\n----------------|----------------|----------------\n`text-field` | Input element | vaadin-date-picker\n`clear-button` | Clear button | vaadin-date-picker\n`toggle-button` | Toggle button | vaadin-date-picker\n`overlay` | The overlay element | vaadin-date-picker\n`overlay` | The overlay element | vaadin-date-picker-light\n`overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay\n`label` | Fullscreen mode value/label | vaadin-date-picker-overlay\n`clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay\n`toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay\n`years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay\n`months` | Months scroller | vaadin-date-picker-overlay\n`years` | Years scroller | vaadin-date-picker-overlay\n`toolbar` | Footer bar with buttons | vaadin-date-picker-overlay\n`today-button` | Today button | vaadin-date-picker-overlay\n`cancel-button` | Cancel button | vaadin-date-picker-overlay\n`month` | Month calendar | vaadin-date-picker-overlay\n`year-number` | Year number | vaadin-date-picker-overlay\n`year-separator` | Year separator | vaadin-date-picker-overlay\n`month-header` | Month title | vaadin-month-calendar\n`weekdays` | Weekday container | vaadin-month-calendar\n`weekday` | Weekday element | vaadin-month-calendar\n`week-numbers` | Week numbers container | vaadin-month-calendar\n`week-number` | Week number element | vaadin-month-calendar\n`date` | Date element | vaadin-month-calendar\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`invalid` | Set when the element is invalid | :host\n`opened` | Set when the date selector overlay is opened | :host\n`readonly` | Set when the element is readonly | :host\n\nIf you want to replace the default input field with a custom implementation, you should use the\n[`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.",
-          "summary": "",
-          "path": "vaadin-date-picker.html",
-          "properties": [
-            {
-              "name": "_selectedDate",
-              "type": "Date",
-              "description": "The current selected date.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_focusedDate",
-              "type": "Date",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 29,
-                  "column": 8
-                },
-                "end": {
-                  "line": 29,
-                  "column": 26
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "value",
-              "type": "string",
-              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 40,
-                  "column": 8
-                },
-                "end": {
-                  "line": 45,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "observer": "\"_valueChanged\""
-                }
-              },
-              "defaultValue": "\"\"",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "required",
-              "type": "boolean",
-              "description": "Set to true to mark the input as required.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 50,
-                  "column": 8
-                },
-                "end": {
-                  "line": 53,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "name",
-              "type": "string",
-              "description": "The name of this element.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 58,
-                  "column": 8
-                },
-                "end": {
-                  "line": 60,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "hasValue",
-              "type": "boolean",
-              "description": "Indicates whether this date picker has a value.",
-              "privacy": "private",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 66,
-                  "column": 8
-                },
-                "end": {
-                  "line": 70,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "initialPosition",
-              "type": "string",
-              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 77,
-                  "column": 8
-                },
-                "end": {
-                  "line": 77,
-                  "column": 31
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "label",
-              "type": "string",
-              "description": "The label for this element.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 82,
-                  "column": 8
-                },
-                "end": {
-                  "line": 82,
-                  "column": 21
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "opened",
-              "type": "boolean",
-              "description": "Set true to open the date selector overlay.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 87,
-                  "column": 8
-                },
-                "end": {
-                  "line": 91,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true
-                }
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "showWeekNumbers",
-              "type": "boolean",
-              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 98,
-                  "column": 8
-                },
-                "end": {
-                  "line": 100,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_fullscreen",
-              "type": "?",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 102,
-                  "column": 8
-                },
-                "end": {
-                  "line": 105,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "observer": "\"_fullscreenChanged\""
-                }
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_fullscreenMediaQuery",
-              "type": "?",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 107,
-                  "column": 8
-                },
-                "end": {
-                  "line": 109,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "\"(max-width: 420px), (max-height: 420px)\"",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_touchPrevented",
-              "type": "Array",
-              "description": "'touch' to value 'auto' in order to prevent them from clipping the dropdown. iOS only.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 113,
-                  "column": 8
-                },
-                "end": {
-                  "line": 113,
-                  "column": 30
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "i18n",
-              "type": "Object",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 191,
-                  "column": 8
-                },
-                "end": {
-                  "line": 244,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "min",
-              "type": "string",
-              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 255,
-                  "column": 8
-                },
-                "end": {
-                  "line": 258,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "observer": "\"_minChanged\""
-                }
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "max",
-              "type": "string",
-              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 269,
-                  "column": 8
-                },
-                "end": {
-                  "line": 272,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "observer": "\"_maxChanged\""
-                }
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_minDate",
-              "type": "Date",
-              "description": "The earliest date that can be selected. All earlier dates will be disabled.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 277,
-                  "column": 8
-                },
-                "end": {
-                  "line": 281,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "\"\"",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_maxDate",
-              "type": "Date",
-              "description": "The latest date that can be selected. All later dates will be disabled.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 286,
-                  "column": 8
-                },
-                "end": {
-                  "line": 289,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "\"\"",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_noInput",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 291,
-                  "column": 8
-                },
-                "end": {
-                  "line": 294,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_ios",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 296,
-                  "column": 8
-                },
-                "end": {
-                  "line": 299,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_ignoreAnnounce",
-              "type": "?",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 301,
-                  "column": 8
-                },
-                "end": {
-                  "line": 303,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "true",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_focusOverlayOnOpen",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 305,
-                  "column": 8
-                },
-                "end": {
-                  "line": 305,
-                  "column": 36
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_documentPointerEvents",
-              "type": "string",
-              "description": "When datepicker is opened, we're setting body pointer-events to none\nto make the datepicker behave in \"modal\" way. This variable keeps the\nprevious state of body pointer-events to restore it when datepicker is\nclosed.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 313,
-                  "column": 8
-                },
-                "end": {
-                  "line": 313,
-                  "column": 38
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "disabled",
-              "type": "boolean",
-              "description": "Set to true to disable this element.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 190,
-                  "column": 12
-                },
-                "end": {
-                  "line": 194,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "false"
-            },
-            {
-              "name": "errorMessage",
-              "type": "string",
-              "description": "The error message to display when the input is invalid.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 199,
-                  "column": 12
-                },
-                "end": {
-                  "line": 199,
-                  "column": 32
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "placeholder",
-              "type": "string",
-              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 204,
-                  "column": 12
-                },
-                "end": {
-                  "line": 204,
-                  "column": 31
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "readonly",
-              "type": "boolean",
-              "description": "Set to true to make this element read-only.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 209,
-                  "column": 12
-                },
-                "end": {
-                  "line": 213,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "false"
-            },
-            {
-              "name": "invalid",
-              "type": "boolean",
-              "description": "This property is set to true when the control value invalid.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 218,
-                  "column": 12
-                },
-                "end": {
-                  "line": 223,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true
-                }
-              },
-              "defaultValue": "false"
-            },
-            {
-              "name": "_userInputValue",
-              "type": "string",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 225,
-                  "column": 12
-                },
-                "end": {
-                  "line": 225,
-                  "column": 35
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            }
-          ],
-          "methods": [
-            {
-              "name": "ready",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 235,
-                  "column": 8
-                },
-                "end": {
-                  "line": 240,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "open",
-              "description": "Opens the dropdown.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 341,
-                  "column": 4
-                },
-                "end": {
-                  "line": 346,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_close",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 348,
-                  "column": 4
-                },
-                "end": {
-                  "line": 354,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "close",
-              "description": "Closes the dropdown.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 359,
-                  "column": 4
-                },
-                "end": {
-                  "line": 361,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_parseDate",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 377,
-                  "column": 4
-                },
-                "end": {
-                  "line": 389,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "str"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_isNoInput",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 391,
-                  "column": 4
-                },
-                "end": {
-                  "line": 393,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_formatISO",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 395,
-                  "column": 4
-                },
-                "end": {
-                  "line": 399,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "date"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_selectedDateChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 401,
-                  "column": 4
-                },
-                "end": {
-                  "line": 408,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "selectedDate"
-                },
-                {
-                  "name": "formatDate"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_focusedDateChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 410,
-                  "column": 4
-                },
-                "end": {
-                  "line": 417,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "focusedDate"
-                },
-                {
-                  "name": "formatDate"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_hasValue",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 419,
-                  "column": 4
-                },
-                "end": {
-                  "line": 421,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_handleDateChange",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 423,
-                  "column": 4
-                },
-                "end": {
-                  "line": 437,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "property"
-                },
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "oldValue"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_valueChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 439,
-                  "column": 4
-                },
-                "end": {
-                  "line": 441,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "oldValue"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_minChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 443,
-                  "column": 4
-                },
-                "end": {
-                  "line": 445,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "oldValue"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_maxChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 447,
-                  "column": 4
-                },
-                "end": {
-                  "line": 449,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "oldValue"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_updateAlignmentAndPosition",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 451,
-                  "column": 4
-                },
-                "end": {
-                  "line": 473,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_fullscreenChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 475,
-                  "column": 4
-                },
-                "end": {
-                  "line": 479,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_onOverlayOpened",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 481,
-                  "column": 4
-                },
-                "end": {
-                  "line": 529,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_preventWebkitOverflowScrollingTouch",
-              "description": "ancestor container with -webkit-overflow-scrolling: touch;",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 533,
-                  "column": 4
-                },
-                "end": {
-                  "line": 547,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "element"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_onOverlayClosed",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 549,
-                  "column": 4
-                },
-                "end": {
-                  "line": 587,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "detached",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 589,
-                  "column": 4
-                },
-                "end": {
-                  "line": 591,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 599,
-                  "column": 4
-                },
-                "end": {
-                  "line": 602,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value",
-                  "type": "string",
-                  "description": "Value to validate. Optional, defaults to user's input value."
-                }
-              ],
-              "return": {
-                "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "checkValidity",
-              "description": "Returns true if the current input value satisfies all constraints (if any)\n\nOverride the `checkValidity` method for custom validations.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 612,
-                  "column": 4
-                },
-                "end": {
-                  "line": 629,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value",
-                  "type": "string",
-                  "description": "Value to validate. Optional, defaults to the selected date."
-                }
-              ],
-              "return": {
-                "type": "boolean",
-                "desc": "True if the value is valid"
-              },
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_onScroll",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 631,
-                  "column": 4
-                },
-                "end": {
-                  "line": 635,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_preventCancelOnComponentAccess",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 637,
-                  "column": 4
-                },
-                "end": {
-                  "line": 642,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_focus",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 644,
-                  "column": 4
-                },
-                "end": {
-                  "line": 650,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_focusAndSelect",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 652,
-                  "column": 4
-                },
-                "end": {
-                  "line": 655,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_setSelectionRange",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 657,
-                  "column": 4
-                },
-                "end": {
-                  "line": 661,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "a"
-                },
-                {
-                  "name": "b"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_preventDefault",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 663,
-                  "column": 4
-                },
-                "end": {
-                  "line": 665,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_eventKey",
-              "description": "Keyboard Navigation",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 670,
-                  "column": 4
-                },
-                "end": {
-                  "line": 679,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_isValidDate",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 681,
-                  "column": 4
-                },
-                "end": {
-                  "line": 683,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "d"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_onKeydown",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 685,
-                  "column": 4
-                },
-                "end": {
-                  "line": 738,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_validateInput",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 740,
-                  "column": 4
-                },
-                "end": {
-                  "line": 744,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "date"
-                },
-                {
-                  "name": "min"
-                },
-                {
-                  "name": "max"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_onUserInput",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 746,
-                  "column": 4
-                },
-                "end": {
-                  "line": 757,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_userInputValueChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 759,
-                  "column": 4
-                },
-                "end": {
-                  "line": 768,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_announceFocusedDate",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 770,
-                  "column": 4
-                },
-                "end": {
-                  "line": 774,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "_focusedDate"
-                },
-                {
-                  "name": "opened"
-                },
-                {
-                  "name": "_ignoreAnnounce"
-                }
-              ],
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "_addEventListenerToNode",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
-                "start": {
-                  "line": 47,
-                  "column": 6
-                },
-                "end": {
-                  "line": 51,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "node"
-                },
-                {
-                  "name": "eventName"
-                },
-                {
-                  "name": "handler"
-                }
-              ],
-              "inheritedFrom": "Polymer.GestureEventListeners"
-            },
-            {
-              "name": "_removeEventListenerFromNode",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "bower_components/polymer/lib/mixins/gesture-event-listeners.html",
-                "start": {
-                  "line": 53,
-                  "column": 6
-                },
-                "end": {
-                  "line": 57,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "node"
-                },
-                {
-                  "name": "eventName"
-                },
-                {
-                  "name": "handler"
-                }
-              ],
-              "inheritedFrom": "Polymer.GestureEventListeners"
-            },
-            {
-              "name": "_clear",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 242,
-                  "column": 8
-                },
-                "end": {
-                  "line": 246,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ]
-            },
-            {
-              "name": "_toggle",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 248,
-                  "column": 8
-                },
-                "end": {
-                  "line": 251,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "e"
-                }
-              ]
-            },
-            {
-              "name": "_input",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 253,
-                  "column": 8
-                },
-                "end": {
-                  "line": 255,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_getAriaExpanded",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 265,
-                  "column": 8
-                },
-                "end": {
-                  "line": 267,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "opened"
-                }
-              ]
-            }
-          ],
-          "staticMethods": [
-            {
-              "name": "_includeStyle",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
-                "start": {
-                  "line": 46,
-                  "column": 4
-                },
-                "end": {
-                  "line": 50,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "moduleName"
-                }
-              ],
-              "inheritedFrom": "Vaadin.ThemableMixin"
-            }
-          ],
-          "demos": [
-            {
-              "url": "demo/index.html",
-              "description": ""
-            }
-          ],
-          "metadata": {},
-          "sourceRange": {
-            "start": {
-              "line": 179,
-              "column": 6
-            },
-            "end": {
-              "line": 268,
-              "column": 7
-            }
-          },
-          "privacy": "public",
-          "superclass": "HTMLElement",
-          "name": "Vaadin.DatePickerElement",
-          "attributes": [
-            {
-              "name": "value",
-              "description": "The value for this element.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 40,
-                  "column": 8
-                },
-                "end": {
-                  "line": 45,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "required",
-              "description": "Set to true to mark the input as required.",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 50,
-                  "column": 8
-                },
-                "end": {
-                  "line": 53,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "name",
-              "description": "The name of this element.",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 58,
-                  "column": 8
-                },
-                "end": {
-                  "line": 60,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "initial-position",
-              "description": "Date which should be visible when there is no value selected.\n\nThe same date formats as for the `value` property are supported.",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 77,
-                  "column": 8
-                },
-                "end": {
-                  "line": 77,
-                  "column": 31
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "label",
-              "description": "The label for this element.",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 82,
-                  "column": 8
-                },
-                "end": {
-                  "line": 82,
-                  "column": 21
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "opened",
-              "description": "Set true to open the date selector overlay.",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 87,
-                  "column": 8
-                },
-                "end": {
-                  "line": 91,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "show-week-numbers",
-              "description": "Set true to display ISO-8601 week numbers in the calendar. Notice that\ndisplaying week numbers is only supported when `i18n.firstDayOfWeek`\nis 1 (Monday).",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 98,
-                  "column": 8
-                },
-                "end": {
-                  "line": 100,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "i18n",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 191,
-                  "column": 8
-                },
-                "end": {
-                  "line": 244,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "Object",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "min",
-              "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 255,
-                  "column": 8
-                },
-                "end": {
-                  "line": 258,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "max",
-              "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
-              "sourceRange": {
-                "file": "vaadin-date-picker-mixin.html",
-                "start": {
-                  "line": 269,
-                  "column": 8
-                },
-                "end": {
-                  "line": 272,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.DatePickerMixin"
-            },
-            {
-              "name": "disabled",
-              "description": "Set to true to disable this element.",
-              "sourceRange": {
-                "start": {
-                  "line": 190,
-                  "column": 12
-                },
-                "end": {
-                  "line": 194,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            },
-            {
-              "name": "error-message",
-              "description": "The error message to display when the input is invalid.",
-              "sourceRange": {
-                "start": {
-                  "line": 199,
-                  "column": 12
-                },
-                "end": {
-                  "line": 199,
-                  "column": 32
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "placeholder",
-              "description": "A placeholder string in addition to the label. If this is set, the label will always float.",
-              "sourceRange": {
-                "start": {
-                  "line": 204,
-                  "column": 12
-                },
-                "end": {
-                  "line": 204,
-                  "column": 31
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "readonly",
-              "description": "Set to true to make this element read-only.",
-              "sourceRange": {
-                "start": {
-                  "line": 209,
-                  "column": 12
-                },
-                "end": {
-                  "line": 213,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            },
-            {
-              "name": "invalid",
-              "description": "This property is set to true when the control value invalid.",
-              "sourceRange": {
-                "start": {
-                  "line": 218,
-                  "column": 12
-                },
-                "end": {
-                  "line": 223,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            }
-          ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "invalid-changed",
-              "description": "Fired when the `invalid` property changes.",
-              "metadata": {}
-            }
-          ],
-          "styling": {
-            "cssVariables": [],
-            "selectors": []
-          },
-          "slots": [
-            {
-              "description": "",
-              "name": "prefix",
-              "range": {
-                "file": "vaadin-date-picker.html",
-                "start": {
-                  "line": 81,
-                  "column": 6
-                },
-                "end": {
-                  "line": 81,
-                  "column": 47
-                }
-              }
-            }
-          ],
-          "tagname": "vaadin-date-picker",
-          "mixins": [
-            "Vaadin.ThemableMixin",
-            "Vaadin.DatePickerMixin",
-            "Polymer.GestureEventListeners"
           ]
         }
       ],
