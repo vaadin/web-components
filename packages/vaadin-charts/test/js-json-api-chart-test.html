@@ -102,6 +102,8 @@
       it('should have no title if resetConfiguration is true', function(done) {
         // initialConfig true should reset the config
         chart.update({}, true);
+        Polymer.flush();
+        
         setTimeout(function() {
           expect(chart.$.chart.querySelector('.highcharts-title')).to.be.null;
           done();

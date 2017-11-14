@@ -27,6 +27,7 @@
       });
 
       it('should have custom title', done => {
+        Polymer.flush();
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
           done();
@@ -34,6 +35,7 @@
       });
 
       it('should have custom subtitle', function(done) {
+        Polymer.flush();
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
           done();

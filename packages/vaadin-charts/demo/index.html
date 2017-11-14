@@ -57,7 +57,7 @@
                 const series = this.$.mychart.querySelector('vaadin-chart-series');
                 if (series) {
                   series.values = this._valuesGenerator;
-                } 
+                }
               }
 
               _addSeries() {
@@ -87,6 +87,49 @@
             });
           </script>
         </dom-module>
+      </template>
+    </demo-snippet>
+
+    <h3>Multiple series with dom-repeat</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="chart-series-dom-repeat">
+          <template>
+            <vaadin-chart id="mychart">
+              <template is="dom-repeat" items="{{series}}">
+                <vaadin-chart-series values="{{item.data}}"></vaadin-chart-series>
+              </template>
+            </vaadin-chart>
+          </template>
+
+          <script>
+            class ChartSeriesDomRepeatElement extends Polymer.Element {
+              static get is() {
+                return 'chart-series-dom-repeat';
+              }
+
+              static get properties() {
+                return {
+                  series: {
+                    type: Array,
+                    value: () => {
+                      return [
+                        {'data': [10096761, 6990386, 9830199, 10373255, 7903685, 8713277, 10606107, 10227879, 9225719, 11987894]},
+                        {'data': [9545219, 9425618, 10835399, 8084422, 8541604, 10266319, 7586920, 8778721, 9379301, 10443877, 9771264, 8948669]},
+                        {'data': [8881128, 9330959, 9882444, 8594214, 9153243, 10109828, 9706285, 9005619, 7717883, 10727544, 9155228, 8765827]}
+                      ];
+                    }
+                  }
+                };
+              }
+            }
+
+            addEventListener('WebComponentsReady', () => {
+              customElements.define(ChartSeriesDomRepeatElement.is, ChartSeriesDomRepeatElement);
+            });
+          </script>
+        </dom-module>
+        <chart-series-dom-repeat></chart-series-dom-repeat>
       </template>
     </demo-snippet>
   </div>
