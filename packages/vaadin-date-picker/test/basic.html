@@ -34,6 +34,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-in-flexbox">
+    <template>
+      <div style="display: flex; flex-direction: column; width:500px;">
+        <vaadin-date-picker></vaadin-date-picker>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     describe('Basic features', () => {
       var datepicker, clearButton, toggleButton;
@@ -582,6 +590,15 @@
         it('should expose the text-field prefix slot', () => {
           const slot = textfield.querySelector('slot[name=prefix]');
           expect(slot.assignedNodes()[0].textContent).to.eql('foo');
+        });
+      });
+
+      describe('Inside flexbox', () => {
+        it('date-picker should have width 175px', () => {
+          const container = fixture('datepicker-in-flexbox');
+          const flexDatePicker = container.querySelector('vaadin-date-picker');
+          expect(window.getComputedStyle(container).width).to.eql('500px');
+          expect(window.getComputedStyle(flexDatePicker).width).to.eql('175px');
         });
       });
     });
