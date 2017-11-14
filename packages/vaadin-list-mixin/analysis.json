@@ -2,280 +2,30 @@
   "schema_version": "1.0.0",
   "mixins": [
     {
-      "description": "A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.\n\n`focused`, `active` and `focus-ring` are set as only as attributes.",
-      "summary": "",
-      "path": "vaadin-list-item-mixin.html",
-      "properties": [
-        {
-          "name": "disabled",
-          "type": "boolean",
-          "description": "If true, the user cannot interact with this element.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 21,
-              "column": 8
-            },
-            "end": {
-              "line": 27,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true,
-              "observer": "\"_disabledChanged\""
-            }
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "selected",
-          "type": "boolean",
-          "description": "If true, the button is in the selected state.",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 32,
-              "column": 8
-            },
-            "end": {
-              "line": 38,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "notify": true,
-              "observer": "\"_selectedChanged\""
-            }
-          },
-          "defaultValue": "false"
-        }
-      ],
-      "methods": [
-        {
-          "name": "ready",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 42,
-              "column": 4
-            },
-            "end": {
-              "line": 57,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_toggle",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 59,
-              "column": 4
-            },
-            "end": {
-              "line": 63,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_selectedChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 65,
-              "column": 4
-            },
-            "end": {
-              "line": 67,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "selected"
-            }
-          ]
-        },
-        {
-          "name": "_disabledChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 69,
-              "column": 4
-            },
-            "end": {
-              "line": 76,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "disabled"
-            }
-          ]
-        },
-        {
-          "name": "_setFocused",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 78,
-              "column": 4
-            },
-            "end": {
-              "line": 89,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "focused"
-            }
-          ]
-        },
-        {
-          "name": "_setActive",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 91,
-              "column": 4
-            },
-            "end": {
-              "line": 97,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "active"
-            }
-          ]
-        },
-        {
-          "name": "_onKeydown",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 99,
-              "column": 4
-            },
-            "end": {
-              "line": 104,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ]
-        },
-        {
-          "name": "_onKeyup",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 106,
-              "column": 4
-            },
-            "end": {
-              "line": 111,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ]
-        }
-      ],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 15,
-          "column": 2
-        },
-        "end": {
-          "line": 112,
-          "column": 3
-        }
-      },
-      "privacy": "public",
-      "name": "Vaadin.ListItemMixin",
-      "attributes": [
-        {
-          "name": "disabled",
-          "description": "If true, the user cannot interact with this element.",
-          "sourceRange": {
-            "start": {
-              "line": 21,
-              "column": 8
-            },
-            "end": {
-              "line": 27,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        },
-        {
-          "name": "selected",
-          "description": "If true, the button is in the selected state.",
-          "sourceRange": {
-            "start": {
-              "line": 32,
-              "column": 8
-            },
-            "end": {
-              "line": 38,
-              "column": 9
-            }
-          },
-          "metadata": {},
-          "type": "boolean"
-        }
-      ],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": []
-    },
-    {
       "description": "A mixin for `nav` elements, facilitating navigation and selection of childNodes.",
       "summary": "",
-      "path": "vaadin-list-mixin.html",
+      "path": "kk.html",
       "properties": [
+        {
+          "name": "_hasVaadinListMixin",
+          "type": "?",
+          "description": "Used for mixin detection because `instanceof` does not work with mixins.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 20,
+              "column": 8
+            },
+            "end": {
+              "line": 22,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
         {
           "name": "selected",
           "type": "number",
@@ -283,65 +33,63 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 20,
+              "line": 27,
               "column": 8
             },
             "end": {
-              "line": 26,
+              "line": 31,
               "column": 9
             }
           },
           "metadata": {
             "polymer": {
-              "notify": true,
-              "observer": "\"_selectedChanged\""
+              "notify": true
             }
-          },
-          "defaultValue": "0"
+          }
         },
         {
-          "name": "vertical",
-          "type": "boolean",
-          "description": "When true changes the disposition of items in dom from horizontal\nto vertical.\nIt also changes navigation keys from left/right to up/down.",
+          "name": "orientation",
+          "type": "string",
+          "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 32,
+              "line": 38,
               "column": 8
             },
             "end": {
-              "line": 37,
+              "line": 42,
               "column": 9
             }
           },
           "metadata": {
-            "polymer": {
-              "observer": "\"_verticalChanged\""
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_navItems",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 45,
+              "column": 8
+            },
+            "end": {
+              "line": 47,
+              "column": 9
             }
           },
-          "defaultValue": "false"
+          "metadata": {
+            "polymer": {}
+          }
         }
       ],
       "methods": [
         {
           "name": "ready",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 41,
-              "column": 4
-            },
-            "end": {
-              "line": 53,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": []
-        },
-        {
-          "name": "_verticalChanged",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
@@ -350,28 +98,7 @@
               "column": 4
             },
             "end": {
-              "line": 58,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "vertical"
-            }
-          ]
-        },
-        {
-          "name": "_updateItemsVertical",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 60,
-              "column": 4
-            },
-            "end": {
-              "line": 68,
+              "line": 67,
               "column": 5
             }
           },
@@ -379,16 +106,43 @@
           "params": []
         },
         {
-          "name": "_onKeydown",
+          "name": "_enhanceItems",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 79,
+              "line": 69,
               "column": 4
             },
             "end": {
-              "line": 127,
+              "line": 84,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "items"
+            },
+            {
+              "name": "orientation"
+            },
+            {
+              "name": "selected"
+            }
+          ]
+        },
+        {
+          "name": "_onClick",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 4
+            },
+            "end": {
+              "line": 96,
               "column": 5
             }
           },
@@ -396,6 +150,54 @@
           "params": [
             {
               "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onKeydown",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 98,
+              "column": 4
+            },
+            "end": {
+              "line": 139,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_getAvailableIndex",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 141,
+              "column": 4
+            },
+            "end": {
+              "line": 156,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "idx"
+            },
+            {
+              "name": "increment"
+            },
+            {
+              "name": "condition"
             }
           ]
         },
@@ -405,11 +207,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 129,
+              "line": 158,
               "column": 4
             },
             "end": {
-              "line": 132,
+              "line": 162,
               "column": 5
             }
           },
@@ -426,11 +228,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 164,
               "column": 4
             },
             "end": {
-              "line": 140,
+              "line": 170,
               "column": 5
             }
           },
@@ -442,16 +244,33 @@
           ]
         },
         {
+          "name": "focus",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 172,
+              "column": 4
+            },
+            "end": {
+              "line": 176,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
           "name": "_scrollToItem",
           "description": "Scroll the container to have the next item by the edge of the viewport",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 148,
+              "line": 184,
               "column": 4
             },
             "end": {
-              "line": 167,
+              "line": 203,
               "column": 5
             }
           },
@@ -468,11 +287,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 169,
+              "line": 210,
               "column": 4
             },
             "end": {
-              "line": 171,
+              "line": 212,
               "column": 5
             }
           },
@@ -480,48 +299,6 @@
           "params": [
             {
               "name": "pixels"
-            }
-          ]
-        },
-        {
-          "name": "_selectedChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 173,
-              "column": 4
-            },
-            "end": {
-              "line": 177,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "idx"
-            }
-          ]
-        },
-        {
-          "name": "_onSelected",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 179,
-              "column": 4
-            },
-            "end": {
-              "line": 186,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "e"
             }
           ]
         }
@@ -535,7 +312,7 @@
           "column": 2
         },
         "end": {
-          "line": 187,
+          "line": 213,
           "column": 3
         }
       },
@@ -547,11 +324,11 @@
           "description": "The index of the item selected in the items array",
           "sourceRange": {
             "start": {
-              "line": 20,
+              "line": 27,
               "column": 8
             },
             "end": {
-              "line": 26,
+              "line": 31,
               "column": 9
             }
           },
@@ -559,20 +336,399 @@
           "type": "number"
         },
         {
-          "name": "vertical",
-          "description": "When true changes the disposition of items in dom from horizontal\nto vertical.\nIt also changes navigation keys from left/right to up/down.",
+          "name": "orientation",
+          "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
           "sourceRange": {
             "start": {
-              "line": 32,
+              "line": 38,
               "column": 8
             },
             "end": {
-              "line": 37,
+              "line": 42,
               "column": 9
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "string"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": []
+    },
+    {
+      "description": "A mixin for `nav` elements, facilitating navigation and selection of childNodes.",
+      "summary": "",
+      "path": "vaadin-list-mixin.html",
+      "properties": [
+        {
+          "name": "_hasVaadinListMixin",
+          "type": "?",
+          "description": "Used for mixin detection because `instanceof` does not work with mixins.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 20,
+              "column": 8
+            },
+            "end": {
+              "line": 22,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "true"
+        },
+        {
+          "name": "selected",
+          "type": "number",
+          "description": "The index of the item selected in the items array",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 27,
+              "column": 8
+            },
+            "end": {
+              "line": 31,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        },
+        {
+          "name": "orientation",
+          "type": "string",
+          "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 38,
+              "column": 8
+            },
+            "end": {
+              "line": 42,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "_navItems",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 45,
+              "column": 8
+            },
+            "end": {
+              "line": 47,
+              "column": 9
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 55,
+              "column": 4
+            },
+            "end": {
+              "line": 67,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_enhanceItems",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 69,
+              "column": 4
+            },
+            "end": {
+              "line": 84,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "items"
+            },
+            {
+              "name": "orientation"
+            },
+            {
+              "name": "selected"
+            }
+          ]
+        },
+        {
+          "name": "_filterItems",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 90,
+              "column": 4
+            },
+            "end": {
+              "line": 92,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "array"
+            }
+          ]
+        },
+        {
+          "name": "_onClick",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 94,
+              "column": 4
+            },
+            "end": {
+              "line": 100,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_onKeydown",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 102,
+              "column": 4
+            },
+            "end": {
+              "line": 143,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            }
+          ]
+        },
+        {
+          "name": "_getAvailableIndex",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 145,
+              "column": 4
+            },
+            "end": {
+              "line": 160,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "idx"
+            },
+            {
+              "name": "increment"
+            },
+            {
+              "name": "condition"
+            }
+          ]
+        },
+        {
+          "name": "_setFocusable",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 162,
+              "column": 4
+            },
+            "end": {
+              "line": 166,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "idx"
+            }
+          ]
+        },
+        {
+          "name": "_focus",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 168,
+              "column": 4
+            },
+            "end": {
+              "line": 174,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "idx"
+            }
+          ]
+        },
+        {
+          "name": "focus",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 176,
+              "column": 4
+            },
+            "end": {
+              "line": 180,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_scrollToItem",
+          "description": "Scroll the container to have the next item by the edge of the viewport",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 188,
+              "column": 4
+            },
+            "end": {
+              "line": 207,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "idx"
+            }
+          ]
+        },
+        {
+          "name": "_scroll",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 214,
+              "column": 4
+            },
+            "end": {
+              "line": 216,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "pixels"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 14,
+          "column": 2
+        },
+        "end": {
+          "line": 217,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "name": "Vaadin.ListMixin",
+      "attributes": [
+        {
+          "name": "selected",
+          "description": "The index of the item selected in the items array",
+          "sourceRange": {
+            "start": {
+              "line": 27,
+              "column": 8
+            },
+            "end": {
+              "line": 31,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "orientation",
+          "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
+          "sourceRange": {
+            "start": {
+              "line": 38,
+              "column": 8
+            },
+            "end": {
+              "line": 42,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "type": "string"
         }
       ],
       "events": [],
