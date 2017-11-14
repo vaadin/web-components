@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-list-box.html",
         "start": {
-          "line": 122,
+          "line": 126,
           "column": 6
         },
         "end": {
-          "line": 122,
+          "line": 126,
           "column": 42
         }
       },
@@ -74,11 +74,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 101,
+                  "line": 105,
                   "column": 12
                 },
                 "end": {
-                  "line": 103,
+                  "line": 107,
                   "column": 13
                 }
               },
@@ -117,11 +117,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 107,
+                  "line": 111,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 114,
                   "column": 9
                 }
               },
@@ -401,11 +401,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 91,
+              "line": 95,
               "column": 6
             },
             "end": {
-              "line": 115,
+              "line": 119,
               "column": 7
             }
           },
@@ -462,11 +462,11 @@
               "range": {
                 "file": "vaadin-list-box.html",
                 "start": {
-                  "line": 58,
+                  "line": 62,
                   "column": 6
                 },
                 "end": {
-                  "line": 58,
+                  "line": 62,
                   "column": 19
                 }
               }
