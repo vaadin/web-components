@@ -126,15 +126,15 @@
             // TAB
             for (let i = 0; i < focusableElements.length; i++) {
               expect(overlay._focusedElement).to.eql(focusableElements[i]);
-              MockInteractions.pressAndReleaseKeyOn(document.body, 9);
+              MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
             }
             expect(overlay._focusedElement).to.eql(focusableElements[0]);
 
             // SHIFT+TAB
-            MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift');
+            MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
             for (let i = focusableElements.length - 1; i >= 0; i--) {
               expect(overlay._focusedElement).to.eql(focusableElements[i]);
-              MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift');
+              MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
             }
             expect(overlay._focusedElement).to.eql(focusableElements[focusableElements.length - 1]);
             done();
@@ -161,7 +161,7 @@
       });
 
       it('should close on esc', () => {
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
 
         expect(overlay.opened).to.be.false;
       });
@@ -179,8 +179,8 @@
 
         overlay.addEventListener('vaadin-overlay-escape-press', doneHandler, false);
 
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
-        MockInteractions.pressAndReleaseKeyOn(document.body, 13);
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+        MockInteractions.pressAndReleaseKeyOn(document.body, 13, [], 'Enter');
 
         overlay.removeEventListener('vaadin-overlay-escape-press', doneHandler, false);
       });
@@ -190,7 +190,7 @@
           e.preventDefault();
         });
 
-        MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+        MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
 
         expect(overlay.opened).to.be.true;
       });

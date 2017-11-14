@@ -307,7 +307,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _keydownListener(event) {
         // TAB
-        if (event.keyCode === 9 && this.focusTrap) {
+        if (event.key === 'Tab' && this.focusTrap) {
           const focusableElements = this._getFocusableElements();
           const focusedElementIndex = focusableElements.indexOf(this._focusedElement);
 
@@ -323,7 +323,7 @@ This program is available under Apache License Version 2.0, available at https:/
           event.preventDefault();
 
         // ESC
-        } else if (event.keyCode === 27) {
+        } else if (event.key === 'Escape' || event.key === 'Esc') {
           const evt = new CustomEvent('vaadin-overlay-escape-press', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
           this.dispatchEvent(evt);
 
