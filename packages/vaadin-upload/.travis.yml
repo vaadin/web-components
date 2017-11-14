@@ -16,8 +16,7 @@ install:
   - bower install
 
 before_script:
-  - gulp lint
-  - gulp version:check
+  - gulp lint version:check
   - polymer lint --rules polymer-2 --input *.html
   - xvfb-run -s '-screen 0 1024x768x24' polymer test
 
