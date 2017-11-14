@@ -192,21 +192,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _indeterminateChanged(indeterminate, prevIndeterminate) {
+        _indeterminateChanged(indeterminate) {
           if (indeterminate) {
             this.setAttribute('aria-checked', 'mixed');
-          }
-
-          if (prevIndeterminate === undefined && indeterminate === false) {
-            return;
-          }
-
-          if (this.checked) {
-            this.checked = false;
-          }
-
-          if (!indeterminate) {
-            this.checked = true;
+          } else {
+            this.setAttribute('aria-checked', this.checked);
           }
         }
 
