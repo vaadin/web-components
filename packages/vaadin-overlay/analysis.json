@@ -631,11 +631,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 38,
+                  "line": 40,
                   "column": 4
                 },
                 "end": {
-                  "line": 42,
+                  "line": 44,
                   "column": 5
                 }
               },
