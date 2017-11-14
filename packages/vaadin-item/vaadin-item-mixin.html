@@ -72,6 +72,17 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('keyup', e => this._onKeyup(e));
     }
 
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      // in Firefox and Safari, blur does not fire on the element when it is removed,
+      // especially between keydown and keyup events, being active at the same time.
+      // reproducible in `<vaadin-dropdown-menu>` when closing overlay on select.
+      if (this.hasAttribute('active')) {
+        this._setFocused(false);
+      }
+    }
+
     _selectedChanged(selected) {
       this.setAttribute('aria-selected', selected);
     }

@@ -102,6 +102,13 @@
         expect(item.hasAttribute('active')).to.be.false;
       });
 
+      it('should not have active attribute when disconnected from the DOM', () => {
+        spaceDown(item);
+        item.parentNode.removeChild(item);
+        window.ShadyDOM && window.ShadyDOM.flush();
+        expect(item.hasAttribute('active')).to.be.false;
+      });
+
       it('should not have focus-ring if not focused', () => {
         expect(item.hasAttribute('focus-ring')).to.be.false;
       });
