@@ -12,7 +12,8 @@
         box-sizing: border-box;
         height: var(--valo-size-xxs);
         margin: var(--valo-space-xs);
-        padding: var(--valo-space-wide-xs);
+        padding-left: calc(0.45em + var(--valo-border-radius) / 4);
+        padding-right: calc(0.45em + var(--valo-border-radius) / 4);
         color: var(--valo-contrast);
         background-color: var(--valo-contrast-10pct);
         border-radius: var(--valo-border-radius);
@@ -26,7 +27,6 @@
 
       [theme~="badge"][theme~="small"] {
         font-size: var(--valo-font-size-xxs);
-        padding: var(--valo-space-wide-xxs);
         height: var(--valo-size-xxxs);
       }
 
@@ -123,7 +123,7 @@
       /* Pill */
 
       [theme~="badge"][theme~="pill"] {
-        border-radius: 1rem;
+        --valo-border-radius: calc(var(--valo-size-xxs) / 2);
       }
     </style>
   </template>
