@@ -9,32 +9,259 @@
     <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout'>
       <template preserve-content>
         <vaadin-horizontal-layout>
-          <div>
-            Block 1
+          <div class="dashed-outline">
+            Item 1
           </div>
-          <div>
-            Block 2
+          <div class="dashed-outline">
+            Item 2
           </div>
         </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Vertical Layout</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout'>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout'>
       <template preserve-content>
         <vaadin-vertical-layout>
-          <div>
-            Block 1
+          <div class="dashed-outline">
+            Item 1
           </div>
-          <div>
-            Block 2
+          <div class="dashed-outline">
+            Item 2
           </div>
         </vaadin-vertical-layout>
+
+        <style>
+          vaadin-vertical-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
       </template>
     </vaadin-demo-snippet>
+
+    <h3>Horizontal Layout With Custom Spacing</h3>
+    <p>
+      Use the <code>--vaadin-horizontal-layout-column-gap</code> custom CSS property
+      to customize spacing between items in <code>&lt;vaadin-horizontal-layout&gt;</code>.
+    </p>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-gap'>
+      <template preserve-content>
+        <dom-module id="my-horizontal-view">
+          <template preserve-content>
+            <style>
+              vaadin-horizontal-layout {
+                height: 150px;
+                --vaadin-horizontal-layout-column-gap: 4em;
+              }
+
+              .dashed-outline {
+                outline: 1px dashed gray; /* for demonstration purposes only */
+              }
+            </style>
+
+            <vaadin-horizontal-layout>
+              <div class="dashed-outline">
+                Item 1
+              </div>
+              <div class="dashed-outline">
+                Item 2
+              </div>
+            </vaadin-horizontal-layout>
+          </template>
+        </dom-module>
+        <script>
+          window.addDemoReadyListener('#ordered-layout-basic-demos-horizontal-layout-gap', function() {
+            Polymer({is: 'my-horizontal-view'});
+          });
+        </script>
+
+        <my-horizontal-view></my-horizontal-view>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Vertical Layout With Custom Spacing</h3>
+    <p>
+      Use the <code>--vaadin-vertical-layout-row-gap</code> custom CSS property
+      to customize spacing between items in <code>&lt;vaadin-vertical-layout&gt;.</code>
+    </p>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-gap'>
+      <template preserve-content>
+        <dom-module id="my-vertical-view">
+          <template preserve-content>
+            <style>
+              vaadin-vertical-layout {
+                height: 150px;
+                --vaadin-vertical-layout-row-gap: 4em;
+              }
+
+              .dashed-outline {
+                outline: 1px dashed gray; /* for demonstration purposes only */
+              }
+            </style>
+
+            <vaadin-vertical-layout>
+              <div class="dashed-outline">
+                Item 1
+              </div>
+              <div class="dashed-outline">
+                Item 2
+              </div>
+            </vaadin-vertical-layout>
+          </template>
+        </dom-module>
+        <script>
+          window.addDemoReadyListener('#ordered-layout-basic-demos-vertical-layout-gap', function() {
+            Polymer({is: 'my-vertical-view'});
+          });
+        </script>
+
+        <my-vertical-view></my-vertical-view>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Horizontal Layout Without Gaps</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-gap-none'>
+      <template preserve-content>
+        <vaadin-horizontal-layout theme="gap-none">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Vertical Layout Without Gaps</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-gap-none'>
+      <template preserve-content>
+        <vaadin-vertical-layout theme="gap-none">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-vertical-layout>
+
+        <style>
+          vaadin-vertical-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Horizontal Layout With Margin Around</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-margin'>
+      <template preserve-content>
+        <vaadin-horizontal-layout theme="margin">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Vertical Layout With Margin Around</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-margin'>
+      <template preserve-content>
+        <vaadin-vertical-layout theme="margin">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-vertical-layout>
+
+        <style>
+          vaadin-vertical-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Horizontal Layout With Padding Around</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-padding'>
+      <template preserve-content>
+        <vaadin-horizontal-layout theme="padding">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Vertical Layout With Padding Around</h3>
+    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-padding'>
+      <template preserve-content>
+        <vaadin-vertical-layout theme="padding">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-vertical-layout>
+
+        <style>
+          vaadin-vertical-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
-    class OrderedLayoutBasicDemos extends Polymer.Element {
+    class OrderedLayoutBasicDemos extends DemoReadyEventEmitter(Polymer.Element) {
       static get is() {
         return 'ordered-layout-basic-demos';
       }

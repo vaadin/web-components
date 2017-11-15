@@ -5,19 +5,67 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-horizontal-layout">
   <template>
     <style>
       :host {
         display: flex;
+
+        /* CSS API for host */
+        --vaadin-horizontal-layout-column-gap: 2em; /* (default) */
       }
 
       :host([hidden]) {
         display: none !important;
       }
+
+      #layout {
+        display: flex;
+        flex: 1 1 auto;
+
+        /*
+          Compensate for item margins, so that there are no gaps around
+          the layout itself.
+        */
+        margin-left: calc(-0.5 * var(--vaadin-horizontal-layout-column-gap));
+        margin-right: calc(-0.5 * var(--vaadin-horizontal-layout-column-gap));
+      }
+
+      #layout ::slotted(*) {
+        /* Enable grow and shrink for items. */
+        flex: 1 1 auto;
+
+        /* Margins make gaps between items */
+        margin-left: calc(0.5 * var(--vaadin-horizontal-layout-column-gap));
+        margin-right: calc(0.5 * var(--vaadin-horizontal-layout-column-gap));
+      }
+
+      /* Theme variations */
+
+      :host([theme~="gap-none"]) #layout {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      :host([theme~="gap-none"]) #layout ::slotted(*) {
+        margin-left: 0;
+        margin-right: 0;
+      }
+
+      :host([theme~="margin"]) {
+        margin: 2em;
+      }
+
+      :host([theme~="padding"]) {
+        padding: 2em;
+      }
     </style>
-    <slot></slot>
+
+    <div id="layout">
+      <slot></slot>
+    </div>
   </template>
 
   <script>
@@ -31,15 +79,35 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ```
        * <vaadin-horizontal-layout>
-       *   <div>Block 1</div>
-       *   <div>Block 2</div>
+       *   <div>Item 1</div>
+       *   <div>Item 2</div>
        * </vaadin-horizontal-layout>
        * ```
        *
+       * ### CSS Properties Reference
+       *
+       * The following custom CSS properties are available
+       * on the `<vaadin-horizontal-layout>` element:
+       *
+       * Custom CSS property | Description | Default
+       * ---|---|---
+       * `--vaadin-horizontal-layout-column-gap` | Length of the gap between items | `2em`
+       *
+       * ### Built-in Theme Variations
+       *
+       * `<vaadin-horizontal-layout>` supports the following theme variations:
+       *
+       * Theme variation | Description
+       * ---|---
+       * `theme="gap-none"` | Removes gaps between items
+       * `theme="margin"` | Adds default margin around the layout
+       * `theme="padding"` | Adds default padding around the layout
+       *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class HorizontalLayoutElement extends Polymer.Element {
+      class HorizontalLayoutElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-horizontal-layout';
         }

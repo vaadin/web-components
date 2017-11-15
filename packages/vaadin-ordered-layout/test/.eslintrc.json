@@ -8,6 +8,6 @@
     "expect": false,
     "gemini": false,
     "sinon": false,
-    "positionEquals": false
+    "getCoords": false
   }
 }

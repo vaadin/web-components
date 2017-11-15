@@ -24,7 +24,8 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "^2.0.0"
+    "polymer": "^2.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.5"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.0",
@@ -32,6 +33,6 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^1.0.0"
   }
 }
