@@ -10,14 +10,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <style>
   @font-face {
-    font-family: "vaadin-grid-hierarchy-icons";
-    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAQoAA0AAAAABvgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAEDAAAABoAAAAcgGQ0kEdERUYAAAPwAAAAHAAAAB4AJwAOT1MvMgAAAZQAAAA/AAAAYA8TBIJjbWFwAAAB8AAAAFUAAAFeGJvXWmdhc3AAAAPoAAAACAAAAAgAAAAQZ2x5ZgAAAlwAAABLAAAAhIrPOhFoZWFkAAABMAAAACsAAAA2Dqpie2hoZWEAAAFcAAAAHQAAACQHAgPHaG10eAAAAdQAAAAZAAAAHAxVAgBsb2NhAAACSAAAABIAAAASAIAAVG1heHAAAAF8AAAAGAAAACAACgAFbmFtZQAAAqgAAAEGAAACi/tBDcRwb3N0AAADsAAAADYAAABZQ7Ajh3icY2BkYGAA4va5i9/F89t8ZeBmYQCBa2r89sg0swMziOJgYAJRAAAxB0oAeJxjYGRgYD7w/wADAwsDCDA7MDAyoAI2AFEEAtIAAAB4nGNgZGBg4GBgZgDRDAxMDGgAAAGbABB4nGNgZp7JOIGBlYGBaSbTGQYGhn4IzfiawZiRkwEVMAqgCTA4MDA+38d84P8BBgdmIAapQZJVYGAEAGc/C54AeJxjYYAAxlAIzQTELAwMBxgZGB0ACy0BYwAAAHicY2BgYGaAYBkGRgYQiADyGMF8FgYbIM3FwMHABISMDArP9/3/+/8/WJXC8z0Q9v8nEp5gHVwMMMAIMo+RDYiZoQJMQIKJARUA7WBhGN4AACFKDtoAAAAAAAAAAAgACAAQABgAJgA0AEIAAHichYvBEYBADAKBVHBjBT4swl9KS2k05o0XHd/yW1hAfBFwCv9sIlJu3nZaNS3PXAaXXHI8Lge7DlzF7C1RgXc7xkK6+gvcD2URmQB4nLWOQWrDMBRER4mT0gS6Kl00Gx2gNgmEkBMUssgmlO4VS8iCIBXbCfgOPUbXPUPpqbrs2PwrWEboaTwzXwAe8A2FfimssBee4A5WeEr9Szgj/wnPsFQvwnOs1IfwAs/qlymV3VPZDQ09TzjrTXhK/SKckX+EZ3hSj8Jz7NReeIGt+sQNhp9FQEQOj5pkSRVPx5vhLnnrqAVSoq8BbsbYEHNfB5tXwdWmLqsuD2WK/Hli0uPK1/RpnJy/XgxhjFljdL4PyYb+3q2xQYE1ZVc3IUW9KdbjzH0dXC0nenZE6Wl5Wmpndmkchq4jd+8tGEqx1d5FdrXO6nOnD2U6phQL/AOVkHyhAAB4nGNgYsAPOBgYGJkYmBiZGZgZWRhZGdnY0nMqCzIM2UvzMg0MDMC0q7mTM5R2gdKuAO+pC5cAAAABAAH//wAPeJxjYGRgYOABYjEgZmJgBEJ2IGYB8xgAA+sANnicY2BgYGQAgisSYoIg+poavz2MBgAn2AOpAAA=) format('woff');
+    font-family: "vaadin-grid-tree-icons";
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAQkAA0AAAAABrwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAECAAAABoAAAAcgHwa6EdERUYAAAPsAAAAHAAAAB4AJwAOT1MvMgAAAZQAAAA/AAAAYA8TBIJjbWFwAAAB8AAAAFUAAAFeGJvXWmdhc3AAAAPkAAAACAAAAAgAAAAQZ2x5ZgAAAlwAAABLAAAAhIrPOhFoZWFkAAABMAAAACsAAAA2DsJI02hoZWEAAAFcAAAAHQAAACQHAgPHaG10eAAAAdQAAAAZAAAAHAxVAgBsb2NhAAACSAAAABIAAAASAIAAVG1heHAAAAF8AAAAGAAAACAACgAFbmFtZQAAAqgAAAECAAACTwflzbdwb3N0AAADrAAAADYAAABZQ7Ajh3icY2BkYGAA4twv3Vfi+W2+MnCzMIDANSOmbGSa2YEZRHEwMIEoAAoiB6sAeJxjYGRgYD7w/wADAwsDCDA7MDAyoAI2AFEEAtIAAAB4nGNgZGBg4GBgZgDRDAxMDGgAAAGbABB4nGNgZp7JOIGBlYGBaSbTGQYGhn4IzfiawZiRkwEVMAqgCTA4MDA+38d84P8BBgdmIAapQZJVYGAEAGc/C54AeJxjYYAAxlAIzQTELAwMBxgZGB0ACy0BYwAAAHicY2BgYGaAYBkGRgYQiADyGMF8FgYbIM3FwMHABISMDArP9/3/+/8/WJXC8z0Q9v8nEp5gHVwMMMAIMo+RDYiZoQJMQIKJARUA7WBhGN4AACFKDtoAAAAAAAAAAAgACAAQABgAJgA0AEIAAHichYvBEYBADAKBVHBjBT4swl9KS2k05o0XHd/yW1hAfBFwCv9sIlJu3nZaNS3PXAaXXHI8Lge7DlzF7C1RgXc7xkK6+gvcD2URmQB4nK2RQWoCMRiFX3RUqtCli65yADModOMBLLgQSqHddRFnQghIAnEUvEA3vUUP0LP0Fj1G+yb8R5iEhO9/ef/7FwFwj28o9EthiVp4hBlehcfUP4Ur8o/wBAv8CU+xVFvhOR7UB7tUdUdlVRJ6HnHWTnhM/V24In8JT5j/KzzFSi2E53hUz7jCcrcIiDDwyKSW1JEct2HdIPH1DFytbUM0PofWdNk5E5oUqb/Q6HHBiVGZpfOXkyUMEj5IyBuNmYZQjBobfsuassvnkKLe1OuBBj0VQ8cRni2xjLWsHaM0jrjx3peYA0/vrdmUYqe9iy7bzrX6eNP7Jh1SijX+AaUVbB8AAHicY2BiwA84GBgYmRiYGJkZmBlZGFkZ2djScyoLMgzZS/MyDQwMwLSruZMzlHaB0q4A76kLlwAAAAEAAf//AA94nGNgZGBg4AFiMSBmYmAEQnYgZgHzGAAD6wA2eJxjYGBgZACCKxJigiD6mhFTNowGACmcA/8AAA==) format('woff');
     font-weight: normal;
     font-style: normal;
   }
 </style>
 
-<dom-module id="vaadin-grid-hierarchy-toggle">
+<dom-module id="vaadin-grid-tree-toggle">
   <template>
     <style>
       :host {
@@ -25,7 +25,7 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: baseline;
 
         /* CSS API for :host */
-        --vaadin-grid-hierarchy-toggle-level-offset: 1em;
+        --vaadin-grid-tree-toggle-level-offset: 1em;
 
         /*
           ShadyCSS seems to polyfill :dir(rtl) only for :host, thus using
@@ -53,11 +53,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       #level-spacer {
         display: inline-block;
-        width: calc(var(---level, '0') * var(--vaadin-grid-hierarchy-toggle-level-offset));
+        width: calc(var(---level, '0') * var(--vaadin-grid-tree-toggle-level-offset));
       }
 
       [part="toggle"]::before {
-        font-family: "vaadin-grid-hierarchy-icons";
+        font-family: "vaadin-grid-tree-icons";
         line-height: 1em; /* make icon font metrics not affect baseline */
       }
 
@@ -83,20 +83,20 @@ This program is available under Apache License Version 2.0, available at https:/
 <script>
   {
     /**
-     * `<vaadin-grid-hierarchy-toggle>` is a helper element for the `<vaadin-grid>`
-     * that provides toggle and level display functionality for the item hierarchy.
+     * `<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`
+     * that provides toggle and level display functionality for the item tree.
      *
      * #### Example:
      * ```html
      * <vaadin-grid-column>
      *   <template class="header">Package name</template>
      *   <template>
-     *     <vaadin-grid-hierarchy-toggle
+     *     <vaadin-grid-tree-toggle
      *         icon-hidden="[[!item.hasChildren]]"
      *         expanded="{{expanded}}"
      *         level="[[level]]">
      *       [[item.name]]
-     *     </vaadin-grid-hierarchy-toggle>
+     *     </vaadin-grid-tree-toggle>
      *   </template>
      * </vaadin-grid-column>
      * ```
@@ -107,7 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * Part name | Description
      * ---|---
-     * `toggle` | The hierarchy toggle icon
+     * `toggle` | The tree toggle icon
      *
      * The following state attributes are available for styling:
      *
@@ -117,24 +117,24 @@ This program is available under Apache License Version 2.0, available at https:/
      * `icon-hidden` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
      *
      * The following custom CSS properties are available on
-     * the `<vaadin-grid-hierarchy-toggle>` element:
+     * the `<vaadin-grid-tree-toggle>` element:
      *
      * Custom CSS property | Description | Default
      * ---|---|---
-     * `--vaadin-grid-hierarchy-toggle-level-offset` | Visual offset step for each hierarchy sublevel | `1em`
+     * `--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`
      *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
      */
-    class GridHierarchyToggleElement extends Vaadin.ThemableMixin(Polymer.Element) {
+    class GridTreeToggleElement extends Vaadin.ThemableMixin(Polymer.Element) {
       static get is() {
-        return 'vaadin-grid-hierarchy-toggle';
+        return 'vaadin-grid-tree-toggle';
       }
 
       static get properties() {
         return {
           /**
-           * Current level of the hierarchy represented with a horizontal offset
+           * Current level of the tree represented with a horizontal offset
            * of the toggle button.
            */
           level: {
@@ -144,7 +144,7 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * Hides the toggle icon and disables toggling a hierarchy sublevel.
+           * Hides the toggle icon and disables toggling a tree sublevel.
            */
           iconHidden: {
             type: Boolean,
@@ -192,12 +192,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    customElements.define(GridHierarchyToggleElement.is, GridHierarchyToggleElement);
+    customElements.define(GridTreeToggleElement.is, GridTreeToggleElement);
 
     /**
      * @namespace Vaadin
      */
     window.Vaadin = window.Vaadin || {};
-    Vaadin.GridHierarchyToggleElement = GridHierarchyToggleElement;
+    Vaadin.GridTreeToggleElement = GridTreeToggleElement;
   }
 </script>

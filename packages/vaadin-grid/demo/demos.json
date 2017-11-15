@@ -90,11 +90,11 @@
   }
   ,
   {
-    "name": "Hierarchy",
-    "url": "grid-hierarchy-demos",
-    "src": "grid-hierarchy-demos.html",
+    "name": "Tree",
+    "url": "grid-tree-demos",
+    "src": "grid-tree-demos.html",
     "meta": {
-      "title": "vaadin-grid – Hierarchy",
+      "title": "vaadin-grid – Tree",
       "description": "",
       "image": ""
     }
