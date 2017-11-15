@@ -191,21 +191,21 @@
 
       /* Icons used together with text (not super proud of these calc's) */
 
-      :host ::slotted(iron-icon:first-child:not(:last-child)) {
+      [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
         margin-left: calc(var(--valo-size, var(--valo-size-m)) / -6);
         margin-right: calc(var(--valo-size, var(--valo-size-m)) / 9);
       }
 
-      :host ::slotted(iron-icon:last-child:not(:first-child)) {
+      [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
         margin-left: calc(var(--valo-size, var(--valo-size-m)) / 9);
         margin-right: calc(var(--valo-size, var(--valo-size-m)) / -6);
       }
 
-      :host([theme~="tertiary-inline"]) ::slotted(iron-icon:first-child:not(:last-child)) {
+      :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
         margin-left: 0;
       }
 
-      :host([theme~="tertiary-inline"]) ::slotted(iron-icon:last-child:not(:first-child)) {
+      :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
         margin-right: 0;
       }
 
