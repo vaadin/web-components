@@ -49,7 +49,16 @@
 
 
     <h2 demo-section>Sizing</h2>
-    <p>Use these properties to adjust the sizing of regular elements (buttons, text fields, list items). The default sizing is based on <code>--valo-size-m</code>.</p>
+    <p>Use these properties to adjust the sizing of regular elements (buttons, text fields, list items).</p>
+
+    <div class="note">
+      <p>If you want to use the sizing properties, you need to import them manually.</p>
+      <nice-demo-snippet code-only>
+        <template slot="source">
+          <link rel="import" href="bower_components/vaadin-valo-theme/sizing.html">
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <nice-demo-snippet>
       <template slot="source">
@@ -94,6 +103,14 @@
     <h2 demo-section>Spacing</h2>
     <p>Use these properties to adjust the inter-component spacings, i.e. space outside a regular component (button, text field) or inside a container component (layouts, grid cells)</p>
 
+    <div class="note">
+      <p>If you want to use the spacing properties, you need to import them manually.</p>
+      <nice-demo-snippet code-only>
+        <template slot="source">
+          <link rel="import" href="bower_components/vaadin-valo-theme/spacing.html">
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3>Uniform</h3>
     <p>Use these properties for margin or padding in a single direction or uniformly on all sides.</p>
@@ -134,7 +151,7 @@
 
 
     <h3>Wide</h3>
-    <p>Use these properties for margin or padding to have a bigger horizontal space then vertical space.</p>
+    <p>Use these properties for margin or padding to have a bigger horizontal space than vertical space.</p>
 
     <nice-demo-snippet class="space">
       <template slot="source">
@@ -172,7 +189,7 @@
 
 
     <h3>Tall</h3>
-    <p>Use these properties for margin or padding to have a bigger vertical space then horizontal space.</p>
+    <p>Use these properties for margin or padding to have a bigger vertical space than horizontal space.</p>
 
     <nice-demo-snippet class="space">
       <template slot="source">
