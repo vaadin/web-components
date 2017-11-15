@@ -18,3 +18,4 @@ npm-debug.log
 directives/typings
 coverage/
 bower-*
+package-lock.json

@@ -229,6 +229,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return 'vaadin-grid';
       }
 
+      static get version() {
+        return '4.1.0-alpha3';
+      }
+
       static get observers() {
         return [
           '_columnTreeChanged(_columnTree, _columnTree.*)'
