@@ -35,13 +35,13 @@
 
       describe('no-close-on-esc', () => {
         it('should close itself on ESC press by default', () => {
-          MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
           expect(dialog.opened).to.eql(false);
         });
 
         it('should not close itself on ESC press when no-close-on-esc is true', () => {
           dialog.noCloseOnEsc = true;
-          MockInteractions.pressAndReleaseKeyOn(document.body, 27);
+          MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
           expect(dialog.opened).to.eql(true);
         });
       });
