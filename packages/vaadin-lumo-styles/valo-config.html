@@ -200,7 +200,7 @@
         </div>
 
         <div>
-          Border radius: <input type="range" value="{{borderRadius::input}}" min="0" max="24">
+          Border radius: <input type="range" value="{{borderRadius::input}}" min="0" max="1.25" step="0.125">
         </div>
 
         <details>
@@ -336,7 +336,7 @@
 
           borderRadius: {
             type: Number,
-            value: 4,
+            value: 0.25,
             observer: '_borderRadiusChanged'
           }
         };
@@ -633,7 +633,7 @@
         let styleStr = lightTheme + '\n\n' + darkTheme;
         styleStr += `
 html {
-  --valo-border-radius: ${this.borderRadius}px;
+  --valo-border-radius: ${this.borderRadius}em;
 }
         `;
 
