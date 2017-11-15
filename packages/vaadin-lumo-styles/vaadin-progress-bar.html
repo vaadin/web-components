@@ -1,12 +1,13 @@
 <link rel="import" href="color.html">
 <link rel="import" href="style.html">
+<link rel="import" href="spacing.html">
 
 <dom-module id="valo-progress-bar" theme-for="vaadin-progress-bar">
   <template>
     <style>
       :host {
-        height: 0.25em;
-        margin: 0.5em 0;
+        height: var(--valo-space-xs);
+        margin: var(--valo-space-s) 0;
       }
 
       [part="bar"] {
@@ -25,12 +26,14 @@
         transition: 0.2s width;
       }
 
-      /* aria-valuenow is always reflected as an attribute, value is not */
-      :host(:not([aria-valuenow])) [part="value"],
+      /* Indeterminate mode */
+
       :host([indeterminate]) [part="value"] {
+        --valo-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct));
+        --valo-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct));
         width: 100%;
-        background-color: transparent;
-        background-image: linear-gradient(to right, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct));
+        background-color: transparent !important;
+        background-image: var(--valo-progress-indeterminate-progress-bar-background);
         opacity: 0.55;
         will-change: transform;
         animation: vaadin-progress-slide 1.6s infinite cubic-bezier(.645, .045, .355, 1), vaadin-progress-scale 1.6s infinite cubic-bezier(.645, .045, .355, 1);
@@ -38,9 +41,9 @@
 
       @keyframes vaadin-progress-slide {
         0% { transform-origin: 0% 0%; }
-        50% { transform-origin: 100% 0%; background-image: linear-gradient(to right, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
-        50.1% { transform-origin: 100% 0%; background-image: linear-gradient(to left, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
-        100% { transform-origin: 0% 0%; background-image: linear-gradient(to left, var(--valo-contrast-5pct) 10%, var(--valo-contrast-90pct)); }
+        50% { transform-origin: 100% 0%; background-image: var(--valo-progress-indeterminate-progress-bar-background); }
+        50.1% { transform-origin: 100% 0%; background-image: var(--valo-progress-indeterminate-progress-bar-background-reverse); }
+        100% { transform-origin: 0% 0%; background-image: var(--valo-progress-indeterminate-progress-bar-background-reverse); }
       }
 
       @keyframes vaadin-progress-scale {
@@ -73,6 +76,33 @@
         60% { opacity: 0; }
         90% { opacity: 0; }
         100% { opacity: 1; }
+      }
+
+      /* Primary style */
+
+      :host([theme~="primary"]) [part="value"],
+      :host([theme~="primary"]) [part="value"]::before {
+        background-color: var(--valo-primary-color);
+        --valo-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--valo-primary-color-10pct) 10%, var(--valo-primary-color));
+        --valo-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--valo-primary-color-10pct) 10%, var(--valo-primary-color));
+      }
+
+      /* Error style */
+
+      :host([theme~="error"]) [part="value"],
+      :host([theme~="error"]) [part="value"]::before {
+        background-color: var(--valo-error-color);
+        --valo-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--valo-error-color-10pct) 10%, var(--valo-error-color));
+        --valo-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--valo-error-color-10pct) 10%, var(--valo-error-color));
+      }
+
+      /* Primary style */
+
+      :host([theme~="success"]) [part="value"],
+      :host([theme~="success"]) [part="value"]::before {
+        background-color: var(--valo-success-color);
+        --valo-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--valo-success-color-10pct) 10%, var(--valo-success-color));
+        --valo-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--valo-success-color-10pct) 10%, var(--valo-success-color));
       }
     </style>
   </template>

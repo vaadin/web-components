@@ -37,7 +37,7 @@
     <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-progress-bar.html" class="theme-source-code">Theme source code</a>
     <h1>Progress bar</h1>
 
-    <h3 demo-section>With a value</h3>
+    <h3 demo-section>Value</h3>
     <nice-demo-snippet>
       <template slot="source">
         <h6>Static</h6>
@@ -46,17 +46,29 @@
         <h6>Live</h6>
         <!-- Value updated with a background script -->
         <vaadin-progress-bar id="dynamic"></vaadin-progress-bar>
+
+        <h6>Indeterminate</h6>
+        <vaadin-progress-bar indeterminate></vaadin-progress-bar>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Indeterminate</h3>
+    <h3 demo-section>Colors</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <h6>Implicit (without a value)</h6>
-        <vaadin-progress-bar></vaadin-progress-bar>
+        <h5>Primary</h5>
+        <vaadin-progress-bar theme="primary" value="0.7"></vaadin-progress-bar>
+        <h6>Indeterminate</h6>
+        <vaadin-progress-bar theme="primary" indeterminate></vaadin-progress-bar>
 
-        <h6>Explicit (attribute)</h6>
-        <vaadin-progress-bar value="0.2" indeterminate></vaadin-progress-bar>
+        <h5>Error</h5>
+        <vaadin-progress-bar theme="error" value="0.7"></vaadin-progress-bar>
+        <h6>Indeterminate</h6>
+        <vaadin-progress-bar theme="error" indeterminate></vaadin-progress-bar>
+
+        <h5>Success</h5>
+        <vaadin-progress-bar theme="success" value="0.7"></vaadin-progress-bar>
+        <h6>Indeterminate</h6>
+        <vaadin-progress-bar theme="success" indeterminate></vaadin-progress-bar>
       </template>
     </nice-demo-snippet>
 
