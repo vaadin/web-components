@@ -27,11 +27,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_itemsChanged(items, items.*)'
+        '_itemsChanged(items, items.*, isAttached)'
       ];
     }
 
-    _itemsChanged(items, splices) {
+    _itemsChanged(items, splices, isAttached) {
+      if (!isAttached) {
+        return;
+      }
       if (!Array.isArray(items)) {
         if (items === undefined || items === null) {
           this.size = 0;
