@@ -196,6 +196,8 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
        * for `<vaadin-notification-overlay>` parts.
        *
@@ -217,8 +219,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
-       * for `<vaadin-notification-overlay>` parts.
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
@@ -247,6 +248,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        *
        * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
        * The following Shadow DOM parts are available for styling:
        *
@@ -322,10 +325,16 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
+        /**
+         * Opens the notification.
+         */
         open() {
           this.opened = true;
         }
 
+        /**
+         * Closes the notification.
+         */
         close() {
           this.opened = false;
         }
