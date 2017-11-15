@@ -17,35 +17,44 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
-        min-width: 175px;
+        display: inline-flex;
+        width: 175px;
         outline: none;
       }
 
       .vaadin-text-area-container {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        position: relative;
-        height: 100%;
-        max-height: inherit;
-        min-height: inherit;
+        max-height: inherit; /* MSIE 11 */
+        min-height: inherit; /* MSIE 11 */
       }
 
       [part="label"]:empty {
         display: none;
       }
 
+      /* The label and the error message should neither grow nor shrink. */
+      [part="label"],
+      [part="error-message"] {
+        flex: none;
+      }
+
       [part="input-field"] {
+        flex: auto;
         display: flex;
-        flex-grow: 1;
         min-height: 4.5em;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       [part="value"] {
         width: 100%;
         box-sizing: border-box;
         flex: 1;
+        min-width: 0;
         resize: none;
+        overflow: hidden;
       }
 
       [part="value"]::-ms-clear {
@@ -80,6 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
             aria-invalid$="[[invalid]]"></textarea>
 
         <slot name="suffix"></slot>
+
       </div>
 
       <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
@@ -152,27 +162,32 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _updateHeight() {
-          const scrollTop = this.focusElement.scrollTop;
-          const container = this.root.querySelector('.vaadin-text-area-container');
-          // Clear container enforced height
-          container.style.height = '';
-
           const inputField = this.root.querySelector('[part=input-field]');
+          const scrollTop = inputField.scrollTop;
+          const input = this.focusElement;
+
+          const inputWidth = getComputedStyle(input).width;
 
           const valueLength = this.value ? this.value.length : 0;
+          // Only clear the height when the content shortens to minimize scrollbar flickering.
           if (this._oldValueLength >= valueLength) {
-            // Only clear the height when the content shortens to minimize scrollbar flickering.
-            inputField.style.height = '';
+            // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
+            input.style.maxWidth = inputWidth;
+            input.style.height = 'auto';
+            // Avoid a jumpy Safari rendering issue
+            inputField.style.display = 'block';
           }
           this._oldValueLength = valueLength;
 
-          inputField.style.height = this.focusElement.scrollHeight + 'px';
+          const inputHeight = input.scrollHeight;
+          if (inputHeight > input.clientHeight) {
+            input.style.height = inputHeight + 'px';
+          }
 
-          // IE11 flexbox doesn't respect max-height constraints. Enforce the
-          // constraints with an explicit height value
-          const fixedHeight = container.clientHeight + 'px';
-          container.style.height = fixedHeight;
-          this.focusElement.scrollTop = scrollTop;
+          // Restore
+          input.style.removeProperty('max-width');
+          inputField.style.removeProperty('display');
+          inputField.scrollTop = scrollTop;
         }
       }
 

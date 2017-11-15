@@ -130,24 +130,27 @@
     });
 
     describe('multi-line', () => {
-      let textArea, input;
+      let textArea, input, inputField;
 
       beforeEach(() => {
         textArea = fixture('default');
         input = textArea.focusElement;
+        inputField = textArea.shadowRoot.querySelector('[part=input-field]');
       });
 
       it('should grow height with unwrapped text', () => {
-        const originalHeight = parseInt(window.getComputedStyle(input).height);
+        const originalHeight = parseInt(window.getComputedStyle(inputField).height);
 
         // Make sure there are enough characters to grow the textarea
         textArea.value = Array(400).join('400');
 
-        const newHeight = parseInt(window.getComputedStyle(input).height);
+        const newHeight = parseInt(window.getComputedStyle(inputField).height);
         expect(newHeight).to.be.at.least(originalHeight + 10);
       });
 
       it('should not grow over max-height', () => {
+        inputField.style.padding = '0';
+        inputField.style.border = 'none';
         textArea.style.maxHeight = '100px';
         const container = textArea.root.querySelector('.vaadin-text-area-container');
 
@@ -162,7 +165,7 @@
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
         expect(window.getComputedStyle(container).height).to.be.equal('100px');
-        expect(parseFloat(window.getComputedStyle(input).height)).to.be.below(100);
+        expect(window.getComputedStyle(inputField).height).to.be.equal('100px');
       });
 
       it('should not shrink less than min-height', () => {
@@ -171,14 +174,14 @@
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
         expect(window.getComputedStyle(container).height).to.be.equal('125px');
-        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(100);
+        expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
 
         // Check that value modification doesn't break min-height rule
         textArea.value = `1 row`;
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('125px');
         expect(window.getComputedStyle(container).height).to.be.equal('125px');
-        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(100);
+        expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(100);
       });
 
       it('should stay between min and max height', () => {
@@ -207,21 +210,21 @@
 
         expect(window.getComputedStyle(textArea).height).to.be.equal('175px');
         expect(window.getComputedStyle(container).height).to.be.equal('175px');
-        expect(parseFloat(window.getComputedStyle(input).height)).to.be.above(150);
+        expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.above(150);
       });
 
-      it('should increase input height', () => {
+      it('should increase inputField height', () => {
         textArea.style.height = '200px';
         textArea.value = 'foo';
-        expect(input.clientHeight).to.be.closeTo(200, 10);
+        expect(inputField.clientHeight).to.be.closeTo(200, 10);
       });
 
       it('should maintain scroll top', () => {
         textArea.style.maxHeight = '100px';
         textArea.value = Array(400).join('400');
-        input.scrollTop = 200;
+        inputField.scrollTop = 200;
         textArea.value += 'foo';
-        expect(input.scrollTop).to.equal(200);
+        expect(inputField.scrollTop).to.equal(200);
       });
 
       it('should decrease height automatically', () => {
@@ -229,6 +232,43 @@
         const height = textArea.clientHeight;
         textArea.value = '';
         expect(textArea.clientHeight).to.be.below(height);
+      });
+
+      it('should not change height', () => {
+        textArea.style.maxHeight = '100px';
+        textArea.value = Array(400).join('400');
+        const height = textArea.clientHeight;
+
+        textArea.value = textArea.value.slice(0, -1);
+        expect(textArea.clientHeight).to.equal(height);
+      });
+
+      it('should have the correct width', () => {
+        textArea.style.width = '300px';
+        expect(input.clientWidth).to.equal(
+          textArea.clientWidth
+          - parseFloat(getComputedStyle(inputField).paddingTop)
+          - parseFloat(getComputedStyle(inputField).paddingBottom)
+          - parseFloat(getComputedStyle(inputField).borderTopWidth)
+          - parseFloat(getComputedStyle(inputField).borderBottomWidth));
+      });
+
+      it('should have matching scrollHeight', () => {
+        inputField.style.padding = '0';
+        textArea.style.maxHeight = '100px';
+
+        textArea.value = Array(400).join('400');
+        textArea.value = textArea.value.slice(0, -1);
+        expect(input.scrollHeight).to.equal(inputField.scrollHeight);
+      });
+
+      it('should cover input field', () => {
+        inputField.style.padding = '0';
+        inputField.style.border = 'none';
+        textArea.style.minHeight = '300px';
+        textArea.value = 'foo';
+
+        expect(input.clientHeight).to.equal(300);
       });
     });
   </script>
