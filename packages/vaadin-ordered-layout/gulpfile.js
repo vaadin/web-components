@@ -8,6 +8,12 @@ var log = require('gulp-util').log;
 var polyserve = require('polyserve');
 var spawn = require('child_process').spawn;
 var which = require('which');
+var find = require('gulp-find');
+var replace = require('gulp-replace');
+var expect = require('gulp-expect-file');
+var grepContents = require('gulp-grep-contents');
+var clip = require('gulp-clip-empty-files');
+var git = require('gulp-git');
 
 var perf = {
   lighthouse: './node_modules/.bin/lighthouse',
@@ -118,4 +124,32 @@ gulp.task('perf:run', ['perf:run:tests'], function() {
   log('Finished \'perf:run\' with ' + (perf.failed ? 'error' : 'great success'));
   process.exitCode = perf.failed ? 1 : 0;
   process.exit();
+});
+
+gulp.task('version:check', function() {
+  const expectedVersion = new RegExp('^' + require('./package.json').version + '$');
+  return gulp.src(['*.html'])
+    .pipe(htmlExtract({sel: 'script'}))
+    .pipe(find(/static get version.*\n.*/))
+    .pipe(clip()) // Remove non-matching files
+    .pipe(replace(/.*\n.*return '(.*)'.*/, '$1'))
+    .pipe(grepContents(expectedVersion, {invert: true}))
+    .pipe(expect({reportUnexpected: true}, []));
+});
+
+gulp.task('version:update', ['version:check'], function() {
+  // Should be run from 'preversion'
+  // Assumes that the old version is in package.json and the new version in the `npm_package_version` environment variable
+  const oldversion = require('./package.json').version;
+  const newversion = process.env.npm_package_version;
+  if (!oldversion) {
+    throw new 'No old version found in package.json';
+  }
+  if (!newversion) {
+    throw new 'New version must be given as a npm_package_version environment variable.';
+  }
+  return gulp.src(['*.html'])
+    .pipe(replace(oldversion, newversion))
+    .pipe(gulp.dest('.'))
+    .pipe(git.add());
 });
