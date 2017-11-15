@@ -90,7 +90,7 @@
   }
   ,
   {
-    "name": "Tree",
+    "name": "Tree Grid",
     "url": "grid-tree-demos",
     "src": "grid-tree-demos.html",
     "meta": {
