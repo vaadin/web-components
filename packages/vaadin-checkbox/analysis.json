@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-checkbox.html",
         "start": {
-          "line": 269,
+          "line": 262,
           "column": 6
         },
         "end": {
-          "line": 269,
+          "line": 262,
           "column": 42
         }
       },
@@ -46,16 +46,16 @@
             {
               "name": "focused",
               "type": "boolean",
-              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
-              "privacy": "private",
+              "description": "If true, the element currently has focus.",
+              "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 60,
+                  "line": 57,
                   "column": 8
                 },
                 "end": {
-                  "line": 67,
+                  "line": 64,
                   "column": 9
                 }
               },
@@ -77,11 +77,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 72,
+                  "line": 69,
                   "column": 8
                 },
                 "end": {
-                  "line": 74,
+                  "line": 71,
                   "column": 9
                 }
               },
@@ -98,11 +98,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 79,
+                  "line": 76,
                   "column": 8
                 },
                 "end": {
-                  "line": 83,
+                  "line": 80,
                   "column": 9
                 }
               },
@@ -121,11 +121,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 85,
+                  "line": 82,
                   "column": 8
                 },
                 "end": {
-                  "line": 85,
+                  "line": 82,
                   "column": 32
                 }
               },
@@ -141,11 +141,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 163,
+                  "line": 167,
                   "column": 10
                 },
                 "end": {
-                  "line": 163,
+                  "line": 167,
                   "column": 20
                 }
               },
@@ -162,11 +162,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 134,
+                  "line": 138,
                   "column": 13
                 }
               },
@@ -185,11 +185,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 145,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -207,11 +207,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 153,
+                  "line": 157,
                   "column": 13
                 }
               },
@@ -228,11 +228,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 178,
                   "column": 8
                 },
                 "end": {
-                  "line": 185,
+                  "line": 188,
                   "column": 9
                 }
               },
@@ -242,15 +242,15 @@
             {
               "name": "connectedCallback",
               "description": "",
-              "privacy": "protected",
+              "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 131,
+                  "line": 128,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 133,
                   "column": 5
                 }
               },
@@ -261,15 +261,15 @@
             {
               "name": "disconnectedCallback",
               "description": "",
-              "privacy": "protected",
+              "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 141,
+                  "line": 135,
                   "column": 4
                 },
                 "end": {
-                  "line": 146,
+                  "line": 140,
                   "column": 5
                 }
               },
@@ -284,11 +284,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 148,
+                  "line": 142,
                   "column": 4
                 },
                 "end": {
-                  "line": 156,
+                  "line": 150,
                   "column": 5
                 }
               },
@@ -307,11 +307,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 158,
+                  "line": 152,
                   "column": 4
                 },
                 "end": {
-                  "line": 160,
+                  "line": 154,
                   "column": 5
                 }
               },
@@ -330,11 +330,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 162,
+                  "line": 156,
                   "column": 4
                 },
                 "end": {
-                  "line": 164,
+                  "line": 158,
                   "column": 5
                 }
               },
@@ -349,11 +349,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 169,
                   "column": 4
                 },
                 "end": {
-                  "line": 182,
+                  "line": 175,
                   "column": 5
                 }
               },
@@ -372,11 +372,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 188,
+                  "line": 181,
                   "column": 4
                 },
                 "end": {
-                  "line": 195,
+                  "line": 184,
                   "column": 5
                 }
               },
@@ -391,11 +391,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 191,
                   "column": 4
                 },
                 "end": {
-                  "line": 205,
+                  "line": 194,
                   "column": 5
                 }
               },
@@ -410,11 +410,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 207,
+                  "line": 196,
                   "column": 4
                 },
                 "end": {
-                  "line": 220,
+                  "line": 209,
                   "column": 5
                 }
               },
@@ -433,11 +433,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 222,
+                  "line": 211,
                   "column": 4
                 },
                 "end": {
-                  "line": 238,
+                  "line": 227,
                   "column": 5
                 }
               },
@@ -448,6 +448,48 @@
                 }
               ],
               "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "updateStyles",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 44,
+                  "column": 4
+                },
+                "end": {
+                  "line": 59,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_getComputedStyle",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 4
+                },
+                "end": {
+                  "line": 65,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "name"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
             },
             {
               "name": "_addEventListenerToNode",
@@ -513,11 +555,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 193,
+                  "line": 196,
                   "column": 9
                 }
               },
@@ -534,11 +576,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 211,
+                  "line": 204,
                   "column": 9
                 }
               },
@@ -546,9 +588,6 @@
               "params": [
                 {
                   "name": "indeterminate"
-                },
-                {
-                  "name": "prevIndeterminate"
                 }
               ]
             },
@@ -558,11 +597,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 213,
+                  "line": 206,
                   "column": 8
                 },
                 "end": {
-                  "line": 244,
+                  "line": 237,
                   "column": 9
                 }
               },
@@ -575,11 +614,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 243,
                   "column": 8
                 },
                 "end": {
-                  "line": 257,
+                  "line": 250,
                   "column": 9
                 }
               },
@@ -596,11 +635,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 252,
                   "column": 8
                 },
                 "end": {
-                  "line": 261,
+                  "line": 254,
                   "column": 9
                 }
               },
@@ -610,17 +649,17 @@
           ],
           "staticMethods": [
             {
-              "name": "_includeStyle",
+              "name": "includeStyle",
               "description": "",
-              "privacy": "private",
+              "privacy": "public",
               "sourceRange": {
                 "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 67,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 71,
                   "column": 5
                 }
               },
@@ -646,7 +685,7 @@
               "column": 6
             },
             "end": {
-              "line": 262,
+              "line": 255,
               "column": 7
             }
           },
@@ -673,16 +712,34 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
+              "name": "focused",
+              "description": "If true, the element currently has focus.",
+              "sourceRange": {
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 57,
+                  "column": 8
+                },
+                "end": {
+                  "line": 64,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 79,
+                  "line": 76,
                   "column": 8
                 },
                 "end": {
-                  "line": 83,
+                  "line": 80,
                   "column": 9
                 }
               },
@@ -695,11 +752,11 @@
               "description": "True if the checkbox is checked.",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 134,
+                  "line": 138,
                   "column": 13
                 }
               },
@@ -711,11 +768,11 @@
               "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 145,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -727,11 +784,11 @@
               "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 153,
+                  "line": 157,
                   "column": 13
                 }
               },
