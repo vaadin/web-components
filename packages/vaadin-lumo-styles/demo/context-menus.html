@@ -12,8 +12,8 @@
 
   <link rel="import" href="../vaadin-context-menu.html">
   <link rel="import" href="../../vaadin-context-menu/vaadin-context-menu.html">
-  <link rel="import" href="../../paper-listbox/paper-listbox.html">
-  <link rel="import" href="../../paper-item/paper-item.html">
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../vaadin-item/vaadin-item.html">
 
   <style>
     [unresolved] {
@@ -39,17 +39,22 @@
       <template slot="source">
         <vaadin-context-menu>
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+              <vaadin-item>Third menu item</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Fourth menu item</vaadin-item>
+              <vaadin-item disabled>Fifth menu item</vaadin-item>
+              <hr>
+              <vaadin-item>Sixth menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           Open a context menu with <b>right click</b> or with <b>long touch.</b>
         </vaadin-context-menu>
       </template>
     </nice-demo-snippet>
-
 
   </div>
 </body>

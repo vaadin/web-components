@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Valo Theme Dropdown Menu</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+  <link rel="import" href="person-item.html">
+
+  <link rel="import" href="../vaadin-dropdown-menu.html">
+  <link rel="import" href="../icons.html">
+
+  <link rel="import" href="../../vaadin-item/vaadin-item.html">
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../vaadin-dropdown-menu/vaadin-dropdown-menu.html">
+
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <valo-config></valo-config>
+
+    <demo-navigation>
+      <span slot="header">Valo</span>
+    </demo-navigation>
+
+    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-dropdown-menu.html" class="theme-source-code">Theme source code</a>
+    <h1>Dropdown menu</h1>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-dropdown-menu label="Select an option" placeholder="foobar">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item disabled>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <vaadin-item disabled>Option four</vaadin-item>
+              <hr>
+              <vaadin-item>
+                <style>
+                  [slot="selected"] person-item {
+                    --person-item-email-display: none;
+                  }
+                </style>
+                <person-item name="Maxine Richardson" email="maxine.richardson@example.org"></person-item>
+              </vaadin-item>
+              <vaadin-item>
+                <style>
+                  [slot="selected"] person-item {
+                    --person-item-email-display: none;
+                  }
+                </style>
+                <person-item name="Kristina Howard" email="kristina.howard@example.org"></person-item>
+              </vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </nice-demo-snippet>
+
+  </div>
+</body>
+</html>

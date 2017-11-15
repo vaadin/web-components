@@ -9,12 +9,10 @@
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
+  <link rel="import" href="person-item.html">
 
   <link rel="import" href="../vaadin-combo-box.html">
   <link rel="import" href="../../vaadin-combo-box/vaadin-combo-box.html">
-
-  <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../icons.html">
 
   <style>
     [unresolved] {
@@ -70,30 +68,9 @@
     <nice-demo-snippet>
       <!-- TODO make the overlay adapt to the width of the items -->
       <template slot="source">
-        <vaadin-combo-box label="Person" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
+        <vaadin-combo-box label="Person" item-label-path="name" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
           <template>
-            <style>
-              .photo {
-                float: left;
-                border-radius: 50%;
-                color: var(--valo-base-color);
-                background-color: var(--valo-contrast-20pct);
-                margin-right: var(--valo-space-s);
-                margin-top: var(--valo-space-s);
-              }
-
-              .email {
-                color: var(--valo-secondary-text-color);
-                font-size: var(--valo-font-size-s);
-              }
-            </style>
-            <div class="wrap">
-              <iron-icon icon="valo:user" class="photo"></iron-icon>
-              <div class="details">
-                <div class="name">[[item.name]]</div>
-                <div class="email">[[item.email]]</div>
-              </div>
-            </div>
+            <person-item name="[[item.name]]" email="[[item.email]]"></person-item>
           </template>
         </vaadin-combo-box>
       </template>
@@ -131,7 +108,6 @@
             combo.items = [{name:"Maxine Richardson", email: "maxine.richardson@example.org"},
                            {name:"Kristina Howard", email: "kristina.howard@example.org"},
                            {name:"Sebastian Harris", email: "sebastian.harris@example.org"}];
-            combo.itemLabelPath = 'name';
           }
         });
       });

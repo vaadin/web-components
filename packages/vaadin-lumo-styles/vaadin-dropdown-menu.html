@@ -1,0 +1,62 @@
+<link rel="import" href="sizing.html">
+<link rel="import" href="spacing.html">
+<link rel="import" href="style.html">
+
+<link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-item.html">
+<link rel="import" href="vaadin-list-box.html">
+<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="menu-overlay.html">
+
+<dom-module id="valo-dropdown-menu" theme-for="vaadin-dropdown-menu">
+  <template>
+    <style>
+      [slot="selected"] {
+        /* TODO Copied from vaadin-text-field part="value". See https://github.com/vaadin/vaadin-dropdown-menu/issues/56 */
+        flex: 1;
+        min-width: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 9);
+      }
+
+      vaadin-item[selected] {
+        padding-left: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+  <template>
+    <style>
+      [part="input-field"] {
+        cursor: pointer;
+      }
+
+      [part="input-field"]:focus {
+        outline: none;
+      }
+
+      /* TODO why do we keep the native input element? Why not replace it with the current <div slot=selected> and use part="value" for it? */
+      [part="value"] {
+        display: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      :host {
+        --_valo-item-selected-icon-display: block;
+      }
+
+      vaadin-item {
+        padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
+      }
+    </style>
+  </template>
+</dom-module>

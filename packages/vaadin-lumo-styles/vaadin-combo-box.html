@@ -1,7 +1,12 @@
+<link rel="import" href="color.html">
 <link rel="import" href="spacing.html">
-<link rel="import" href="vaadin-text-field.html">
-<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="style.html">
 <link rel="import" href="font-icons.html">
+
+<link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-item.html">
+<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="menu-overlay.html">
 
 <dom-module id="valo-combo-box" theme-for="vaadin-combo-box">
   <template>
@@ -24,6 +29,7 @@
         text-align: center;
         color: var(--valo-contrast-40pct);
         transition: 0.2s color;
+        cursor: default;
       }
 
       [part$="button"]:hover {
@@ -54,6 +60,11 @@
 <dom-module id="valo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style>
+      [part="overlay"] {
+        padding: 0;
+      }
+
+      /* TODO unsupported selector */
       #scroller {
         border-radius: var(--valo-border-radius);
       }
@@ -63,24 +74,14 @@
 
 <dom-module id="valo-combo-box-item" theme-for="vaadin-combo-box-item">
   <template>
-    <style>
-      :host {
-        display: flex;
-        align-items: center;
-        min-height: var(--valo-size-m);
-        padding: var(--valo-space-xs) var(--valo-space-m) var(--valo-space-xs) calc(var(--valo-space-xs) * 2 + 24px);
-        box-sizing: border-box;
-        line-height: var(--valo-line-height-s);
-        border-radius: var(--valo-border-radius);
-        cursor: pointer;
-        white-space: nowrap;
-        position: relative;
+    <style include="valo-item">
+      /* TODO duplicated from vaadin-list-box styles. Should find a way to make it DRY */
 
-        /* TODO ugly hack to add horizontal spacing between the overlay and the item */
-        /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
-        left: var(--valo-space-xs);
-        right: var(--valo-space-xs);
-        width: auto !important;
+      :host {
+        --_valo-item-selected-icon-display: block;
+        cursor: pointer;
+        padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
+        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
       }
 
       :host([focused]) {
@@ -88,25 +89,21 @@
       }
 
       @media (pointer: coarse) {
-        :host {
-          min-height: var(--valo-size-l);
-        }
-
         :host([focused]) {
           background-color: transparent;
         }
       }
 
-      :host([selected])::before {
-        position: absolute;
-        content: "\e902";
-        font-family: valo-icons;
-        font-size: 24px;
-        width: 24px;
-        top: 50%;
-        transform: translateY(-50%);
+      :host([selected]) {
+        font-weight: 500;
+      }
+
+      /* TODO ugly hack to add horizontal spacing between the overlay and the item */
+      /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
+      :host {
         left: var(--valo-space-xs);
-        color: var(--valo-secondary-text-color);
+        right: var(--valo-space-xs);
+        width: auto !important;
       }
     </style>
   </template>

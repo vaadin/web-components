@@ -1,0 +1,74 @@
+<link rel="import" href="color.html">
+<link rel="import" href="spacing.html">
+
+<dom-module id="valo-menu-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      [part="overlay"] {
+        animation: 0.2s vaadin-menu-overlay-enter;
+        will-change: opacity, transform;
+      }
+
+      @keyframes vaadin-menu-overlay-enter {
+        0% {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+      }
+
+      /* Small viewport styles */
+
+      :host([phone][phone]) {
+        /* Remove padding around the viewport */
+        padding: 0;
+      }
+
+      :host([phone]) [part="overlay"] {
+        animation: 0.15s vaadin-mobile-menu-overlay-enter cubic-bezier(.215, .61, .355, 1);
+        border-radius: 0;
+        box-shadow: 0 6px 56px 0 var(--valo-shade-80pct);
+        overflow: visible;
+        padding: 0;
+        position: relative;
+      }
+
+      @keyframes vaadin-mobile-menu-overlay-enter {
+        0% {
+          transform: translateY(150%);
+        }
+      }
+
+      /* Gradient fade-out at the top and bottom edges */
+      :host([phone]) [part="overlay"]::after {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: inherit;
+        --_valo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
+        -webkit-mask-image: var(--_valo-menu-overlay-mask-image);
+        mask-image: var(--_valo-menu-overlay-mask-image);
+      }
+
+      /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
+      :host([phone][phone]) [part="content"] {
+        max-height: 50vh;
+        padding: 30px var(--valo-space-s);
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
+        overflow: auto;
+      }
+
+      :host([phone]) vaadin-list-box vaadin-item {
+        margin: 0 var(--valo-space-xs);
+      }
+
+      :host([phone]) vaadin-list-box vaadin-item[focused] {
+        background-color: transparent;
+      }
+    </style>
+  </template>
+</dom-module>

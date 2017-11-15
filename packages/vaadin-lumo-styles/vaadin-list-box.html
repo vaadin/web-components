@@ -1,0 +1,47 @@
+<link rel="import" href="font-icons.html">
+<link rel="import" href="color.html">
+<link rel="import" href="spacing.html">
+<link rel="import" href="style.html">
+
+<dom-module id="valo-list-box" theme-for="vaadin-list-box">
+  <template>
+    <style>
+      :host {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Normal item */
+
+      [part="items"] ::slotted(vaadin-item) {
+        cursor: pointer;
+        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+      }
+
+      /* Selected item */
+
+      [part="items"] ::slotted(vaadin-item[focused]:not([disabled])) {
+        background-color: var(--valo-primary-color-10pct);
+      }
+
+      @media (pointer: coarse) {
+        [part="items"] ::slotted(vaadin-item[focused]) {
+          background-color: transparent;
+        }
+      }
+
+      [part="items"] ::slotted(vaadin-item[selected]) {
+        font-weight: 500;
+      }
+
+      /* Easily add section dividers */
+
+      [part="items"] ::slotted(hr) {
+        height: 1px;
+        border: 0;
+        padding: 0;
+        margin: var(--valo-space-s) var(--valo-border-radius);
+        background-color: var(--valo-contrast-10pct);
+      }
+    </style>
+  </template>
+</dom-module>

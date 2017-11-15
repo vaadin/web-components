@@ -1,4 +1,5 @@
 <link rel="import" href="color.html">
+<link rel="import" href="spacing.html">
 <link rel="import" href="style.html">
 
 <custom-style>
@@ -29,25 +30,21 @@
   </style>
 </custom-style>
 
-<!-- TODO add vaadin-date-picker-overlay once it uses the generic vaadin-overlay element -->
-<dom-module id="valo-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay">
+<!-- TODO use "vaadin-*-overlay" (if it makes sense) once vaadin-date-picker-overlay uses the generic vaadin-overlay element -->
+<dom-module id="valo-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay vaadin-dropdown-menu-overlay">
   <template>
     <style>
       [part="overlay"] {
         background-color: var(--valo-base-color);
         border-radius: var(--valo-border-radius);
         box-shadow: var(--valo-overlay-box-shadow);
-        animation: 0.2s vaadin-overlay-enter;
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-m);
-        will-change: transform;
-      }
-
-      @keyframes vaadin-overlay-enter {
-        0% {
-          opacity: 0;
-          transform: translateY(-4px);
-        }
+        font-weight: 400;
+        line-height: var(--valo-line-height);
+        letter-spacing: 0;
+        text-transform: none;
+        padding: var(--valo-space-xs);
       }
 
       [part="backdrop"] {
