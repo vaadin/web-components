@@ -65,7 +65,7 @@ gulp.task('version:check', function() {
     .pipe(expect({reportUnexpected: true}, []));
 });
 
-gulp.task('version:update', function() {
+gulp.task('version:update', ['version:check'], function() {
   // Should be run from 'preversion'
   // Assumes that the old version is in package.json and the new version in the `npm_package_version` environment variable
   const oldversion = require('./package.json').version;
