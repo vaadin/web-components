@@ -1,7 +1,7 @@
+<link rel="import" href="font-icons.html">
 <link rel="import" href="color.html">
 <link rel="import" href="sizing.html">
 <link rel="import" href="typography.html">
-<link rel="import" href="font-icons.html">
 
 <dom-module id="valo-tabs" theme-for="vaadin-tabs">
   <template>
@@ -46,43 +46,43 @@
       /* Tabs overflow */
 
       [part="tabs"] {
-        --valo-tabs-overflow-mask-image: none;
-        -webkit-mask-image: var(--valo-tabs-overflow-mask-image);
-        mask-image: var(--valo-tabs-overflow-mask-image);
+        --_valo-tabs-overflow-mask-image: none;
+        -webkit-mask-image: var(--_valo-tabs-overflow-mask-image);
+        mask-image: var(--_valo-tabs-overflow-mask-image);
       }
 
       /* Horizontal tabs overflow */
 
       /* Both ends overflowing */
       :host([overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px, #000 calc(100% - 60px), transparent calc(100% - 30px));
+        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px, #000 calc(100% - 60px), transparent calc(100% - 30px));
       }
 
       /* End overflowing */
       :host([overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 60px), transparent calc(100% - 30px));
+        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 60px), transparent calc(100% - 30px));
       }
 
       /* Start overflowing */
       :host([overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px);
+        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 30px, #000 60px);
       }
 
       /* Vertical tabs overflow */
 
       /* Both ends overflowing */
       :host([overflow~="start"][overflow~="end"][orientation="vertical"]) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px, #000 calc(100% - 30px), transparent);
+        --_valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px, #000 calc(100% - 30px), transparent);
       }
 
       /* End overflowing */
       :host([overflow~="end"][orientation="vertical"]) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 30px), transparent);
+        --_valo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 30px), transparent);
       }
 
       /* Start overflowing */
       :host([overflow~="start"][orientation="vertical"]) [part="tabs"] {
-        --valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px);
+        --_valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px);
       }
 
       /* Selected tab styles */
@@ -129,10 +129,12 @@
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
         padding-left: calc(var(--valo-border-radius) / 3 + 1em);
+        border-radius: var(--valo-border-radius) 0 0 var(--valo-border-radius);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
         padding-right: calc(var(--valo-border-radius) / 3 + 1em);
+        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
@@ -152,14 +154,6 @@
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:last-child) {
         box-shadow: -1px 0 0 0 var(--valo-contrast-10pct);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
-        border-radius: var(--valo-border-radius) 0 0 var(--valo-border-radius);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
-        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
       }
     </style>
   </template>
