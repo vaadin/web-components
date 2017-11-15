@@ -1,3 +1,4 @@
+<link rel="import" href="style.html">
 <link rel="import" href="color.html">
 <link rel="import" href="typography.html">
 <link rel="import" href="sizing-and-spacing.html">
@@ -111,62 +112,6 @@
 
       [theme~="badge"][theme~="pill"] {
         border-radius: 1rem;
-      }
-
-      /* Positioning */
-
-      [theme~="badge"][theme*="top-"],
-      [theme~="badge"][theme*="bottom-"] {
-        position: absolute;
-        margin: 0;
-      }
-      [theme~="badge"][theme*="top-"] {
-        top: calc(var(--valo-size-xxs) * -0.5);
-      }
-      [theme~="badge"][theme*="bottom-"] {
-        bottom: calc(var(--valo-size-xxs) * -0.5);
-      }
-      [theme~="badge"][theme*="-right"] {
-        right: calc(var(--valo-size-xxs) * -0.5);
-      }
-      [theme~="badge"][theme*="-left"] {
-        left: calc(var(--valo-size-xxs) * -0.5);
-      }
-      [theme~="badge"][theme*="top-"][theme~="small"] {
-        top: calc(var(--valo-size-xxxs) * -0.5);
-      }
-      [theme~="badge"][theme*="bottom-"][theme~="small"] {
-        bottom: calc(var(--valo-size-xxxs) * -0.5);
-      }
-      [theme~="badge"][theme*="-right"][theme~="small"] {
-        right: calc(var(--valo-size-xxxs) * -0.5);
-      }
-      [theme~="badge"][theme*="-left"][theme~="small"] {
-        left: calc(var(--valo-size-xxxs) * -0.5);
-      }
-      [theme~="badge"][theme*="top-"]:not([icon]):empty {
-        top: -0.5em;
-      }
-      [theme~="badge"][theme*="bottom-"]:not([icon]):empty {
-        bottom: -0.5em;
-      }
-      [theme~="badge"][theme*="-right"]:not([icon]):empty {
-        right: -0.5em;
-      }
-      [theme~="badge"][theme*="-left"]:not([icon]):empty {
-        left: -0.5em;
-      }
-      [theme~="badge"][theme*="top-"][theme~="small"]:not([icon]):empty {
-        top: -0.375em;
-      }
-      [theme~="badge"][theme*="bottom-"][theme~="small"]:not([icon]):empty {
-        bottom: -0.375em;
-      }
-      [theme~="badge"][theme*="-right"][theme~="small"]:not([icon]):empty {
-        right: -0.375em;
-      }
-      [theme~="badge"][theme*="-left"][theme~="small"]:not([icon]):empty {
-        left: -0.375em;
       }
     </style>
   </template>

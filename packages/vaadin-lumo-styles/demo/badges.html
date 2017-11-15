@@ -11,11 +11,7 @@
   <link rel="import" href="common.html">
 
   <link rel="import" href="../badge.html">
-  <link rel="import" href="../vaadin-button.html">
-  <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
-  <link rel="import" href="../vaadin-tabs.html">
-  <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
 
   <style>
     [unresolved] {
@@ -90,6 +86,30 @@
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Pill</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span theme="badge pill">Default</span>
+        <span theme="badge primary pill">Primary</span>
+        <span theme="badge success pill">Success</span>
+        <span theme="badge error pill">Error</span>
+        <span theme="badge pill">1</span>
+        <span theme="badge primary pill">2</span>
+        <span theme="badge success pill">3</span>
+        <span theme="badge error pill">4</span>
+        <br>
+        <span theme="badge contrast pill">Default</span>
+        <span theme="badge primary contrast pill">Primary</span>
+        <span theme="badge success contrast pill">Success</span>
+        <span theme="badge error contrast pill">Error</span>
+        <span theme="badge contrast pill">1</span>
+        <span theme="badge primary contrast pill">2</span>
+        <span theme="badge success contrast pill">3</span>
+        <span theme="badge error contrast pill">4</span>
+      </template>
+    </nice-demo-snippet>
+
     <h3 demo-section>Icon</h3>
 
     <nice-demo-snippet>
@@ -103,6 +123,15 @@
         <iron-icon icon="valo:bell" theme="badge success contrast"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge error contrast"></iron-icon>
         <br>
+        <iron-icon icon="valo:bell" theme="badge pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary contrast pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success contrast pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error contrast pill"></iron-icon>
+        <br>
         <iron-icon icon="valo:bell" theme="badge small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge primary small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge success small"></iron-icon>
@@ -111,6 +140,15 @@
         <iron-icon icon="valo:bell" theme="badge primary contrast small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge success contrast small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge error contrast small"></iron-icon>
+        <br>
+        <iron-icon icon="valo:bell" theme="badge small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary contrast small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success contrast small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error contrast small pill"></iron-icon>
       </template>
     </nice-demo-snippet>
 
@@ -137,54 +175,6 @@
         Visit the new <a href="https://vaadin.com" theme="badge primary">Vaadin</a> website!
       </template>
     </nice-demo-snippet>
-
-    <h3 demo-section>Pill</h3>
-
-    <nice-demo-snippet>
-      <template slot="source">
-        <span theme="badge pill">Default</span>
-        <span theme="badge primary pill">Primary</span>
-        <span theme="badge success pill">Success</span>
-        <span theme="badge error pill">Error</span>
-        <span theme="badge pill">1</span>
-        <span theme="badge primary pill">2</span>
-        <span theme="badge success pill">3</span>
-        <span theme="badge error pill">4</span>
-        <br>
-        <span theme="badge contrast pill">Default</span>
-        <span theme="badge primary contrast pill">Primary</span>
-        <span theme="badge success contrast pill">Success</span>
-        <span theme="badge error contrast pill">Error</span>
-        <span theme="badge contrast pill">1</span>
-        <span theme="badge primary contrast pill">2</span>
-        <span theme="badge success contrast pill">3</span>
-        <span theme="badge error contrast pill">4</span>
-      </template>
-    </nice-demo-snippet>
-
-    <h3 demo-section>Positioning</h3>
-
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-button>
-          Top left
-          <span theme="badge error contrast pill top-left"></span>
-        </vaadin-button>
-        <vaadin-button>
-          Bottom left
-          <span theme="badge contrast small bottom-left">New</span>
-        </vaadin-button>
-        <vaadin-button>
-          Top right
-          <span theme="badge primary contrast top-right">5</span>
-        </vaadin-button>
-        <vaadin-button>
-          Bottom right
-          <iron-icon icon="valo:checkmark" theme="badge success contrast pill bottom-right"></iron-icon>
-        </vaadin-button>
-      </template>
-    </nice-demo-snippet>
-
 
   </div>
 </body>
