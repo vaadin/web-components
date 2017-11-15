@@ -17,42 +17,44 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: inline-flex;
         width: 175px;
         outline: none;
       }
 
       .vaadin-text-area-container {
+        flex: 1;
         display: flex;
         flex-direction: column;
-        position: relative;
-        height: 100%;
-        max-height: inherit;
-        min-height: inherit;
+        max-height: inherit; /* MSIE 11 */
+        min-height: inherit; /* MSIE 11 */
       }
 
       [part="label"]:empty {
         display: none;
       }
 
+      /* The label and the error message should neither grow nor shrink. */
+      [part="label"],
+      [part="error-message"] {
+        flex: none;
+      }
+
       [part="input-field"] {
+        flex: auto;
         display: flex;
-        flex-grow: 1;
-        width: 100%;
-        box-sizing: border-box;
         min-height: 4.5em;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
 
       [part="value"] {
-        margin: 0;
         width: 100%;
         box-sizing: border-box;
         flex: 1;
+        min-width: 0;
         resize: none;
         overflow: hidden;
-        min-height: 100%;
       }
 
       [part="value"]::-ms-clear {
@@ -87,6 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
             aria-invalid$="[[invalid]]"></textarea>
 
         <slot name="suffix"></slot>
+
       </div>
 
       <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
@@ -151,7 +154,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this._isIE = !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
           this._updateHeight();
         }
 
@@ -166,15 +168,13 @@ This program is available under Apache License Version 2.0, available at https:/
           const input = this.focusElement;
 
           const inputWidth = getComputedStyle(input).width;
-          // Clear container enforced height
-          container.style.height = '';
 
           const valueLength = this.value ? this.value.length : 0;
           // Only clear the height when the content shortens to minimize scrollbar flickering.
           if (this._oldValueLength >= valueLength) {
             // Fix the input element width so its scroll height isn't affected by host's disappearing scrollbars
             input.style.maxWidth = inputWidth;
-            input.style.height = '';
+            input.style.height = 'auto';
             // Avoid a jumpy Safari rendering issue
             inputField.style.display = 'block';
           }
@@ -184,16 +184,10 @@ This program is available under Apache License Version 2.0, available at https:/
           if (inputHeight > input.clientHeight) {
             input.style.height = inputHeight + 'px';
           }
-          // Restore
-          input.style.maxWidth = '';
-          inputField.style.display = '';
 
-          // IE11 flexbox doesn't respect max-height constraints. Enforce the
-          // constraints with an explicit height value
-          if (this._isIE) {
-            const containerHeight = container.clientHeight + 'px';
-            container.style.height = containerHeight;
-          }
+          // Restore
+          input.style.removeProperty('max-width');
+          inputField.style.removeProperty('display');
           inputField.scrollTop = scrollTop;
         }
       }
