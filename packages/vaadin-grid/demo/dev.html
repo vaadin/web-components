@@ -62,7 +62,7 @@
             <template>
               <vaadin-grid-tree-toggle
                   level="[[level]]"
-                  icon-hidden="[[!item.hasChildren]]"
+                  is-leaf="[[!item.hasChildren]]"
                   expanded="{{expanded}}">
                 [[index]]
               </vaadin-grid-tree-toggle>

@@ -37,16 +37,16 @@
         toggle = fixture('default');
       });
 
-      it('should have icon-hidden false by default', () => {
-        expect(toggle.iconHidden).to.not.be.ok;
+      it('should have is-leaf false by default', () => {
+        expect(toggle.isLeaf).to.not.be.ok;
       });
 
       it('should have expanded false by default', () => {
         expect(toggle.expanded).to.not.be.ok;
       });
 
-      it('should not toggle on click if icon-hidden', () => {
-        toggle.iconHidden = true;
+      it('should not toggle on click if is-leaf', () => {
+        toggle.isLeaf = true;
 
         const clickEvent = click(toggle);
         expect(toggle.expanded).to.not.be.ok;
