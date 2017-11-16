@@ -274,6 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
       if (!cache.pendingRequests[page] && this.dataProvider) {
+        this._loading = true;
         cache.pendingRequests[page] = true;
         const params = {
           page,
@@ -329,7 +330,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       this._cache.updateSize();
       this._hasData = false;
-      this._loading = true;
       this._assignModels();
     }
 
@@ -365,7 +365,6 @@ This program is available under Apache License Version 2.0, available at https:/
       if (!this._hasData) {
         // load data before adding rows to make sure they have content when
         // rendered for the first time.
-        this._loading = true;
         this._loadPage(0, this._cache, () => {
           const hadData = this._hasData;
           this._hasData = true;
