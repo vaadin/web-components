@@ -186,24 +186,29 @@
           //   {name: {first: 'foo-3', last: 'bar-3'}},
           // ];
 
-          function generateItem(level, index) {
-            const levelPrefix = Array(...new Array(level)).map(() => '🔳 ').join('');
+          function generateItem(parentLevels, index) {
+            const levelPrefix = Array(...new Array(parentLevels.length)).map(() => '🔳 ').join('');
+            const levels = parentLevels.concat(index);
+
             const item = {
               name: {
-                first: `${levelPrefix}foo-${level}-${index}`,
-                last: `${levelPrefix}bar-${level}-${index}`
+                first: `${levelPrefix}foo-${levels.join('-')}`,
+                last: `${levelPrefix}bar-${levels.join('-')}`
               }
             };
-            item.hasChildren = level < 3 && index % 3 === 2;
+
+            item.hasChildren = parentLevels.length < 3 && index % 3 === 2;
+
             if (item.hasChildren) {
               const childrenCount = 5;
               item.children = Array(...new Array(childrenCount))
-                .map((v, i) => generateItem(level + 1, i));
+                .map((v, i) => generateItem(levels, i));
             }
+
             return item;
           }
 
-          const dataBase = Array(...new Array(1000)).map((v, i) => generateItem(0, i));
+          const dataBase = Array(...new Array(1000)).map((v, i) => generateItem([], i));
           window.dataBase = dataBase;
 
           class XApp extends Polymer.Element {
