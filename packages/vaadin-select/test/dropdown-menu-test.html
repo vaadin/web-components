@@ -499,6 +499,28 @@
 
       });
 
+      describe('initial validation', () => {
+        var menu, spy;
+
+        beforeEach(done => {
+          dropdown.required = true;
+          spy = sinon.spy();
+          dropdown.validate = spy;
+          menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
+
+        it('should not validate the initial empty value', () => {
+          expect(spy).not.to.have.been.called;
+        });
+
+        it('should validate when the value is set to empty string', () => {
+          dropdown.value = 'v2';
+          expect(spy).to.be.calledOnce;
+          dropdown.value = '';
+          expect(spy).to.be.calledTwice;
+        });
+      });
     });
   </script>
 </body>

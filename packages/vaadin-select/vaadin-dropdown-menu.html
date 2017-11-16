@@ -289,7 +289,8 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               value: '',
-              notify: true
+              notify: true,
+              observer: '_valueChanged'
             },
 
             /**
@@ -351,7 +352,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_valueChanged(value, _items)',
+            '_updateSelectedItem(value, _items)',
             '_updateAriaExpanded(opened, _toggleElement)'
           ];
         }
@@ -421,6 +422,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _requiredChanged(required) {
           this.setAttribute('aria-required', required);
+        }
+
+        _valueChanged(value, oldValue) {
+          // Skip validation for the initial value
+          if (oldValue === undefined) {
+            return;
+          }
+          this.validate();
         }
 
         _onKeyDown(e) {
@@ -502,11 +511,9 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = selected && selected.value || '';
             delete this._selectedChanging;
           }
-
-          this.validate();
         }
 
-        _valueChanged(value, items) {
+        _updateSelectedItem(value, items) {
           if (items) {
             this._menuElement.selected = items.reduce((prev, item, idx) => {
               return prev === undefined && item.value === value ? idx : prev;
