@@ -42,7 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      :host(:not([is-leaf])) {
+      :host(:not([leaf])) {
         cursor: pointer;
       }
 
@@ -69,7 +69,7 @@ This program is available under Apache License Version 2.0, available at https:/
         content: "\e7bc\00a0"; /* icon glyph + single non-breaking space */
       }
 
-      :host([is-leaf]) [part="toggle"] {
+      :host([leaf]) [part="toggle"] {
         visibility: hidden;
       }
     </style>
@@ -92,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
      *   <template class="header">Package name</template>
      *   <template>
      *     <vaadin-grid-tree-toggle
-     *         is-leaf="[[!item.hasChildren]]"
+     *         leaf="[[!item.hasChildren]]"
      *         expanded="{{expanded}}"
      *         level="[[level]]">
      *       [[item.name]]
@@ -114,7 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Attribute    | Description | Part name
      * ---|---|---
      * `expanded` | When present, the toggle is expanded | :host
-     * `is-leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
+     * `leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host
      *
      * The following custom CSS properties are available on
      * the `<vaadin-grid-tree-toggle>` element:
@@ -146,7 +146,7 @@ This program is available under Apache License Version 2.0, available at https:/
           /**
            * Hides the toggle icon and disables toggling a tree sublevel.
            */
-          isLeaf: {
+          leaf: {
             type: Boolean,
             value: false,
             reflectToAttribute: true
@@ -171,7 +171,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onClick(e) {
-        if (this.isLeaf) {
+        if (this.leaf) {
           return;
         }
 

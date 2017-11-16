@@ -18,7 +18,7 @@
                 <template class="header">Name</template>
                 <template>
                   <vaadin-grid-tree-toggle
-                      is-leaf="[[!item.hasChildren]]"
+                      leaf="[[!item.hasChildren]]"
                       expanded="{{expanded}}"
                       level="[[level]]">
                     [[item.name]]
@@ -54,7 +54,7 @@
                     //   parentUuid: null
                     // }
                     // This demo uses the `hasChildren` flag as an indicator of the item having child items.
-                    // The property is bound to `<vaadin-grid-tree-toggle>`'s `isLeaf` property in
+                    // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
                     // the template above.
 
                     // Slice out only the requested items
