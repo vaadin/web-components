@@ -326,6 +326,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
+          this._nativeInput.setAttribute('tabindex', -1);
 
           this.focusElement.addEventListener('click', e => this.opened = true);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));

@@ -291,6 +291,10 @@
           expect(dropdown.focusElement.focused).not.to.be.ok;
         });
 
+        it('Should set tabindex attribute to -1 on the native input', () => {
+          expect(dropdown._nativeInput.getAttribute('tabindex')).to.be.equal('-1');
+        });
+
         it('Should focus the next focusable element when tabbing', () => {
           dropdown.focus();
 
