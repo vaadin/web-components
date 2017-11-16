@@ -8,19 +8,19 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../../polymer/polymer-element.html">
-  <link rel="import" href="../vaadin-grid-hierarchy-toggle.html">
+  <link rel="import" href="../vaadin-grid-tree-toggle.html">
 </head>
 
 <body>
 
   <test-fixture id="default">
     <template>
-      <vaadin-grid-hierarchy-toggle></vaadin-grid-hierarchy-toggle>
+      <vaadin-grid-tree-toggle></vaadin-grid-tree-toggle>
     </template>
   </test-fixture>
 
   <script>
-    describe('hierarchy toggle', () => {
+    describe('tree toggle', () => {
       let toggle;
 
       function click(element) {
@@ -37,16 +37,16 @@
         toggle = fixture('default');
       });
 
-      it('should have icon-hidden false by default', () => {
-        expect(toggle.iconHidden).to.not.be.ok;
+      it('should have leaf false by default', () => {
+        expect(toggle.leaf).to.not.be.ok;
       });
 
       it('should have expanded false by default', () => {
         expect(toggle.expanded).to.not.be.ok;
       });
 
-      it('should not toggle on click if icon-hidden', () => {
-        toggle.iconHidden = true;
+      it('should not toggle on click if leaf', () => {
+        toggle.leaf = true;
 
         const clickEvent = click(toggle);
         expect(toggle.expanded).to.not.be.ok;

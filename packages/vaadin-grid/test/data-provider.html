@@ -357,7 +357,7 @@
 
     });
 
-    describe('hierarchy', () => {
+    describe('tree', () => {
       let grid;
 
       function finiteDataProvider(params, callback) {
@@ -481,7 +481,7 @@
           expect(grid.dataProvider.getCall(2).args[0].page).to.equal(0);
         });
 
-        it('should restore hierarchy after cache is cleared', () => {
+        it('should restore tree after cache is cleared', () => {
           grid.getItemId = item => {
             return item !== undefined ? item.level + '-' + item.value : undefined;
           };

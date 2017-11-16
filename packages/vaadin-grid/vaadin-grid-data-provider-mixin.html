@@ -97,15 +97,15 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * `params.sortOrders` Currently applied sorting orders
          *
-         * `params.parentItem` When hierarchy is used, and sublevel items
+         * `params.parentItem` When tree is used, and sublevel items
          * are requested, reference to parent item of the requested sublevel.
          * Otherwise `undefined`.
          *
          * `callback(items, size)` Callback function with arguments:
          *   - `items` Current page of items
-         *   - `size` Total number of items. When hierarchy sublevel items
+         *   - `size` Total number of items. When tree sublevel items
          *     are requested, total number of items in the requested sublevel.
-         *     Optional when hierarchy is not used, required for hierarchy.
+         *     Optional when tree is not used, required for tree.
          */
         dataProvider: {
           type: Object,
@@ -241,7 +241,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /**
-     * Expands the given item hierarchy.
+     * Expands the given item tree.
      */
     expandItem(item) {
       if (!this._isExpanded(item)) {
@@ -250,7 +250,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     /**
-     * Collapses the given item hierarchy.
+     * Collapses the given item tree.
      */
     collapseItem(item) {
       if (this._isExpanded(item)) {

@@ -42,7 +42,7 @@
         </style>
         <input value="{{foobar::input}}">
         <label>[[foobar]]</label>
-        <vaadin-grid id="component" item-id-path="name.first" data-provider="[[hierarchicalDataProvider]]" multi-selection column-reordering-allowed>
+        <vaadin-grid id="component" item-id-path="name.first" data-provider="[[treeDataProvider]]" multi-selection column-reordering-allowed>
 
           <template class="row-details">
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
@@ -60,12 +60,12 @@
               Index
             </template>
             <template>
-              <vaadin-grid-hierarchy-toggle
+              <vaadin-grid-tree-toggle
                   level="[[level]]"
-                  icon-hidden="[[!item.hasChildren]]"
+                  leaf="[[!item.hasChildren]]"
                   expanded="{{expanded}}">
                 [[index]]
-              </vaadin-grid-hierarchy-toggle>
+              </vaadin-grid-tree-toggle>
             </template>
           </vaadin-grid-column>
 
@@ -214,15 +214,15 @@
             static get properties() {
               return {
 
-                hierarchicalDataProvider: {
+                treeDataProvider: {
                   value: function() {
-                    return this.hierarchicalDataProvider.bind(this);
+                    return this.treeDataProvider.bind(this);
                   }
                 }
               };
             }
 
-            hierarchicalDataProvider(params, cb) {
+            treeDataProvider(params, cb) {
               const parentItem = params.parentItem;
               const array = parentItem ? parentItem.children : dataBase;
               const pageOffset = params.page * params.pageSize;

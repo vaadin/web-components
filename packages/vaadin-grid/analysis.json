@@ -9619,14 +9619,14 @@
           "tagname": "vaadin-grid-filter"
         },
         {
-          "description": "`<vaadin-grid-hierarchy-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item hierarchy.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-hierarchy-toggle\n        icon-hidden=\"[[!item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-hierarchy-toggle>\n  </template>\n</vaadin-grid-column>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`toggle` | The hierarchy toggle icon\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n---|---|---\n`expanded` | When present, the toggle is expanded | :host\n`icon-hidden` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host\n\nThe following custom CSS properties are available on\nthe `<vaadin-grid-hierarchy-toggle>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-grid-hierarchy-toggle-level-offset` | Visual offset step for each hierarchy sublevel | `1em`",
+          "description": "`<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item tree.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-tree-toggle\n        leaf=\"[[!item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-tree-toggle>\n  </template>\n</vaadin-grid-column>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`toggle` | The tree toggle icon\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n---|---|---\n`expanded` | When present, the toggle is expanded | :host\n`leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host\n\nThe following custom CSS properties are available on\nthe `<vaadin-grid-tree-toggle>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`",
           "summary": "",
-          "path": "vaadin-grid-hierarchy-toggle.html",
+          "path": "vaadin-grid-tree-toggle.html",
           "properties": [
             {
               "name": "level",
               "type": "number",
-              "description": "Current level of the hierarchy represented with a horizontal offset\nof the toggle button.",
+              "description": "Current level of the tree represented with a horizontal offset\nof the toggle button.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -9646,9 +9646,9 @@
               "defaultValue": "0"
             },
             {
-              "name": "iconHidden",
+              "name": "leaf",
               "type": "boolean",
-              "description": "Hides the toggle icon and disables toggling a hierarchy sublevel.",
+              "description": "Hides the toggle icon and disables toggling a tree sublevel.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -9788,11 +9788,11 @@
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.GridHierarchyToggleElement",
+          "name": "Vaadin.GridTreeToggleElement",
           "attributes": [
             {
               "name": "level",
-              "description": "Current level of the hierarchy represented with a horizontal offset\nof the toggle button.",
+              "description": "Current level of the tree represented with a horizontal offset\nof the toggle button.",
               "sourceRange": {
                 "start": {
                   "line": 139,
@@ -9807,8 +9807,8 @@
               "type": "number"
             },
             {
-              "name": "icon-hidden",
-              "description": "Hides the toggle icon and disables toggling a hierarchy sublevel.",
+              "name": "leaf",
+              "description": "Hides the toggle icon and disables toggling a tree sublevel.",
               "sourceRange": {
                 "start": {
                   "line": 148,
@@ -9856,7 +9856,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-grid-hierarchy-toggle.html",
+                "file": "vaadin-grid-tree-toggle.html",
                 "start": {
                   "line": 78,
                   "column": 4
@@ -9868,7 +9868,7 @@
               }
             }
           ],
-          "tagname": "vaadin-grid-hierarchy-toggle",
+          "tagname": "vaadin-grid-tree-toggle",
           "mixins": [
             "Vaadin.ThemableMixin"
           ]
@@ -11441,7 +11441,7 @@
           "tagname": "vaadin-grid-sorter"
         },
         {
-          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-hierarchy-toggle>`](#/elements/vaadin-grid-hierarchy-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n- `{{expanded}}`: True if the item has hierarchy sublevel expanded (can be two-way bound)\n- `[[level]]`: Number of the hierarchy sublevel of the item, first level-items have 0\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
+          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-tree-toggle>`](#/elements/vaadin-grid-tree-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n- `{{expanded}}`: True if the item has tree sublevel expanded (can be two-way bound)\n- `[[level]]`: Number of the tree sublevel of the item, first level-items have 0\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboad navigation in interaction mode | :host\n`navigating` | Keyboad navigation in navigation mode | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`odd` | Odd row | row",
           "summary": "",
           "path": "vaadin-grid.html",
           "properties": [
@@ -11472,7 +11472,7 @@
             {
               "name": "dataProvider",
               "type": "Object",
-              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
@@ -12397,7 +12397,7 @@
             },
             {
               "name": "expandItem",
-              "description": "Expands the given item hierarchy.",
+              "description": "Expands the given item tree.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
@@ -12420,7 +12420,7 @@
             },
             {
               "name": "collapseItem",
-              "description": "Collapses the given item hierarchy.",
+              "description": "Collapses the given item tree.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
@@ -15211,7 +15211,7 @@
             },
             {
               "name": "data-provider",
-              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
+              "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
               "sourceRange": {
                 "file": "vaadin-grid-data-provider-mixin.html",
                 "start": {
@@ -20764,7 +20764,7 @@
         {
           "name": "dataProvider",
           "type": "Object",
-          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
+          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
           "privacy": "public",
           "sourceRange": {
             "start": {
@@ -21063,7 +21063,7 @@
         },
         {
           "name": "expandItem",
-          "description": "Expands the given item hierarchy.",
+          "description": "Expands the given item tree.",
           "privacy": "public",
           "sourceRange": {
             "start": {
@@ -21084,7 +21084,7 @@
         },
         {
           "name": "collapseItem",
-          "description": "Collapses the given item hierarchy.",
+          "description": "Collapses the given item tree.",
           "privacy": "public",
           "sourceRange": {
             "start": {
@@ -21368,7 +21368,7 @@
         },
         {
           "name": "data-provider",
-          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When hierarchy is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When hierarchy sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when hierarchy is not used, required for hierarchy.",
+          "description": "Function that provides items lazily. Receives arguments `params`, `callback`\n\n`params.page` Requested page index\n\n`params.pageSize` Current page size\n\n`params.filters` Currently applied filters\n\n`params.sortOrders` Currently applied sorting orders\n\n`params.parentItem` When tree is used, and sublevel items\nare requested, reference to parent item of the requested sublevel.\nOtherwise `undefined`.\n\n`callback(items, size)` Callback function with arguments:\n  - `items` Current page of items\n  - `size` Total number of items. When tree sublevel items\n    are requested, total number of items in the requested sublevel.\n    Optional when tree is not used, required for tree.",
           "sourceRange": {
             "start": {
               "line": 109,
