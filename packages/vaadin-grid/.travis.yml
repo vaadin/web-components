@@ -13,7 +13,7 @@ install:
   - polymer install
 
 before_script:
-  - gulp lint
+  - gulp lint version:check
   #- polymer lint --rules polymer-2 --input *.html
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l chrome
   # - xvfb-run -s '-screen 0 1024x768x24' polymer test -l firefox
@@ -24,7 +24,7 @@ env:
   - TEST_SUITE=desktop
 
 script:
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs:$TEST_SUITE --expanded --verbose
+  - xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs:$TEST_SUITE --expanded --verbose
   #- if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
   #    npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
   #    gemini test test/visual;

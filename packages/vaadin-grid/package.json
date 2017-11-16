@@ -17,8 +17,14 @@
     "eslint-plugin-html": "^2.0.0",
     "faker": "^4.1.0",
     "gulp": "latest",
+    "gulp-clip-empty-files": "^0.1.2",
     "gulp-eslint": "^3.0.1",
+    "gulp-expect-file": "0.0.7",
+    "gulp-find": "0.0.10",
+    "gulp-git": "^2.4.2",
+    "gulp-grep-contents": "0.0.1",
     "gulp-html-extract": "^0.3.0",
+    "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^3.7.0",
     "polymer-cli": "^0.18.0",
     "stylelint": "^7.10.0",
@@ -29,7 +35,8 @@
     "yargs": "^8.0.0"
   },
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "preversion": "gulp version:update"
   },
   "keywords": [
     "vaadin",
