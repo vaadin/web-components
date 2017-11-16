@@ -9619,7 +9619,7 @@
           "tagname": "vaadin-grid-filter"
         },
         {
-          "description": "`<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item tree.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-tree-toggle\n        is-leaf=\"[[!item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-tree-toggle>\n  </template>\n</vaadin-grid-column>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`toggle` | The tree toggle icon\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n---|---|---\n`expanded` | When present, the toggle is expanded | :host\n`is-leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host\n\nThe following custom CSS properties are available on\nthe `<vaadin-grid-tree-toggle>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`",
+          "description": "`<vaadin-grid-tree-toggle>` is a helper element for the `<vaadin-grid>`\nthat provides toggle and level display functionality for the item tree.\n\n#### Example:\n```html\n<vaadin-grid-column>\n  <template class=\"header\">Package name</template>\n  <template>\n    <vaadin-grid-tree-toggle\n        leaf=\"[[!item.hasChildren]]\"\n        expanded=\"{{expanded}}\"\n        level=\"[[level]]\">\n      [[item.name]]\n    </vaadin-grid-tree-toggle>\n  </template>\n</vaadin-grid-column>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`toggle` | The tree toggle icon\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n---|---|---\n`expanded` | When present, the toggle is expanded | :host\n`leaf` | When present, the toggle is not expandable, i. e., the current item is a leaf | :host\n\nThe following custom CSS properties are available on\nthe `<vaadin-grid-tree-toggle>` element:\n\nCustom CSS property | Description | Default\n---|---|---\n`--vaadin-grid-tree-toggle-level-offset` | Visual offset step for each tree sublevel | `1em`",
           "summary": "",
           "path": "vaadin-grid-tree-toggle.html",
           "properties": [
@@ -9646,7 +9646,7 @@
               "defaultValue": "0"
             },
             {
-              "name": "isLeaf",
+              "name": "leaf",
               "type": "boolean",
               "description": "Hides the toggle icon and disables toggling a tree sublevel.",
               "privacy": "public",
@@ -9807,7 +9807,7 @@
               "type": "number"
             },
             {
-              "name": "is-leaf",
+              "name": "leaf",
               "description": "Hides the toggle icon and disables toggling a tree sublevel.",
               "sourceRange": {
                 "start": {
