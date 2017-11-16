@@ -386,6 +386,17 @@
           dropdown._overlayElement.click();
           expect(dropdown.opened).to.be.false;
         });
+
+        it('Should keep the dropdown and text field focused after opening overlay', done => {
+          menu.selected = 1;
+          arrowDown(input);
+          setTimeout(() => {
+            expect(dropdown.opened).to.be.true;
+            expect(dropdown.focused).to.be.true;
+            expect(input.focused).to.be.true;
+            done();
+          });
+        });
       });
 
       describe('aria', () => {
