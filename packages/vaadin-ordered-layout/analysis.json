@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-vertical-layout.html",
         "start": {
-          "line": 121,
+          "line": 125,
           "column": 6
         },
         "end": {
-          "line": 121,
+          "line": 125,
           "column": 42
         }
       },
@@ -61,7 +61,7 @@
               "column": 6
             },
             "end": {
-              "line": 113,
+              "line": 117,
               "column": 7
             }
           },
@@ -140,7 +140,7 @@
               "column": 6
             },
             "end": {
-              "line": 114,
+              "line": 118,
               "column": 7
             }
           },
