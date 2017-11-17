@@ -7,6 +7,16 @@
     </style>
 
     <h3>Assigning Tree Data Using Data Provider</h3>
+    <p>
+      Use <code>&lt;vaadin-grid-tree-toggle&gt;</code> in the column body
+      template to make a tree UI inside a grid. Make sure you have bindings
+      for the <code>expanded</code>, <code>level</code>, and <code>leaf</code>
+      properties.
+    </p>
+    <p>
+      <strong>NOTE: You must explicitly import the <code>vaadin-grid-tree-toggle.html</code>
+      file in order to use <code>&lt;vaadin-grid-tree-toggle&gt;</code>.</strong>
+    </p>
     <vaadin-demo-snippet id="grid-tree-demos-data-provider">
       <template preserve-content>
         <x-tree-data-provider-example></x-tree-data-provider-example>
