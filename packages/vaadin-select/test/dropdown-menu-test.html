@@ -110,7 +110,7 @@
 
       it('should be possible to set value declaratively', () => {
         expect(menu.selected).to.be.equal(1);
-        expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
+        expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
       });
     });
 
@@ -126,11 +126,18 @@
         expect(dropdown.localName).to.be.equal('vaadin-dropdown-menu');
       });
 
-      it('should have a modified template with a slot for selected', () => {
+      it('should have a modified template with a slot for value', () => {
         const modifiedTemplate = dropdown._inputElement.constructor.template;
-        expect(modifiedTemplate.content.querySelector('slot[name="selected"]')).to.be.ok;
+        expect(modifiedTemplate.content.querySelector('slot[name="value"]')).to.be.ok;
       });
 
+      it('should wrap native input in the value slot in a modified template', () => {
+        const modifiedTemplate = dropdown._inputElement.constructor.template;
+        const slot = modifiedTemplate.content.querySelector('slot[name="value"]');
+        const nativeInput = modifiedTemplate.content.querySelector('input');
+        expect(nativeInput.getAttribute('part')).to.equal('value');
+        expect(slot.firstElementChild).to.equal(nativeInput);
+      });
 
       describe('selection', () => {
 
@@ -154,7 +161,7 @@
         it('Should update selection slot with a clone of the selected item', () => {
           menu.selected = 2;
           const itemElement = dropdown._items[menu.selected];
-          const valueElement = dropdown._selectionElement.firstChild;
+          const valueElement = dropdown._valueElement.firstChild;
           expect(valueElement).not.to.be.equal(itemElement);
           expect(valueElement.localName).to.be.equal(itemElement.localName);
           expect(valueElement.textContent).to.be.equal(itemElement.textContent);
@@ -179,19 +186,19 @@
         it('Should remove tabindex when cloning the selected element', () => {
           menu.selected = 2;
           const itemElement = dropdown._items[menu.selected];
-          const valueElement = dropdown._selectionElement.firstChild;
+          const valueElement = dropdown._valueElement.firstChild;
           expect(itemElement.tabIndex).to.be.equal(0);
           expect(valueElement.hasAttribute('tabindex')).to.be.false;
         });
 
         it('Should update selection slot textContent with the selected item `label` string', () => {
           menu.selected = 1;
-          expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
+          expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
         });
 
         it('Should update selection slot when value is provided', () => {
           dropdown.value = 'v2';
-          expect(dropdown._selectionElement.textContent.trim()).to.be.equal('o2');
+          expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
         });
 
         it('Should update overlay selected item when value is provided', () => {
@@ -226,7 +233,8 @@
 
         it('overlay should not be opened on click event on underlying native input', () => {
           expect(dropdown._overlayElement.opened).to.be.false;
-          MockInteractions.tap(dropdown._nativeInput);
+          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
+          MockInteractions.tap(nativeInput);
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
@@ -314,7 +322,8 @@
         });
 
         it('Should set pointer-events to none on the native input to fix iOS Zooming', () => {
-          expect(getComputedStyle(dropdown._nativeInput)['pointer-events']).to.equal('none');
+          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
+          expect(getComputedStyle(nativeInput)['pointer-events']).to.equal('none');
         });
       });
 
@@ -367,19 +376,19 @@
 
         it('Should hide native input when a item is selected, and it has content', () => {
           menu.selected = 2;
-          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('hidden');
+          expect(dropdown._valueElement.slot).to.equal('value');
         });
 
         it('Should toggle native native input visibility when the content of the selected item is empty', () => {
           menu.selected = 2;
 
           menu.selected = 3;
-          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
+          expect(dropdown._valueElement.slot).to.equal('');
         });
 
         it('Should show native input when label of the selected items is an empty string', () => {
           menu.selected = 4;
-          expect(getComputedStyle(dropdown._nativeInput).visibility).to.be.equal('visible');
+          expect(dropdown._valueElement.slot).to.equal('');
         });
 
         it('Should close the overlay when clicking on the overlay', () => {
@@ -407,7 +416,7 @@
         });
 
         it('should have aria-hidden attribute to the native input', () => {
-          expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
+          // expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
         });
       });
 

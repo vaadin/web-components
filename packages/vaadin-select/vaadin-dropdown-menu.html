@@ -109,13 +109,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
             // Create a slot for the value element
             const slot = document.createElement('slot');
-            slot.setAttribute('name', 'selected');
-            slot.setAttribute('part', 'selected');
+            slot.setAttribute('name', 'value');
 
             // Insert the slot before the text-field
             const input = memoizedTemplate.content.querySelector('input');
 
-            input.parentElement.insertBefore(slot, input);
+            input.parentElement.replaceChild(slot, input);
+            slot.appendChild(input);
           }
           return memoizedTemplate;
         }
@@ -148,7 +148,7 @@ This program is available under Apache License Version 2.0, available at https:/
         invalid="[[invalid]]"
       >
       <slot name="prefix" slot="prefix"></slot>
-      <div slot="selected"></div>
+      <div part="value"></div>
     </vaadin-dropdown-menu-text-field>
     <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
@@ -296,8 +296,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _items: Object,
 
-            _nativeInput: Object,
-
             // Used for setting a value to the input in order to show/hide placeholder
             _valueForInput: Object
           };
@@ -323,7 +321,7 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
-          this._selectionElement = this.shadowRoot.querySelector('[slot="selected"]');
+          this._valueElement = this.shadowRoot.querySelector('[part="value"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
           this._nativeInput.setAttribute('tabindex', -1);
@@ -393,7 +391,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (opened) {
-            this._menuElement.addEventListener('selected-changed', () => this._updateSelectedSlot());
+            this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
 
@@ -423,25 +421,25 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _updateSelectedSlot() {
+        _updateValueSlot() {
           this.opened = false;
-          this._selectionElement.innerHTML = '';
+          this._valueElement.innerHTML = '';
 
           const selected = this._items[this._menuElement.selected];
           let hasContent;
           if (selected) {
             if (selected.hasAttribute('label')) {
-              hasContent = this._selectionElement.textContent = selected.getAttribute('label');
+              hasContent = this._valueElement.textContent = selected.getAttribute('label');
             } else {
               const clone = selected.cloneNode(true);
               clone.removeAttribute('tabindex');
-              this._selectionElement.appendChild(clone);
+              this._valueElement.appendChild(clone);
               hasContent = selected.textContent.trim() || selected.children.length;
             }
           }
 
-          // Toggle input visibility to show/hide the placeholder
-          this._nativeInput.style.visibility = this.placeholder && !hasContent ? 'visible' : 'hidden';
+          // Toggle visibility of _valueElement vs fallback input with placeholder
+          this._valueElement.slot = hasContent ? 'value' : '';
 
           if (!this._valueChanging) {
             this._selectedChanging = true;
@@ -459,7 +457,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }, undefined);
             if (!this._selectedChanging) {
               this._valueChanging = true;
-              this._updateSelectedSlot();
+              this._updateValueSlot();
               delete this._valueChanging;
             }
           }
