@@ -6,27 +6,62 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../vaadin-checkbox.html">
 </head>
 
 <body>
+  <dom-module id="x-checkbox">
+    <template>
+      <iron-form id="form">
+        <vaadin-checkbox id="boundname" name="[[checkboxName]]"></vaadin-checkbox>
+        <vaadin-checkbox id="attrname" name="attrcheckbox"></vaadin-checkbox>
+      </iron-form>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', () => {
+        class XCheckbox extends Polymer.Element {
+          static get is() {
+            return 'x-checkbox';
+          }
+
+          static get properties() {
+            return {
+              checkboxName: {
+                type: String,
+                value: 'boundcheckbox'
+              }
+            };
+          }
+        }
+        customElements.define(XCheckbox.is, XCheckbox);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="default">
     <template>
       <vaadin-checkbox name="test-checkbox">Vaadin <i>Checkbox</i></vaadin-checkbox>
     </template>
   </test-fixture>
 
+  <test-fixture id="iron-form-checkbox">
+    <template>
+      <x-checkbox></x-checkbox>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-checkbox', () => {
-      var down = node => {
+      const down = node => {
         node.dispatchEvent(new CustomEvent('down'));
       };
 
-      var up = node => {
+      const up = node => {
         node.dispatchEvent(new CustomEvent('up'));
       };
 
-      var vaadinCheckbox, nativeCheckbox, label;
+      let vaadinCheckbox, nativeCheckbox, label;
 
       beforeEach(() => {
         vaadinCheckbox = fixture('default');
@@ -35,7 +70,7 @@
       });
 
       it('should define checkbox label using light DOM', () => {
-        var children = Polymer.dom(label).getEffectiveChildNodes();
+        const children = Polymer.dom(label).getEffectiveChildNodes();
         expect(children[1].textContent).to.be.equal('Vaadin ');
         expect(children[2].outerHTML).to.be.equal('<i>Checkbox</i>');
       });
@@ -164,6 +199,53 @@
         expect(vaadinCheckbox.indeterminate).to.be.false;
         expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
       });
+
+    });
+
+    describe('iron-form-checkbox', () => {
+      let boundNameCheckbox, attrNameCheckbox, form;
+
+      beforeEach(() => {
+        const xCheckbox = fixture('iron-form-checkbox');
+        form = xCheckbox.$.form;
+        boundNameCheckbox = xCheckbox.$.boundname;
+        attrNameCheckbox = xCheckbox.$.attrname;
+      });
+
+      it('should serialize', () => {
+        boundNameCheckbox.checked = true;
+        expect(boundNameCheckbox.name).to.equal('boundcheckbox');
+        expect(form.serializeForm().boundcheckbox).to.equal('on');
+      });
+
+      it('should serialize with a custom value', () => {
+        boundNameCheckbox.checked = true;
+        boundNameCheckbox.value = 'foo';
+        expect(form.serializeForm().boundcheckbox).to.equal('foo');
+      });
+
+      it('should not serialize when not checked', () => {
+        expect(boundNameCheckbox.name).to.be.empty;
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should not serialize without a name', () => {
+        boundNameCheckbox.checked = true;
+        boundNameCheckbox.name = '';
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should not serialize after unchecked', () => {
+        boundNameCheckbox.checked = true;
+        boundNameCheckbox.checked = false;
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should define the name from an attribute', () => {
+        attrNameCheckbox.checked = true;
+        expect(form.serializeForm().attrcheckbox).to.equal('on');
+      });
+
     });
   </script>
 </body>
