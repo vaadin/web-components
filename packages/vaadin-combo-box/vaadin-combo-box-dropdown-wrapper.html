@@ -13,7 +13,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
-    <vaadin-combo-box-dropdown id="dropdown" opened="{{opened}}" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]"
+    <vaadin-combo-box-dropdown id="dropdown" opened="{{opened}}" hidden="[[_hidden(_items.*, loading)]]" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]"
       on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
       <template>
         <style>
@@ -387,6 +387,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _stopPropagation(e) {
         e.stopPropagation();
+      }
+
+      _hidden(itemsChange, loading) {
+        return !loading && (!this._items || !this._items.length);
       }
     }
 
