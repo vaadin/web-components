@@ -56,6 +56,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="dropdown-in-flexbox">
+    <template>
+      <div style="display: flex; flex-direction: column; width:500px;">
+        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
@@ -96,6 +104,15 @@
         dropdown.opened = true;
         dropdown.value = 'foo';
         dropdown.opened = false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu inside flexbox', () => {
+      it('dropdown should have width 175px', () => {
+        const container = fixture('dropdown-in-flexbox');
+        const dropdown = container.querySelector('vaadin-dropdown-menu');
+        expect(window.getComputedStyle(container).width).to.eql('500px');
+        expect(window.getComputedStyle(dropdown).width).to.eql('175px');
       });
     });
 
