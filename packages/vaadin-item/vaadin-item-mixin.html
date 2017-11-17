@@ -46,18 +46,36 @@ This program is available under Apache License Version 2.0, available at https:/
           observer: '_selectedChanged'
         },
 
-        /**
-         * A property representing the value of this item
-         */
-        value: {
-          type: String,
-          value: ''
-        }
+        _value: String
       };
+    }
+
+    constructor() {
+      super();
+
+      /**
+       * Submittable string value. The default value is the trimmed text content of the element.
+       * @type {string}
+       */
+      this.value;
+    }
+
+    get value() {
+      return this._value !== undefined ? this._value : this.textContent.trim();
+    }
+
+    set value(value) {
+      this._value = value;
     }
 
     ready() {
       super.ready();
+
+      const attrValue = this.getAttribute('value');
+      if (attrValue !== null) {
+        this.value = attrValue;
+      }
+
       this.addEventListener('focus', e => this._setFocused(true), true);
       this.addEventListener('blur', e => this._setFocused(false), true);
       this.addEventListener('mousedown', e => {

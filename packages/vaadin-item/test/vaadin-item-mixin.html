@@ -35,6 +35,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="defaultValue">
+    <template>
+      <test-element>
+        text-content
+      </test-element>
+    </template>
+  </test-fixture>
+
   <script>
     function spaceDown(target) {
       MockInteractions.keyDownOn(target, 32, [], ' ');
@@ -59,7 +67,7 @@
     }
 
     describe('vaadin-item-mixin', () => {
-      var item;
+      let item;
 
       beforeEach(() => item = fixture('navItem'));
 
@@ -178,6 +186,22 @@
       it('should have value property', () => {
         expect(item.value).to.be.equal('foo');
       });
+
+      describe('default value', () => {
+        let defaultValueItem;
+
+        beforeEach(() => defaultValueItem = fixture('defaultValue'));
+
+        it('should use trimmed textContent', () => {
+          expect(defaultValueItem.value).to.equal('text-content');
+        });
+
+        it('should reflect changes of content', () => {
+          defaultValueItem.innerHTML = 'foo';
+          expect(defaultValueItem.value).to.equal('foo');
+        });
+      });
+
     });
   </script>
 </body>
