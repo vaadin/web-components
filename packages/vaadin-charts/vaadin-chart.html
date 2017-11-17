@@ -314,11 +314,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (this.__isSeriesEmpty(series)) {
             return;
           }
+          const seriesNodes = Array.from(this.childNodes).filter(this.__filterSeriesNodes);
+
           for (let i = 0, len = series.length; i < len; i++) {
             const seriesElement = series[i];
-            const seriesAdded = this.configuration.addSeries(seriesElement.options);
 
-            seriesElement.setSeries(seriesAdded);
+            const idxOnChildList = seriesNodes.indexOf(seriesElement);
+            const seriesConfiguration = this.__updateOrAddSeriesInstance(seriesElement.options, idxOnChildList);
+
+            seriesElement.setSeries(seriesConfiguration);
           }
         }
 
@@ -440,15 +444,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
           for (var i = 0; i < series.length; i++) {
             var currentSeries = series[i];
-            if (currentSeries.type === 'bar') {
-              currentSeries.type = 'column';
-            }
-            if (this._configuration.series[i]) {
-              this._configuration.series[i].update(currentSeries);
-            } else {
-              this._configuration.addSeries(currentSeries);
-            }
+            this.__updateOrAddSeriesInstance(currentSeries, i);
           }
+        }
+
+        __updateOrAddSeriesInstance(seriesOptions, position) {
+          if (this._configuration.series[position]) {
+            this._configuration.series[position].update(seriesOptions);
+          } else {
+            this._configuration.addSeries(seriesOptions);
+          }
+          return this._configuration.series[position];
         }
 
         __updateTitle(newValue) {
