@@ -6,7 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
-  <link rel="import" href="../../vaadin-item/vaadin-item.html">
+  <link rel="import" href="mock-item.html">
   <link rel="import" href="../vaadin-dropdown-menu.html">
 </head>
 
@@ -16,11 +16,11 @@
       <vaadin-dropdown-menu placeholder="placeholder">
         <template>
           <vaadin-list-box>
-            <vaadin-item>Option 1</vaadin-item>
-            <vaadin-item value="v2" label="o2">Option 2</vaadin-item>
-            <vaadin-item> Option 3 </vaadin-item>
-            <vaadin-item></vaadin-item>
-            <vaadin-item label="">Empty</vaadin-item>
+            <mock-item>Option 1</mock-item>
+            <mock-item value="v2" label="o2">Option 2</mock-item>
+            <mock-item>Option 3</mock-item>
+            <mock-item></mock-item>
+            <mock-item label="">Empty</mock-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -48,8 +48,8 @@
       <vaadin-dropdown-menu value="v2">
         <template>
           <vaadin-list-box>
-            <vaadin-item value="v1">t1</vaadin-item>
-            <vaadin-item value="v2" label="o2">t2</vaadin-item>
+            <mock-item value="v1">t1</mock-item>
+            <mock-item value="v2" label="o2">t2</mock-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -345,6 +345,7 @@
         });
 
         it('Should set pointer-events to none on the native input to fix iOS Zooming', () => {
+          dropdown.value = 'nomatch';
           const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
           expect(getComputedStyle(nativeInput)['pointer-events']).to.equal('none');
         });
@@ -439,7 +440,7 @@
         });
 
         it('should have aria-hidden attribute to the native input', () => {
-          // expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
+          expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
         });
 
         it('should have role button on the toggle button', () => {
