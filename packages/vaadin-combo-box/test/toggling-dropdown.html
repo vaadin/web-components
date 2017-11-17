@@ -97,7 +97,7 @@
         combobox.open();
 
         expect(combobox.opened);
-        expect(combobox.$.overlay.hidden).to.be.true;
+        expect(combobox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
       });
 
       it('should be hidden with no items', () => {
@@ -106,7 +106,7 @@
         combobox.open();
 
         expect(combobox.opened);
-        expect(combobox.$.overlay.hidden).to.be.true;
+        expect(combobox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
       });
 
       // When using Shadow DOM polyfill, the style scope of the combobox might

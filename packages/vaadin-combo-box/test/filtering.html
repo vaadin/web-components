@@ -231,7 +231,7 @@
       it('should hide overlay when filtered items length is 0', () => {
         setInputValue('THIS IS NOT FOUND');
 
-        expect(comboBox.opened && comboBox.$.overlay.hidden).to.be.true;
+        expect(comboBox.opened && comboBox.$.overlay.$.dropdown.$.overlay.hidden).to.be.true;
       });
     });
 

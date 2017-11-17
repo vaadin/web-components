@@ -468,8 +468,6 @@ This program is available under Apache License Version 2.0, available at https:/
       // because that will cause problems to say the least.
       Polymer.flush && Polymer.flush();
 
-      this.$.overlay.hidden = !this._hasItems(this.$.overlay._items) && !this.loading;
-
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders
       // the items synchonously. It is required to have the items rendered
       // before we update the overlay and the list positions and sizes.
@@ -704,7 +702,6 @@ This program is available under Apache License Version 2.0, available at https:/
     _setOverlayItems(items) {
       this.$.overlay.set('_items', items);
 
-      this.$.overlay.hidden = !this._hasItems(items);
       this.$.overlay.$.dropdown.notifyResize();
     }
 
