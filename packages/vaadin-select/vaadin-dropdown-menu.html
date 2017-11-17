@@ -54,6 +54,12 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="input-field"] {
         outline: none;
       }
+
+      [part="input-field"] ::slotted([part="value"]) {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+      }
     </style>
   </template>
 </dom-module>
@@ -65,6 +71,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * The overlay element.
        *
        * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
        * for `<vaadin-dropdown-menu-overlay>` parts.
@@ -82,6 +90,15 @@ This program is available under Apache License Version 2.0, available at https:/
   </script>
 </dom-module>
 
+<style>
+  @font-face {
+    font-family: "vaadin-dropdown-menu-icons";
+    src: url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAASEAAsAAAAABDgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDxIGKmNtYXAAAAFoAAAAVAAAAFQXVtKHZ2FzcAAAAbwAAAAIAAAACAAAABBnbHlmAAABxAAAAHwAAAB8CohkJ2hlYWQAAAJAAAAANgAAADYOavgEaGhlYQAAAngAAAAkAAAAJAarA8ZobXR4AAACnAAAABQAAAAUCAABP2xvY2EAAAKwAAAADAAAAAwAKABSbWF4cAAAArwAAAAgAAAAIAAHABduYW1lAAAC3AAAAYYAAAGGmUoJ+3Bvc3QAAARkAAAAIAAAACAAAwAAAAMEAAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAA6QADwP/AAEADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAwAAAAMAAAAcAAEAAwAAABwAAwABAAAAHAAEADgAAAAKAAgAAgACAAEAIOkA//3//wAAAAAAIOkA//3//wAB/+MXBAADAAEAAAAAAAAAAAAAAAEAAf//AA8AAQAAAAAAAAAAAAIAADc5AQAAAAABAAAAAAAAAAAAAgAANzkBAAAAAAEAAAAAAAAAAAACAAA3OQEAAAAAAQE/AUAC6QIVABQAAAEwFx4BFxYxMDc+ATc2MTAjKgEjIgE/ISJPIiEhIk8iIUNCoEJDAhUhIk8iISEiTyIhAAEAAAABAABvL5bdXw889QALBAAAAAAA1jHaeQAAAADWMdp5AAAAAALpAhUAAAAIAAIAAAAAAAAAAQAAA8D/wAAABAAAAAAAAukAAQAAAAAAAAAAAAAAAAAAAAUEAAAAAAAAAAAAAAAAAAAABAABPwAAAAAACgAUAB4APgABAAAABQAVAAEAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAADgCuAAEAAAAAAAEABwAAAAEAAAAAAAIABwBgAAEAAAAAAAMABwA2AAEAAAAAAAQABwB1AAEAAAAAAAUACwAVAAEAAAAAAAYABwBLAAEAAAAAAAoAGgCKAAMAAQQJAAEADgAHAAMAAQQJAAIADgBnAAMAAQQJAAMADgA9AAMAAQQJAAQADgB8AAMAAQQJAAUAFgAgAAMAAQQJAAYADgBSAAMAAQQJAAoANACkaWNvbW9vbgBpAGMAbwBtAG8AbwBuVmVyc2lvbiAxLjAAVgBlAHIAcwBpAG8AbgAgADEALgAwaWNvbW9vbgBpAGMAbwBtAG8AbwBuaWNvbW9vbgBpAGMAbwBtAG8AbwBuUmVndWxhcgBSAGUAZwB1AGwAYQByaWNvbW9vbgBpAGMAbwBtAG8AbwBuRm9udCBnZW5lcmF0ZWQgYnkgSWNvTW9vbi4ARgBvAG4AdAAgAGcAZQBuAGUAcgBhAHQAZQBkACAAYgB5ACAASQBjAG8ATQBvAG8AbgAuAAAAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==) format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+</style>
+
 <dom-module id="vaadin-dropdown-menu-text-field">
   <script>
     {
@@ -90,6 +107,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * The text-field element.
        *
        * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
        * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/vaadin-text-field.html)
        * for `<vaadin-dropdown-menu-text-field>` parts and available slots (prefix, suffix etc.)
@@ -139,6 +158,14 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
+
+      [part="toggle-button"] {
+        font-family: "vaadin-dropdown-menu-icons";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e900";
+      }
     </style>
 
     <vaadin-dropdown-menu-text-field
@@ -149,6 +176,7 @@ This program is available under Apache License Version 2.0, available at https:/
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
+      <div part="toggle-button" slot="suffix" role="button" aria-label="Toggle"></div>
     </vaadin-dropdown-menu-text-field>
     <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
 
@@ -179,6 +207,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * be able to change the visual representation of the selected value in the input part.
        *
        * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `toggle-button` | The toggle button
        *
        * The following state attributes are available for styling:
        *
@@ -294,6 +330,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _inputElement: Object,
 
+            _toggleElement: Object,
+
             _items: Object,
 
             // Used for setting a value to the input in order to show/hide placeholder
@@ -302,7 +340,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get observers() {
-          return ['_valueChanged(value, _items)'];
+          return [
+            '_valueChanged(value, _items)',
+            '_updateAriaExpanded(opened, _toggleElement)'
+          ];
         }
 
         /** @private */
@@ -322,6 +363,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._overlayElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-overlay');
           this._valueElement = this.shadowRoot.querySelector('[part="value"]');
+          this._toggleElement = this.shadowRoot.querySelector('[part="toggle-button"]');
           this._nativeInput = this.focusElement.shadowRoot.querySelector('input');
           this._nativeInput.setAttribute('aria-hidden', true);
           this._nativeInput.setAttribute('tabindex', -1);
@@ -385,7 +427,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _openedChanged(opened, wasOpened) {
-          if (!this._overlayElement || !this._menuElement || !this.focusElement || this.disabled) {
+          if (!this._overlayElement || !this._menuElement || !this._toggleElement || !this.focusElement || this.disabled) {
             this.opened = false;
             return;
           }
@@ -419,6 +461,10 @@ This program is available under Apache License Version 2.0, available at https:/
             });
             return new Templatizer({});
           }
+        }
+
+        _updateAriaExpanded(opened, toggleElement) {
+          toggleElement && toggleElement.setAttribute('aria-expanded', opened);
         }
 
         _updateValueSlot() {

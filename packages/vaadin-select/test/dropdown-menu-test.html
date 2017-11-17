@@ -238,6 +238,12 @@
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
+        it('overlay should be opened on click event on toggle button', () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          MockInteractions.tap(dropdown._toggleElement);
+          expect(dropdown._overlayElement.opened).to.be.true;
+        });
+
         it('On ArrowUp Should open the overlay, not select any item, and keep opened', () => {
           arrowUp(input);
           expect(dropdown._overlayElement.opened).to.be.true;
@@ -417,6 +423,20 @@
 
         it('should have aria-hidden attribute to the native input', () => {
           // expect(dropdown._nativeInput.getAttribute('aria-hidden')).to.be.equal('true');
+        });
+
+        it('should have role button on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('role')).to.be.equal('button');
+        });
+
+        it('should have aria-label attribute on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('aria-label')).to.equal('Toggle');
+        });
+
+        it('should set aria-expanded attribute on the toggle button', () => {
+          expect(dropdown._toggleElement.getAttribute('aria-expanded')).to.be.equal('false');
+          dropdown.opened = true;
+          expect(dropdown._toggleElement.getAttribute('aria-expanded')).to.be.equal('true');
         });
       });
 
