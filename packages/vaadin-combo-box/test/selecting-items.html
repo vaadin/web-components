@@ -264,12 +264,12 @@
       expect(combobox.selectedItem).to.be.null;
     });
 
-    it('should close the dropdown after clearing a selection', () => {
+    it('should not close the dropdown after clearing a selection', () => {
       combobox.open();
 
       fire('click', clearIcon);
 
-      expect(combobox.opened).to.eql(false);
+      expect(combobox.opened).to.eql(true);
     });
 
     it('should cancel down event to avoid input blur', () => {
