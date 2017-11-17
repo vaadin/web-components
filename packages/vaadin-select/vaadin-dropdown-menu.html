@@ -465,6 +465,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _setFocused(focused) {
+          // Keep `focused` state when opening the overlay for styling purpose.
+          super._setFocused(this.opened || focused);
+          this.focusElement._setFocused(this.focused);
+        }
+
         _setPosition() {
           const inputRect = this.focusElement.getBoundingClientRect();
 

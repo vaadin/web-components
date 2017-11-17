@@ -324,6 +324,7 @@
         beforeEach(done => {
           menu = dropdown._menuElement;
           Polymer.RenderStatus.afterNextRender(menu, () => {
+            dropdown.focus();
             Enter(input);
             done();
           });
@@ -385,6 +386,12 @@
           dropdown.opened = false;
           dropdown._overlayElement.click();
           expect(dropdown.opened).to.be.false;
+        });
+
+        it('Should keep focused state after opening overlay', () => {
+          expect(dropdown.opened).to.be.true;
+          expect(dropdown.focused).to.be.true;
+          expect(input.focused).to.be.true;
         });
       });
 
