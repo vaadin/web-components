@@ -26,7 +26,7 @@
 ```
 -->
 ```html
-<div>
+<custom-style>
   <style is="custom-style">
     paper-icon-item {
       margin: -13px -16px;
@@ -35,6 +35,8 @@
       border-radius: 50%;
     }
   </style>
+</custom-style>
+<dom-bind>
   <template is="dom-bind">
     <iron-ajax url="https://randomuser.me/api?results=100&inc=name,email,picture" last-response="{{response}}" auto></iron-ajax>
 
@@ -50,7 +52,8 @@
       </template>
     </vaadin-combo-box>
   </template>
-</div>
+</dom-bind>
+
 
 ```
 
