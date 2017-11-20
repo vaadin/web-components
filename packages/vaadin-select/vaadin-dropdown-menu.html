@@ -422,8 +422,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _valueChanged(value, oldValue) {
-          // Skip validation for the initial value
-          if (oldValue === undefined) {
+          // Skip validation for the initial empty string value
+          if (value === '' && oldValue === undefined) {
             return;
           }
           this.validate();
@@ -527,6 +527,7 @@ This program is available under Apache License Version 2.0, available at https:/
           // Keep `focused` state when opening the overlay for styling purpose.
           super._setFocused(this.opened || focused);
           this.focusElement._setFocused(this.focused);
+          !this.focused && this.validate();
         }
 
         _setPosition() {
