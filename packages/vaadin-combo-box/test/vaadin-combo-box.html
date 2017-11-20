@@ -12,6 +12,14 @@
 
 <body>
 
+  <test-fixture id="combobox-in-flexbox">
+    <template>
+      <div style="display: flex; flex-direction: column; width:500px;">
+        <vaadin-combo-box></vaadin-combo-box>
+      </div>
+    </template>
+  </test-fixture>
+
   <test-fixture id="combobox">
     <template>
       <vaadin-combo-box></vaadin-combo-box>
@@ -37,6 +45,15 @@
         if (comboBox._bindableInput._initSlottedInput) {
           comboBox._bindableInput._initSlottedInput();
         }
+      });
+
+      describe('Inside flexbox', () => {
+        it('combo-box should have width 175px', () => {
+          const container = fixture('combobox-in-flexbox');
+          const combobox = container.querySelector('vaadin-combo-box');
+          expect(window.getComputedStyle(container).width).to.eql('500px');
+          expect(window.getComputedStyle(combobox).width).to.eql('175px');
+        });
       });
 
       describe('items property', () => {
