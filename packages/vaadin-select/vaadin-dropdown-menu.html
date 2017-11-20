@@ -173,6 +173,7 @@ This program is available under Apache License Version 2.0, available at https:/
         label="[[label]]"
         required="[[required]]"
         invalid="[[invalid]]"
+        error-message="[[errorMessage]]"
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
@@ -253,6 +254,14 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true,
               reflectToAttribute: true,
               observer: '_openedChanged'
+            },
+
+            /**
+             * The error message to display when the dropdown menu value is invalid
+             */
+            errorMessage: {
+              type: String,
+              value: ''
             },
 
             /**
