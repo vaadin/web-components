@@ -219,24 +219,24 @@
       });
 
       it('should apply `loading` attribute to scroller and grid', () => {
-        grid._loading = true;
+        grid._setLoading(true);
         expect(grid.$.scroller.hasAttribute('loading')).to.be.true;
         expect(grid.hasAttribute('loading')).to.be.true;
-        grid._loading = false;
+        grid._setLoading(false);
         expect(grid.$.scroller.hasAttribute('loading')).to.be.false;
         expect(grid.hasAttribute('loading')).to.be.false;
       });
 
       it('should be in loading state when dataProvider changes', () => {
         container.dataProvider = (params, callback) => {};
-        expect(grid._loading).to.be.true;
+        expect(grid.loading).to.be.true;
       });
 
       it('should be in loading state when fetching new data', () => {
         container.dataProvider = (params, callback) => {
-          expect(grid._loading).to.be.true;
+          expect(grid.loading).to.be.true;
           callback(Array(params.pageSize));
-          expect(grid._loading).not.to.be.true;
+          expect(grid.loading).not.to.be.true;
         };
         scrollToEnd(grid);
       });
@@ -247,9 +247,9 @@
           cb = callback;
         };
         cb(Array(25));
-        expect(grid._loading).not.to.be.true;
+        expect(grid.loading).not.to.be.true;
         grid.clearCache();
-        expect(grid._loading).to.be.true;
+        expect(grid.loading).to.be.true;
 
       });
 
