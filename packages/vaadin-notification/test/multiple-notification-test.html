@@ -8,6 +8,18 @@
 </head>
 
 <body>
+  <!-- Override default theme so as it's guaranteed that we dont have any animation -->
+  <dom-module id="vaadin-notification-card-multiple-theme" theme-for="vaadin-notification-card">
+    <template>
+      <style>
+        :host {
+          width: 200px;
+          background: lightgrey;
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <test-fixture id="multiple">
     <template>
       <vaadin-notification opened vertical-align="top-stretch"><template>Notificaton</template></vaadin-notification>
