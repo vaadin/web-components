@@ -32,10 +32,10 @@
     "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^1.0.0",
     "vaadin-context-menu": "^2.0.0",
-    "vaadin-dropdown-menu": "vaadin/vaadin-dropdown-menu#master",
-    "vaadin-list-box": "vaadin/vaadin-list-box#master",
-    "vaadin-tabs": "vaadin/vaadin-tabs#master",
-    "vaadin-item": "vaadin/vaadin-item#master"
+    "vaadin-dropdown-menu": "^1.0.0",
+    "vaadin-list-box": "^1.0.0",
+    "vaadin-tabs": "^1.0.0",
+    "vaadin-item": "^1.0.0"
   },
   "resolutions": {
     "vaadin-item": "master"
