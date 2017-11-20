@@ -154,17 +154,14 @@
 
       beforeEach(done => {
         nav = fixture('nav');
-        Polymer.RenderStatus.afterNextRender(nav, done);
+        nav.then(done);
       });
 
-      it('should have a list of valid items after the DOM `_observer` has been run', () => {
-        // DOM _observer runs asynchronously, we need to flush to access items
-        nav._observer.flush();
+      it('should have a list of valid items', () => {
         expect(nav._navItems.length).to.be.equal(6);
       });
 
-      it('`focus` should flush the `_observer` if it is called too soon', () => {
-        // focus flushes the observer in order to be run in 3rd party elements initialisation
+      it('should focus the selected item', () => {
         nav.focus();
         expect(nav._navItems.length).to.be.equal(6);
       });

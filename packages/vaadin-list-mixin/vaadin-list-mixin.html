@@ -53,18 +53,23 @@ This program is available under Apache License Version 2.0, available at https:/
       return ['_enhanceItems(_navItems, orientation, selected)'];
     }
 
+    constructor() {
+      super();
+      const promise = new Promise(resolve => {
+        new Polymer.FlattenedNodesObserver(this, info => {
+          this._navItems = (this._navItems || [])
+            .filter(e => info.removedNodes.indexOf(e) < 0)
+            .concat(this._filterItems(info.addedNodes));
+          resolve();
+        });
+      });
+      this.then = cb => promise.then(cb);
+    }
+
     ready() {
       super.ready();
       this.addEventListener('keydown', e => this._onKeydown(e));
       this.addEventListener('click', e => this._onClick(e));
-
-      Polymer.RenderStatus.afterNextRender(this, () => {
-        this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-          this._navItems = (this._navItems || [])
-            .filter(e => info.removedNodes.indexOf(e) < 0)
-            .concat(this._filterItems(info.addedNodes));
-        });
-      });
     }
 
     _enhanceItems(items, orientation, selected) {
@@ -176,8 +181,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     focus() {
       // In initialisation (e.g vaadin-dropdown-menu) observer might not been run yet.
-      this._observer.flush();
-      (this.querySelector('[tabindex="0"]') || this._navItems[0]).focus();
+      this.then(() => (this.querySelector('[tabindex="0"]') || this._navItems[0]).focus());
     }
 
     /* @protected */
