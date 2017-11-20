@@ -154,6 +154,16 @@ This program is available under Apache License Version 2.0, available at https:/
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
       }
 
+      @keyframes close-notification {
+        100% {
+          opacity: 0;
+        }
+      }
+
+      :host([closing]) {
+        animation: close-notification 1000ms;
+      }
+
       @media (max-width: 420px) {
         :host {
           max-width: none;
@@ -375,7 +385,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             this._appendNotificationCard();
           } else if (this._card) {
-            this._removeNotificationCard();
+            this._closeNotificationCard();
           }
         }
 
@@ -392,10 +402,23 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _removeNotificationCard() {
-          this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
+          this._card.removeAttribute('closing');
           this._overlay.opened =
             Object.keys(this._overlay.regions).reduce((prev, part) => this._overlay.regions[part].hasChildNodes() || prev, false);
+        }
+
+        _closeNotificationCard() {
+          this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+          this._card.setAttribute('closing', '');
+          if (!this._endHandler) {
+            const name = getComputedStyle(this._card).getPropertyValue('animation-name');
+            if (name && name != 'none') {
+              this._endHandler = this._card.addEventListener('animationend', () => this._removeNotificationCard());
+            } else {
+              this._removeNotificationCard();
+            }
+          }
         }
 
         _orientiationChanged(vertical, horizontal) {
