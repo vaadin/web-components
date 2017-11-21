@@ -1,0 +1,34 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+
+<dom-module id="mock-item">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <slot></slot>
+  </template>
+</dom-module>
+<script>
+  class MockItemElement extends Polymer.Element {
+    static get is() {
+      return 'mock-item';
+    }
+
+    static get properties() {
+      return {
+        _hasVaadinItemMixin: {
+          type: Boolean,
+          value: true
+        },
+        value: {
+          type: String,
+          value: ''
+        }
+      };
+    }
+  }
+
+  customElements.define(MockItemElement.is, MockItemElement);
+</script>
