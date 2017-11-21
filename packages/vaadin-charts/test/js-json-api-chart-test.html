@@ -103,11 +103,11 @@
         // initialConfig true should reset the config
         chart.update({}, true);
         Polymer.flush();
-        
+
         setTimeout(function() {
           expect(chart.$.chart.querySelector('.highcharts-title')).to.be.null;
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should inflate whole function strings', function(done) {
@@ -139,7 +139,6 @@
           done();
         });
       });
-
     });
   </script>
 </body>

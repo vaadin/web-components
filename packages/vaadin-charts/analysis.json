@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 488,
+          "line": 500,
           "column": 6
         },
         "end": {
-          "line": 488,
+          "line": 500,
           "column": 42
         }
       },
@@ -212,11 +212,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 244,
+                  "line": 256,
                   "column": 10
                 },
                 "end": {
-                  "line": 244,
+                  "line": 256,
                   "column": 29
                 }
               },
@@ -246,9 +246,9 @@
               }
             },
             {
-              "name": "title",
-              "type": "string",
-              "description": "Represents the title of the chart.",
+              "name": "timeline",
+              "type": "boolean",
+              "description": "Specifies whether the chart is a normal chart or a timeline chart.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -256,7 +256,26 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 194,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "description": "Represents the title of the chart.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 199,
+                  "column": 12
+                },
+                "end": {
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -273,11 +292,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 208,
                   "column": 12
                 },
                 "end": {
-                  "line": 204,
+                  "line": 212,
                   "column": 13
                 }
               },
@@ -295,11 +314,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 248,
+                  "line": 260,
                   "column": 8
                 },
                 "end": {
-                  "line": 253,
+                  "line": 271,
                   "column": 9
                 }
               },
@@ -312,11 +331,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 304,
                   "column": 8
                 },
                 "end": {
-                  "line": 292,
+                  "line": 310,
                   "column": 9
                 }
               },
@@ -329,11 +348,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 294,
+                  "line": 312,
                   "column": 8
                 },
                 "end": {
-                  "line": 300,
+                  "line": 318,
                   "column": 9
                 }
               },
@@ -346,11 +365,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 302,
+                  "line": 320,
                   "column": 8
                 },
                 "end": {
-                  "line": 304,
+                  "line": 322,
                   "column": 9
                 }
               },
@@ -367,11 +386,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 306,
+                  "line": 324,
                   "column": 8
                 },
                 "end": {
-                  "line": 316,
+                  "line": 334,
                   "column": 9
                 }
               },
@@ -388,11 +407,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 318,
+                  "line": 336,
                   "column": 8
                 },
                 "end": {
-                  "line": 320,
+                  "line": 338,
                   "column": 9
                 }
               },
@@ -409,11 +428,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 323,
+                  "line": 341,
                   "column": 8
                 },
                 "end": {
-                  "line": 326,
+                  "line": 344,
                   "column": 9
                 }
               },
@@ -426,11 +445,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 360,
+                  "line": 378,
                   "column": 8
                 },
                 "end": {
-                  "line": 364,
+                  "line": 410,
                   "column": 9
                 }
               },
@@ -449,40 +468,16 @@
               ]
             },
             {
-              "name": "__internalUpdate",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 366,
-                  "column": 8
-                },
-                "end": {
-                  "line": 390,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "jsonConfiguration"
-                },
-                {
-                  "name": "resetConfiguration"
-                }
-              ]
-            },
-            {
               "name": "__inflateFunctions",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 392,
+                  "line": 412,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 428,
                   "column": 9
                 }
               },
@@ -490,27 +485,6 @@
               "params": [
                 {
                   "name": "jsonConfiguration"
-                }
-              ]
-            },
-            {
-              "name": "__invertForBarSeries",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 410,
-                  "column": 8
-                },
-                "end": {
-                  "line": 415,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "series"
                 }
               ]
             },
@@ -520,11 +494,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 417,
+                  "line": 430,
                   "column": 8
                 },
                 "end": {
-                  "line": 423,
+                  "line": 436,
                   "column": 9
                 }
               },
@@ -541,11 +515,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 425,
+                  "line": 438,
                   "column": 8
                 },
                 "end": {
-                  "line": 438,
+                  "line": 451,
                   "column": 9
                 }
               },
@@ -565,11 +539,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 440,
+                  "line": 453,
                   "column": 8
                 },
                 "end": {
-                  "line": 456,
+                  "line": 468,
                   "column": 9
                 }
               },
@@ -586,11 +560,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 458,
+                  "line": 470,
                   "column": 8
                 },
                 "end": {
-                  "line": 466,
+                  "line": 478,
                   "column": 9
                 }
               },
@@ -607,11 +581,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 468,
+                  "line": 480,
                   "column": 8
                 },
                 "end": {
-                  "line": 480,
+                  "line": 492,
                   "column": 9
                 }
               },
@@ -637,7 +611,7 @@
               "column": 6
             },
             "end": {
-              "line": 481,
+              "line": 493,
               "column": 7
             }
           },
@@ -646,15 +620,31 @@
           "name": "Vaadin.VaadinChart",
           "attributes": [
             {
-              "name": "title",
-              "description": "Represents the title of the chart.",
+              "name": "timeline",
+              "description": "Specifies whether the chart is a normal chart or a timeline chart.",
               "sourceRange": {
                 "start": {
                   "line": 191,
                   "column": 12
                 },
                 "end": {
-                  "line": 195,
+                  "line": 194,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
+            },
+            {
+              "name": "title",
+              "description": "Represents the title of the chart.",
+              "sourceRange": {
+                "start": {
+                  "line": 199,
+                  "column": 12
+                },
+                "end": {
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -666,11 +656,11 @@
               "description": "Represents the subtitle of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 208,
                   "column": 12
                 },
                 "end": {
-                  "line": 204,
+                  "line": 212,
                   "column": 13
                 }
               },

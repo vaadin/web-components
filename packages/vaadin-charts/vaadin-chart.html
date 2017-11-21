@@ -191,6 +191,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             _configuration: Object,
 
             /**
+             * Specifies whether the chart is a normal chart or a timeline chart.
+             */
+            timeline: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
              * Represents the title of the chart.
              */
             title: {
@@ -259,7 +267,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__addLicenseChecker();
           this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
-            this._configuration = Highcharts.chart(this.$.chart, this.options);
+            if (this.timeline) {
+              this._configuration = Highcharts.stockChart(this.$.chart, this.options);
+            } else {
+              this._configuration = Highcharts.chart(this.$.chart, this.options);
+            }
           });
         }
 
@@ -380,7 +392,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               const initialOptions = Object.assign({}, this.options);
               Object.assign(initialOptions, jsonConfiguration);
 
-              this._configuration = Highcharts.chart(this.$.chart, initialOptions);
+              if (this.timeline) {
+                this._configuration = Highcharts.stockChart(this.$.chart, initialOptions);
+              } else {
+                this._configuration = Highcharts.chart(this.$.chart, initialOptions);
+              }
+
               this._dirty = true;
               return;
             }

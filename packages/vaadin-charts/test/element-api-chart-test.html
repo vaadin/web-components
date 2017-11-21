@@ -31,7 +31,7 @@
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
           done();
-        }, 70);
+        }, 100);
       });
 
       it('should have custom subtitle', function(done) {
@@ -39,7 +39,7 @@
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
           done();
-        }, 70);
+        }, 100);
       });
     });
   </script>
