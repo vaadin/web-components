@@ -48,17 +48,17 @@
       MockInteractions.keyDownOn(target, 13, [], 'Enter');
     }
 
-    describe('scrollable-viewport', function() {
+    describe('scrollable-viewport', () => {
       var scrollableContainer, container, dropdown, input;
 
-      beforeEach(function() {
+      beforeEach(() => {
         scrollableContainer = fixture('dropdown');
         container = scrollableContainer.querySelector('[id="container"]');
         dropdown = container.querySelector('vaadin-dropdown-menu');
         input = dropdown._inputElement;
       });
 
-      it('should update the position on scrolling', function() {
+      it('should update the position on scrolling', () => {
         Enter(input);
         expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
@@ -72,7 +72,7 @@
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
       });
 
-      it('should update the position on iron-resize event', function() {
+      it('should update the position on iron-resize event', () => {
         Enter(input);
         expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
