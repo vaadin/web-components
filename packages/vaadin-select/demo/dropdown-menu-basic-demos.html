@@ -66,6 +66,21 @@
         </template>
     </vaadin-demo-snippet>
 
+    <h3>Validation with error message</h3>
+    <vaadin-demo-snippet id='dropdown-menu-error-message'>
+      <template preserve-content>
+        <vaadin-dropdown-menu label="Required, with error message" error-message="Please choose one option" required>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>No value</vaadin-item>
+              <vaadin-item value="1">Option one</vaadin-item>
+              <vaadin-item value="2">Option two</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Custom Label</h3>
     <vaadin-demo-snippet id='dropdown-menu-list-box-custom-value'>
       <template preserve-content>

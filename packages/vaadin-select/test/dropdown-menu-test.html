@@ -486,6 +486,17 @@
           expect(spy).to.be.calledOnce;
         });
 
+        it('should show error message when validated.', () => {
+          expect(dropdown.invalid).to.be.false;
+          dropdown.errorMessage = 'Please choose one option';
+          dropdown.setAttribute('required', '');
+          dropdown.validate();
+
+          expect(dropdown.invalid).to.be.true;
+          expect(input.invalid).to.be.true;
+          expect(input.errorMessage).to.be.equal(dropdown.errorMessage);
+        });
+
       });
 
     });
