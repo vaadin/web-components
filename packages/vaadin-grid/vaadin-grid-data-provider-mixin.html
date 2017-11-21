@@ -116,9 +116,11 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * `true` while data is being requested from the data provider.
          */
-        _loading: {
+        loading: {
           type: Boolean,
-          observer: '_loadingChanged'
+          notify: true,
+          readOnly: true,
+          reflectToAttribute: true
         },
 
         _cache: {
@@ -161,10 +163,6 @@ This program is available under Apache License Version 2.0, available at https:/
       this._cache.size += delta;
       this._cache.effectiveSize += delta;
       this._effectiveSize = this._cache.effectiveSize;
-    }
-
-    _loadingChanged(loading) {
-      this._toggleAttribute('loading', loading, this);
     }
 
     _updateRowItem(item, el) {
@@ -275,7 +273,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _loadPage(page, cache) {
       // make sure same page isn't requested multiple times.
       if (!cache.pendingRequests[page] && this.dataProvider) {
-        this._loading = true;
+        this._setLoading(true);
         cache.pendingRequests[page] = true;
         const params = {
           page,
@@ -312,7 +310,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           delete cache.pendingRequests[page];
 
-          this._loading = this._cache.isLoading();
+          this._setLoading(this._cache.isLoading());
         });
       }
     }
