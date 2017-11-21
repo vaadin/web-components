@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-notification.html",
         "start": {
-          "line": 423,
+          "line": 424,
           "column": 6
         },
         "end": {
-          "line": 423,
+          "line": 424,
           "column": 42
         }
       },
@@ -1032,7 +1032,7 @@
             {
               "name": "verticalAlign",
               "type": "string",
-              "description": "Vertical alignment of the notification in the viewport\nValid values are `top-stretch|top|center|bottom|bottom-stretch`",
+              "description": "Vertical alignment of the notification in the viewport\nValid values are `top-stretch|top|middle|bottom|bottom-stretch`",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -1052,15 +1052,15 @@
             {
               "name": "horizontalAlign",
               "type": "string",
-              "description": "Horizontal alignment of the notification in the viewport\nOnly applies for notifications in `top` or `bottom` containers.\nValid values are `start|center|end`",
+              "description": "Horizontal alignment of the notification in the viewport\nOnly applies for notifications in `top` or `bottom` containers.\nValid values are `start|center|end`\nHorizontal alignment is skipped in case verticalAlign is set to `top-stretch|middle|bottom-stretch`",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 317,
+                  "line": 318,
                   "column": 12
                 },
                 "end": {
-                  "line": 320,
+                  "line": 321,
                   "column": 13
                 }
               },
@@ -1077,11 +1077,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 334,
+                  "line": 335,
                   "column": 8
                 },
                 "end": {
-                  "line": 336,
+                  "line": 337,
                   "column": 9
                 }
               },
@@ -1094,11 +1094,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 342,
                   "column": 8
                 },
                 "end": {
-                  "line": 343,
+                  "line": 344,
                   "column": 9
                 }
               },
@@ -1111,11 +1111,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 358,
+                  "line": 359,
                   "column": 8
                 },
                 "end": {
-                  "line": 379,
+                  "line": 380,
                   "column": 9
                 }
               },
@@ -1132,11 +1132,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 381,
+                  "line": 382,
                   "column": 8
                 },
                 "end": {
-                  "line": 391,
+                  "line": 392,
                   "column": 9
                 }
               },
@@ -1149,11 +1149,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 393,
+                  "line": 394,
                   "column": 8
                 },
                 "end": {
-                  "line": 398,
+                  "line": 399,
                   "column": 9
                 }
               },
@@ -1166,11 +1166,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 400,
+                  "line": 401,
                   "column": 8
                 },
                 "end": {
-                  "line": 404,
+                  "line": 405,
                   "column": 9
                 }
               },
@@ -1190,11 +1190,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 406,
+                  "line": 407,
                   "column": 8
                 },
                 "end": {
-                  "line": 413,
+                  "line": 414,
                   "column": 9
                 }
               },
@@ -1223,7 +1223,7 @@
               "column": 6
             },
             "end": {
-              "line": 414,
+              "line": 415,
               "column": 7
             }
           },
@@ -1265,7 +1265,7 @@
             },
             {
               "name": "vertical-align",
-              "description": "Vertical alignment of the notification in the viewport\nValid values are `top-stretch|top|center|bottom|bottom-stretch`",
+              "description": "Vertical alignment of the notification in the viewport\nValid values are `top-stretch|top|middle|bottom|bottom-stretch`",
               "sourceRange": {
                 "start": {
                   "line": 307,
@@ -1281,14 +1281,14 @@
             },
             {
               "name": "horizontal-align",
-              "description": "Horizontal alignment of the notification in the viewport\nOnly applies for notifications in `top` or `bottom` containers.\nValid values are `start|center|end`",
+              "description": "Horizontal alignment of the notification in the viewport\nOnly applies for notifications in `top` or `bottom` containers.\nValid values are `start|center|end`\nHorizontal alignment is skipped in case verticalAlign is set to `top-stretch|middle|bottom-stretch`",
               "sourceRange": {
                 "start": {
-                  "line": 317,
+                  "line": 318,
                   "column": 12
                 },
                 "end": {
-                  "line": 320,
+                  "line": 321,
                   "column": 13
                 }
               },
@@ -3314,10 +3314,7 @@
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to push onto array"
+              "name": "...items"
             }
           ],
           "return": {
@@ -3388,10 +3385,7 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert into array."
+              "name": "...items"
             }
           ],
           "return": {
@@ -3452,10 +3446,7 @@
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert info array"
+              "name": "...items"
             }
           ],
           "return": {

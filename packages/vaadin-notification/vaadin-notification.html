@@ -303,7 +303,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Vertical alignment of the notification in the viewport
-             * Valid values are `top-stretch|top|center|bottom|bottom-stretch`
+             * Valid values are `top-stretch|top|middle|bottom|bottom-stretch`
              */
             verticalAlign: {
               type: String,
@@ -314,6 +314,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * Horizontal alignment of the notification in the viewport
              * Only applies for notifications in `top` or `bottom` containers.
              * Valid values are `start|center|end`
+             * Horizontal alignment is skipped in case verticalAlign is set to `top-stretch|middle|bottom-stretch`
              */
             horizontalAlign: {
               type: String,
