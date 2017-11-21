@@ -215,6 +215,10 @@ This program is available under Apache License Version 2.0, available at https:/
           e.preventDefault();
           window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         };
+
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          this._boundIosResizeListener = e => this._setIosNavbar(e);
+        }
       }
 
       ready() {
@@ -228,6 +232,21 @@ This program is available under Apache License Version 2.0, available at https:/
         // and <vaadin-context-menu>).
         this.addEventListener('click', () => {});
         this.$.backdrop.addEventListener('click', () => {});
+      }
+
+      _setIosNavbar() {
+        const innerHeight = window.innerHeight;
+        const innerWidth = window.innerWidth;
+
+        const vertical = (innerWidth > innerHeight) ? true : false;
+
+        const rectBottom = this.getBoundingClientRect().bottom;
+
+        if (vertical && rectBottom > innerHeight) {
+          this.setAttribute('ios-bar-opened', '');
+        } else {
+          this.removeAttribute('ios-bar-opened');
+        }
       }
 
       _setTemplateFromNodes(nodes) {
@@ -252,6 +271,11 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.parentNode === document.body) {
           window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         }
+
+        if (this._boundIosResizeListener) {
+          this._setIosNavbar();
+          window.addEventListener('resize', this._boundIosResizeListener);
+        }
       }
 
       disconnectedCallback() {
@@ -268,6 +292,8 @@ This program is available under Apache License Version 2.0, available at https:/
             window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
           }
         }
+
+        this._boundIosResizeListener && window.removeEventListener('resize', this._boundIosResizeListener);
       }
 
       _mouseDownListener(event) {
