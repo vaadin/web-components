@@ -1004,7 +1004,7 @@
               "metadata": {
                 "polymer": {}
               },
-              "defaultValue": "3000"
+              "defaultValue": "7000"
             },
             {
               "name": "opened",
