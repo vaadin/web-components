@@ -1004,7 +1004,7 @@
               "metadata": {
                 "polymer": {}
               },
-              "defaultValue": "3000"
+              "defaultValue": "7000"
             },
             {
               "name": "opened",
@@ -3314,10 +3314,7 @@
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to push onto array"
+              "name": "...items"
             }
           ],
           "return": {
@@ -3388,10 +3385,7 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert into array."
+              "name": "...items"
             }
           ],
           "return": {
@@ -3452,10 +3446,7 @@
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert info array"
+              "name": "...items"
             }
           ],
           "return": {
