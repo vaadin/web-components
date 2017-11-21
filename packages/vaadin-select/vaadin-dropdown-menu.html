@@ -450,7 +450,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this._setPosition();
             window.addEventListener('scroll', this._boundSetPosition, true);
           } else if (wasOpened) {
-            !this._phone && this.focusElement.focus();
+            if (this._phone) {
+              this._setFocused(false);
+            } else {
+              this.focusElement.focus();
+            }
             this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
           }

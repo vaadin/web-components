@@ -350,7 +350,7 @@
         });
       });
 
-      describe('focus when opened', () => {
+      describe('focus when overlay opened', () => {
         beforeEach(done => {
           const menu = dropdown._menuElement;
           Polymer.RenderStatus.afterNextRender(menu, done);
@@ -398,6 +398,13 @@
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
+        });
+
+        it('should remove focused state from the input on closing the overlay if phone', () => {
+          dropdown._phone = true;
+          menu.selected = 1;
+          expect(dropdown.focused).to.be.false;
+          expect(input.focused).to.be.false;
         });
 
         it('should not focus the input on closing the overlay if phone', () => {
