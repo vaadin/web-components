@@ -88,7 +88,7 @@
     </script>
   </dom-module>
 
-  <test-fixture id="nav">
+  <test-fixture id="list">
     <template>
       <test-list-element style="width: 400px; height: 400px;">
         <test-item-element>Foo</test-item-element>
@@ -150,59 +150,59 @@
     }
 
     describe('vaadin-list-mixin', () => {
-      var nav;
+      let list;
 
       beforeEach(done => {
-        nav = fixture('nav');
-        Polymer.RenderStatus.afterNextRender(nav, done);
+        list = fixture('list');
+        Polymer.RenderStatus.afterNextRender(list, done);
       });
 
       it('should have a list of valid items after the DOM `_observer` has been run', () => {
         // DOM _observer runs asynchronously, we need to flush to access items
-        nav._observer.flush();
-        expect(nav.items.length).to.be.equal(6);
+        list._observer.flush();
+        expect(list.items.length).to.be.equal(6);
       });
 
       it('`focus` should flush the `_observer` if it is called too soon', () => {
         // focus flushes the observer in order to be run in 3rd party elements initialisation
-        nav.focus();
-        expect(nav.items.length).to.be.equal(6);
+        list.focus();
+        expect(list.items.length).to.be.equal(6);
       });
 
       describe('selection', () => {
         it('should not select any item by default', () => {
-          nav.items.forEach(e => expect(!!nav.items[0].selected).to.be.false);
+          list.items.forEach(e => expect(!!list.items[0].selected).to.be.false);
         });
 
         it('should select an item when `selected` property is set', () => {
-          nav.selected = 3;
-          expect(nav.items[3].selected).to.be.true;
+          list.selected = 3;
+          expect(list.items[3].selected).to.be.true;
         });
 
         it('should clear selection when `selected` property is set to not numeric value', () => {
-          nav.selected = 3;
-          nav.selected = undefined;
-          expect(nav.items[3].selected).to.be.false;
+          list.selected = 3;
+          list.selected = undefined;
+          expect(list.items[3].selected).to.be.false;
         });
 
         it('should be selectable with mouse click', () => {
-          nav.items[3].click();
-          expect(nav.selected).to.be.equal(3);
+          list.items[3].click();
+          expect(list.selected).to.be.equal(3);
         });
 
         it('should be selectable with mouse click in child elements', () => {
-          nav.items[3].firstElementChild.click();
-          expect(nav.selected).to.be.equal(3);
+          list.items[3].firstElementChild.click();
+          expect(list.selected).to.be.equal(3);
         });
 
         it('should be selectable with Enter key', () => {
-          enter(nav.items[3]);
-          expect(nav.selected).to.be.equal(3);
+          enter(list.items[3]);
+          expect(list.selected).to.be.equal(3);
         });
 
         it('should be selectable with Space key', () => {
-          space(nav.items[3]);
-          expect(nav.selected).to.be.equal(3);
+          space(list.items[3]);
+          expect(list.selected).to.be.equal(3);
         });
 
 
@@ -210,178 +210,178 @@
 
       describe('tabIndex', () => {
         it('should set tabIndex=-1 to all items, but the first', done => {
-          Polymer.RenderStatus.afterNextRender(nav, () => {
-            [0, -1, -1, -1].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
+          Polymer.RenderStatus.afterNextRender(list, () => {
+            [0, -1, -1, -1].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
             done();
           });
         });
 
         it('should move tabIndex when moving focus', () => {
-          nav._focus(3);
-          [-1, -1, -1, 0].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
+          list._focus(3);
+          [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
         });
 
         it('should not set tabIndex=0 to disabled items, but the next one in the loop', () => {
-          nav._focus(2);
-          [-1, -1, -1, 0].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
+          list._focus(2);
+          [-1, -1, -1, 0].forEach((val, idx) => expect(list.items[idx].tabIndex).to.be.equal(val));
         });
 
         it('should have a `focus()` method focusing item with `tabIndex=0`', done => {
-          nav._setFocusable(3);
-          nav.items[3].focus = () => done();
-          nav.focus();
+          list._setFocusable(3);
+          list.items[3].focus = () => done();
+          list.focus();
         });
       });
 
       describe('focus', () => {
 
-        beforeEach(() => nav._focus(0));
+        beforeEach(() => list._focus(0));
 
         it('should move focus to next element on "arrow-down" keydown', () => {
-          arrowDown(nav);
-          expect(nav.items[1].focused).to.be.true;
+          arrowDown(list);
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
-          arrowDownIE(nav);
-          expect(nav.items[1].focused).to.be.true;
+          arrowDownIE(list);
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('should move focus to prev element on "arrow-up" keydown', () => {
-          arrowDown(nav);
-          arrowUp(nav);
-          expect(nav.items[0].focused).to.be.true;
+          arrowDown(list);
+          arrowUp(list);
+          expect(list.items[0].focused).to.be.true;
         });
 
         it('should move focus to next element on "arrow-right" keydown', () => {
-          nav.orientation = 'horizontal';
-          arrowRight(nav);
-          expect(nav.items[1].focused).to.be.true;
+          list.orientation = 'horizontal';
+          arrowRight(list);
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('should move focus to prev element on "arrow-right" keydown', () => {
-          nav.orientation = 'horizontal';
-          arrowRight(nav);
-          arrowLeft(nav);
-          expect(nav.items[0].focused).to.be.true;
+          list.orientation = 'horizontal';
+          arrowRight(list);
+          arrowLeft(list);
+          expect(list.items[0].focused).to.be.true;
         });
 
         it('should move focus to first element on "home" keydown', () => {
-          nav._focus(3);
-          home(nav);
-          expect(nav.items[0].focused).to.be.true;
+          list._focus(3);
+          home(list);
+          expect(list.items[0].focused).to.be.true;
         });
 
         it('should move focus to second element if first is disabled on "home" keydown', () => {
-          nav.items[0].disabled = true;
-          nav._focus(3);
-          home(nav);
-          expect(nav.items[1].focused).to.be.true;
+          list.items[0].disabled = true;
+          list._focus(3);
+          home(list);
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('should move focus to last element on "end" keydown', () => {
-          end(nav);
-          expect(nav.items[5].focused).to.be.true;
+          end(list);
+          expect(list.items[5].focused).to.be.true;
         });
 
         it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
-          nav.items[5].disabled = true;
-          end(nav);
-          expect(nav.items[3].focused).to.be.true;
+          list.items[5].disabled = true;
+          end(list);
+          expect(list.items[3].focused).to.be.true;
         });
 
         it('if focus is in last element should move focus to first element on arrow-down', () => {
-          nav._focus(nav.items.length - 1);
-          arrowDown(nav);
-          expect(nav.items[0].focused).to.be.true;
+          list._focus(list.items.length - 1);
+          arrowDown(list);
+          expect(list.items[0].focused).to.be.true;
         });
 
         it('if focus is in first element should move focus to last element on arrow-up', () => {
-          arrowUp(nav);
-          expect(nav.items[nav.items.length - 1].focused).to.be.true;
+          arrowUp(list);
+          expect(list.items[list.items.length - 1].focused).to.be.true;
         });
 
         it('focus loop should skip disabled items', () => {
-          arrowDown(nav);
-          arrowDown(nav);
-          expect(nav.items[3].focused).to.be.true;
+          arrowDown(list);
+          arrowDown(list);
+          expect(list.items[3].focused).to.be.true;
         });
 
         it('should focus the next item whose first letter matches the key pressed', () => {
-          keyDownChar(nav, 'b');
-          expect(nav.items[1].focused).to.be.true;
+          keyDownChar(list, 'b');
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('key search should be case insensitive', () => {
-          keyDownChar(nav, 'B');
-          expect(nav.items[1].focused).to.be.true;
+          keyDownChar(list, 'B');
+          expect(list.items[1].focused).to.be.true;
         });
 
         it('key search should not happen if a modifier key is pressed', () => {
-          keyDownChar(nav, 'b', 'shift');
-          expect(nav.items[0].focused).to.be.true;
+          keyDownChar(list, 'b', 'shift');
+          expect(list.items[0].focused).to.be.true;
         });
 
         it('key search should skip disabled items', () => {
-          keyDownChar(nav, 'b');
-          keyDownChar(nav, 'b');
-          expect(nav.items[3].focused).to.be.true;
+          keyDownChar(list, 'b');
+          keyDownChar(list, 'b');
+          expect(list.items[3].focused).to.be.true;
         });
 
         it('key seacrh should accept items having non-text content before text', () => {
-          keyDownChar(nav, 'x');
-          expect(nav.items[5].focused).to.be.true;
+          keyDownChar(list, 'x');
+          expect(list.items[5].focused).to.be.true;
         });
 
         it('focus should loop when search by first letter', () => {
-          nav._focus(nav.items.length - 1);
-          keyDownChar(nav, 'b');
-          expect(nav.items[1].focused).to.be.true;
+          list._focus(list.items.length - 1);
+          keyDownChar(list, 'b');
+          expect(list.items[1].focused).to.be.true;
         });
       });
 
       describe('orientation', () => {
         it('if not orientation set, aria-orientation attribute should set to vertical', () => {
-          expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
+          expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
         });
 
         it('if horizontally oriented, aria-orientation attribute should be set to horizontal', () => {
-          nav.orientation = 'horizontal';
-          expect(nav.getAttribute('aria-orientation')).to.be.equal('horizontal');
+          list.orientation = 'horizontal';
+          expect(list.getAttribute('aria-orientation')).to.be.equal('horizontal');
         });
 
         it('if vertically oriented, aria-orientation attribute should be set to vertical', () => {
-          nav.orientation = 'vertical';
-          expect(nav.getAttribute('aria-orientation')).to.be.equal('vertical');
+          list.orientation = 'vertical';
+          expect(list.getAttribute('aria-orientation')).to.be.equal('vertical');
         });
 
         it('should not have orientation attribute on each item if orientation is not set', () => {
-          nav.querySelectorAll('test-item-element').forEach(item => {
+          list.querySelectorAll('test-item-element').forEach(item => {
             expect(item.hasAttribute('orientation')).to.be.false;
           });
         });
 
         it('should have orientation attribute on each item', () => {
-          nav.orientation = 'horizontal';
-          nav.querySelectorAll('test-item-element').forEach(item => {
+          list.orientation = 'horizontal';
+          list.querySelectorAll('test-item-element').forEach(item => {
             expect(item.getAttribute('orientation')).to.be.equal('horizontal');
           });
         });
 
         it('should change orientation attribute on each item', () => {
-          nav.orientation = 'horizontal';
-          nav.orientation = 'vertical';
-          nav.querySelectorAll('test-item-element').forEach(item => {
+          list.orientation = 'horizontal';
+          list.orientation = 'vertical';
+          list.querySelectorAll('test-item-element').forEach(item => {
             expect(item.getAttribute('orientation')).to.be.equal('vertical');
           });
         });
 
         it('should have vertical attribute on newly added item', done => {
-          nav.orientation = 'vertical';
+          list.orientation = 'vertical';
 
           const item = document.createElement('test-item-element');
           item.innerText = 'foo';
-          nav.appendChild(item);
+          list.appendChild(item);
 
           setTimeout(() => {
             expect(item.hasAttribute('orientation')).to.be.true;
@@ -390,37 +390,37 @@
         });
 
         it('should have a protected boolean property to check vertical orientation', () => {
-          expect(nav._vertical).to.be.true;
-          nav.orientation = 'horizontal';
-          expect(nav._vertical).to.be.false;
+          expect(list._vertical).to.be.true;
+          list.orientation = 'horizontal';
+          expect(list._vertical).to.be.false;
         });
       });
 
 
       describe('Scroll', () => {
         beforeEach(() => {
-          nav.style.width = nav.style.height = '50px';
+          list.style.width = list.style.height = '50px';
         });
 
         it(`when orientation is horizontal should move scroll horizontally`, () => {
-          nav.orientation = 'horizontal';
-          expect(nav._scrollerElement.scrollLeft).to.be.equal(0);
-          nav._scrollToItem(1);
-          expect(nav._scrollerElement.scrollLeft).to.be.greaterThan(0);
+          list.orientation = 'horizontal';
+          expect(list._scrollerElement.scrollLeft).to.be.equal(0);
+          list._scrollToItem(1);
+          expect(list._scrollerElement.scrollLeft).to.be.greaterThan(0);
         });
 
         it(`when orientation is vertical should move scroll vertically`, () => {
-          nav.orientation = 'vertical';
-          expect(nav._scrollerElement.scrollTop).to.be.equal(0);
+          list.orientation = 'vertical';
+          expect(list._scrollerElement.scrollTop).to.be.equal(0);
 
           // iOS 10 needs change the display to work
-          nav.style.display = 'flex';
+          list.style.display = 'flex';
 
           // FIXME: using _scroll because _scrollToItem does not work in IE11 in vertical mode.
-          // nav._scrollToItem(1);
-          nav._scroll(1);
+          // list._scrollToItem(1);
+          list._scroll(1);
 
-          expect(nav._scrollerElement.scrollTop).to.be.greaterThan(0);
+          expect(list._scrollerElement.scrollTop).to.be.greaterThan(0);
         });
       });
     });
