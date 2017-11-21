@@ -18,7 +18,7 @@
         }
 
         [part="middle"] > vaadin-notification-card[closing] {
-          animation: test-animation 1ms;
+          animation: test-animation 100ms;
         }
       </style>
     </template>
@@ -53,7 +53,7 @@
         overlay = notifications[0]._overlay;
 
         // Change default duration and wait for both notifications to be closed;
-        const duration = 1;
+        const duration = 20;
         notifications.forEach(elm => {
           elm.duration = duration;
           elm.opened = true;
@@ -64,7 +64,7 @@
       afterEach(() => notifications.forEach(e => e.close()));
 
       describe('animation', () => {
-        it('should remove card inmediatly if no animation defined', () => {
+        it('should remove card immediately if no animation defined', () => {
           expect(notifications[0]._card.parentNode).not.to.be.ok;
         });
 

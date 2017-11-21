@@ -57,13 +57,15 @@
         setTimeout(done);
       });
 
-      afterEach(() => {
+      afterEach(done => {
         // Close everything to stop all pending timers.
         notifications.forEach(e => e.close());
         // Remove overlay from body
         document.body.removeChild(notifications[0].constructor._overlay);
         // delete singleton reference, so as it's created in next test
         delete notifications[0].constructor._overlay;
+        // Needed in FF
+        setTimeout(done);
       });
 
       describe('vaadin-notification-overlay', () => {
