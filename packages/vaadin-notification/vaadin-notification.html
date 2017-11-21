@@ -411,13 +411,15 @@ This program is available under Apache License Version 2.0, available at https:/
         _closeNotificationCard() {
           this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
           this._card.setAttribute('closing', '');
-          if (!this._endHandler) {
-            const name = getComputedStyle(this._card).getPropertyValue('animation-name');
-            if (name && name != 'none') {
-              this._endHandler = this._card.addEventListener('animationend', () => this._removeNotificationCard());
-            } else {
+          const name = getComputedStyle(this._card).getPropertyValue('animation-name');
+          if (name && name != 'none') {
+            const listener = () => {
               this._removeNotificationCard();
-            }
+              this._card.removeEventListener('animationend', listener);
+            };
+            this._card.addEventListener('animationend', listener);
+          } else {
+            this._removeNotificationCard();
           }
         }
 
