@@ -382,13 +382,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._instance = this._createTemplateInstance();
           if (this._instance) {
             this._overlayElement.content = this._instance.root;
-            this._menuElement = Array.from(this._overlayElement.$.content.children).filter(e => e._hasVaadinListMixin)[0];
+            this._menuElement = this._overlayElement.$.content.firstElementChild;
 
             if (this._menuElement) {
-              // To access items content we need menu DOM updated
-              Polymer.RenderStatus.afterNextRender(this._menuElement, () => {
-                this._menuElement._observer.flush(); // Ensure observer was run
-                this._items = this._menuElement._navItems;
+              this._menuElement.addEventListener('items-changed', e => {
+                this._items = this._menuElement.items;
               });
             }
           }
