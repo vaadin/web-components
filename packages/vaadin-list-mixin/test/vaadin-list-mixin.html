@@ -154,51 +154,54 @@
 
       beforeEach(done => {
         nav = fixture('nav');
-        nav.then(done);
+        Polymer.RenderStatus.afterNextRender(nav, done);
       });
 
-      it('should have a list of valid items', () => {
-        expect(nav._navItems.length).to.be.equal(6);
+      it('should have a list of valid items after the DOM `_observer` has been run', () => {
+        // DOM _observer runs asynchronously, we need to flush to access items
+        nav._observer.flush();
+        expect(nav.items.length).to.be.equal(6);
       });
 
-      it('should focus the selected item', () => {
+      it('`focus` should flush the `_observer` if it is called too soon', () => {
+        // focus flushes the observer in order to be run in 3rd party elements initialisation
         nav.focus();
-        expect(nav._navItems.length).to.be.equal(6);
+        expect(nav.items.length).to.be.equal(6);
       });
 
       describe('selection', () => {
         it('should not select any item by default', () => {
-          nav._navItems.forEach(e => expect(!!nav._navItems[0].selected).to.be.false);
+          nav.items.forEach(e => expect(!!nav.items[0].selected).to.be.false);
         });
 
         it('should select an item when `selected` property is set', () => {
           nav.selected = 3;
-          expect(nav._navItems[3].selected).to.be.true;
+          expect(nav.items[3].selected).to.be.true;
         });
 
         it('should clear selection when `selected` property is set to not numeric value', () => {
           nav.selected = 3;
           nav.selected = undefined;
-          expect(nav._navItems[3].selected).to.be.false;
+          expect(nav.items[3].selected).to.be.false;
         });
 
         it('should be selectable with mouse click', () => {
-          nav._navItems[3].click();
+          nav.items[3].click();
           expect(nav.selected).to.be.equal(3);
         });
 
         it('should be selectable with mouse click in child elements', () => {
-          nav._navItems[3].firstElementChild.click();
+          nav.items[3].firstElementChild.click();
           expect(nav.selected).to.be.equal(3);
         });
 
         it('should be selectable with Enter key', () => {
-          enter(nav._navItems[3]);
+          enter(nav.items[3]);
           expect(nav.selected).to.be.equal(3);
         });
 
         it('should be selectable with Space key', () => {
-          space(nav._navItems[3]);
+          space(nav.items[3]);
           expect(nav.selected).to.be.equal(3);
         });
 
@@ -208,24 +211,24 @@
       describe('tabIndex', () => {
         it('should set tabIndex=-1 to all items, but the first', done => {
           Polymer.RenderStatus.afterNextRender(nav, () => {
-            [0, -1, -1, -1].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+            [0, -1, -1, -1].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
             done();
           });
         });
 
         it('should move tabIndex when moving focus', () => {
           nav._focus(3);
-          [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+          [-1, -1, -1, 0].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
         });
 
         it('should not set tabIndex=0 to disabled items, but the next one in the loop', () => {
           nav._focus(2);
-          [-1, -1, -1, 0].forEach((val, idx) => expect(nav._navItems[idx].tabIndex).to.be.equal(val));
+          [-1, -1, -1, 0].forEach((val, idx) => expect(nav.items[idx].tabIndex).to.be.equal(val));
         });
 
         it('should have a `focus()` method focusing item with `tabIndex=0`', done => {
           nav._setFocusable(3);
-          nav._navItems[3].focus = () => done();
+          nav.items[3].focus = () => done();
           nav.focus();
         });
       });
@@ -236,104 +239,104 @@
 
         it('should move focus to next element on "arrow-down" keydown', () => {
           arrowDown(nav);
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('should move focus when event.key name does not include the Arrow prefix (IE)', () => {
           arrowDownIE(nav);
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('should move focus to prev element on "arrow-up" keydown', () => {
           arrowDown(nav);
           arrowUp(nav);
-          expect(nav._navItems[0].focused).to.be.true;
+          expect(nav.items[0].focused).to.be.true;
         });
 
         it('should move focus to next element on "arrow-right" keydown', () => {
           nav.orientation = 'horizontal';
           arrowRight(nav);
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('should move focus to prev element on "arrow-right" keydown', () => {
           nav.orientation = 'horizontal';
           arrowRight(nav);
           arrowLeft(nav);
-          expect(nav._navItems[0].focused).to.be.true;
+          expect(nav.items[0].focused).to.be.true;
         });
 
         it('should move focus to first element on "home" keydown', () => {
           nav._focus(3);
           home(nav);
-          expect(nav._navItems[0].focused).to.be.true;
+          expect(nav.items[0].focused).to.be.true;
         });
 
         it('should move focus to second element if first is disabled on "home" keydown', () => {
-          nav._navItems[0].disabled = true;
+          nav.items[0].disabled = true;
           nav._focus(3);
           home(nav);
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('should move focus to last element on "end" keydown', () => {
           end(nav);
-          expect(nav._navItems[5].focused).to.be.true;
+          expect(nav.items[5].focused).to.be.true;
         });
 
         it('should move focus to the most closed enabled element if last is disabled on "end" keydown', () => {
-          nav._navItems[5].disabled = true;
+          nav.items[5].disabled = true;
           end(nav);
-          expect(nav._navItems[3].focused).to.be.true;
+          expect(nav.items[3].focused).to.be.true;
         });
 
         it('if focus is in last element should move focus to first element on arrow-down', () => {
-          nav._focus(nav._navItems.length - 1);
+          nav._focus(nav.items.length - 1);
           arrowDown(nav);
-          expect(nav._navItems[0].focused).to.be.true;
+          expect(nav.items[0].focused).to.be.true;
         });
 
         it('if focus is in first element should move focus to last element on arrow-up', () => {
           arrowUp(nav);
-          expect(nav._navItems[nav._navItems.length - 1].focused).to.be.true;
+          expect(nav.items[nav.items.length - 1].focused).to.be.true;
         });
 
         it('focus loop should skip disabled items', () => {
           arrowDown(nav);
           arrowDown(nav);
-          expect(nav._navItems[3].focused).to.be.true;
+          expect(nav.items[3].focused).to.be.true;
         });
 
         it('should focus the next item whose first letter matches the key pressed', () => {
           keyDownChar(nav, 'b');
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('key search should be case insensitive', () => {
           keyDownChar(nav, 'B');
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
 
         it('key search should not happen if a modifier key is pressed', () => {
           keyDownChar(nav, 'b', 'shift');
-          expect(nav._navItems[0].focused).to.be.true;
+          expect(nav.items[0].focused).to.be.true;
         });
 
         it('key search should skip disabled items', () => {
           keyDownChar(nav, 'b');
           keyDownChar(nav, 'b');
-          expect(nav._navItems[3].focused).to.be.true;
+          expect(nav.items[3].focused).to.be.true;
         });
 
         it('key seacrh should accept items having non-text content before text', () => {
           keyDownChar(nav, 'x');
-          expect(nav._navItems[5].focused).to.be.true;
+          expect(nav.items[5].focused).to.be.true;
         });
 
         it('focus should loop when search by first letter', () => {
-          nav._focus(nav._navItems.length - 1);
+          nav._focus(nav.items.length - 1);
           keyDownChar(nav, 'b');
-          expect(nav._navItems[1].focused).to.be.true;
+          expect(nav.items[1].focused).to.be.true;
         });
       });
 
