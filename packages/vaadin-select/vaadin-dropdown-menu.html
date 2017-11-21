@@ -39,6 +39,10 @@ This program is available under Apache License Version 2.0, available at https:/
         /* Ideally should be 100vh but iOS phone addr-bar covers view port */
         max-height: 80vh;
       }
+
+      :host([ios-bar-opened]) {
+        margin-bottom: 50px;
+      }
     </style>
   </template>
 </dom-module>
