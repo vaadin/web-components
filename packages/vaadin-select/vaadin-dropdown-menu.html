@@ -452,12 +452,15 @@ This program is available under Apache License Version 2.0, available at https:/
             this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
-
-            this._menuElement && Polymer.RenderStatus.afterNextRender(this._menuElement, () => this._menuElement.focus());
+            this._menuElement.focus();
             this._setPosition();
             window.addEventListener('scroll', this._boundSetPosition, true);
           } else if (wasOpened) {
-            !this._phone && this.focusElement.focus();
+            if (this._phone) {
+              this._setFocused(false);
+            } else {
+              this.focusElement.focus();
+            }
             this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
           }
@@ -523,6 +526,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /** @override */
         _setFocused(focused) {
           // Keep `focused` state when opening the overlay for styling purpose.
           super._setFocused(this.opened || focused);

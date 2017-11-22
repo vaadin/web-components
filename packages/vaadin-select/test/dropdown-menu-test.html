@@ -85,7 +85,8 @@
     }
 
     describe('vaadin-dropdown-menu no-template', () => {
-      var dropdown;
+      let dropdown;
+
       beforeEach(() => dropdown = fixture('notemplate'));
 
       it('should not throw an exception if template is not present', () => {
@@ -93,11 +94,10 @@
         dropdown.value = 'foo';
         dropdown.opened = false;
       });
-
     });
 
     describe('vaadin-dropdown-menu no-menu', () => {
-      var dropdown;
+      let dropdown;
       beforeEach(() => dropdown = fixture('nomenu'));
 
       it('should not throw an exception if menu list is not present', () => {
@@ -117,7 +117,7 @@
     });
 
     describe('vaadin-dropdown-menu with-value', () => {
-      var dropdown, menu;
+      let dropdown, menu;
 
       beforeEach(done => {
         dropdown = fixture('withvalue');
@@ -132,7 +132,7 @@
     });
 
     describe('vaadin-dropdown-menu', () => {
-      var dropdown, input;
+      let dropdown, input;
 
       beforeEach(() => {
         dropdown = fixture('dropdown');
@@ -157,8 +157,7 @@
       });
 
       describe('selection', () => {
-
-        var menu;
+        let menu;
 
         beforeEach(done => {
           dropdown.opened = true;
@@ -351,8 +350,28 @@
         });
       });
 
+      describe('focus when overlay opened', () => {
+        beforeEach(done => {
+          const menu = dropdown._menuElement;
+          Polymer.RenderStatus.afterNextRender(menu, done);
+        });
+
+        it('when focused it should keep focused state after opening overlay', () => {
+          dropdown.focus();
+          dropdown.opened = true;
+          expect(dropdown.focused).to.be.true;
+          expect(input.focused).to.be.true;
+        });
+
+        it('if not focused it should not set focused state after opening overlay', () => {
+          dropdown.opened = true;
+          expect(dropdown.focused).to.be.false;
+          expect(input.focused).to.be.false;
+        });
+      });
+
       describe('overlay opened', () => {
-        var menu;
+        let menu;
 
         beforeEach(done => {
           menu = dropdown._menuElement;
@@ -379,6 +398,13 @@
           expect(dropdown._overlayElement.opened).to.be.false;
 
           expect(focusedSpy).to.be.calledOnce;
+        });
+
+        it('should remove focused state from the input on closing the overlay if phone', () => {
+          dropdown._phone = true;
+          menu.selected = 1;
+          expect(dropdown.focused).to.be.false;
+          expect(input.focused).to.be.false;
         });
 
         it('should not focus the input on closing the overlay if phone', () => {
@@ -419,12 +445,6 @@
           dropdown.opened = false;
           dropdown._overlayElement.click();
           expect(dropdown.opened).to.be.false;
-        });
-
-        it('Should keep focused state after opening overlay', () => {
-          expect(dropdown.opened).to.be.true;
-          expect(dropdown.focused).to.be.true;
-          expect(input.focused).to.be.true;
         });
       });
 
