@@ -66,7 +66,7 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-tap-highlight-color: transparent;
 
         /* CSS API for host */
-        --vaadin-overlay-viewport-bottom: 0;
+        --vaadin-overlay-viewport-bottom: 0px;
       }
 
       :host([hidden]),
@@ -252,7 +252,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (landscape && clientHeight > innerHeight) {
           this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
         } else {
-          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0');
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0px');
         }
       }
 
