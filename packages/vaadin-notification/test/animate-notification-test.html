@@ -1,0 +1,101 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-notification tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-notification.html">
+</head>
+
+<body>
+  <dom-module id="vaadin-notification-overlay-animation-theme" theme-for="vaadin-notification-overlay">
+    <template>
+      <style>
+        @keyframes test-animation {
+          100% {
+            opacity: 0;
+          }
+        }
+
+        [part="middle"] > vaadin-notification-card[closing] {
+          animation: test-animation 100ms;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="vaadin-notification-card-animation-theme" theme-for="vaadin-notification-card">
+    <template>
+      <style>
+        :host {
+          width: 200px;
+          background: lightgrey;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <test-fixture id="notification">
+    <template>
+      <vaadin-notification><template>Notificaton</template></vaadin-notification>
+
+      <!-- notificatons in middle are animated -->
+      <vaadin-notification vertical-align="middle"><template>Notificaton</template></vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('animated notifications', function() {
+      let notifications, overlay;
+
+      beforeEach(done => {
+        notifications = Array.from(fixture('notification'));
+        overlay = notifications[0]._overlay;
+
+        // Change default duration and wait for both notifications to be closed;
+        const duration = 20;
+        notifications.forEach(elm => {
+          elm.duration = duration;
+          elm.opened = true;
+        });
+        setTimeout(done, duration);
+      });
+
+      afterEach(() => notifications.forEach(e => e.close()));
+
+      describe('animation', () => {
+        it('should remove card immediately if no animation defined', () => {
+          expect(notifications[0]._card.parentNode).not.to.be.ok;
+        });
+
+        it('should not remove card after timeout if animation running', () => {
+          expect(notifications[1]._card.parentNode).to.be.ok;
+        });
+
+        it('should remove card after animation', done => {
+          notifications[1]._card.addEventListener('animationend', () => {
+            expect(notifications[1]._card.parentNode).not.to.be.ok;
+            done();
+          });
+        });
+
+        it('should close the overlay when all active notifications dissapear', done => {
+          notifications[1]._card.addEventListener('animationend', () => {
+            expect(overlay.opened).to.be.false;
+            done();
+          });
+        });
+
+        it('should set `closing` attribute and remove later', done => {
+          expect(notifications[0]._card.hasAttribute('closing')).to.be.false;
+          expect(notifications[1]._card.hasAttribute('closing')).to.be.true;
+          notifications[1]._card.addEventListener('animationend', () => {
+            expect(notifications[0]._card.hasAttribute('closing')).to.be.false;
+            expect(notifications[1]._card.hasAttribute('closing')).to.be.false;
+            done();
+          });
+        });
+      });
+    });
+  </script>
+</body>

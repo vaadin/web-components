@@ -14,7 +14,8 @@
 
     WCT.loadSuites([
       'vaadin-notification-test.html',
-      'multiple-notification-test.html'
+      'multiple-notification-test.html',
+      'animate-notification-test.html',
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
