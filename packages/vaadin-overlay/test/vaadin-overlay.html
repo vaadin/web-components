@@ -70,6 +70,16 @@
         overlay.opened = false;
       });
 
+      it('should set value to --vaadin-overlay-viewport-bottom when landscape and clientHeight > innerHeight', () => {
+        window.top.document.querySelector('#subsuites').style.height = '250px';
+        const sandbox = sinon.sandbox.create();
+        sandbox.stub(window, 'innerHeight', 200);
+        overlay._detectIosNavbar();
+        expect(getComputedStyle(overlay).getPropertyValue('--vaadin-overlay-viewport-bottom')).to.be.ok;
+        sandbox.restore();
+        window.top.document.querySelector('#subsuites').style.removeProperty('height');
+      });
+
       it('should move under body when open', () => {
         expect(overlay.parentElement).to.eql(document.body);
       });
