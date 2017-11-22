@@ -4,6 +4,7 @@
     "describe": false,
     "beforeEach": false,
     "fixture": false,
+    "flush": false,
     "it": false,
     "expect": false,
     "gemini": false,
