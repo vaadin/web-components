@@ -51,11 +51,12 @@
     describe('scrollable-viewport', () => {
       var scrollableContainer, container, dropdown, input;
 
-      beforeEach(() => {
+      beforeEach(done => {
         scrollableContainer = fixture('dropdown');
         container = scrollableContainer.querySelector('[id="container"]');
         dropdown = container.querySelector('vaadin-dropdown-menu');
         input = dropdown._inputElement;
+        flush(done);
       });
 
       it('should update the position on scrolling', () => {

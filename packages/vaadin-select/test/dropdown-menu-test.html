@@ -231,6 +231,8 @@
 
       describe('opening the overlay', () => {
 
+        beforeEach(flush);
+
         it('should keep synchronized opened properties in overlay and dropdown', () => {
           dropdown.opened = true;
           expect(dropdown.opened).to.be.true;
@@ -449,6 +451,9 @@
       });
 
       describe('aria', () => {
+
+        beforeEach(flush);
+
         it('should have aria-required attribute set to true when required', () => {
           dropdown.setAttribute('required', '');
           expect(dropdown.getAttribute('aria-required')).to.be.equal('true');
