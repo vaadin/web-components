@@ -161,6 +161,13 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String
             },
 
+            /**
+             * Theme to apply to the overlay element
+             */
+            theme: {
+              observer: '_themeChanged'
+            },
+
             _contentTemplate: Object,
 
             /**
@@ -228,6 +235,10 @@ This program is available under Apache License Version 2.0, available at https:/
         disconnectedCallback() {
           super.disconnectedCallback();
           this.opened = false;
+        }
+
+        _themeChanged(position) {
+          this.$.overlay.setAttribute('theme', position);
         }
 
         _openedChanged(opened) {
