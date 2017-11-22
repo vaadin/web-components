@@ -159,13 +159,12 @@
           });
         });
 
-        describe('stacking overays', function() {
+        describe('multiple overlays', function() {
           let overlay1, overlay2;
 
           beforeEach(function() {
             overlay1 = overlay;
-            parent = fixture('empty').children[0];
-            overlay2 = parent.children[0];
+            overlay2 = fixture('empty').children[0].children[0];
           });
 
           it('should be the last when only one overlay is opened', () => {
@@ -185,6 +184,40 @@
             overlay2.opened = true;
             overlay2.opened = false;
             expect(overlay1.last).to.be.true;
+          });
+
+          it('should fire the vaadin-overlay-escape-press if it is the only overlay opened', () => {
+            var spy = sinon.spy();
+            overlay1.addEventListener('vaadin-overlay-escape-press', spy);
+            overlay1.opened = true;
+            MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+            expect(spy).to.be.called.once;
+          });
+
+          it('should not fire the vaadin-overlay-escape-press if there is a recent overlay opened', () => {
+            var spy = sinon.spy();
+            overlay1.addEventListener('vaadin-overlay-escape-press', spy);
+            overlay1.opened = true;
+            overlay2.opened = true;
+            MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
+            expect(spy).not.to.be.called;
+          });
+
+          it('should fire the vaadin-overlay-outside-click if it is the only overlay opened', () => {
+            var spy = sinon.spy();
+            overlay1.addEventListener('vaadin-overlay-outside-click', spy);
+            overlay1.opened = true;
+            click(parent);
+            expect(spy).to.be.called.once;
+          });
+
+          it('should not fire the vaadin-overlay-outside-click if there is a recent overlay opened', () => {
+            var spy = sinon.spy();
+            overlay1.addEventListener('vaadin-overlay-outside-click', spy);
+            overlay1.opened = true;
+            overlay2.opened = true;
+            click(parent);
+            expect(spy).not.to.be.called;
           });
         });
       });

@@ -287,7 +287,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
-        if (event.composedPath().indexOf(this.$.overlay) !== -1 ||
+        if (!this.last || event.composedPath().indexOf(this.$.overlay) !== -1 ||
             this._mouseDownInside || this._mouseUpInside) {
           this._mouseDownInside = false;
           this._mouseUpInside = false;
@@ -307,6 +307,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
        */
       _keydownListener(event) {
+        if (!this.last) {
+          return;
+        }
+
         // TAB
         if (event.key === 'Tab' && this.focusTrap) {
           const focusableElements = this._getFocusableElements();
