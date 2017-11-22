@@ -26,7 +26,7 @@
           text-shadow: 1px 1px #fff;
         }
 
-        :host([vertical]) [part~="handle"]::after {
+        :host([orientation="vertical"]) [part~="handle"]::after {
           content: "\22EF";
         }
       </style>
@@ -35,7 +35,7 @@
 
   <vaadin-split-layout id="customized" style="height: 100px; width: 200px;">
     <div>First</div>
-    <vaadin-split-layout vertical>
+    <vaadin-split-layout orientation="vertical">
       <div>Second</div>
       <div>Third</div>
     </vaadin-split-layout>
