@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
         top: 8px;
         right: 8px;
         left: 8px;
-        bottom: 8px;
+        bottom: calc(8px + var(--vaadin-overlay-viewport-bottom));
       }
 
       [part="overlay"] {
@@ -46,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
         */
         top: 0;
         right: 0;
-        bottom: 0;
+        bottom: var(--vaadin-overlay-viewport-bottom);
         left: 0;
 
         /* Use flexbox alignment for the overlay part. */
@@ -64,6 +64,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /* Remove tap highlight on touch devices. */
         -webkit-tap-highlight-color: transparent;
+
+        /* CSS API for host */
+        --vaadin-overlay-viewport-bottom: 0px;
       }
 
       :host([hidden]),
@@ -217,7 +220,7 @@ This program is available under Apache License Version 2.0, available at https:/
         };
 
         if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-          this._boundIosResizeListener = e => this._setIosNavbar(e);
+          this._boundIosResizeListener = () => this._detectIosNavbar();
         }
       }
 
@@ -234,18 +237,22 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.backdrop.addEventListener('click', () => {});
       }
 
-      _setIosNavbar() {
+      _detectIosNavbar() {
+        if (!this.opened) {
+          return;
+        }
+
         const innerHeight = window.innerHeight;
         const innerWidth = window.innerWidth;
 
-        const vertical = (innerWidth > innerHeight) ? true : false;
+        const landscape = innerWidth > innerHeight;
 
-        const rectBottom = this.getBoundingClientRect().bottom;
+        const clientHeight = document.documentElement.clientHeight;
 
-        if (vertical && rectBottom > innerHeight) {
-          this.setAttribute('ios-bar-opened', '');
+        if (landscape && clientHeight > innerHeight) {
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
         } else {
-          this.removeAttribute('ios-bar-opened');
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0px');
         }
       }
 
@@ -273,7 +280,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (this._boundIosResizeListener) {
-          this._setIosNavbar();
+          this._detectIosNavbar();
           window.addEventListener('resize', this._boundIosResizeListener);
         }
       }
