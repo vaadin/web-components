@@ -359,7 +359,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.modeless) {
             this._enterModalState();
           }
-
         } else {
           if (this._placeholder) {
             this._placeholder.parentNode.insertBefore(this, this._placeholder);
@@ -368,6 +367,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           this._exitModalState();
         }
+      }
+
+      /**
+       * returns true if this is the last in the opened overlay stack
+       */
+      get last() {
+        return this == Array.from(document.body.children).filter(e => e instanceof Vaadin.OverlayElement).pop();
       }
 
       _modelessChanged(modeless) {
