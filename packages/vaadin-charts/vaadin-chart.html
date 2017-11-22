@@ -385,12 +385,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *    if existing configuration should be discarded.
          */
         update(jsonConfiguration, resetConfiguration) {
+
+          if (resetConfiguration || !this._jsonConfigurationBuffer) {
+            this._jsonConfigurationBuffer = {};
+          }
+          this._jsonConfigurationBuffer = Object.assign(this._jsonConfigurationBuffer, jsonConfiguration);
+
           Polymer.RenderStatus.beforeNextRender(this, () => {
-            this.__inflateFunctions(jsonConfiguration);
+
+            if (!this._jsonConfigurationBuffer) {
+              return;
+            }
+
+            this.__inflateFunctions(this._jsonConfigurationBuffer);
 
             if (!this._dirty || resetConfiguration) {
               const initialOptions = Object.assign({}, this.options);
-              Object.assign(initialOptions, jsonConfiguration);
+              Object.assign(initialOptions, this._jsonConfigurationBuffer);
 
               if (this.timeline) {
                 this._configuration = Highcharts.stockChart(this.$.chart, initialOptions);
@@ -399,22 +410,24 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
 
               this._dirty = true;
+              this._jsonConfigurationBuffer = null;
               return;
             }
 
-            this.configuration.update(jsonConfiguration);
-            if (jsonConfiguration.credits) {
-              this.__updateOrAddCredits(jsonConfiguration.credits);
+            this.configuration.update(this._jsonConfigurationBuffer);
+            if (this._jsonConfigurationBuffer.credits) {
+              this.__updateOrAddCredits(this._jsonConfigurationBuffer.credits);
             }
-            if (jsonConfiguration.xAxis) {
-              this.__updateOrAddAxes(jsonConfiguration.xAxis, true);
+            if (this._jsonConfigurationBuffer.xAxis) {
+              this.__updateOrAddAxes(this._jsonConfigurationBuffer.xAxis, true);
             }
-            if (jsonConfiguration.yAxis) {
-              this.__updateOrAddAxes(jsonConfiguration.yAxis, false);
+            if (this._jsonConfigurationBuffer.yAxis) {
+              this.__updateOrAddAxes(this._jsonConfigurationBuffer.yAxis, false);
             }
-            if (jsonConfiguration.series) {
-              this.__updateOrAddSeries(jsonConfiguration.series);
+            if (this._jsonConfigurationBuffer.series) {
+              this.__updateOrAddSeries(this._jsonConfigurationBuffer.series);
             }
+            this._jsonConfigurationBuffer = null;            
           });
         }
 
