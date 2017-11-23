@@ -32,11 +32,11 @@ script:
         gemini test test/visual -c .gemini-ie.yml;
       fi &&
       if [[ "$TEST_SUITE" = "unit_tests" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs;
+        wct --env saucelabs;
       fi;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
       if [[ "$TEST_SUITE" = "visual_tests" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs-cron;
+        wct --env saucelabs-cron;
       fi;
     fi
