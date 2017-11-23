@@ -70,16 +70,6 @@
         overlay.opened = false;
       });
 
-      it('should set value to --vaadin-overlay-viewport-bottom when landscape and clientHeight > innerHeight', () => {
-        window.top.document.querySelector('#subsuites').style.height = '250px';
-        const sandbox = sinon.sandbox.create();
-        sandbox.stub(window, 'innerHeight', 200);
-        overlay._detectIosNavbar();
-        expect(getComputedStyle(overlay).getPropertyValue('--vaadin-overlay-viewport-bottom')).to.be.ok;
-        sandbox.restore();
-        window.top.document.querySelector('#subsuites').style.removeProperty('height');
-      });
-
       it('should move under body when open', () => {
         expect(overlay.parentElement).to.eql(document.body);
       });
@@ -467,6 +457,35 @@
           expect(overlayRect.bottom - overlayPartRect.bottom).to.be.closeTo(halfHeightDifference, 1);
         });
       });
+
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        describe('iOS incorrect viewport height workaround', () => {
+          it('should set value to --vaadin-overlay-viewport-bottom when landscape and clientHeight > innerHeight', () => {
+            window.top.document.querySelector('#subsuites').style.height = '250px';
+            const sandbox = sinon.sandbox.create();
+            sandbox.stub(window, 'innerHeight', 200);
+            overlay._detectIosNavbar();
+            expect(getComputedStyle(overlay).getPropertyValue('--vaadin-overlay-viewport-bottom')).to.be.ok;
+            sandbox.restore();
+            window.top.document.querySelector('#subsuites').style.removeProperty('height');
+          });
+
+          it('should apply the workaround on open', () => {
+            overlay.opened = false;
+            sinon.spy(overlay, '_detectIosNavbar');
+            overlay.opened = true;
+            expect(overlay._detectIosNavbar.called).to.be.true;
+            overlay._detectIosNavbar.restore();
+          });
+
+          it('should apply the workaround on resize', () => {
+            sinon.spy(overlay, '_detectIosNavbar');
+            window.dispatchEvent(new CustomEvent('resize'));
+            expect(overlay._detectIosNavbar.called).to.be.true;
+            overlay._detectIosNavbar.restore();
+          });
+        });
+      }
     });
   </script>
 </body>
