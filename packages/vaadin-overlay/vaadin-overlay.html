@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
         top: 8px;
         right: 8px;
         left: 8px;
-        bottom: 8px;
+        bottom: calc(8px + var(--vaadin-overlay-viewport-bottom));
       }
 
       [part="overlay"] {
@@ -46,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
         */
         top: 0;
         right: 0;
-        bottom: 0;
+        bottom: var(--vaadin-overlay-viewport-bottom);
         left: 0;
 
         /* Use flexbox alignment for the overlay part. */
@@ -64,6 +64,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /* Remove tap highlight on touch devices. */
         -webkit-tap-highlight-color: transparent;
+
+        /* stylelint-disable */
+        /* CSS API for host */
+        --vaadin-overlay-viewport-bottom: 0px;
+        /* stylelint-enable */
       }
 
       :host([hidden]),
@@ -119,6 +124,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * `backdrop` | Backdrop of the overlay
      * `overlay`  | Container for position/sizing/alignment of the content
      * `content`  | Content of the overlay
+     *
+     * The following custom CSS properties are available for styling:
+     *
+     * Custom CSS property | Description | Default value
+     * ---|---|---
+     * `--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0px` or detected offset
      *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
@@ -215,6 +226,10 @@ This program is available under Apache License Version 2.0, available at https:/
           e.preventDefault();
           window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         };
+
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          this._boundIosResizeListener = () => this._detectIosNavbar();
+        }
       }
 
       ready() {
@@ -228,6 +243,25 @@ This program is available under Apache License Version 2.0, available at https:/
         // and <vaadin-context-menu>).
         this.addEventListener('click', () => {});
         this.$.backdrop.addEventListener('click', () => {});
+      }
+
+      _detectIosNavbar() {
+        if (!this.opened) {
+          return;
+        }
+
+        const innerHeight = window.innerHeight;
+        const innerWidth = window.innerWidth;
+
+        const landscape = innerWidth > innerHeight;
+
+        const clientHeight = document.documentElement.clientHeight;
+
+        if (landscape && clientHeight > innerHeight) {
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
+        } else {
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0px');
+        }
       }
 
       _setTemplateFromNodes(nodes) {
@@ -252,6 +286,11 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.parentNode === document.body) {
           window.addEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
         }
+
+        if (this._boundIosResizeListener) {
+          this._detectIosNavbar();
+          window.addEventListener('resize', this._boundIosResizeListener);
+        }
       }
 
       disconnectedCallback() {
@@ -268,6 +307,8 @@ This program is available under Apache License Version 2.0, available at https:/
             window.removeEventListener('iron-overlay-canceled', this._boundIronOverlayCanceledListener);
           }
         }
+
+        this._boundIosResizeListener && window.removeEventListener('resize', this._boundIosResizeListener);
       }
 
       _mouseDownListener(event) {
