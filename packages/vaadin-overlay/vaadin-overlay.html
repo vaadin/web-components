@@ -334,6 +334,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this._mouseUpInside = false;
           return;
         }
+        if (!this._last) {
+          return;
+        }
 
         const evt = new CustomEvent('vaadin-overlay-outside-click', {bubbles: true, cancelable: true, detail: {sourceEvent: event}});
         this.dispatchEvent(evt);
@@ -348,6 +351,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
        */
       _keydownListener(event) {
+        if (!this._last) {
+          return;
+        }
+
         // TAB
         if (event.key === 'Tab' && this.focusTrap) {
           const focusableElements = this._getFocusableElements();
@@ -400,7 +407,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.modeless) {
             this._enterModalState();
           }
-
         } else {
           if (this._placeholder) {
             this._placeholder.parentNode.insertBefore(this, this._placeholder);
@@ -409,6 +415,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
           this._exitModalState();
         }
+      }
+
+      /**
+       * returns true if this is the last one in the opened overlays stack
+       */
+      get _last() {
+        return this == Array.from(document.body.children).filter(e => e instanceof Vaadin.OverlayElement).pop();
       }
 
       _modelessChanged(modeless) {
