@@ -18,7 +18,7 @@ install:
 before_script:
   - gulp lint version:check
   - polymer lint --rules polymer-2 --input *.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test
+  - xvfb-run -s '-screen 0 1024x768x24' wct
 
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
@@ -26,8 +26,8 @@ script:
       gemini test test/visual &&
       gemini test test/visual -c .gemini-ie.yml &&
       gemini test test/visual -c .gemini-edge.yml &&
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
+      wct --env saucelabs;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
+      wct --env saucelabs-cron;
     fi
