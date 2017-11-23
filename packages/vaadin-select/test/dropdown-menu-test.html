@@ -464,6 +464,18 @@
           dropdown._overlayElement.click();
           expect(dropdown.opened).to.be.false;
         });
+
+        // iOS Safari has incorrect viewport height when navigation bar is
+        // visible in landscape orientation. This is workarounded by exposing
+        // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
+        if (!window.ShadyCSS || window.ShadyCSS.nativeCss) {
+          it('should support --vaadin-overlay-viewport-bottom CSS property', () => {
+            const overlay = dropdown._overlayElement;
+            overlay.setAttribute('phone', '');
+            overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
+            expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
+          });
+        }
       });
 
       describe('aria', () => {
