@@ -61,21 +61,21 @@
         c2 = element.querySelector('#c2');
       });
 
-      it('should apply default column-gap', () => {
+      it('should apply default gap', () => {
         expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal('16px'); // 0.5 * 2em in px
         expect(getComputedStyle(c1).getPropertyValue('margin-bottom')).to.equal('16px');
         expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal('16px'); // 0.5 * 2em in px
         expect(getComputedStyle(c2).getPropertyValue('margin-bottom')).to.equal('16px');
       });
 
-      it('should compensate for column-gap in layout wrapper', () => {
+      it('should compensate for gap in layout wrapper', () => {
         expect(getComputedStyle(element.$.layout).getPropertyValue('margin-top')).to.equal('-16px'); // -0.5 * 2em in px
         expect(getComputedStyle(element.$.layout).getPropertyValue('margin-bottom')).to.equal('-16px');
       });
 
       it('should support updating with `updateStyles` call', () => {
         element.updateStyles({
-          '--vaadin-vertical-layout-row-gap': '20px'
+          '--vaadin-vertical-layout-gap': '20px'
         });
 
         expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal('10px'); // 0.5 * 20px in px

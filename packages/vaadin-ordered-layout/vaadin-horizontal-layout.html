@@ -14,7 +14,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
 
         /* CSS API for host */
-        --vaadin-horizontal-layout-column-gap: 2em; /* (default) */
+        --vaadin-horizontal-layout-gap: 2em; /* (default) */
       }
 
       :host([hidden]) {
@@ -29,8 +29,8 @@ This program is available under Apache License Version 2.0, available at https:/
           Compensate for item margins, so that there are no gaps around
           the layout itself.
         */
-        margin-left: calc(-0.5 * var(--vaadin-horizontal-layout-column-gap));
-        margin-right: calc(-0.5 * var(--vaadin-horizontal-layout-column-gap));
+        margin-left: calc(-0.5 * var(--vaadin-horizontal-layout-gap));
+        margin-right: calc(-0.5 * var(--vaadin-horizontal-layout-gap));
       }
 
       #layout ::slotted(*) {
@@ -38,8 +38,8 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: 1 1 auto;
 
         /* Margins make gaps between items */
-        margin-left: calc(0.5 * var(--vaadin-horizontal-layout-column-gap));
-        margin-right: calc(0.5 * var(--vaadin-horizontal-layout-column-gap));
+        margin-left: calc(0.5 * var(--vaadin-horizontal-layout-gap));
+        margin-right: calc(0.5 * var(--vaadin-horizontal-layout-gap));
       }
 
       /* Theme variations */
@@ -91,7 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Custom CSS property | Description | Default
        * ---|---|---
-       * `--vaadin-horizontal-layout-column-gap` | Length of the gap between items | `2em`
+       * `--vaadin-horizontal-layout-gap` | Length of the gap between items | `2em`
        *
        * ### Built-in Theme Variations
        *
