@@ -10,7 +10,7 @@
 [API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dropdown-menu/)
 
 
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/elements/-/element/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/elements/-/element/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element similar to a native browser select element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
@@ -26,7 +26,7 @@
 ```html
 <vaadin-dropdown-menu placeholder="Name" label="Select a Name">
   <template>
-    <vaadin-list-box vertical>
+    <vaadin-list-box>
       <vaadin-item>Jose</vaadin-item>
       <vaadin-item>Manolo</vaadin-item>
       <vaadin-item>Pedro</vaadin-item>
