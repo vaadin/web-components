@@ -454,10 +454,10 @@
         // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
         if (!window.ShadyCSS || window.ShadyCSS.nativeCss) {
           it('should support --vaadin-overlay-viewport-bottom CSS property', () => {
-            dropdown.setAttribute('phone', '');
             const overlay = dropdown._overlayElement;
+            overlay.setAttribute('phone', '');
             overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-            expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('58px');
+            expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('50px');
           });
         }
       });
