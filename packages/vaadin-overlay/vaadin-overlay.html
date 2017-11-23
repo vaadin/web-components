@@ -287,10 +287,13 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.
        */
       _outsideClickListener(event) {
-        if (!this.last || event.composedPath().indexOf(this.$.overlay) !== -1 ||
+        if (event.composedPath().indexOf(this.$.overlay) !== -1 ||
             this._mouseDownInside || this._mouseUpInside) {
           this._mouseDownInside = false;
           this._mouseUpInside = false;
+          return;
+        }
+        if (!this._last) {
           return;
         }
 
@@ -307,7 +310,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * fired before the `vaadin-overlay` will be closed on ESC button press. If canceled the closing of the overlay is canceled as well.
        */
       _keydownListener(event) {
-        if (!this.last) {
+        if (!this._last) {
           return;
         }
 
@@ -374,9 +377,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
-       * returns true if this is the last in the opened overlay stack
+       * returns true if this is the last one in the opened overlays stack
        */
-      get last() {
+      get _last() {
         return this == Array.from(document.body.children).filter(e => e instanceof Vaadin.OverlayElement).pop();
       }
 
