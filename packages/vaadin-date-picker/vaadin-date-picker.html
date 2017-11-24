@@ -179,7 +179,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class DatePickerElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
+      class DatePickerElement extends
+        Vaadin.ControlStateMixin(
+          Vaadin.ThemableMixin(
+            Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-date-picker';
@@ -244,6 +247,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // In order to have synchronized invalid property, we need to use the same validate logic.
           Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
+
+          // Keep focus attribute in focusElement for styling
+          this.$.overlay.addEventListener('focus', () => this.focusElement._setFocused(true));
         }
 
         _clear(e) {
