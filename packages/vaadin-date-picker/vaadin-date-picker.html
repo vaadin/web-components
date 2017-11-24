@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -178,7 +179,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class DatePickerElement extends Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class DatePickerElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-date-picker';
@@ -271,6 +272,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _getAriaExpanded(opened) {
           return Boolean(opened).toString();
+        }
+
+        /**
+         * Focussable element used by vaadin-control-state-mixin
+         */
+        get focusElement() {
+          return this._input() || this;
         }
       }
 
