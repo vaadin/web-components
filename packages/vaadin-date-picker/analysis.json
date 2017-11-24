@@ -1093,7 +1093,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
@@ -1116,7 +1116,7 @@
               ],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               },
               "inheritedFrom": "Vaadin.DatePickerMixin"
             },
@@ -2916,7 +2916,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
@@ -2939,7 +2939,7 @@
               ],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               },
               "inheritedFrom": "Vaadin.DatePickerMixin"
             },
@@ -4412,7 +4412,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -4434,7 +4434,7 @@
               ],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               }
             },
             {
