@@ -7391,7 +7391,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
@@ -7408,7 +7408,7 @@
               "params": [],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               },
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
@@ -9477,7 +9477,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
@@ -9494,7 +9494,7 @@
               "params": [],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               },
               "inheritedFrom": "Vaadin.ComboBoxMixin"
             },
@@ -11451,7 +11451,7 @@
             },
             {
               "name": "validate",
-              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriatelly.",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -11467,7 +11467,7 @@
               "params": [],
               "return": {
                 "type": "boolean",
-                "desc": "True if the value is valid and sets the `invalid` flag appropriatelly"
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
               }
             },
             {
