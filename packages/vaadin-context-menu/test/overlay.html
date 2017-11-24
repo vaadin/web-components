@@ -234,6 +234,13 @@
             expect(menu.opened).to.eql(true);
           });
         });
+
+        describe('styling', () => {
+          it('should set default background color for content', () => {
+            const content = menu.$.overlay.shadowRoot.querySelector('[part="content"]');
+            expect(getComputedStyle(content).backgroundColor).to.eql('rgb(255, 255, 255)');
+          });
+        });
       });
     </script>
 
