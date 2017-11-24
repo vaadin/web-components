@@ -4,7 +4,6 @@
       :host {
         display: block;
       }
-
     </style>
 
 
@@ -111,35 +110,28 @@
 
           <script>
             window.addDemoReadyListener('#context-menu-basic-demos-menu-item-events', function(document) {
-              class MyListView extends Polymer.Element {
+              Polymer({
+                is: 'my-list-view',
 
-                static get is() {
-                  return 'my-list-view';
-                }
-
-                static get properties() {
-                  return {
-                    items: {
-                      type: Array,
-                      value: () => {
-                        return ['Foo', 'Bar', 'Baz'];
-                      }
+                properties: {
+                  items: {
+                    type: Array,
+                    value: function() {
+                      return ['Foo', 'Bar', 'Baz'];
                     }
-                  };
-                }
+                  }
+                },
 
-                _appendItem() {
+                _appendItem: function() {
                   this.push('items', 'New item');
-                }
+                },
 
-                _removeItem(e) {
+                _removeItem: function(e) {
                   const menuItem = e.target; // `<paper-item>`
                   const listItem = menuItem.listItem; // `<li>`
                   this.splice('items', listItem.index, 1);
                 }
-              }
-
-              customElements.define(MyListView.is, MyListView);
+              });
             });
           </script>
         </dom-module>
@@ -165,7 +157,7 @@
 
         <script>
           window.addDemoReadyListener('#context-menu-basic-demos-javascript-api', function(document) {
-            document.querySelector('#menuOpener').addEventListener('click', event => {
+            document.querySelector('#menuOpener').addEventListener('click', function(event) {
               const menu = document.querySelector('#buttonMenu');
               if (!menu.opened) {
                 menu.open(event);
