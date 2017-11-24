@@ -95,8 +95,8 @@
             <vaadin-context-menu selector="li">
               <template>
                 <paper-listbox>
-                  <paper-item on-tap="_appendItem">Append item</paper-item>
-                  <paper-item list-item="[[target]]" on-tap="_removeItem">Remove item</paper-item>
+                  <paper-item on-click="_appendItem">Append item</paper-item>
+                  <paper-item list-item="[[target]]" on-click="_removeItem">Remove item</paper-item>
                 </paper-listbox>
               </template>
 

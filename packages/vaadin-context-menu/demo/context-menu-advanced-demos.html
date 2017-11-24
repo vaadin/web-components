@@ -44,9 +44,9 @@
             <vaadin-context-menu>
               <template>
                 <paper-listbox>
-                  <paper-item on-tap="_add">Add</paper-item>
+                  <paper-item on-click="_add">Add</paper-item>
                   <template is="dom-if" if="[[_isGridBody(target)]]">
-                    <paper-item content="[[target]]" on-tap="_remove">Remove</paper-item>
+                    <paper-item content="[[target]]" on-click="_remove">Remove</paper-item>
                   </template>
                 </paper-listbox>
               </template>
