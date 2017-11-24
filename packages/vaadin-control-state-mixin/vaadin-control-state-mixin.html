@@ -104,15 +104,13 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
 
       this.addEventListener('keydown', e => {
-        if (!e.defaultPrevented) {
-          if (e.shiftKey && e.keyCode === 9) {
-            // Flag is checked in _focus event handler.
-            this._isShiftTabbing = true;
-            HTMLElement.prototype.focus.apply(this);
-            this._setFocused(false);
-            // Event handling in IE is asynchronous and the flag is removed asynchronously as well
-            setTimeout(() => this._isShiftTabbing = false, 0);
-          }
+        if (!e.defaultPrevented && e.shiftKey && e.keyCode === 9) {
+          // Flag is checked in _focus event handler.
+          this._isShiftTabbing = true;
+          HTMLElement.prototype.focus.apply(this);
+          this._setFocused(false);
+          // Event handling in IE is asynchronous and the flag is removed asynchronously as well
+          setTimeout(() => this._isShiftTabbing = false, 0);
         }
       });
 
