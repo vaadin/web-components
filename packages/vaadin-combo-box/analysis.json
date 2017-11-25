@@ -6127,7 +6127,7 @@
             {
               "name": "loading",
               "type": "boolean",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
@@ -7738,7 +7738,7 @@
             },
             {
               "name": "loading",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
@@ -8159,7 +8159,7 @@
             {
               "name": "loading",
               "type": "boolean",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
@@ -9883,7 +9883,7 @@
             },
             {
               "name": "loading",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "sourceRange": {
                 "file": "vaadin-combo-box-mixin.html",
                 "start": {
@@ -10372,7 +10372,7 @@
             {
               "name": "loading",
               "type": "boolean",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -11711,7 +11711,7 @@
             },
             {
               "name": "loading",
-              "description": "When set to `true`, \"loading\" attibute is added to host and the overlay element.",
+              "description": "When set to `true`, \"loading\" attribute is added to host and the overlay element.",
               "sourceRange": {
                 "start": {
                   "line": 114,
