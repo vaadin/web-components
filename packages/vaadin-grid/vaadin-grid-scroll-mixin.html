@@ -89,9 +89,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this._hasResidualMomentum = true;
 
         this._ignoreNewWheel = true;
-        this._debouncerIgnoreNewWheel = Polymer.Debouncer.debounce(this._debouncerIgnoreNewWheel,
-            Polymer.Async.timeOut.after(500),
-            () => this._ignoreNewWheel = false);
+        this._debouncerIgnoreNewWheel = Polymer.Debouncer.debounce(
+          this._debouncerIgnoreNewWheel,
+          Polymer.Async.timeOut.after(500),
+          () => this._ignoreNewWheel = false
+        );
       } else if (this._hasResidualMomentum && momentum <= this._previousMomentum || this._ignoreNewWheel) {
         e.preventDefault();
       } else if (momentum > this._previousMomentum) {
@@ -137,20 +139,24 @@ This program is available under Apache License Version 2.0, available at https:/
         this._toggleAttribute('scroll-period', true, this.$.scroller);
       }
 
-      this._debounceScrolling = Polymer.Debouncer.debounce(this._debounceScrolling,
-          Polymer.Async.timeOut.after(100),
-          () => {
-            this._toggleAttribute('scrolling', false, this.$.scroller);
-            if (!this.$.outerscroller.outerScrolling) {
-              this._reorderRows();
-            }
-          });
+      this._debounceScrolling = Polymer.Debouncer.debounce(
+        this._debounceScrolling,
+        Polymer.Async.timeOut.after(100),
+        () => {
+          this._toggleAttribute('scrolling', false, this.$.scroller);
+          if (!this.$.outerscroller.outerScrolling) {
+            this._reorderRows();
+          }
+        }
+      );
 
-      this._debounceScrollPeriod = Polymer.Debouncer.debounce(this._debounceScrollPeriod,
-          Polymer.Async.timeOut.after(1000),
-          () => {
-            this._toggleAttribute('scroll-period', false, this.$.scroller);
-          });
+      this._debounceScrollPeriod = Polymer.Debouncer.debounce(
+        this._debounceScrollPeriod,
+        Polymer.Async.timeOut.after(1000),
+        () => {
+          this._toggleAttribute('scroll-period', false, this.$.scroller);
+        }
+      );
 
       this.$.outerscroller.syncOuterScroller();
     }
@@ -185,15 +191,17 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _frozenCellsChanged() {
-      this._debouncerCacheElements = Polymer.Debouncer.debounce(this._debouncerCacheElements,
-          Polymer.Async.microTask,
-          () => {
-            Array.from(this.root.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
-              cell.style.transform = '';
-            });
-            this._frozenCells = Array.prototype.slice.call(this.root.querySelectorAll('[frozen]'));
-            this._translateStationaryElements();
+      this._debouncerCacheElements = Polymer.Debouncer.debounce(
+        this._debouncerCacheElements,
+        Polymer.Async.microTask,
+        () => {
+          Array.from(this.root.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
+            cell.style.transform = '';
           });
+          this._frozenCells = Array.prototype.slice.call(this.root.querySelectorAll('[frozen]'));
+          this._translateStationaryElements();
+        }
+      );
       this._updateLastFrozen();
     }
 
