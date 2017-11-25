@@ -159,6 +159,24 @@
           expect(customElement._tabPressed).to.be.false;
         });
 
+        it('should set _isShiftTabbing when pressing shift-tab', () => {
+          const event = MockInteractions.keyboardEventFor('keydown', 9, 'shift');
+          customElement.dispatchEvent(event);
+          expect(customElement._isShiftTabbing).to.be.true;
+        });
+
+        it('should skip setting _isShiftTabbing if event is defaultPrevented', () => {
+          const evt = MockInteractions.keyboardEventFor('keydown', 9, 'shift');
+          // In Edge just calling preventDefault() does not work because of the polyfilled dispatchEvent
+          Object.defineProperty(evt, 'defaultPrevented', {
+            get() {
+              return true;
+            }
+          });
+          customElement.dispatchEvent(evt);
+          expect(customElement._isShiftTabbing).not.to.be.ok;
+        });
+
         it('should not change _tabPressed on any other key except TAB', () => {
           MockInteractions.keyDownOn(document.body, 65);
           expect(customElement._tabPressed).to.be.false;
