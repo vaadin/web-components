@@ -94,7 +94,7 @@
         /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
          * will overlap the other, and the user can’t click on a date to select it. Using smaller
          * offset for now, and compensating it in the scroll item height */
-        /*transform: translateY(calc(var(--valo-size-m) * 2));*/
+        /* transform: translateY(calc(var(--valo-size-m) * 2)); */
         transform: translateY(var(--valo-size-s));
       }
 
@@ -248,7 +248,7 @@
 
       [part="months"] {
         /* TODO this property should support calc or measure the height from the DOM */
-        /*--vaadin-infinite-scroller-item-height: calc(var(--valo-size-l) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s));*/
+        /* --vaadin-infinite-scroller-item-height: calc(var(--valo-size-l) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s)); */
         --vaadin-infinite-scroller-item-height: 301px;
         -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
         mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
@@ -262,7 +262,7 @@
         }
 
         [part="months"] {
-          /*--vaadin-infinite-scroller-item-height: calc(var(--valo-size-m) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s));*/
+          /* --vaadin-infinite-scroller-item-height: calc(var(--valo-size-m) * 6 + var(--valo-font-size-l) + var(--valo-space-m) + var(--valo-font-size-xs) + var(--valo-space-s) + var(--valo-size-s)); */
           --vaadin-infinite-scroller-item-height: 349px;
         }
       }
@@ -287,7 +287,7 @@
       }
 
       [part="year-number"],
-      [part="year-separator"]{
+      [part="year-separator"] {
         opacity: 0.5;
         transition: 0.2s opacity;
       }

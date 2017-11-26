@@ -72,10 +72,12 @@
 
     <script>
       document.addEventListener('WebComponentsReady', function() {
-        let progress = document.querySelector('vaadin-progress-bar#dynamic');
+        const progress = document.querySelector('vaadin-progress-bar#dynamic');
         progress.value = 0;
         setInterval(() => {
-          if (progress.value >= 1) progress.value = 0;
+          if (progress.value >= 1) {
+            progress.value = 0;
+          }
           progress.value += Math.random() * 0.2;
         }, 1000);
       });

@@ -288,9 +288,11 @@
 
 <script>
 document.addEventListener('WebComponentsReady', () => {
-  const deprecatedStyleModule = ShadyCSS.getComputedStyleValue(document.body, '--valo-deprecated-colors-style-module');
+  const deprecatedStyleModule = window.ShadyCSS.getComputedStyleValue(document.body, '--valo-deprecated-colors-style-module');
   if (deprecatedStyleModule) {
-    console.warn("The “valo-colors” style module is renamed to “valo-color”. Please update your code accordingly. The deprecated “valo-colors” style module will be removed in some version before the first beta version.");
+    console.warn(`The “valo-colors” style module is renamed to “valo-color”.
+      Please update your code accordingly. The deprecated “valo-colors” style
+      module will be removed in some version before the first beta version.`);
   }
 });
 </script>
