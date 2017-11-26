@@ -68,7 +68,12 @@
       <template slot="source">
         <vaadin-combo-box label="Person" item-label-path="name" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
           <template>
-            <person-item name="[[item.name]]" email="[[item.email]]"></person-item>
+            <style>
+            person-item {
+              --person-item-email-display: block;
+            }
+            </style>
+            <person-item email="[[item.email]]">[[item.name]]</person-item>
           </template>
         </vaadin-combo-box>
       </template>
@@ -103,9 +108,9 @@
             combo.push('items', 'Option ' + i);
           }
           if (combo.classList.contains('item-template')) {
-            combo.items = [{name:"Maxine Richardson", email: "maxine.richardson@example.org"},
-                           {name:"Kristina Howard", email: "kristina.howard@example.org"},
-                           {name:"Sebastian Harris", email: "sebastian.harris@example.org"}];
+            combo.items = [{name: 'Maxine Richardson', email: 'maxine.richardson@example.org'},
+                           {name: 'Kristina Howard', email: 'kristina.howard@example.org'},
+                           {name: 'Sebastian Harris', email: 'sebastian.harris@example.org'}];
           }
         });
       });

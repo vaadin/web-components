@@ -37,32 +37,85 @@
     <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-dropdown-menu.html" class="theme-source-code">Theme source code</a>
     <h1>Dropdown menu</h1>
 
+    <h3>Label and placeholder</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dropdown-menu label="Select an option" placeholder="foobar">
+        <vaadin-dropdown-menu label="Label" placeholder="Placeholder" value="Option one">
           <template>
             <vaadin-list-box>
-              <vaadin-item disabled>Option one</vaadin-item>
+              <vaadin-item>Option one</vaadin-item>
               <vaadin-item>Option two</vaadin-item>
               <vaadin-item>Option three</vaadin-item>
-              <vaadin-item disabled>Option four</vaadin-item>
               <hr>
-              <vaadin-item>
-                <style>
-                  [slot="selected"] person-item {
-                    --person-item-email-display: none;
-                  }
-                </style>
-                <person-item name="Maxine Richardson" email="maxine.richardson@example.org"></person-item>
-              </vaadin-item>
-              <vaadin-item>
-                <style>
-                  [slot="selected"] person-item {
-                    --person-item-email-display: none;
-                  }
-                </style>
-                <person-item name="Kristina Howard" email="kristina.howard@example.org"></person-item>
-              </vaadin-item>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </nice-demo-snippet>
+
+    <h3>States</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-dropdown-menu label="Disabled" disabled value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+
+        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </nice-demo-snippet>
+
+    <h3>Validation</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-dropdown-menu required error-message="Please select an option" label="Required" placeholder="Select an option">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Customized items</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-dropdown-menu label="Select a user" style="width: 15em;">
+          <template>
+            <vaadin-list-box>
+              <person-item>Maxine Richardson</person-item>
+              <person-item>Kristina Howard</person-item>
+              <person-item>Sebastian Harris</person-item>
+
+              <style>
+                /* Show the email line when inside the list-box, but not inside the dropdown-menu selected item */
+                person-item {
+                  --person-item-email-display: block;
+                }
+              </style>
             </vaadin-list-box>
           </template>
         </vaadin-dropdown-menu>

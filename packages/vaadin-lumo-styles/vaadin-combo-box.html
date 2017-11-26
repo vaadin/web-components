@@ -84,10 +84,25 @@
       /* TODO duplicated from vaadin-list-box styles. Should find a way to make it DRY */
 
       :host {
-        --_valo-item-selected-icon-display: block;
         cursor: pointer;
         padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
         -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+      }
+
+      /* ShadyCSS workaround */
+      :host::before {
+        display: block;
+      }
+
+      /* IE11 flexbox workaround */
+      ::-ms-backdrop,
+      :host {
+        height: var(--valo-size-m);
+      }
+
+      /* Only apply for this particular item, not nested items */
+      :host > * {
+        --_valo-item-selected-icon-display: none;
       }
 
       :host([focused]) {

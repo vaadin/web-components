@@ -2,13 +2,15 @@
 <link rel="import" href="../../iron-icon/iron-icon.html">
 <link rel="import" href="../icons.html">
 
+<link rel="import" href="../../vaadin-item/vaadin-item.html">
+
+
 <dom-module id="person-item">
   <template>
-    <style>
+    <style include="valo-item">
       :host {
         display: flex;
         align-items: center;
-        cursor: pointer;
       }
 
       .photo {
@@ -22,27 +24,33 @@
       .email {
         color: var(--valo-secondary-text-color);
         font-size: var(--valo-font-size-s);
-        display: var(--person-item-email-display);
+        display: var(--person-item-email-display, none);
       }
     </style>
     <iron-icon icon="valo:user" class="photo"></iron-icon>
     <div class="details">
-      <div class="name">[[name]]</div>
-      <div class="email">[[email]]</div>
+      <div class="name"><slot></slot></div>
+      <div class="email">[[_computeEmail(email)]]</div>
     </div>
   </template>
 
   <script>
-    class PersonItemElement extends Polymer.Element {
+    class PersonItemElement extends Vaadin.ItemElement {
       static get is() {
         return 'person-item';
       }
 
       static get properties() {
         return {
-          name: String,
-          email: String
-        }
+          email: {
+            type: String,
+            value: ''
+          }
+        };
+      }
+
+      _computeEmail(email) {
+        return this.email || this.textContent.toLowerCase().replace(' ', '.') + '@example.org';
       }
     }
 

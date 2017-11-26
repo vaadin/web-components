@@ -10,26 +10,38 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      /* IE11 flexbox fix (https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items) */
+      [part="items"] {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
       /* Normal item */
 
+      [part="items"] ::slotted(*) {
+        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+        cursor: default;
+      }
+
+      /* TODO this does not match elements extending vaadin-item. This is anyway a workaround until we have "focus-follows-mouse" */
       [part="items"] ::slotted(vaadin-item) {
         cursor: pointer;
-        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
       }
 
       /* Selected item */
 
-      [part="items"] ::slotted(vaadin-item[focused]:not([disabled])) {
+      [part="items"] ::slotted([focused]:not([disabled])) {
         background-color: var(--valo-primary-color-10pct);
       }
 
       @media (pointer: coarse) {
-        [part="items"] ::slotted(vaadin-item[focused]) {
+        [part="items"] ::slotted([focused]) {
           background-color: transparent;
         }
       }
 
-      [part="items"] ::slotted(vaadin-item[selected]) {
+      [part="items"] ::slotted([selected]) {
         font-weight: 500;
       }
 
