@@ -247,6 +247,32 @@
         font-size: var(--valo-font-size-xs);
       }
 
+      /* Contrast color */
+
+      :host([theme~="contrast"]) [part="input-field"] {
+        background-color: var(--valo-contrast-60pct);
+        color: var(--valo-base-color);
+      }
+
+      :host([theme~="contrast"]) [part="input-field"]::after {
+        background-color: var(--valo-tint);
+      }
+
+      @media (hover: hover) {
+        :host([theme~="contrast"]:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
+          background-color: var(--valo-contrast-70pct);
+        }
+      }
+
+      :host([theme~="contrast"][focused]:not([readonly])) [part="label"] {
+        color: var(--valo-body-text-color);
+      }
+
+      :host([theme~="contrast"][focused]:not([readonly])) [part="input-field"] {
+        background-color: var(--valo-contrast-90pct);
+        box-shadow: none;
+      }
+
       /* Slotted buttons */
 
       [part="input-field"] ::slotted(vaadin-button) {
