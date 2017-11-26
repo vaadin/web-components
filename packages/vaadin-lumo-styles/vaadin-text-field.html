@@ -55,7 +55,9 @@
         color: var(--valo-primary-text-color);
       }
 
-      [part="value"] {
+      [part="value"],
+      /* For vaadin-dropdown-menu-text-field */
+      [part="input-field"] ::slotted([part="value"]) {
         -webkit-appearance: none;
         -moz-appearance: none;
         outline: none;
