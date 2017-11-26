@@ -13,9 +13,9 @@
     {name: 'combo-boxes', title: 'Combo box'},
     {name: 'context-menus', title: 'Context menu'},
     {name: 'dropdown-menus', title: 'Dropdown menu'},
-    {name: 'grids', title: 'Data grid'},
     {name: 'date-pickers', title: 'Date picker'},
     {name: 'dialogs', title: 'Dialog'},
+    {name: 'grids', title: 'Grid'},
     {name: 'progress-bars', title: 'Progress bar'},
     {name: 'radio-buttons', title: 'Radio button'},
     {name: 'tabs', title: 'Tabs'},
@@ -104,7 +104,7 @@
       font-weight: 400;
     }
 
-    dl.custom-properties dt .color-swatch {
+    .color-swatch {
       display: inline-block;
       width: 0.75em;
       height: 0.75em;
@@ -115,13 +115,16 @@
 
     code {
       background-color: var(--valo-shade-5pct);
+      border-radius: var(--valo-border-radius);
+      padding: 0 0.2em;
+      font-family: "Source Code Pro", "Courier New", Courier, monospace;
+      font-size: var(--valo-font-size-s);
     }
 
     code.block {
       display: block;
       white-space: pre;
       border: 1px solid var(--valo-shade-10pct);
-      border-radius: var(--valo-border-radius);
       padding: 1em;
       font-size: var(--valo-font-size-xs);
       margin: 1em 0;
@@ -132,12 +135,13 @@
       --nice-demo-snippet-code-font-family: Menlo, Consolas, monospace;
       --nice-demo-snippet-code-background-color: var(--valo-shade-5pct);
       --nice-demo-snippet-border-color: var(--valo-contrast-10pct);
-      --nice-demo-snippet-view-source-background-color: var(--valo-contrast-5pct);
+      --nice-demo-snippet-view-source-background-color: var(--valo-base-color);
+      --nice-demo-snippet-view-source-background-image: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
     }
 
-    nice-demo-snippet > [theme="dark"] {
-      margin: -1em;
-      padding: 1em;
+    [theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #FFF;
+      --nice-demo-snippet-code-color: var(--valo-shade-70pct);
     }
 
     nice-demo-snippet h5:first-child {
@@ -148,6 +152,12 @@
       --demo-navigation-sidebar-background-color: var(--valo-shade-5pct);
       --demo-navigation-current-section-border: 2px solid var(--valo-contrast-10pct);
       --demo-navigation-selected-item-color: var(--valo-primary-text-color);
+      --demo-navigation-item-color: var(--valo-secondary-text-color);
+      --demo-navigation-item-opacity: 1;
+      --demo-navigation-header-background: var(--valo-base-color) linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
+      --demo-navigation-header-box-shadow: 0 0 1px 2px var(--valo-shade-5pct), 0 0 1px 4px var(--valo-shade-5pct), 0 0 1px 6px var(--valo-shade-5pct);
+      --demo-navigation-drawer-background-color: var(--valo-base-color);
+      --demo-navigation-drawer-curtain-background-color: var(--valo-shade-30pct);
     }
 
     .theme-source-code {
@@ -170,6 +180,16 @@
       margin-right: 0.5em;
       opacity: 0.8;
     }
+
+    .note {
+      background-color: var(--valo-primary-color-10pct);
+      border-color: var(--valo-primary-color-50pct);
+    }
+
+    [theme~="dark"] .note.warn {
+      background-color: var(--valo-error-color-10pct);
+      border-color: var(--valo-error-color-50pct);
+    }
   </style>
 </custom-style>
 
@@ -186,19 +206,29 @@
         dt.innerHTML += `<code>${value}</code>`;
       }
     });
-
-    // Insert light/dark theme selector
-    var themeSelect = document.createElement('div');
-    themeSelect.id = 'theme-select';
-    themeSelect.innerHTML = '<select tooltip="Choose theme variant"><option>Light</option><option>Dark</option></select>';
-    document.querySelector('demo-navigation').firstElementChild.appendChild(themeSelect);
-
-    var demos = Array.prototype.slice.call(document.querySelectorAll('nice-demo-snippet'));
-
-    themeSelect.addEventListener('change', function(e) {
-      demos.forEach(function(demo) {
-        demo.querySelector('div').setAttribute('theme', e.target.value.toLowerCase());
-      });
-    });
   });
+
+  // Insert light/dark theme selector
+  var themeSelect = document.createElement('div');
+  themeSelect.id = 'theme-select';
+  themeSelect.innerHTML = '<select tooltip="Choose color palette"><option>Light</option><option>Dark</option></select>';
+  document.querySelector('demo-navigation').firstElementChild.appendChild(themeSelect);
+
+  themeSelect.addEventListener('change', function(e) {
+    const theme = e.target.value.toLowerCase();
+    document.documentElement.setAttribute('theme', theme);
+
+    if (window.localStorage) {
+      window.localStorage.setItem('theme', theme);
+    }
+  });
+
+  if (window.localStorage) {
+    const theme = window.localStorage.getItem('theme');
+    document.documentElement.setAttribute('theme', theme);
+    if (theme == 'dark') {
+      themeSelect.firstChild.childNodes[1].setAttribute('selected', '');
+    }
+  }
+
 </script>
