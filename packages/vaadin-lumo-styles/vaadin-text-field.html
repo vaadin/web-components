@@ -28,7 +28,7 @@
       }
 
       [part="label"] {
-        color: var(--valo-contrast-60pct);
+        color: var(--valo-secondary-text-color);
         font-weight: 500;
         font-size: var(--valo-font-size-s);
         margin-left: calc(var(--valo-border-radius) / 4);
@@ -67,37 +67,47 @@
         height: 100%;
         font-family: inherit;
         font-size: 1em;
-        font-weight: 500;
+        font-weight: inherit;
         color: inherit;
         background-color: transparent;
         align-self: baseline;
         text-align: var(--valo-text-field-text-align);
-        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        --_valo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 24px);
+        -webkit-mask-image: var(--_valo-text-field-overflow-mask-image);
+        mask-image: var(--_valo-text-field-overflow-mask-image);
 
         /* Disable default invalid style in Firefox */
         box-shadow: none;
       }
 
+      [part="value"]:focus {
+        -webkit-mask-image: none;
+        mask-image: none;
+      }
+
       [part="value"]::-webkit-input-placeholder {
-        color: var(--valo-tertiary-text-color);
+        color: inherit;
         transition: opacity 0.175s 0.05s;
-        opacity: 1;
+        opacity: 0.5;
       }
 
       [part="value"]:-ms-input-placeholder {
-        color: var(--valo-tertiary-text-color);
+        color: inherit;
+        opacity: 0.5;
       }
 
       [part="value"]::-moz-placeholder {
-        color: var(--valo-tertiary-text-color);
+        color: inherit;
         transition: opacity 0.175s 0.05s;
-        opacity: 1;
+        opacity: 0.5;
       }
 
       [part="value"]::placeholder {
-        color: var(--valo-tertiary-text-color);
+        color: inherit;
         transition: opacity 0.175s 0.1s;
-        opacity: 1;
+        opacity: 0.5;
       }
 
       [part="input-field"] {
@@ -106,7 +116,7 @@
         border-radius: var(--valo-border-radius);
         background-color: var(--valo-contrast-5pct);
         padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-border-radius) / 4);
-        transition: background-color 0.5s, box-shadow 0.5s;
+        transition: background-color 0.5s, box-shadow 0.2s;
         font-weight: 500;
         position: relative;
         height: var(--valo-size, var(--valo-size-m));
@@ -117,6 +127,7 @@
         :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="label"] {
           color: var(--valo-body-text-color);
         }
+
         :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
           background-color: var(--valo-contrast-10pct);
         }
@@ -124,7 +135,7 @@
 
       :host([focused]:not([readonly])) [part="input-field"] {
         background-color: var(--valo-base-color);
-        box-shadow: 0 0 0 1px var(--valo-contrast-10pct), 0 1px 4px 1px var(--valo-shade-10pct);
+        box-shadow: var(--_valo-text-field-focused-box-shadow, 0 0 0 1px var(--valo-contrast-10pct), 0 1px 4px 1px var(--valo-shade-10pct));
       }
 
       :host([focus-ring]) [part="input-field"] {
@@ -163,8 +174,11 @@
         pointer-events: none;
       }
 
-      :host([disabled]) [part="value"] {
+      :host([disabled]) [part="label"],
+      :host([disabled]) [part="value"],
+      :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
         color: var(--valo-disabled-text-color);
+        -webkit-text-fill-color: var(--valo-disabled-text-color);
       }
 
       :host([disabled]) [part="value"]::-webkit-input-placeholder {
@@ -195,12 +209,8 @@
 
       /* Invalid style */
 
-      :host([invalid]) [part="label"] {
-        color: var(--valo-error-color);
-      }
-
       :host([invalid]) [part="label"]::after {
-        color: inherit;
+        color: var(--valo-error-text-color);
       }
 
       :host([invalid]) [part="input-field"] {
@@ -213,7 +223,7 @@
         margin-left: calc(var(--valo-border-radius) / 4);
         font-size: var(--valo-font-size-xs);
         line-height: var(--valo-line-height-xs);
-        color: var(--valo-secondary-text-color);
+        color: var(--valo-error-text-color);
         will-change: max-height;
         transition: 0.4s max-height;
         max-height: 5em;
