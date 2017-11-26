@@ -54,6 +54,11 @@
         content: "\e907";
       }
 
+      :host([disabled]) [part="toggle-button"] {
+        display: block;
+        color: var(--valo-contrast-20pct);
+      }
+
       /* Overlay width */
 
       [part="overlay"] {
