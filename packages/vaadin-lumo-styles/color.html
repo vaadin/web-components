@@ -3,31 +3,34 @@
 <custom-style>
   <style>
     html {
+      /* Base (background) color */
+      --valo-base-color: #FFF;
+
       /* Tints */
-      --valo-tint-5pct: hsla(0, 0%, 100%, 0.06);
-      --valo-tint-10pct: hsla(0, 0%, 100%, 0.11);
-      --valo-tint-20pct: hsla(0, 0%, 100%, 0.21);
-      --valo-tint-30pct: hsla(0, 0%, 100%, 0.31);
-      --valo-tint-40pct: hsla(0, 0%, 100%, 0.41);
-      --valo-tint-50pct: hsla(0, 0%, 100%, 0.51);
-      --valo-tint-60pct: hsla(0, 0%, 100%, 0.61);
-      --valo-tint-70pct: hsla(0, 0%, 100%, 0.71);
-      --valo-tint-80pct: hsla(0, 0%, 100%, 0.81);
-      --valo-tint-90pct: hsla(0, 0%, 100%, 0.91);
+      --valo-tint-5pct: hsla(0, 0%, 100%, 0.3);
+      --valo-tint-10pct: hsla(0, 0%, 100%, 0.37);
+      --valo-tint-20pct: hsla(0, 0%, 100%, 0.44);
+      --valo-tint-30pct: hsla(0, 0%, 100%, 0.5);
+      --valo-tint-40pct: hsla(0, 0%, 100%, 0.57);
+      --valo-tint-50pct: hsla(0, 0%, 100%, 0.64);
+      --valo-tint-60pct: hsla(0, 0%, 100%, 0.7);
+      --valo-tint-70pct: hsla(0, 0%, 100%, 0.77);
+      --valo-tint-80pct: hsla(0, 0%, 100%, 0.84);
+      --valo-tint-90pct: hsla(0, 0%, 100%, 0.9);
       --valo-tint: #FFF;
 
       /* Shades */
-      --valo-shade-5pct: hsla(214, 45%, 26%, 0.06);
-      --valo-shade-10pct: hsla(214, 45%, 26%, 0.11);
-      --valo-shade-20pct: hsla(214, 45%, 26%, 0.21);
-      --valo-shade-30pct: hsla(214, 45%, 26%, 0.31);
-      --valo-shade-40pct: hsla(214, 45%, 26%, 0.41);
-      --valo-shade-50pct: hsla(214, 45%, 26%, 0.51);
-      --valo-shade-60pct: hsla(214, 45%, 26%, 0.61);
-      --valo-shade-70pct: hsla(214, 45%, 26%, 0.71);
-      --valo-shade-80pct: hsla(214, 45%, 26%, 0.81);
-      --valo-shade-90pct: hsla(214, 45%, 26%, 0.91);
-      --valo-shade: hsl(214, 45%, 26%);
+      --valo-shade-5pct: hsla(214, 100%, 15%, 0.05);
+      --valo-shade-10pct: hsla(214, 95%, 15%, 0.1);
+      --valo-shade-20pct: hsla(214, 90%, 15%, 0.2);
+      --valo-shade-30pct: hsla(214, 85%, 15%, 0.3);
+      --valo-shade-40pct: hsla(214, 80%, 15%, 0.41);
+      --valo-shade-50pct: hsla(214, 75%, 15%, 0.51);
+      --valo-shade-60pct: hsla(214, 70%, 15%, 0.61);
+      --valo-shade-70pct: hsla(214, 65%, 15%, 0.72);
+      --valo-shade-80pct: hsla(214, 60%, 15%, 0.82);
+      --valo-shade-90pct: hsla(214, 55%, 15%, 0.92);
+      --valo-shade: hsl(214, 50%, 15%);
 
       /* Contrast colors */
       --valo-contrast-5pct: var(--valo-shade-5pct);
@@ -50,28 +53,25 @@
       --valo-disabled-text-color: var(--valo-contrast-30pct);
 
       /* Primary colors */
-      --valo-primary-color: #1676f4;
-      --valo-primary-color-50pct: rgba(22, 118, 244, 0.5);
-      --valo-primary-color-10pct: rgba(22, 118, 244, 0.1);
+      --valo-primary-color: hsl(214, 90%, 52%);
+      --valo-primary-color-50pct: hsla(214, 90%, 52%, 0.5);
+      --valo-primary-color-10pct: hsla(214, 90%, 52%, 0.1);
       --valo-primary-text-color: var(--valo-primary-color);
       --valo-primary-contrast-color: #FFF;
 
       /* Error colors */
-      --valo-error-color: #FF473A;
-      --valo-error-color-50pct: rgba(255, 66, 56, 0.5);
-      --valo-error-color-10pct: rgba(255, 66, 56, 0.1);
-      --valo-error-text-color: var(--valo-error-color);
-      --valo-error-contrast-color: var(--valo-primary-contrast-color);
+      --valo-error-color: hsl(3, 100%, 61%);
+      --valo-error-color-50pct: hsla(3, 100%, 60%, 0.5);
+      --valo-error-color-10pct: hsla(3, 100%, 60%, 0.1);
+      --valo-error-text-color: hsl(3, 92%, 53%);
+      --valo-error-contrast-color: #FFF;
 
       /* Success colors */
-      --valo-success-color: #1BCA66;
-      --valo-success-color-50pct: rgba(27, 201, 102, .5);
-      --valo-success-color-10pct: rgba(27, 201, 102, .1);
-      --valo-success-text-color: var(--valo-success-color);
-      --valo-success-contrast-color: var(--valo-primary-contrast-color);
-
-      /* Base color (main bg) */
-      --valo-base-color: #FFF;
+      --valo-success-color: hsl(145, 80%, 42%); /* hsl(144,82%,37%); */
+      --valo-success-color-50pct: hsla(145, 76%, 44%, 0.55);
+      --valo-success-color-10pct: hsla(145, 76%, 44%, 0.12);
+      --valo-success-text-color: hsl(145, 100%, 32%);
+      --valo-success-contrast-color: #FFF;
     }
   </style>
 </custom-style>
@@ -79,44 +79,35 @@
 <dom-module id="valo-color">
   <template>
     <style>
-      html {
-        color: var(--valo-body-text-color);
-        background-color: var(--valo-base-color);
-      }
-
-      /* Need to duplicate so this style module can be used for custom elements as well */
-      /* Can’t combine with the above selector because that doesn’t work in Firefox */
-      :host {
-        color: var(--valo-body-text-color);
-        background-color: var(--valo-base-color);
-      }
-
       [theme~="dark"] {
+        /* Base (background) color */
+        --valo-base-color: hsl(214, 35%, 21%);
+
         /* Tints */
-        --valo-tint-5pct: hsla(214, 81%, 97%, 0.06);
-        --valo-tint-10pct: hsla(214, 81%, 97%, 0.11);
-        --valo-tint-20pct: hsla(214, 81%, 97%, 0.21);
-        --valo-tint-30pct: hsla(214, 81%, 97%, 0.31);
-        --valo-tint-40pct: hsla(214, 81%, 97%, 0.41);
-        --valo-tint-50pct: hsla(214, 81%, 97%, 0.51);
-        --valo-tint-60pct: hsla(214, 81%, 97%, 0.61);
-        --valo-tint-70pct: hsla(214, 81%, 97%, 0.71);
-        --valo-tint-80pct: hsla(214, 81%, 97%, 0.81);
-        --valo-tint-90pct: hsla(214, 81%, 97%, 0.91);
-        --valo-tint: hsl(214, 81%, 97%);
+        --valo-tint-5pct: hsla(214, 65%, 85%, 0.06);
+        --valo-tint-10pct: hsla(214, 60%, 80%, 0.14);
+        --valo-tint-20pct: hsla(214, 64%, 82%, 0.23);
+        --valo-tint-30pct: hsla(214, 69%, 84%, 0.32);
+        --valo-tint-40pct: hsla(214, 73%, 86%, 0.41);
+        --valo-tint-50pct: hsla(214, 78%, 88%, 0.5);
+        --valo-tint-60pct: hsla(214, 82%, 90%, 0.6);
+        --valo-tint-70pct: hsla(214, 87%, 92%, 0.7);
+        --valo-tint-80pct: hsla(214, 91%, 94%, 0.8);
+        --valo-tint-90pct: hsla(214, 96%, 96%, 0.9);
+        --valo-tint: hsl(214, 100%, 98%);
 
         /* Shades */
-        --valo-shade-5pct: hsla(214, 13%, 7%, 0.06);
-        --valo-shade-10pct: hsla(214, 13%, 7%, 0.11);
-        --valo-shade-20pct: hsla(214, 13%, 7%, 0.21);
-        --valo-shade-30pct: hsla(214, 13%, 7%, 0.31);
-        --valo-shade-40pct: hsla(214, 13%, 7%, 0.41);
-        --valo-shade-50pct: hsla(214, 13%, 7%, 0.51);
-        --valo-shade-60pct: hsla(214, 13%, 7%, 0.61);
-        --valo-shade-70pct: hsla(214, 13%, 7%, 0.71);
-        --valo-shade-80pct: hsla(214, 13%, 7%, 0.81);
-        --valo-shade-90pct: hsla(214, 13%, 7%, 0.91);
-        --valo-shade: hsl(214, 13%, 7%);
+        --valo-shade-5pct: hsla(214, 0%, 0%, 0.08);
+        --valo-shade-10pct: hsla(214, 4%, 2%, 0.15);
+        --valo-shade-20pct: hsla(214, 8%, 4%, 0.23);
+        --valo-shade-30pct: hsla(214, 12%, 6%, 0.32);
+        --valo-shade-40pct: hsla(214, 16%, 8%, 0.41);
+        --valo-shade-50pct: hsla(214, 20%, 10%, 0.5);
+        --valo-shade-60pct: hsla(214, 24%, 12%, 0.6);
+        --valo-shade-70pct: hsla(214, 28%, 13%, 0.7);
+        --valo-shade-80pct: hsla(214, 32%, 13%, 0.8);
+        --valo-shade-90pct: hsla(214, 33%, 13%, 0.9);
+        --valo-shade: hsl(214, 33%, 13%);
 
         /* Contrast colors */
         --valo-contrast-5pct: var(--valo-tint-5pct);
@@ -139,22 +130,25 @@
         --valo-disabled-text-color: var(--valo-contrast-30pct);
 
         /* Primary colors */
-        --valo-primary-color: #3d92ff;
-        --valo-primary-color-50pct: rgba(61, 146, 255, 0.5);
-        --valo-primary-color-10pct: rgba(61, 146, 255, 0.1);
-        --valo-primary-text-color: var(--valo-primary-color);
+        --valo-primary-color: hsl(214, 86%, 55%);
+        --valo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
+        --valo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
+        --valo-primary-text-color: hsl(214, 100%, 70%);
         --valo-primary-contrast-color: #FFF;
 
         /* Error colors */
-        --valo-error-color: #f65b50;
-        --valo-error-color-50pct: rgba(246, 91, 80, 0.5);
-        --valo-error-color-10pct: rgba(246, 91, 80, 0.1);
-        --valo-error-text-color: var(--valo-error-color);
+        --valo-error-color: hsl(3, 90%, 63%);
+        --valo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
+        --valo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
+        --valo-error-text-color: hsl(3, 100%, 67%);
 
-        /* Use the original shade color. The newly defined shade colors are used to shade this color */
-        --valo-base-color: hsl(214, 27%, 26%);
+        /* Success colors */
+        --valo-success-color: hsl(145, 65%, 42%);
+        --valo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
+        --valo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
+        --valo-success-text-color: hsl(145, 85%, 47%);
 
-        /* This is a special case, where the contrast colors don’t look nice, so we need an extra property for it */
+        /* The contrast colors don’t look nice, so we need an extra property for it */
         --_valo-button-background-color: var(--valo-tint-5pct);
 
         /* The box shadow elevation doesn’t look that nice on the dark background */
@@ -162,12 +156,33 @@
 
         /* Set the base colors */
         color: var(--valo-body-text-color);
+      }
+
+      html {
+        color: var(--valo-body-text-color);
+        background-color: var(--valo-base-color);
+      }
+
+      /* Can’t combine with the above selector because that doesn’t work in Firefox */
+      :host {
+        color: var(--valo-body-text-color);
+        background-color: var(--valo-base-color);
+      }
+
+      /* Limit setting the background color to certain elements only */
+      body[theme~="dark"],
+      div[theme~="dark"],
+      section[theme~="dark"],
+      main[theme~="dark"],
+      header[theme~="dark"],
+      footer[theme~="dark"],
+      nav[theme~="dark"] {
         background-color: var(--valo-base-color);
       }
 
       /* Set link color */
       a {
-        color: var(--valo-link-color, var(--valo-primary-text-color));
+        color: var(--valo-primary-text-color);
       }
     </style>
   </template>
@@ -178,31 +193,34 @@
   <template>
     <style>
       :host {
+        /* Base (background) color */
+        --valo-base-color: hsl(214, 35%, 21%);
+
         /* Tints */
-        --valo-tint-5pct: hsla(214, 81%, 97%, 0.06);
-        --valo-tint-10pct: hsla(214, 81%, 97%, 0.11);
-        --valo-tint-20pct: hsla(214, 81%, 97%, 0.21);
-        --valo-tint-30pct: hsla(214, 81%, 97%, 0.31);
-        --valo-tint-40pct: hsla(214, 81%, 97%, 0.41);
-        --valo-tint-50pct: hsla(214, 81%, 97%, 0.51);
-        --valo-tint-60pct: hsla(214, 81%, 97%, 0.61);
-        --valo-tint-70pct: hsla(214, 81%, 97%, 0.71);
-        --valo-tint-80pct: hsla(214, 81%, 97%, 0.81);
-        --valo-tint-90pct: hsla(214, 81%, 97%, 0.91);
-        --valo-tint: hsl(214, 81%, 97%);
+        --valo-tint-5pct: hsla(214, 65%, 85%, 0.06);
+        --valo-tint-10pct: hsla(214, 60%, 80%, 0.14);
+        --valo-tint-20pct: hsla(214, 64%, 82%, 0.23);
+        --valo-tint-30pct: hsla(214, 69%, 84%, 0.32);
+        --valo-tint-40pct: hsla(214, 73%, 86%, 0.41);
+        --valo-tint-50pct: hsla(214, 78%, 88%, 0.5);
+        --valo-tint-60pct: hsla(214, 82%, 90%, 0.6);
+        --valo-tint-70pct: hsla(214, 87%, 92%, 0.7);
+        --valo-tint-80pct: hsla(214, 91%, 94%, 0.8);
+        --valo-tint-90pct: hsla(214, 96%, 96%, 0.9);
+        --valo-tint: hsl(214, 100%, 98%);
 
         /* Shades */
-        --valo-shade-5pct: hsla(214, 13%, 7%, 0.06);
-        --valo-shade-10pct: hsla(214, 13%, 7%, 0.11);
-        --valo-shade-20pct: hsla(214, 13%, 7%, 0.21);
-        --valo-shade-30pct: hsla(214, 13%, 7%, 0.31);
-        --valo-shade-40pct: hsla(214, 13%, 7%, 0.41);
-        --valo-shade-50pct: hsla(214, 13%, 7%, 0.51);
-        --valo-shade-60pct: hsla(214, 13%, 7%, 0.61);
-        --valo-shade-70pct: hsla(214, 13%, 7%, 0.71);
-        --valo-shade-80pct: hsla(214, 13%, 7%, 0.81);
-        --valo-shade-90pct: hsla(214, 13%, 7%, 0.91);
-        --valo-shade: hsl(214, 13%, 7%);
+        --valo-shade-5pct: hsla(214, 0%, 0%, 0.08);
+        --valo-shade-10pct: hsla(214, 4%, 2%, 0.15);
+        --valo-shade-20pct: hsla(214, 8%, 4%, 0.23);
+        --valo-shade-30pct: hsla(214, 12%, 6%, 0.32);
+        --valo-shade-40pct: hsla(214, 16%, 8%, 0.41);
+        --valo-shade-50pct: hsla(214, 20%, 10%, 0.5);
+        --valo-shade-60pct: hsla(214, 24%, 12%, 0.6);
+        --valo-shade-70pct: hsla(214, 28%, 13%, 0.7);
+        --valo-shade-80pct: hsla(214, 32%, 13%, 0.8);
+        --valo-shade-90pct: hsla(214, 33%, 13%, 0.9);
+        --valo-shade: hsl(214, 33%, 13%);
 
         /* Contrast colors */
         --valo-contrast-5pct: var(--valo-tint-5pct);
@@ -225,20 +243,24 @@
         --valo-disabled-text-color: var(--valo-contrast-30pct);
 
         /* Primary colors */
-        --valo-primary-color: #3d92ff;
-        --valo-primary-color-50pct: rgba(61, 146, 255, 0.5);
-        --valo-primary-color-10pct: rgba(61, 146, 255, 0.1);
-        --valo-primary-text-color: var(--valo-primary-color);
+        --valo-primary-color: hsl(214, 86%, 55%);
+        --valo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
+        --valo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
+        --valo-primary-text-color: hsl(214, 100%, 70%);
         --valo-primary-contrast-color: #FFF;
 
         /* Error colors */
-        --valo-error-color: #f65b50;
-        --valo-error-color-50pct: rgba(246, 91, 80, 0.5);
-        --valo-error-color-10pct: rgba(246, 91, 80, 0.1);
-        --valo-error-text-color: var(--valo-error-color);
+        --valo-error-color: hsl(3, 90%, 63%);
+        --valo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
+        --valo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
+        --valo-error-text-color: hsl(3, 100%, 67%);
 
-        /* Use the original shade color. The newly defined shade colors are used to shade this color */
-        --valo-base-color: hsl(214, 27%, 26%);
+        /* Success colors */
+        --valo-success-color: hsl(145, 65%, 42%);
+        --valo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
+        --valo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
+        --valo-success-text-color: hsl(145, 85%, 47%);
+
         /* The contrast colors don’t look nice, so we need an extra property for it */
         --_valo-button-background-color: var(--valo-tint-5pct);
 
