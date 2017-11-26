@@ -53,6 +53,12 @@
       :host([readonly]) [part="toggle-button"] {
         display: none;
       }
+
+      /* Disabled */
+
+      :host([disabled]) [part$="button"] {
+        color: var(--valo-contrast-20pct);
+      }
     </style>
   </template>
 </dom-module>
