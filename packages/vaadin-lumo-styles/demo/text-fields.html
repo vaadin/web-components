@@ -119,6 +119,29 @@
     </nice-demo-snippet>
 
 
+    <h3 demo-section>Text align</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-text-field value="left"></vaadin-text-field>
+        <vaadin-text-field value="center" class="center"></vaadin-text-field>
+        <vaadin-text-field value="right" class="right"></vaadin-text-field>
+
+        <custom-style>
+          <style>
+            .center {
+              --valo-text-field-text-align: center;
+            }
+
+            .right {
+              --valo-text-field-text-align: right;
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
     <hr>
 
 
