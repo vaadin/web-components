@@ -88,7 +88,11 @@
         left: 0.5em;
         transform: scale(0.55) rotate(-135deg);
         opacity: 0;
-        transition: width 0.1s, height 0.4s;
+      }
+
+      /* Only show this transition if activated with the mouse (disabled for grid select-all this way) */
+      :host(:hover) [part="checkbox"]::after {
+        transition: width 0.1s, height 0.25s;
       }
 
       :host([indeterminate]) [part="checkbox"],
@@ -135,7 +139,7 @@
         width: auto;
         border: 0;
         background-color: var(--valo-primary-contrast-color);
-        transition: opacity 0.4s;
+        transition: opacity 0.25s;
       }
 
       :host([disabled]) {
