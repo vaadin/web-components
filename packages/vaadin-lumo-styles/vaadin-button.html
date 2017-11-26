@@ -106,7 +106,7 @@
         transform: scale(0);
       }
 
-      :host([active]:not([theme~="primary"])) {
+      :host([active][theme*="tertiary"]) {
         color: var(--valo-body-text-color);
       }
 
@@ -149,7 +149,7 @@
       }
 
       :host([theme~="primary"][active])::after {
-        opacity: 0.15;
+        opacity: 0.2;
       }
 
       @media (hover: hover) {
