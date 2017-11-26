@@ -14,8 +14,8 @@
         margin: var(--valo-space-xs);
         padding-left: calc(0.45em + var(--valo-border-radius) / 4);
         padding-right: calc(0.45em + var(--valo-border-radius) / 4);
-        color: var(--valo-contrast);
-        background-color: var(--valo-contrast-10pct);
+        color: var(--valo-primary-text-color);
+        background-color: var(--valo-primary-color-10pct);
         border-radius: var(--valo-border-radius);
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-xs);
@@ -30,12 +30,7 @@
         height: var(--valo-size-xxxs);
       }
 
-      /* Default */
-
-      [theme~="badge"][theme~="primary"] {
-        color: var(--valo-primary-text-color);
-        background-color: var(--valo-primary-color-10pct);
-      }
+      /* Colors */
 
       [theme~="badge"][theme~="success"] {
         color: var(--valo-success-text-color);
@@ -47,26 +42,31 @@
         background-color: var(--valo-error-color-10pct);
       }
 
-      /* Contrast */
-
       [theme~="badge"][theme~="contrast"] {
-        color: var(--valo-base-color);
-        background-color: var(--valo-contrast);
+        color: var(--valo-contrast-80pct);
+        background-color: var(--valo-contrast-5pct);
       }
 
-      [theme~="badge"][theme~="primary"][theme~="contrast"] {
+      /* Primary */
+
+      [theme~="badge"][theme~="primary"] {
         color: var(--valo-primary-contrast-color);
         background-color: var(--valo-primary-color);
       }
 
-      [theme~="badge"][theme~="success"][theme~="contrast"] {
+      [theme~="badge"][theme~="success"][theme~="primary"] {
         color: var(--valo-success-contrast-color);
         background-color: var(--valo-success-color);
       }
 
-      [theme~="badge"][theme~="error"][theme~="contrast"] {
+      [theme~="badge"][theme~="error"][theme~="primary"] {
         color: var(--valo-error-contrast-color);
         background-color: var(--valo-error-color);
+      }
+
+      [theme~="badge"][theme~="contrast"][theme~="primary"] {
+        color: var(--valo-base-color);
+        background-color: var(--valo-contrast);
       }
 
       /* Links */
@@ -100,7 +100,7 @@
         height: 1em;
         padding: 0;
         border-radius: 50%;
-        background-color: var(--valo-contrast);
+        background-color: var(--valo-primary-color);
       }
 
       [theme~="badge"][theme~="small"]:not([icon]):empty {
@@ -108,8 +108,8 @@
         height: 0.75em;
       }
 
-      [theme~="badge"][theme~="primary"]:not([icon]):empty {
-        background-color: var(--valo-primary-color);
+      [theme~="badge"][theme~="contrast"]:not([icon]):empty {
+        background-color: var(--valo-contrast);
       }
 
       [theme~="badge"][theme~="success"]:not([icon]):empty {

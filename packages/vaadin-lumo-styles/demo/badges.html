@@ -19,9 +19,7 @@
     }
   </style>
   <custom-style>
-    <style include="valo-badge">
-      /* The <style> tag needs to be non-empty for IE11 */
-    </style>
+    <style include="valo-badge"></style>
   </custom-style>
 </head>
 
@@ -36,51 +34,74 @@
     <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/badge.html" class="theme-source-code">Theme source code</a>
     <h1>Badges</h1>
 
-    <h3 demo-section>Default</h3>
-
-    <nice-demo-snippet>
+    <p>Import and include the badge style module:</p>
+    <nice-demo-snippet code-only>
       <template slot="source">
-        <span theme="badge">Default</span>
-        <span theme="badge primary">Primary</span>
-        <span theme="badge success">Success</span>
-        <span theme="badge error">Error</span>
-        <span theme="badge">1</span>
-        <span theme="badge primary">2</span>
-        <span theme="badge success">3</span>
-        <span theme="badge error">4</span>
-        <br>
-        <span theme="badge small">Default</span>
-        <span theme="badge primary small">Primary</span>
-        <span theme="badge success small">Success</span>
-        <span theme="badge error small">Error</span>
-        <span theme="badge small">1</span>
-        <span theme="badge primary small">2</span>
-        <span theme="badge success small">3</span>
-        <span theme="badge error small">4</span>
+        <link rel="import" href="bower_components/vaadin-valo-theme/badge.html">
+
+        <custom-style>
+          <style include="valo-badge"></style>
+        </custom-style>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Contrast</h3>
+    <h3 demo-section>Colors</h3>
 
     <nice-demo-snippet>
       <template slot="source">
-        <span theme="badge contrast">Default</span>
-        <span theme="badge primary contrast">Primary</span>
-        <span theme="badge success contrast">Success</span>
-        <span theme="badge error contrast">Error</span>
-        <span theme="badge contrast">1</span>
-        <span theme="badge primary contrast">2</span>
-        <span theme="badge success contrast">3</span>
-        <span theme="badge error contrast">4</span>
+        <span theme="badge">Normal</span>
+        <span theme="badge success">Success</span>
+        <span theme="badge error">Error</span>
+        <span theme="badge contrast">Contrast</span>
+
+        <span theme="badge">1</span>
+        <span theme="badge success">2</span>
+        <span theme="badge error">3</span>
+        <span theme="badge contrast">4</span>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Primary</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span theme="badge primary">Normal</span>
+        <span theme="badge success primary">Success</span>
+        <span theme="badge error primary">Error</span>
+        <span theme="badge contrast primary">Contrast</span>
+
+        <span theme="badge primary">1</span>
+        <span theme="badge success primary">2</span>
+        <span theme="badge error primary">3</span>
+        <span theme="badge contrast primary">4</span>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Small</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span theme="badge small">Normal</span>
+        <span theme="badge success small">Success</span>
+        <span theme="badge error small">Error</span>
+        <span theme="badge contrast small">Contrast</span>
+
+        <span theme="badge small">1</span>
+        <span theme="badge success small">2</span>
+        <span theme="badge error small">3</span>
+        <span theme="badge contrast small">4</span>
+
         <br>
-        <span theme="badge contrast small">Default</span>
-        <span theme="badge primary contrast small">Primary</span>
-        <span theme="badge success contrast small">Success</span>
-        <span theme="badge error contrast small">Error</span>
-        <span theme="badge contrast small">1</span>
-        <span theme="badge primary contrast small">2</span>
-        <span theme="badge success contrast small">3</span>
-        <span theme="badge error contrast small">4</span>
+
+        <span theme="badge small primary">Normal</span>
+        <span theme="badge success small primary">Success</span>
+        <span theme="badge error small primary">Error</span>
+        <span theme="badge contrast small primary">Contrast</span>
+
+        <span theme="badge small primary">1</span>
+        <span theme="badge success small primary">2</span>
+        <span theme="badge error small primary">3</span>
+        <span theme="badge contrast small primary">4</span>
       </template>
     </nice-demo-snippet>
 
@@ -88,41 +109,51 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <span theme="badge pill">Default</span>
-        <span theme="badge primary pill">Primary</span>
+        <span theme="badge pill">Normal</span>
         <span theme="badge success pill">Success</span>
         <span theme="badge error pill">Error</span>
+        <span theme="badge contrast pill">Contrast</span>
+
         <span theme="badge pill">1</span>
-        <span theme="badge primary pill">2</span>
-        <span theme="badge success pill">3</span>
-        <span theme="badge error pill">4</span>
+        <span theme="badge success pill">2</span>
+        <span theme="badge error pill">3</span>
+        <span theme="badge contrast pill">4</span>
+
         <br>
-        <span theme="badge pill small">Default</span>
-        <span theme="badge primary pill small">Primary</span>
-        <span theme="badge success pill small">Success</span>
-        <span theme="badge error pill small">Error</span>
-        <span theme="badge pill small">1</span>
-        <span theme="badge primary pill small">2</span>
-        <span theme="badge success pill small">3</span>
-        <span theme="badge error pill small">4</span>
+
+        <span theme="badge primary pill">Normal</span>
+        <span theme="badge success primary pill">Success</span>
+        <span theme="badge error primary pill">Error</span>
+        <span theme="badge contrast primary pill">Contrast</span>
+
+        <span theme="badge primary pill">1</span>
+        <span theme="badge success primary pill">2</span>
+        <span theme="badge error primary pill">3</span>
+        <span theme="badge contrast primary pill">4</span>
+
+        <h6>Small</h6>
+
+        <span theme="badge small pill">Normal</span>
+        <span theme="badge success small pill">Success</span>
+        <span theme="badge error small pill">Error</span>
+        <span theme="badge contrast small pill">Contrast</span>
+
+        <span theme="badge small pill">1</span>
+        <span theme="badge success small pill">2</span>
+        <span theme="badge error small pill">3</span>
+        <span theme="badge contrast small pill">4</span>
+
         <br>
-        <span theme="badge contrast pill">Default</span>
-        <span theme="badge primary contrast pill">Primary</span>
-        <span theme="badge success contrast pill">Success</span>
-        <span theme="badge error contrast pill">Error</span>
-        <span theme="badge contrast pill">1</span>
-        <span theme="badge primary contrast pill">2</span>
-        <span theme="badge success contrast pill">3</span>
-        <span theme="badge error contrast pill">4</span>
-        <br>
-        <span theme="badge contrast pill small">Default</span>
-        <span theme="badge primary contrast pill small">Primary</span>
-        <span theme="badge success contrast pill small">Success</span>
-        <span theme="badge error contrast pill small">Error</span>
-        <span theme="badge contrast pill small">1</span>
-        <span theme="badge primary contrast pill small">2</span>
-        <span theme="badge success contrast pill small">3</span>
-        <span theme="badge error contrast pill small">4</span>
+
+        <span theme="badge small primary pill">Normal</span>
+        <span theme="badge success small primary pill">Success</span>
+        <span theme="badge error small primary pill">Error</span>
+        <span theme="badge contrast small primary pill">Contrast</span>
+
+        <span theme="badge small primary pill">1</span>
+        <span theme="badge success small primary pill">2</span>
+        <span theme="badge error small primary pill">3</span>
+        <span theme="badge contrast small primary pill">4</span>
       </template>
     </nice-demo-snippet>
 
@@ -131,40 +162,40 @@
     <nice-demo-snippet>
       <template slot="source">
         <iron-icon icon="valo:bell" theme="badge"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge success"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge error"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge contrast"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary contrast"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge success contrast"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge error contrast"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success primary"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error primary"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast primary"></iron-icon>
         <br>
         <iron-icon icon="valo:bell" theme="badge pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary pill"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge success pill"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge error pill"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge contrast pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary contrast pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge success contrast pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge error contrast pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success primary pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error primary pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast primary pill"></iron-icon>
         <br>
         <iron-icon icon="valo:bell" theme="badge small"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge success small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge error small"></iron-icon>
         <iron-icon icon="valo:bell" theme="badge contrast small"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary contrast small"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge success contrast small"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge error contrast small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success primary small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error primary small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast primary small"></iron-icon>
         <br>
-        <iron-icon icon="valo:bell" theme="badge small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge success small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge error small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge contrast small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge primary contrast small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge success contrast small pill"></iron-icon>
-        <iron-icon icon="valo:bell" theme="badge error contrast small pill"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge primary pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge success primary pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge error primary pill small"></iron-icon>
+        <iron-icon icon="valo:bell" theme="badge contrast primary pill small"></iron-icon>
       </template>
     </nice-demo-snippet>
 
@@ -173,14 +204,14 @@
     <nice-demo-snippet>
       <template slot="source">
         <span theme="badge"></span>
-        <span theme="badge primary"></span>
         <span theme="badge success"></span>
         <span theme="badge error"></span>
+        <span theme="badge contrast"></span>
         <br>
         <span theme="badge small"></span>
-        <span theme="badge primary small"></span>
         <span theme="badge success small"></span>
         <span theme="badge error small"></span>
+        <span theme="badge contrast small"></span>
       </template>
     </nice-demo-snippet>
 
@@ -188,7 +219,7 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        Visit the new <a href="https://vaadin.com" theme="badge primary">Vaadin</a> website!
+        Visit the <a href="https://vaadin.com" theme="badge">Vaadin</a> website!
       </template>
     </nice-demo-snippet>
 
