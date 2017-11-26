@@ -155,7 +155,7 @@
         --valo-base-color: hsl(214, 27%, 26%);
 
         /* This is a special case, where the contrast colors don’t look nice, so we need an extra property for it */
-        ---valo-button-background-color: var(--valo-tint-5pct);
+        --_valo-button-background-color: var(--valo-tint-5pct);
 
         /* Set the base colors */
         color: var(--valo-body-text-color);
@@ -236,9 +236,9 @@
 
         /* Use the original shade color. The newly defined shade colors are used to shade this color */
         --valo-base-color: hsl(214, 27%, 26%);
+        /* The contrast colors don’t look nice, so we need an extra property for it */
+        --_valo-button-background-color: var(--valo-tint-5pct);
 
-        /* This is a special case, where the contrast colors don’t look nice, so we need an extra property for it */
-        ---valo-button-background-color: var(--valo-tint-5pct);
 
         /* Set the base colors */
         color: var(--valo-body-text-color);
