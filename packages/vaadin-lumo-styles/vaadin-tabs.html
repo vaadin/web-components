@@ -12,6 +12,10 @@
         min-height: var(--valo-size-l);
       }
 
+      :host([orientation="vertical"]) {
+        box-shadow: -1px 0 0 0 var(--valo-contrast-10pct);
+      }
+
       [part="forward-button"],
       [part="back-button"] {
         position: absolute;
@@ -45,10 +49,16 @@
 
       /* Tabs overflow */
 
+      :host(:not([overflow])) [part="tabs"] {
+        overflow: visible;
+      }
+
       [part="tabs"] {
         --_valo-tabs-overflow-mask-image: none;
         -webkit-mask-image: var(--_valo-tabs-overflow-mask-image);
         mask-image: var(--_valo-tabs-overflow-mask-image);
+        /* For IE11 */
+        min-height: var(--valo-size-l);
       }
 
       /* Horizontal tabs overflow */
@@ -85,16 +95,23 @@
         --_valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 30px);
       }
 
-      /* Selected tab styles */
-
       :host [part="tabs"][part="tabs"] ::slotted(vaadin-tab) {
         border: 0;
+      }
+
+      :host ::slotted(:not(vaadin-tab)) {
+        margin-left: var(--valo-space-m);
       }
 
       /* Small theme */
 
       :host([theme~="small"]) {
         font-size: var(--valo-font-size-s);
+        min-height: var(--valo-size-m);
+      }
+
+      :host([theme~="small"]) [part="tabs"] {
+        min-height: var(--valo-size-m);
       }
 
       /* Minimal and pill themes */
@@ -144,8 +161,7 @@
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
         color: var(--valo-primary-text-color);
-        box-shadow:  1px 0 0 0 var(--valo-contrast-10pct),
-                    -1px 0 0 0 var(--valo-contrast-10pct);
+        box-shadow: 1px 0 0 0 var(--valo-contrast-10pct), -1px 0 0 0 var(--valo-contrast-10pct);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:first-child) {
@@ -166,11 +182,16 @@
         font-weight: 500;
         opacity: 1;
         color: var(--valo-contrast-60pct);
-        transition: 0.2s color;
+        transition: 0.2s color, 0.2s transform;
         display: flex;
         align-items: center;
         position: relative;
         cursor: pointer;
+        transform-origin: 50% 100%;
+      }
+
+      :host([orientation="vertical"]) {
+        transform-origin: 0% 50%;
       }
 
       :host(:hover),
@@ -179,7 +200,7 @@
       }
 
       :host([focus-ring]) {
-        background-color: var(--valo-primary-color-10pct);
+        background-color: transparent;
       }
 
       :host([selected]) {
@@ -203,12 +224,17 @@
         max-width: 80%;
         height: 2px;
         max-height: 80%;
-        background-color: var(--valo-primary-color);
+        background-color: var(--valo-contrast-60pct);
         border-radius: var(--valo-border-radius) var(--valo-border-radius) 0 0;
         transform: translateX(-50%) scale(0);
         transform-origin: 50% 100%;
         transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
         will-change: transform;
+      }
+
+      :host([selected])::before,
+      :host([selected])::after {
+        background-color: var(--valo-primary-color);
       }
 
       :host([orientation="vertical"])::before,
@@ -229,17 +255,39 @@
       }
 
       :host([selected])::before,
-      :host([selected])::after {
+      :host([selected]:not([active]))::after,
+      :host([focus-ring])::before {
         transform: translateX(-50%) scale(1);
         transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
       }
 
       :host([orientation="vertical"][selected])::before,
-      :host([orientation="vertical"][selected])::after {
+      :host([orientation="vertical"][selected]:not([active]))::after,
+      :host([orientation="vertical"][focus-ring])::before {
         transform: translateY(50%) scale(1);
       }
 
-      :host([selected])::after {
+      :host([selected][focus-ring]:not([active]))::before,
+      :host([selected][focus-ring]:not([active]))::after {
+        transform: translateX(-50%) scale(1.2);
+      }
+
+      :host([orientation="vertical"][selected][focus-ring]:not([active]))::before,
+      :host([orientation="vertical"][selected][focus-ring]:not([active]))::after {
+        transform: translateY(50%) scale(1.2);
+      }
+
+      :host([active][focus-ring])::before,
+      :host([active][focus-ring])::after {
+        transform: translateX(-50%) scale(0.9);
+      }
+
+      :host([orientation="vertical"][active][focus-ring])::before,
+      :host([orientation="vertical"][active][focus-ring])::after {
+        transform: translateY(50%) scale(0.9);
+      }
+
+      :host([selected]:not([active]))::after {
         opacity: 0;
       }
 
