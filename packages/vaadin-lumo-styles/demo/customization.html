@@ -34,40 +34,13 @@
 
     <h1>Customization</h1>
 
-    <p>One of the main benefits of the Valo theme is that it allows you to customize it to your
-      needs. Because it’s based on Web Components and Polymer, the styling is done a bit
-      differently than for a traditional web page.</p>
-
-    <p>The main difference is that Web Components use <b>shadow DOM</b>, which prevents you from styling
-      the internals of the components with global CSS because a shadow DOM introduces its own
-      <b>style scope</b>.</p>
-
-    <h3 demo-section>What is a “style scope”?</h3>
-
-    <p>A style scope is a part of the DOM hierarhcy, where the styles placed inside it can only
-      affect the elements inside that same part of the hiearchy.</p>
-
-    <p>The global scope is the default, and all external stylesheets (i.e.
-      <code>&lt;link rel="stylesheet"&gt;</code>) and <code>&lt;style&gt;</code> elements placed in
-      the <code>index.html</code> end up.</p>
-
-    <p>Each shadow DOM introduces their own style scope, and <b>global styles will not affect the
-      elements inside it</b>. And vice-versa, styles inside a shadow DOM will not affect the elements
-      in the global scope (or in other shadow DOMs).</p>
-
-
-    <hr>
-
 
     <h2 demo-section>Common use cases</h2>
     <h4 class="subtitle">Built-in theme variations</h4>
 
     <p>For common use cases, Valo offers many built-in theme variations you can apply to individual
       component instances. For example, there is a “primary” theme for buttons, and a ”small” theme
-      text-fields.</p>
-
-    <p>The built-in variations are applied using the <code>theme</code> attribute, and <b>they work
-      in any style scope</b>:</p>
+      for text-fields. The built-in variations are applied using the <code>theme</code> attribute.</p>
 
     <h6>Example: making a button more prominent using built-in variations</h6>
 
@@ -85,7 +58,7 @@
     <h3>Light and dark themes</h3>
 
     <p>Read more about light and dark themes from the
-      <a href="colors.html#light-and-dark-themes">colors documentation</a>.</p>
+      <a href="colors.html#light-and-dark-palette">colors documentation</a>.</p>
 
 
     <hr>
@@ -99,10 +72,7 @@
       that you can use to make smaller adjustments to the theme.</p>
 
     <p>The pages under the “Style guide” section (<a href="colors.html">Colors</a> for example) list
-      the custom properties that affect all elements. Component specific custom properties are listed
-      at the end of each component’s documentation page. See
-      <a href="buttons.html#custom-properties">Button’s custom properties</a>
-      for example.</p>
+      the custom properties that affect all elements.</p>
 
     <h3>Global changes</h3>
 
@@ -179,179 +149,11 @@
     <h2 demo-section>Advanced styling</h2>
     <h4 class="subtitle">Theme modules</h4>
 
-    <p>When you can’t accomplish the styling you want using the CSS custom properties provided by
-      the theme, and you want to <b>style the internals of an element freely</b>, you can create new
-      theme modules to add <b>low level CSS for any element</b>.</p>
+    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the theme and need to style elements freely.</p>
 
-    <h3>Defining a theme module</h3>
+    <p>Read the documentation for <code>ThemableMixin</code> to learn how theme modules work.</p>
 
-    <p>A theme module is basically the same as a
-      <a href="https://www.polymer-project.org/1.0/docs/devguide/styling#style-modules">Polymer style module</a>,
-      with an additional <code>theme-for</code> attribute.</p>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Add directly to index.html or use a separate HTML import -->
-        <dom-module id="my-theme-module" theme-for="my-element">
-          <template>
-            <style>
-              /* Styles for my-element */
-            </style>
-          </template>
-        </dom-module>
-      </template>
-    </nice-demo-snippet>
-
-    <div class="note">
-      <h6>Module ID</h6>
-      <p>The <code>id</code> attribute of the theme module should be unique. You can also re-use an
-        existing id if you want to override a previously defined/imported module.</p>
-    </div>
-
-    <h3><code>theme-for</code> attribute</h3>
-
-    <p>The <code>theme-for</code> attribute specifies the custom element (read: Web Component) that
-      the styles in the theme module will affect. The value can be a space separated list of element
-      names, and can contain wildcard element names as well.</p>
-
-    <p>Examples of valid <code>theme-for</code> attribute values:</p>
-    <ul>
-      <li><code>"vaadin-button"</code></li>
-      <li><code>"vaadin-overlay vaadin-date-picker-overlay"</code></li>
-      <li><code>"vaadin-*"</code></li>
-    </ul>
-
-    <h3>Writing styles in a theme module</h3>
-
-    <p>The styles written inside a theme module are included in the elements shadow DOM. That means,
-      that in order to style the main element (a.k.a. the host element) you need to use the
-      <code>:host</code> selector:</p>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Add directly to index.html or use a separate HTML import -->
-        <dom-module id="my-button-theme" theme-for="vaadin-button">
-          <template>
-            <style>
-              :host {
-                /* Styles that are applied for all vaadin-button elements */
-              }
-            </style>
-          </template>
-        </dom-module>
-      </template>
-    </nice-demo-snippet>
-
-    <h4>Supported selectors</h4>
-
-    <p>In addition to the <code>:host</code> selector, the only other supported selectors inside a
-      theme module are ones that target the documented “shadow parts” (i.e. elements inside a shadow
-      DOM with a <code>part</code> attribute) of the element. You can still write more complex
-      selectors, which rely on any of the state attributes applied on the host or parts.</p>
-
-    <h6>Example: Styling text field’s focused and invalid states</h6>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Add directly to index.html or use a separate HTML import -->
-        <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
-          <template>
-            <style>
-              /* Styles for the "input-field" part when the text-field is invalid */
-              :host([invalid]) [part="input-field"] {
-                ...
-              }
-
-              /* Styles for the "input-field" part when the text-field is focused but not readonly */
-              :host([focused]:not([readonly])) [part="input-field"] {
-                ...
-              }
-            </style>
-          </template>
-        </dom-module>
-      </template>
-    </nice-demo-snippet>
-
-    <p>You can find links to the shadow parts documentation at the end of each element’s styling API
-      documentation. See <a href="buttons.html#styling-api">vaadin-button</a> for example.</p>
-
-    <h3>Theme modules are global</h3>
-
-    <p>When creating a theme module for an element, the styles in that theme module will apply to
-      all instances of that element. The styles are always “global” in that sense and can’t be
-      scoped by default with anything.</p>
-
-    <h4>Scoping styles in a theme module</h4>
-
-    <p>There are two ways to scope the styles that you write in a theme module.</p>
-
-    <ol>
-      <li><b>Expose new custom properties</b><br>This is the recommened first option for simple
-        situations. If you end up exposing more than a handful of properties, you should consider
-        the second option.</li>
-      <li><b>Use scoping selectors</b><br>This approach is used by the built-in
-        theme variations (i.e. <code>theme</code> attribute). The downside of this approach is that
-        you end up adding the styles to all instances, even though only some instances will need those
-        styles.</li>
-    </ol>
-
-    <h6>Example: Exposing new custom properties</h6>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Define the theme module (in index.html or in a separate HTML import)-->
-        <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
-          <template>
-            <style>
-              [part="input-field"] {
-                background-color: var(--input-field-background-color, #fff);
-              }
-            </style>
-          </template>
-        </dom-module>
-
-        <!-- Use the new custom property -->
-        <custom-style>
-          <style>
-            .some-part-of-my-app vaadin-text-field {
-             --input-field-background-color: #eee;
-            }
-          </style>
-        </custom-style>
-
-        <div class="some-part-of-my-app">
-          <vaadin-text-field></vaadin-text-field>
-        </div>
-      </template>
-    </nice-demo-snippet>
-
-    <h6>Example: Use scoping selectors</h6>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Define the theme module (in index.html or in a separate HTML import)-->
-        <dom-module id="my-text-field-theme" theme-for="vaadin-text-field">
-          <template>
-            <style>
-              :host(.special-field) [part="input-field"] {
-                background-color: #000;
-                color: #fff;
-                border: 2px solid #fff;
-                border-radius: 9px;
-                ...
-              }
-            </style>
-          </template>
-        </dom-module>
-
-        <!-- Use the new scoping selector anywhere in your app -->
-        <div>
-          <vaadin-text-field class="special-field"></vaadin-text-field>
-        </div>
-      </template>
-    </nice-demo-snippet>
-
-    <h3>Define theme modules before importing elements</h3>
-
-    <p>As with the built-in element themes, theme modules should be defined before the corresponding
-      elements are imported to make sure they are loaded by the elements.</p>
+    <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">Theme module documentation <iron-icon icon="valo:arrow-right"></iron-icon></a>
 
   </div>
 </body>
