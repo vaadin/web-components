@@ -20,6 +20,12 @@
 
     vaadin-split-layout {
       min-height: 200px;
+      flex: auto;
+    }
+
+    nice-demo-snippet > div {
+      padding-top: 1.4em;
+      display: flex;
     }
   </style>
 </head>
@@ -35,42 +41,47 @@
     <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/vaadin-split-layout.html" class="theme-source-code">Theme source code</a>
     <h1>Split Layout</h1>
 
-    <h3>Horizontal</h3>
+    <h3>Default</h3>
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-split-layout>
-          <div>First content element</div>
-          <div>Second content element</div>
+          <div></div>
+          <div></div>
         </vaadin-split-layout>
-      </template>
-    </nice-demo-snippet>
 
-    <h3>Vertical</h3>
-    <nice-demo-snippet>
-      <template slot="source">
         <vaadin-split-layout vertical>
-          <div>First content element</div>
-          <div>Second content element</div>
+          <div></div>
+          <div></div>
         </vaadin-split-layout>
       </template>
     </nice-demo-snippet>
 
-    <h3>Subtle</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-split-layout theme="subtle">
-          <div>First content element</div>
-          <div>Second content element</div>
-        </vaadin-split-layout>
-      </template>
-    </nice-demo-snippet>
-
-    <h3>Small</h3>
+    <h3 demo-section>Small</h3>
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-split-layout theme="small">
-          <div>First content element</div>
-          <div>Second content element</div>
+          <div></div>
+          <div></div>
+        </vaadin-split-layout>
+
+        <vaadin-split-layout vertical theme="small">
+          <div></div>
+          <div></div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Subtle</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout theme="subtle">
+          <div></div>
+          <div></div>
+        </vaadin-split-layout>
+
+        <vaadin-split-layout vertical theme="subtle">
+          <div></div>
+          <div></div>
         </vaadin-split-layout>
       </template>
     </nice-demo-snippet>
