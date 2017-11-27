@@ -21,7 +21,7 @@
      }
     </style>
     <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../paper-menu/paper-menu.html">
+    <link rel="import" href="../paper-listbox/paper-listbox.html">
     <link rel="import" href="../paper-item/paper-item.html">
     <link rel="import" href="vaadin-context-menu.html">
     <next-code-block></next-code-block>
@@ -32,10 +32,10 @@
 ```html
 <vaadin-context-menu>
   <template>
-    <paper-menu>
+    <paper-listbox>
       <paper-item>First menu item</paper-item>
       <paper-item>Second menu item</paper-item>
-    </paper-menu>
+    </paper-listbox>
   </template>
 
   <p>This paragraph has the context menu provided in the above template.</p>
