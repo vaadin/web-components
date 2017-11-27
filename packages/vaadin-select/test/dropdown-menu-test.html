@@ -311,6 +311,18 @@
         });
       });
 
+      describe('readonly', () => {
+        it('should disable opening if dropdown-menu is readonly', () => {
+          dropdown.readonly = true;
+
+          Enter(input);
+          expect(dropdown._overlayElement.opened).to.be.false;
+
+          input.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(dropdown._overlayElement.opened).to.be.false;
+        });
+      });
+
       describe('focus', () => {
 
         it('Should be focusable', () => {
