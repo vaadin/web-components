@@ -12,10 +12,10 @@
       <template preserve-content>
         <vaadin-context-menu selector="button" open-on="click" close-on="none">
           <template>
-            <paper-listbox>
-              <paper-item>First menu item</paper-item>
-              <paper-item>Second menu item</paper-item>
-            </paper-listbox>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
           </template>
 
           <button>Show Context Menu</button>
@@ -43,12 +43,12 @@
 
             <vaadin-context-menu>
               <template>
-                <paper-listbox>
-                  <paper-item on-click="_add">Add</paper-item>
+                <vaadin-list-box>
+                  <vaadin-item on-click="_add">Add</vaadin-item>
                   <template is="dom-if" if="[[_isGridBody(target)]]">
-                    <paper-item content="[[target]]" on-click="_remove">Remove</paper-item>
+                    <vaadin-item content="[[target]]" on-click="_remove">Remove</vaadin-item>
                   </template>
-                </paper-listbox>
+                </vaadin-list-box>
               </template>
 
               <vaadin-grid id="grid" items="[[items]]">
@@ -160,13 +160,13 @@
           <template>
             <vaadin-context-menu>
               <template>
-                <paper-listbox>
+                <vaadin-list-box>
                   <dom-repeat items="[[menuItems]]">
                     <template>
-                      <paper-item>Menu Item</paper-item>
+                      <vaadin-item>Menu Item</vaadin-item>
                     </template>
                   </dom-repeat>
-                </paper-listbox>
+                </vaadin-list-box>
               </template>
 
               <p>
