@@ -225,6 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * `invalid` | Set when the element is invalid | :host
        * `focused` | Set when the element is focused | :host
        * `focus-ring` | Set when the element is keyboard focused | :host
+       * `readonly` | Set when the dropdown menu is read only | :host
        *
        * @memberof Vaadin
        * @mixes Vaadin.ControlStateMixin
@@ -330,6 +331,15 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String
             },
 
+            /**
+             * When present, it specifies that the element is read-only.
+             */
+            readonly: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
             _phone: Boolean,
 
             _phoneMediaQuery: {
@@ -375,7 +385,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._nativeInput.setAttribute('aria-hidden', true);
           this._nativeInput.setAttribute('tabindex', -1);
 
-          this.focusElement.addEventListener('click', e => this.opened = true);
+          this.focusElement.addEventListener('click', e => this.opened = !this.readonly);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
 
           this._instance = this._createTemplateInstance();
@@ -427,7 +437,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _onKeyDown(e) {
-          if (!this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
+          if (!this.readonly && !this.opened && /^(ArrowDown|Down|ArrowUp|Up|Enter|SpaceBar| )$/.test(e.key)) {
             e.preventDefault();
             this.opened = true;
           }
@@ -440,7 +450,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _openedChanged(opened, wasOpened) {
-          if (!this._overlayElement || !this._menuElement || !this._toggleElement || !this.focusElement || this.disabled) {
+          if (
+            !this._overlayElement ||
+            !this._menuElement ||
+            !this._toggleElement ||
+            !this.focusElement ||
+            this.disabled ||
+            this.readonly
+          ) {
             this.opened = false;
             return;
           }
