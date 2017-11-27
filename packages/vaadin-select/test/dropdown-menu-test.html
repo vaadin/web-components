@@ -227,6 +227,23 @@
           dropdown.value = 'foo';
           expect(menu.selected).to.be.equal(0);
         });
+
+        describe('has-value attribute on text-field', () => {
+          it('should not be set by default', () => {
+            expect(dropdown._inputElement.getAttribute('has-value')).to.be.null;
+          });
+
+          it('should set when value is set to not empty', () => {
+            dropdown.value = 'v2';
+            expect(dropdown._inputElement.getAttribute('has-value')).to.equal('');
+          });
+
+          it('should remove when value is set to empty', () => {
+            dropdown.value = 'v2';
+            dropdown.value = '';
+            expect(dropdown._inputElement.getAttribute('has-value')).to.be.null;
+          });
+        });
       });
 
       describe('opening the overlay', () => {
