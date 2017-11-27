@@ -18,19 +18,18 @@
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-tabs.html">
-    <next-code-block>
-    </next-code-block>
+    <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-  <vaadin-tabs selected="4">
-    <vaadin-tab>Page 1</vaadin-tab>
-    <vaadin-tab>Page 2</vaadin-tab>
-    <vaadin-tab>Page 3</vaadin-tab>
-    <vaadin-tab>Page 4</vaadin-tab>
-  </vaadin-tabs>
+<vaadin-tabs selected="3">
+  <vaadin-tab>Page 1</vaadin-tab>
+  <vaadin-tab>Page 2</vaadin-tab>
+  <vaadin-tab>Page 3</vaadin-tab>
+  <vaadin-tab>Page 4</vaadin-tab>
+</vaadin-tabs>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/-/element/vaadin-tabs)
