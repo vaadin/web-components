@@ -16,13 +16,13 @@
 <custom-element-demo height="260">
   <template>
     <style>
-     vaadin-context-menu {
-       font-family: sans-serif;
-     }
+      vaadin-context-menu {
+        font-family: sans-serif;
+      }
     </style>
     <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
-    <link rel="import" href="../paper-listbox/paper-listbox.html">
-    <link rel="import" href="../paper-item/paper-item.html">
+    <link rel="import" href="../vaadin-list-box/vaadin-list-box.html">
+    <link rel="import" href="../vaadin-item/vaadin-item.html">
     <link rel="import" href="vaadin-context-menu.html">
     <next-code-block></next-code-block>
   </template>
@@ -32,10 +32,10 @@
 ```html
 <vaadin-context-menu>
   <template>
-    <paper-listbox>
-      <paper-item>First menu item</paper-item>
-      <paper-item>Second menu item</paper-item>
-    </paper-listbox>
+    <vaadin-list-box>
+      <vaadin-item>First menu item</vaadin-item>
+      <vaadin-item>Second menu item</vaadin-item>
+    </vaadin-list-box>
   </template>
 
   <p>This paragraph has the context menu provided in the above template.</p>
