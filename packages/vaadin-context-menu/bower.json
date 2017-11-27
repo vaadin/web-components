@@ -41,6 +41,7 @@
     "vaadin-list-box": "^1.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "^1.0.0"
+    "vaadin-demo-helpers": "^1.0.0",
+    "vaadin-tabs": "^1.0.0"
   }
 }

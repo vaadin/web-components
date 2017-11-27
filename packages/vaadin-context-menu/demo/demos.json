@@ -13,6 +13,17 @@
   }
   ,
   {
+    "name": "Integration",
+    "url": "context-menu-integration-demos",
+    "src": "context-menu-integration-demos.html",
+    "meta": {
+      "title": "vaadin-context-menu Integration Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
     "name": "Advanced Usage",
     "url": "context-menu-advanced-demos",
     "src": "context-menu-advanced-demos.html",
