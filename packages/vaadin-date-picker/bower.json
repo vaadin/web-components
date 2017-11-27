@@ -28,7 +28,8 @@
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
     "vaadin-text-field": "^1.0.0",
-    "vaadin-themable-mixin": "^1.1.0"
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-control-state-mixin": "^1.1.7"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

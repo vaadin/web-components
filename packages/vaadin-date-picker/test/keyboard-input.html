@@ -496,6 +496,19 @@
             });
           });
 
+          it('should keep focused attribute in focusElement when the focus moves to the overlay', done => {
+            open(datepicker, () => {
+              MockInteractions.tap(datepicker.$.overlay);
+              datepicker.focusElement.blur();
+              expect(datepicker.focusElement.focused).to.be.false;
+
+              MockInteractions.focus(datepicker.$.overlay);
+              expect(datepicker.focused).to.be.true;
+              expect(datepicker.focusElement.focused).to.be.true;
+              done();
+            });
+          });
+
           it('should not reveal the focused date on tap', done => {
             open(datepicker, () => {
               var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
