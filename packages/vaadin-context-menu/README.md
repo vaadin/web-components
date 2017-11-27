@@ -32,6 +32,11 @@
 ```html
 <vaadin-context-menu>
   <template>
+    <style>
+      vaadin-item {
+        font-family: sans-serif;
+      }
+    </style>
     <vaadin-list-box>
       <vaadin-item>First menu item</vaadin-item>
       <vaadin-item>Second menu item</vaadin-item>
