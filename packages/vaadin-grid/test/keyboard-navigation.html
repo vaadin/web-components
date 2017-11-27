@@ -288,8 +288,9 @@
     }
 
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const android = /android/i.test(navigator.userAgent);
 
-    !ios && describe('keyboard navigation', () => {
+    !ios && !android && describe('keyboard navigation', () => {
       beforeEach(done => {
         const fixtureElements = fixture('default');
         grid = fixtureElements[0];

@@ -119,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * and the “Assigning Data” page in the demos.
      *
      * __Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__
-     * 
+     *
      * __Also, note that when using function data providers, the total number of items
      * needs to be set manually. The total number of items can be returned
      * in the second argument of the data provider callback:__
@@ -244,11 +244,6 @@ This program is available under Apache License Version 2.0, available at https:/
       static get properties() {
         return {
 
-          _safari: {
-            type: Boolean,
-            value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-          },
-
           _this: {
             type: Object,
             value: function() {
@@ -256,32 +251,34 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           },
 
+          _safari: {
+            type: Boolean,
+            value: /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+          },
+
           _ios: {
             type: Boolean,
-            value: function() {
-              return navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
-            }
+            value: /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
           },
 
           _edge: {
             type: Boolean,
-            value: function() {
-              return typeof CSS !== 'undefined' && CSS.supports('(-ms-ime-align:auto)');
-            }
+            value: typeof CSS !== 'undefined' && CSS.supports('(-ms-ime-align:auto)')
           },
 
           _ie: {
             type: Boolean,
-            value: function() {
-              return !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/));
-            }
+            value: !!(navigator.userAgent.match(/Trident/) && !navigator.userAgent.match(/MSIE/))
           },
 
           _firefox: {
             type: Boolean,
-            value: function() {
-              return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-            }
+            value: navigator.userAgent.toLowerCase().indexOf('firefox') > -1
+          },
+
+          _android: {
+            type: Boolean,
+            value: /android/i.test(navigator.userAgent)
           }
         };
       }
