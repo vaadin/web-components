@@ -1,1 +1,149 @@
+<link rel="import" href="../../../vaadin-valo-theme/color.html">
+<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
+<link rel="import" href="../../../vaadin-valo-theme/style.html">
+
+<dom-module id="valo-tab" theme-for="vaadin-tab">
+  <template>
+    <style>
+      :host {
+        box-sizing: border-box;
+        padding: .25em 1em;
+        font-weight: 500;
+        color: var(--valo-contrast-60pct);
+        transition: 0.2s color, 0.2s transform;
+        display: flex;
+        align-items: center;
+        position: relative;
+        cursor: pointer;
+        transform-origin: 50% 100%;
+        outline: none;
+      }
+
+      :host([orientation="vertical"]) {
+        transform-origin: 0% 50%;
+      }
+
+      :host(:hover),
+      :host([focus-ring]) {
+        color: var(--valo-body-text-color);
+      }
+
+      :host([focus-ring]) {
+        background-color: transparent;
+      }
+
+      :host([selected]) {
+        color: var(--valo-primary-text-color);
+        transition: 0.6s color;
+      }
+
+      :host([active]:not([selected])) {
+        color: var(--valo-primary-text-color);
+        transition-duration: 0.1s;
+      }
+
+      :host::before,
+      :host::after {
+        content: "";
+        position: absolute;
+        display: var(--_valo-tab-marker-display, block);
+        bottom: 0;
+        left: 50%;
+        width: 2.5em;
+        max-width: 80%;
+        height: 2px;
+        max-height: 80%;
+        background-color: var(--valo-contrast-60pct);
+        border-radius: var(--valo-border-radius) var(--valo-border-radius) 0 0;
+        transform: translateX(-50%) scale(0);
+        transform-origin: 50% 100%;
+        transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
+        will-change: transform;
+      }
+
+      :host([selected])::before,
+      :host([selected])::after {
+        background-color: var(--valo-primary-color);
+      }
+
+      :host([orientation="vertical"])::before,
+      :host([orientation="vertical"])::after {
+        left: 0;
+        bottom: 50%;
+        transform: translateY(50%) scale(0);
+        width: 2px;
+        height: 3em;
+        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+        transform-origin: 100% 50%;
+      }
+
+      :host::after {
+        box-shadow: 0 0 1px 4px var(--valo-primary-color);
+        opacity: 0.15;
+        transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
+      }
+
+      :host([selected])::before,
+      :host([selected]:not([active]))::after,
+      :host([focus-ring])::before {
+        transform: translateX(-50%) scale(1);
+        transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
+      }
+
+      :host([orientation="vertical"][selected])::before,
+      :host([orientation="vertical"][selected]:not([active]))::after,
+      :host([orientation="vertical"][focus-ring])::before {
+        transform: translateY(50%) scale(1);
+      }
+
+      :host([selected][focus-ring]:not([active]))::before,
+      :host([selected][focus-ring]:not([active]))::after {
+        transform: translateX(-50%) scale(1.2);
+      }
+
+      :host([orientation="vertical"][selected][focus-ring]:not([active]))::before,
+      :host([orientation="vertical"][selected][focus-ring]:not([active]))::after {
+        transform: translateY(50%) scale(1.2);
+      }
+
+      :host([active][focus-ring])::before,
+      :host([active][focus-ring])::after {
+        transform: translateX(-50%) scale(0.9);
+      }
+
+      :host([orientation="vertical"][active][focus-ring])::before,
+      :host([orientation="vertical"][active][focus-ring])::after {
+        transform: translateY(50%) scale(0.9);
+      }
+
+      :host([selected]:not([active]))::after {
+        opacity: 0;
+      }
+
+      :host ::slotted(iron-icon) {
+        margin: 0 4px;
+      }
+
+      :host ::slotted(iron-icon:first-child) {
+        margin-left: 0;
+      }
+
+      :host ::slotted(iron-icon:last-child) {
+        margin-right: 0;
+      }
+
+      :host([theme~="icon-on-top"]) {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      :host([theme~="icon-on-top"]) ::slotted(iron-icon) {
+        margin: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <link rel="import" href="../../src/vaadin-tab.html">
