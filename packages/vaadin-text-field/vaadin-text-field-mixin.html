@@ -156,18 +156,6 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * A read-only property indicating whether this input has a non empty value.
-           * It can be used for example in styling of the component.
-           */
-          hasValue: {
-            type: Boolean,
-            value: false,
-            notify: true,
-            readOnly: true,
-            reflectToAttribute: true
-          },
-
-          /**
            * When set to true, user is prevented from typing a value that
            * conflicts with the given `pattern`.
            */
@@ -206,7 +194,11 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.invalid) {
           this.validate();
         }
-        this._setHasValue(newVal !== '' && newVal != null);
+        if (newVal !== '' && newVal != null) {
+          this.setAttribute('has-value', '');
+        } else {
+          this.removeAttribute('has-value');
+        }
       }
 
       /**

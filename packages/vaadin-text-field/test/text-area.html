@@ -91,28 +91,28 @@
 
         it('setting input value updates has-value attribute', () => {
           textArea.value = 'foo';
-          expect(textArea.hasValue).to.be.true;
+          expect(textArea.hasAttribute('has-value')).to.be.true;
         });
 
         it('setting value to undefine should not update has-value attribute', () => {
           textArea.value = undefined;
-          expect(textArea.hasValue).to.be.false;
+          expect(textArea.hasAttribute('has-value')).to.be.false;
         });
 
-        it('setting empty value does not update has-value property', () => {
+        it('setting empty value does not update has-value attribute', () => {
           textArea.value = '';
-          expect(textArea.hasValue).to.be.false;
+          expect(textArea.hasAttribute('has-value')).to.be.false;
         });
 
         // User could accidently set a 0 or false value
-        it('setting number value updates has-value property', () => {
+        it('setting number value updates has-value attribute', () => {
           textArea.value = 0;
-          expect(textArea.hasValue).to.be.true;
+          expect(textArea.hasAttribute('has-value')).to.be.true;
         });
 
-        it('setting boolean value updates has-value property', () => {
+        it('setting boolean value updates has-value attribute', () => {
           textArea.value = false;
-          expect(textArea.hasValue).to.be.true;
+          expect(textArea.hasAttribute('has-value')).to.be.true;
         });
       });
 
