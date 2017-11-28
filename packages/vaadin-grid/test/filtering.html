@@ -247,6 +247,13 @@
         flushGrid(grid);
       });
 
+      it('should not throw when receiving null filter', done => {
+        grid._filters[0].value = null;
+        Polymer.Base.async(() => {
+          done();
+        });
+      });
+
       it('should filter automatically', () => {
         expect(getBodyCellContent(grid, 0, 0).innerText).to.equal('foo');
         expect(getBodyCellContent(grid, 1, 0).innerText).to.equal('foo');
