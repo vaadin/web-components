@@ -1,0 +1,65 @@
+<link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
+<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
+<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
+<link rel="import" href="../../../vaadin-valo-theme/style.html">
+<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+
+<dom-module id="valo-item" theme-for="vaadin-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        min-height: var(--valo-size-m);
+        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
+        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
+        box-sizing: border-box;
+        line-height: var(--valo-line-height-s);
+        border-radius: var(--valo-border-radius);
+        overflow: hidden;
+      }
+
+      @media (pointer: coarse) {
+        :host {
+          min-height: var(--valo-size-l);
+          padding-top: var(--valo-space-s);
+          padding-bottom: var(--valo-space-s);
+        }
+      }
+
+      /* It's the list-box's responsibility to add the focus style */
+      :host([focused]) {
+        outline: none;
+      }
+
+      /* Selected item has an icon */
+
+      :host::before {
+        display: var(--_valo-item-selected-icon-display, none);
+        content: "";
+        font-family: valo-icons;
+        font-size: 24px;
+        line-height: 1;
+        font-weight: 400;
+        width: 24px;
+        margin-right: var(--valo-space-xs);
+        color: var(--valo-primary-text-color);
+        flex: none;
+      }
+
+      :host([selected])::before {
+        content: "\e902";
+      }
+
+      /* Disabled item */
+
+      :host([disabled]) {
+        color: var(--valo-disabled-text-color);
+        cursor: default;
+        pointer-events: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../../src/vaadin-item.html">

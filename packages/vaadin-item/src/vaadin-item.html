@@ -1,0 +1,53 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-item-mixin.html">
+
+<dom-module id="vaadin-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    </style>
+    <slot></slot>
+  </template>
+  <script>
+    {
+      /**
+       * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ItemMixin
+       * @mixes Vaadin.ThemableMixin
+       */
+      class ItemElement extends Vaadin.ItemMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-item';
+        }
+
+        static get version() {
+          return '1.0.0-alpha7';
+        }
+      }
+
+      customElements.define(ItemElement.is, ItemElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ItemElement = ItemElement;
+    }
+  </script>
+</dom-module>

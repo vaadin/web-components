@@ -6,7 +6,7 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-item.html",
+        "file": "src/vaadin-item.html",
         "start": {
           "line": 48,
           "column": 6
@@ -20,7 +20,7 @@
         {
           "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.",
           "summary": "",
-          "path": "vaadin-item.html",
+          "path": "src/vaadin-item.html",
           "properties": [
             {
               "name": "value",
@@ -321,7 +321,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -403,7 +403,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-item.html",
+                "file": "src/vaadin-item.html",
                 "start": {
                   "line": 22,
                   "column": 4
@@ -426,7 +426,7 @@
         {
           "description": "A mixin providing `focused`, `focus-ring`, `active`, `disabled` and `selected`.\n\n`focused`, `active` and `focus-ring` are set as only as attributes.",
           "summary": "",
-          "path": "vaadin-item-mixin.html",
+          "path": "src/vaadin-item-mixin.html",
           "properties": [
             {
               "name": "value",
