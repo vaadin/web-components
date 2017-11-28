@@ -55,11 +55,6 @@ This program is available under Apache License Version 2.0, available at https:/
       return ['_enhanceItems(items, orientation, selected)'];
     }
 
-    /* @deprecated */
-    get _navItems() {
-      return this.items;
-    }
-
     ready() {
       super.ready();
       this.addEventListener('keydown', e => this._onKeydown(e));
