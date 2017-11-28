@@ -38,6 +38,11 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
 
+      if (this._ios || this._android) {
+        // Disable keyboard navigation on mobile devices
+        return;
+      }
+
       this.addEventListener('keydown', this._onKeyDown);
       this.addEventListener('focusin', this._onFocusIn);
       this.addEventListener('focusout', this._onFocusOut);
