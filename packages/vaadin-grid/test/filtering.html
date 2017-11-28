@@ -249,6 +249,7 @@
 
       it('should not throw when receiving null filter', done => {
         grid._filters[0].value = null;
+        flushFilters(grid);
         Polymer.Base.async(() => {
           done();
         });
