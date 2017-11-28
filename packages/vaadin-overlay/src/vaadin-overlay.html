@@ -61,7 +61,11 @@ This program is available under Apache License Version 2.0, available at https:/
         -webkit-overflow-scrolling: touch;
         overflow: auto;
         pointer-events: auto;
-        max-width: 100%; /* prevents overflowing the host in MSIE 11 */
+
+        /* Prevent overflowing the host in MSIE 11 */
+        max-width: 100%;
+        box-sizing: border-box;
+
         -webkit-tap-highlight-color: initial; /* reenable tap highlight inside */
       }
 
