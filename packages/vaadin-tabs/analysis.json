@@ -6,13 +6,13 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-tabs.html",
+        "file": "src/vaadin-tabs.html",
         "start": {
-          "line": 254,
+          "line": 225,
           "column": 6
         },
         "end": {
-          "line": 254,
+          "line": 225,
           "column": 42
         }
       },
@@ -20,15 +20,38 @@
         {
           "description": "`<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.\n\n[Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)\n\n```\n  <vaadin-tab>\n    Tab 1\n  </vaadin-tab>\n```\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled tab | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the tab is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host\n`orientation` | Set to `horizontal` or `vertical` dependinng on the direction of items  | :host",
           "summary": "",
-          "path": "vaadin-tab.html",
+          "path": "src/vaadin-tab.html",
           "properties": [
+            {
+              "name": "value",
+              "type": "string",
+              "description": "Submittable string value. The default value is the trimmed text content of the element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "start": {
+                  "line": 59,
+                  "column": 6
+                },
+                "end": {
+                  "line": 59,
+                  "column": 17
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              },
+              "inheritedFrom": "Vaadin.ItemMixin"
+            },
             {
               "name": "_hasVaadinItemMixin",
               "type": "?",
               "description": "Used for mixin detection because `instanceof` does not work with mixins.\ne.g. in VaadinListMixin it filters items by using the\n`element._hasVaadinItemMixin` condition.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 24,
                   "column": 8
@@ -50,7 +73,7 @@
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 31,
                   "column": 8
@@ -74,7 +97,7 @@
               "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 41,
                   "column": 8
@@ -91,6 +114,27 @@
               },
               "defaultValue": "false",
               "inheritedFrom": "Vaadin.ItemMixin"
+            },
+            {
+              "name": "_value",
+              "type": "string",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "start": {
+                  "line": 48,
+                  "column": 8
+                },
+                "end": {
+                  "line": 48,
+                  "column": 22
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
           "methods": [
@@ -100,11 +144,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 75,
+                  "line": 46,
                   "column": 6
                 },
                 "end": {
-                  "line": 78,
+                  "line": 49,
                   "column": 7
                 }
               },
@@ -112,17 +156,36 @@
               "params": []
             },
             {
+              "name": "disconnectedCallback",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "start": {
+                  "line": 92,
+                  "column": 4
+                },
+                "end": {
+                  "line": 101,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.ItemMixin"
+            },
+            {
               "name": "_selectedChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 66,
+                  "line": 103,
                   "column": 4
                 },
                 "end": {
-                  "line": 68,
+                  "line": 105,
                   "column": 5
                 }
               },
@@ -139,13 +202,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 70,
+                  "line": 107,
                   "column": 4
                 },
                 "end": {
-                  "line": 78,
+                  "line": 115,
                   "column": 5
                 }
               },
@@ -162,13 +225,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 117,
                   "column": 4
                 },
                 "end": {
-                  "line": 91,
+                  "line": 128,
                   "column": 5
                 }
               },
@@ -185,13 +248,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 93,
+                  "line": 130,
                   "column": 4
                 },
                 "end": {
-                  "line": 99,
+                  "line": 136,
                   "column": 5
                 }
               },
@@ -208,13 +271,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 101,
+                  "line": 138,
                   "column": 4
                 },
                 "end": {
-                  "line": 106,
+                  "line": 143,
                   "column": 5
                 }
               },
@@ -231,13 +294,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 108,
+                  "line": 145,
                   "column": 4
                 },
                 "end": {
-                  "line": 113,
+                  "line": 150,
                   "column": 5
                 }
               },
@@ -256,7 +319,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -279,11 +342,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 70,
+              "line": 37,
               "column": 4
             },
             "end": {
-              "line": 79,
+              "line": 50,
               "column": 5
             }
           },
@@ -295,7 +358,7 @@
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 31,
                   "column": 8
@@ -313,7 +376,7 @@
               "name": "selected",
               "description": "If true, the item is in selected state.",
               "sourceRange": {
-                "file": "bower_components/vaadin-item/vaadin-item-mixin.html",
+                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 41,
                   "column": 8
@@ -339,7 +402,7 @@
         {
           "description": "`<vaadin-tabs>` is a Polymer 2 element for easy switching between different view\n\n```\n  <vaadin-tabs selected=\"4\">\n    <vaadin-tab>Page 1</vaadin-tab>\n    <vaadin-tab>Page 2</vaadin-tab>\n    <vaadin-tab>Page 3</vaadin-tab>\n    <vaadin-tab>Page 4</vaadin-tab>\n  </vaadin-tabs>\n```\n\n### Styling\n\n[Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|--------------------------------------\n`back-button`     | Button for moving the scroll back\n`tabs`            | The tabs container\n`forward-button`  | Button for moving the scroll forward\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`orientation` | Set when orientation of tabs, valid values are `horizontal|vertical`. | :host\n`overflow` | It's set to `start`, `end`, none or both. | :host",
           "summary": "",
-          "path": "vaadin-tabs.html",
+          "path": "src/vaadin-tabs.html",
           "properties": [
             {
               "name": "_hasVaadinListMixin",
@@ -347,7 +410,7 @@
               "description": "Used for mixin detection because `instanceof` does not work with mixins.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 20,
                   "column": 8
@@ -370,11 +433,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 155,
                   "column": 12
                 },
                 "end": {
-                  "line": 187,
+                  "line": 158,
                   "column": 13
                 }
               },
@@ -390,11 +453,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 150,
                   "column": 13
                 }
               },
@@ -404,23 +467,26 @@
               "defaultValue": "\"horizontal\""
             },
             {
-              "name": "_navItems",
+              "name": "items",
               "type": "Array",
-              "description": "",
-              "privacy": "protected",
+              "description": "The array of list items",
+              "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 47,
+                  "line": 49,
                   "column": 9
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "notify": true,
+                  "readOnly": true
+                }
               },
               "inheritedFrom": "Vaadin.ListMixin"
             }
@@ -432,11 +498,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 176,
                   "column": 9
                 }
               },
@@ -448,13 +514,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 69,
+                  "line": 75,
                   "column": 4
                 },
                 "end": {
-                  "line": 84,
+                  "line": 90,
                   "column": 5
                 }
               },
@@ -477,13 +543,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 90,
+                  "line": 96,
                   "column": 4
                 },
                 "end": {
-                  "line": 92,
+                  "line": 98,
                   "column": 5
                 }
               },
@@ -500,13 +566,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 94,
+                  "line": 100,
                   "column": 4
                 },
                 "end": {
-                  "line": 100,
+                  "line": 106,
                   "column": 5
                 }
               },
@@ -523,13 +589,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 102,
+                  "line": 108,
                   "column": 4
                 },
                 "end": {
-                  "line": 143,
+                  "line": 149,
                   "column": 5
                 }
               },
@@ -546,13 +612,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 145,
+                  "line": 151,
                   "column": 4
                 },
                 "end": {
-                  "line": 160,
+                  "line": 166,
                   "column": 5
                 }
               },
@@ -575,13 +641,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 162,
+                  "line": 168,
                   "column": 4
                 },
                 "end": {
-                  "line": 166,
+                  "line": 172,
                   "column": 5
                 }
               },
@@ -598,13 +664,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 168,
+                  "line": 174,
                   "column": 4
                 },
                 "end": {
-                  "line": 174,
+                  "line": 180,
                   "column": 5
                 }
               },
@@ -621,13 +687,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 176,
+                  "line": 182,
                   "column": 4
                 },
                 "end": {
-                  "line": 180,
+                  "line": 186,
                   "column": 5
                 }
               },
@@ -640,13 +706,13 @@
               "description": "Scroll the container to have the next item by the edge of the viewport",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 188,
+                  "line": 194,
                   "column": 4
                 },
                 "end": {
-                  "line": 207,
+                  "line": 213,
                   "column": 5
                 }
               },
@@ -663,13 +729,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 214,
+                  "line": 220,
                   "column": 4
                 },
                 "end": {
-                  "line": 216,
+                  "line": 222,
                   "column": 5
                 }
               },
@@ -687,11 +753,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 178,
                   "column": 8
                 },
                 "end": {
-                  "line": 209,
+                  "line": 180,
                   "column": 9
                 }
               },
@@ -704,11 +770,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 182,
                   "column": 8
                 },
                 "end": {
-                  "line": 213,
+                  "line": 184,
                   "column": 9
                 }
               },
@@ -721,11 +787,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 223,
+                  "line": 194,
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 205,
                   "column": 9
                 }
               },
@@ -738,11 +804,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 207,
                   "column": 8
                 },
                 "end": {
-                  "line": 246,
+                  "line": 217,
                   "column": 9
                 }
               },
@@ -756,7 +822,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -784,11 +850,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 162,
+              "line": 129,
               "column": 6
             },
             "end": {
-              "line": 247,
+              "line": 218,
               "column": 7
             }
           },
@@ -801,11 +867,11 @@
               "description": "The index of the selected tab.",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 155,
                   "column": 12
                 },
                 "end": {
-                  "line": 187,
+                  "line": 158,
                   "column": 13
                 }
               },
@@ -817,16 +883,34 @@
               "description": "Set tabs disposition. Possible values are `horizontal|vertical`",
               "sourceRange": {
                 "start": {
-                  "line": 176,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 150,
                   "column": 13
                 }
               },
               "metadata": {},
               "type": "string"
+            },
+            {
+              "name": "items",
+              "description": "The array of list items",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "start": {
+                  "line": 45,
+                  "column": 8
+                },
+                "end": {
+                  "line": 49,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "Array",
+              "inheritedFrom": "Vaadin.ListMixin"
             }
           ],
           "events": [],
@@ -839,13 +923,13 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-tabs.html",
+                "file": "src/vaadin-tabs.html",
                 "start": {
-                  "line": 116,
+                  "line": 83,
                   "column": 6
                 },
                 "end": {
-                  "line": 116,
+                  "line": 83,
                   "column": 19
                 }
               }
@@ -856,366 +940,6 @@
             "Vaadin.ListMixin",
             "Vaadin.ThemableMixin"
           ]
-        }
-      ],
-      "mixins": [
-        {
-          "description": "A mixin for `nav` elements, facilitating navigation and selection of childNodes.",
-          "summary": "",
-          "path": "kk.html",
-          "properties": [
-            {
-              "name": "_hasVaadinListMixin",
-              "type": "?",
-              "description": "Used for mixin detection because `instanceof` does not work with mixins.",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 20,
-                  "column": 8
-                },
-                "end": {
-                  "line": 22,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "true"
-            },
-            {
-              "name": "selected",
-              "type": "number",
-              "description": "The index of the item selected in the items array",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 27,
-                  "column": 8
-                },
-                "end": {
-                  "line": 31,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true
-                }
-              }
-            },
-            {
-              "name": "orientation",
-              "type": "string",
-              "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 38,
-                  "column": 8
-                },
-                "end": {
-                  "line": 42,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "\"\""
-            },
-            {
-              "name": "_navItems",
-              "type": "Array",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 45,
-                  "column": 8
-                },
-                "end": {
-                  "line": 47,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            }
-          ],
-          "methods": [
-            {
-              "name": "ready",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 55,
-                  "column": 4
-                },
-                "end": {
-                  "line": 67,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_enhanceItems",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 69,
-                  "column": 4
-                },
-                "end": {
-                  "line": 84,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "items"
-                },
-                {
-                  "name": "orientation"
-                },
-                {
-                  "name": "selected"
-                }
-              ]
-            },
-            {
-              "name": "_onClick",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 90,
-                  "column": 4
-                },
-                "end": {
-                  "line": 96,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "event"
-                }
-              ]
-            },
-            {
-              "name": "_onKeydown",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 98,
-                  "column": 4
-                },
-                "end": {
-                  "line": 139,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "event"
-                }
-              ]
-            },
-            {
-              "name": "_getAvailableIndex",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 141,
-                  "column": 4
-                },
-                "end": {
-                  "line": 156,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "idx"
-                },
-                {
-                  "name": "increment"
-                },
-                {
-                  "name": "condition"
-                }
-              ]
-            },
-            {
-              "name": "_setFocusable",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 158,
-                  "column": 4
-                },
-                "end": {
-                  "line": 162,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "idx"
-                }
-              ]
-            },
-            {
-              "name": "_focus",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 164,
-                  "column": 4
-                },
-                "end": {
-                  "line": 170,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "idx"
-                }
-              ]
-            },
-            {
-              "name": "focus",
-              "description": "",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 172,
-                  "column": 4
-                },
-                "end": {
-                  "line": 176,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_scrollToItem",
-              "description": "Scroll the container to have the next item by the edge of the viewport",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 184,
-                  "column": 4
-                },
-                "end": {
-                  "line": 203,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "idx"
-                }
-              ]
-            },
-            {
-              "name": "_scroll",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 210,
-                  "column": 4
-                },
-                "end": {
-                  "line": 212,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "pixels"
-                }
-              ]
-            }
-          ],
-          "staticMethods": [],
-          "demos": [],
-          "metadata": {},
-          "sourceRange": {
-            "start": {
-              "line": 14,
-              "column": 2
-            },
-            "end": {
-              "line": 213,
-              "column": 3
-            }
-          },
-          "privacy": "public",
-          "name": "Vaadin.ListMixin",
-          "attributes": [
-            {
-              "name": "selected",
-              "description": "The index of the item selected in the items array",
-              "sourceRange": {
-                "start": {
-                  "line": 27,
-                  "column": 8
-                },
-                "end": {
-                  "line": 31,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "number"
-            },
-            {
-              "name": "orientation",
-              "description": "Define how items are disposed in the dom.\nPossible values are: `horizontal|vertical`.\nIt also changes navigation keys from left/right to up/down.",
-              "sourceRange": {
-                "start": {
-                  "line": 38,
-                  "column": 8
-                },
-                "end": {
-                  "line": 42,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            }
-          ],
-          "events": [],
-          "styling": {
-            "cssVariables": [],
-            "selectors": []
-          },
-          "slots": []
         }
       ]
     }

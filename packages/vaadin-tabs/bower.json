@@ -28,7 +28,8 @@
     "iron-resizable-behavior": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.4",
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^1.4.1",
-    "vaadin-item": "^1.0.0"
+    "vaadin-item": "#next",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
