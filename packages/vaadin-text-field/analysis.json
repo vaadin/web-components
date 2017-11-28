@@ -46,16 +46,16 @@
             {
               "name": "focused",
               "type": "boolean",
-              "description": "If true, the element currently has focus.",
-              "privacy": "public",
+              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 64,
+                  "line": 67,
                   "column": 9
                 }
               },
@@ -77,11 +77,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 69,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 71,
+                  "line": 74,
                   "column": 9
                 }
               },
@@ -98,11 +98,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -121,11 +121,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 82,
+                  "line": 85,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 85,
                   "column": 32
                 }
               },
@@ -135,27 +135,6 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "_parentForm",
-              "type": "Object",
-              "description": "The form that the element is registered to.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
               "name": "autocomplete",
               "type": "string",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
@@ -163,11 +142,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -184,11 +163,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -206,11 +185,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -228,11 +207,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -249,11 +228,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -270,11 +249,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -291,11 +270,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -312,11 +291,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -333,11 +312,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -354,11 +333,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -379,42 +358,17 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
+                  "line": 155,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
                   "notify": true
-                }
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "hasValue",
-              "type": "boolean",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "readOnly": true
                 }
               },
               "defaultValue": "false",
@@ -428,11 +382,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -449,11 +403,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 179,
+                  "line": 165,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 167,
                   "column": 11
                 }
               },
@@ -470,11 +424,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 183,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 171,
                   "column": 11
                 }
               },
@@ -568,11 +522,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 225,
+                  "line": 216,
                   "column": 6
                 },
                 "end": {
-                  "line": 234,
+                  "line": 225,
                   "column": 7
                 }
               },
@@ -585,38 +539,38 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 34,
+                  "line": 131,
                   "column": 4
                 },
                 "end": {
-                  "line": 37,
+                  "line": 136,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disconnectedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 146,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_focusedChanged",
@@ -625,11 +579,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 156,
                   "column": 5
                 }
               },
@@ -648,11 +602,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -671,11 +625,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 158,
+                  "line": 164,
                   "column": 5
                 }
               },
@@ -690,11 +644,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -713,11 +667,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 181,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 184,
+                  "line": 195,
                   "column": 5
                 }
               },
@@ -732,11 +686,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 202,
                   "column": 4
                 },
                 "end": {
-                  "line": 194,
+                  "line": 205,
                   "column": 5
                 }
               },
@@ -751,11 +705,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 196,
+                  "line": 207,
                   "column": 4
                 },
                 "end": {
-                  "line": 209,
+                  "line": 220,
                   "column": 5
                 }
               },
@@ -774,11 +728,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 211,
+                  "line": 222,
                   "column": 4
                 },
                 "end": {
-                  "line": 227,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -797,11 +751,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 193,
+                  "line": 179,
                   "column": 6
                 },
                 "end": {
-                  "line": 200,
+                  "line": 186,
                   "column": 7
                 }
               },
@@ -820,11 +774,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 188,
                   "column": 6
                 },
                 "end": {
-                  "line": 211,
+                  "line": 201,
                   "column": 7
                 }
               },
@@ -846,16 +800,19 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 216,
+                  "line": 207,
                   "column": 6
                 },
                 "end": {
-                  "line": 222,
+                  "line": 213,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "boolean"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -865,11 +822,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 242,
+                  "line": 233,
                   "column": 6
                 },
                 "end": {
-                  "line": 244,
+                  "line": 235,
                   "column": 7
                 }
               },
@@ -888,11 +845,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 246,
+                  "line": 237,
                   "column": 6
                 },
                 "end": {
-                  "line": 248,
+                  "line": 239,
                   "column": 7
                 }
               },
@@ -917,11 +874,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 241,
                   "column": 6
                 },
                 "end": {
-                  "line": 252,
+                  "line": 243,
                   "column": 7
                 }
               },
@@ -943,11 +900,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 257,
+                  "line": 248,
                   "column": 6
                 },
                 "end": {
-                  "line": 275,
+                  "line": 266,
                   "column": 7
                 }
               },
@@ -1031,34 +988,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "focused",
-              "description": "If true, the element currently has focus.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 57,
-                  "column": 8
-                },
-                "end": {
-                  "line": 64,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -1072,11 +1011,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -1090,11 +1029,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -1108,11 +1047,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -1126,11 +1065,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -1144,11 +1083,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -1162,11 +1101,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -1180,11 +1119,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -1198,11 +1137,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -1216,11 +1155,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -1234,11 +1173,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -1252,29 +1191,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "has-value",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -1288,11 +1209,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -1365,22 +1286,7 @@
               "type": "string"
             }
           ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-register",
-              "description": "iron-form-element-register",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-unregister",
-              "description": "iron-form-element-unregister",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            }
-          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
@@ -1452,16 +1358,16 @@
             {
               "name": "focused",
               "type": "boolean",
-              "description": "If true, the element currently has focus.",
-              "privacy": "public",
+              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 64,
+                  "line": 67,
                   "column": 9
                 }
               },
@@ -1483,11 +1389,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 69,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 71,
+                  "line": 74,
                   "column": 9
                 }
               },
@@ -1504,11 +1410,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -1527,11 +1433,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 82,
+                  "line": 85,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 85,
                   "column": 32
                 }
               },
@@ -1541,27 +1447,6 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "_parentForm",
-              "type": "Object",
-              "description": "The form that the element is registered to.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
               "name": "autocomplete",
               "type": "string",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
@@ -1569,11 +1454,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -1590,11 +1475,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -1612,11 +1497,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -1634,11 +1519,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -1655,11 +1540,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -1676,11 +1561,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -1697,11 +1582,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -1718,11 +1603,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -1739,11 +1624,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -1760,11 +1645,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -1785,42 +1670,17 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
+                  "line": 155,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
                   "notify": true
-                }
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "hasValue",
-              "type": "boolean",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "readOnly": true
                 }
               },
               "defaultValue": "false",
@@ -1834,11 +1694,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -1855,11 +1715,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 179,
+                  "line": 165,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 167,
                   "column": 11
                 }
               },
@@ -1876,11 +1736,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 183,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 171,
                   "column": 11
                 }
               },
@@ -2040,38 +1900,38 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 34,
+                  "line": 131,
                   "column": 4
                 },
                 "end": {
-                  "line": 37,
+                  "line": 136,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disconnectedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 146,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_focusedChanged",
@@ -2080,11 +1940,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 156,
                   "column": 5
                 }
               },
@@ -2103,11 +1963,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -2126,11 +1986,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 158,
+                  "line": 164,
                   "column": 5
                 }
               },
@@ -2145,11 +2005,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -2168,11 +2028,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 181,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 184,
+                  "line": 195,
                   "column": 5
                 }
               },
@@ -2187,11 +2047,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 202,
                   "column": 4
                 },
                 "end": {
-                  "line": 194,
+                  "line": 205,
                   "column": 5
                 }
               },
@@ -2206,11 +2066,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 196,
+                  "line": 207,
                   "column": 4
                 },
                 "end": {
-                  "line": 209,
+                  "line": 220,
                   "column": 5
                 }
               },
@@ -2229,11 +2089,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 211,
+                  "line": 222,
                   "column": 4
                 },
                 "end": {
-                  "line": 227,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -2252,11 +2112,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 193,
+                  "line": 179,
                   "column": 6
                 },
                 "end": {
-                  "line": 200,
+                  "line": 186,
                   "column": 7
                 }
               },
@@ -2275,11 +2135,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 188,
                   "column": 6
                 },
                 "end": {
-                  "line": 211,
+                  "line": 201,
                   "column": 7
                 }
               },
@@ -2301,16 +2161,19 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 216,
+                  "line": 207,
                   "column": 6
                 },
                 "end": {
-                  "line": 222,
+                  "line": 213,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "boolean"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -2320,11 +2183,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 242,
+                  "line": 233,
                   "column": 6
                 },
                 "end": {
-                  "line": 244,
+                  "line": 235,
                   "column": 7
                 }
               },
@@ -2343,11 +2206,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 246,
+                  "line": 237,
                   "column": 6
                 },
                 "end": {
-                  "line": 248,
+                  "line": 239,
                   "column": 7
                 }
               },
@@ -2372,11 +2235,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 241,
                   "column": 6
                 },
                 "end": {
-                  "line": 252,
+                  "line": 243,
                   "column": 7
                 }
               },
@@ -2398,11 +2261,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 257,
+                  "line": 248,
                   "column": 6
                 },
                 "end": {
-                  "line": 275,
+                  "line": 266,
                   "column": 7
                 }
               },
@@ -2545,34 +2408,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "focused",
-              "description": "If true, the element currently has focus.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 57,
-                  "column": 8
-                },
-                "end": {
-                  "line": 64,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -2586,11 +2431,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -2604,11 +2449,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -2622,11 +2467,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -2640,11 +2485,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -2658,11 +2503,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -2676,11 +2521,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -2694,11 +2539,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -2712,11 +2557,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -2730,11 +2575,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -2748,11 +2593,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -2766,29 +2611,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "has-value",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -2802,11 +2629,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -2919,22 +2746,7 @@
               "type": "boolean"
             }
           ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-register",
-              "description": "iron-form-element-register",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-unregister",
-              "description": "iron-form-element-unregister",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            }
-          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
@@ -2971,16 +2783,16 @@
             {
               "name": "focused",
               "type": "boolean",
-              "description": "If true, the element currently has focus.",
-              "privacy": "public",
+              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 64,
+                  "line": 67,
                   "column": 9
                 }
               },
@@ -3002,11 +2814,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 69,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 71,
+                  "line": 74,
                   "column": 9
                 }
               },
@@ -3023,11 +2835,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -3046,11 +2858,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 82,
+                  "line": 85,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 85,
                   "column": 32
                 }
               },
@@ -3060,27 +2872,6 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "_parentForm",
-              "type": "Object",
-              "description": "The form that the element is registered to.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
               "name": "autocomplete",
               "type": "string",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
@@ -3088,11 +2879,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -3109,11 +2900,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -3131,11 +2922,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -3153,11 +2944,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -3174,11 +2965,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -3195,11 +2986,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -3216,11 +3007,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -3237,11 +3028,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -3258,11 +3049,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -3279,11 +3070,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -3304,42 +3095,17 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
+                  "line": 155,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
                   "notify": true
-                }
-              },
-              "defaultValue": "false",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "hasValue",
-              "type": "boolean",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "readOnly": true
                 }
               },
               "defaultValue": "false",
@@ -3353,11 +3119,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -3374,11 +3140,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 179,
+                  "line": 165,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 167,
                   "column": 11
                 }
               },
@@ -3395,11 +3161,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 183,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 171,
                   "column": 11
                 }
               },
@@ -3432,38 +3198,38 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 34,
+                  "line": 131,
                   "column": 4
                 },
                 "end": {
-                  "line": 37,
+                  "line": 136,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disconnectedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 146,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_focusedChanged",
@@ -3472,11 +3238,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 156,
                   "column": 5
                 }
               },
@@ -3495,11 +3261,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -3518,11 +3284,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 158,
+                  "line": 164,
                   "column": 5
                 }
               },
@@ -3537,11 +3303,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -3560,11 +3326,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 181,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 184,
+                  "line": 195,
                   "column": 5
                 }
               },
@@ -3579,11 +3345,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 202,
                   "column": 4
                 },
                 "end": {
-                  "line": 194,
+                  "line": 205,
                   "column": 5
                 }
               },
@@ -3598,11 +3364,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 196,
+                  "line": 207,
                   "column": 4
                 },
                 "end": {
-                  "line": 209,
+                  "line": 220,
                   "column": 5
                 }
               },
@@ -3621,11 +3387,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 211,
+                  "line": 222,
                   "column": 4
                 },
                 "end": {
-                  "line": 227,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -3644,11 +3410,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 193,
+                  "line": 179,
                   "column": 6
                 },
                 "end": {
-                  "line": 200,
+                  "line": 186,
                   "column": 7
                 }
               },
@@ -3667,11 +3433,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 188,
                   "column": 6
                 },
                 "end": {
-                  "line": 211,
+                  "line": 201,
                   "column": 7
                 }
               },
@@ -3693,16 +3459,19 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 216,
+                  "line": 207,
                   "column": 6
                 },
                 "end": {
-                  "line": 222,
+                  "line": 213,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "boolean"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -3712,11 +3481,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 242,
+                  "line": 233,
                   "column": 6
                 },
                 "end": {
-                  "line": 244,
+                  "line": 235,
                   "column": 7
                 }
               },
@@ -3735,11 +3504,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 246,
+                  "line": 237,
                   "column": 6
                 },
                 "end": {
-                  "line": 248,
+                  "line": 239,
                   "column": 7
                 }
               },
@@ -3764,11 +3533,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 241,
                   "column": 6
                 },
                 "end": {
-                  "line": 252,
+                  "line": 243,
                   "column": 7
                 }
               },
@@ -3790,11 +3559,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 257,
+                  "line": 248,
                   "column": 6
                 },
                 "end": {
-                  "line": 275,
+                  "line": 266,
                   "column": 7
                 }
               },
@@ -3916,34 +3685,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "focused",
-              "description": "If true, the element currently has focus.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 57,
-                  "column": 8
-                },
-                "end": {
-                  "line": 64,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -3957,11 +3708,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -3975,11 +3726,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -3993,11 +3744,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -4011,11 +3762,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -4029,11 +3780,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -4047,11 +3798,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -4065,11 +3816,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -4083,11 +3834,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -4101,11 +3852,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -4119,11 +3870,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -4137,29 +3888,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
-              "name": "has-value",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "sourceRange": {
-                "file": "vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -4173,11 +3906,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -4186,22 +3919,7 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             }
           ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-register",
-              "description": "iron-form-element-register",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-unregister",
-              "description": "iron-form-element-unregister",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            }
-          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
@@ -4247,103 +3965,6 @@
       ],
       "mixins": [
         {
-          "description": "IronFormElementBehavior is not a proper 2.0 class.",
-          "summary": "",
-          "path": "vaadin-form-element-mixin.html",
-          "properties": [
-            {
-              "name": "_parentForm",
-              "type": "Object",
-              "description": "The form that the element is registered to.",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            }
-          ],
-          "methods": [
-            {
-              "name": "connectedCallback",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 34,
-                  "column": 4
-                },
-                "end": {
-                  "line": 37,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "disconnectedCallback",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 42,
-                  "column": 4
-                },
-                "end": {
-                  "line": 49,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            }
-          ],
-          "staticMethods": [],
-          "demos": [],
-          "metadata": {},
-          "sourceRange": {
-            "start": {
-              "line": 7,
-              "column": 2
-            },
-            "end": {
-              "line": 50,
-              "column": 3
-            }
-          },
-          "privacy": "public",
-          "name": "Vaadin.FormElementMixin",
-          "attributes": [],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-register",
-              "description": "iron-form-element-register",
-              "metadata": {}
-            },
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-unregister",
-              "description": "iron-form-element-unregister",
-              "metadata": {}
-            }
-          ],
-          "styling": {
-            "cssVariables": [],
-            "selectors": []
-          },
-          "slots": []
-        },
-        {
           "description": "",
           "summary": "",
           "path": "vaadin-text-field-mixin.html",
@@ -4372,16 +3993,16 @@
             {
               "name": "focused",
               "type": "boolean",
-              "description": "If true, the element currently has focus.",
-              "privacy": "public",
+              "description": "If true, the element currently has focus.\nThis property is @deprecated and will not be accessible in the next major version\nof the component.",
+              "privacy": "private",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 57,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 64,
+                  "line": 67,
                   "column": 9
                 }
               },
@@ -4403,11 +4024,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 69,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 71,
+                  "line": 74,
                   "column": 9
                 }
               },
@@ -4424,11 +4045,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -4447,11 +4068,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 82,
+                  "line": 85,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 85,
                   "column": 32
                 }
               },
@@ -4461,38 +4082,17 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "_parentForm",
-              "type": "Object",
-              "description": "The form that the element is registered to.",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
-                "start": {
-                  "line": 25,
-                  "column": 8
-                },
-                "end": {
-                  "line": 27,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
               "name": "autocomplete",
               "type": "string",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -4507,11 +4107,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -4527,11 +4127,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -4547,11 +4147,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -4566,11 +4166,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -4585,11 +4185,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -4604,11 +4204,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -4623,11 +4223,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -4642,11 +4242,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -4661,11 +4261,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -4684,11 +4284,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -4700,40 +4300,17 @@
               "defaultValue": "false"
             },
             {
-              "name": "hasValue",
-              "type": "boolean",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "notify": true,
-                  "readOnly": true
-                }
-              },
-              "defaultValue": "false"
-            },
-            {
               "name": "preventInvalidInput",
               "type": "boolean",
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -4748,11 +4325,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 165,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 167,
                   "column": 11
                 }
               },
@@ -4767,11 +4344,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 171,
                   "column": 11
                 }
               },
@@ -4787,11 +4364,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 225,
+                  "line": 216,
                   "column": 6
                 },
                 "end": {
-                  "line": 234,
+                  "line": 225,
                   "column": 7
                 }
               },
@@ -4803,38 +4380,38 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 34,
+                  "line": 131,
                   "column": 4
                 },
                 "end": {
-                  "line": 37,
+                  "line": 136,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disconnectedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "vaadin-form-element-mixin.html",
+                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 49,
+                  "line": 146,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
-              "inheritedFrom": "Vaadin.FormElementMixin"
+              "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_focusedChanged",
@@ -4843,11 +4420,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 156,
                   "column": 5
                 }
               },
@@ -4866,11 +4443,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 152,
+                  "line": 158,
                   "column": 4
                 },
                 "end": {
-                  "line": 154,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -4889,11 +4466,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 158,
+                  "line": 164,
                   "column": 5
                 }
               },
@@ -4908,11 +4485,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 175,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -4931,11 +4508,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 181,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 184,
+                  "line": 195,
                   "column": 5
                 }
               },
@@ -4950,11 +4527,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 191,
+                  "line": 202,
                   "column": 4
                 },
                 "end": {
-                  "line": 194,
+                  "line": 205,
                   "column": 5
                 }
               },
@@ -4969,11 +4546,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 196,
+                  "line": 207,
                   "column": 4
                 },
                 "end": {
-                  "line": 209,
+                  "line": 220,
                   "column": 5
                 }
               },
@@ -4992,11 +4569,11 @@
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 211,
+                  "line": 222,
                   "column": 4
                 },
                 "end": {
-                  "line": 227,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -5014,11 +4591,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 179,
                   "column": 6
                 },
                 "end": {
-                  "line": 200,
+                  "line": 186,
                   "column": 7
                 }
               },
@@ -5035,11 +4612,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 202,
+                  "line": 188,
                   "column": 6
                 },
                 "end": {
-                  "line": 211,
+                  "line": 201,
                   "column": 7
                 }
               },
@@ -5059,16 +4636,19 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 207,
                   "column": 6
                 },
                 "end": {
-                  "line": 222,
+                  "line": 213,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "boolean"
+              }
             },
             {
               "name": "validate",
@@ -5076,11 +4656,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 233,
                   "column": 6
                 },
                 "end": {
-                  "line": 244,
+                  "line": 235,
                   "column": 7
                 }
               },
@@ -5097,11 +4677,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 237,
                   "column": 6
                 },
                 "end": {
-                  "line": 248,
+                  "line": 239,
                   "column": 7
                 }
               },
@@ -5124,11 +4704,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 241,
                   "column": 6
                 },
                 "end": {
-                  "line": 252,
+                  "line": 243,
                   "column": 7
                 }
               },
@@ -5148,11 +4728,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 257,
+                  "line": 248,
                   "column": 6
                 },
                 "end": {
-                  "line": 275,
+                  "line": 266,
                   "column": 7
                 }
               },
@@ -5175,11 +4755,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 65,
+              "line": 63,
               "column": 4
             },
             "end": {
-              "line": 276,
+              "line": 267,
               "column": 5
             }
           },
@@ -5205,34 +4785,16 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
-              "name": "focused",
-              "description": "If true, the element currently has focus.",
-              "sourceRange": {
-                "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
-                "start": {
-                  "line": 57,
-                  "column": 8
-                },
-                "end": {
-                  "line": 64,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "boolean",
-              "inheritedFrom": "Vaadin.ControlStateMixin"
-            },
-            {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "file": "bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 79,
                   "column": 8
                 },
                 "end": {
-                  "line": 80,
+                  "line": 83,
                   "column": 9
                 }
               },
@@ -5245,11 +4807,11 @@
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "sourceRange": {
                 "start": {
-                  "line": 73,
+                  "line": 71,
                   "column": 10
                 },
                 "end": {
-                  "line": 75,
+                  "line": 73,
                   "column": 11
                 }
               },
@@ -5261,11 +4823,11 @@
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 78,
                   "column": 10
                 },
                 "end": {
-                  "line": 83,
+                  "line": 81,
                   "column": 11
                 }
               },
@@ -5277,11 +4839,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 88,
+                  "line": 86,
                   "column": 10
                 },
                 "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 11
                 }
               },
@@ -5293,11 +4855,11 @@
               "description": "Maximum number of characters (in Unicode code points) that the user can enter.",
               "sourceRange": {
                 "start": {
-                  "line": 96,
+                  "line": 94,
                   "column": 10
                 },
                 "end": {
-                  "line": 98,
+                  "line": 96,
                   "column": 11
                 }
               },
@@ -5309,11 +4871,11 @@
               "description": "Minimum number of characters (in Unicode code points) that the user can enter.",
               "sourceRange": {
                 "start": {
-                  "line": 103,
+                  "line": 101,
                   "column": 10
                 },
                 "end": {
-                  "line": 105,
+                  "line": 103,
                   "column": 11
                 }
               },
@@ -5325,11 +4887,11 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 108,
                   "column": 10
                 },
                 "end": {
-                  "line": 112,
+                  "line": 110,
                   "column": 11
                 }
               },
@@ -5341,11 +4903,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 115,
                   "column": 10
                 },
                 "end": {
-                  "line": 119,
+                  "line": 117,
                   "column": 11
                 }
               },
@@ -5357,11 +4919,11 @@
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
                 "start": {
-                  "line": 124,
+                  "line": 122,
                   "column": 10
                 },
                 "end": {
-                  "line": 127,
+                  "line": 125,
                   "column": 11
                 }
               },
@@ -5373,11 +4935,11 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 10
                 },
                 "end": {
-                  "line": 135,
+                  "line": 133,
                   "column": 11
                 }
               },
@@ -5389,11 +4951,11 @@
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 140,
                   "column": 10
                 },
                 "end": {
-                  "line": 147,
+                  "line": 145,
                   "column": 11
                 }
               },
@@ -5405,27 +4967,11 @@
               "description": "This property is set to true when the control value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 152,
+                  "line": 150,
                   "column": 10
                 },
                 "end": {
-                  "line": 157,
-                  "column": 11
-                }
-              },
-              "metadata": {},
-              "type": "boolean"
-            },
-            {
-              "name": "has-value",
-              "description": "A read-only property indicating whether this input has a non empty value.\nIt can be used for example in styling of the component.",
-              "sourceRange": {
-                "start": {
-                  "line": 163,
-                  "column": 10
-                },
-                "end": {
-                  "line": 169,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -5437,11 +4983,11 @@
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -5449,30 +4995,14 @@
               "type": "boolean"
             }
           ],
-          "events": [
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-register",
-              "description": "iron-form-element-register",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            },
-            {
-              "type": "CustomEvent",
-              "name": "iron-form-element-unregister",
-              "description": "iron-form-element-unregister",
-              "metadata": {},
-              "inheritedFrom": "Vaadin.FormElementMixin"
-            }
-          ],
+          "events": [],
           "styling": {
             "cssVariables": [],
             "selectors": []
           },
           "slots": [],
           "mixins": [
-            "Vaadin.ControlStateMixin",
-            "Vaadin.FormElementMixin"
+            "Vaadin.ControlStateMixin"
           ]
         }
       ]
