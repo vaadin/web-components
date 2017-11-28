@@ -6,7 +6,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
-<link rel="import" href="vaadin-form-element-mixin.html">
 
 <dom-module id="vaadin-text-field-default-theme-common">
   <template>
@@ -61,9 +60,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * @polymerMixin
      * @memberof Vaadin
      * @mixes Vaadin.ControlStateMixin
-     * @mixes Vaadin.FormElementMixin
      */
-    Vaadin.TextFieldMixin = subclass => class VaadinTextFieldMixin extends Vaadin.ControlStateMixin(Vaadin.FormElementMixin(subclass)) {
+    Vaadin.TextFieldMixin = subclass => class VaadinTextFieldMixin extends Vaadin.ControlStateMixin(subclass) {
       static get properties() {
         return {
           /**
