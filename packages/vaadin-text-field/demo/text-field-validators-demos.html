@@ -13,30 +13,8 @@
 
     <vaadin-demo-snippet id='text-field-validators-demos-synchronous-custom-validator'>
       <template preserve-content>
-        <style>
-          employee-role-text-field {
-            padding: 10px;
-            background: rgba(0, 128, 0, 0.15);
-            width: 400px;
-          }
-
-          employee-role-text-field[invalid] {
-            background: rgba(244, 67, 54, 0.18);
-          }
-
-          employee-role-text-field div[slot=suffix] {
-            padding-left: 15px;
-            font-size: 80%;
-          }
-
-          employee-role-text-field[invalid] div[slot=suffix] {
-            color: red;
-          }
-        </style>
-
-        <employee-role-text-field label='Position'>
-          <div slot='suffix'>Valid options: Architect, Developer or Designer</div>
-        </employee-role-text-field>
+        <employee-role-text-field label='Position'></employee-role-text-field>
+        Valid options: Architect, Developer or Designer
 
         <script>
           window.addDemoReadyListener('#text-field-validators-demos-synchronous-custom-validator', function(document) {
@@ -65,37 +43,9 @@
 
     <vaadin-demo-snippet id='text-field-validators-demos-asynchronous-custom-validator'>
       <template preserve-content>
-        <style>
-          chemical-element-text-field {
-            width: 500px;
-          }
-
-          chemical-element-text-field div[slot=prefix] {
-            position: absolute;
-            margin-left: -8px;
-            color: red;
-            opacity: 0;
-          }
-
-          chemical-element-text-field[invalid] div[slot=prefix] {
-            opacity: 1;
-          }
-
-          chemical-element-text-field div[slot=suffix] {
-            padding-left: 15px;
-            font-size: 80%;
-          }
-
-          chemical-element-text-field[invalid] div[slot=suffix] {
-            color: red;
-          }
-        </style>
-
-        <iron-ajax id='ajax1' handle-as='json' url='https://vaadin.com/validate-element'></iron-ajax>
-        <chemical-element-text-field label='Element Name'>
-          <div slot='prefix'>!</div>
-          <div slot='suffix'>Type a valid Chemical Element such as Hydrogen, Oxygen, Carbon, etc.</div>
-        </chemical-element-text-field>
+        <my-ajax id='ajax1' handle-as='json' url='https://vaadin.com/validate-element'></my-ajax>
+        <chemical-element-text-field label='Element Name'></chemical-element-text-field>
+        Type a valid Chemical Element such as Hydrogen, Oxygen, Carbon, etc.
 
         <script>
           window.addDemoReadyListener('#text-field-validators-demos-asynchronous-custom-validator', function(document) {
@@ -129,12 +79,12 @@
     </vaadin-demo-snippet>
   </div>
 
-  <dom-module id='iron-ajax'>
+  <dom-module id='my-ajax'>
     <template>
     </template>
     <script>
         Polymer({
-          is: 'iron-ajax',
+          is: 'my-ajax',
 
           generateRequest: function() {
             setTimeout(function() {
