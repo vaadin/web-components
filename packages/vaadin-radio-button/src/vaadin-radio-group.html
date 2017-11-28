@@ -1,0 +1,226 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="vaadin-radio-button.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+
+<dom-module id="vaadin-radio-group">
+  <template>
+    <slot id="slot"></slot>
+  </template>
+
+  <script>
+    {
+      /**
+       * `<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.
+       *
+       * ```html
+       * <vaadin-radio-group>
+       *   <vaadin-radio-button name="foo">Foo</vaadin-radio-button>
+       *   <vaadin-radio-button name="bar">Bar</vaadin-radio-button>
+       *   <vaadin-radio-button name="baz">Baz</vaadin-radio-button>
+       * </vaadin-radio-group>
+       * ```
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled`   | Set when the radio group and its children are disabled. | :host
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @element vaadin-radio-group
+       * @demo demo/index.html
+       */
+      class RadioGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-radio-group';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The current disabled state of the radio group. True if group and all internal radio buttons are disabled.
+             */
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
+            },
+
+            _checkedButton: {
+              type: Object,
+              observer: '_checkedButtonChanged'
+            },
+
+            /**
+             * Value of the radio group.
+             */
+            value: {
+              type: String,
+              notify: true,
+              observer: '_valueChanged'
+            }
+          };
+        }
+
+        /**
+         * @private
+         */
+        connectedCallback() {
+          super.connectedCallback();
+          this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
+            var checkedChangedListener = (e) => {
+              if (e.target.checked) {
+                this._changeSelectedButton(e.target);
+              }
+            };
+
+            this._filterRadioButtons(info.addedNodes).forEach(button => {
+              button.addEventListener('checked-changed', checkedChangedListener);
+            });
+
+            this._filterRadioButtons(info.removedNodes).forEach(button => {
+              button.removeEventListener('checked-changed', checkedChangedListener);
+            });
+
+          });
+        }
+
+        ready() {
+          super.ready();
+
+          this._addActiveListeners();
+
+          if (this._radioButtons.length) {
+            this._setFocusable(0);
+          }
+
+          this.setAttribute('role', 'radiogroup');
+        }
+
+        get _radioButtons() {
+          return this._filterRadioButtons(this.querySelectorAll('*'));
+        }
+
+        _filterRadioButtons(nodes) {
+          return Array.from(nodes)
+            .filter(child => child instanceof Vaadin.RadioButtonElement);
+        }
+
+        _disabledChanged(disabled) {
+          this.setAttribute('aria-disabled', disabled);
+
+          this._radioButtons.forEach(button => button.disabled = disabled);
+        }
+
+        _addActiveListeners() {
+          this.addEventListener('keydown', e => {
+            // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
+            var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
+            if (this.disabled) {
+              return;
+            }
+
+            // LEFT, UP - select previous radio button
+            if (e.keyCode === 37 || e.keyCode === 38) {
+              e.preventDefault();
+              this._selectPreviousButton(checkedRadioButton);
+            }
+
+            // RIGHT, DOWN - select next radio button
+            if (e.keyCode === 39 || e.keyCode === 40) {
+              e.preventDefault();
+              this._selectNextButton(checkedRadioButton);
+            }
+          });
+        }
+
+        _selectButton(element) {
+          if (this.contains(this.getRootNode().activeElement)) {
+            element.focus();
+          }
+          this._changeSelectedButton(element);
+        }
+
+        _hasEnabledButtons() {
+          return !this._radioButtons.every((button) => button.disabled);
+        }
+
+        _selectNextButton(element) {
+          if (!this._hasEnabledButtons()) {
+            return;
+          }
+
+          var nextButton = element.nextElementSibling || this.firstElementChild;
+
+          if (nextButton.disabled) {
+            this._selectNextButton(nextButton);
+          } else {
+            this._selectButton(nextButton);
+          }
+        }
+
+        _selectPreviousButton(element) {
+          if (!this._hasEnabledButtons()) {
+            return;
+          }
+
+          var previousButton = element.previousElementSibling || this.lastElementChild;
+
+          if (previousButton.disabled) {
+            this._selectPreviousButton(previousButton);
+          } else {
+            this._selectButton(previousButton);
+          }
+        }
+
+        _changeSelectedButton(button) {
+          this._checkedButton = button;
+
+          this._setFocusable(this._radioButtons.indexOf(button));
+        }
+
+        _checkedButtonChanged(checkedButton) {
+          this._radioButtons.forEach(button => button.checked = button === checkedButton);
+
+          this.value = checkedButton.value;
+        }
+
+        _valueChanged(newV, oldV) {
+          if (!this._checkedButton || newV != this._checkedButton.value) {
+            const newCheckedButton = this._radioButtons.filter(button => button.value == newV)[0];
+
+            if (newCheckedButton) {
+              this._selectButton(newCheckedButton);
+            } else {
+              console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
+            }
+          }
+        }
+
+        _setFocusable(idx) {
+          const items = this._radioButtons;
+          items.forEach(e => e.tabindex = e === items[idx] ? 0 : -1);
+        }
+
+      }
+
+      customElements.define(RadioGroupElement.is, RadioGroupElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.RadioGroupElement = RadioGroupElement;
+    }
+  </script>
+</dom-module>
