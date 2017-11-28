@@ -1,0 +1,112 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<dom-module id="vaadin-button">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        position: relative;
+        outline: none;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      [part="button"] {
+        width: 100%;
+        height: 100%;
+        margin: 0; /* (normalize.css) Remove the margin in Firefox and Safari. */
+        overflow: visible; /* (normalize.css) Show the overflow in IE. */
+      }
+    </style>
+    <button id="button" type="button" part="button">
+      <slot></slot>
+    </button>
+  </template>
+  <script>
+    {
+      /**
+       * `<vaadin-button>` is a Polymer 2 element providing an accessible and customizable button.
+       *
+       * ```html
+       * <vaadin-button>
+       * </vaadin-button>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are exposed for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `button` | The internal `<button>` element
+       *
+       * The following attributes are exposed for styling:
+       *
+       * Attribute | Description
+       * --------- | -----------
+       * `active` | Set when the button is pressed down, either with mouse, touch or the keyboard.
+       * `disabled` | Set when the button is disabled.
+       * `focus-ring` | Set when the button is focused using the keyboard.
+       * `focused` | Set when the button is focused.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
+       * @demo demo/index.html
+       */
+      class ButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-button';
+        }
+
+        static get version() {
+          return '1.0.4';
+        }
+
+        ready() {
+          super.ready();
+
+          // Leaving default role in the native button, makes navigation announcement
+          // being different when using focus navigation (tab) versus using normal
+          // navigation (arrows). The first way announces the label on a button
+          // since the focus is moved programmatically, and the second on a group.
+          this.setAttribute('role', 'button');
+          this.$.button.setAttribute('role', 'presentation');
+
+          this._addActiveListeners();
+        }
+
+        _addActiveListeners() {
+          Polymer.Gestures.addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
+          Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
+          this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
+          this.addEventListener('keyup', () => this.removeAttribute('active'));
+        }
+
+        get focusElement() {
+          return this.$.button;
+        }
+      }
+
+      customElements.define(ButtonElement.is, ButtonElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ButtonElement = ButtonElement;
+    }
+  </script>
+</dom-module>
