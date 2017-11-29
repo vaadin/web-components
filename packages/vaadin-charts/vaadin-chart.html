@@ -514,6 +514,73 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
           }
         }
+
+        __callChartFunction(functionName) {
+          if (this._configuration) {
+            const functionToCall = this._configuration[functionName];
+            const argumentsForCall = Array.prototype.splice.call(arguments, 1);
+            if (functionToCall && typeof functionToCall === 'function') {
+              functionToCall.apply(this._configuration, argumentsForCall);
+            }
+          }
+        }
+
+        __callSeriesFunction(functionName, seriesIndex) {
+          if (this._configuration && this._configuration.series[seriesIndex]) {
+            const series = this._configuration.series[seriesIndex];
+            const functionToCall = series[functionName];
+            const argumentsForCall = Array.prototype.splice.call(arguments, 2);
+            if (functionToCall && typeof functionToCall === 'function') {
+              functionToCall.apply(series, argumentsForCall);
+            }
+          }
+        }
+
+        __callAxisFunction(functionName, axisCategory, axisIndex) {
+          /*
+           * axisCategory:
+           * 0 - xAxis
+           * 1 - yAxis
+           * 2 - zAxis
+           * 3 - colorAxis
+           */
+          if (this._configuration) {
+            let axes;
+            switch (axisCategory) {
+              case 0:
+                axes = this._configuration.xAxis;
+                break;
+              case 1:
+                axes = this._configuration.yAxis;
+                break;
+              case 2:
+                axes = this._configuration.zAxis;
+                break;
+              case 3:
+                axes = this._configuration.colorAxis;
+                break;
+            }
+            if (axes && axes[axisIndex]) {
+              const axis = axes[axisIndex];
+              const functionToCall = axis[functionName];
+              const argumentsForCall = Array.prototype.splice.call(arguments, 3);
+              if (functionToCall && typeof functionToCall === 'function') {
+                functionToCall.apply(axis, argumentsForCall);
+              }
+            }
+          }
+        }
+
+        __callPointFunction(functionName, seriesIndex, pointIndex) {
+          if (this._configuration && this._configuration.series[seriesIndex] && this._configuration.series[seriesIndex].data[pointIndex]) {
+            const point = this._configuration.series[seriesIndex].data[pointIndex];
+            const functionToCall = point[functionName];
+            const argumentsForCall = Array.prototype.splice.call(arguments, 3);
+            if (functionToCall && typeof functionToCall === 'function') {
+              functionToCall.apply(point, argumentsForCall);
+            }
+          }
+        }
       }
 
       customElements.define(ChartElement.is, ChartElement);
