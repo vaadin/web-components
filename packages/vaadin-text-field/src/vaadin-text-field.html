@@ -1,0 +1,190 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="vaadin-text-field-mixin.html">
+
+<dom-module id="vaadin-text-field">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        width: 175px;
+        outline: none;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .vaadin-text-field-container {
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
+      [part="input-field"] {
+        display: flex;
+        align-items: center;
+      }
+
+      [part="value"] {
+        width: 100%;
+        box-sizing: border-box;
+        flex: 1;
+        min-width: 0;
+      }
+
+      [part="value"]::-ms-clear {
+        display: none;
+      }
+
+    </style>
+
+    <div class="vaadin-text-field-container">
+
+      <label part="label" on-click="focus" id="[[_labelId]]">[[label]]</label>
+
+      <div part="input-field">
+
+        <slot name="prefix"></slot>
+
+        <input part="value"
+          autocomplete$="[[autocomplete]]"
+          autocorrect$="[[autocorrect]]"
+          autofocus$="[[autofocus]]"
+          disabled$="[[disabled]]"
+          list="[[list]]"
+          maxlength$="[[maxlength]]"
+          minlength$="[[minlength]]"
+          pattern="[[pattern]]"
+          placeholder="[[placeholder]]"
+          readonly$="[[readonly]]"
+          aria-readonly$="[[readonly]]"
+          required$="[[required]]"
+          aria-required$="[[required]]"
+          value="{{value::input}}"
+          title="[[title]]"
+          on-blur="validate"
+          on-input="_onInput"
+          aria-describedby$="[[_getActiveErrorId(invalid, errorMessage, _errorId)]]"
+          aria-labelledby$="[[_getActiveLabelId(label, _labelId)]]"
+          aria-invalid$="[[invalid]]"
+        >
+
+        <slot name="suffix"></slot>
+
+      </div>
+
+      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
+
+    </div>
+
+  </template>
+
+  <script>
+    {
+      /**
+       * `<vaadin-text-field>` is a Polymer 2 element for text field control in forms.
+       *
+       * ```html
+       * <vaadin-text-field label="First Name">
+       * </vaadin-text-field>
+       * ```
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       * `value` | The input element
+       * `error-message` | The error message element
+       * `input-field` | The element that wraps prefix, value and suffix
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `disabled` | Set to a disabled text field | :host
+       * `has-value` | Set when the element has a value | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       * `readonly` | Set to a readonly text field | :host
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.TextFieldMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class TextFieldElement extends Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-text-field';
+        }
+
+        static get version() {
+          return '1.2.0-alpha2';
+        }
+
+        static get properties() {
+          return {
+
+
+            /**
+             * This is a property supported by Safari that is used to control whether
+             * autocorrection should be enabled when the user is entering/editing the text.
+             * Possible values are:
+             * on: Enable autocorrection.
+             * off: Disable autocorrection.
+             */
+            autocorrect: {
+              type: String
+            },
+
+            /**
+             * Identifies a list of pre-defined options to suggest to the user.
+             * The value must be the id of a <datalist> element in the same document.
+             */
+            list: {
+              type: String
+            },
+
+            /**
+             * A regular expression that the value is checked against.
+             * The pattern must match the entire value, not just some subset.
+             */
+            pattern: {
+              type: String
+            },
+
+            /**
+             * Message to show to the user when validation fails.
+             */
+            title: {
+              type: String
+            }
+          };
+        }
+      }
+
+      customElements.define(TextFieldElement.is, TextFieldElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.TextFieldElement = TextFieldElement;
+    }
+  </script>
+</dom-module>
