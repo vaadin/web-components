@@ -24,9 +24,10 @@
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
     "vaadin-control-state-mixin": "^1.1.4",
-    "vaadin-overlay": "^1.2.2",
-    "vaadin-text-field": "^1.0.0",
-    "vaadin-themable-mixin": "^1.1.0"
+    "vaadin-overlay": "#next",
+    "vaadin-text-field": "#next",
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "devDependencies": {
     "iron-ajax": "^2.0.0",
@@ -43,7 +44,7 @@
     "paper-input": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-button": "^1.0.0",
+    "vaadin-button": "#next",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
   }

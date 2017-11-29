@@ -1,0 +1,335 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-combo-box-mixin.html">
+<link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
+<link rel="import" href="vaadin-combo-box-styles.html">
+
+<dom-module id="vaadin-combo-box">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        width: 175px;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host([opened]) {
+        pointer-events: auto;
+      }
+
+      [part="text-field"] {
+        min-width: 100%;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        font-family: 'vaadin-combo-box-icons';
+      }
+
+      [part="clear-button"]::before {
+        content: "\e901";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e900";
+      }
+
+      :host([disabled]) [part="clear-button"],
+      :host([readonly]) [part="clear-button"],
+      :host(:not([has-value])) [part="clear-button"] {
+        display: none;
+      }
+    </style>
+
+    <vaadin-text-field part="text-field" id="input"
+        pattern="[[pattern]]"
+        prevent-invalid-input="[[preventInvalidInput]]"
+
+        value="{{_inputElementValue}}"
+        autocomplete="off"
+
+        invalid="[[invalid]]"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+
+        autocapitalize="none"
+
+        autofocus="[[autofocus]]"
+
+        on-change="_stopPropagation"
+        on-input="_inputValueChanged"
+      >
+      <slot name="prefix" slot="prefix"></slot>
+
+      <div part="clear-button" id="clearButton" slot="suffix" role="button" aria-label="Clear"></div>
+      <div part="toggle-button" id="toggleButton" slot="suffix" role="button" aria-label="Toggle"></div>
+
+    </vaadin-text-field>
+
+    <vaadin-combo-box-dropdown-wrapper id="overlay"
+      opened=[[opened]]
+      position-target="[[_getPositionTarget()]]"
+      _focused-index="[[_focusedIndex]]"
+      _item-label-path="[[itemLabelPath]]"
+      loading="[[loading]]">
+    </vaadin-combo-box-dropdown-wrapper>
+  </template>
+</dom-module>
+
+  <script>
+    {
+      /**
+       * `<vaadin-combo-box>` is a combo box element combining a dropdown list with an
+       * input field for filtering the list of items. If you want to replace the default
+       * input field with a custom implementation, you should use the
+       * [`<vaadin-combo-box-light>`](#/elements/vaadin-combo-box-light) element.
+       *
+       * Items in the dropdown list must be provided as a list of `String` values.
+       * Defining the items is done using the `items` property, which can be assigned
+       * with data-binding, using an attribute or directly with the JavaScript property.
+       *
+       * ```html
+       * <vaadin-combo-box
+       *     label="Fruit"
+       *     items="[[data]]">
+       * </vaadin-combo-box>
+       * ```
+       *
+       * ```js
+       * combobox.items = ['apple', 'orange', 'banana'];
+       * ```
+       *
+       * When the selected `value` is changed, a `value-changed` event is triggered.
+       *
+       * This element can be used within an `iron-form`.
+       *
+       * ### Item Template
+       *
+       * `<vaadin-combo-box>` supports using custom item template provided in the light
+       * DOM:
+       *
+       * ```html
+       * <vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
+       *   <template>
+       *     [[index]]: [[item.label]] <b>[[item.value]</b>
+       *   </template>
+       * </vaadin-combo-box>
+       * ```
+       *
+       * The following properties are available for item template bindings:
+       *
+       * Property name | Type | Description
+       * --------------|------|------------
+       * `index`| Number | Index of the item in the `items` array
+       * `item` | String or Object | The item reference
+       * `selected` | Boolean | True when item is selected
+       * `focused` | Boolean | True when item is focused
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * The following custom properties are available for styling:
+       *
+       * Custom property | Description | Default
+       * ----------------|-------------|-------------
+       * `--vaadin-combo-box-overlay-max-height` | Property that determines the max height of overlay | `65vh`
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `text-field` | The text field
+       * `clear-button` | The clear button
+       * `toggle-button` | The toggle button
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-combo-box-overlay>` parts.
+       *
+       * See [`<vaadin-text-field>` documentation](https://vaadin.com/elements/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement)
+       * for the text field parts.
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `opened` | Set when the combo box dropdown is open | :host
+       * `disabled` | Set to a disabled combo box | :host
+       * `readonly` | Set to a read only combo box | :host
+       * `has-value` | Set when the element has a value | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       * `loading` | Set when new items are expected | :host
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ComboBoxMixin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class ComboBoxElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element))) {
+
+        static get is() {
+          return 'vaadin-combo-box';
+        }
+
+        static get version() {
+          return '3.0.2';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The label for this element.
+             */
+            label: {
+              type: String,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Set to true to mark the input as required.
+             */
+            required: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to disable this input.
+             */
+            disabled: {
+              type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true to prevent the user from entering invalid input.
+             */
+            preventInvalidInput: {
+              type: Boolean
+            },
+
+            /**
+             * A pattern to validate the `input` with.
+             */
+            pattern: {
+              type: String
+            },
+
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: {
+              type: String
+            },
+
+            autofocus: {
+              type: Boolean
+            },
+
+            /**
+             * A placeholder string in addition to the label.
+             */
+            placeholder: {
+              type: String,
+              value: ''
+            },
+
+            readonly: {
+              type: Boolean,
+              value: false
+            }
+          };
+        }
+
+        static get observers() {
+          return ['_updateAriaExpanded(opened)'];
+        }
+
+        attributeChanged(name, type) {
+          // Safari has an issue with repainting shadow root element styles when a host attribute changes.
+          // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          if (isSafari && this.root) {
+            Array.prototype.forEach.call(this.root.querySelectorAll('*'), el => {
+              el.style['-webkit-backface-visibility'] = 'visible';
+              el.style['-webkit-backface-visibility'] = '';
+            });
+          }
+        }
+
+        ready() {
+          super.ready();
+
+          this._bindableInput = this.$.input;
+          this._nativeInput = this.$.input.focusElement;
+          this._toggleElement = this.$.toggleButton;
+          this._clearElement = this.$.clearButton;
+
+          this._nativeInput.setAttribute('role', 'combobox');
+          this._nativeInput.setAttribute('aria-autocomplete', 'list');
+          this._updateAriaExpanded();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          this._preventInputBlur();
+        }
+
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this._restoreInputBlur();
+        }
+
+        _getPositionTarget() {
+          return this.$.input;
+        }
+
+        _updateAriaExpanded() {
+          if (this._nativeInput) {
+            this._nativeInput.setAttribute('aria-expanded', this.opened);
+            this._toggleElement.setAttribute('aria-expanded', this.opened);
+          }
+        }
+
+        get inputElement() {
+          return this.$.input;
+        }
+
+        /**
+         * Focussable element used by vaadin-control-state-mixin
+         */
+        get focusElement() {
+          // inputElement might not be defined on property changes before ready.
+          return this.inputElement || this;
+        }
+      }
+
+      customElements.define(ComboBoxElement.is, ComboBoxElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.ComboBoxElement = ComboBoxElement;
+    }
+  </script>
+</dom-module>
