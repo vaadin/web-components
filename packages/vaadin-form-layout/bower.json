@@ -26,14 +26,15 @@
   "dependencies": {
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.1.0"
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "paper-input": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-text-field": "^1.0.0",
+    "vaadin-text-field": "#next",
     "webcomponentsjs": "^1.0.1",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
