@@ -340,8 +340,8 @@ This program is available under Apache License Version 2.0, available at https:/
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, .25);
       }
 
-      :host([loading]) [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
-        opacity: 0.5;
+      [part~="row"][loading] [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
+        opacity: 0;
       }
     </style>
   </template>

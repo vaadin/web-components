@@ -250,7 +250,32 @@
         expect(grid.loading).not.to.be.true;
         grid.clearCache();
         expect(grid.loading).to.be.true;
+      });
 
+      it('should set loading attribute to rows', () => {
+        container.dataProvider = (params, callback) => {};
+        expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.true;
+      });
+
+      it('should clear loading attribute from rows when data received', () => {
+        container.dataProvider = (params, callback) => {
+          callback([...Array(25)]);
+        };
+        expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
+      });
+
+      it('should clear loading attribute from rows when scrolled to previously loaded rows', () => {
+        grid.pageSize = 1;
+        container.dataProvider = (params, callback) => {
+          if (params.page === 0) {
+            callback([{value: 'loaded'}]);
+          }
+        };
+        const row = getRows(grid.$.items)[0];
+        scrollToEnd(grid);
+        expect(row.hasAttribute('loading')).to.be.true;
+        grid._scrollToIndex(0);
+        expect(row.hasAttribute('loading')).to.be.false;
       });
 
       it('should not set virtual scroll position to 0 on size change', () => {
