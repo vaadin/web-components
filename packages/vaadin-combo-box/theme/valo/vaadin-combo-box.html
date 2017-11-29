@@ -1,12 +1,10 @@
 <link rel="import" href="../../../vaadin-valo-theme/color.html">
 <link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
 <link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
 
 <link rel="import" href="../../../vaadin-text-field/theme/valo/vaadin-text-field.html">
-<link rel="import" href="../../../vaadin-item/theme/valo/vaadin-item.html">
-<link rel="import" href="../../../vaadin-overlay/theme/valo/vaadin-overlay.html">
-<link rel="import" href="../../../vaadin-valo-theme/menu-overlay.html">
+<link rel="import" href="vaadin-combo-box-dropdown.html">
+<link rel="import" href="vaadin-combo-box-item.html">
 
 <dom-module id="valo-combo-box" theme-for="vaadin-combo-box">
   <template>
@@ -58,73 +56,6 @@
 
       :host([disabled]) [part$="button"] {
         color: var(--valo-contrast-20pct);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="valo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
-  <template>
-    <style>
-      [part="overlay"] {
-        padding: 0;
-      }
-
-      /* TODO unsupported selector */
-      #scroller {
-        border-radius: var(--valo-border-radius);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="valo-combo-box-item" theme-for="vaadin-combo-box-item">
-  <template>
-    <style include="valo-item">
-      /* TODO duplicated from vaadin-list-box styles. Should find a way to make it DRY */
-
-      :host {
-        cursor: pointer;
-        padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
-        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
-      }
-
-      /* ShadyCSS workaround */
-      :host::before {
-        display: block;
-      }
-
-      /* IE11 flexbox workaround */
-      ::-ms-backdrop,
-      :host {
-        height: var(--valo-size-m);
-      }
-
-      /* Only apply for this particular item, not nested items */
-      :host > * {
-        --_valo-item-selected-icon-display: none;
-      }
-
-      :host([focused]) {
-        background-color: var(--valo-primary-color-10pct);
-      }
-
-      @media (pointer: coarse) {
-        :host([focused]) {
-          background-color: transparent;
-        }
-      }
-
-      :host([selected]) {
-        font-weight: 500;
-      }
-
-      /* TODO ugly hack to add horizontal spacing between the overlay and the item */
-      /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
-      :host {
-        left: var(--valo-space-xs);
-        right: var(--valo-space-xs);
-        width: auto !important;
       }
     </style>
   </template>
