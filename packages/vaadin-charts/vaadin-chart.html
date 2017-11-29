@@ -176,7 +176,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinChart extends Vaadin.ThemableMixin(Polymer.Element) {
+      class ChartElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-chart';
         }
@@ -323,7 +323,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __filterSeriesNodes(node) {
-          return node.nodeType === Node.ELEMENT_NODE && node instanceof Vaadin.VaadinChartSeries;
+          return node.nodeType === Node.ELEMENT_NODE && node instanceof Vaadin.ChartSeriesElement;
         }
 
         __addSeries(series) {
@@ -516,13 +516,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      customElements.define(VaadinChart.is, VaadinChart);
+      customElements.define(ChartElement.is, ChartElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinChart = VaadinChart;
+      Vaadin.ChartElement = ChartElement;
     }
   </script>
 </dom-module>
