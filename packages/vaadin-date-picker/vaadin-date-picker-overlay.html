@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-date-picker-helper.html">
 <link rel="import" href="vaadin-date-picker-styles.html">
 
-<dom-module id="vaadin-date-picker-overlay">
+<dom-module id="vaadin-date-picker-overlay-content">
   <template>
     <style>
       :host {
@@ -231,10 +231,10 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @private
        */
-      class DatePickerOverlayElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      class DatePickerOverlayContentElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
-          return 'vaadin-date-picker-overlay';
+          return 'vaadin-date-picker-overlay-content';
         }
 
         static get properties() {
@@ -671,7 +671,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _close() {
-          this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
+          this.getRootNode().host.opened = false;
         }
 
         _cancel() {
@@ -901,13 +901,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(DatePickerOverlayElement.is, DatePickerOverlayElement);
+      customElements.define(DatePickerOverlayContentElement.is, DatePickerOverlayContentElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.DatePickerOverlayElement = DatePickerOverlayElement;
+      Vaadin.DatePickerOverlayContentElement = DatePickerOverlayContentElement;
     }
   </script>
 </dom-module>

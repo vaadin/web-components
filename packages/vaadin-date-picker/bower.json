@@ -29,7 +29,8 @@
     "vaadin-button": "^1.0.0",
     "vaadin-text-field": "^1.0.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-control-state-mixin": "^1.1.7"
+    "vaadin-control-state-mixin": "^1.1.7",
+    "vaadin-overlay": "^1.6.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

@@ -15,6 +15,33 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-date-picker-helper.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="vaadin-date-picker-styles.html">
+<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+
+<dom-module id="vaadin-date-picker-overlay">
+  <script>
+    {
+      /**
+       * The overlay element.
+       *
+       * ### Styling
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+       * for `<vaadin-date-picker-overlay>` parts.
+       *
+       * @memberof Vaadin
+       * @extends Vaadin.OverlayElement
+       */
+      class VaadinDatePickerOverlayElement extends Vaadin.OverlayElement {
+        static get is() {
+          return 'vaadin-date-picker-overlay';
+        }
+      }
+      customElements.define(VaadinDatePickerOverlayElement.is, VaadinDatePickerOverlayElement);
+    }
+  </script>
+</dom-module>
 
 <dom-module id="vaadin-date-picker">
   <template>
@@ -35,11 +62,6 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="text-field"] {
         min-width: 100%;
         max-width: 100%;
-      }
-
-      [part="overlay"] {
-        height: 100vh;
-        width: 420px;
       }
 
       [part="clear-button"],
@@ -86,29 +108,30 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
-    <iron-dropdown
-        id="dropdown"
+    <vaadin-date-picker-overlay
+        id="overlay"
         fullscreen$=[[_fullscreen]]
-        allow-outside-scroll
-        on-iron-overlay-opened="_onOverlayOpened"
-        on-iron-overlay-closed="_onOverlayClosed"
-        on-iron-overlay-canceled="_preventCancelOnComponentAccess"
         opened="{{opened}}"
-        no-auto-focus>
-      <vaadin-date-picker-overlay
-          id="overlay" i18n="[[i18n]]"
-          fullscreen$="[[_fullscreen]]"
-          label="[[label]]"
-          selected-date="{{_selectedDate}}"
-          slot="dropdown-content"
-          focused-date="{{_focusedDate}}"
-          show-week-numbers="[[showWeekNumbers]]"
-          min-date="[[_minDate]]"
-          max-date="[[_maxDate]]"
-          role="dialog"
-          part="overlay">
-      </vaadin-date-picker-overlay>
-    </iron-dropdown>
+        fullscreen$="[[_fullscreen]]"
+        on-vaadin-overlay-open="_onOverlayOpened"
+        on-vaadin-overlay-close="_onOverlayClosed">
+      <template>
+        <vaadin-date-picker-overlay-content
+            id="overlay-content" i18n="[[i18n]]"
+            fullscreen$="[[_fullscreen]]"
+            label="[[label]]"
+            selected-date="{{_selectedDate}}"
+            slot="dropdown-content"
+            focused-date="{{_focusedDate}}"
+            show-week-numbers="[[showWeekNumbers]]"
+            min-date="[[_minDate]]"
+            max-date="[[_maxDate]]"
+            role="dialog"
+            on-date-tap="_close"
+            part="overlay-content">
+        </vaadin-date-picker-overlay-content>
+      </template>
+    </vaadin-date-picker-overlay>
 
     <iron-media-query
         query="[[_fullscreenMediaQuery]]"
@@ -249,7 +272,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
 
           // Keep focus attribute in focusElement for styling
-          this.$.overlay.addEventListener('focus', () => this.focusElement._setFocused(true));
+          this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
         }
 
         _clear(e) {
@@ -261,7 +284,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _toggle(e) {
           e.stopPropagation();
-          this[this.$.dropdown.opened ? 'close' : 'open']();
+          this[this.$.overlay.opened ? 'close' : 'open']();
         }
 
         _input() {

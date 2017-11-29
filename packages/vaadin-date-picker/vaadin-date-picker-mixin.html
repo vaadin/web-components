@@ -303,15 +303,7 @@ This program is available under Apache License Version 2.0, available at https:/
           value: true
         },
 
-        _focusOverlayOnOpen: Boolean,
-
-        /**
-         * When datepicker is opened, we're setting body pointer-events to none
-         * to make the datepicker behave in "modal" way. This variable keeps the
-         * previous state of body pointer-events to restore it when datepicker is
-         * closed.
-         */
-        _documentPointerEvents: String
+        _focusOverlayOnOpen: Boolean
       };
     }
 
@@ -326,6 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
+      this._overlayContent = this.$.overlay.$.content.querySelector('#overlay-content');
       this._boundOnScroll = this._onScroll.bind(this);
       this.addEventListener('tap', this.open.bind(this));
       this.addEventListener('touchend', this._preventDefault.bind(this));
@@ -341,7 +334,7 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     open() {
       if (!this.disabled && !this.readonly) {
-        this.$.dropdown.open();
+        this.$.overlay.opened = true;
         this._updateAlignmentAndPosition();
       }
     }
@@ -358,7 +351,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Closes the dropdown.
      */
     close() {
-      this.$.dropdown.close();
+      this.$.overlay.opened = false;
     }
 
     get _inputElement() {
@@ -450,31 +443,20 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateAlignmentAndPosition() {
-      var viewportWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-      this.$.dropdown.positionTarget = this._fullscreen ? document.documentElement : this;
+      const inputRect = this._inputElement.getBoundingClientRect();
 
-      var viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-      var bottomAlign = this.getBoundingClientRect().top > viewportHeight / 2;
-      var rightAlign = this.getBoundingClientRect().left + this.clientWidth / 2 > viewportWidth / 2;
+      if(!this._fullscreen) {
+        this.$.overlay.style.left = inputRect.left + 'px';
 
-      this.$.dropdown.verticalAlign = bottomAlign ? 'bottom' : 'top';
-      this.$.dropdown.horizontalAlign = this._fullscreen ? null : rightAlign ? 'right' : 'left';
-
-      // Previously used verticalOffset property has been recently deprecated
-      // in favor of using top and bottom margins.
-      if (this._fullscreen) {
-        this.$.dropdown.style.marginTop = 0;
-        this.$.dropdown.style.marginBottom = 0;
-      } else {
-        this.$.dropdown.style.marginTop = (bottomAlign ? 10 : this.clientHeight + 2) + 'px';
-        this.$.dropdown.style.marginBottom = (bottomAlign ? this.clientHeight : 10) + 'px';
+        this.$.overlay.style.top = ((inputRect.top <= window.innerHeight - inputRect.top) ? inputRect.bottom :
+          inputRect.top - this._overlayContent.getBoundingClientRect().height) + 'px';
       }
 
-      this.$.overlay._repositionYearScroller();
+      this._overlayContent._repositionYearScroller();
     }
 
     _fullscreenChanged() {
-      if (this.$.dropdown.opened) {
+      if (this.$.overlay.opened) {
         this._updateAlignmentAndPosition();
       }
     }
@@ -482,21 +464,21 @@ This program is available under Apache License Version 2.0, available at https:/
     _onOverlayOpened() {
       var parsedInitialPosition = this._parseDate(this.initialPosition);
 
-      var initialPosition = this._selectedDate || this.$.overlay.initialPosition ||
+      var initialPosition = this._selectedDate || this._overlayContent.initialPosition ||
         parsedInitialPosition || new Date();
 
       if (parsedInitialPosition ||
         Vaadin.DatePickerHelper._dateAllowed(initialPosition, this._minDate, this._maxDate)) {
-        this.$.overlay.initialPosition = initialPosition;
+        this._overlayContent.initialPosition = initialPosition;
       } else {
-        this.$.overlay.initialPosition =
+        this._overlayContent.initialPosition =
           Vaadin.DatePickerHelper._getClosestDate(initialPosition, [this._minDate, this._maxDate]);
       }
 
-      this.$.overlay.scrollToDate(this.$.overlay.focusedDate || this.$.overlay.initialPosition);
+      this._overlayContent.scrollToDate(this._overlayContent.focusedDate || this._overlayContent.initialPosition);
       // Have a default focused date
       this._ignoreFocusedDateChange = true;
-      this.$.overlay.focusedDate = this.$.overlay.focusedDate || this.$.overlay.initialPosition;
+      this._overlayContent.focusedDate = this._overlayContent.focusedDate || this._overlayContent.initialPosition;
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
@@ -508,23 +490,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       if (this._focusOverlayOnOpen) {
-        this.$.overlay.focus();
+        this._overlayContent.focus();
         this._focusOverlayOnOpen = false;
       } else {
         this._focus();
       }
 
       this.updateStyles();
-
-      // Set body pointer-events to 'none' to disable mouse interactions with
-      // other document nodes (datepicker is "modal")
-      this._documentPointerEvents = document.body.style.pointerEvents;
-      document.body.style.pointerEvents = 'none';
-
-      // Workarond for Chrome 62+, without it clicks on date cells don't work
-      var _pointerEvents = this.style.pointerEvents;
-      this.style.pointerEvents = 'auto';
-      this.style.pointerEvents = _pointerEvents;
 
       this._ignoreAnnounce = false;
     }
@@ -560,9 +532,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this.updateStyles();
-
-      // Restore the initial body pointer-events
-      document.body.style.pointerEvents = this._documentPointerEvents;
 
       // Select the parsed input or focused date
       this._ignoreFocusedDateChange = true;
@@ -630,21 +599,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onScroll(e) {
-      if (e.target === window || !this.$.overlay.contains(e.target)) {
+      if (e.target === window || !this._overlayContent.contains(e.target)) {
         this._updateAlignmentAndPosition();
-      }
-    }
-
-    _preventCancelOnComponentAccess(e) {
-      var event = e.detail;
-      if (/tap|mousedown|touchstart/.test(e.detail.type) && event.composedPath().indexOf(this) > -1) {
-        e.preventDefault();
       }
     }
 
     _focus() {
       if (this._noInput) {
-        this.$.overlay.focus();
+        this._overlayContent.focus();
       } else {
         this._inputElement.focus();
       }
@@ -703,8 +665,8 @@ This program is available under Apache License Version 2.0, available at https:/
           e.preventDefault();
 
           if (this.opened) {
-            this.$.overlay.focus();
-            this.$.overlay._onKeydown(e);
+            this._overlayContent.focus();
+            this._overlayContent._onKeydown(e);
           } else {
             this._focusOverlayOnOpen = true;
             this.open();
@@ -712,8 +674,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           break;
         case 'enter':
-          if (this.$.overlay.focusedDate) {
-            this._selectedDate = this.$.overlay.focusedDate;
+          if (this._overlayContent.focusedDate) {
+            this._selectedDate = this._overlayContent.focusedDate;
           }
           this.close();
           break;
@@ -727,10 +689,10 @@ This program is available under Apache License Version 2.0, available at https:/
             // Clear the selection range (remains visible on IE)
             this._setSelectionRange(0, 0);
             if (e.shiftKey) {
-              this.$.overlay.focusCancel();
+              this._overlayContent.focusCancel();
             } else {
-              this.$.overlay.focus();
-              this.$.overlay.revealDate(this._focusedDate);
+              this._overlayContent.focus();
+              this._overlayContent.revealDate(this._focusedDate);
             }
 
           }
@@ -752,7 +714,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._ios) {
           // iOS needs a refit after input blur animation has finished
           this._debouncerRefit = Polymer.Debouncer.debounce(this._debouncerRefit,
-            Polymer.Async.timeOut.after(500), this.$.dropdown.refit);
+            Polymer.Async.timeOut.after(500), this.$.overlay.refit);
         }
       }
     }
@@ -770,7 +732,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _announceFocusedDate(_focusedDate, opened, _ignoreAnnounce) {
       if (opened && !_ignoreAnnounce) {
-        this.$.overlay.announceFocusedDate();
+        this._overlayContent.announceFocusedDate();
       }
     }
   };
