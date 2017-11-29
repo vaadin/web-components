@@ -210,6 +210,10 @@
         expect(selectAllCheckbox.localName).to.eql('vaadin-checkbox');
       });
 
+      it('should have class name for the select all checkbox', () => {
+        expect(selectAllCheckbox.classList.contains('vaadin-grid-select-all-checkbox')).to.be.true;
+      });
+
       it('should set selectAll when header checkbox is clicked', () => {
         selectAllCheckbox.click();
         expect(selectionColumn.selectAll).to.be.true;
