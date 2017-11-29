@@ -86,7 +86,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       </div>
 
-      <div id="[[_errorId]]" aria-live="assertive" part="error-message" hidden$="[[!_getActiveErrorId(invalid, errorMessage, _errorId)]]">[[errorMessage]]</div>
+      <div part="error-message"
+        id="[[_errorId]]"
+        aria-live="assertive"
+        aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]"
+      >[[errorMessage]]</div>
 
     </div>
 

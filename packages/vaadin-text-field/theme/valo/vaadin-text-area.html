@@ -21,6 +21,11 @@
       [part="value"] {
         line-height: var(--valo-line-height-s);
       }
+
+      [part="input-field"] [part="value"] {
+        white-space: pre-wrap; /* override `nowrap` from <vaadin-text-field> */
+        align-self: stretch; /* override `baseline` from <vaadin-text-field> */
+      }
     </style>
   </template>
 </dom-module>

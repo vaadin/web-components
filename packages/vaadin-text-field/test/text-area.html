@@ -163,9 +163,9 @@
         of
         rows`;
 
-        expect(window.getComputedStyle(textArea).height).to.be.equal('100px');
-        expect(window.getComputedStyle(container).height).to.be.equal('100px');
-        expect(window.getComputedStyle(inputField).height).to.be.equal('100px');
+        expect(parseFloat(window.getComputedStyle(textArea).height)).to.be.lte(100);
+        expect(parseFloat(window.getComputedStyle(container).height)).to.be.lte(100);
+        expect(parseFloat(window.getComputedStyle(inputField).height)).to.be.lte(100);
       });
 
       it('should not shrink less than min-height', () => {
@@ -245,12 +245,15 @@
 
       it('should have the correct width', () => {
         textArea.style.width = '300px';
-        expect(input.clientWidth).to.equal(
+        expect(input.clientWidth).to.equal(Math.round(
           textArea.clientWidth
-          - parseFloat(getComputedStyle(inputField).paddingTop)
-          - parseFloat(getComputedStyle(inputField).paddingBottom)
-          - parseFloat(getComputedStyle(inputField).borderTopWidth)
-          - parseFloat(getComputedStyle(inputField).borderBottomWidth));
+          - parseFloat(getComputedStyle(inputField).marginLeft)
+          - parseFloat(getComputedStyle(inputField).marginRight)
+          - parseFloat(getComputedStyle(inputField).paddingLeft)
+          - parseFloat(getComputedStyle(inputField).paddingRight)
+          - parseFloat(getComputedStyle(inputField).borderLeftWidth)
+          - parseFloat(getComputedStyle(inputField).borderRightWidth)
+        ));
       });
 
       it('should have matching scrollHeight', () => {
@@ -268,7 +271,15 @@
         textArea.style.minHeight = '300px';
         textArea.value = 'foo';
 
-        expect(input.clientHeight).to.equal(300);
+        expect(input.clientHeight).to.equal(Math.round(
+          textArea.clientHeight
+          - parseFloat(getComputedStyle(inputField).marginTop)
+          - parseFloat(getComputedStyle(inputField).marginBottom)
+          - parseFloat(getComputedStyle(inputField).paddingTop)
+          - parseFloat(getComputedStyle(inputField).paddingBottom)
+          - parseFloat(getComputedStyle(inputField).borderTopWidth)
+          - parseFloat(getComputedStyle(inputField).borderBottomWidth)
+        ));
       });
     });
   </script>

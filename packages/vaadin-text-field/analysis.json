@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-text-area.html",
         "start": {
-          "line": 192,
+          "line": 196,
           "column": 6
         },
         "end": {
-          "line": 192,
+          "line": 196,
           "column": 42
         }
       },
@@ -444,11 +444,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -463,11 +463,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -482,11 +482,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 168,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -501,11 +501,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -894,17 +894,46 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 199,
+                  "column": 6
+                },
+                "end": {
+                  "line": 201,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "attributeChangedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 206,
                   "column": 6
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 7
                 }
               },
@@ -957,11 +986,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 130,
+              "line": 134,
               "column": 6
             },
             "end": {
-              "line": 178,
+              "line": 182,
               "column": 7
             }
           },
@@ -1244,11 +1273,11 @@
               "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -1260,11 +1289,11 @@
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -1276,11 +1305,11 @@
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 168,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -1292,11 +1321,11 @@
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -1775,11 +1804,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -1796,11 +1825,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -1817,11 +1846,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 166,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 168,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -1838,11 +1867,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -2273,17 +2302,46 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 199,
+                  "column": 6
+                },
+                "end": {
+                  "line": 201,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "attributeChangedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 206,
                   "column": 6
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 7
                 }
               },
@@ -2683,11 +2741,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 150,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -2701,11 +2759,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 158,
+                  "line": 162,
                   "column": 12
                 },
                 "end": {
-                  "line": 160,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -2719,11 +2777,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 166,
+                  "line": 170,
                   "column": 12
                 },
                 "end": {
-                  "line": 168,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -2737,11 +2795,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -3218,11 +3276,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 155,
                   "column": 9
                 }
               },
@@ -3589,17 +3647,46 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 199,
+                  "column": 6
+                },
+                "end": {
+                  "line": 201,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "attributeChangedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 202,
+                  "line": 206,
                   "column": 6
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 7
                 }
               },
@@ -3623,11 +3710,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 157,
                   "column": 8
                 },
                 "end": {
-                  "line": 155,
+                  "line": 159,
                   "column": 9
                 }
               },
@@ -3644,11 +3731,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 157,
+                  "line": 161,
                   "column": 8
                 },
                 "end": {
-                  "line": 184,
+                  "line": 188,
                   "column": 9
                 }
               },
@@ -3690,11 +3777,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 133,
+              "line": 137,
               "column": 6
             },
             "end": {
-              "line": 185,
+              "line": 189,
               "column": 7
             }
           },
@@ -4777,16 +4864,43 @@
               ]
             },
             {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 199,
+                  "column": 6
+                },
+                "end": {
+                  "line": 201,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ]
+            },
+            {
               "name": "attributeChangedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 202,
+                  "line": 206,
                   "column": 6
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 7
                 }
               },
@@ -4813,7 +4927,7 @@
               "column": 4
             },
             "end": {
-              "line": 221,
+              "line": 225,
               "column": 5
             }
           },

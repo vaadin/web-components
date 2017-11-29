@@ -238,8 +238,8 @@
         height: var(--valo-space-s);
       }
 
-      [part="error-message"][hidden] {
-        display: block;
+      :host(:not([invalid])) [part="error-message"],
+      [part="error-message"]:empty {
         max-height: 0;
         overflow: hidden;
       }

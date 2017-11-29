@@ -116,19 +116,20 @@
             expect(err).to.be.ok;
           });
 
-          it('should not show the error message initially', function() {
-            expect(window.getComputedStyle(err).display).to.equal('none');
+          it('should not announce the error message initially', function() {
+            expect(err.getAttribute('aria-hidden')).to.equal('true');
           });
 
-          it('should show the error message after validation is run', function() {
+          it('should announce the error message after validation is run', function() {
             tf.validate();
             expect(window.getComputedStyle(err).display).not.to.equal('none');
+            expect(err.getAttribute('aria-hidden')).to.equal('false');
           });
 
-          it('should not show the error message if error-message is empty', function() {
+          it('should not announce the error message if error-message is empty', function() {
             tf.errorMessage = '';
             tf.validate();
-            expect(window.getComputedStyle(err).display).to.equal('none');
+            expect(err.getAttribute('aria-hidden')).to.equal('true');
           });
 
           it('should not have aria-describedby attribute if valid', function() {

@@ -197,6 +197,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return label ? labelId : undefined;
       }
 
+      _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
+        return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+      }
+
       /**
        * @protected
        */
