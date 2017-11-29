@@ -212,6 +212,15 @@
           expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
         });
 
+        it('should wrap the selected item `label` string in selected vaadin item', () => {
+          menu.selected = 1;
+          const item = dropdown._valueElement.firstElementChild;
+          expect(item.localName).to.equal('vaadin-item');
+          expect(item.textContent).to.equal('o2');
+          expect(item.selected).to.be.true;
+          expect(item.getAttribute('tabindex')).to.be.null;
+        });
+
         it('Should update selection slot when value is provided', () => {
           dropdown.value = 'v2';
           expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');

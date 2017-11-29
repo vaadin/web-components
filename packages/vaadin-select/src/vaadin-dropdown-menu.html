@@ -489,14 +489,18 @@ This program is available under Apache License Version 2.0, available at https:/
           const selected = this._items[this._menuElement.selected];
           let hasContent;
           if (selected) {
+            let labelItem;
             if (selected.hasAttribute('label')) {
-              hasContent = this._valueElement.textContent = selected.getAttribute('label');
+              hasContent = selected.getAttribute('label');
+              labelItem = document.createElement('vaadin-item');
+              labelItem.textContent = hasContent;
+              labelItem.selected = true;
             } else {
-              const clone = selected.cloneNode(true);
-              clone.removeAttribute('tabindex');
-              this._valueElement.appendChild(clone);
               hasContent = selected.textContent.trim() || selected.children.length;
+              labelItem = selected.cloneNode(true);
             }
+            labelItem.removeAttribute('tabindex');
+            this._valueElement.appendChild(labelItem);
           }
 
           // Toggle visibility of _valueElement vs fallback input with placeholder
