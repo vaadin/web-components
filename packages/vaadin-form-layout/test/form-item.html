@@ -150,7 +150,8 @@
 
       it('should have defalut label-width', function() {
         expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-label-width')).to.equal('8em');
-        expect(getComputedStyle(item.$.label).width).to.equal('128px'); // 8em in px
+        const labelFontSize = parseFloat(getComputedStyle(item.$.label).fontSize);
+        expect(parseFloat(getComputedStyle(item.$.label).width)).to.be.closeTo(8 * labelFontSize, 0.5);
       });
 
       it('should apply label-width', function() {
@@ -174,10 +175,10 @@
         expect(getComputedStyle(item.$.gap).width).to.equal('8px');
       });
 
-      it('should have default row-gap', function() {
-        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-row-gap')).to.equal('1em');
-        expect(getComputedStyle(item).marginTop).to.equal('8px'); // 0.5 * 1em in px
-        expect(getComputedStyle(item).marginBottom).to.equal('8px'); // 0.5 * 1em in px
+      it('should not have default row-gap', function() {
+        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-row-gap')).to.equal('0');
+        expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
+        expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
       });
     });
   </script>
