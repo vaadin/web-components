@@ -91,6 +91,13 @@
         expect(bodyRows).to.have.length(2);
       });
 
+      it('should work after initialized with empty items', () => {
+        grid = fixture('default');
+        grid.items = [];
+        grid.items = [0];
+        expect(getRows(grid.$.items)).to.have.length(1);
+      });
+
       it('should have the right data', () => {
         expect(getContent(0, 0)).to.equal('foo');
         expect(getContent(1, 0)).to.equal('baz');
