@@ -288,6 +288,17 @@
         flushGrid(grid);
       });
 
+      it('should request data only once for empty grid', () => {
+        grid.dataProvider = sinon.spy(infiniteDataProvider);
+        grid.size = 10;
+        grid.dataProvider.reset();
+
+        grid.size = 0;
+        grid.clearCache();
+
+        expect(grid.dataProvider.callCount).to.equal(1);
+      });
+
       it('should warn about missing size', () => {
         const _warn = console.warn;
         const spy = console.warn = sinon.spy();

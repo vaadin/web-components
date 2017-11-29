@@ -172,7 +172,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getItem(index, el) {
-      if (this._effectiveSize && index >= this._effectiveSize) {
+      if (index >= this._effectiveSize) {
         return;
       }
 
@@ -328,6 +328,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._cache.updateSize();
       this._hasData = false;
       this._assignModels();
+
+      if (!this._effectiveSize) {
+        this._loadPage(0, this._cache);
+      }
     }
 
     _flushItemsDebouncer() {
