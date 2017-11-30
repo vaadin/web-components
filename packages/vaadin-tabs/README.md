@@ -7,7 +7,7 @@
 
 [Live Demo ↗](https://cdn.vaadin.com/vaadin-tabs/1.0.0/demo/)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-tabs/1.0.0/#/elements/vaadin-tab)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-tabs/1.0.0/#/elements/vaadin-tabs)
 
 
 [&lt;vaadin-tabs&gt;](https://vaadin.com/elements/-/element/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin Core Elements](https://vaadin.com/elements). It is designed for menu and tab components.
