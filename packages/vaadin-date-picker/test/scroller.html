@@ -7,40 +7,37 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="common.js"></script>
 
-  <link rel="import" href="../vaadin-infinite-scroller.html">
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../polymer/lib/elements/custom-style.html">
+  <link rel="import" href="../src/vaadin-infinite-scroller.html">
 </head>
 
 <body>
-
-  <!-- nested templates don't play too well together with text-fixture
-  (https://github.com/PolymerElements/test-fixture/issues/24)
-  so in order to be able to test vaadin-infinite-scroller in isolation we're
-  using the same instance in this suite -->
-  <custom-style>
-    <style>
-      vaadin-infinite-scroller {
-        --vaadin-infinite-scroller-item-height: 30;
-      }
-    </style>
-  </custom-style>
-
-  <vaadin-infinite-scroller id="scroller" buffer-size="80">
+  <test-fixture id="scroller">
     <template>
-      <div>[[index]]</div>
+      <vaadin-infinite-scroller buffer-size="80">
+        <template>
+          <div>[[index]]</div>
+        </template>
+      </vaadin-infinite-scroller>
     </template>
-  </vaadin-infinite-scroller>
+  </test-fixture>
 
   <script>
     describe('vaadin-infinite-scroller', () => {
       var scroller;
 
       beforeEach(done => {
-        scroller = document.querySelector('#scroller');
-        scroller._itemHeightVal = 30; // Workaround for IE (reading the CSS property fails)
-
-        Polymer.RenderStatus.afterNextRender(scroller, () => setTimeout(done, 1));
-
+        scroller = fixture('scroller');
+        scroller.style.setProperty('--vaadin-infinite-scroller-item-height', '30px');
+        scroller.updateStyles({'--vaadin-infinite-scroller-item-height': '30px'});
         scroller.active = true;
+        setTimeout(() => {
+          Polymer.RenderStatus.afterNextRender(scroller, () => {
+            scroller._debouncerUpdateClones.flush();
+            done();
+          });
+        }, 1);
       });
 
       function verifyPosition() {
@@ -54,7 +51,7 @@
       }
 
       it('should default to position 0', () => {
-        expect(parseInt(scroller.position, 10)).to.equal(0);
+        expect(scroller.position).to.equal(0);
       });
 
       it('should have correct item height', () => {

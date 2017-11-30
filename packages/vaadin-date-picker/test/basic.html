@@ -470,8 +470,8 @@
           expect(datepicker.$.overlay.opened).not.to.be.ok;
         });
 
-        it('calendar icon should be hidden', () => {
-          expect(toggleButton.clientHeight).to.equal(0);
+        it('calendar icon should not be hidden', () => {
+          expect(toggleButton.clientHeight).to.not.equal(0);
         });
 
         it('clear icon should be hidden', () => {

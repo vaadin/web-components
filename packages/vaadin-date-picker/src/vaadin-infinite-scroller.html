@@ -252,7 +252,12 @@ This program is available under Apache License Version 2.0, available at https:/
           const itemHeight = window.ShadyCSS
             ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-infinite-scroller-item-height')
             : getComputedStyle(this).getPropertyValue('--vaadin-infinite-scroller-item-height');
-          this._itemHeightVal = parseInt(itemHeight);
+          // Use background-position temp inline style for unit conversion
+          const tmpStyleProp = 'background-position';
+          this.$.fullHeight.style.setProperty(tmpStyleProp, itemHeight);
+          const itemHeightPx = getComputedStyle(this.$.fullHeight).getPropertyValue(tmpStyleProp);
+          this.$.fullHeight.style.removeProperty(tmpStyleProp);
+          this._itemHeightVal = parseFloat(itemHeightPx);
         }
 
         return this._itemHeightVal;
