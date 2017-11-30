@@ -177,7 +177,7 @@
 
         expect(combobox._bindableInput.value).to.eql('empty string');
         expect(combobox.value).to.eql('');
-        expect(combobox.hasValue).to.eql(true);
+        expect(combobox.hasAttribute('has-value')).to.be.true;
       });
 
       it('should distinguish between 0 (number) and "0" (string) values', () => {

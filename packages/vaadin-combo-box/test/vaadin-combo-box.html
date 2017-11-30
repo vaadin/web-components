@@ -124,16 +124,10 @@
         });
       });
 
-      describe('hasValue property', () => {
-        it('should be readOnly', () => {
-          expect(comboBox.hasValue).to.be.false;
-          comboBox.hasValue = true;
-          expect(comboBox.hasValue).to.be.false;
-        });
-
+      describe('has-value attribute', () => {
         it('should be updated when setting the value', () => {
           comboBox.value = 'foo';
-          expect(comboBox.hasValue).to.be.true;
+          expect(comboBox.hasAttribute('has-value')).to.be.true;
         });
       });
 

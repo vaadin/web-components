@@ -328,7 +328,7 @@
 
       expect(combobox.value).to.be.empty;
       expect(combobox.selectedItem).to.be.null;
-      expect(combobox.hasValue).to.be.false;
+      expect(combobox.hasAttribute('has-value')).to.be.false;
     });
 
     it('should select a custom value', () => {
@@ -339,7 +339,7 @@
       expect(combobox.value).to.eql('foobar');
       expect(combobox.selectedItem).to.be.null;
       expect(combobox._inputElementValue).to.eql('foobar');
-      expect(combobox.hasValue).to.be.true;
+      expect(combobox.hasAttribute('has-value')).to.be.true;
     });
 
     it('should clear the custom value on clear', () => {
