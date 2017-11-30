@@ -121,7 +121,7 @@
       it('should be below the input box', () => {
         comboBox.open();
 
-        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
+        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom, 1);
       });
 
       it('should position correctly if items are populated after opening', done => {
@@ -131,7 +131,7 @@
         setTimeout(() => {
           comboBox.items = [1, 2, 3];
           setTimeout(() => {
-            expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
+            expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom, 1);
             done();
           }, 1);
         }, 1);
@@ -166,7 +166,7 @@
 
         expect(Math.round(dropContentRect().left)).to.be.closeTo(Math.round(inputContentRect().left), 1);
 
-        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom + comboBox.$.overlay.verticalOffset, 1);
+        expect(dropContentRect().top).to.be.closeTo(inputContentRect().bottom, 1);
       });
 
       it('when the input position width changes overlay width should change', () => {

@@ -20,8 +20,7 @@ This program is available under Apache License Version 2.0, available at https:/
         position-target="[[inputElement]]"
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]"
-        vertical-offset="[[overlayVerticalOffset]]">
+        loading="[[loading]]">
     </vaadin-combo-box-dropdown-wrapper>
   </template>
 </dom-module>
@@ -91,16 +90,6 @@ This program is available under Apache License Version 2.0, available at https:/
           attrForValue: {
             type: String,
             value: 'value'
-          },
-
-          /**
-           * Number of pixels used as the vertical offset in positioning of
-           * the dropdown.
-           * @private
-           */
-          overlayVerticalOffset: {
-            type: Number,
-            value: 0
           },
 
           inputElement: {

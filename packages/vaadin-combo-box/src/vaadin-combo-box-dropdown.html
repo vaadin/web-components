@@ -93,14 +93,6 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * Vertical offset for the overlay position.
-           */
-          verticalOffset: {
-            type: Number,
-            value: 0
-          },
-
-          /**
            * If `true`, overlay is aligned above the `positionTarget`
            */
           alignedAbove: {
@@ -210,11 +202,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _verticalOffset(overlayRect, targetRect) {
-        if (this.alignedAbove) {
-          return -overlayRect.height;
-        } else {
-          return targetRect.height + this.verticalOffset;
-        }
+        return this.alignedAbove ? -overlayRect.height : targetRect.height;
       }
 
       _shouldAlignAbove() {

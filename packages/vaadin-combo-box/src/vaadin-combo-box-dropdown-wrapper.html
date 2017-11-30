@@ -13,8 +13,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
-    <vaadin-combo-box-dropdown id="dropdown" opened="{{opened}}" hidden="[[_hidden(_items.*, loading)]]" position-target="[[positionTarget]]" vertical-offset="[[verticalOffset]]"
-      on-template-changed="_templateChanged" on-position-changed="_setOverlayHeight">
+    <vaadin-combo-box-dropdown id="dropdown"
+        opened="{{opened}}"
+        hidden="[[_hidden(_items.*, loading)]]"
+        position-target="[[positionTarget]]"
+        on-template-changed="_templateChanged"
+        on-position-changed="_setOverlayHeight">
       <template>
         <style>
           :host([opened][loading]) {
@@ -94,14 +98,6 @@ This program is available under Apache License Version 2.0, available at https:/
             value: false,
             reflectToAttribute: true,
             observer: '_setOverlayHeight'
-          },
-
-          /**
-           * Vertical offset for the overlay position.
-           */
-          verticalOffset: {
-            type: Number,
-            value: 0
           },
 
           _selectedItem: {
