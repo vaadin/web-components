@@ -1,26 +1,31 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
 <link rel="import" href="../../vaadin-overlay/vaadin-overlay.html">
 
-<dom-module id="vaadin-date-picker-overlay">
-  <script>
-    {
-      /**
-       * The overlay element.
-       *
-       * ### Styling
-       *
-       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
-       *
-       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
-       * for `<vaadin-date-picker-overlay>` parts.
-       *
-       * @extends Vaadin.OverlayElement
-       */
-      class VaadinDatePickerOverlayElement extends Vaadin.OverlayElement {
-        static get is() {
-          return 'vaadin-date-picker-overlay';
-        }
+<script>
+  {
+    /**
+     * The overlay element.
+     *
+     * ### Styling
+     *
+     * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+     *
+     * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
+     * for `<vaadin-date-picker-overlay>` parts.
+     *
+     * @extends Vaadin.OverlayElement
+     */
+    class VaadinDatePickerOverlayElement extends Vaadin.OverlayElement {
+      static get is() {
+        return 'vaadin-date-picker-overlay';
       }
-      customElements.define(VaadinDatePickerOverlayElement.is, VaadinDatePickerOverlayElement);
     }
-  </script>
-</dom-module>
+
+    customElements.define(VaadinDatePickerOverlayElement.is, VaadinDatePickerOverlayElement);
+  }
+</script>

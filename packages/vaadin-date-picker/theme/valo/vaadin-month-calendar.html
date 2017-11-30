@@ -1,0 +1,157 @@
+<link rel="import" href="../../../vaadin-valo-theme/color.html">
+<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
+<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
+<link rel="import" href="../../../vaadin-valo-theme/style.html">
+<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+
+<dom-module id="valo-month-calendar" theme-for="vaadin-month-calendar">
+  <template>
+    <style>
+      :host {
+        -moz-user-select: none;
+        -ms-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        font-size: var(--valo-font-size-m);
+        color: var(--valo-body-text-color);
+        text-align: center;
+        /* Make the currently focused month be roughly in the center of the overlay */
+        /* TODO expose the overlay max-height as a custom property, so it can be used in calc's */
+        /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
+         * will overlap the other, and the user can’t click on a date to select it. Using smaller
+         * offset for now, and compensating it in the scroll item height */
+        /* transform: translateY(calc(var(--valo-size-m) * 2)); */
+        transform: translateY(var(--valo-size-s));
+        /* Make equal horizontal spacing between dates and element edges */
+        padding: 0 calc(100% / 8 / 2);
+      }
+
+      :host([week-numbers]) {
+        /* Make equal horizontal spacing between dates and element edges */
+        /* In case when week numbers are visible, there is one more gap */
+        padding: 0 calc(100% / 9 / 2);
+      }
+
+      /* Disabled state */
+
+      :host([disabled]),
+      [part="date"][disabled] {
+        color: var(--valo-disabled-text-color);
+        cursor: default;
+      }
+
+      /* Month header */
+
+      [part="month-header"] {
+        color: var(--valo-header-text-color);
+        font-size: var(--valo-font-size-l);
+        line-height: 1;
+        font-weight: 500;
+        margin-bottom: var(--valo-space-m);
+      }
+
+      /* Week days and numbers */
+
+      [part="weekdays"],
+      [part="weekday"],
+      [part="week-numbers"] {
+        font-size: var(--valo-font-size-xs);
+        line-height: 1;
+        color: var(--valo-tertiary-text-color);
+      }
+
+      [part="weekdays"] {
+        margin-bottom: var(--valo-space-s);
+      }
+
+      /* TODO should have part="week-number" for the cell in weekdays-container */
+      [part="weekday"]:empty,
+      [part="week-numbers"] {
+        width: var(--valo-size-s);
+        padding-left: var(--valo-space-xs);
+      }
+
+      /* Date and week number cells */
+
+      [part="date"],
+      [part="week-number"] {
+        box-sizing: border-box;
+        height: var(--valo-size-m);
+        line-height: var(--valo-size-m);
+        position: relative;
+      }
+
+      @media (pointer: coarse) {
+        [part="date"],
+        [part="week-number"] {
+          height: var(--valo-size-l);
+          line-height: var(--valo-size-l);
+        }
+      }
+
+      [part="date"]:not(:empty):not([disabled]) {
+        cursor: pointer;
+      }
+
+      /* Today date */
+
+      [part="date"][today] {
+        color: var(--valo-primary-text-color);
+      }
+
+      /* Focused date */
+
+      [part="date"][focused] {
+        color: var(--valo-primary-contrast-color);
+      }
+
+      [part="date"][focused]::before,
+      [part="date"][selected]::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.85);
+        transition: 0.16s transform cubic-bezier(.12, .32, .54, 2);
+        will-change: transform;
+        min-width: 2em;
+        min-height: 2em;
+        width: 80%;
+        height: 80%;
+        max-height: 100%;
+        max-width: 100%;
+        background-color: var(--valo-primary-color);
+        border-radius: var(--valo-border-radius);
+      }
+
+      [part="date"][selected]:not([focused])::before {
+        content: none;
+      }
+
+      :host([focused]) [part="date"][focused]::before {
+        transform: translate(-50%, -50%);
+      }
+
+      @media (pointer: coarse) {
+        [part="date"][focused]::before {
+          content: none;
+        }
+
+        [part="date"][focused]:not([selected]) {
+          color: inherit;
+        }
+
+        [part="date"][today]:not([selected]) {
+          color: var(--valo-primary-text-color);
+        }
+
+        [part="date"][selected]::before {
+          content: "";
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../../src/vaadin-month-calendar.html">
