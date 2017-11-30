@@ -329,6 +329,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('input', this._onUserInput.bind(this));
     }
 
+    disconnectedCallback() {
+      super.disconnectedCallback();
+
+      this.opened = false;
+    }
+
     /**
      * Opens the dropdown.
      */
@@ -351,7 +357,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * Closes the dropdown.
      */
     close() {
-      this.$.overlay.opened = false;
+      this.$.overlay.close();
     }
 
     get _inputElement() {

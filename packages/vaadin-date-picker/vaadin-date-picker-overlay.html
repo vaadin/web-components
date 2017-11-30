@@ -671,7 +671,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _close() {
-          this.getRootNode().host.opened = false;
+          if (this.getRootNode().host) {
+            this.getRootNode().host.opened = false;
+          }
+
+          this.dispatchEvent(new CustomEvent('close', {bubbles: true, composed: true}));
         }
 
         _cancel() {

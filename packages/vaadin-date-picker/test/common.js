@@ -36,12 +36,12 @@ function listenForEvent(elem, type, callback) {
 }
 
 function open(datepicker, callback) {
-  listenForEvent(datepicker, 'iron-overlay-opened', callback);
+  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', callback);
   datepicker.open();
 }
 
 function close(datepicker, callback) {
-  listenForEvent(datepicker, 'iron-overlay-closed', callback);
+  listenForEvent(datepicker.$.overlay, 'vaadin-overlay-close', callback);
   datepicker.close();
 }
 

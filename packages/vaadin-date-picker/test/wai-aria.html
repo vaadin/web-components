@@ -50,8 +50,9 @@
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-          datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+          overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+          overlayContent.$.monthScroller.bufferSize = 0;
+          overlayContent.$.yearScroller.bufferSize = 0;
           clearButton = datepicker.root.querySelector('[part="clear-button"]');
           toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
         });

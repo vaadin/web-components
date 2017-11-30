@@ -29,8 +29,9 @@
 
       beforeEach(done => {
         datepicker = fixture('custom-input-datepicker');
-        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent.$.monthScroller.bufferSize = 0;
+        overlayContent.$.yearScroller.bufferSize = 0;
         setTimeout(done);
       });
 
@@ -45,7 +46,7 @@
         target.value = '1';
         datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
 
-        listenForEvent(datepicker, 'iron-overlay-opened', () => {
+        listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
           expect(datepicker.$.dropdown.opened).to.be.true;
           done();
         });
