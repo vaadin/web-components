@@ -143,6 +143,7 @@
 
         describe('empty content', function() {
           beforeEach(function() {
+            overlay.opened = false;
             parent = fixture('empty').children[0];
             overlay = parent.children[0];
             overlayPart = overlay.$.overlay;
@@ -166,6 +167,8 @@
             overlay1 = overlay;
             overlay2 = fixture('empty').children[0].children[0];
           });
+
+          afterEach(() => overlay2.opened = false);
 
           it('should be the last when only one overlay is opened', () => {
             overlay1.opened = true;
@@ -218,6 +221,16 @@
             overlay2.opened = true;
             click(parent);
             expect(spy).not.to.be.called;
+          });
+
+          it('should restore correctly pointer events when overlays are not closed in order', () => {
+            overlay1.opened = true;
+            overlay2.opened = true;
+            expect(document.body.style.pointerEvents).to.eql('none');
+
+            overlay1.opened = false;
+            overlay2.opened = false;
+            expect(document.body.style.pointerEvents).to.eql('');
           });
         });
       });
