@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 dist: trusty
 language: node_js
 node_js: 8.1
@@ -8,13 +8,9 @@ cache:
     - node_modules
 
 addons:
+  chrome: stable
   firefox: latest
   ssh_known_hosts: app.fi
-  apt:
-    sources:
-     - google-chrome
-    packages:
-     - google-chrome-stable
 
 install:
   - npm install
