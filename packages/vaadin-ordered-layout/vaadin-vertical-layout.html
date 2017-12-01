@@ -23,12 +23,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /* Theme variations */
 
-      :host([theme~="gap-none"]) #layout {
+      :host([theme~="gap-none"]) vaadin-vertical-layout-container {
         margin-top: 0;
         margin-bottom: 0;
       }
 
-      :host([theme~="gap-none"]) #layout ::slotted(*) {
+      :host([theme~="gap-none"]) vaadin-vertical-layout-container ::slotted(*) {
         margin-top: 0;
         margin-bottom: 0;
       }
@@ -42,7 +42,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-vertical-layout-container id="layout">
+    <vaadin-vertical-layout-container>
       <slot></slot>
     </vaadin-vertical-layout-container>
   </template>
