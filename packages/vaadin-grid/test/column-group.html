@@ -227,7 +227,7 @@
             Polymer.dom(group).flush();
           }
 
-          expect(group.headerTemplate).to.eql(template);
+          expect(group._headerTemplate).to.eql(template);
         });
 
         it('should pickup footer template', () => {
@@ -242,7 +242,7 @@
             Polymer.dom(group).flush();
           }
 
-          expect(group.footerTemplate).to.eql(template);
+          expect(group._footerTemplate).to.eql(template);
         });
 
       });
