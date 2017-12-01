@@ -320,6 +320,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this._overlayContent = this.$.overlay.$.content.querySelector('#overlay-content');
       this._boundOnScroll = this._onScroll.bind(this);
+      this._boundFocusInput = this._focusInput.bind(this);
       this.addEventListener('tap', this.open.bind(this));
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
@@ -329,8 +330,16 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('input', this._onUserInput.bind(this));
     }
 
+    connectedCallback() {
+      super.connectedCallback();
+
+      this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocusInput);
+    }
+
     disconnectedCallback() {
       super.disconnectedCallback();
+
+      this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocusInput);
 
       this.opened = false;
     }
@@ -616,6 +625,14 @@ This program is available under Apache License Version 2.0, available at https:/
       } else {
         this._inputElement.focus();
       }
+    }
+
+    _focusInput() {
+      if (!this._inputElement) {
+        return;
+      }
+
+      this._inputElement.focus();
     }
 
     _focusAndSelect() {

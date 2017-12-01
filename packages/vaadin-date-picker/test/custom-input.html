@@ -38,7 +38,7 @@
       it('should open calendar on tap', () => {
         // mock-interactions tap does not work in mobile devices
         tap(datepicker);
-        expect(datepicker.$.dropdown.opened).to.be.true;
+        expect(datepicker.$.overlay.opened).to.be.true;
       });
 
       it('should open calendar on input', done => {
@@ -47,18 +47,14 @@
         datepicker._nativeInput.dispatchEvent(new CustomEvent('input', {bubbles: true}));
 
         listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
-          expect(datepicker.$.dropdown.opened).to.be.true;
+          expect(datepicker.$.overlay.opened).to.be.true;
           done();
         });
       });
 
-      it('should not auto focus overlay', () => {
-        expect(datepicker.$.dropdown.noAutoFocus).to.equal(true);
-      });
-
       it('should show week numbers', () => {
         datepicker.showWeekNumbers = true;
-        expect(datepicker.$.overlay.showWeekNumbers).to.equal(true);
+        expect(overlayContent.showWeekNumbers).to.equal(true);
       });
     });
   </script>
