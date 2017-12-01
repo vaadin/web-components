@@ -13,8 +13,15 @@
 
   <dom-module id="dynamic-item-size-grid-styles" theme-for="vaadin-grid">
     <template>
-      <style incluce="vaadin-grid-default-theme">
+      <style>
+        /* Override Valo theme */
+
+        [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+          padding: 0 !important;
+        }
+
         [part~="cell"] {
+          padding: 1px;
           line-height: 18px;
         }
 

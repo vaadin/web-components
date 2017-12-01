@@ -587,7 +587,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _onAnimationEnd(e) {
-        if (e.animationName === 'vaadin-grid-appear') {
+        // ShadyCSS applies scoping suffixes to animation names
+        if (e.animationName.indexOf('vaadin-grid-appear') === 0) {
           this._render();
           this._updateHeaderFooterMetrics();
           e.stopPropagation();

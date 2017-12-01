@@ -225,12 +225,14 @@
       });
 
       it('should position ghost', () => {
+        const cellRect = getCellByCellContent(headerContent[1]).getBoundingClientRect();
+
         const ghost = grid._reorderGhost;
         dragOver(headerContent[0], headerContent[1]);
 
         const ghostRect = ghost.getBoundingClientRect();
-        expect(ghostRect.left).to.be.closeTo(grid._ie ? 118 : 110, 1);
-        expect(ghostRect.top).to.be.closeTo(grid._ie ? 8 : 0, 1);
+        expect(ghostRect.left).to.be.closeTo(cellRect.left, 1);
+        expect(ghostRect.top).to.be.closeTo(cellRect.top, 1);
       });
 
       it('should have the ghost visible again', () => {

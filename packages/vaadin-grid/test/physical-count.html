@@ -16,13 +16,20 @@
     <style is="custom-style">
       vaadin-grid {
         border: none;
+        font-size: 16px;
+        line-height: 1.5;
+      }
+
+      vaadin-grid-cell-content {
+        /* Override Valo theme */
+        padding: 0 !important;
       }
     </style>
   </custom-style>
 
   <dom-module id="physical-count-styles" theme-for="vaadin-grid">
     <template>
-      <style include="vaadin-grid-default-theme">
+      <style>
         :host(.small) [part~="cell"] {
           line-height: 10px;
           padding: 0 !important;

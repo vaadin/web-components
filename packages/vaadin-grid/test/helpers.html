@@ -277,8 +277,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     const sourceRect = source.getBoundingClientRect();
     fire('track', {
-      x: sourceRect.left + sourceRect.width / 2 + 1,
-      y: sourceRect.top,
+      x: Math.round(sourceRect.left + sourceRect.width / 2),
+      y: Math.round(sourceRect.top + sourceRect.height / 2),
       state: 'start'
     }, {
       node: source,
@@ -290,8 +290,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     dragStart(source);
     const targetRect = target.getBoundingClientRect();
     fire('track', {
-      x: clientX || targetRect.left + targetRect.width / 2 + 1,
-      y: targetRect.top,
+      x: Math.round(clientX || targetRect.left + targetRect.width / 2),
+      y: Math.round(targetRect.top + targetRect.height / 2),
       state: 'track'
     }, {
       node: source,
