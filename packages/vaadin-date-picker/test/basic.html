@@ -285,6 +285,17 @@
         expect(datepicker.invalid).to.equal(true);
       });
 
+      it('should set has-value attribute when value is set', () => {
+        datepicker.value = '2000-02-01';
+        expect(datepicker.hasAttribute('has-value')).to.be.true;
+      });
+
+      it('should remove has-value attribute on clear', () => {
+        datepicker.value = '2000-02-01';
+        tap(clearButton);
+        expect(datepicker.hasAttribute('has-value')).to.be.false;
+      });
+
       describe('window scroll realign', () => {
 
         beforeEach(done => {

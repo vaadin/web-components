@@ -61,16 +61,6 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * Indicates whether this date picker has a value.
-         * @private
-         */
-        hasValue: {
-          type: Boolean,
-          computed: '_hasValue(value)',
-          reflectToAttribute: true
-        },
-
-        /**
          * Date which should be visible when there is no value selected.
          *
          * The same date formats as for the `value` property are supported.
@@ -309,6 +299,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
+        '_updateHasValue(value)',
         '_validateInput(_selectedDate, _minDate, _maxDate)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
@@ -424,8 +415,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _hasValue(value) {
-      return !!value;
+    _updateHasValue(value) {
+      if (value) {
+        this.setAttribute('has-value', '');
+      } else {
+        this.removeAttribute('has-value');
+      }
     }
 
     _handleDateChange(property, value, oldValue) {
