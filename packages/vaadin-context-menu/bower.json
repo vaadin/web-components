@@ -26,7 +26,8 @@
     "polymer": "^2.0.0",
     "iron-media-query": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-overlay": "^1.1.0"
+    "vaadin-overlay": "#next",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -36,12 +37,12 @@
     "paper-listbox": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-grid": "^3.0.0",
-    "vaadin-item": "^1.0.0",
-    "vaadin-list-box": "^1.0.0",
+    "vaadin-grid": "#next",
+    "vaadin-item": "#next",
+    "vaadin-list-box": "#next",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0",
-    "vaadin-tabs": "^1.0.0"
+    "vaadin-tabs": "#next"
   }
 }
