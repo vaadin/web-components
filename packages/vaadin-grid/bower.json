@@ -46,9 +46,9 @@
     "app-localize-behavior": "^v2.0.0",
     "iron-list": "^v2.0.4",
     "vaadin-demo-helpers": "^1.0.0",
-    "vaadin-text-field": "^1.1.0",
-    "vaadin-checkbox": "^1.0.0",
-    "vaadin-button": "^1.0.4"
+    "vaadin-text-field": "#next",
+    "vaadin-checkbox": "#next",
+    "vaadin-button": "#next"
   },
   "dependencies": {
     "polymer": "^2.0.0",
@@ -57,8 +57,9 @@
     "iron-a11y-keys-behavior": "^v2.0.0",
     "iron-a11y-announcer": "^v2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-checkbox": "^1.0.0",
-    "vaadin-text-field": "^1.0.0"
+    "vaadin-checkbox": "#next",
+    "vaadin-text-field": "#next",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "resolutions": {
     "iron-doc-viewer": "^3.0.0"
