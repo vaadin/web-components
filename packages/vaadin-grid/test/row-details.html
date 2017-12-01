@@ -191,17 +191,14 @@
 
         beforeEach(() => grid = fixture('repeat'));
 
-        it('should have correct height', done => {
+        it('should have correct height', () => {
           grid.openItemDetails(items[0]);
 
           grid.dataProvider = (params, callback) => callback(items);
           flushGrid(grid);
 
-          animationFrameFlush(() => {
-            const row = getRows(grid.$.items)[0];
-            expect(row.offsetHeight).to.be.above(70);
-            done();
-          });
+          const row = getRows(grid.$.items)[0];
+          expect(row.offsetHeight).to.be.above(70);
         });
       });
     });
