@@ -1,1 +1,41 @@
+<link rel="import" href="../../../vaadin-valo-theme/color.html">
+
+<dom-module id="valo-grid-sorter" theme-for="vaadin-grid-sorter">
+  <template>
+    <style>
+      :host {
+        justify-content: flex-start;
+        align-items: baseline;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      [part="content"] {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: none;
+      }
+
+      [part="indicators"] {
+        margin-left: var(--valo-space-s);
+      }
+
+      :host(:not([direction])) [part="indicators"]::before {
+        opacity: 0.2;
+      }
+
+      :host([direction]) {
+        color: var(--valo-primary-text-color);
+      }
+
+      [part="order"] {
+        font-size: var(--valo-font-size-xxs);
+        line-height: 1;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <link rel="import" href="../../src/vaadin-grid-sorter.html">

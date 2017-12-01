@@ -26,12 +26,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="indicators"] {
         position: relative;
+        align-self: center;
       }
 
       [part="order"] {
-        position: absolute;
-        right: 0;
-        top: 0;
+        display: inline;
+        vertical-align: super;
       }
 
       [part="indicators"]::before {
@@ -55,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
       <slot></slot>
     </div>
     <div part="indicators">
-      <div part="order">[[_getDisplayOrder(_order)]]</div>
+      <span part="order">[[_getDisplayOrder(_order)]]</span>
     </div>
 
   </template>

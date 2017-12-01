@@ -70,12 +70,12 @@
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column width="200px">
                 <template>
-                  <div style="display: flex">
+                  <div style="display: flex; justify-content: flex-end;">
                     <vaadin-button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</vaadin-button>
-                    <vaadin-button hidden="[[editing]]" on-click="_remove">Remove</vaadin-button>
-                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]">Save</vaadin-button>
+                    <vaadin-button hidden="[[editing]]" on-click="_remove" theme="error">Remove</vaadin-button>
+                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
                     <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
                   </div>
                 </template>

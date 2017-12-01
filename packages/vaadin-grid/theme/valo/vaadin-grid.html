@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-valo-theme/color.html">
 <link rel="import" href="../../../vaadin-valo-theme/sizing.html">
 <link rel="import" href="../../../vaadin-valo-theme/spacing.html">
 <link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
@@ -169,99 +170,5 @@
   </template>
 </dom-module>
 
-
-<dom-module id="valo-grid-sorter" theme-for="vaadin-grid-sorter">
-  <template>
-    <style include="vaadin-grid-sorter-default-theme">
-      :host {
-        justify-content: flex-start;
-        height: 100%;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      [part="content"] {
-        flex: none;
-      }
-
-      :host([direction]) {
-        color: var(--valo-primary-text-color);
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="valo-grid-tree-toggle" theme-for="vaadin-grid-tree-toggle">
-  <template>
-    <style>
-      :host {
-        --vaadin-grid-tree-toggle-level-offset: 2em;
-        align-items: center;
-        vertical-align: middle;
-        margin-left: calc(var(--valo-space-s) * -1);
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      :host(:not([leaf])) {
-        cursor: default;
-      }
-
-      [part="toggle"] {
-        display: inline-block;
-        font-size: 1.5em;
-        line-height: 1;
-        width: 1em;
-        height: 1em;
-        text-align: center;
-        color: var(--valo-contrast-50pct);
-        /* Increase touch target area */
-        padding: calc(1em / 3);
-        margin: calc(1em / -3);
-        margin-right: 0;
-      }
-
-      @media (hover: hover) {
-        :host(:hover) [part="toggle"] {
-          color: var(--valo-contrast-80pct);
-        }
-      }
-
-      [part="toggle"]::before {
-        font-family: "valo-icons";
-        display: inline-block;
-        height: 100%;
-      }
-
-      :host(:not([expanded])) [part="toggle"]::before {
-        content: "\e906";
-      }
-
-      :host([expanded]) [part="toggle"]::before {
-        content: "\e906";
-        transform: rotate(90deg);
-      }
-
-      /* Experimental support for hierarchy connectors, using an unsupported selector */
-      :host([theme~="connectors"]) #level-spacer {
-        position: relative;
-        z-index: -1;
-        font-size: 1em;
-        height: 1.5em;
-      }
-
-      :host([theme~="connectors"]) #level-spacer::before {
-        display: block;
-        content: "";
-        margin-top: calc(var(--valo-space-m) * -1);
-        height: calc(var(--valo-space-m) + 3em);
-        background-image: linear-gradient(to right, transparent calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px), var(--valo-contrast-10pct) calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px));
-        background-size: var(--vaadin-grid-tree-toggle-level-offset) var(--vaadin-grid-tree-toggle-level-offset);
-        background-position: calc(var(--vaadin-grid-tree-toggle-level-offset) / 2 - 2px) 0;
-      }
-    </style>
-  </template>
-</dom-module>
 
 <link rel="import" href="../../src/vaadin-grid.html">
