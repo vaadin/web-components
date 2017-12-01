@@ -19,24 +19,23 @@
       <template preserve-content>
         <dom-bind>
           <template>
-            <custom-style>
-              <style>
-                .details {
-                  padding: 10px;
-                  margin: 10px;
-                  display: flex;
-                  justify-content: space-around;
-                  align-items: center;
-                  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
-                  font-size: 20px;
-                }
+            <style>
+              .details {
+                padding: 10px;
+                margin: 10px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+                font-size: 20px;
+              }
 
-                img {
-                  width: 80px;
-                  height: 80px;
-                }
-              </style>
-            </custom-style>
+              img {
+                width: 80px;
+                height: 80px;
+              }
+            </style>
+
             <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
 
             <vaadin-grid active-item={{activeItem}} aria-label="Row Details Example" data-provider="[[dataProvider]]" size="200">
@@ -145,7 +144,7 @@
                 is: 'bind-details-opened-items',
 
                 _onActiveItemChanged: function(e) {
-                  this.$.grid.expandedItems = [e.detail.value];
+                  this.$.grid.detailsOpenedItems = [e.detail.value];
                 }
               });
             });
