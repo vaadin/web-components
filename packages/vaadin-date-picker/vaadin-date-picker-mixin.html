@@ -325,8 +325,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
       this.addEventListener('close', this._close.bind(this));
-      this.addEventListener('date-tap', this._close.bind(this));
-      this.addEventListener('focus-input', this._focusAndSelect.bind(this));
+      this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
     }
 
@@ -747,7 +746,9 @@ This program is available under Apache License Version 2.0, available at https:/
         var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
         if (this._isValidDate(parsedDate)) {
           this._ignoreFocusedDateChange = true;
-          this._focusedDate = parsedDate;
+          if (!Vaadin.DatePickerHelper._dateEquals(parsedDate, this._focusedDate)) {
+            this._focusedDate = parsedDate;
+          }
           this._ignoreFocusedDateChange = false;
         }
       }
