@@ -16,7 +16,7 @@ install:
   - bower install
 
 before_script:
-  - gulp lint
+  - gulp lint version:check
 
 script:
   # We need some line in the block, otherwise travis executes the `npm test` task by default

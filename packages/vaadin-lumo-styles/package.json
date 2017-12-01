@@ -19,7 +19,8 @@
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "preversion": "gulp version:update"
   },
   "devDependencies": {
     "bower": "latest",
@@ -27,8 +28,14 @@
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^2.0.0",
     "gulp": "latest",
+    "gulp-clip-empty-files": "^0.1.2",
     "gulp-eslint": "^3.0.1",
+    "gulp-expect-file": "0.0.7",
+    "gulp-find": "0.0.10",
+    "gulp-git": "^2.4.2",
+    "gulp-grep-contents": "0.0.1",
     "gulp-html-extract": "^0.3.0",
+    "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^3.7.0",
     "polyserve": "^0.19.1",
     "stylelint": "7.10.1",
