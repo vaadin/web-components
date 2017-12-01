@@ -459,7 +459,7 @@ This program is available under Apache License Version 2.0, available at https:/
     _updateAlignmentAndPosition() {
       const inputRect = this._inputElement.getBoundingClientRect();
 
-      if(!this._fullscreen) {
+      if (!this._fullscreen) {
         this.$.overlay.style.left = inputRect.left + 'px';
 
         this.$.overlay.style.top = ((inputRect.top <= window.innerHeight - inputRect.top) ? inputRect.bottom :
