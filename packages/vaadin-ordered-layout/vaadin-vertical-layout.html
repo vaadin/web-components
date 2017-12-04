@@ -21,36 +21,14 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      #layout {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-
-        /*
-          Compensate for item margins, so that there are no gaps around
-          the layout itself.
-        */
-        margin-top: calc(-0.5 * var(--vaadin-vertical-layout-gap));
-        margin-bottom: calc(-0.5 * var(--vaadin-vertical-layout-gap));
-      }
-
-      #layout ::slotted(*) {
-        /* Enable grow and shrink for items. */
-        flex: 1 1 auto;
-
-        /* Margins make gaps between items */
-        margin-top: calc(0.5 * var(--vaadin-vertical-layout-gap));
-        margin-bottom: calc(0.5 * var(--vaadin-vertical-layout-gap));
-      }
-
       /* Theme variations */
 
-      :host([theme~="gap-none"]) #layout {
+      :host([theme~="gap-none"]) vaadin-vertical-layout-container {
         margin-top: 0;
         margin-bottom: 0;
       }
 
-      :host([theme~="gap-none"]) #layout ::slotted(*) {
+      :host([theme~="gap-none"]) vaadin-vertical-layout-container ::slotted(*) {
         margin-top: 0;
         margin-bottom: 0;
       }
@@ -64,16 +42,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="layout">
+    <vaadin-vertical-layout-container>
       <slot></slot>
-    </div>
+    </vaadin-vertical-layout-container>
   </template>
 
   <script>
-    if (!Polymer.Element) {
-      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-    }
-
     {
       /**
        * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
@@ -125,6 +99,50 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.VerticalLayoutElement = VerticalLayoutElement;
+    }
+  </script>
+</dom-module>
+
+<dom-module id="vaadin-vertical-layout-container">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        /* Internal CSS property used for scoping --vaadin-vertical-layout-gap */
+        --vaadin-vertical-layout-gap-scoped: var(--vaadin-vertical-layout-gap);
+
+        /*
+          Compensate for item margins, so that there are no gaps around
+          the layout itself.
+        */
+        margin-top: calc(-0.5 * var(--vaadin-vertical-layout-gap-scoped));
+        margin-bottom: calc(-0.5 * var(--vaadin-vertical-layout-gap-scoped));
+      }
+
+      :host ::slotted(*) {
+        /* Enable grow and shrink for items. */
+        flex: 1 1 auto;
+
+        /* Margins make gaps between items */
+        margin-top: calc(0.5 * var(--vaadin-vertical-layout-gap-scoped));
+        margin-bottom: calc(0.5 * var(--vaadin-vertical-layout-gap-scoped));
+      }
+    </style>
+    <slot></slot>
+  </template>
+  <script>
+    {
+      /**
+       * For internal use only
+       */
+      class VaadinVerticalLayoutContainer extends Polymer.Element {
+        static get is() {
+          return 'vaadin-vertical-layout-container';
+        }
+      }
+      customElements.define(VaadinVerticalLayoutContainer.is, VaadinVerticalLayoutContainer);
     }
   </script>
 </dom-module>

@@ -21,35 +21,14 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      #layout {
-        display: flex;
-        flex: 1 1 auto;
-
-        /*
-          Compensate for item margins, so that there are no gaps around
-          the layout itself.
-        */
-        margin-left: calc(-0.5 * var(--vaadin-horizontal-layout-gap));
-        margin-right: calc(-0.5 * var(--vaadin-horizontal-layout-gap));
-      }
-
-      #layout ::slotted(*) {
-        /* Enable grow and shrink for items. */
-        flex: 1 1 auto;
-
-        /* Margins make gaps between items */
-        margin-left: calc(0.5 * var(--vaadin-horizontal-layout-gap));
-        margin-right: calc(0.5 * var(--vaadin-horizontal-layout-gap));
-      }
-
       /* Theme variations */
 
-      :host([theme~="gap-none"]) #layout {
+      :host([theme~="gap-none"]) vaadin-horizontal-layout-container {
         margin-left: 0;
         margin-right: 0;
       }
 
-      :host([theme~="gap-none"]) #layout ::slotted(*) {
+      :host([theme~="gap-none"]) vaadin-horizontal-layout-container ::slotted(*) {
         margin-left: 0;
         margin-right: 0;
       }
@@ -63,16 +42,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="layout">
+    <vaadin-horizontal-layout-container>
       <slot></slot>
-    </div>
+    </vaadin-horizontal-layout-container>
   </template>
 
   <script>
-    if (!Polymer.Element) {
-      throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-    }
-
     {
       /**
        * `<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.
@@ -124,6 +99,49 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.HorizontalLayoutElement = HorizontalLayoutElement;
+    }
+  </script>
+</dom-module>
+
+<dom-module id="vaadin-horizontal-layout-container">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex: 1 1 auto;
+        /* Internal CSS property used for scoping --vaadin-horizontal-layout-gap */
+        --vaadin-horizontal-layout-gap-scoped: var(--vaadin-horizontal-layout-gap);
+
+        /*
+          Compensate for item margins, so that there are no gaps around
+          the layout itself.
+        */
+        margin-left: calc(-0.5 * var(--vaadin-horizontal-layout-gap-scoped));
+        margin-right: calc(-0.5 * var(--vaadin-horizontal-layout-gap-scoped));
+      }
+
+      :host ::slotted(*) {
+        /* Enable grow and shrink for items. */
+        flex: 1 1 auto;
+
+        /* Margins make gaps between items */
+        margin-left: calc(0.5 * var(--vaadin-horizontal-layout-gap-scoped));
+        margin-right: calc(0.5 * var(--vaadin-horizontal-layout-gap-scoped));
+      }
+    </style>
+    <slot></slot>
+  </template>
+  <script>
+    {
+      /**
+       * For internal use only
+       */
+      class VaadinHorizontalLayoutContainer extends Polymer.Element {
+        static get is() {
+          return 'vaadin-horizontal-layout-container';
+        }
+      }
+      customElements.define(VaadinHorizontalLayoutContainer.is, VaadinHorizontalLayoutContainer);
     }
   </script>
 </dom-module>

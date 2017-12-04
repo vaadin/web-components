@@ -31,7 +31,23 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="nested">
+    <template>
+      <vaadin-horizontal-layout id="container">
+        <div id="c1">c1</div>
+        <vaadin-horizontal-layout id="container" class="inner-layout">
+          <div id="c2">c2</div>
+        </vaadin-horizontal-layout>
+      </vaadin-horizontal-layout>
+    </template>
+  </test-fixture>
+
   <script>
+
+    function getLayout(element) {
+      return element.shadowRoot.lastElementChild;
+    }
+
     describe('basic tests', () => {
       let element, c1, c2;
 
@@ -67,8 +83,8 @@
       });
 
       it('should compensate for gap in layout wrapper', () => {
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('-16px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-16px');
       });
 
       it('should support updating with `updateStyles` call', () => {
@@ -80,8 +96,8 @@
         expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('10px'); // 0.5 * 20px in px
         expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
         expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('-10px'); // -0.5 * 20px in px
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('-10px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-10px'); // -0.5 * 20px in px
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-10px');
       });
     });
 
@@ -100,8 +116,8 @@
         expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('0px');
         expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('0px');
         expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('0px');
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-left')).to.equal('0px');
-        expect(getComputedStyle(element.$.layout).getPropertyValue('margin-right')).to.equal('0px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('0px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('0px');
       });
 
       it('should not have margin or padding by default', () => {
@@ -129,6 +145,33 @@
         expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('32px');
         expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('32px');
         expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('32px');
+      });
+    });
+
+    describe('nested', () => {
+      let element, inner, c1, c2;
+
+      beforeEach(() => {
+        element = fixture('nested');
+        inner = element.querySelector('.inner-layout');
+        c1 = element.querySelector('#c1');
+        c2 = inner.querySelector('#c2');
+      });
+
+      it('should support different gaps in nested layouts', () => {
+        inner.updateStyles({
+          '--vaadin-horizontal-layout-gap': '10px'
+        });
+
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('16px');
+        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('16px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-16px');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-16px');
+
+        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('5px');
+        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('5px');
+        expect(getComputedStyle(getLayout(inner)).getPropertyValue('margin-left')).to.equal('-5px');
+        expect(getComputedStyle(getLayout(inner)).getPropertyValue('margin-right')).to.equal('-5px');
       });
     });
   </script>
