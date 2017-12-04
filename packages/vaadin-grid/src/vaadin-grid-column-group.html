@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="vaadin-grid-column.html">
 
 <dom-module id="vaadin-grid-column-group">
@@ -97,10 +98,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._updateFlexAndWidth();
         }
 
-        detached() {
-          if (this._observer) {
-            Polymer.dom(this).unobserveNodes(this._observer);
-          }
+        /** @private */
+        disconnectedCallback() {
+          super.disconnectedCallback();
+          this._observer && this._observer.disconnect();
         }
 
         _columnPropChanged(path, value) {
@@ -241,13 +242,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _getChildColumns(el) {
-          // TODO: Drop legacy api
-          return Polymer.dom(el).queryDistributedElements('*').filter(this._isColumnElement);
+          return Polymer.FlattenedNodesObserver.getFlattenedNodes(el).filter(this._isColumnElement);
         }
 
         _addNodeObserver() {
-          // TODO: Drop legacy api
-          this._observer = Polymer.dom(this).observeNodes(info => {
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
             if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
               info.removedNodes.filter(this._isColumnElement).length > 0) {
 
