@@ -15,6 +15,9 @@
           <div class="dashed-outline">
             Item 2
           </div>
+          <div class="dashed-outline">
+            Item 3
+          </div>
         </vaadin-horizontal-layout>
 
         <style>
@@ -38,6 +41,9 @@
           </div>
           <div class="dashed-outline">
             Item 2
+          </div>
+          <div class="dashed-outline">
+            Item 3
           </div>
         </vaadin-vertical-layout>
 
@@ -80,6 +86,9 @@
               <div class="dashed-outline">
                 Item 2
               </div>
+              <div class="dashed-outline">
+                Item 3
+              </div>
             </vaadin-horizontal-layout>
           </template>
         </dom-module>
@@ -104,7 +113,7 @@
           <template preserve-content>
             <style>
               vaadin-vertical-layout {
-                height: 150px;
+                height: 200px;
                 --vaadin-vertical-layout-gap: 4em;
               }
 
@@ -120,6 +129,9 @@
               <div class="dashed-outline">
                 Item 2
               </div>
+              <div class="dashed-outline">
+                Item 3
+              </div>
             </vaadin-vertical-layout>
           </template>
         </dom-module>
@@ -130,132 +142,6 @@
         </script>
 
         <my-vertical-view></my-vertical-view>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Horizontal Layout Without Gaps</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-gap-none'>
-      <template preserve-content>
-        <vaadin-horizontal-layout theme="gap-none">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-horizontal-layout>
-
-        <style>
-          vaadin-horizontal-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Vertical Layout Without Gaps</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-gap-none'>
-      <template preserve-content>
-        <vaadin-vertical-layout theme="gap-none">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-vertical-layout>
-
-        <style>
-          vaadin-vertical-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Horizontal Layout With Margin Around</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-margin'>
-      <template preserve-content>
-        <vaadin-horizontal-layout theme="margin">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-horizontal-layout>
-
-        <style>
-          vaadin-horizontal-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Vertical Layout With Margin Around</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-margin'>
-      <template preserve-content>
-        <vaadin-vertical-layout theme="margin">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-vertical-layout>
-
-        <style>
-          vaadin-vertical-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Horizontal Layout With Padding Around</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout-padding'>
-      <template preserve-content>
-        <vaadin-horizontal-layout theme="padding">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-horizontal-layout>
-
-        <style>
-          vaadin-horizontal-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Vertical Layout With Padding Around</h3>
-    <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout-padding'>
-      <template preserve-content>
-        <vaadin-vertical-layout theme="padding">
-          <div class="dashed-outline">Item 1</div>
-          <div class="dashed-outline">Item 2</div>
-          <div class="dashed-outline">Item 3</div>
-        </vaadin-vertical-layout>
-
-        <style>
-          vaadin-vertical-layout {
-            height: 150px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
-          }
-        </style>
       </template>
     </vaadin-demo-snippet>
 
