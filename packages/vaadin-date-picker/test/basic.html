@@ -426,12 +426,14 @@
           overlayContent.$.monthScroller.bufferSize = 1;
 
           open(datepicker,
-            () => Polymer.RenderStatus.afterNextRender(overlayContent.$.scroller,
-              () => setTimeout(done, 1)));
+            () => {
+              overlayContent.$.monthScroller._finishInit();
+              overlayContent.$.yearScroller._finishInit();
+              setTimeout(done, 1);
+            });
         });
 
         it('should notify i18n mutation to children', () => {
-
           var monthCalendar = overlayContent.$.monthScroller.querySelector('vaadin-month-calendar');
           var weekdays = monthCalendar.$.monthGrid.querySelectorAll('[part="weekday"]:not(:empty)');
           var weekdayLabels = Array.prototype.map.call(weekdays,
