@@ -2212,10 +2212,7 @@
                   "description": "Path to array."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to push onto array"
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -2286,10 +2283,7 @@
                   "description": "Number of items to remove."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to insert into array."
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -2350,10 +2344,7 @@
                   "description": "Path to array."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to insert info array"
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -3654,13 +3645,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -3677,13 +3668,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -3700,13 +3691,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -3723,13 +3714,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -3745,13 +3736,13 @@
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -3769,13 +3760,13 @@
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -3791,13 +3782,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 171,
+                  "line": 174,
                   "column": 10
                 },
                 "end": {
-                  "line": 173,
+                  "line": 176,
                   "column": 11
                 }
               },
@@ -3812,13 +3803,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 175,
+                  "line": 178,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 180,
                   "column": 11
                 }
               },
@@ -3833,13 +3824,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 179,
+                  "line": 182,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 184,
                   "column": 11
                 }
               },
@@ -3854,13 +3845,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 183,
+                  "line": 186,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 188,
                   "column": 11
                 }
               },
@@ -3875,13 +3866,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 187,
+                  "line": 190,
                   "column": 10
                 },
                 "end": {
-                  "line": 189,
+                  "line": 192,
                   "column": 11
                 }
               },
@@ -3897,32 +3888,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 219,
+                  "line": 218,
                   "column": 6
                 },
                 "end": {
-                  "line": 230,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_detectIosNavbar",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 232,
-                  "column": 6
-                },
-                "end": {
-                  "line": 249,
+                  "line": 229,
                   "column": 7
                 }
               },
@@ -3935,13 +3907,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 251,
+                  "line": 231,
                   "column": 6
                 },
                 "end": {
-                  "line": 253,
+                  "line": 233,
                   "column": 7
                 }
               },
@@ -3958,13 +3930,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 259,
+                  "line": 239,
                   "column": 6
                 },
                 "end": {
-                  "line": 265,
+                  "line": 245,
                   "column": 7
                 }
               },
@@ -3981,13 +3953,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 267,
+                  "line": 247,
                   "column": 6
                 },
                 "end": {
-                  "line": 278,
+                  "line": 253,
                   "column": 7
                 }
               },
@@ -4000,13 +3972,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 280,
+                  "line": 255,
                   "column": 6
                 },
                 "end": {
-                  "line": 296,
+                  "line": 269,
                   "column": 7
                 }
               },
@@ -4019,13 +3991,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 298,
+                  "line": 271,
                   "column": 6
                 },
                 "end": {
-                  "line": 300,
+                  "line": 273,
                   "column": 7
                 }
               },
@@ -4042,13 +4014,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 302,
+                  "line": 275,
                   "column": 6
                 },
                 "end": {
-                  "line": 304,
+                  "line": 277,
                   "column": 7
                 }
               },
@@ -4065,13 +4037,13 @@
               "description": "We need to listen on 'click' / 'tap' event and capture it and close the overlay before\npropagating the event to the listener in the button. Otherwise, if the clicked button would call\nopen(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 314,
+                  "line": 287,
                   "column": 6
                 },
                 "end": {
-                  "line": 331,
+                  "line": 301,
                   "column": 7
                 }
               },
@@ -4088,13 +4060,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 337,
+                  "line": 307,
                   "column": 6
                 },
                 "end": {
-                  "line": 367,
+                  "line": 333,
                   "column": 7
                 }
               },
@@ -4111,13 +4083,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 373,
+                  "line": 339,
                   "column": 6
                 },
                 "end": {
-                  "line": 402,
+                  "line": 369,
                   "column": 7
                 }
               },
@@ -4134,13 +4106,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 411,
+                  "line": 371,
                   "column": 6
                 },
                 "end": {
-                  "line": 419,
+                  "line": 379,
                   "column": 7
                 }
               },
@@ -4157,13 +4129,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 421,
+                  "line": 381,
                   "column": 6
                 },
                 "end": {
-                  "line": 431,
+                  "line": 391,
                   "column": 7
                 }
               },
@@ -4176,13 +4148,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 433,
+                  "line": 393,
                   "column": 6
                 },
                 "end": {
-                  "line": 442,
+                  "line": 402,
                   "column": 7
                 }
               },
@@ -4195,13 +4167,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 444,
+                  "line": 404,
                   "column": 6
                 },
                 "end": {
-                  "line": 455,
+                  "line": 415,
                   "column": 7
                 }
               },
@@ -4218,13 +4190,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 457,
+                  "line": 417,
                   "column": 6
                 },
                 "end": {
-                  "line": 459,
+                  "line": 419,
                   "column": 7
                 }
               },
@@ -4241,13 +4213,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 461,
+                  "line": 421,
                   "column": 6
                 },
                 "end": {
-                  "line": 492,
+                  "line": 452,
                   "column": 7
                 }
               },
@@ -4267,13 +4239,13 @@
               "description": "borrowed from jqeury $(elem).is(':visible') implementation",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 495,
+                  "line": 455,
                   "column": 6
                 },
                 "end": {
-                  "line": 497,
+                  "line": 457,
                   "column": 7
                 }
               },
@@ -4290,13 +4262,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 499,
+                  "line": 459,
                   "column": 6
                 },
                 "end": {
-                  "line": 523,
+                  "line": 483,
                   "column": 7
                 }
               },
@@ -4309,13 +4281,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 525,
+                  "line": 485,
                   "column": 6
                 },
                 "end": {
-                  "line": 529,
+                  "line": 489,
                   "column": 7
                 }
               },
@@ -4373,13 +4345,13 @@
               "name": "opened",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -4391,13 +4363,13 @@
               "name": "template",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -4409,13 +4381,13 @@
               "name": "content",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -4427,13 +4399,13 @@
               "name": "with-backdrop",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -4445,13 +4417,13 @@
               "name": "modeless",
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -4463,13 +4435,13 @@
               "name": "focus-trap",
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../bower_components/vaadin-overlay/vaadin-overlay.html",
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -4537,7 +4509,7 @@
           "tagname": "vaadin-context-menu-overlay"
         },
         {
-          "description": "```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n```\n\n### “vaadin-contextmenu” Gesture Event\n\n`vaadin-contextmenu` is a gesture event (a custom event fired by Polymer),\nwhich is dispatched after either `contextmenu` and long touch events.\nThis enables support for both mouse and touch environments in a uniform way.\n\n`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`\nevent by default.\n\n### Menu Listener\n\nBy default, the `<vaadin-context-menu>` element listens for the menu opening\nevent on itself. In order to have a context menu on your content, wrap\nyour content with the `<vaadin-context-menu>` element, and add a template\nelement with a menu. Example:\n\n```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n\n  <p>This paragraph has the context menu provided in the above template.</p>\n  <p>Another paragraph with the context menu.</p>\n</vaadin-context-menu>\n```\n\nIn case if you do not want to wrap the page content, you can listen for\nevents on an element outside the `<vaadin-context-menu>` by setting the\n`listenOn` property:\n\n```html\n<vaadin-context-menu id=\"customListener\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n\n<div id=\"menuListener\">The element that listens for the context menu.</div>\n\n&lt;script&gt;\n  const contextMenu = document.querySelector('vaadin-context-menu#customListener');\n  contextMenu.listenOn = document.querySelector('#menuListener');\n&lt;/script&gt;\n```\n\n### Filtering Menu Targets\n\nBy default, the listener element and all its descendants open the context\nmenu. You can filter the menu targets to a smaller set of elements inside\nthe listener element by setting the `selector` property.\n\nIn the following example, only the elements matching `.has-menu` will open the context menu:\n\n```html\n<vaadin-context-menu selector=\".has-menu\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n\n  <p class=\"has-menu\">This paragraph opens the context menu</p>\n  <p>This paragraph does not open the context menu</p>\n</vaadin-context-menu>\n```\n\n### Menu Context\n\nYou can bind to the following properties in the menu template:\n\n- `target` is the menu opening event target, which is the element that\nthe user has called the context menu for\n- `detail` is the menu opening event detail\n\nIn the following example, the menu item text is composed with the contents\nof the element that opened the menu:\n\n```html\n<vaadin-context-menu selector=\"li\">\n  <template>\n    <paper-listbox>\n      <paper-item>The menu target: [[target.textContent]]</paper-item>\n    </paper-listbox>\n  </template>\n\n  <ul>\n    <li>Foo</li>\n    <li>Bar</li>\n    <li>Baz</li>\n  </ul>\n</vaadin-context-menu>\n```\n\n### Styling\n\n[Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)\nfor `<vaadin-context-menu-overlay>` parts.",
+          "description": "```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n```\n\n### “vaadin-contextmenu” Gesture Event\n\n`vaadin-contextmenu` is a gesture event (a custom event fired by Polymer),\nwhich is dispatched after either `contextmenu` and long touch events.\nThis enables support for both mouse and touch environments in a uniform way.\n\n`<vaadin-context-menu>` opens the menu overlay on the `vaadin-contextmenu`\nevent by default.\n\n### Menu Listener\n\nBy default, the `<vaadin-context-menu>` element listens for the menu opening\nevent on itself. In order to have a context menu on your content, wrap\nyour content with the `<vaadin-context-menu>` element, and add a template\nelement with a menu. Example:\n\n```html\n<vaadin-context-menu>\n  <template>\n    <paper-listbox>\n      <paper-item>First menu item</paper-item>\n      <paper-item>Second menu item</paper-item>\n    </paper-listbox>\n  </template>\n\n  <p>This paragraph has the context menu provided in the above template.</p>\n  <p>Another paragraph with the context menu.</p>\n</vaadin-context-menu>\n```\n\nIn case if you do not want to wrap the page content, you can listen for\nevents on an element outside the `<vaadin-context-menu>` by setting the\n`listenOn` property:\n\n```html\n<vaadin-context-menu id=\"customListener\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n</vaadin-context-menu>\n\n<div id=\"menuListener\">The element that listens for the context menu.</div>\n\n&lt;script&gt;\n  const contextMenu = document.querySelector('vaadin-context-menu#customListener');\n  contextMenu.listenOn = document.querySelector('#menuListener');\n&lt;/script&gt;\n```\n\n### Filtering Menu Targets\n\nBy default, the listener element and all its descendants open the context\nmenu. You can filter the menu targets to a smaller set of elements inside\nthe listener element by setting the `selector` property.\n\nIn the following example, only the elements matching `.has-menu` will open the context menu:\n\n```html\n<vaadin-context-menu selector=\".has-menu\">\n  <template>\n    <paper-listbox>\n      ...\n    </paper-listbox>\n  </template>\n\n  <p class=\"has-menu\">This paragraph opens the context menu</p>\n  <p>This paragraph does not open the context menu</p>\n</vaadin-context-menu>\n```\n\n### Menu Context\n\nYou can bind to the following properties in the menu template:\n\n- `target` is the menu opening event target, which is the element that\nthe user has called the context menu for\n- `detail` is the menu opening event detail\n\nIn the following example, the menu item text is composed with the contents\nof the element that opened the menu:\n\n```html\n<vaadin-context-menu selector=\"li\">\n  <template>\n    <paper-listbox>\n      <paper-item>The menu target: [[target.textContent]]</paper-item>\n    </paper-listbox>\n  </template>\n\n  <ul>\n    <li>Foo</li>\n    <li>Bar</li>\n    <li>Baz</li>\n  </ul>\n</vaadin-context-menu>\n```\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)\nfor `<vaadin-context-menu-overlay>` parts.\\\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-context-menu.html",
           "properties": [
