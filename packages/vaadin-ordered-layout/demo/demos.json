@@ -9,5 +9,15 @@
       "description": "",
       "image": ""
     }
+  },
+  {
+    "name": "Theme variants",
+    "url": "ordered-layout-theme-demos",
+    "src": "ordered-layout-theme-demos.html",
+    "meta": {
+      "title": "vaadin-ordered-layout Theme Variants Examples",
+      "description": "",
+      "image": ""
+    }
   }]
 }
