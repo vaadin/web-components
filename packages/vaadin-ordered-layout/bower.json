@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-ordered-layout",
-  "main": "vaadin-ordered-layout.html",
+  "main": [
+    "vaadin-horizontal-layout.html",
+    "vaadin-vertical-layout.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-ordered-layout",
