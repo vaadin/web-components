@@ -320,7 +320,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this._overlayContent = this.$.overlay.$.content.querySelector('#overlay-content');
       this._boundOnScroll = this._onScroll.bind(this);
-      this._boundFocusInput = this._focusInput.bind(this);
+      this._boundFocus = this._focus.bind(this);
       this.addEventListener('tap', this.open.bind(this));
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
@@ -332,13 +332,13 @@ This program is available under Apache License Version 2.0, available at https:/
     connectedCallback() {
       super.connectedCallback();
 
-      this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocusInput);
+      this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
     }
 
     disconnectedCallback() {
       super.disconnectedCallback();
 
-      this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocusInput);
+      this.$.overlay.removeEventListener('vaadin-overlay-escape-press', this._boundFocus);
 
       this.opened = false;
     }
@@ -457,13 +457,31 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateAlignmentAndPosition() {
+      const bottomAlign = this._inputElement.getBoundingClientRect().top > window.innerHeight / 2;
+      const rightAlign = this._inputElement.getBoundingClientRect().left + this.clientWidth / 2 > window.innerWidth / 2;
+
       const inputRect = this._inputElement.getBoundingClientRect();
 
       if (!this._fullscreen) {
-        this.$.overlay.style.left = inputRect.left + 'px';
+        if (rightAlign) {
+          this.$.overlay.setAttribute('right-aligned', '');
+          this.$.overlay.style.removeProperty('left');
+          this.$.overlay.style.right = (window.innerWidth - inputRect.right) + 'px';
+        } else {
+          this.$.overlay.removeAttribute('right-aligned');
+          this.$.overlay.style.removeProperty('right');
+          this.$.overlay.style.left = inputRect.left + 'px';
+        }
 
-        this.$.overlay.style.top = ((inputRect.top <= window.innerHeight - inputRect.top) ? inputRect.bottom :
-          inputRect.top - this._overlayContent.getBoundingClientRect().height) + 'px';
+        if (bottomAlign) {
+          this.$.overlay.setAttribute('bottom-aligned', '');
+          this.$.overlay.style.removeProperty('top');
+          this.$.overlay.style.bottom = (window.innerHeight - inputRect.top) + 'px';
+        } else {
+          this.$.overlay.removeAttribute('bottom-aligned');
+          this.$.overlay.style.removeProperty('bottom');
+          this.$.overlay.style.top = inputRect.bottom + 'px';
+        }
       }
 
       this._overlayContent._repositionYearScroller();
@@ -626,14 +644,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _focusInput() {
-      if (!this._inputElement) {
-        return;
-      }
-
-      this._inputElement.focus();
-    }
-
     _focusAndSelect() {
       this._focus();
       this._setSelectionRange(0, this._inputValue.length);
@@ -733,11 +743,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this.opened) {
         this.open();
-        if (this._ios) {
-          // iOS needs a refit after input blur animation has finished
-          this._debouncerRefit = Polymer.Debouncer.debounce(this._debouncerRefit,
-            Polymer.Async.timeOut.after(500), this.$.overlay.refit);
-        }
       }
     }
 

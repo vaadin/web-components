@@ -15,6 +15,14 @@
         justify-content: flex-start;
       }
 
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+
+      :host([right-aligned]) {
+        align-items: flex-end;
+      }
+
       [part="overlay"] {
         display: flex;
         flex: auto;

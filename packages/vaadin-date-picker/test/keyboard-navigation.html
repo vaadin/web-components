@@ -93,12 +93,6 @@
             overlay = datepicker.$.overlay;
           });
 
-          afterEach(() => {
-            if (datepicker._debouncerRefit) {
-              datepicker._debouncerRefit.flush();
-            }
-          });
-
           it('should open overlay on down', () => {
             target = datepicker.$.input;
             arrowDown();
