@@ -30,8 +30,9 @@
   "dependencies": {
     "polymer": "^2.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-button": "^1.0.0",
-    "vaadin-progress-bar": "^1.0.0"
+    "vaadin-button": "#next",
+    "vaadin-progress-bar": "#next",
+    "vaadin-valo-theme": "^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
