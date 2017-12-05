@@ -109,6 +109,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * `dragover` | A file is being dragged over the element | `:host`
        * `dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`
        *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
@@ -819,7 +821,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
         * Fired when the XHR has been opened but not sent yet. Useful for appending
         * data keys to the FormData object, for changing some parameters like
-        * headers, etc. If the event is preventDefault, `vaadin-upload` will not
+        * headers, etc. If the event is defaultPrevented, `vaadin-upload` will not
         * send the request allowing the user to do something on his own.
         *
         * @event upload-request
@@ -850,7 +852,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
         * Fired when we have the actual server response, and before the component
         * analyses it. It's useful for developers to make the upload fail depending
-        * on the server response. If the event is preventDefault the vaadin-upload
+        * on the server response. If the event is defaultPrevented the vaadin-upload
         * will return allowing the user to do something on his own like retry the
         * upload, etc. since he has full access to the `xhr` and `file` objects.
         * Otherwise, if the event is not prevented default `vaadin-upload` continues
