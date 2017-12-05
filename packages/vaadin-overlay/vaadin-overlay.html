@@ -440,10 +440,12 @@ This program is available under Apache License Version 2.0, available at https:/
         document.addEventListener('click', this._boundOutsideClickListener, true);
         document.addEventListener('keydown', this._boundKeydownListener);
 
-        // Set body pointer-events to 'none' to disable mouse interactions with
-        // other document nodes.
-        this._previousDocumentPointerEvents = document.body.style.pointerEvents;
-        document.body.style.pointerEvents = 'none';
+        if (document.body.style.pointerEvents !== 'none') {
+          // Set body pointer-events to 'none' to disable mouse interactions with
+          // other document nodes.
+          this._previousDocumentPointerEvents = document.body.style.pointerEvents;
+          document.body.style.pointerEvents = 'none';
+        }
       }
 
       _exitModalState() {
@@ -452,9 +454,11 @@ This program is available under Apache License Version 2.0, available at https:/
         document.removeEventListener('click', this._boundOutsideClickListener, true);
         document.removeEventListener('keydown', this._boundKeydownListener);
 
-        // Restore body pointer-events
-        document.body.style.pointerEvents = this._previousDocumentPointerEvents;
-        delete this._previousDocumentPointerEvents;
+        if (this._previousDocumentPointerEvents !== undefined) {
+          // Restore body pointer-events
+          document.body.style.pointerEvents = this._previousDocumentPointerEvents;
+          delete this._previousDocumentPointerEvents;
+        }
       }
 
       _templateChanged(template) {
