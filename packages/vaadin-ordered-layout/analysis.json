@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-vertical-layout.html",
         "start": {
-          "line": 99,
+          "line": 100,
           "column": 6
         },
         "end": {
-          "line": 99,
+          "line": 100,
           "column": 42
         }
       },
@@ -57,11 +57,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 84,
+              "line": 85,
               "column": 6
             },
             "end": {
-              "line": 92,
+              "line": 93,
               "column": 7
             }
           },
@@ -81,11 +81,11 @@
               "range": {
                 "file": "vaadin-horizontal-layout.html",
                 "start": {
-                  "line": 45,
+                  "line": 46,
                   "column": 6
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 19
                 }
               }
@@ -136,11 +136,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 84,
+              "line": 85,
               "column": 6
             },
             "end": {
-              "line": 92,
+              "line": 93,
               "column": 7
             }
           },
@@ -160,11 +160,11 @@
               "range": {
                 "file": "vaadin-vertical-layout.html",
                 "start": {
-                  "line": 45,
+                  "line": 46,
                   "column": 6
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 19
                 }
               }
@@ -174,6 +174,125 @@
           "mixins": [
             "Vaadin.ThemableMixin"
           ]
+        }
+      ],
+      "mixins": [
+        {
+          "description": "A mixin for internal use.",
+          "summary": "",
+          "path": "vaadin-ordered-layout-mixin.html",
+          "properties": [
+            {
+              "name": "_alignItems",
+              "type": "string",
+              "description": "The internal layout’s value of the `align-items` CSS property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 19,
+                  "column": 8
+                },
+                "end": {
+                  "line": 23,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_alignItemsChanged\""
+                }
+              },
+              "defaultValue": "\"stretch\""
+            },
+            {
+              "name": "_justifyContent",
+              "type": "string",
+              "description": "The internal layout’s value of the `justify-content` CSS property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 28,
+                  "column": 8
+                },
+                "end": {
+                  "line": 32,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_justifyContentChanged\""
+                }
+              },
+              "defaultValue": "\"flex-start\""
+            }
+          ],
+          "methods": [
+            {
+              "name": "_alignItemsChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 36,
+                  "column": 4
+                },
+                "end": {
+                  "line": 38,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "alignItems"
+                }
+              ]
+            },
+            {
+              "name": "_justifyContentChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 40,
+                  "column": 4
+                },
+                "end": {
+                  "line": 42,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "justifyContent"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 13,
+              "column": 2
+            },
+            "end": {
+              "line": 43,
+              "column": 3
+            }
+          },
+          "privacy": "public",
+          "name": "Vaadin.OrderedLayoutMixin",
+          "attributes": [],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
         }
       ]
     }
@@ -2310,7 +2429,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to push onto array"
             }
           ],
           "return": {
@@ -2381,7 +2503,10 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert into array."
             }
           ],
           "return": {
@@ -2442,7 +2567,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert info array"
             }
           ],
           "return": {
@@ -3620,11 +3748,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 138,
+          "line": 139,
           "column": 6
         },
         "end": {
-          "line": 142,
+          "line": 143,
           "column": 7
         }
       },
@@ -3644,11 +3772,11 @@
           "range": {
             "file": "vaadin-horizontal-layout.html",
             "start": {
-              "line": 131,
+              "line": 132,
               "column": 4
             },
             "end": {
-              "line": 131,
+              "line": 132,
               "column": 17
             }
           }
@@ -5787,7 +5915,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to push onto array"
             }
           ],
           "return": {
@@ -5858,7 +5989,10 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert into array."
             }
           ],
           "return": {
@@ -5919,7 +6053,10 @@
               "description": "Path to array."
             },
             {
-              "name": "...items"
+              "name": "items",
+              "type": "...*",
+              "rest": true,
+              "description": "Items to insert info array"
             }
           ],
           "return": {
@@ -7097,11 +7234,11 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 139,
+          "line": 140,
           "column": 6
         },
         "end": {
-          "line": 143,
+          "line": 144,
           "column": 7
         }
       },
@@ -7121,11 +7258,11 @@
           "range": {
             "file": "vaadin-vertical-layout.html",
             "start": {
-              "line": 132,
+              "line": 133,
               "column": 4
             },
             "end": {
-              "line": 132,
+              "line": 133,
               "column": 17
             }
           }

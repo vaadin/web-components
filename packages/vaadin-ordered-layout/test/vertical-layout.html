@@ -175,5 +175,33 @@
         expect(getComputedStyle(getLayout(inner)).getPropertyValue('margin-bottom')).to.equal('-5px');
       });
     });
+
+    describe('layout customization api', () => {
+      let element;
+
+      beforeEach(() => {
+        element = fixture('default');
+      });
+
+      it('should have default align-items value of stretch', () => {
+        expect(element._alignItems).to.equal('stretch');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('align-items')).to.equal('stretch');
+      });
+
+      it('should have default justify-content value of flex-start', () => {
+        expect(element._justifyContent).to.equal('flex-start');
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('justify-content')).to.equal('flex-start');
+      });
+
+      it('should support customizing align-items', () => {
+        element._alignItems = 'flex-end';
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('align-items')).to.equal('flex-end');
+      });
+
+      it('should support customizing justify-content', () => {
+        element._justifyContent = 'space-between';
+        expect(getComputedStyle(getLayout(element)).getPropertyValue('justify-content')).to.equal('space-between');
+      });
+    });
   </script>
 </body>
