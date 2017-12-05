@@ -132,6 +132,62 @@
         <chart-series-dom-repeat></chart-series-dom-repeat>
       </template>
     </demo-snippet>
+
+    <h3>Adding event listeners <small>(Try clicking at chart background and any series point)</small></h3>
+
+    <demo-snippet>
+      <template>
+        <dom-module id="chart-event-listeners">
+          <template>
+            <vaadin-chart title="Chart with events" id="mychart" on-chart-click="__onChartClick">
+                <vaadin-chart-series values="[10,20,30]"></vaadin-chart-series>
+            </vaadin-chart>
+          </template>
+
+          <script>
+            class ChartEventListeners extends Polymer.Element {
+              static get is() {
+                return 'chart-event-listeners';
+              }
+
+              __onChartClick(event) {
+                const {chartX, chartY} = event.detail.originalEvent;
+                this.showLabel(`[CHART-CLICK] (x: ${chartX}, y: ${chartY})`, chartX, chartY);
+              }
+
+              connectedCallback() {
+                super.connectedCallback();
+                this.$.mychart.addEventListener('point-click', (event) => {
+                  const {chartX, chartY} = event.detail.originalEvent;
+                  this.showLabel(`[POINT-CLICK] (x: ${chartX}, y: ${chartY})`, chartX, chartY);
+                });
+              }
+
+              showLabel(message, xPixels, yPixels) {
+                const label = this.$.mychart.configuration.renderer.label(message, xPixels, yPixels)
+                  .attr({
+                    padding: 10,
+                    r: 5,
+                    zIndex: 1000
+                  })
+                  .css({
+                    color: '#FF0000'
+                  })
+                  .add();
+                setTimeout(function() {
+                  label.fadeOut();
+                }, 1000);
+              }
+            }
+
+            addEventListener('WebComponentsReady', () => {
+              customElements.define(ChartEventListeners.is, ChartEventListeners);
+            });
+          </script>
+        </dom-module>
+        <chart-event-listeners></chart-event-listeners>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 

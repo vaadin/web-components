@@ -268,10 +268,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__addLicenseChecker();
           this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
+            const options = Object.assign({}, this.options);
+            this.__initEventsListeners(options);
             if (this.timeline) {
-              this._configuration = Highcharts.stockChart(this.$.chart, this.options);
+              this._configuration = Highcharts.stockChart(this.$.chart, options);
             } else {
-              this._configuration = Highcharts.chart(this.$.chart, this.options);
+              this._configuration = Highcharts.chart(this.$.chart, options);
             }
           });
         }
@@ -306,6 +308,209 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._dirty = true;
           this._configuration = value;
         }
+
+        /**
+         *  Name of the chart events to add to the configuration and its corresponding event for the chart element
+         **/
+        get __chartEventNames() {
+          return {
+
+            /**
+             *
+             * @event chart-add-series  Fired when a new series is added
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            addSeries: 'chart-add-series',
+            /**
+             *
+             * @event chart-after-print  Fired after a chart is printed
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            afterPrint: 'chart-after-print',
+            /**
+             *
+             * @event chart-before-print  Fired before a chart is printed
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            beforePrint: 'chart-before-print',
+            /**
+             *
+             * @event chart-click  Fired when clicking on the plot background
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            click: 'chart-click',
+            /**
+             *
+             * @event chart-drilldown  Fired when drilldown point is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            drilldown: 'chart-drilldown',
+            /**
+             *
+             * @event chart-drillup  Fired when drilling up from a drilldown series
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            drillup: 'chart-drillup',
+            /**
+             *
+             * @event chart-drillupall  Fired after all the series  has been drilled up
+             *                          if chart has multiple drilldown series
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            drillupall: 'chart-drillupall',
+            /**
+             *
+             * @event chart-load  Fired when the chart is finished loading
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            load: 'chart-load',
+            /**
+             *
+             * @event chart-redraw  Fired when the chart is redraw. Can be called after a `Chart.configuration.redraw()`
+             *                      or after an axis, series or point is modified with the `redraw` option set to `true`
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            redraw: 'chart-redraw',
+            /**
+             *
+             * @event chart-selection  Fired when an area of the chart has been selected
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} chart Chart object where the event was sent from
+             */
+            selection: 'chart-selection'
+          };
+        }
+
+        /**
+         *  Name of the series events to add to the configuration and its corresponding event for the chart element
+         **/
+        get __seriesEventNames() {
+          return {
+            /**
+             *
+             * @event series-after-animate  Fired when the series has finished its initial animation
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            afterAnimate: 'series-after-animate',
+            /**
+             *
+             * @event series-checkbox-click  Fired when the checkbox next to the series' name in the legend is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            checkboxClick: 'series-checkbox-click',
+            /**
+             *
+             * @event series-click  Fired when the series is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            click: 'series-click',
+            /**
+             *
+             * @event series-hide  Fired when the series is hidden after chart generation time
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            hide: 'series-hide',
+            /**
+             *
+             * @event series-legend-item-click  Fired when the legend item belonging to the series is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            legendItemClick: 'series-legend-item-click',
+            /**
+             *
+             * @event series-mouse-out  Fired when the mouses leave the graph
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            mouseOut: 'series-mouse-out',
+            /**
+             *
+             * @event series-mouse-over  Fired when the mouse enters the graph
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            mouseOver: 'series-mouse-over',
+            /**
+             *
+             * @event series-show  Fired when the series is show after chart generation time
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} series Series object where the event was sent from
+             */
+            show: 'series-show'
+          };
+        }
+
+        /**
+         *  Name of the point events to add to the configuration and its corresponding event for the chart element
+         **/
+        get __pointEventNames() {
+          return {
+            /**
+             *
+             * @event point-click  Fired when the point is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            click: 'point-click',
+            /**
+             *
+             * @event point-mouse-out  Fired when the mouse leaves the area close to the point
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            mouseOut: 'point-mouse-out',
+            /**
+             *
+             * @event point-mouse-over  Fired when the mouse enters the area close to the point
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            mouseOver: 'point-mouse-over',
+            /**
+             *
+             * @event point-remove  Fired when the point is removed from the series
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            remove: 'point-remove',
+            /**
+             *
+             * @event point-select  Fired when the point is selected etheir programmatically or by clicking on the point
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            select: 'point-select',
+            /**
+             *
+             * @event point-unselect  Fired when the point is unselected etheir programmatically or by clicking on the point
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */          
+            unselect: 'point-unselect',
+            /**
+             *
+             * @event point-update  Fired when the point is updated programmatically through `.update()` method
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */  
+            update: 'point-update'
+          };
+        }
+
 
         __addLicenseChecker() {
           var licenseChecker = document.createElement('vaadin-license-checker');
@@ -386,7 +591,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          *    if existing configuration should be discarded.
          */
         update(jsonConfiguration, resetConfiguration) {
-
           if (resetConfiguration || !this._jsonConfigurationBuffer) {
             this._jsonConfigurationBuffer = {};
           }
@@ -399,10 +603,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
 
             this.__inflateFunctions(this._jsonConfigurationBuffer);
-
             if (!this._dirty || resetConfiguration) {
-              const initialOptions = Object.assign({}, this.options);
-              Object.assign(initialOptions, this._jsonConfigurationBuffer);
+              const initialOptions = Object.assign({}, this.options, this._jsonConfigurationBuffer);
+              this.__initEventsListeners(initialOptions);
 
               if (this.timeline) {
                 this._configuration = Highcharts.stockChart(this.$.chart, initialOptions);
@@ -448,6 +651,57 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
             }
           }
+        }
+
+        __initEventsListeners(configuration) {
+          this.__initChartEventsListeners(configuration);
+          this.__initSeriesEventsListeners(configuration);
+          this.__initPointsEventsListeners(configuration);
+        }
+
+        __initChartEventsListeners(configuration) {
+          this.__createEventListeners(this.__chartEventNames, configuration, 'chart.events', 'chart');
+        }
+
+        __initSeriesEventsListeners(configuration) {
+          this.__createEventListeners(this.__seriesEventNames, configuration, 'plotOptions.series.events', 'series');
+        }
+
+        __initPointsEventsListeners(configuration) {
+          this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
+        }
+
+        __createEventListeners(eventList, configuration, pathToAdd, eventType) {
+          const self = this;
+          const eventObject = this.__ensureObjectPath(configuration, pathToAdd);
+
+          for (let keys = Object.keys(eventList), i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            if (!eventObject[key]) {
+              eventObject[key] = function(event) {
+                self.dispatchEvent(new CustomEvent(eventList[key], {
+                  bubbles: false,
+                  composed: true,
+                  detail: {
+                    originalEvent: event,
+                    [eventType]: this
+                  }
+                }));
+              };
+            }
+          }
+        }
+
+        __ensureObjectPath(object, path) {
+          if (typeof path !== 'string') {
+            return;
+          }
+
+          path = path.split('.');
+          return path.reduce((obj, key) => {
+            obj[key] = obj[key] || {};
+            return obj[key];
+          }, object);
         }
 
         __updateOrAddCredits(credits) {

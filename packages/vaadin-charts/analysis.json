@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 523,
+          "line": 843,
           "column": 6
         },
         "end": {
-          "line": 523,
+          "line": 843,
           "column": 42
         }
       },
@@ -331,11 +331,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 308,
+                  "line": 512,
                   "column": 8
                 },
                 "end": {
-                  "line": 314,
+                  "line": 518,
                   "column": 9
                 }
               },
@@ -348,11 +348,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 316,
+                  "line": 520,
                   "column": 8
                 },
                 "end": {
-                  "line": 322,
+                  "line": 526,
                   "column": 9
                 }
               },
@@ -365,11 +365,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 324,
+                  "line": 528,
                   "column": 8
                 },
                 "end": {
-                  "line": 326,
+                  "line": 530,
                   "column": 9
                 }
               },
@@ -386,11 +386,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 328,
+                  "line": 532,
                   "column": 8
                 },
                 "end": {
-                  "line": 342,
+                  "line": 546,
                   "column": 9
                 }
               },
@@ -407,11 +407,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 344,
+                  "line": 548,
                   "column": 8
                 },
                 "end": {
-                  "line": 346,
+                  "line": 550,
                   "column": 9
                 }
               },
@@ -428,11 +428,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 349,
+                  "line": 553,
                   "column": 8
                 },
                 "end": {
-                  "line": 352,
+                  "line": 556,
                   "column": 9
                 }
               },
@@ -445,11 +445,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 386,
+                  "line": 590,
                   "column": 8
                 },
                 "end": {
-                  "line": 431,
+                  "line": 633,
                   "column": 9
                 }
               },
@@ -473,11 +473,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 433,
+                  "line": 635,
                   "column": 8
                 },
                 "end": {
-                  "line": 449,
+                  "line": 651,
                   "column": 9
                 }
               },
@@ -489,16 +489,154 @@
               ]
             },
             {
+              "name": "__initEventsListeners",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 653,
+                  "column": 8
+                },
+                "end": {
+                  "line": 657,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "configuration"
+                }
+              ]
+            },
+            {
+              "name": "__initChartEventsListeners",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 659,
+                  "column": 8
+                },
+                "end": {
+                  "line": 661,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "configuration"
+                }
+              ]
+            },
+            {
+              "name": "__initSeriesEventsListeners",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 663,
+                  "column": 8
+                },
+                "end": {
+                  "line": 665,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "configuration"
+                }
+              ]
+            },
+            {
+              "name": "__initPointsEventsListeners",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 667,
+                  "column": 8
+                },
+                "end": {
+                  "line": 669,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "configuration"
+                }
+              ]
+            },
+            {
+              "name": "__createEventListeners",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 671,
+                  "column": 8
+                },
+                "end": {
+                  "line": 690,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "eventList"
+                },
+                {
+                  "name": "configuration"
+                },
+                {
+                  "name": "pathToAdd"
+                },
+                {
+                  "name": "eventType"
+                }
+              ]
+            },
+            {
+              "name": "__ensureObjectPath",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 692,
+                  "column": 8
+                },
+                "end": {
+                  "line": 702,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "object"
+                },
+                {
+                  "name": "path"
+                }
+              ]
+            },
+            {
               "name": "__updateOrAddCredits",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 451,
+                  "line": 704,
                   "column": 8
                 },
                 "end": {
-                  "line": 457,
+                  "line": 710,
                   "column": 9
                 }
               },
@@ -515,11 +653,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 459,
+                  "line": 712,
                   "column": 8
                 },
                 "end": {
-                  "line": 472,
+                  "line": 725,
                   "column": 9
                 }
               },
@@ -539,11 +677,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 474,
+                  "line": 727,
                   "column": 8
                 },
                 "end": {
-                  "line": 482,
+                  "line": 735,
                   "column": 9
                 }
               },
@@ -560,11 +698,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 484,
+                  "line": 737,
                   "column": 8
                 },
                 "end": {
-                  "line": 491,
+                  "line": 744,
                   "column": 9
                 }
               },
@@ -584,11 +722,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 493,
+                  "line": 746,
                   "column": 8
                 },
                 "end": {
-                  "line": 501,
+                  "line": 754,
                   "column": 9
                 }
               },
@@ -605,11 +743,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 503,
+                  "line": 756,
                   "column": 8
                 },
                 "end": {
-                  "line": 515,
+                  "line": 768,
                   "column": 9
                 }
               },
@@ -617,6 +755,105 @@
               "params": [
                 {
                   "name": "newValue"
+                }
+              ]
+            },
+            {
+              "name": "__callChartFunction",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 770,
+                  "column": 8
+                },
+                "end": {
+                  "line": 778,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "functionName"
+                }
+              ]
+            },
+            {
+              "name": "__callSeriesFunction",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 780,
+                  "column": 8
+                },
+                "end": {
+                  "line": 789,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "functionName"
+                },
+                {
+                  "name": "seriesIndex"
+                }
+              ]
+            },
+            {
+              "name": "__callAxisFunction",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 791,
+                  "column": 8
+                },
+                "end": {
+                  "line": 824,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "functionName"
+                },
+                {
+                  "name": "axisCategory"
+                },
+                {
+                  "name": "axisIndex"
+                }
+              ]
+            },
+            {
+              "name": "__callPointFunction",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 826,
+                  "column": 8
+                },
+                "end": {
+                  "line": 835,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "functionName"
+                },
+                {
+                  "name": "seriesIndex"
+                },
+                {
+                  "name": "pointIndex"
                 }
               ]
             }
@@ -635,7 +872,7 @@
               "column": 6
             },
             "end": {
-              "line": 516,
+              "line": 836,
               "column": 7
             }
           },
@@ -692,7 +929,158 @@
               "type": "string"
             }
           ],
-          "events": [],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "chart-add-series",
+              "description": "chart-add-series  Fired when a new series is added",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-after-print",
+              "description": "chart-after-print  Fired after a chart is printed",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-before-print",
+              "description": "chart-before-print  Fired before a chart is printed",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-click",
+              "description": "chart-click  Fired when clicking on the plot background",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-drilldown",
+              "description": "chart-drilldown  Fired when drilldown point is clicked",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-drillup",
+              "description": "chart-drillup  Fired when drilling up from a drilldown series",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-drillupall",
+              "description": "chart-drillupall  Fired after all the series  has been drilled up\n                         if chart has multiple drilldown series",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-load",
+              "description": "chart-load  Fired when the chart is finished loading",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-redraw",
+              "description": "chart-redraw  Fired when the chart is redraw. Can be called after a `Chart.configuration.redraw()`\n                     or after an axis, series or point is modified with the `redraw` option set to `true`",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "chart-selection",
+              "description": "chart-selection  Fired when an area of the chart has been selected",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-click",
+              "description": "point-click  Fired when the point is clicked",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-mouse-out",
+              "description": "point-mouse-out  Fired when the mouse leaves the area close to the point",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-mouse-over",
+              "description": "point-mouse-over  Fired when the mouse enters the area close to the point",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-remove",
+              "description": "point-remove  Fired when the point is removed from the series",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-select",
+              "description": "point-select  Fired when the point is selected etheir programmatically or by clicking on the point",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-unselect",
+              "description": "point-unselect  Fired when the point is unselected etheir programmatically or by clicking on the point",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "point-update",
+              "description": "point-update  Fired when the point is updated programmatically through `.update()` method",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-after-animate",
+              "description": "series-after-animate  Fired when the series has finished its initial animation",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-checkbox-click",
+              "description": "series-checkbox-click  Fired when the checkbox next to the series' name in the legend is clicked",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-click",
+              "description": "series-click  Fired when the series is clicked",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-hide",
+              "description": "series-hide  Fired when the series is hidden after chart generation time",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-legend-item-click",
+              "description": "series-legend-item-click  Fired when the legend item belonging to the series is clicked",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-mouse-out",
+              "description": "series-mouse-out  Fired when the mouses leave the graph",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-mouse-over",
+              "description": "series-mouse-over  Fired when the mouse enters the graph",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "series-show",
+              "description": "series-show  Fired when the series is show after chart generation time",
+              "metadata": {}
+            }
+          ],
           "styling": {
             "cssVariables": [],
             "selectors": []
