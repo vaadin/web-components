@@ -24,12 +24,14 @@
 ```
 -->
 ```html
-<vaadin-dropdown-menu placeholder="Name" label="Select a Name">
+<vaadin-dropdown-menu label="Label" placeholder="Placeholder" value="Option one">
   <template>
     <vaadin-list-box>
-      <vaadin-item>Jose</vaadin-item>
-      <vaadin-item>Manolo</vaadin-item>
-      <vaadin-item>Pedro</vaadin-item>
+      <vaadin-item>Option one</vaadin-item>
+      <vaadin-item>Option two</vaadin-item>
+      <vaadin-item>Option three</vaadin-item>
+      <hr>
+      <vaadin-item disabled>Option four</vaadin-item>
     </vaadin-list-box>
   </template>
 </vaadin-dropdown-menu>
