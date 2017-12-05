@@ -23,9 +23,8 @@
 ```
 -->
 ```html
-<vaadin-button>
-  Vaadin Button
-</vaadin-button>
+<vaadin-button>Button One</vaadin-button>
+<vaadin-button disabled>Button Two</vaadin-button>
 ```
 
 <!-- TODO: uncomment when we have a nice screenshot to show
