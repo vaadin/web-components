@@ -23,7 +23,7 @@
 ```
 -->
 ```html
-<vaadin-date-picker label="Pick a date">
+<vaadin-date-picker label="Label" placeholder="Placeholder">
 </vaadin-date-picker>
 ```
 
