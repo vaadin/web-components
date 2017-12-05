@@ -24,12 +24,11 @@
 ```
 -->
 ```html
-<vaadin-item>
-  ...
-</vaadin-item>
+<vaadin-item>Simple Item</vaadin-item>
+<vaadin-item disabled>Disabled Item</vaadin-item>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="200" alt="Screenshot of vaadin-item">](https://vaadin.com/elements/-/element/vaadin-item)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/elements/vaadin-item)
 
 
 ## Running demos and tests in browser
