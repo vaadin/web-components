@@ -31,31 +31,8 @@
 ```
 -->
 ```html
-<dom-bind>
-  <template is="dom-bind">
-    <iron-ajax url="https://randomuser.me/api?results=100&inc=name,email,picture" last-response="{{response}}" auto></iron-ajax>
-
-    <vaadin-combo-box items="[[response.results]]" item-value-path="email" item-label-path="email">
-      <template>
-        <style>
-          paper-icon-item img {
-            border-radius: 50%;
-            margin-right: 10px;
-          }
-        </style>
-        <paper-icon-item>
-          <img src="[[item.picture.thumbnail]]" slot="item-icon">
-          <paper-item-body two-line>
-            <div>[[item.name.first]] [[item.name.last]]</div>
-            <div secondary>[[item.email]]</div>
-          </paper-item-body>
-        </paper-icon-item>
-      </template>
-    </vaadin-combo-box>
-  </template>
-</dom-bind>
-
-
+<vaadin-combo-box label="Label" placeholder="Placeholder"></vaadin-combo-box>
+<vaadin-combo-box label="Label" value="Option 1"></vaadin-combo-box>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/docs/img/vaadin-combo-box-item-template-material.png" width="311" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/-/element/vaadin-combo-box)
