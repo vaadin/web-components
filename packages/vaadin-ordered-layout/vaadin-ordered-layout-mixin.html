@@ -1,0 +1,45 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * A mixin for internal use.
+   * @polymerMixin
+   */
+  Vaadin.OrderedLayoutMixin = superClass => class VaadinOrderedLayoutMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * The internal layout’s value of the `align-items` CSS property
+         */
+        _alignItems: {
+          type: String,
+          value: 'stretch',
+          observer: '_alignItemsChanged'
+        },
+
+        /**
+         * The internal layout’s value of the `justify-content` CSS property
+         */
+        _justifyContent: {
+          type: String,
+          value: 'flex-start',
+          observer: '_justifyContentChanged'
+        }
+      };
+    }
+
+    _alignItemsChanged(alignItems) {
+      this.$.vaadinOrderedLayoutContainer.style.alignItems = alignItems;
+    }
+
+    _justifyContentChanged(justifyContent) {
+      this.$.vaadinOrderedLayoutContainer.style.justifyContent = justifyContent;
+    }
+  };
+</script>

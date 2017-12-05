@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-ordered-layout-mixin.html">
 
 <dom-module id="vaadin-horizontal-layout">
   <template>
@@ -42,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <vaadin-horizontal-layout-container>
+    <vaadin-horizontal-layout-container id="vaadinOrderedLayoutContainer">
       <slot></slot>
     </vaadin-horizontal-layout-container>
   </template>
@@ -82,7 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class HorizontalLayoutElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class HorizontalLayoutElement extends Vaadin.OrderedLayoutMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-horizontal-layout';
         }
