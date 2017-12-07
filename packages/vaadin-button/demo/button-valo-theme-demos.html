@@ -1,0 +1,44 @@
+<dom-module id="button-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Sizing</h3>
+    <vaadin-demo-snippet id='button-valo-theme-demos-sizing'>
+      <template preserve-content>
+        <vaadin-button theme="small">Small Button</vaadin-button>
+        <vaadin-button theme="large">Large Button</vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Styles</h3>
+    <vaadin-demo-snippet id='button-valo-theme-demos-styles'>
+      <template preserve-content>
+        <vaadin-button theme="primary">Primary</vaadin-button>
+        <vaadin-button theme="tertiary">Tertiary</vaadin-button>
+        <vaadin-button theme="tertiary-inlne">Tertiary inline</vaadin-button>
+        <vaadin-button theme="contrast">Contrast</vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>States</h3>
+    <vaadin-demo-snippet id='button-valo-theme-demos-states'>
+      <template preserve-content>
+        <vaadin-button theme="success">Success</vaadin-button>
+        <vaadin-button theme="error">Error</vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ButtonValoThemeDemos extends DemoReadyEventEmitter(ButtonDemo(Polymer.Element)) {
+      static get is() {
+        return 'button-valo-theme-demos';
+      }
+    }
+    customElements.define(ButtonValoThemeDemos.is, ButtonValoThemeDemos);
+  </script>
+</dom-module>

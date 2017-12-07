@@ -11,5 +11,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Valo Theme Variations",
+    "url": "button-valo-theme-demos",
+    "src": "button-valo-theme-demos.html",
+        "meta": {
+      "title": "vaadin-button Valo Theme Variations",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
