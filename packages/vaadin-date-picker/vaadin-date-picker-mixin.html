@@ -460,13 +460,16 @@ This program is available under Apache License Version 2.0, available at https:/
       const bottomAlign = this._inputElement.getBoundingClientRect().top > window.innerHeight / 2;
       const rightAlign = this._inputElement.getBoundingClientRect().left + this.clientWidth / 2 > window.innerWidth / 2;
 
+      const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+      const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
+
       const inputRect = this._inputElement.getBoundingClientRect();
 
       if (!this._fullscreen) {
         if (rightAlign) {
           this.$.overlay.setAttribute('right-aligned', '');
           this.$.overlay.style.removeProperty('left');
-          this.$.overlay.style.right = (window.innerWidth - inputRect.right) + 'px';
+          this.$.overlay.style.right = (viewportWidth - inputRect.right) + 'px';
         } else {
           this.$.overlay.removeAttribute('right-aligned');
           this.$.overlay.style.removeProperty('right');
@@ -476,7 +479,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (bottomAlign) {
           this.$.overlay.setAttribute('bottom-aligned', '');
           this.$.overlay.style.removeProperty('top');
-          this.$.overlay.style.bottom = (window.innerHeight - inputRect.top) + 'px';
+          this.$.overlay.style.bottom = (viewportHeight - inputRect.top) + 'px';
         } else {
           this.$.overlay.removeAttribute('bottom-aligned');
           this.$.overlay.style.removeProperty('bottom');
