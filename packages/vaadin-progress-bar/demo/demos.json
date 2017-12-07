@@ -10,6 +10,16 @@
       "description": "",
       "image": ""
      }
+  },
+  {
+    "name": "Valo Theme Variations",
+    "url": "progress-bar-valo-theme-demos",
+    "src": "progress-bar-valo-theme-demos.html",
+    "meta": {
+      "title": "vaadin-progress-bar Valo Theme Variations",
+      "description": "",
+      "image": ""
+    }
   }
   ]
 }

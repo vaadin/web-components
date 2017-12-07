@@ -1,0 +1,35 @@
+<dom-module id="progress-bar-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Styles</h3>
+    <vaadin-demo-snippet id='progress-bar-valo-theme-demos-styles'>
+      <template preserve-content>
+        <vaadin-progress-bar theme="contrast" value="0.35">Contrast</vaadin-progress-bar>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>States</h3>
+    <vaadin-demo-snippet id='progress-bar-valo-theme-demos-states'>
+      <template preserve-content>
+        <vaadin-progress-bar theme="success" value="0.35">Success</vaadin-progress-bar>
+        <p>&nbsp;</p>
+        <vaadin-progress-bar theme="error" value="0.45">Error</vaadin-progress-bar>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ProgressBarValoThemeDemos extends DemoReadyEventEmitter(ProgressBarDemo(Polymer.Element)) {
+      static get is() {
+        return 'progress-bar-valo-theme-demos';
+      }
+    }
+
+    customElements.define(ProgressBarValoThemeDemos.is, ProgressBarValoThemeDemos);
+  </script>
+</dom-module>
