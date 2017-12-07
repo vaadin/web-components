@@ -21,9 +21,7 @@
   "dependencies": {
     "iron-a11y-announcer": "^2.0.0",
     "iron-a11y-keys-behavior": "^2.0.0",
-    "iron-dropdown": "^2.0.0",
     "iron-media-query": "^2.0.0",
-    "iron-overlay-behavior": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
