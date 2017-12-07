@@ -269,12 +269,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
             const options = Object.assign({}, this.options);
-            this.__initEventsListeners(options);
-            if (this.timeline) {
-              this._configuration = Highcharts.stockChart(this.$.chart, options);
-            } else {
-              this._configuration = Highcharts.chart(this.$.chart, options);
-            }
+            this.__initChart(options);
           });
         }
 
@@ -499,14 +494,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * @event point-unselect  Fired when the point is unselected etheir programmatically or by clicking on the point
              * @param {Object} detail.originalEvent object with details about the event sent
              * @param {Object} point Point object where the event was sent from
-             */          
+             */
             unselect: 'point-unselect',
             /**
              *
              * @event point-update  Fired when the point is updated programmatically through `.update()` method
              * @param {Object} detail.originalEvent object with details about the event sent
              * @param {Object} point Point object where the event was sent from
-             */  
+             */
             update: 'point-update'
           };
         }
@@ -550,6 +545,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __isSeriesEmpty(series) {
           return series === null || series.length === 0;
+        }
+
+        __initChart(options) {
+          this.__initEventsListeners(options);
+          if (this.timeline) {
+            this._configuration = Highcharts.stockChart(this.$.chart, options);
+          } else {
+            this._configuration = Highcharts.chart(this.$.chart, options);
+          }
+          // Workaround for highcharts#7494 to prevent chart growing on window resize
+          this._configuration.getChartSize();
         }
 
         /** @private */
@@ -605,13 +611,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this.__inflateFunctions(this._jsonConfigurationBuffer);
             if (!this._dirty || resetConfiguration) {
               const initialOptions = Object.assign({}, this.options, this._jsonConfigurationBuffer);
-              this.__initEventsListeners(initialOptions);
 
-              if (this.timeline) {
-                this._configuration = Highcharts.stockChart(this.$.chart, initialOptions);
-              } else {
-                this._configuration = Highcharts.chart(this.$.chart, initialOptions);
-              }
+              this.__initChart(initialOptions);
 
               this._dirty = true;
               this._jsonConfigurationBuffer = null;
@@ -631,7 +632,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             if (this._jsonConfigurationBuffer.series) {
               this.__updateOrAddSeries(this._jsonConfigurationBuffer.series);
             }
-            this._jsonConfigurationBuffer = null;            
+            this._jsonConfigurationBuffer = null;
           });
         }
 
