@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Valo Theme Variations",
+    "url": "split-layout-valo-theme-demos",
+    "src": "split-layout-valo-theme-demos.html",
+    "meta": {
+      "title": "vaadin-split-layout Valo Theme Variations",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
