@@ -1,0 +1,32 @@
+<dom-module id="text-field-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Small</h3>
+    <vaadin-demo-snippet id='text-field-valo-theme-demos-small'>
+      <template preserve-content>
+        <vaadin-text-field theme="small" label="Small" placeholder="Placeholder"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Contrast</h3>
+    <vaadin-demo-snippet id='text-field-valo-theme-demos-contrast'>
+      <template preserve-content>
+        <vaadin-text-field theme="contrast" label="Contrast" placeholder="Placeholder" value="Value"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class TextFieldValoThemeDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-field-valo-theme-demos';
+      }
+    }
+    customElements.define(TextFieldValoThemeDemos.is, TextFieldValoThemeDemos);
+  </script>
+</dom-module>

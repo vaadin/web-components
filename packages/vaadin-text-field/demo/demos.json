@@ -40,6 +40,16 @@
         "description": "",
         "image": ""
       }
+    },
+    {
+      "name": "Valo Theme Variations",
+      "url": "text-field-valo-theme-demos",
+      "src": "text-field-valo-theme-demos.html",
+      "meta": {
+        "title": "vaadin-text-field Valo Theme Variations",
+        "description": "",
+        "image": ""
+      }
     }
   ]
 }
