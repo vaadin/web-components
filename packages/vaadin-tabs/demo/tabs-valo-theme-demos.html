@@ -1,0 +1,173 @@
+<dom-module id="tabs-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Icons</h3>
+    <vaadin-demo-snippet id='tabs-valo-theme-demos-icons'>
+      <template preserve-content>
+        <vaadin-tabs>
+          <vaadin-tab>
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+
+        <br>
+
+        <vaadin-tabs orientation="vertical">
+          <vaadin-tab>
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+
+        <br>
+
+        <vaadin-tabs>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+
+        <br>
+
+        <vaadin-tabs orientation="vertical" style="width: 120px;">
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Small Size</h3>
+    <vaadin-demo-snippet id='tabs-valo-theme-demos-small-size'>
+      <template preserve-content>
+        <vaadin-tabs theme="small">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+        </vaadin-tabs>
+
+        <br>
+
+        <vaadin-tabs orientation="vertical" theme="small">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Minimal</h3>
+    <vaadin-demo-snippet id='tabs-valo-theme-demos-minimal'>
+      <template preserve-content>
+        <vaadin-tabs theme="minimal">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+        </vaadin-tabs>
+
+        <br>
+
+        <vaadin-tabs orientation="vertical" theme="minimal">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Pills</h3>
+    <vaadin-demo-snippet id='tabs-valo-theme-demos-pills'>
+      <template preserve-content>
+        <vaadin-tabs theme="pill">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three</vaadin-tab>
+          <vaadin-tab>Tab four</vaadin-tab>
+        </vaadin-tabs>
+
+        <br><br>
+
+        <vaadin-tabs theme="pill">
+          <vaadin-tab>
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab>
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+
+        <br><br>
+
+        <vaadin-tabs theme="pill">
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:user"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:plane"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="valo:bell"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class TabsValoThemeDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
+      static get is() {
+        return 'tabs-valo-theme-demos';
+      }
+    }
+    customElements.define(TabsValoThemeDemos.is, TabsValoThemeDemos);
+  </script>
+</dom-module>
