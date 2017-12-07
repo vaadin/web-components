@@ -34,7 +34,7 @@
   </vaadin-list-box>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="200" alt="Screenshot of vaadin-list-box">](https://vaadin.com/elements/-/element/vaadin-list-box)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="145" alt="Screenshot of vaadin-list-box">](https://vaadin.com/elements/vaadin-list-box)
 
 
 ## Running demos and tests in browser
