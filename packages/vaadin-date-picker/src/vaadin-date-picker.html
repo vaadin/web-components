@@ -1,0 +1,298 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../iron-media-query/iron-media-query.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-date-picker-overlay-content.html">
+<link rel="import" href="vaadin-date-picker-mixin.html">
+<link rel="import" href="vaadin-date-picker-helper.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="vaadin-date-picker-styles.html">
+
+<dom-module id="vaadin-date-picker">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+        width: 175px;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      :host([opened]) {
+        pointer-events: auto;
+      }
+
+      [part="text-field"] {
+        min-width: 100%;
+        max-width: 100%;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        font-family: 'vaadin-date-picker-icons';
+      }
+
+      [part="clear-button"]::before {
+        content: "\e901";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e902";
+      }
+
+      :host([disabled]) [part="clear-button"],
+      :host([disabled]) [part="toggle-button"],
+      :host([readonly]) [part="clear-button"],
+      :host([readonly]) [part="toggle-button"],
+      :host(:not([has-value])) [part="clear-button"] {
+        display: none;
+      }
+    </style>
+
+
+    <vaadin-text-field id="input"
+        role="application"
+        autocomplete="off"
+        on-focus="_focus"
+        value="{{_userInputValue}}"
+        invalid="[[invalid]]"
+        label="[[label]]"
+        name="[[name]]"
+        placeholder="[[placeholder]]"
+        required="[[required]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        error-message="[[errorMessage]]"
+        aria-label$="[[label]]"
+        part="text-field"
+      >
+      <slot name="prefix" slot="prefix"></slot>
+      <div part="clear-button" slot="suffix" on-tap="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
+      <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
+    </vaadin-text-field>
+
+    <vaadin-date-picker-overlay
+        id="overlay"
+        fullscreen$=[[_fullscreen]]
+        opened="{{opened}}"
+        fullscreen$="[[_fullscreen]]"
+        on-vaadin-overlay-open="_onOverlayOpened"
+        on-vaadin-overlay-close="_onOverlayClosed">
+      <template>
+        <vaadin-date-picker-overlay-content
+            id="overlay-content" i18n="[[i18n]]"
+            fullscreen$="[[_fullscreen]]"
+            label="[[label]]"
+            selected-date="{{_selectedDate}}"
+            slot="dropdown-content"
+            focused-date="{{_focusedDate}}"
+            show-week-numbers="[[showWeekNumbers]]"
+            min-date="[[_minDate]]"
+            max-date="[[_maxDate]]"
+            role="dialog"
+            on-date-tap="_close"
+            part="overlay-content">
+        </vaadin-date-picker-overlay-content>
+      </template>
+    </vaadin-date-picker-overlay>
+
+    <iron-media-query
+        query="[[_fullscreenMediaQuery]]"
+        query-matches="{{_fullscreen}}">
+    </iron-media-query>
+  </template>
+
+  <script>
+    {
+      /**
+       *
+       * `<vaadin-date-picker>` is a date selection field which includes a scrollable
+       * month calendar view.
+       * ```html
+       * <vaadin-date-picker label="Birthday"></vaadin-date-picker>
+       * ```
+       * ```js
+       * datePicker.value = '2016-03-02';
+       * ```
+       * When the selected `value` is changed, a `value-changed` event is triggered.
+       *
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `text-field` | Input element | vaadin-date-picker
+       * `clear-button` | Clear button | vaadin-date-picker
+       * `toggle-button` | Toggle button | vaadin-date-picker
+       * `overlay` | The overlay element | vaadin-date-picker
+       * `overlay` | The overlay element | vaadin-date-picker-light
+       * `overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay-content
+       * `label` | Fullscreen mode value/label | vaadin-date-picker-overlay-content
+       * `clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay-content
+       * `toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay-content
+       * `years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay-content
+       * `months` | Months scroller | vaadin-date-picker-overlay-content
+       * `years` | Years scroller | vaadin-date-picker-overlay-content
+       * `toolbar` | Footer bar with buttons | vaadin-date-picker-overlay-content
+       * `today-button` | Today button | vaadin-date-picker-overlay-content
+       * `cancel-button` | Cancel button | vaadin-date-picker-overlay-content
+       * `month` | Month calendar | vaadin-date-picker-overlay-content
+       * `year-number` | Year number | vaadin-date-picker-overlay-content
+       * `year-separator` | Year separator | vaadin-date-picker-overlay-content
+       * `month-header` | Month title | vaadin-month-calendar
+       * `weekdays` | Weekday container | vaadin-month-calendar
+       * `weekday` | Weekday element | vaadin-month-calendar
+       * `week-numbers` | Week numbers container | vaadin-month-calendar
+       * `week-number` | Week number element | vaadin-month-calendar
+       * `date` | Date element | vaadin-month-calendar
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `invalid` | Set when the element is invalid | :host
+       * `opened` | Set when the date selector overlay is opened | :host
+       * `readonly` | Set when the element is readonly | :host
+       *
+       * If you want to replace the default input field with a custom implementation, you should use the
+       * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.DatePickerMixin
+       * @mixes Polymer.GestureEventListeners
+       * @demo demo/index.html
+       */
+      class DatePickerElement extends
+        Vaadin.ControlStateMixin(
+          Vaadin.ThemableMixin(
+            Vaadin.DatePickerMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
+
+        static get is() {
+          return 'vaadin-date-picker';
+        }
+
+        static get version() {
+          return '2.0.7';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * Set to true to disable this element.
+             */
+            disabled: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
+             * The error message to display when the input is invalid.
+             */
+            errorMessage: String,
+
+            /**
+             * A placeholder string in addition to the label. If this is set, the label will always float.
+             */
+            placeholder: String,
+
+            /**
+             * Set to true to make this element read-only.
+             */
+            readonly: {
+              type: Boolean,
+              value: false,
+              reflectToAttribute: true
+            },
+
+            /**
+             * This property is set to true when the control value invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            _userInputValue: String
+          };
+        }
+
+        static get observers() {
+          return [
+            '_userInputValueChanged(_userInputValue)'
+          ];
+        }
+
+        ready() {
+          super.ready();
+
+          // In order to have synchronized invalid property, we need to use the same validate logic.
+          Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
+
+          // Keep focus attribute in focusElement for styling
+          this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
+        }
+
+        _clear(e) {
+          e.stopPropagation();
+          this.value = '';
+          this.close();
+          this.validate();
+        }
+
+        _toggle(e) {
+          e.stopPropagation();
+          this[this.$.overlay.opened ? 'close' : 'open']();
+        }
+
+        _input() {
+          return this.$.input;
+        }
+
+        set _inputValue(value) {
+          this._inputElement.value = value;
+        }
+
+        get _inputValue() {
+          return this._inputElement.value;
+        }
+
+        _getAriaExpanded(opened) {
+          return Boolean(opened).toString();
+        }
+
+        /**
+         * Focussable element used by vaadin-control-state-mixin
+         */
+        get focusElement() {
+          return this._input() || this;
+        }
+      }
+
+      customElements.define(DatePickerElement.is, DatePickerElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.DatePickerElement = DatePickerElement;
+    }
+  </script>
+</dom-module>
