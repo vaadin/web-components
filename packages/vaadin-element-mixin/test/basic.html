@@ -30,6 +30,7 @@
         return 'test-foo';
       }
     }
+    customElements.define(TestFoo.is, TestFoo);
   });
   </script>
 
@@ -41,20 +42,16 @@
 
   <script>
     describe('basic functionality', function() {
-      let components;
 
-      beforeEach(function() {
-        components = fixture('default');
-      });
-
-      before(function(done) {
-        HTMLImports.whenReady(() => {
+      beforeEach(function(done) {
+        fixture('default');
+        window.HTMLImports.whenReady(() => {
           done();
         });
       });
 
       it('should define window.Vaadin', function() {
-        var v = expect(window.Vaadin).to.exist;
+        expect(window.Vaadin).to.exist;
       });
 
       it('should check for development mode', function() {
@@ -62,10 +59,10 @@
       });
 
       it('should load usage statistics only on localhost', function() {
-        const localhost = window.location.href.indexOf("localhost") != -1;
+        const localhost = window.location.href.indexOf('localhost') != -1;
         if (localhost) {
           expect(window.Vaadin.developmentModeCallback).to.exist;
-          expect(window.Vaadin.developmentModeCallback["vaadin-usage-statistics"]).to.exist;
+          expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
         } else {
           expect(window.Vaadin.developmentModeCallback).not.to.exist;
         }
