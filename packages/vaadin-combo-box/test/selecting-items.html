@@ -152,6 +152,14 @@
       expect(newComboBox.value).to.equal('foo');
     });
 
+    it('should be possible to set selectedItem after attaching to the DOM and before setting items', () => {
+      var newComboBox = combobox.cloneNode(true);
+      combobox.parentElement.appendChild(newComboBox);
+      newComboBox.selectedItem = 'foo';
+      newComboBox.items = ['foo', 'bar'];
+      expect(newComboBox.value).to.equal('foo');
+    });
+
     describe('`change` event', () => {
       it('should fire `value-changed` and `selected-item-changed` before `changed`', done => {
         combobox.addEventListener('change', () => {
