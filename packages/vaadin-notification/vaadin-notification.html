@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-notification-overlay-default-theme" theme-for="vaadin-notification-overlay">
   <template>
@@ -281,7 +282,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class NotificationElement extends (class extends Polymer.Element {}) {
+      class NotificationElement extends Vaadin.ElementMixin(class extends Polymer.Element {}) {
         static get is() {
           return 'vaadin-notification';
         }
@@ -447,8 +448,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.NotificationElement = NotificationElement;
+      window.Vaadin.NotificationElement = NotificationElement;
     }
   </script>
 </dom-module>
