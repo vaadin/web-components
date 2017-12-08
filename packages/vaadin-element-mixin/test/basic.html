@@ -47,14 +47,30 @@
         components = fixture('default');
       });
 
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          done();
+        });
+      });
+
       it('should define window.Vaadin', function() {
-        debugger;
         var v = expect(window.Vaadin).to.exist;
       });
 
       it('should check for development mode', function() {
-        expect(window.Vaadin.developmentMode).to.equal(true);
+        expect(window.Vaadin.developmentMode).to.exist;
       });
+
+      it('should load usage statistics only on localhost', function() {
+        const localhost = window.location.href.indexOf("localhost") != -1;
+        if (localhost) {
+          expect(window.Vaadin.developmentModeCallback).to.exist;
+          expect(window.Vaadin.developmentModeCallback["vaadin-usage-statistics"]).to.exist;
+        } else {
+          expect(window.Vaadin.developmentModeCallback).not.to.exist;
+        }
+      });
+
 
     });
   </script>
