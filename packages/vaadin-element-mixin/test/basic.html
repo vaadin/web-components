@@ -1,0 +1,61 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-element-mixin tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-element-mixin.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+</head>
+
+<body>
+  <div id="dom-modules">
+    <dom-module id="test-foo">
+      <template>
+        <style>
+          :host {
+            display: block;
+          }
+        </style>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+  </div>
+
+  <script>
+  document.addEventListener('WebComponentsReady', function() {
+    class TestFoo extends Vaadin.ElementMixin(Polymer.Element) {
+      static get is() {
+        return 'test-foo';
+      }
+    }
+  });
+  </script>
+
+  <test-fixture id="default">
+    <template>
+      <test-foo></test-foo>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('basic functionality', function() {
+      let components;
+
+      beforeEach(function() {
+        components = fixture('default');
+      });
+
+      it('should define window.Vaadin', function() {
+        debugger;
+        var v = expect(window.Vaadin).to.exist;
+      });
+
+      it('should check for development mode', function() {
+        expect(window.Vaadin.developmentMode).to.equal(true);
+      });
+
+    });
+  </script>
+</body>

@@ -1,0 +1,32 @@
+{
+  "name": "vaadin-element-mixin",
+  "homepage": "https://vaadin.com/elements",
+  "authors": [
+    "Vaadin Ltd"
+  ],
+  "description": "vaadin-element-mixin",
+  "main": "vaadin-element-mixin.html",
+  "keywords": [
+    "Vaadin",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "package.json",
+    "wct.conf.js"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-test-helpers": "#2.0-preview",
+    "web-component-tester": "^6.0.0"
+  }
+}

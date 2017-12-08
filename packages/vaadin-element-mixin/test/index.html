@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>vaadin-themable-mixin tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+</head>
+
+<body>
+  <script>
+    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
+
+    WCT.loadSuites([
+      'basic.html'
+    ].reduce(function(suites, suite) {
+      return suites.concat([suite, suite.replace(/(.+)\?(.*)|$/, '$1?wc-shadydom=true&$2')]);
+    }, []));
+  </script>
+</body>
+
+</html>
