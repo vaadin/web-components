@@ -21,15 +21,14 @@
   "dependencies": {
     "iron-a11y-announcer": "^2.0.0",
     "iron-a11y-keys-behavior": "^2.0.0",
-    "iron-dropdown": "^2.0.0",
     "iron-media-query": "^2.0.0",
-    "iron-overlay-behavior": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0",
     "vaadin-button": "^1.0.0",
     "vaadin-text-field": "^1.0.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-control-state-mixin": "^1.1.7"
+    "vaadin-control-state-mixin": "^1.1.7",
+    "vaadin-overlay": "^1.6.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",

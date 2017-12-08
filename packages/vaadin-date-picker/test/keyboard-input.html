@@ -69,22 +69,17 @@
         }
 
         function focusedDate() {
-          return overlay.focusedDate;
+          return overlayContent.focusedDate;
         }
 
         beforeEach(done => {
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
           target = datepicker._inputElement;
-          datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-          datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+          overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+          overlayContent.$.monthScroller.bufferSize = 0;
+          overlayContent.$.yearScroller.bufferSize = 0;
           setTimeout(done, 1);
-        });
-
-        afterEach(() => {
-          if (datepicker._debouncerRefit) {
-            datepicker._debouncerRefit.flush();
-          }
         });
 
         it('should open overlay on input', () => {
@@ -114,7 +109,7 @@
         });
 
         it('should select focused date on enter', done => {
-          datepicker.addEventListener('iron-overlay-closed', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             expect(datepicker.value).to.equal('2001-01-01');
             done();
           });
@@ -132,7 +127,7 @@
         it('should not forward keys after close', done => {
           inputText('1/2/2000');
           arrowDown();
-          datepicker.addEventListener('iron-overlay-closed', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             var focused = focusedDate();
             arrowRight();
             expect(focusedDate()).to.eql(focused);
@@ -143,24 +138,24 @@
 
         it('should not open with wrong keys', () => {
           arrowRight();
-          expect(datepicker.opened).to.be.false;
+          expect(datepicker.opened).not.to.be.ok;
         });
 
         it('should not forward keys after reopen', done => {
           inputText('1/2/2000');
           arrowDown();
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             var focused = focusedDate();
             arrowRight();
             expect(focusedDate()).to.eql(focused);
             done();
           });
-          datepicker.addEventListener('iron-overlay-closed', () => inputText('0'));
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => inputText('0'));
           enter();
         });
 
         it('should not forward after user changes input', done => {
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
             // Forwarding keys to overlay
             target.value = '';
@@ -188,7 +183,7 @@
         it('should reflect focused date to input', done => {
           datepicker.value = '2000-01-01';
 
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/8/2000');
             done();
@@ -198,7 +193,7 @@
 
         it('should not reflect focused date on open', done => {
 
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(datepicker._inputValue).to.equal('');
             done();
           });
@@ -208,9 +203,9 @@
         it('should stop key event bubbles from overlay', done => {
           datepicker.value = '2000-01-01';
 
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             arrowDown();
-            target = overlay;
+            target = overlayContent;
             arrowDown();
             expect(datepicker._inputValue).to.equal('1/15/2000');
             done();
@@ -230,7 +225,7 @@
           open(datepicker, () => {
             var spy = sinon.spy(datepicker, 'validate');
 
-            datepicker.addEventListener('iron-overlay-closed', () => {
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
               expect(spy.called).to.be.true;
               done();
             });
@@ -243,7 +238,7 @@
           datepicker.value = '2000-01-01';
           target.value = '';
           inputText('foo');
-          datepicker.addEventListener('iron-overlay-closed', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             expect(datepicker.value).to.equal('');
             done();
           });
@@ -254,7 +249,7 @@
           datepicker.value = '2000-01-01';
           target.value = '';
           inputText('foo');
-          datepicker.addEventListener('iron-overlay-closed', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             expect(datepicker.invalid).to.be.true;
             done();
           });
@@ -262,7 +257,7 @@
         });
 
         it('should clear selection on close', done => {
-          datepicker.addEventListener('iron-overlay-closed', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
             expect(target.selectionStart).to.equal(target.selectionEnd);
             done();
           });
@@ -291,7 +286,7 @@
           });
 
           it('should select focused date on close', done => {
-            datepicker.addEventListener('iron-overlay-closed', () => {
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
               expect(datepicker._selectedDate).to.equal(datepicker._focusedDate);
               done();
             });
@@ -302,7 +297,7 @@
         });
 
         it('should not forward up/down to overlay when closed', done => {
-          datepicker.addEventListener('iron-overlay-opened', () => {
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
             expect(datepicker._focusedDate.getDate()).to.eql(new Date().getDate());
             done();
           });
@@ -320,7 +315,7 @@
         describe('esc behavior', () => {
 
           it('should close the overlay on esc', done => {
-            datepicker.addEventListener('iron-overlay-closed', () => done());
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => done());
             open(datepicker, esc);
           });
 
@@ -350,7 +345,7 @@
 
           it('should not change value on esc', done => {
             datepicker.value = '2000-01-01';
-            datepicker.addEventListener('iron-overlay-closed', () => {
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
               expect(datepicker.value).to.equal('2000-01-01');
               done();
             });
@@ -364,7 +359,7 @@
 
           it('should not change value on esc (empty)', done => {
             datepicker.value = '';
-            datepicker.addEventListener('iron-overlay-closed', () => {
+            datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
               expect(datepicker.value).to.equal('');
               done();
             });
@@ -450,8 +445,12 @@
 
         describe('focus modes', () => {
 
+          var today;
+
+          beforeEach(() => overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content'));
+
           it('should be tabbable', () => {
-            expect(parseInt(datepicker.$.overlay.getAttribute('tabindex'), 10)).to.equal(0);
+            expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
             expect(datepicker._inputElement.focused).to.equal(false);
           });
 
@@ -463,13 +462,13 @@
 
           it('should focus the input on date tap', () => {
             arrowDown();
-            datepicker.$.overlay.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
+            overlayContent.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
             expect(datepicker._inputElement.focused).to.be.true;
           });
 
           it('should focus the input on date cancel', () => {
             arrowDown();
-            MockInteractions.tap(datepicker.$.overlay.$.cancelButton);
+            MockInteractions.tap(overlayContent.$.cancelButton);
             expect(datepicker._inputElement.focused).to.be.true;
           });
 
@@ -477,18 +476,18 @@
             open(datepicker, () => {
               MockInteractions.focus(datepicker._inputElement);
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
-              expect(datepicker.$.overlay.$.cancelButton.focused).to.be.true;
+              expect(overlayContent.$.cancelButton.focused).to.be.true;
               done();
             });
           });
 
           it('should focus input in cancel tab', done => {
             open(datepicker, () => {
-              MockInteractions.focus(datepicker.$.overlay.$.cancelButton);
+              MockInteractions.focus(overlayContent.$.cancelButton);
 
               // IE11 needs spy the focus instead of checking _inputElement.focused
               var spy = sinon.spy(datepicker, '_focus');
-              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.cancelButton, 9);
+              MockInteractions.pressAndReleaseKeyOn(overlayContent.$.cancelButton, 9);
               setTimeout(() => {
                 expect(spy.called).to.be.true;
                 done();
@@ -498,11 +497,11 @@
 
           it('should keep focused attribute in focusElement when the focus moves to the overlay', done => {
             open(datepicker, () => {
-              MockInteractions.tap(datepicker.$.overlay);
+              MockInteractions.tap(overlayContent);
               datepicker.focusElement.blur();
               expect(datepicker.focusElement.focused).to.be.false;
 
-              MockInteractions.focus(datepicker.$.overlay);
+              MockInteractions.focus(overlayContent);
               expect(datepicker.focused).to.be.true;
               expect(datepicker.focusElement.focused).to.be.true;
               done();
@@ -511,9 +510,9 @@
 
           it('should not reveal the focused date on tap', done => {
             open(datepicker, () => {
-              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
-              MockInteractions.tap(datepicker.$.overlay);
-              MockInteractions.focus(datepicker.$.overlay);
+              var spy = sinon.spy(overlayContent, 'revealDate');
+              MockInteractions.tap(overlayContent);
+              MockInteractions.focus(overlayContent);
               setTimeout(() => {
                 expect(spy.called).to.be.false;
                 done();
@@ -523,7 +522,7 @@
 
           it('should reveal the focused date on tab focus from input', done => {
             open(datepicker, () => {
-              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
+              var spy = sinon.spy(overlayContent, 'revealDate');
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9);
               expect(spy.called).to.be.true;
               done();
@@ -532,9 +531,9 @@
 
           it('should reveal the focused date on shift-tab focus from today button', done => {
             open(datepicker, () => {
-              var spy = sinon.spy(datepicker.$.overlay, 'revealDate');
-              MockInteractions.pressAndReleaseKeyOn(datepicker.$.overlay.$.todayButton, 9, 'shift');
-              MockInteractions.focus(datepicker.$.overlay);
+              var spy = sinon.spy(overlayContent, 'revealDate');
+              MockInteractions.pressAndReleaseKeyOn(overlayContent.$.todayButton, 9, 'shift');
+              MockInteractions.focus(overlayContent);
               setTimeout(() => {
                 expect(spy.called).to.be.true;
                 done();
@@ -545,7 +544,7 @@
           it('should not focus overlay on key-input', done => {
             var spy = sinon.spy(datepicker.$.overlay, 'focus');
 
-            listenForEvent(datepicker, 'iron-overlay-opened', () => {
+            listenForEvent(datepicker.$.overlay, 'vaadin-overlay-open', () => {
               expect(spy.called).to.be.false;
               done();
             });

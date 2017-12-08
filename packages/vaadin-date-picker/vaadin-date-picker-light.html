@@ -5,10 +5,10 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-styles.html">
 
@@ -22,37 +22,33 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([opened]) {
         pointer-events: auto;
       }
-
-      [part="overlay"] {
-        height: 100vh;
-        width: 420px;
-      }
     </style>
     <slot></slot>
 
-    <iron-dropdown
-        id="dropdown"
+    <vaadin-date-picker-overlay
+        id="overlay"
         fullscreen$=[[_fullscreen]]
-        allow-outside-scroll
-        on-iron-overlay-opened="_onOverlayOpened"
-        on-iron-overlay-closed="_onOverlayClosed"
-        on-iron-overlay-canceled="_preventCancelOnComponentAccess"
         opened="{{opened}}"
-        no-auto-focus>
-      <vaadin-date-picker-overlay
-        id="overlay" i18n="[[i18n]]"
-        fullscreen$=[[_fullscreen]]
-        label=[[label]]
-        selected-date="{{_selectedDate}}"
-        slot="dropdown-content"
-        focused-date="{{_focusedDate}}"
-        show-week-numbers="[[showWeekNumbers]]"
-        min-date="[[_minDate]]"
-        max-date="[[_maxDate]]"
-        role="dialog"
-        part="overlay">
-      </vaadin-date-picker-overlay>
-    </iron-dropdown>
+        fullscreen$="[[_fullscreen]]"
+        on-vaadin-overlay-open="_onOverlayOpened"
+        on-vaadin-overlay-close="_onOverlayClosed">
+      <template>
+        <vaadin-date-picker-overlay-content
+          id="overlay-content" i18n="[[i18n]]"
+          fullscreen$=[[_fullscreen]]
+          label=[[label]]
+          selected-date="{{_selectedDate}}"
+          slot="dropdown-content"
+          focused-date="{{_focusedDate}}"
+          show-week-numbers="[[showWeekNumbers]]"
+          min-date="[[_minDate]]"
+          max-date="[[_maxDate]]"
+          on-date-tap="_close"
+          role="dialog"
+          part="overlay">
+        </vaadin-date-picker-overlay-content>
+      </template>
+    </vaadin-date-picker-overlay>
 
     <iron-media-query
         query="[[_fullscreenMediaQuery]]"

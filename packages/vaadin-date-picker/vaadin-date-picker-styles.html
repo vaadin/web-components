@@ -7,6 +7,51 @@
   }
 </style>
 
+<dom-module id="vaadin-date-picker-overlay-styles" theme-for="vaadin-date-picker-overlay">
+  <template>
+    <style>
+      :host {
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+
+      :host([right-aligned]) {
+        align-items: flex-end;
+      }
+
+      [part="overlay"] {
+        display: flex;
+        flex: auto;
+        width: 420px;
+        max-height: 500px;
+      }
+
+      [part~="content"] {
+        display: flex;
+        flex: auto;
+      }
+
+      :host([fullscreen]) [part~="overlay"] {
+        min-width: 175px;
+        max-height: initial;
+      }
+
+      :host([fullscreen]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
+        left: 0 !important;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-date-picker-default-theme" theme-for="vaadin-date-picker vaadin-date-picker-light">
   <template>
     <style>
@@ -21,11 +66,12 @@
   </template>
 </dom-module>
 
-<dom-module id="vaadin-date-picker-overlay-default-theme" theme-for="vaadin-date-picker-overlay">
+<dom-module id="vaadin-date-picker-overlay-content-default-theme" theme-for="vaadin-date-picker-overlay-content">
   <template>
     <style>
       :host {
         box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
+        font-size: 14px;
       }
 
       [part="overlay-header"] {

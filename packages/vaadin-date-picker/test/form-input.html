@@ -57,8 +57,9 @@
 
       beforeEach(done => {
         datepicker = fixture('datepicker');
-        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent.$.monthScroller.bufferSize = 0;
+        overlayContent.$.yearScroller.bufferSize = 0;
         // Needed so as iron-input has time to look for it's inputElement
         setTimeout(done);
       });
@@ -159,7 +160,7 @@
       it('should validate keyboard input (invalid)', done => {
         inputValue('foo');
 
-        datepicker.addEventListener('iron-overlay-closed', () => {
+        datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
           expect(datepicker.validate()).to.equal(false);
           expect(datepicker.invalid).to.be.equal(true);
           done();
@@ -170,7 +171,7 @@
       it('should validate keyboard input (valid)', done => {
         inputValue('01/01/2000');
 
-        datepicker.addEventListener('iron-overlay-closed', () => {
+        datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
           expect(datepicker.validate()).to.equal(true);
           expect(datepicker.invalid).to.be.equal(false);
           done();
@@ -182,7 +183,7 @@
         datepicker.min = '2001-01-01';
         inputValue('01/01/2000');
 
-        datepicker.addEventListener('iron-overlay-closed', () => {
+        datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
           expect(datepicker.validate()).to.equal(false);
           expect(datepicker.invalid).to.be.equal(true);
           done();
@@ -198,8 +199,9 @@
         ironForm = fixture('datepicker-in-form');
         datepicker = ironForm.querySelector('vaadin-date-picker');
         form = ironForm.querySelector('form');
-        datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-        datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent.$.monthScroller.bufferSize = 0;
+        overlayContent.$.yearScroller.bufferSize = 0;
         setTimeout(done);
       });
 

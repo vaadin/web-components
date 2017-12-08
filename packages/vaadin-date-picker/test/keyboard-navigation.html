@@ -22,7 +22,7 @@
 
   <test-fixture id="overlay">
     <template>
-      <vaadin-date-picker-overlay></vaadin-date-picker-overlay>
+      <vaadin-date-picker-overlay-content></vaadin-date-picker-overlay-content>
     </template>
   </test-fixture>
 
@@ -75,11 +75,11 @@
         }
 
         function esc() {
-          MockInteractions.keyDownOn(target, 27);
+          MockInteractions.keyDownOn(target, 27, null, 'Escape');
         }
 
         function focusedDate() {
-          return overlay.focusedDate;
+          return overlayContent.focusedDate;
         }
 
         describe('date-picker', () => {
@@ -87,15 +87,10 @@
 
           beforeEach(() => {
             datepicker = fixture('datepicker');
-            datepicker.$.overlay.$.monthScroller.bufferSize = 0;
-            datepicker.$.overlay.$.yearScroller.bufferSize = 0;
+            overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+            overlayContent.$.monthScroller.bufferSize = 0;
+            overlayContent.$.yearScroller.bufferSize = 0;
             overlay = datepicker.$.overlay;
-          });
-
-          afterEach(() => {
-            if (datepicker._debouncerRefit) {
-              datepicker._debouncerRefit.flush();
-            }
           });
 
           it('should open overlay on down', () => {
@@ -126,7 +121,7 @@
             datepicker.value = '2001-01-01';
 
             datepicker.open();
-            target = overlay;
+            target = overlayContent;
             arrowRight();
 
             expect(focusedDate()).to.eql(new Date(2001, 0, 2));
@@ -136,10 +131,10 @@
             datepicker.value = null;
             datepicker.initialPosition = '2001-01-01';
 
-            target = overlay;
+            target = overlayContent;
 
             open(datepicker, () => {
-              target = overlay;
+              target = overlayContent;
               arrowRight();
               expect(focusedDate()).to.eql(new Date(2001, 0, 2));
               done();
@@ -152,7 +147,7 @@
             datepicker.initialPosition = null;
 
             datepicker.open();
-            target = overlay;
+            target = overlayContent;
             arrowRight();
 
             expect(focusedDate()).to.eql(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1));
@@ -161,7 +156,7 @@
           it('should not lose focused date after deselecting', () => {
             var _focused = focusedDate();
             datepicker.open();
-            target = overlay;
+            target = overlayContent;
             space();
             space();
 
@@ -253,6 +248,7 @@
           });
 
           it('should focus next month with pagedown', () => {
+            target = overlayContent;
             pageDown();
 
             expect(focusedDate()).to.eql(new Date(2000, 1, 1));

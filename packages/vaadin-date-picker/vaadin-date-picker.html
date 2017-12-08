@@ -6,11 +6,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../polymer/lib/mixins/gesture-event-listeners.html">
-<link rel="import" href="../iron-dropdown/iron-dropdown.html">
 <link rel="import" href="../iron-media-query/iron-media-query.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
 <link rel="import" href="../vaadin-text-field/vaadin-text-field.html">
@@ -35,11 +35,6 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="text-field"] {
         min-width: 100%;
         max-width: 100%;
-      }
-
-      [part="overlay"] {
-        height: 100vh;
-        width: 420px;
       }
 
       [part="clear-button"],
@@ -86,29 +81,30 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="toggle-button" slot="suffix" on-tap="_toggle" role="button" aria-label$="[[i18n.calendar]]" aria-expanded$="[[_getAriaExpanded(opened)]]"></div>
     </vaadin-text-field>
 
-    <iron-dropdown
-        id="dropdown"
+    <vaadin-date-picker-overlay
+        id="overlay"
         fullscreen$=[[_fullscreen]]
-        allow-outside-scroll
-        on-iron-overlay-opened="_onOverlayOpened"
-        on-iron-overlay-closed="_onOverlayClosed"
-        on-iron-overlay-canceled="_preventCancelOnComponentAccess"
         opened="{{opened}}"
-        no-auto-focus>
-      <vaadin-date-picker-overlay
-          id="overlay" i18n="[[i18n]]"
-          fullscreen$="[[_fullscreen]]"
-          label="[[label]]"
-          selected-date="{{_selectedDate}}"
-          slot="dropdown-content"
-          focused-date="{{_focusedDate}}"
-          show-week-numbers="[[showWeekNumbers]]"
-          min-date="[[_minDate]]"
-          max-date="[[_maxDate]]"
-          role="dialog"
-          part="overlay">
-      </vaadin-date-picker-overlay>
-    </iron-dropdown>
+        fullscreen$="[[_fullscreen]]"
+        on-vaadin-overlay-open="_onOverlayOpened"
+        on-vaadin-overlay-close="_onOverlayClosed">
+      <template>
+        <vaadin-date-picker-overlay-content
+            id="overlay-content" i18n="[[i18n]]"
+            fullscreen$="[[_fullscreen]]"
+            label="[[label]]"
+            selected-date="{{_selectedDate}}"
+            slot="dropdown-content"
+            focused-date="{{_focusedDate}}"
+            show-week-numbers="[[showWeekNumbers]]"
+            min-date="[[_minDate]]"
+            max-date="[[_maxDate]]"
+            role="dialog"
+            on-date-tap="_close"
+            part="overlay-content">
+        </vaadin-date-picker-overlay-content>
+      </template>
+    </vaadin-date-picker-overlay>
 
     <iron-media-query
         query="[[_fullscreenMediaQuery]]"
@@ -142,25 +138,27 @@ This program is available under Apache License Version 2.0, available at https:/
        * `toggle-button` | Toggle button | vaadin-date-picker
        * `overlay` | The overlay element | vaadin-date-picker
        * `overlay` | The overlay element | vaadin-date-picker-light
-       * `overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay
-       * `label` | Fullscreen mode value/label | vaadin-date-picker-overlay
-       * `clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay
-       * `toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay
-       * `years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay
-       * `months` | Months scroller | vaadin-date-picker-overlay
-       * `years` | Years scroller | vaadin-date-picker-overlay
-       * `toolbar` | Footer bar with buttons | vaadin-date-picker-overlay
-       * `today-button` | Today button | vaadin-date-picker-overlay
-       * `cancel-button` | Cancel button | vaadin-date-picker-overlay
-       * `month` | Month calendar | vaadin-date-picker-overlay
-       * `year-number` | Year number | vaadin-date-picker-overlay
-       * `year-separator` | Year separator | vaadin-date-picker-overlay
+       * `overlay-header` | Fullscreen mode header | vaadin-date-picker-overlay-content
+       * `label` | Fullscreen mode value/label | vaadin-date-picker-overlay-content
+       * `clear-button` | Fullscreen mode clear button | vaadin-date-picker-overlay-content
+       * `toggle-button` | Fullscreen mode toggle button | vaadin-date-picker-overlay-content
+       * `years-toggle-button` | Fullscreen mode years scroller toggle | vaadin-date-picker-overlay-content
+       * `months` | Months scroller | vaadin-date-picker-overlay-content
+       * `years` | Years scroller | vaadin-date-picker-overlay-content
+       * `toolbar` | Footer bar with buttons | vaadin-date-picker-overlay-content
+       * `today-button` | Today button | vaadin-date-picker-overlay-content
+       * `cancel-button` | Cancel button | vaadin-date-picker-overlay-content
+       * `month` | Month calendar | vaadin-date-picker-overlay-content
+       * `year-number` | Year number | vaadin-date-picker-overlay-content
+       * `year-separator` | Year separator | vaadin-date-picker-overlay-content
        * `month-header` | Month title | vaadin-month-calendar
        * `weekdays` | Weekday container | vaadin-month-calendar
        * `weekday` | Weekday element | vaadin-month-calendar
        * `week-numbers` | Week numbers container | vaadin-month-calendar
        * `week-number` | Week number element | vaadin-month-calendar
        * `date` | Date element | vaadin-month-calendar
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * The following state attributes are available for styling:
        *
@@ -249,7 +247,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Polymer.RenderStatus.afterNextRender(this, () => this._inputElement.validate = () => {});
 
           // Keep focus attribute in focusElement for styling
-          this.$.overlay.addEventListener('focus', () => this.focusElement._setFocused(true));
+          this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
         }
 
         _clear(e) {
@@ -261,7 +259,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _toggle(e) {
           e.stopPropagation();
-          this[this.$.dropdown.opened ? 'close' : 'open']();
+          this[this.$.overlay.opened ? 'close' : 'open']();
         }
 
         _input() {
