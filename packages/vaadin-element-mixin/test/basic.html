@@ -68,6 +68,33 @@
         }
       });
 
+      it('should load usage statistics once per class', function() {
+        var called = 0;
+        window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function() {
+          called++;
+        };
+
+        expect(called).to.equal(0);
+        class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar';
+          }
+        }
+        expect(called).to.equal(1);
+        customElements.define(TestBar.is, TestBar);
+        expect(called).to.equal(1);
+        const elem = document.createElement('test-bar');
+        document.body.appendChild(elem);
+        expect(called).to.equal(1);
+        class TestBar2 extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar2';
+          }
+        }
+        customElements.define(TestBar2.is, TestBar2);
+        expect(called).to.equal(2);
+      });
+
 
     });
   </script>
