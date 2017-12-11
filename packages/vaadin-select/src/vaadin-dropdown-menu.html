@@ -12,6 +12,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
   <template>
@@ -208,9 +209,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * @demo demo/index.html
        */
       class DropdownMenuElement extends
-        Vaadin.ControlStateMixin(
+        Vaadin.ElementMixin(Vaadin.ControlStateMixin(
           Vaadin.ThemableMixin(
-            Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element))) {
+            Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)))) {
         static get is() {
           return 'vaadin-dropdown-menu';
         }
@@ -557,8 +558,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.DropdownMenuElement = DropdownMenuElement;
+      window.Vaadin.DropdownMenuElement = DropdownMenuElement;
     }
   </script>
 </dom-module>
