@@ -11,6 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-combo-box">
   <template>
@@ -183,7 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ComboBoxElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element))) {
+      class ComboBoxElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-combo-box';
@@ -327,8 +328,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ComboBoxElement = ComboBoxElement;
+      window.Vaadin.ComboBoxElement = ComboBoxElement;
     }
   </script>
 </dom-module>
