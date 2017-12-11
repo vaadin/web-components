@@ -27,9 +27,7 @@
 <vaadin-button disabled>Button Two</vaadin-button>
 ```
 
-<!-- TODO: uncomment when we have a nice screenshot to show
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" width="200" alt="Screenshot of vaadin-button">](https://vaadin.com/elements/-/element/vaadin-button)
--->
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Valo theme">](https://vaadin.com/elements/-/element/vaadin-button)
 
 ## Running demos and tests in browser
 
