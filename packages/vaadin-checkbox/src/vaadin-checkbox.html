@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-checkbox">
   <template>
@@ -77,7 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class CheckboxElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class CheckboxElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
         static get is() {
           return 'vaadin-checkbox';
         }
@@ -224,8 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.CheckboxElement = CheckboxElement;
+      window.Vaadin.CheckboxElement = CheckboxElement;
     }
   </script>
 </dom-module>
