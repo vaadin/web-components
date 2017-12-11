@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="vaadin-progress-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-progress-bar">
   <template>
@@ -76,7 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ProgressBarElement extends Vaadin.ThemableMixin(Vaadin.ProgressMixin(Polymer.Element)) {
+      class ProgressBarElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Vaadin.ProgressMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-progress-bar';
         }
@@ -91,8 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ProgressBarElement = ProgressBarElement;
+      window.Vaadin.ProgressBarElement = ProgressBarElement;
     }
   </script>
 </dom-module>
