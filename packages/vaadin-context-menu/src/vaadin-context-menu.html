@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-overlay/vaadin-overlay.html">
 <link rel="import" href="vaadin-contextmenu-event.html">
 <link rel="import" href="vaadin-device-detector.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-context-menu-overlay-styles" theme-for="vaadin-context-menu-overlay">
   <template>
@@ -210,7 +211,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class ContextMenuElement extends Polymer.GestureEventListeners(Polymer.Element) {
+      class ContextMenuElement extends Vaadin.ElementMixin(Polymer.GestureEventListeners(Polymer.Element)) {
 
         static get is() {
           return 'vaadin-context-menu';
@@ -484,8 +485,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ContextMenuElement = ContextMenuElement;
+      window.Vaadin.ContextMenuElement = ContextMenuElement;
     }
   </script>
 </dom-module>

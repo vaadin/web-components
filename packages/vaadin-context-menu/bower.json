@@ -27,7 +27,8 @@
     "iron-media-query": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-overlay": "#next",
-    "vaadin-valo-theme": "^2.0.0"
+    "vaadin-valo-theme": "^2.0.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
