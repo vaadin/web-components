@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-list-mixin/vaadin-list-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <dom-module id="vaadin-list-box">
   <template>
     <style>
@@ -63,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ListBoxElement extends Vaadin.ListMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ListBoxElement extends Vaadin.ElementMixin(Vaadin.ListMixin(Vaadin.ThemableMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-list-box';
         }
@@ -98,8 +99,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ListBoxElement = ListBoxElement;
+      window.Vaadin.ListBoxElement = ListBoxElement;
     }
   </script>
 </dom-module>
