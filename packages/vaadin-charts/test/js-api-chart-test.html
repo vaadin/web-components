@@ -48,10 +48,13 @@
       var chartContainer;
 
 
-      before(function() {
-        const el = document.querySelector('js-api-demo');
-        chart = el.$.mychart;
-        chartContainer = chart.$.chart;
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          const el = document.querySelector('js-api-demo');
+          chart = el.$.mychart;
+          chartContainer = chart.$.chart;
+          done();
+        });
       });
 
       it('should be defined', function(done) {

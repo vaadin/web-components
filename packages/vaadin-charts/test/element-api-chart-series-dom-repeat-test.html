@@ -54,10 +54,13 @@
       let chartContainer;
       let element;
 
-      before(function() {
-        element = document.querySelector('chart-series-dom-repeat');
-        chart = element.$.mychart;
-        chartContainer = chart.$.chart;
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          element = document.querySelector('chart-series-dom-repeat');
+          chart = element.$.mychart;
+          chartContainer = chart.$.chart;
+          done();
+        });
       });
 
       it('should have 3 series', function(done) {
@@ -75,8 +78,6 @@
             const currentSeries = series[index];
             // IE11 doesn't support SVGElement.classList 
             expect(currentSeries.getAttribute('class')).to.include('highcharts-line-series');
-            // debugger;
-            // console.log(element.seriesData[index]);
             expect(chart.configuration.series[0].data).to.have.lengthOf(element.seriesData[index].data.length);
           }
           done();

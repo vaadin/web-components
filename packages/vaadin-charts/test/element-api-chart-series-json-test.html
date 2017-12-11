@@ -45,9 +45,12 @@
       let chart;
       let element;
 
-      before(function() {
-        element = document.querySelector('chart-series-with-json-api');
-        chart = element.$.mychart;
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          element = document.querySelector('chart-series-with-json-api');
+          chart = element.$.mychart;
+          done();
+        });
       });
 
       it('should have 1 series', function(done) {

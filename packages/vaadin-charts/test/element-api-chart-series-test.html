@@ -49,10 +49,13 @@
       let chartContainer;
       let element;
 
-      before(function() {
-        element = document.querySelector('chart-series-api-demo');
-        chart = element.$.mychart;
-        chartContainer = chart.$.chart;
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          element = document.querySelector('chart-series-api-demo');
+          chart = element.$.mychart;
+          chartContainer = chart.$.chart;
+          done();
+        });
       });
 
       it('should be defined', function(done) {

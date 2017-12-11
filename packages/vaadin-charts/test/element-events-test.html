@@ -55,9 +55,12 @@
       let chart;
       let element;
 
-      before(function() {
-        element = document.querySelector('chart-events');
-        chart = element.$.mychart;
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          element = document.querySelector('chart-events');
+          chart = element.$.mychart;
+          done();
+        });
       });
 
       it('should trigger chart events to imperative listeners', done => {
