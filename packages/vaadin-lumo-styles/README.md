@@ -44,6 +44,9 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
   - Wait for response from one of Vaadin Elements team members
 
+## Updating the version number
+Use `npm version <new version>` to release a new version. This will update
+the version number in `package.json` and in other relevant places such as `version.html`
 
 ## License
 
