@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-button">
   <template>
@@ -68,7 +69,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class ButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class ButtonElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
         static get is() {
           return 'vaadin-button';
         }
@@ -107,8 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ButtonElement = ButtonElement;
+      window.Vaadin.ButtonElement = ButtonElement;
     }
   </script>
 </dom-module>
