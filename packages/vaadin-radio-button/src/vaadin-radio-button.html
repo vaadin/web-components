@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-radio-button">
   <template>
@@ -71,7 +72,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @element vaadin-radio-button
        * @demo demo/index.html
        */
-      class RadioButtonElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+      class RadioButtonElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
         static get is() {
           return 'vaadin-radio-button';
         }
@@ -182,8 +183,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.RadioButtonElement = RadioButtonElement;
+      window.Vaadin.RadioButtonElement = RadioButtonElement;
     }
   </script>
 </dom-module>
