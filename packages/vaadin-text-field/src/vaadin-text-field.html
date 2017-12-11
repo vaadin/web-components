@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="vaadin-text-field-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-text-field">
   <template>
@@ -132,7 +133,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class TextFieldElement extends Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class TextFieldElement extends Vaadin.ElementMixin(Vaadin.TextFieldMixin(Vaadin.ThemableMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-text-field';
         }
@@ -187,8 +188,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.TextFieldElement = TextFieldElement;
+      window.Vaadin.TextFieldElement = TextFieldElement;
     }
   </script>
 </dom-module>
