@@ -1,0 +1,231 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+
+<dom-module id="vaadin-checkbox">
+  <template>
+    <style>
+      :host([disabled]) {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+
+    <label part="wrapper" id="label">
+      <input
+        id="nativeCheckbox"
+        type="checkbox"
+        part="native-checkbox"
+        checked="{{checked::change}}"
+        disabled$="[[disabled]]"
+        indeterminate="{{indeterminate::change}}"
+        role="presentation"
+        tabindex="-1">
+
+      <span part="checkbox"></span>
+
+      <span part="label">
+        <slot></slot>
+      </span>
+    </label>
+
+  </template>
+  <script>
+    {
+      /**
+       * `<vaadin-checkbox>` is a Polymer 2 element for customized checkboxes.
+       *
+       * ```html
+       * <vaadin-checkbox>
+       *   Make my profile visible
+       * </vaadin-checkbox>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name         | Description
+       * ------------------|----------------
+       * `wrapper`         | The `<label>` element which wraps the checkbox and [part="label"]
+       * `native-checkbox` | The `<input type="checkbox">` element
+       * `checkbox`        | The `<span>` element for a custom graphical check
+       * `label`           | The `<span>` element for slotted text/HTML label
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description
+       * -------------|------------
+       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
+       * `disabled`   | Set when the checkbox is disabled.
+       * `focus-ring` | Set when the checkbox is focused using the keyboard.
+       * `focused`    | Set when the checkbox is focused.
+       * `indeterminate` | Set when the checkbox is in indeterminate mode.
+       * `checked` | Set when the checkbox is checked.
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Polymer.GestureEventListeners
+       * @demo demo/index.html
+       */
+      class CheckboxElement extends Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element))) {
+        static get is() {
+          return 'vaadin-checkbox';
+        }
+
+        static get version() {
+          return '1.0.3';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * True if the checkbox is checked.
+             */
+            checked: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_checkedChanged',
+              reflectToAttribute: true
+            },
+
+            /**
+             * Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.
+             * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes
+             */
+            indeterminate: {
+              type: Boolean,
+              notify: true,
+              observer: '_indeterminateChanged',
+              reflectToAttribute: true
+            },
+
+            /**
+             * The value given to the data submitted with the checkbox's name to the server when the control is inside a form.
+             */
+            value: {
+              type: String,
+              value: 'on'
+            }
+          };
+        }
+
+        constructor() {
+          super();
+          /**
+           * @type {string}
+           * Name of the element.
+           */
+          this.name;
+        }
+
+        get name() {
+          return this.checked ? this._storedName : '';
+        }
+
+        set name(name) {
+          this._storedName = name;
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'checkbox');
+
+          this.addEventListener('click', this._handleClick.bind(this));
+
+          this._addActiveListeners();
+
+          const attrName = this.getAttribute('name');
+          if (attrName) {
+            this.name = attrName;
+          }
+        }
+
+        _checkedChanged(checked) {
+          if (this.indeterminate) {
+            this.setAttribute('aria-checked', 'mixed');
+          } else {
+            this.setAttribute('aria-checked', checked);
+          }
+        }
+
+        _indeterminateChanged(indeterminate) {
+          if (indeterminate) {
+            this.setAttribute('aria-checked', 'mixed');
+          } else {
+            this.setAttribute('aria-checked', this.checked);
+          }
+        }
+
+        _addActiveListeners() {
+          // DOWN
+          this._addEventListenerToNode(this, 'down', (e) => {
+            if (!this.disabled) {
+              this.setAttribute('active', '');
+            }
+          });
+
+          // UP
+          this._addEventListenerToNode(this, 'up', () => this.removeAttribute('active'));
+
+          // KEYDOWN
+          this.addEventListener('keydown', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('active', '');
+            }
+          });
+
+          // KEYUP
+          this.addEventListener('keyup', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this._toggleChecked();
+              this.removeAttribute('active');
+
+              if (this.indeterminate) {
+                this.indeterminate = false;
+              }
+            }
+          });
+        }
+
+        get focusElement() {
+          return this.$.label;
+        }
+
+        _handleClick(e) {
+          if (!this.disabled && !this.indeterminate) {
+            if (e.composedPath()[0] !== this.$.nativeCheckbox) {
+              e.preventDefault();
+              this._toggleChecked();
+            }
+          }
+        }
+
+        _toggleChecked() {
+          this.checked = !this.checked;
+        }
+      }
+
+      customElements.define(CheckboxElement.is, CheckboxElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.CheckboxElement = CheckboxElement;
+    }
+  </script>
+</dom-module>

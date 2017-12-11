@@ -23,9 +23,9 @@
 ```
 -->
 ```html
-<vaadin-checkbox checked>
-  Make my profile visible
-</vaadin-checkbox>
+<vaadin-checkbox checked>Checked</vaadin-checkbox>
+<vaadin-checkbox>Unchecked</vaadin-checkbox>
+<vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
 ```
 
 <!-- TODO: uncomment when we have a nice screenshot to show
