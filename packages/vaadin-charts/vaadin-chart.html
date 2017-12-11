@@ -555,8 +555,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           } else {
             this._configuration = Highcharts.chart(this.$.chart, options);
           }
-          // Workaround for highcharts#7494 to prevent chart growing on window resize
-          this._configuration.getChartSize();
         }
 
         /** @private */
