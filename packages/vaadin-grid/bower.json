@@ -59,7 +59,8 @@
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-checkbox": "#next",
     "vaadin-text-field": "#next",
-    "vaadin-valo-theme": "^2.0.0"
+    "vaadin-valo-theme": "^2.0.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "resolutions": {
     "iron-doc-viewer": "^3.0.0"
