@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-button/vaadin-button.html">
 <link rel="import" href="vaadin-upload-icons.html">
 <link rel="import" href="vaadin-upload-file.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-upload">
   <template>
@@ -115,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class UploadElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class UploadElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-upload';
         }
@@ -909,8 +910,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.UploadElement = UploadElement;
+      window.Vaadin.UploadElement = UploadElement;
     }
   </script>
 </dom-module>
