@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-list-mixin/vaadin-list-mixin.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-tab.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-tabs">
   <template>
@@ -128,9 +129,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * @demo demo/index.html
        */
       class TabsElement extends
-        Vaadin.ListMixin(
-          Vaadin.ThemableMixin(
-            Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element))) {
+        Vaadin.ElementMixin(
+          Vaadin.ListMixin(
+            Vaadin.ThemableMixin(
+              Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-tabs';
@@ -223,8 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.TabsElement = TabsElement;
+      window.Vaadin.TabsElement = TabsElement;
     }
   </script>
 </dom-module>
