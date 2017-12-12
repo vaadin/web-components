@@ -27,14 +27,16 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-control-state-mixin": "^1.1.0",
-    "vaadin-themable-mixin": "^1.1.0"
+    "vaadin-themable-mixin": "^1.1.0",
+    "vaadin-valo-theme": "^2.0.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-form": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "vaadin-button": "^1.0.0-beta3",
+    "vaadin-button": "#next",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
   }

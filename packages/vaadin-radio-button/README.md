@@ -31,7 +31,7 @@
 </vaadin-radio-group>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="162" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/elements/-/element/vaadin-radio-button)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="237" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/elements/vaadin-radio-button)
 
 
 ## Running demos and tests in browser
@@ -71,3 +71,5 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.

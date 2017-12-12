@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Valo Theme Variations",
+    "url": "radio-group-valo-theme-demos",
+    "src": "radio-group-valo-theme-demos.html",
+    "meta": {
+      "title": "vaadin-radio-button Valo Theme Variations",
+      "description": "",
+      "image": ""
+    }
+  }
   ]
 }

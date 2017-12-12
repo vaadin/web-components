@@ -1,0 +1,189 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-radio-button">
+  <template>
+    <style>
+      :host([disabled]) {
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+
+    <label part="wrapper" on-click="_preventDefault">
+      <input
+        type="radio"
+        part="native-radio"
+        checked="{{checked::change}}"
+        disabled$="[[disabled]]"
+        role="presentation"
+        tabindex="-1">
+
+      <span part="radio"></span>
+
+      <span part="label">
+        <slot></slot>
+      </span>
+    </label>
+  </template>
+
+  <script>
+    {
+      /**
+       * `<vaadin-radio-button>` is a Polymer element for radio buttons.
+       *
+       * ```html
+       * <vaadin-radio-button value="foo">Foo</vaadin-radio-button>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name         | Description
+       * ------------------|----------------
+       * `wrapper`         | The `<label>` element which wrapps the radio button and [part="label"]
+       * `native-radio`    | The `<input type="radio">` element
+       * `radio`           | The `<span>` element for a custom graphical radio button
+       * `label`           | The `<span>` element for slotted text/HTML label
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled`   | Set when the radio button is disabled. | :host
+       * `focus-ring` | Set when the radio button is focused using the keyboard. | :host
+       * `focused`    | Set when the radio button is focused. | :host
+       * `checked`    | Set when the radio button is checked. | :host
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
+       * @element vaadin-radio-button
+       * @demo demo/index.html
+       */
+      class RadioButtonElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)))) {
+        static get is() {
+          return 'vaadin-radio-button';
+        }
+
+        static get version() {
+          return '1.0.0-alpha8';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * True if the radio button is checked.
+             */
+            checked: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_checkedChanged',
+              reflectToAttribute: true
+            },
+
+            /**
+             * The value for this element.
+             */
+            value: {
+              type: String,
+              value: 'on'
+            }
+
+          };
+        }
+
+        constructor() {
+          super();
+
+          /**
+           * @type {string}
+           * Name of the element.
+           */
+          this.name;
+        }
+
+        get name() {
+          return this.checked ? this._storedName : '';
+        }
+
+        set name(name) {
+          this._storedName = name;
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'radio');
+
+          this._addActiveListeners();
+
+          this.name = this.getAttribute('name');
+        }
+
+        _checkedChanged(checked) {
+          this.setAttribute('aria-checked', checked);
+        }
+
+        _addActiveListeners() {
+          this._addEventListenerToNode(this, 'down', (e) => {
+            if (!this.disabled) {
+              this.setAttribute('active', '');
+            }
+          });
+
+          this._addEventListenerToNode(this, 'up', (e) => {
+            this.removeAttribute('active');
+
+            if (!this.checked && !this.disabled) {
+              this.checked = true;
+            }
+          });
+
+          this.addEventListener('keydown', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('active', '');
+            }
+          });
+
+          this.addEventListener('keyup', e => {
+            if (!this.disabled && e.keyCode === 32) {
+              e.preventDefault();
+              this.setAttribute('checked', '');
+              this.removeAttribute('active');
+            }
+          });
+        }
+
+        get focusElement() {
+          return this.shadowRoot.querySelector('[part="wrapper"]');
+        }
+
+        _preventDefault(e) {
+          e.preventDefault();
+        }
+      }
+
+      customElements.define(RadioButtonElement.is, RadioButtonElement);
+
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.RadioButtonElement = RadioButtonElement;
+    }
+  </script>
+</dom-module>
