@@ -3,8 +3,6 @@
 <custom-style>
   <style>
     html {
-      --material-base-color: #fff;
-      --dark-theme-base-color: #000;
       /* Text colors */
       --material-body-text-color: var(--light-theme-text-color, rgba(0, 0, 0, 0.87));
       --material-secondary-text-color: var(--light-theme-secondary-color, rgba(0, 0, 0, 0.54));
@@ -12,7 +10,7 @@
 
       /* Primary colors */
       --material-primary-color: var(--primary-color, #2962FF);
-      --material-primary-contrast-color: var(--dark-theme-base-color, #000);
+      --material-primary-contrast-color: var(--dark-theme-base-color, #fff);
       --material-primary-text-color: var(--material-primary-color);
 
       /* Error colors */
@@ -26,8 +24,7 @@
 
       /* Divider colors */
       --material-divider-color: rgba(0, 0, 0, 0.12);
-
-  }
+    }
 
     [theme~="dark"] {
       /* Text colors */
@@ -37,7 +34,6 @@
 
       /* Primary colors */
       --material-primary-color: var(--light-primary-color, #448AFF);
-      --material-primary-contrast-color: var(--material-base-color, #fff);
       --material-primary-text-color: var(--material-primary-color);
 
       /* Error colors */
@@ -74,9 +70,8 @@
       /* Grid tweaks */
       ---material-grid-row-hover-background-color: rgba(255, 255, 255, 0.08);
 
-      /* Split layouts */
-      --material-split-layouts-splitter-color: rgba(255, 255, 255, 0.8);
-      --material-split-layouts-handle-color: rgba(0, 0, 0, 1.0);
+      /* Split layout tweaks */
+      ---material-split-layout-splitter-background-color: rgba(255, 255, 255, 0.8);
     }
   </style>
 </custom-style>
@@ -139,7 +134,6 @@
 
       /* Grid tweaks */
       ---material-grid-row-hover-background-color: rgba(255, 255, 255, 0.08);
-
     }
     </style>
   </template>
