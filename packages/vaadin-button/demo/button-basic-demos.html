@@ -1,56 +1,37 @@
 <dom-module id="button-basic-demos">
   <template>
     <style>
-       :host {
+      :host {
         display: block;
       }
-
     </style>
 
-
-    <h3>Default button</h3>
-    <vaadin-demo-snippet id='button-basic-demos-default-button'>
+    <h3>Basic Button</h3>
+    <p>The <code>&lt;vaadin-button&gt;</code> element works the same as the native <code>&lt;button&gt;</code> element, but offers better styling support and accessibility features.</p>
+    <vaadin-demo-snippet id='button-basic-demos-basic'>
       <template preserve-content>
-        <vaadin-button onclick="console.log('clicked')">Vaadin Button</vaadin-button>
+        <vaadin-button>Button</vaadin-button>
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Button with autofocus</h3>
-    <vaadin-demo-snippet id='button-basic-demos-button-with-autofocus'>
-      <template preserve-content>
-        <vaadin-button autofocus>
-          <img src="vaadin-logo.svg">
-        </vaadin-button>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Button with Accessible Label</h3>
-    <vaadin-demo-snippet id='button-basic-demos-button-with-accessible-label'>
-      <template preserve-content>
-        <vaadin-button aria-label="Click Me">Accessible</vaadin-button>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Buttons with custom tabindex</h3>
-    <vaadin-demo-snippet id='button-basic-demos-buttons-with-custom-tabindex'>
-      <template preserve-content>
-        <vaadin-button tabindex="3">3</vaadin-button>
-        <vaadin-button tabindex="2">2</vaadin-button>
-        <vaadin-button tabindex="1">1</vaadin-button>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Disabled button</h3>
-    <vaadin-demo-snippet id='button-basic-demos-disabled-button'>
+    <h3>Disabled</h3>
+    <vaadin-demo-snippet id='button-basic-demos-disabled'>
       <template preserve-content>
         <vaadin-button disabled>Disabled</vaadin-button>
       </template>
     </vaadin-demo-snippet>
-  </div>
+
+    <h3>Using an Icon</h3>
+    <p>See the <a href="#button-valo-demos">Valo Theme Icons</a> example for more tips how to use icons.</p>
+    <vaadin-demo-snippet id='button-basic-demos-disabled'>
+      <template preserve-content>
+        <vaadin-button>
+          <iron-icon icon="valo:edit"></iron-icon>
+          <span>Edit</span>
+        </vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ButtonBasicDemos extends DemoReadyEventEmitter(ButtonDemo(Polymer.Element)) {

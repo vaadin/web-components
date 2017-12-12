@@ -6,31 +6,77 @@
       }
     </style>
 
-    <h3>Sizing</h3>
-    <vaadin-demo-snippet id='button-valo-theme-demos-sizing'>
-      <template preserve-content>
-        <vaadin-button theme="small">Small Button</vaadin-button>
-        <vaadin-button theme="large">Large Button</vaadin-button>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Styles</h3>
-    <vaadin-demo-snippet id='button-valo-theme-demos-styles'>
+    <h3>Types</h3>
+    <p>Use the different types to prioritize the actions presented to the end user. Usually, you should only have one primary button in a view. Use tertiary buttons to decrease the priority of an action.</p>
+    <p>The “tertiary-inline” type is useful when you want to add a button as part of regular text content.</p>
+    <vaadin-demo-snippet id='button-styling-demos-types'>
       <template preserve-content>
         <vaadin-button theme="primary">Primary</vaadin-button>
+        <vaadin-button>Secondary</vaadin-button>
         <vaadin-button theme="tertiary">Tertiary</vaadin-button>
-        <vaadin-button theme="tertiary-inlne">Tertiary inline</vaadin-button>
-        <vaadin-button theme="contrast">Contrast</vaadin-button>
+        <vaadin-button theme="tertiary-inline">Tertiary Inline</vaadin-button>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>States</h3>
-    <vaadin-demo-snippet id='button-valo-theme-demos-states'>
+    <h3>Colors</h3>
+    <p>Use <code>contrast</code> if you need increased legibility. Use <code>success</code> for actions that complete a longer sequence of steps, like a checkout flow. Use <code>error</code> for actions that can cause permanent data-loss, like deleting content created by the user.</p>
+    <vaadin-demo-snippet id='button-stylings-demos-colors'>
       <template preserve-content>
-        <vaadin-button theme="success">Success</vaadin-button>
-        <vaadin-button theme="error">Error</vaadin-button>
+        <h4>Contrast</h4>
+
+        <vaadin-button theme="contrast primary">Primary</vaadin-button>
+        <vaadin-button theme="contrast">Secondary</vaadin-button>
+        <vaadin-button theme="contrast tertiary">Tertiary</vaadin-button>
+
+        <h4>Success</h4>
+
+        <vaadin-button theme="success primary">Primary</vaadin-button>
+        <vaadin-button theme="success">Secondary</vaadin-button>
+        <vaadin-button theme="success tertiary">Tertiary</vaadin-button>
+
+        <h4>Error</h4>
+
+        <vaadin-button theme="error primary">Primary</vaadin-button>
+        <vaadin-button theme="error">Secondary</vaadin-button>
+        <vaadin-button theme="error tertiary">Tertiary</vaadin-button>
       </template>
     </vaadin-demo-snippet>
+
+    <h3>Sizes</h3>
+    <p>You can combine the sizes with any other theme variation.</p>
+    <vaadin-demo-snippet id='button-stylings-demos-sizes'>
+      <template preserve-content>
+        <vaadin-button theme="large">Large</vaadin-button>
+        <vaadin-button>Normal</vaadin-button>
+        <vaadin-button theme="small">Small</vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Icons</h3>
+    <p>When using icons in buttons, here are a few tips you should follow. Check out the <a href="#button-accessibility-demos">Accessible Icon Button</a> example as well.</p>
+    <vaadin-demo-snippet id='button-styling-demos-icons'>
+      <template preserve-content>
+        <!-- Icon-only buttons should specify theme="icon" and aria-label="..." -->
+        <vaadin-button theme="icon" aria-label="Add new item">
+          <iron-icon icon="valo:plus"></iron-icon>
+        </vaadin-button>
+
+        <!-- When using an icon together with text, wrap the text in a span and don’t leave
+             white-space characters between it and the icon element. This ensures correct
+             spacing between the icon and the text. -->
+
+        <vaadin-button>
+          <iron-icon icon="valo:edit"></iron-icon><!--
+       --><span>Edit</span>
+        </vaadin-button>
+
+        <vaadin-button>
+          <span>Next</span><!--
+       --><iron-icon icon="valo:arrow-right"></iron-icon>
+        </vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
 
   </template>
   <script>

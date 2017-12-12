@@ -1,0 +1,38 @@
+<dom-module id="button-accessibility-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Accessible Button</h3>
+    <p>You can focus the button using the keyboard, and activate it with the <kbd>Enter</kbd> and <kbd>Space</kbd> keys. Notice how the visual active style is also triggered, giving keyboard users clear visual feedback that the button was clicked.</p>
+    <vaadin-demo-snippet id='button-a11y-demos-accessible-label'>
+      <template preserve-content>
+        <vaadin-button>OK</vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Accessible Icon Button</h3>
+    <p>If you only place an icon as the content of the button, you should provide an alternative label for screen reader users by using the standard <code>aria-label</code> attribute.</p>
+    <p>See the <a href="#button-valo-demos">Valo Theme Icons</a> example for more tips how to use icons.</p>
+    <vaadin-demo-snippet id='button-a11y-demos-accessible-label'>
+      <template preserve-content>
+        <vaadin-button aria-label="Delete">
+          <iron-icon icon="valo:cross"></iron-icon>
+        </vaadin-button>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ButtonA11yDemos extends DemoReadyEventEmitter(ButtonDemo(Polymer.Element)) {
+      static get is() {
+        return 'button-accessibility-demos';
+      }
+    }
+    customElements.define(ButtonA11yDemos.is, ButtonA11yDemos);
+  </script>
+</dom-module>
