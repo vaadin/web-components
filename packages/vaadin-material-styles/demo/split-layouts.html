@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Material Theme Split Layout</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <link rel="import" href="../vaadin-split-layout.html">
+  <link rel="import" href="../../vaadin-split-layout/vaadin-split-layout.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+
+    vaadin-split-layout {
+      flex: auto;
+    }
+
+    nice-demo-snippet div {
+      display: flex;
+    }
+
+    nice-demo-snippet div[theme="dark"] {
+      width: 100%;
+    }
+
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Material</span>
+    </demo-navigation>
+
+    <h1>Split Layout</h1>
+
+    <h3>Default</h3>
+    <nice-demo-snippet style="padding-top: 35px;">
+      <template slot="source">
+        <vaadin-split-layout style="height: 200px;">
+          <div></div>
+          <div></div>
+        </vaadin-split-layout>
+
+        <vaadin-split-layout vertical style="height: 200px">
+          <div></div>
+          <div></div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme default</h3>
+    <nice-demo-snippet style="padding-top: 35px;">
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-split-layout style="height: 200px">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+
+          <vaadin-split-layout vertical style="height: 200px">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Examples</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout>
+          <div>First content element</div>
+          <div>Second content element</div>
+        </vaadin-split-layout>      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout vertical>
+          <div>Top content element</div>
+          <div>Bottom content element</div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout>
+          <div>First content element</div>
+          <vaadin-split-layout vertical>
+            <div>Second content element</div>
+            <div>Third content element</div>
+          </vaadin-split-layout>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout style="height: 200px;">
+          <div>First content element</div>
+          <div>Second content element</div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div style="height: 200px;">
+          <vaadin-split-layout style="height: 100%;">
+            <div>First</div>
+            <div>Second</div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div style="height: 160px; display: flex;">
+          <vaadin-split-layout style="flex: 1;">
+            <div>First</div>
+            <div>Second</div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout>
+          <div style="width: 75%;">First</div>
+          <div style="width: 25%;">Second</div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-split-layout>
+          <div style="min-width: 50px; max-width: 150px;">First</div>
+          <div>Second</div>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet id="resize-notification">
+      <template slot="source">
+        <vaadin-split-layout>
+          <div>First</div>
+          <custom-resizable>Second</custom-resizable>
+        </vaadin-split-layout>
+        <script>
+        window.addDemoReadyListener('#resize-notification', function(document) {
+          Polymer({
+            is: 'custom-resizable',
+            behaviors: [
+              Polymer.IronResizableBehavior
+            ],
+            listeners: {
+              'iron-resize': '_onIronResize'
+            },
+            _onIronResize: function() {
+              console.log('Resized');
+            }
+          });
+        });
+        </script>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <custom-style>
+          <style is="custom-style">
+            iframe {
+              width: 0;
+              border: none;
+            }
+          </style>
+        </custom-style>
+        <vaadin-split-layout style="height: 300px">
+          <iframe src="//maps.google.com/maps?q=Turku&amp;output=embed"></iframe>
+          <iframe src="//maps.google.com/maps?q=Malta&amp;output=embed"></iframe>
+        </vaadin-split-layout>
+      </template>
+    </nice-demo-snippet>
+
+  </div>
+</body>
+</html>
