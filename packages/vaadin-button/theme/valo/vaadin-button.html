@@ -8,31 +8,28 @@
   <template>
     <style>
       :host {
+        --valo-button-size: var(--valo-size-m);
         display: inline-block;
         color: var(--valo-primary-text-color);
         font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size, var(--valo-font-size-m));
+        font-size: var(--valo-font-size-m);
         font-weight: 500;
-        /* Custom property only needed for the dark theme */
-        background-color: var(--_valo-button-background-color, var(--valo-tint-80pct));
-        min-width: calc(var(--valo-size, var(--valo-size-m)) * 2);
-        min-height: var(--valo-size, var(--valo-size-m));
+        background-color: var(--valo-contrast-5pct);
+        min-width: calc(var(--valo-button-size) * 2);
+        min-height: var(--valo-button-size);
         border-radius: var(--valo-border-radius);
-        margin: var(--valo-space-xs);
+        margin: var(--valo-space-xs) 0;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        transition-property: background-color, color, box-shadow;
-        transition-duration: 0.3s;
         position: relative;
-        box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 1px 2px 0 var(--valo-shade-20pct);
         cursor: default;
       }
 
       [part="button"] {
         border: 0;
         margin: 0;
-        padding: var(--valo-space-xs) calc(var(--valo-size, var(--valo-size-m)) / 3 + var(--valo-border-radius) / 2);
+        padding: calc(var(--valo-button-size) / 6) calc(var(--valo-button-size) / 3 + var(--valo-border-radius) / 2);
         background-color: transparent;
         color: inherit;
         font: inherit;
@@ -49,16 +46,18 @@
         text-overflow: ellipsis;
         cursor: inherit;
         /* TODO magic number, based on Valo icons size -1px to make it work nicely with Roboto and SF fonts */
-        line-height: calc(var(--valo-size, var(--valo-size-m)) - 13px);
+        line-height: calc(var(--valo-button-size) - 13px);
       }
 
       [part="button"]::-moz-focus-inner {
         border: 0;
       }
 
+      /* Hover */
+
       @media (hover: hover) {
-        :host(:hover:not([theme*="tertiary"]):not([active])) {
-          box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 2px 6px 0 var(--valo-shade-20pct);
+        :host(:not([theme*="tertiary"]):hover)::before {
+          opacity: 0.04;
         }
       }
 
@@ -72,7 +71,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-        background-color: var(--valo-contrast-5pct);
+        background-color: currentColor;
         border-radius: var(--valo-border-radius);
         opacity: 0;
         transition: opacity 0.2s;
@@ -81,7 +80,6 @@
       }
 
       :host::after {
-        background-color: currentColor;
         transition: opacity 1.4s, transform 0.1s;
         will-change: opacity, transform;
         filter: blur(8px);
@@ -91,12 +89,8 @@
         transition-duration: 0.05s;
       }
 
-      :host([active]:not([theme~="primary"]):not([theme*="tertiary"])) {
-        box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 1px 1px 0 var(--valo-shade-10pct);
-      }
-
       :host([active]:not([theme*="tertiary"]))::before {
-        opacity: 1;
+        opacity: 0.1;
         transition-duration: 0s;
       }
 
@@ -114,15 +108,17 @@
 
       :host([theme*="tertiary"]) {
         background-color: transparent;
-        box-shadow: none;
+        transition: opacity 0.2s;
       }
 
       :host([theme*="tertiary"]) [part="button"] {
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-border-radius) / 2);
+        padding: 0 calc(var(--valo-button-size) / 6 + var(--valo-border-radius) / 2);
       }
 
-      :host([theme*="tertiary"]:not([active]):hover) {
-        opacity: 0.8;
+      @media (hover: hover) {
+        :host([theme*="tertiary"]:not([active]):hover) {
+          opacity: 0.8;
+        }
       }
 
       /* Tertiary inline (no padding or margin) */
@@ -143,56 +139,49 @@
       :host([theme~="primary"]) {
         background-color: var(--valo-primary-color);
         color: var(--valo-primary-contrast-color);
-        box-shadow: 0 1px 2px 0 var(--valo-shade-40pct);
         font-weight: 600;
-        min-width: calc(var(--valo-size, var(--valo-size-m)) * 2.5);
+        min-width: calc(var(--valo-button-size) * 2.5);
       }
 
       :host([theme~="primary"][active])::after {
         opacity: 0.2;
       }
 
-      @media (hover: hover) {
-        :host([theme~="primary"]:hover:not([active])) {
-          box-shadow: 0 2px 6px 0 var(--valo-shade-40pct);
-        }
-      }
-
       /* Small */
 
       :host([theme~="small"]) {
-        --valo-font-size: var(--valo-font-size-s);
-        --valo-size: var(--valo-size-s);
+        font-size: var(--valo-font-size-s);
+        --valo-button-size: var(--valo-size-s);
       }
 
       /* Large */
 
       :host([theme~="large"]) {
-        --valo-font-size: var(--valo-font-size-l);
-        --valo-size: var(--valo-size-l);
+        font-size: var(--valo-font-size-l);
+        --valo-button-size: var(--valo-size-l);
       }
 
       /* Icon-only */
 
       :host([theme~="icon"]:not([theme~="tertiary-inline"])) {
-        min-width: var(--valo-size, var(--valo-size-m));
+        min-width: var(--valo-button-size);
       }
 
       :host([theme~="icon"]:not([theme~="tertiary-inline"])) [part="button"] {
-        padding-left: var(--valo-space-s);
-        padding-right: var(--valo-space-s);
+        padding-left: calc(var(--valo-button-size) / 4);
+        padding-right: calc(var(--valo-button-size) / 4);
       }
 
       /* Icons used together with text (not super proud of these calc's) */
 
       [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
-        margin-left: calc(var(--valo-size, var(--valo-size-m)) / -6);
-        margin-right: calc(var(--valo-size, var(--valo-size-m)) / 9);
+        margin-left: calc(var(--valo-button-size) / -6);
+        margin-right: calc(var(--valo-button-size) / 9);
       }
 
       [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
-        margin-left: calc(var(--valo-size, var(--valo-size-m)) / 9);
-        margin-right: calc(var(--valo-size, var(--valo-size-m)) / -6);
+        margin-left: calc(var(--valo-button-size) / 9);
+        margin-right: calc(var(--valo-button-size) / -6);
       }
 
       :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
@@ -200,6 +189,11 @@
       }
 
       :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
+        margin-right: 0;
+      }
+
+      :host([theme~="icon"]) [part="button"] ::slotted(iron-icon) {
+        margin-left: 0;
         margin-right: 0;
       }
 
@@ -250,11 +244,10 @@
       :host([disabled][disabled]) {
         pointer-events: none;
         color: var(--valo-disabled-text-color);
-        box-shadow: none;
       }
 
       :host([disabled]:not([theme*="tertiary"])) {
-        background-color: var(--valo-contrast-10pct);
+        background-color: var(--valo-contrast-5pct);
       }
 
       /* Keyboard focus */
@@ -282,7 +275,7 @@
       }
 
       @-moz-document url-prefix() {
-        /* Firefox is being stupid and truncates (shows an ellipsis) the suffix icon because of the negative margin */
+        /* Firefox is being stupid and truncates the suffix icon (shows an ellipsis) because of the negative margin */
         [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
           margin-right: 0;
         }
