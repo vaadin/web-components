@@ -288,7 +288,7 @@
             {
               "name": "i18n",
               "type": "Object",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
@@ -297,7 +297,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -314,11 +314,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -337,11 +337,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -360,11 +360,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 267,
+                  "line": 262,
                   "column": 8
                 },
                 "end": {
-                  "line": 271,
+                  "line": 266,
                   "column": 9
                 }
               },
@@ -382,11 +382,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 276,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 279,
+                  "line": 274,
                   "column": 9
                 }
               },
@@ -404,11 +404,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 281,
+                  "line": 276,
                   "column": 8
                 },
                 "end": {
-                  "line": 284,
+                  "line": 279,
                   "column": 9
                 }
               },
@@ -427,11 +427,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 286,
+                  "line": 281,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 284,
                   "column": 9
                 }
               },
@@ -448,11 +448,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 291,
+                  "line": 286,
                   "column": 8
                 },
                 "end": {
-                  "line": 293,
+                  "line": 288,
                   "column": 9
                 }
               },
@@ -470,11 +470,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 295,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 290,
                   "column": 36
                 }
               },
@@ -512,11 +512,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 309,
+                  "line": 304,
                   "column": 4
                 },
                 "end": {
-                  "line": 321,
+                  "line": 316,
                   "column": 5
                 }
               },
@@ -531,11 +531,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 323,
+                  "line": 318,
                   "column": 4
                 },
                 "end": {
-                  "line": 327,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -550,11 +550,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 329,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 335,
+                  "line": 330,
                   "column": 5
                 }
               },
@@ -569,11 +569,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 340,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 345,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -588,11 +588,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 347,
+                  "line": 342,
                   "column": 4
                 },
                 "end": {
-                  "line": 353,
+                  "line": 348,
                   "column": 5
                 }
               },
@@ -611,11 +611,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 358,
+                  "line": 353,
                   "column": 4
                 },
                 "end": {
-                  "line": 360,
+                  "line": 355,
                   "column": 5
                 }
               },
@@ -630,11 +630,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 376,
+                  "line": 371,
                   "column": 4
                 },
                 "end": {
-                  "line": 388,
+                  "line": 383,
                   "column": 5
                 }
               },
@@ -653,11 +653,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 390,
+                  "line": 385,
                   "column": 4
                 },
                 "end": {
-                  "line": 392,
+                  "line": 387,
                   "column": 5
                 }
               },
@@ -672,11 +672,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 394,
+                  "line": 389,
                   "column": 4
                 },
                 "end": {
-                  "line": 398,
+                  "line": 393,
                   "column": 5
                 }
               },
@@ -695,11 +695,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 400,
+                  "line": 395,
                   "column": 4
                 },
                 "end": {
-                  "line": 407,
+                  "line": 402,
                   "column": 5
                 }
               },
@@ -721,11 +721,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 409,
+                  "line": 404,
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 411,
                   "column": 5
                 }
               },
@@ -747,11 +747,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 418,
+                  "line": 413,
                   "column": 4
                 },
                 "end": {
-                  "line": 424,
+                  "line": 419,
                   "column": 5
                 }
               },
@@ -770,11 +770,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 426,
+                  "line": 421,
                   "column": 4
                 },
                 "end": {
-                  "line": 440,
+                  "line": 435,
                   "column": 5
                 }
               },
@@ -799,11 +799,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 442,
+                  "line": 437,
                   "column": 4
                 },
                 "end": {
-                  "line": 444,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -825,11 +825,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 446,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 448,
+                  "line": 443,
                   "column": 5
                 }
               },
@@ -851,11 +851,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 450,
+                  "line": 445,
                   "column": 4
                 },
                 "end": {
-                  "line": 452,
+                  "line": 447,
                   "column": 5
                 }
               },
@@ -877,11 +877,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 454,
+                  "line": 449,
                   "column": 4
                 },
                 "end": {
-                  "line": 486,
+                  "line": 481,
                   "column": 5
                 }
               },
@@ -896,11 +896,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 488,
+                  "line": 483,
                   "column": 4
                 },
                 "end": {
-                  "line": 492,
+                  "line": 487,
                   "column": 5
                 }
               },
@@ -915,11 +915,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 494,
+                  "line": 489,
                   "column": 4
                 },
                 "end": {
-                  "line": 536,
+                  "line": 531,
                   "column": 5
                 }
               },
@@ -934,11 +934,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 540,
+                  "line": 535,
                   "column": 4
                 },
                 "end": {
-                  "line": 554,
+                  "line": 549,
                   "column": 5
                 }
               },
@@ -957,11 +957,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 556,
+                  "line": 551,
                   "column": 4
                 },
                 "end": {
-                  "line": 592,
+                  "line": 590,
                   "column": 5
                 }
               },
@@ -976,11 +976,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 594,
+                  "line": 592,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 594,
                   "column": 5
                 }
               },
@@ -995,11 +995,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 604,
+                  "line": 602,
                   "column": 4
                 },
                 "end": {
-                  "line": 607,
+                  "line": 605,
                   "column": 5
                 }
               },
@@ -1024,11 +1024,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 617,
+                  "line": 615,
                   "column": 4
                 },
                 "end": {
-                  "line": 634,
+                  "line": 633,
                   "column": 5
                 }
               },
@@ -1053,11 +1053,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 636,
+                  "line": 635,
                   "column": 4
                 },
                 "end": {
-                  "line": 640,
+                  "line": 639,
                   "column": 5
                 }
               },
@@ -1076,11 +1076,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 642,
+                  "line": 641,
                   "column": 4
                 },
                 "end": {
-                  "line": 648,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -1095,11 +1095,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 650,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 652,
                   "column": 5
                 }
               },
@@ -1114,11 +1114,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 655,
+                  "line": 654,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 658,
                   "column": 5
                 }
               },
@@ -1140,11 +1140,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 661,
+                  "line": 660,
                   "column": 4
                 },
                 "end": {
-                  "line": 663,
+                  "line": 662,
                   "column": 5
                 }
               },
@@ -1163,11 +1163,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 668,
+                  "line": 667,
                   "column": 4
                 },
                 "end": {
-                  "line": 677,
+                  "line": 676,
                   "column": 5
                 }
               },
@@ -1186,11 +1186,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 679,
+                  "line": 678,
                   "column": 4
                 },
                 "end": {
-                  "line": 681,
+                  "line": 680,
                   "column": 5
                 }
               },
@@ -1209,11 +1209,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 683,
+                  "line": 682,
                   "column": 4
                 },
                 "end": {
-                  "line": 736,
+                  "line": 735,
                   "column": 5
                 }
               },
@@ -1232,11 +1232,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 738,
+                  "line": 737,
                   "column": 4
                 },
                 "end": {
-                  "line": 742,
+                  "line": 741,
                   "column": 5
                 }
               },
@@ -1261,11 +1261,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 744,
+                  "line": 743,
                   "column": 4
                 },
                 "end": {
-                  "line": 750,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -1284,11 +1284,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 752,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 763,
+                  "line": 765,
                   "column": 5
                 }
               },
@@ -1307,11 +1307,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 765,
+                  "line": 767,
                   "column": 4
                 },
                 "end": {
-                  "line": 769,
+                  "line": 771,
                   "column": 5
                 }
               },
@@ -1492,7 +1492,7 @@
             },
             {
               "name": "i18n",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
@@ -1500,7 +1500,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -1514,11 +1514,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -1532,11 +1532,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -1859,7 +1859,7 @@
             {
               "name": "i18n",
               "type": "Object",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
@@ -1868,7 +1868,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -1885,11 +1885,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -1908,11 +1908,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -1931,11 +1931,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 267,
+                  "line": 262,
                   "column": 8
                 },
                 "end": {
-                  "line": 271,
+                  "line": 266,
                   "column": 9
                 }
               },
@@ -1953,11 +1953,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 276,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 279,
+                  "line": 274,
                   "column": 9
                 }
               },
@@ -1975,11 +1975,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 281,
+                  "line": 276,
                   "column": 8
                 },
                 "end": {
-                  "line": 284,
+                  "line": 279,
                   "column": 9
                 }
               },
@@ -1998,11 +1998,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 286,
+                  "line": 281,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 284,
                   "column": 9
                 }
               },
@@ -2019,11 +2019,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 291,
+                  "line": 286,
                   "column": 8
                 },
                 "end": {
-                  "line": 293,
+                  "line": 288,
                   "column": 9
                 }
               },
@@ -2041,11 +2041,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 295,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 290,
                   "column": 36
                 }
               },
@@ -2199,11 +2199,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 323,
+                  "line": 318,
                   "column": 4
                 },
                 "end": {
-                  "line": 327,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -2218,11 +2218,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 329,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 335,
+                  "line": 330,
                   "column": 5
                 }
               },
@@ -2237,11 +2237,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 340,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 345,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -2256,11 +2256,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 347,
+                  "line": 342,
                   "column": 4
                 },
                 "end": {
-                  "line": 353,
+                  "line": 348,
                   "column": 5
                 }
               },
@@ -2279,11 +2279,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 358,
+                  "line": 353,
                   "column": 4
                 },
                 "end": {
-                  "line": 360,
+                  "line": 355,
                   "column": 5
                 }
               },
@@ -2298,11 +2298,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 376,
+                  "line": 371,
                   "column": 4
                 },
                 "end": {
-                  "line": 388,
+                  "line": 383,
                   "column": 5
                 }
               },
@@ -2321,11 +2321,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 390,
+                  "line": 385,
                   "column": 4
                 },
                 "end": {
-                  "line": 392,
+                  "line": 387,
                   "column": 5
                 }
               },
@@ -2340,11 +2340,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 394,
+                  "line": 389,
                   "column": 4
                 },
                 "end": {
-                  "line": 398,
+                  "line": 393,
                   "column": 5
                 }
               },
@@ -2363,11 +2363,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 400,
+                  "line": 395,
                   "column": 4
                 },
                 "end": {
-                  "line": 407,
+                  "line": 402,
                   "column": 5
                 }
               },
@@ -2389,11 +2389,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 409,
+                  "line": 404,
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 411,
                   "column": 5
                 }
               },
@@ -2415,11 +2415,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 418,
+                  "line": 413,
                   "column": 4
                 },
                 "end": {
-                  "line": 424,
+                  "line": 419,
                   "column": 5
                 }
               },
@@ -2438,11 +2438,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 426,
+                  "line": 421,
                   "column": 4
                 },
                 "end": {
-                  "line": 440,
+                  "line": 435,
                   "column": 5
                 }
               },
@@ -2467,11 +2467,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 442,
+                  "line": 437,
                   "column": 4
                 },
                 "end": {
-                  "line": 444,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -2493,11 +2493,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 446,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 448,
+                  "line": 443,
                   "column": 5
                 }
               },
@@ -2519,11 +2519,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 450,
+                  "line": 445,
                   "column": 4
                 },
                 "end": {
-                  "line": 452,
+                  "line": 447,
                   "column": 5
                 }
               },
@@ -2545,11 +2545,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 454,
+                  "line": 449,
                   "column": 4
                 },
                 "end": {
-                  "line": 486,
+                  "line": 481,
                   "column": 5
                 }
               },
@@ -2564,11 +2564,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 488,
+                  "line": 483,
                   "column": 4
                 },
                 "end": {
-                  "line": 492,
+                  "line": 487,
                   "column": 5
                 }
               },
@@ -2583,11 +2583,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 494,
+                  "line": 489,
                   "column": 4
                 },
                 "end": {
-                  "line": 536,
+                  "line": 531,
                   "column": 5
                 }
               },
@@ -2602,11 +2602,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 540,
+                  "line": 535,
                   "column": 4
                 },
                 "end": {
-                  "line": 554,
+                  "line": 549,
                   "column": 5
                 }
               },
@@ -2625,11 +2625,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 556,
+                  "line": 551,
                   "column": 4
                 },
                 "end": {
-                  "line": 592,
+                  "line": 590,
                   "column": 5
                 }
               },
@@ -2644,11 +2644,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 594,
+                  "line": 592,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 594,
                   "column": 5
                 }
               },
@@ -2663,11 +2663,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 604,
+                  "line": 602,
                   "column": 4
                 },
                 "end": {
-                  "line": 607,
+                  "line": 605,
                   "column": 5
                 }
               },
@@ -2692,11 +2692,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 617,
+                  "line": 615,
                   "column": 4
                 },
                 "end": {
-                  "line": 634,
+                  "line": 633,
                   "column": 5
                 }
               },
@@ -2721,11 +2721,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 636,
+                  "line": 635,
                   "column": 4
                 },
                 "end": {
-                  "line": 640,
+                  "line": 639,
                   "column": 5
                 }
               },
@@ -2744,11 +2744,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 642,
+                  "line": 641,
                   "column": 4
                 },
                 "end": {
-                  "line": 648,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -2763,11 +2763,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 650,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 652,
                   "column": 5
                 }
               },
@@ -2782,11 +2782,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 655,
+                  "line": 654,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 658,
                   "column": 5
                 }
               },
@@ -2808,11 +2808,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 661,
+                  "line": 660,
                   "column": 4
                 },
                 "end": {
-                  "line": 663,
+                  "line": 662,
                   "column": 5
                 }
               },
@@ -2831,11 +2831,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 668,
+                  "line": 667,
                   "column": 4
                 },
                 "end": {
-                  "line": 677,
+                  "line": 676,
                   "column": 5
                 }
               },
@@ -2854,11 +2854,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 679,
+                  "line": 678,
                   "column": 4
                 },
                 "end": {
-                  "line": 681,
+                  "line": 680,
                   "column": 5
                 }
               },
@@ -2877,11 +2877,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 683,
+                  "line": 682,
                   "column": 4
                 },
                 "end": {
-                  "line": 736,
+                  "line": 735,
                   "column": 5
                 }
               },
@@ -2900,11 +2900,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 738,
+                  "line": 737,
                   "column": 4
                 },
                 "end": {
-                  "line": 742,
+                  "line": 741,
                   "column": 5
                 }
               },
@@ -2929,11 +2929,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 744,
+                  "line": 743,
                   "column": 4
                 },
                 "end": {
-                  "line": 750,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -2952,11 +2952,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 752,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 763,
+                  "line": 765,
                   "column": 5
                 }
               },
@@ -2975,11 +2975,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 765,
+                  "line": 767,
                   "column": 4
                 },
                 "end": {
-                  "line": 769,
+                  "line": 771,
                   "column": 5
                 }
               },
@@ -3310,7 +3310,7 @@
             },
             {
               "name": "i18n",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
@@ -3318,7 +3318,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -3332,11 +3332,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -3350,11 +3350,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -3728,7 +3728,7 @@
             {
               "name": "i18n",
               "type": "Object",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -3736,7 +3736,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -3751,11 +3751,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -3772,11 +3772,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -3793,11 +3793,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 262,
                   "column": 8
                 },
                 "end": {
-                  "line": 271,
+                  "line": 266,
                   "column": 9
                 }
               },
@@ -3813,11 +3813,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 271,
                   "column": 8
                 },
                 "end": {
-                  "line": 279,
+                  "line": 274,
                   "column": 9
                 }
               },
@@ -3833,11 +3833,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 276,
                   "column": 8
                 },
                 "end": {
-                  "line": 284,
+                  "line": 279,
                   "column": 9
                 }
               },
@@ -3854,11 +3854,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 281,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 284,
                   "column": 9
                 }
               },
@@ -3873,11 +3873,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 291,
+                  "line": 286,
                   "column": 8
                 },
                 "end": {
-                  "line": 293,
+                  "line": 288,
                   "column": 9
                 }
               },
@@ -3893,11 +3893,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 295,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 295,
+                  "line": 290,
                   "column": 36
                 }
               },
@@ -3913,11 +3913,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 309,
+                  "line": 304,
                   "column": 4
                 },
                 "end": {
-                  "line": 321,
+                  "line": 316,
                   "column": 5
                 }
               },
@@ -3930,11 +3930,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 323,
+                  "line": 318,
                   "column": 4
                 },
                 "end": {
-                  "line": 327,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -3947,11 +3947,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 329,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 335,
+                  "line": 330,
                   "column": 5
                 }
               },
@@ -3964,11 +3964,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 340,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 345,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -3981,11 +3981,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 347,
+                  "line": 342,
                   "column": 4
                 },
                 "end": {
-                  "line": 353,
+                  "line": 348,
                   "column": 5
                 }
               },
@@ -4002,11 +4002,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 358,
+                  "line": 353,
                   "column": 4
                 },
                 "end": {
-                  "line": 360,
+                  "line": 355,
                   "column": 5
                 }
               },
@@ -4019,11 +4019,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 371,
                   "column": 4
                 },
                 "end": {
-                  "line": 388,
+                  "line": 383,
                   "column": 5
                 }
               },
@@ -4040,11 +4040,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 390,
+                  "line": 385,
                   "column": 4
                 },
                 "end": {
-                  "line": 392,
+                  "line": 387,
                   "column": 5
                 }
               },
@@ -4057,11 +4057,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 394,
+                  "line": 389,
                   "column": 4
                 },
                 "end": {
-                  "line": 398,
+                  "line": 393,
                   "column": 5
                 }
               },
@@ -4078,11 +4078,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 400,
+                  "line": 395,
                   "column": 4
                 },
                 "end": {
-                  "line": 407,
+                  "line": 402,
                   "column": 5
                 }
               },
@@ -4102,11 +4102,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 409,
+                  "line": 404,
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 411,
                   "column": 5
                 }
               },
@@ -4126,11 +4126,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 418,
+                  "line": 413,
                   "column": 4
                 },
                 "end": {
-                  "line": 424,
+                  "line": 419,
                   "column": 5
                 }
               },
@@ -4147,11 +4147,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 426,
+                  "line": 421,
                   "column": 4
                 },
                 "end": {
-                  "line": 440,
+                  "line": 435,
                   "column": 5
                 }
               },
@@ -4174,11 +4174,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 442,
+                  "line": 437,
                   "column": 4
                 },
                 "end": {
-                  "line": 444,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -4198,11 +4198,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 446,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 448,
+                  "line": 443,
                   "column": 5
                 }
               },
@@ -4222,11 +4222,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 450,
+                  "line": 445,
                   "column": 4
                 },
                 "end": {
-                  "line": 452,
+                  "line": 447,
                   "column": 5
                 }
               },
@@ -4246,11 +4246,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 454,
+                  "line": 449,
                   "column": 4
                 },
                 "end": {
-                  "line": 486,
+                  "line": 481,
                   "column": 5
                 }
               },
@@ -4263,11 +4263,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 488,
+                  "line": 483,
                   "column": 4
                 },
                 "end": {
-                  "line": 492,
+                  "line": 487,
                   "column": 5
                 }
               },
@@ -4280,11 +4280,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 494,
+                  "line": 489,
                   "column": 4
                 },
                 "end": {
-                  "line": 536,
+                  "line": 531,
                   "column": 5
                 }
               },
@@ -4297,11 +4297,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 540,
+                  "line": 535,
                   "column": 4
                 },
                 "end": {
-                  "line": 554,
+                  "line": 549,
                   "column": 5
                 }
               },
@@ -4318,11 +4318,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 556,
+                  "line": 551,
                   "column": 4
                 },
                 "end": {
-                  "line": 592,
+                  "line": 590,
                   "column": 5
                 }
               },
@@ -4335,11 +4335,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 594,
+                  "line": 592,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 594,
                   "column": 5
                 }
               },
@@ -4352,11 +4352,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 604,
+                  "line": 602,
                   "column": 4
                 },
                 "end": {
-                  "line": 607,
+                  "line": 605,
                   "column": 5
                 }
               },
@@ -4379,11 +4379,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 617,
+                  "line": 615,
                   "column": 4
                 },
                 "end": {
-                  "line": 634,
+                  "line": 633,
                   "column": 5
                 }
               },
@@ -4406,11 +4406,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 636,
+                  "line": 635,
                   "column": 4
                 },
                 "end": {
-                  "line": 640,
+                  "line": 639,
                   "column": 5
                 }
               },
@@ -4427,11 +4427,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 642,
+                  "line": 641,
                   "column": 4
                 },
                 "end": {
-                  "line": 648,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -4444,11 +4444,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 650,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 652,
                   "column": 5
                 }
               },
@@ -4461,11 +4461,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 655,
+                  "line": 654,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 658,
                   "column": 5
                 }
               },
@@ -4485,11 +4485,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 661,
+                  "line": 660,
                   "column": 4
                 },
                 "end": {
-                  "line": 663,
+                  "line": 662,
                   "column": 5
                 }
               },
@@ -4506,11 +4506,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 668,
+                  "line": 667,
                   "column": 4
                 },
                 "end": {
-                  "line": 677,
+                  "line": 676,
                   "column": 5
                 }
               },
@@ -4527,11 +4527,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 679,
+                  "line": 678,
                   "column": 4
                 },
                 "end": {
-                  "line": 681,
+                  "line": 680,
                   "column": 5
                 }
               },
@@ -4548,11 +4548,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 683,
+                  "line": 682,
                   "column": 4
                 },
                 "end": {
-                  "line": 736,
+                  "line": 735,
                   "column": 5
                 }
               },
@@ -4569,11 +4569,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 738,
+                  "line": 737,
                   "column": 4
                 },
                 "end": {
-                  "line": 742,
+                  "line": 741,
                   "column": 5
                 }
               },
@@ -4596,11 +4596,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 744,
+                  "line": 743,
                   "column": 4
                 },
                 "end": {
-                  "line": 750,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -4617,11 +4617,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 752,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 763,
+                  "line": 765,
                   "column": 5
                 }
               },
@@ -4638,11 +4638,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 765,
+                  "line": 767,
                   "column": 4
                 },
                 "end": {
-                  "line": 769,
+                  "line": 771,
                   "column": 5
                 }
               },
@@ -4669,7 +4669,7 @@
               "column": 2
             },
             "end": {
-              "line": 770,
+              "line": 772,
               "column": 3
             }
           },
@@ -4790,14 +4790,14 @@
             },
             {
               "name": "i18n",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Date` object as\n              // date string.\n              formatDate: d => {\n                // returns a string representation of the given\n                // Date object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to a `Date`\n              // object. Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // a Date object\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              // An array with the full names of months starting\n              // with January.\n              monthNames: [\n                'January', 'February', 'March', 'April', 'May',\n                'June', 'July', 'August', 'September',\n                'October', 'November', 'December'\n              ],\n\n              // An array of weekday names starting with Sunday. Used\n              // in screen reader announcements.\n              weekdays: [\n                'Sunday', 'Monday', 'Tuesday', 'Wednesday',\n                'Thursday', 'Friday', 'Saturday'\n              ],\n\n              // An array of short weekday names starting with Sunday.\n              // Displayed in the calendar.\n              weekdaysShort: [\n                'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'\n              ],\n\n              // An integer indicating the first day of the week\n              // (0 = Sunday, 1 = Monday, etc.).\n              firstDayOfWeek: 0,\n\n              // Used in screen reader announcements along with week\n              // numbers, if they are displayed.\n              week: 'Week',\n\n              // Translation of the Calendar icon button title.\n              calendar: 'Calendar',\n\n              // Translation of the Clear icon button title.\n              clear: 'Clear',\n\n              // Translation of the Today shortcut button text.\n              today: 'Today',\n\n              // Translation of the Cancel button text.\n              cancel: 'Cancel',\n\n              // A function to format given `Object` as\n              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`\n              formatDate: d => {\n                // returns a string representation of the given\n                // object in 'MM/DD/YYYY' -format\n              },\n\n              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              // Must properly parse (at least) text\n              // formatted by `formatDate`.\n              // Setting the property to null will disable\n              // keyboard input feature.\n              parseDate: text => {\n                // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to\n                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.\n              }\n\n              // A function to format given `monthName` and\n              // `fullYear` integer as calendar title string.\n              formatTitle: (monthName, fullYear) => {\n                return monthName + ' ' + fullYear;\n              }\n            }",
               "sourceRange": {
                 "start": {
                   "line": 181,
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -4809,11 +4809,11 @@
               "description": "The earliest date that can be selected. All earlier dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
               "sourceRange": {
                 "start": {
-                  "line": 245,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 243,
                   "column": 9
                 }
               },
@@ -4825,11 +4825,11 @@
               "description": "The latest date that can be selected. All later dates will be disabled.\n\nSupported date formats:\n- ISO 8601 `\"YYYY-MM-DD\"` (default)\n- 6-digit extended ISO 8601 `\"+YYYYYY-MM-DD\"`, `\"-YYYYYY-MM-DD\"`",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 262,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -4976,6 +4976,27 @@
                 "type": "Date",
                 "desc": "Closest date"
               }
+            },
+            {
+              "name": "_extractDateParts",
+              "description": "Extracts the basic component parts of a date (day, month and year)\nto the expected format.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 96,
+                  "column": 4
+                },
+                "end": {
+                  "line": 102,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "date"
+                }
+              ]
             }
           ],
           "demos": [],
@@ -4986,7 +5007,7 @@
               "column": 28
             },
             "end": {
-              "line": 91,
+              "line": 103,
               "column": 3
             }
           },

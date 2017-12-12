@@ -461,7 +461,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _formatDisplayed(date, formatDate, label) {
           if (date) {
-            return formatDate(date);
+            return formatDate(Vaadin.DatePickerHelper._extractDateParts(date));
           } else {
             return label;
           }

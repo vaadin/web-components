@@ -89,5 +89,17 @@ This program is available under Apache License Version 2.0, available at https:/
           return candidateDiff < closestDateDiff ? candidate : closestDate;
         });
     }
+
+    /**
+     * Extracts the basic component parts of a date (day, month and year)
+     * to the expected format.
+     */
+    static _extractDateParts(date) {
+      return {
+        day: date.getDate(),
+        month: date.getMonth(),
+        year: date.getFullYear()
+      };
+    }
   };
 </script>
