@@ -6,21 +6,21 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-progress-bar.html",
+        "file": "src/vaadin-progress-bar.html",
         "start": {
-          "line": 121,
+          "line": 93,
           "column": 6
         },
         "end": {
-          "line": 121,
+          "line": 93,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar.| :host",
+          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description \n----------------|----------------\n`bar` | Progress-bar's background \n`value` | Progress-bar's foreground \n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)\n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar | :host",
           "summary": "",
-          "path": "vaadin-progress-bar.html",
+          "path": "src/vaadin-progress-bar.html",
           "properties": [
             {
               "name": "value",
@@ -279,7 +279,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -307,11 +307,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 110,
+              "line": 78,
               "column": 6
             },
             "end": {
-              "line": 114,
+              "line": 86,
               "column": 7
             }
           },
@@ -409,7 +409,7 @@
         {
           "description": "",
           "summary": "",
-          "path": "vaadin-progress-mixin.html",
+          "path": "src/vaadin-progress-mixin.html",
           "properties": [
             {
               "name": "value",
