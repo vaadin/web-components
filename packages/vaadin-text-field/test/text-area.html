@@ -122,7 +122,7 @@
             textArea.disabled = true;
             const label = textArea.root.querySelector('[part="label"]');
             label.click();
-            expect(textArea.focused).to.be.false;
+            expect(textArea.getAttribute('focused')).to.be.null;
           });
         });
       }

@@ -123,7 +123,7 @@
             textField.disabled = true;
             const label = textField.root.querySelector('[part="label"]');
             label.click();
-            expect(textField.focused).to.be.false;
+            expect(textField.getAttribute('focused')).to.be.null;
           });
         });
       }
