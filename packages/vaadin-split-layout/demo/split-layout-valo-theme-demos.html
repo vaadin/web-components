@@ -1,0 +1,89 @@
+<dom-module id="split-layout-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Default</h3>
+    <vaadin-demo-snippet id='split-layout-valo-theme-demos-default'>
+      <template preserve-content>
+        <style>
+          vaadin-split-layout {
+            min-height: 200px;
+            flex: auto;
+          }
+        </style>
+        <div style="display: flex">
+          <vaadin-split-layout>
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+
+          <vaadin-split-layout vertical>
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        </div>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Small</h3>
+    <vaadin-demo-snippet id='split-layout-valo-theme-demos-small'>
+      <template preserve-content>
+        <style>
+          vaadin-split-layout {
+            min-height: 200px;
+            flex: auto;
+          }
+        </style>
+        <div style="display: flex">
+          <vaadin-split-layout theme="small">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+
+          <vaadin-split-layout vertical theme="small">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        </div>
+
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Subtle</h3>
+    <vaadin-demo-snippet id='split-layout-valo-theme-demos-subtle'>
+      <template preserve-content>
+        <style>
+          vaadin-split-layout {
+            min-height: 200px;
+            flex: auto;
+          }
+        </style>
+        <div style="display: flex">
+          <vaadin-split-layout theme="subtle">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+
+          <vaadin-split-layout vertical theme="subtle">
+            <div></div>
+            <div></div>
+          </vaadin-split-layout>
+        </div>
+
+      </template>
+    </vaadin-demo-snippet>
+  </div>
+</template>
+<script>
+  class SplitLayoutValoThemeDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
+    static get is() {
+      return 'split-layout-valo-theme-demos';
+    }
+  }
+  customElements.define(SplitLayoutValoThemeDemos.is, SplitLayoutValoThemeDemos);
+</script>
+</dom-module>
