@@ -32,19 +32,19 @@
 ```html
 <vaadin-context-menu>
   <template>
-    <style>
-      vaadin-item {
-        font-family: sans-serif;
-      }
-    </style>
     <vaadin-list-box>
       <vaadin-item>First menu item</vaadin-item>
       <vaadin-item>Second menu item</vaadin-item>
+      <vaadin-item>Third menu item</vaadin-item>
+      <hr>
+      <vaadin-item disabled>Fourth menu item</vaadin-item>
+      <vaadin-item disabled>Fifth menu item</vaadin-item>
+      <hr>
+      <vaadin-item>Sixth menu item</vaadin-item>
     </vaadin-list-box>
   </template>
 
-  <p>This paragraph has the context menu provided in the above template.</p>
-  <p>Another paragraph with the context menu.</p>
+  Open a context menu with <b>right click</b> or with <b>long touch.</b>
 </vaadin-context-menu>
 ```
 
@@ -88,3 +88,5 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
