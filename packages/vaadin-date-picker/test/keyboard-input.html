@@ -451,32 +451,32 @@
 
           it('should be tabbable', () => {
             expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);
-            expect(datepicker._inputElement.focused).to.equal(false);
+            expect(datepicker._inputElement.hasAttribute('focused')).to.equal(false);
           });
 
           it('should focus the input on esc', () => {
             arrowDown();
             esc();
-            expect(datepicker._inputElement.focused).to.be.true;
+            expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
           });
 
           it('should focus the input on date tap', () => {
             arrowDown();
             overlayContent.dispatchEvent(new CustomEvent('date-tap', {bubbles: true, composed: true}));
-            expect(datepicker._inputElement.focused).to.be.true;
+            expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
           });
 
           it('should focus the input on date cancel', () => {
             arrowDown();
             MockInteractions.tap(overlayContent.$.cancelButton);
-            expect(datepicker._inputElement.focused).to.be.true;
+            expect(datepicker._inputElement.hasAttribute('focused')).to.be.true;
           });
 
           it('should focus cancel on input shift tab', done => {
             open(datepicker, () => {
               MockInteractions.focus(datepicker._inputElement);
               MockInteractions.pressAndReleaseKeyOn(datepicker._inputElement, 9, 'shift');
-              expect(overlayContent.$.cancelButton.focused).to.be.true;
+              expect(overlayContent.$.cancelButton.hasAttribute('focused')).to.be.true;
               done();
             });
           });
@@ -499,11 +499,10 @@
             open(datepicker, () => {
               MockInteractions.tap(overlayContent);
               datepicker.focusElement.blur();
-              expect(datepicker.focusElement.focused).to.be.false;
+              expect(datepicker.focusElement.hasAttribute('focused')).to.be.false;
 
               MockInteractions.focus(overlayContent);
-              expect(datepicker.focused).to.be.true;
-              expect(datepicker.focusElement.focused).to.be.true;
+              expect(datepicker.focusElement.hasAttribute('focused')).to.be.true;
               done();
             });
           });
