@@ -263,7 +263,7 @@
       });
 
       it('should apply default column-gap', function() {
-        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2em');
+        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('32px');
         expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('16px'); // 0.5 * 2em in px
         expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px');
       });

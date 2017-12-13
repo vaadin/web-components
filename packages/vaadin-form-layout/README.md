@@ -31,7 +31,7 @@
 </vaadin-form-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="930" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/-/element/vaadin-form-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/vaadin-form-layout)
 
 
 ## Running demos and tests in browser
@@ -71,3 +71,5 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 ## License
 
 Apache License 2.0
+
+Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
