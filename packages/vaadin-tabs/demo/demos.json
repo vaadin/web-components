@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Valo Theme Variations",
+    "url": "tabs-valo-theme-demos",
+    "src": "tabs-valo-theme-demos.html",
+    "meta": {
+      "title": "vaadin-tabs Valo Theme Variations",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
