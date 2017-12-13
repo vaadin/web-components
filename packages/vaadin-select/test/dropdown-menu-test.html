@@ -353,12 +353,12 @@
 
         it('Should be focusable', () => {
           dropdown.focus();
-          expect(dropdown.focused).to.be.true;
-          expect(input.focused).to.be.true;
+          expect(dropdown.hasAttribute('focused')).to.be.true;
+          expect(input.hasAttribute('focused')).to.be.true;
         });
 
         it('should not focus the input by default', () => {
-          expect(dropdown.focusElement.focused).not.to.be.ok;
+          expect(dropdown.focusElement.hasAttribute('focused')).not.to.be.ok;
         });
 
         it('Should set tabindex attribute to -1 on the native input', () => {
@@ -399,14 +399,14 @@
         it('when focused it should keep focused state after opening overlay', () => {
           dropdown.focus();
           dropdown.opened = true;
-          expect(dropdown.focused).to.be.true;
-          expect(input.focused).to.be.true;
+          expect(dropdown.hasAttribute('focused')).to.be.true;
+          expect(input.hasAttribute('focused')).to.be.true;
         });
 
         it('if not focused it should not set focused state after opening overlay', () => {
           dropdown.opened = true;
-          expect(dropdown.focused).to.be.false;
-          expect(input.focused).to.be.false;
+          expect(dropdown.hasAttribute('focused')).to.be.false;
+          expect(input.hasAttribute('focused')).to.be.false;
         });
       });
 
@@ -459,8 +459,8 @@
         it('should remove focused state from the input on closing the overlay if phone', () => {
           dropdown._phone = true;
           menu.selected = 1;
-          expect(dropdown.focused).to.be.false;
-          expect(input.focused).to.be.false;
+          expect(dropdown.hasAttribute('focused')).to.be.false;
+          expect(input.hasAttribute('focused')).to.be.false;
         });
 
         it('should not focus the input on closing the overlay if phone', () => {
