@@ -35,7 +35,7 @@
     "iron-demo-helpers": "^2.0.0",
     "paper-input": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-text-field": "#next",
+    "vaadin-text-field": "2.0.0-alpha1",
     "webcomponentsjs": "^1.0.1",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
