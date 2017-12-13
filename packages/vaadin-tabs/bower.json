@@ -28,7 +28,7 @@
     "iron-resizable-behavior": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.4",
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^1.4.1",
-    "vaadin-item": "#next",
+    "vaadin-item": "v2.0.0-alpha1",
     "vaadin-valo-theme": "^2.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
