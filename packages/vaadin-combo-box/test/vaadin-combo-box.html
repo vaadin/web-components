@@ -241,15 +241,7 @@
       });
 
       describe('focus API', () => {
-        it('should have readOnly focused property', () => {
-          comboBox.focused = true;
-
-          expect(comboBox.focused).to.be.false;
-          expect(comboBox.hasAttribute('focused')).to.be.false;
-        });
-
         it('should not be focused by default', () => {
-          expect(comboBox.focused).to.be.false;
           expect(comboBox.hasAttribute('focused')).to.be.false;
         });
 
@@ -257,7 +249,6 @@
           it('should focus the input with focus method', () => {
             comboBox.focus();
 
-            expect(comboBox.focused).to.be.true;
             expect(comboBox.hasAttribute('focused')).to.be.true;
           });
 
@@ -265,7 +256,6 @@
             comboBox.focus();
             comboBox.blur();
 
-            expect(comboBox.focused).to.be.false;
             expect(comboBox.hasAttribute('focused')).to.be.false;
           });
         });
