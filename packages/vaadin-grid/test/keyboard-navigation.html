@@ -1082,11 +1082,12 @@
 
           it('should scroll down one page with page down', () => {
             focusItem(0);
+            const previousLastVisibleIndex = grid._lastVisibleIndex;
 
             pageDown();
 
             expect(grid._lastVisibleIndex).to.be.gt(1); // sanity check
-            expect(getFocusedRowIndex()).to.equal(grid._lastVisibleIndex - 2);
+            expect(getFocusedRowIndex()).to.equal(previousLastVisibleIndex - 1);
           });
 
           it('should scroll up one page with page up', done => {

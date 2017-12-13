@@ -1,0 +1,259 @@
+<dom-module id="grid-valo-theme-demos">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Compact</h3>
+    <p><code>&lt;vaadin-grid <b>theme="compact"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-compact'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="compact" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em" flex-grow="2">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Borderless</h3>
+    <p><code>&lt;vaadin-grid <b>theme="borderless"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-borderless'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="borderless" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em" flex-grow="2">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Row Dividers</h3>
+    <p><code>&lt;vaadin-grid <b>theme="row-dividers"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-row-dividers'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em" flex-grow="2">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Column Dividers</h3>
+    <p><code>&lt;vaadin-grid <b>theme="column-dividers"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-column-dividers'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="column-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]</span>
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em" flex-grow="2">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Row Stripes</h3>
+    <p><code>&lt;vaadin-grid <b>theme="row-stripes"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-row-stripes'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="row-stripes" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]</span>
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em" flex-grow="2">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Wrap Cell Content</h3>
+    <p><code>&lt;vaadin-grid <b>theme="wrap-cell-content"</b>&gt;</code></p>
+    <p>By default, cell contents don’t wrap and all overflowing content is either clipped or truncated. Apply the <code>wrap-cell-content</code> theme to make the cell content wrap instead.</p>
+    <p>This example is also using the <code>row-dividers</code> theme variant to make the content easier to read.</p>
+    <vaadin-demo-snippet id='grid-valo-theme-demos-wrap-cell-content'>
+      <template preserve-content>
+        <dom-bind >
+          <template>
+            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+
+            <vaadin-grid theme="wrap-cell-content row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+
+              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]</span>
+                </template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="9em">
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column width="15em">
+                <template class="header">
+                  <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+                </template>
+                <template>[[item.address.street]], [[item.address.city]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class GridValoThemeDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() {
+        return 'grid-valo-theme-demos';
+      }
+    }
+    customElements.define(GridValoThemeDemos.is, GridValoThemeDemos);
+  </script>
+</dom-module>

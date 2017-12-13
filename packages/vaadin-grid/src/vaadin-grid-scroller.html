@@ -4,7 +4,7 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="iron-list.html">
 
 <script>
@@ -126,7 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._iterateItems((pidx, vidx) => {
             const row = this._physicalItems[pidx];
             if (row.index === fvi) {
-              this.$.table.scrollTop += row.getBoundingClientRect().top - fviOffset;
+              this.$.table.scrollTop += Math.round(row.getBoundingClientRect().top - fviOffset);
             }
             // Restore keyboard focus to the right cell
             if (row.index === this._focusedItemIndex && this._itemsFocusable && this.$.items.contains(this.shadowRoot.activeElement)) {

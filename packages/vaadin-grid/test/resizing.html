@@ -117,6 +117,8 @@
 
         it('should align height with number of rows', done => {
           grid.style.height = 'auto';
+          // grid.notifyResize();
+          // flushGrid(grid);
           animationFrameFlush(() => {
             const headerHeight = grid.$.header.clientHeight;
             const bodyHeight = grid.$.items.clientHeight;

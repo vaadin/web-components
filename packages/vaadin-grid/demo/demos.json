@@ -99,5 +99,16 @@
       "image": ""
     }
   }
+  ,
+  {
+    "name": "Valo Theme Variations",
+    "url": "grid-valo-theme-demos",
+    "src": "grid-valo-theme-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Valo Theme Variations",
+      "description": "",
+      "image": ""
+    }
+  }
   ]
 }
