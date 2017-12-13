@@ -55,7 +55,7 @@
 </template>
 ```
 
-<img src="https://github.com/vaadin/vaadin-grid/raw/master/grid.gif">
+<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.gif">
 
 
 ## Running demos and tests in browser
