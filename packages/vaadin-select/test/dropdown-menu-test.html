@@ -108,11 +108,11 @@
     });
 
     describe('vaadin-dropdown-menu inside flexbox', () => {
-      it('dropdown should have width 175px', () => {
+      it('dropdown should have some width', () => {
         const container = fixture('dropdown-in-flexbox');
         const dropdown = container.querySelector('vaadin-dropdown-menu');
         expect(window.getComputedStyle(container).width).to.eql('500px');
-        expect(window.getComputedStyle(dropdown).width).to.eql('175px');
+        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.be.lte(300);
       });
     });
 
@@ -210,6 +210,15 @@
         it('Should update selection slot textContent with the selected item `label` string', () => {
           menu.selected = 1;
           expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
+        });
+
+        it('should wrap the selected item `label` string in selected vaadin item', () => {
+          menu.selected = 1;
+          const item = dropdown._valueElement.firstElementChild;
+          expect(item.localName).to.equal('vaadin-item');
+          expect(item.textContent).to.equal('o2');
+          expect(item.selected).to.be.true;
+          expect(item.getAttribute('tabindex')).to.be.null;
         });
 
         it('Should update selection slot when value is provided', () => {
