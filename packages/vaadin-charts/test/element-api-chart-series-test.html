@@ -106,6 +106,35 @@
         });
       });
 
+      it('should disable series visibility toggling only when set', function(done) {
+        setTimeout(function() {
+          const legend = chartContainer.querySelector('.highcharts-legend-item');
+
+          // Series visibility toggling is enabled by default
+          legend.dispatchEvent(new MouseEvent('click'));
+          // IE11 doesn't support SVGElement.classList
+          expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
+
+          legend.dispatchEvent(new MouseEvent('click'));
+          expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
+
+          // Series doesn't hide when toggle is disabled
+          chart['_seriesVisibilityTogglingDisabled'] = true;
+          legend.dispatchEvent(new MouseEvent('click'));
+          expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
+
+          chart['_seriesVisibilityTogglingDisabled'] = false;
+          legend.dispatchEvent(new MouseEvent('click'));
+
+          // Hidden series doesn't show when toggle is disabled
+          chart['_seriesVisibilityTogglingDisabled'] = true;
+          legend.dispatchEvent(new MouseEvent('click'));
+          expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
+
+          done();
+        });
+      });
+
       it('should remove series if element is removed from the tree', function(done) {
         setTimeout(function() {
           const series = chartContainer.querySelectorAll('.highcharts-series');
@@ -117,7 +146,7 @@
           Polymer.RenderStatus.beforeNextRender(this, () => {
             const seriesEmpty = chartContainer.querySelectorAll('.highcharts-series');
             expect(seriesEmpty).to.have.lengthOf(0);
-  
+
             done();
           });
         });

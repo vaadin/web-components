@@ -550,6 +550,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __initChart(options) {
           this.__initEventsListeners(options);
+          // Workaround for https://github.com/highcharts/highcharts/issues/7523
+          this.__ensureObjectPath(options, 'drilldown.activeDataLabelStyle');
           if (this.timeline) {
             this._configuration = Highcharts.stockChart(this.$.chart, options);
           } else {
@@ -678,15 +680,42 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           for (let keys = Object.keys(eventList), i = 0; i < keys.length; i++) {
             const key = keys[i];
             if (!eventObject[key]) {
+              var chart = this;
               eventObject[key] = function(event) {
-                self.dispatchEvent(new CustomEvent(eventList[key], {
+                const customEvent = {
                   bubbles: false,
                   composed: true,
                   detail: {
                     originalEvent: event,
                     [eventType]: this
                   }
-                }));
+                };
+
+                // Workaround for vaadin-charts-flow because of https://github.com/vaadin/flow/issues/3102
+                if (event.type === 'selection') {
+                  if (event.xAxis && event.xAxis[0]) {
+                    customEvent.detail.xAxisMin = event.xAxis[0].min;
+                    customEvent.detail.xAxisMax = event.xAxis[0].max;
+                  }
+                  if (event.yAxis && event.yAxis[0]) {
+                    customEvent.detail.yAxisMin = event.yAxis[0].min;
+                    customEvent.detail.yAxisMax = event.yAxis[0].max;
+                  }
+                }
+                if (event.type === 'click') {
+                  if (event.xAxis && event.xAxis[0]) {
+                    customEvent.detail.xValue = event.xAxis[0].value;
+                  }
+                  if (event.yAxis && event.yAxis[0]) {
+                    customEvent.detail.yValue = event.yAxis[0].value;
+                  }
+                }
+
+                self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
+
+                if (event.type === 'legendItemClick' && chart['_seriesVisibilityTogglingDisabled']) {
+                  return false;
+                }
               };
             }
           }
