@@ -1,0 +1,57 @@
+<dom-module id="checkbox-indeterminate-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+       :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Indeterminate Checkbox</h3>
+    <p>An <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes" target="_blank" rel="noopener">indeterminate checkbox</a> is neither checked nor unchecked. A typical use case is a “Select All” checkbox indicating that some, but not all, items are selected.</p>
+    <vaadin-demo-snippet id="checkbox-indeterminate-demo">
+      <template preserve-content>
+        <x-indeterminate-checkbox-example></x-indeterminate-checkbox-example>
+        <dom-module id="x-indeterminate-checkbox-example">
+          <template preserve-content>
+            <vaadin-checkbox indeterminate="[[_isIndeterminate(optionOne, optionTwo)]]" checked="[[_isAllSelected(optionOne, optionTwo)]]" on-checked-changed="_selectAll">Select All</vaadin-checkbox>
+            <vaadin-checkbox checked="{{optionOne}}">Option one</vaadin-checkbox>
+            <vaadin-checkbox checked="{{optionTwo}}">Option two</vaadin-checkbox>
+          </template>
+          <script>
+            window.addDemoReadyListener('#checkbox-indeterminate-demo', function(document) {
+              class XIndeterminateCheckboxExample extends Polymer.Element {
+                static get is() {
+                  return 'x-indeterminate-checkbox-example';
+                }
+                ready() {
+                  super.ready();
+                  this.optionOne = true;
+                }
+                _isAllSelected(optionOne, optionTwo) {
+                  return (optionOne === true) && (optionOne == optionTwo);
+                }
+                _isIndeterminate(optionOne, optionTwo) {
+                  return optionOne != optionTwo;
+                }
+                _selectAll(e) {
+                  this.optionOne = e.detail.value;
+                  this.optionTwo = e.detail.value;
+                }
+              }
+              window.customElements.define(XIndeterminateCheckboxExample.is, XIndeterminateCheckboxExample);
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class CheckboxIndeterminateDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
+      static get is() {
+        return 'checkbox-indeterminate-demos';
+      }
+    }
+    customElements.define(CheckboxIndeterminateDemos.is, CheckboxIndeterminateDemos);
+  </script>
+</dom-module>
