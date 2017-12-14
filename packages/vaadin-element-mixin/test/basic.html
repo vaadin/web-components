@@ -68,6 +68,20 @@
         }
       });
 
+      it('should be possible to exclude development mode detector', function() {
+        const ref = window.Vaadin.runIfDevelopmentMode;
+        window.Vaadin.runIfDevelopmentMode = undefined;
+        class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
+          static get is() {
+            return 'test-bar';
+          }
+        }
+        // Everything is ok as long as defining the TestBar class does not fail
+        expect(TestBar.is).to.equal('test-bar');
+
+        window.Vaadin.runIfDevelopmentMode = ref;
+      });
+
       it('should load usage statistics once per class', function() {
         var called = 0;
         window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function() {
