@@ -3,18 +3,25 @@
 
 <dom-module id="valo-checkbox" theme-for="vaadin-checkbox">
   <template>
+    <style include="valo-checkbox-style valo-checkbox-effects">
+      /* IE11 only */
+      ::-ms-backdrop,
+      [part="checkbox"] {
+        line-height: 1;
+      }
+    </style>
+  </template>
+</dom-module>
+
+
+<dom-module id="valo-checkbox-style">
+  <template>
     <style>
       :host {
-        display: inline-block;
-        -webkit-user-select: none;
-        color: var(--valo-body-text-color);
-      }
-
-      [part="wrapper"] {
-        display: flex;
-        align-items: baseline;
         -webkit-tap-highlight-color: transparent;
-        outline: none;
+        -webkit-user-select: none;
+        user-select: none;
+        color: var(--valo-body-text-color);
       }
 
       /* This makes the :active style work in IE11 */
@@ -31,18 +38,12 @@
         margin: 0.1875em 0.875em 0.1875em 0.375em;
       }
 
-      [part="native-checkbox"] {
-        opacity: 0;
-        position: absolute;
-      }
-
       [part="checkbox"] {
-        display: inline-block;
         width: calc(1em + 2px);
         height: calc(1em + 2px);
-        flex: none;
         margin: 0.1875em;
         position: relative;
+        border: 0;
         border-radius: var(--valo-border-radius);
         background-color: var(--valo-contrast-20pct);
         transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
@@ -51,29 +52,17 @@
         line-height: 1.2;
       }
 
-      /* IE11 only */
-      ::-ms-backdrop,
-      [part="checkbox"] {
-        line-height: 1;
+      :host([indeterminate]) [part="checkbox"],
+      :host([checked]) [part="checkbox"] {
+        background-color: var(--valo-primary-color);
       }
 
-      /* Used for activation "halo" */
+      /* Needed to align the checkbox nicely on the baseline */
       [part="checkbox"]::before {
-        /* Needed to align the checkbox nicely on the baseline */
         content: "\2003";
-        color: transparent;
-        display: inline-block;
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-        background-color: inherit;
-        transform: scale(1.4);
-        opacity: 0;
-        transition: transform 0.1s, opacity 0.8s;
-        will-change: transform, opacity;
       }
 
-      /* Used for the checkmark */
+      /* Checkmark */
       [part="checkbox"]::after {
         content: "";
         display: inline-block;
@@ -90,44 +79,13 @@
         opacity: 0;
       }
 
-      /* Only show this transition if activated with the mouse (disabled for grid select-all this way) */
-      :host(:hover) [part="checkbox"]::after {
-        transition: width 0.1s, height 0.25s;
-      }
-
-      :host([indeterminate]) [part="checkbox"],
-      :host([checked]) [part="checkbox"] {
-        background-color: var(--valo-primary-color);
-      }
-
       :host([checked]) [part="checkbox"]::after {
         opacity: 1;
         width: 0.625em;
         height: 1.0625em;
       }
 
-      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
-        background-color: var(--valo-contrast-30pct);
-      }
-
-      :host([active]) [part="checkbox"] {
-        transform: scale(0.9);
-        transition-duration: 0.05s;
-      }
-
-      :host([active][checked]) [part="checkbox"] {
-        transform: scale(1.1);
-      }
-
-      :host([active]:not([checked])) [part="checkbox"]::before {
-        transition-duration: 0.01s, 0.01s;
-        transform: scale(0);
-        opacity: 0.4;
-      }
-
-      :host([focus-ring]) [part="checkbox"] {
-        box-shadow: 0 0 0 3px var(--valo-primary-color-50pct);
-      }
+      /* Indeterminate checkmark */
 
       :host([indeterminate]) [part="checkbox"]::after {
         transform: none;
@@ -142,12 +100,20 @@
         transition: opacity 0.25s;
       }
 
+      /* Focus ring */
+
+      :host([focus-ring]) [part="checkbox"] {
+        box-shadow: 0 0 0 3px var(--valo-primary-color-50pct);
+      }
+
+      /* Disabled */
+
       :host([disabled]) {
         pointer-events: none;
         color: var(--valo-disabled-text-color);
       }
 
-      :host([disabled]) ::slotted(*) {
+      :host([disabled]) [part="label"] ::slotted(*) {
         color: inherit;
       }
 
@@ -162,10 +128,53 @@
       :host([indeterminate][disabled]) [part="checkbox"]::after {
         background-color: var(--valo-contrast-30pct);
       }
+    </style>
+  </template>
+</dom-module>
 
-      /* Workaround for vaadin-checkbox issue: https://github.com/vaadin/vaadin-checkbox/issues/16 */
-      [part="native-checkbox"]:checked ~ [part="checkbox"] {
-        opacity: 1;
+<dom-module id="valo-checkbox-effects">
+  <template>
+    <style>
+      /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
+      :host(:hover) [part="checkbox"]::after {
+        transition: width 0.1s, height 0.25s;
+      }
+
+      /* Used for activation "halo" */
+      [part="checkbox"]::before {
+        color: transparent;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+        border-radius: inherit;
+        background-color: inherit;
+        transform: scale(1.4);
+        opacity: 0;
+        transition: transform 0.1s, opacity 0.8s;
+        will-change: transform, opacity;
+      }
+
+      /* Hover */
+
+      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+        background-color: var(--valo-contrast-30pct);
+      }
+
+      /* Active */
+
+      :host([active]) [part="checkbox"] {
+        transform: scale(0.9);
+        transition-duration: 0.05s;
+      }
+
+      :host([active][checked]) [part="checkbox"] {
+        transform: scale(1.1);
+      }
+
+      :host([active]:not([checked])) [part="checkbox"]::before {
+        transition-duration: 0.01s, 0.01s;
+        transform: scale(0);
+        opacity: 0.4;
       }
     </style>
   </template>
