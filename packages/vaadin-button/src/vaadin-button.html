@@ -15,24 +15,80 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
+        align-items: center;
         position: relative;
         outline: none;
+        white-space: nowrap;
       }
 
       :host([hidden]) {
         display: none !important;
       }
 
-      [part="button"] {
+      /* Ensure the button is always aligned on the baseline */
+      .vaadin-button-container::before {
+        content: "\2003";
+        display: inline-block;
+        width: 0;
+      }
+
+      .vaadin-button-container {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
         width: 100%;
         height: 100%;
-        margin: 0; /* (normalize.css) Remove the margin in Firefox and Safari. */
-        overflow: visible; /* (normalize.css) Show the overflow in IE. */
+        min-height: inherit;
+        text-shadow: inherit;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      [part="prefix"],
+      [part="suffix"] {
+        flex: none;
+      }
+
+      [part="label"] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* When there is no text label, icons are misaligned on IE11 */
+      ::-ms-backdrop,
+      [part="label"]::before {
+        content: "\2003";
+        display: inline-block;
+        width: 0;
+        /* Compensate the space the character reserves */
+        margin-right: -0.275em;
+      }
+
+      #button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: inherit;
       }
     </style>
-    <button id="button" type="button" part="button">
-      <slot></slot>
-    </button>
+    <div class="vaadin-button-container">
+      <div part="prefix">
+        <slot name="prefix"></slot>
+      </div>
+      <div part="label">
+        <slot></slot>
+      </div>
+      <div part="suffix">
+        <slot name="suffix"></slot>
+      </div>
+    </div>
+    <button id="button" type="button"></button>
   </template>
   <script>
     {
@@ -50,7 +106,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name | Description
        * ----------------|----------------
-       * `button` | The internal `<button>` element
+       * `label` | The label (text) inside the button
+       * `prefix` | A slot for e.g. an icon before the label
+       * `suffix` | A slot for e.g. an icon after the label
+       *
        *
        * The following attributes are exposed for styling:
        *
