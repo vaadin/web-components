@@ -1,6 +1,6 @@
 <dom-module id="button-basic-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
@@ -22,12 +22,26 @@
     </vaadin-demo-snippet>
 
     <h3>Using an Icon</h3>
-    <p>See the <a href="#button-valo-demos">Valo Theme Icons</a> example for more tips how to use icons.</p>
+    <p>Follow these tips when using icons in buttons. Check out the <a href="#button-accessibility-demos">Accessible Icon Button</a> example as well.</p>
     <vaadin-demo-snippet id='button-basic-demos-disabled'>
       <template preserve-content>
+        <!-- Use the "prefix/suffix" slots to place an icon before/after the text label.
+             This ensure proper alignment of the icon. -->
+
         <vaadin-button>
-          <iron-icon icon="valo:edit"></iron-icon>
-          <span>Edit</span>
+          <iron-icon icon="valo:edit" slot="prefix"></iron-icon>
+          Edit
+        </vaadin-button>
+
+        <vaadin-button>
+          <iron-icon icon="valo:arrow-right" slot="suffix"></iron-icon>
+          Next
+        </vaadin-button>
+
+        <vaadin-button>
+          <iron-icon icon="valo:user"></iron-icon>
+          <br>
+          Profile
         </vaadin-button>
       </template>
     </vaadin-demo-snippet>

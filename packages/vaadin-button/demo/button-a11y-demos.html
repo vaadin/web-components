@@ -1,6 +1,6 @@
 <dom-module id="button-accessibility-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
@@ -17,11 +17,10 @@
 
     <h3>Accessible Icon Button</h3>
     <p>If you only place an icon as the content of the button, you should provide an alternative label for screen reader users by using the standard <code>aria-label</code> attribute.</p>
-    <p>See the <a href="#button-valo-demos">Valo Theme Icons</a> example for more tips how to use icons.</p>
     <vaadin-demo-snippet id='button-a11y-demos-accessible-label'>
       <template preserve-content>
-        <vaadin-button aria-label="Delete">
-          <iron-icon icon="valo:cross"></iron-icon>
+        <vaadin-button aria-label="Create new">
+          <iron-icon icon="valo:plus"></iron-icon>
         </vaadin-button>
       </template>
     </vaadin-demo-snippet>
