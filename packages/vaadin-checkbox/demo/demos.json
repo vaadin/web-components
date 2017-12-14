@@ -2,11 +2,33 @@
   "name": "Vaadin Checkbox",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "checkbox-basic-demos",
     "src": "checkbox-basic-demos.html",
     "meta": {
-      "title": "vaadin-checkbox Basic Examples",
+      "title": "Vaadin Checkbox Basics",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Indeterminate State",
+    "url": "checkbox-indeterminate-demos",
+    "src": "checkbox-indeterminate-demos.html",
+    "meta": {
+      "title": "Vaadin Checkbox Indeterminate State",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Accessibility",
+    "url": "checkbox-accessibility-demos",
+    "src": "checkbox-a11y-demos.html",
+    "meta": {
+      "title": "Vaadin Checkbox Accessibility",
       "description": "",
       "image": ""
      }
