@@ -52,20 +52,19 @@
         notifications = Array.from(fixture('multiple'));
         overlay = notifications[0]._overlay;
         // Object.values is unsupported in old browsers
-        regions = Object.keys(overlay.regions).map(part => overlay.regions[part]);
+        regions = Object.keys(overlay._regions).map(part => overlay._regions[part]);
         // To ensure computed styles are applied.
         setTimeout(done);
       });
 
-      afterEach(done => {
+      afterEach(() => {
         // Close everything to stop all pending timers.
-        notifications.forEach(e => e.close());
-        // Remove overlay from body
-        document.body.removeChild(notifications[0].constructor._overlay);
+        notifications.forEach(el => {
+          el.close();
+          el._removeNotificationCard();
+        });
         // delete singleton reference, so as it's created in next test
         delete notifications[0].constructor._overlay;
-        // Needed in FF
-        setTimeout(done);
       });
 
       describe('vaadin-notification-overlay', () => {
@@ -75,10 +74,6 @@
 
         it('overlay should be a singleton', () => {
           expect(notifications[0]._overlay).to.be.equal(notifications[1]._overlay);
-        });
-
-        it('overlay should be modeless', () => {
-          expect(overlay.modeless).to.be.true;
         });
 
         it('should close the overlay when all active notifications dissapear', done => {
@@ -106,7 +101,7 @@
             'bottom-start', 'bottom-center', 'bottom-end',
             'bottom-stretch'
           ].forEach(part => {
-            expect(overlay.regions[part].getAttribute('part')).to.be.equal(part);
+            expect(overlay._regions[part].getAttribute('part')).to.be.equal(part);
           });
         });
 
@@ -157,7 +152,7 @@
 
       describe('styles', () => {
         it('content should ignore pointer events', () => {
-          expect(getComputedStyle(overlay.$.content)['pointer-events']).to.equal('none');
+          expect(getComputedStyle(overlay)['pointer-events']).to.equal('none');
         });
 
         it('notification should respomnd to pointer events', () => {
@@ -167,21 +162,21 @@
         });
 
         it('all regions should be flex containers', () => {
-          regions.push(overlay.$.content);
+          regions.push(overlay);
           regions.push(overlay.shadowRoot.querySelector('[part="top"]'));
           regions.push(overlay.shadowRoot.querySelector('[part="bottom"]'));
           regions.forEach(e => expect(getComputedStyle(e)['display']).to.equal('flex'));
         });
 
         it('all regions but top ones should have flex-direction column', () => {
-          regions.push(overlay.$.content);
+          regions.push(overlay);
           regions.filter(e => !/top/.test(e.getAttribute('part'))).forEach(e =>
             expect(getComputedStyle(e)['flex-direction']).to.equal('column')
           );
         });
 
         it('top regions should have flex-direction column-reverse', () => {
-          regions.push(overlay.$.content);
+          regions.push(overlay);
           regions.filter(e => /top/.test(e.getAttribute('part')))
             .forEach(e => expect(getComputedStyle(e)['flex-direction']).to.equal('column-reverse'));
         });
@@ -201,7 +196,7 @@
         });
 
         it('middle region should justify-content at center', () => {
-          expect(getComputedStyle(overlay.regions['middle'])['justify-content']).to.equal('center');
+          expect(getComputedStyle(overlay._regions['middle'])['justify-content']).to.equal('center');
         });
 
         it('start notifications should align-self at start', () => {

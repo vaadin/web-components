@@ -5,8 +5,9 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../polymer/lib/utils/templatize.html">
 <link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-notification-overlay-default-theme" theme-for="vaadin-notification-overlay">
   <template>
@@ -33,12 +34,12 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-notification-overlay">
   <template>
     <style>
-      [part="content"] {
+      :host {
         position: fixed;
         z-index: 1000;
         top: 0;
         left: 0;
-        bottom: var(--vaadin-overlay-viewport-bottom, 0);
+        bottom: 0;
         right: 0;
         box-sizing: border-box;
 
@@ -122,25 +123,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="backdrop" part="backdrop" hidden></div>
-
-    <div part="overlay" id="overlay">
-      <div part="content" id="content">
-        <div part="top-stretch"></div>
-        <div part="top">
-          <div part="top-start"></div>
-          <div part="top-center"></div>
-          <div part="top-end"></div>
-        </div>
-        <div part="middle"></div>
-        <div part="bottom">
-          <div part="bottom-start"></div>
-          <div part="bottom-center"></div>
-          <div part="bottom-end"></div>
-        </div>
-        <div part="bottom-stretch"></div>
-      </div>
+    <div part="top-stretch"></div>
+    <div part="top">
+      <div part="top-start"></div>
+      <div part="top-center"></div>
+      <div part="top-end"></div>
     </div>
+    <div part="middle"></div>
+    <div part="bottom">
+      <div part="bottom-start"></div>
+      <div part="bottom-center"></div>
+      <div part="bottom-end"></div>
+    </div>
+    <div part="bottom-stretch"></div>
   </template>
 </dom-module>
 
@@ -207,21 +202,80 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
-       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
-       * for `<vaadin-notification-overlay>` parts.
-       *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        */
-      class VaadinNotificationOverlay extends Vaadin.OverlayElement {
+      class VaadinNotificationOverlay extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-notification-overlay';
         }
 
+        static get properties() {
+          return {
+            /**
+             * True when the overlay is opened
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              observer: '_openedChanged'
+            }
+          };
+        }
+
+        _openedChanged(opened) {
+          if (opened) {
+            document.body.appendChild(this);
+            if (this._boundIosResizeListener) {
+              this._detectIosNavbar();
+              window.addEventListener('resize', this._boundIosResizeListener);
+            }
+          } else {
+            document.body.removeChild(this);
+            if (this._boundIosResizeListener) {
+              window.removeEventListener('resize', this._boundIosResizeListener);
+            }
+          }
+        }
+
+        constructor() {
+          super();
+
+          if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            this._boundIosResizeListener = () => this._detectIosNavbar();
+          }
+        }
+
+        /**
+         * To reduce DOM queries, we cache all regions eligible for appending notifications
+         */
+        get _regions() {
+          if (this._cachedRegions === undefined) {
+            this._cachedRegions = Array.from(this.shadowRoot.querySelectorAll('[part]'))
+              .filter(el => el.children.length === 0)
+              .reduce((obj, el) => {
+                obj[el.getAttribute('part')] = el;
+                return obj;
+              }, {});
+          }
+          return this._cachedRegions;
+        }
+
         ready() {
           super.ready();
-          this.modeless = true;
+        }
+
+        _detectIosNavbar() {
+          const innerHeight = window.innerHeight;
+          const innerWidth = window.innerWidth;
+          const landscape = innerWidth > innerHeight;
+          const clientHeight = document.documentElement.clientHeight;
+          if (landscape && clientHeight > innerHeight) {
+            this.style.bottom = (clientHeight - innerHeight) + 'px';
+          } else {
+            this.style.bottom = '0';
+          }
         }
       }
 
@@ -282,7 +336,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class NotificationElement extends Vaadin.ElementMixin(class extends Polymer.Element {}) {
+      class NotificationElement extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-notification';
         }
@@ -358,12 +412,7 @@ This program is available under Apache License Version 2.0, available at https:/
         get _overlay() {
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
-            document.body.appendChild(this._overlay);
-
-            // To reduce DOM queries, we cache all regions eligible for appending notifications
-            NotificationElement._overlay.regions = {};
-            Array.from(this._overlay.$.content.querySelectorAll('[part]'))
-              .forEach(e => e.children.length == 0 && (this._overlay.regions[e.getAttribute('part')] = e));
+            document.body.appendChild(NotificationElement._overlay);
           }
           return NotificationElement._overlay;
         }
@@ -395,8 +444,8 @@ This program is available under Apache License Version 2.0, available at https:/
           const region = /^(top|bottom)$/.test(this.verticalAlign)
             ? this.verticalAlign + '-' + this.horizontalAlign : this.verticalAlign;
 
-          if (this._overlay.regions[region]) {
-            this._overlay.regions[region].appendChild(this._card);
+          if (this._overlay._regions[region]) {
+            this._overlay._regions[region].appendChild(this._card);
           } else {
             window.console.warn(
               `Invalid alignment parameters provided: vertical-align=${this.verticalAlign} horizontal-align=${this.horizontalAlign}`);
@@ -407,7 +456,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
           this._card.removeAttribute('closing');
           this._overlay.opened =
-            Object.keys(this._overlay.regions).reduce((prev, part) => this._overlay.regions[part].hasChildNodes() || prev, false);
+            Object.keys(this._overlay._regions).reduce((prev, part) => this._overlay._regions[part].hasChildNodes() || prev, false);
         }
 
         _closeNotificationCard() {
