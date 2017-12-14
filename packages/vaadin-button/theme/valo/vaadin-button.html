@@ -9,8 +9,11 @@
 <dom-module id="valo-button" theme-for="vaadin-button">
   <template>
     <style include="valo-button-sizing valo-button-style valo-button-states valo-button-types valo-button-colors valo-button-icons">
-      :host([disabled]) {
-        pointer-events: none !important;
+      /* This needs to be the last selector for it to take priority */
+      :host([disabled][disabled]) {
+        pointer-events: none;
+        color: var(--valo-disabled-text-color);
+        background-color: var(--valo-contrast-5pct);
       }
     </style>
   </template>
@@ -61,13 +64,6 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
-
-      /* Disabled */
-
-      :host([disabled][disabled]) {
-        color: var(--valo-disabled-text-color);
-        background-color: var(--valo-contrast-5pct);
-      }
     </style>
   </template>
 </dom-module>
@@ -75,13 +71,10 @@
 <dom-module id="valo-button-states">
   <template>
     <style>
-      :host {
-        position: relative;
-      }
-
       :host::before,
       :host::after {
         content: "";
+        /* We rely on the host always being relative */
         position: absolute;
         top: 0;
         right: 0;
