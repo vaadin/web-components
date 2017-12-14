@@ -1,9 +1,10 @@
-<link rel="import" href="color.html">
-<link rel="import" href="spacing.html">
+<link rel="import" href="../color.html">
+<link rel="import" href="../spacing.html">
+<link rel="import" href="overlay.html">
 
-<dom-module id="valo-menu-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay vaadin-dropdown-menu-overlay">
+<dom-module id="valo-menu-overlay">
   <template>
-    <style>
+    <style include="valo-overlay">
       [part="overlay"] {
         animation: 0.2s vaadin-menu-overlay-enter;
         will-change: opacity, transform;
@@ -62,6 +63,24 @@
         -webkit-overflow-scrolling: touch;
         overflow: auto;
       }
+
+      /* Styles for the contained vaadin-items */
+
+      vaadin-list-box vaadin-item {
+        min-height: var(--valo-size-m);
+        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
+        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
+      }
+
+      @media (pointer: coarse) {
+        :host vaadin-list-box vaadin-item {
+          min-height: var(--valo-size-l);
+          padding-top: var(--valo-space-s);
+          padding-bottom: var(--valo-space-s);
+        }
+      }
+
+      /* Phone layout specific tweaks */
 
       :host([phone]) vaadin-list-box vaadin-item {
         margin: 0 var(--valo-space-xs);

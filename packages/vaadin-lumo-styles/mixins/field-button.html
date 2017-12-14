@@ -1,0 +1,32 @@
+<link rel="import" href="../color.html">
+<link rel="import" href="../font-icons.html">
+
+<dom-module id="valo-field-button">
+  <template>
+    <style>
+      [part$="button"] {
+        flex: none;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 24px;
+        text-align: center;
+        color: var(--valo-contrast-50pct);
+        transition: 0.2s color;
+        cursor: default;
+      }
+
+      [part$="button"]:hover {
+        color: var(--valo-contrast-80pct);
+      }
+
+      :host([disabled]) [part$="button"] {
+        color: var(--valo-contrast-20pct);
+      }
+
+      [part$="button"]::before {
+        font-family: "valo-icons";
+      }
+    </style>
+  </template>
+</dom-module>
