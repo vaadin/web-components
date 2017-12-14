@@ -53,10 +53,12 @@
     });
 
     describe('theme variations', () => {
-      let element;
+      let element, c1, c2;
 
       beforeEach(() => {
         element = fixture('default');
+        c1 = element.querySelector('#c1');
+        c2 = element.querySelector('#c2');
       });
 
       it('should not have margin or padding by default', () => {
@@ -84,6 +86,13 @@
         expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('32px');
         expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('32px');
         expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('32px');
+      });
+
+      it('should support theme="spacing"', () => {
+        element.setAttribute('theme', 'spacing');
+        expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal('32px'); // 2em in px
+        expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal('32px');
+        expect(getComputedStyle(element, '::before').getPropertyValue('margin-top')).to.equal('-32px');
       });
     });
   </script>

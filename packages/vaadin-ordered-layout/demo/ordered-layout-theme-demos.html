@@ -64,6 +64,35 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Layout With Spacing Between Items</h3>
+    <p>
+      The <code>spacing</code> theme variation can be applied to both horizontal and vertical layout.
+    </p>
+    <p>
+      <b>Note:</b> when applying, the CSS <code>margin</code> property is set on child elements.
+      The property value should be specified by the theme.
+      The same behavior can achieved by setting corresponding property in CSS.
+    </p>
+    <vaadin-demo-snippet id='ordered-layout-theme-demos-spacing'>
+      <template preserve-content>
+        <vaadin-horizontal-layout theme="spacing">
+          <div class="dashed-outline">Item 1</div>
+          <div class="dashed-outline">Item 2</div>
+          <div class="dashed-outline">Item 3</div>
+        </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 150px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class OrderedLayoutThemeDemos extends DemoReadyEventEmitter(Polymer.Element) {

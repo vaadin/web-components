@@ -32,6 +32,19 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([theme~="padding"]) {
         padding: 2em;
       }
+
+      :host([theme~="spacing"]) ::slotted(*) {
+        margin-top: 2em;
+      }
+
+      /*
+        Compensate for the first item margin, so that there is no gap around
+        the layout itself.
+       */
+      :host([theme~="spacing"])::before {
+        content: "";
+        margin-top: -2em;
+      }
     </style>
 
     <slot></slot>
@@ -58,6 +71,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ---|---
        * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
        * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
+       * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
