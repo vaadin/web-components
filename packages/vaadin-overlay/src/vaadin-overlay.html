@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/utils/templatize.html">
+<link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
@@ -379,7 +380,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this.parentNode.insertBefore(this._placeholder, this);
           document.body.appendChild(this);
 
-          Polymer.Async.idlePeriod.run(() => {
+          Polymer.RenderStatus.afterNextRender(this, () => {
             if (this.focusTrap) {
               // Focus
               //  - the overlay content by default
