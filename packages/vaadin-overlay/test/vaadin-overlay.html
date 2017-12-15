@@ -52,14 +52,13 @@
     const mouseup = (el) => fire('mouseup', el);
 
     describe('overlay', function() {
-      var overlay, parent, overlayPart, content, backdrop, focusableElements;
+      var overlay, parent, overlayPart, content, backdrop;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
         overlayPart = overlay.$.overlay;
         content = overlay.$.content;
-        focusableElements = overlay._getFocusableElements();
         backdrop = overlay.$.backdrop;
         overlay._observer.flush();
         overlay.opened = true;
@@ -501,15 +500,13 @@
     });
 
     describe('focus trap', function() {
-      var overlay, parent, overlayPart, content, backdrop, focusableElements;
+      var overlay, parent, overlayPart, focusableElements;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
         overlayPart = overlay.$.overlay;
-        content = overlay.$.content;
         focusableElements = overlay._getFocusableElements();
-        backdrop = overlay.$.backdrop;
         overlay._observer.flush();
         window.focus();
       });
@@ -559,7 +556,6 @@
           parent = fixture('empty').children[0];
           overlay = parent.children[0];
           overlayPart = overlay.$.overlay;
-          content = overlay.$.content;
           overlay._observer.flush();
         });
 
