@@ -8,7 +8,7 @@
 </head>
 
 <body>
-  <dom-module id="vaadin-notification-overlay-animation-theme" theme-for="vaadin-notification-overlay">
+  <dom-module id="vaadin-notification-card-animation-theme" theme-for="vaadin-notification-card">
     <template>
       <style>
         @keyframes test-animation {
@@ -17,19 +17,13 @@
           }
         }
 
-        [part="middle"] > vaadin-notification-card[closing] {
-          animation: test-animation 100ms;
-        }
-      </style>
-    </template>
-  </dom-module>
-
-  <dom-module id="vaadin-notification-card-animation-theme" theme-for="vaadin-notification-card">
-    <template>
-      <style>
         :host {
           width: 200px;
           background: lightgrey;
+        }
+
+        :host([slot="middle"][closing]) {
+          animation: test-animation 100ms;
         }
       </style>
     </template>
