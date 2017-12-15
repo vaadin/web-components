@@ -93,6 +93,60 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Gaps</h3>
+    <p>
+      By default, the theme variations use relative <code>em</code> units based on font size.
+      So you can configure gaps between items and around the layout using <code>font-size</code> CSS property.
+      Pay attenton to that you would need to restore font size for items in this case.
+    </p>
+    <vaadin-demo-snippet id='ordered-layout-theme-demos-custom-gaps'>
+      <template preserve-content>
+        <vaadin-horizontal-layout>
+          <vaadin-vertical-layout theme="margin spacing" class="gap-sm">
+            <div class="dashed-outline">
+              <span class="text">Item 1</span>
+            </div>
+            <div class="dashed-outline">
+              <span class="text">Item 2</span>
+            </div>
+            <div class="dashed-outline">
+              <span class="text">Item 3</span>
+            </div>
+          </vaadin-vertical-layout>
+          <vaadin-vertical-layout theme="padding spacing" class="gap-lg">
+            <div class="dashed-outline">
+              <span class="text">Item 4</span>
+            </div>
+            <div class="dashed-outline">
+              <span class="text">Item 5</span>
+            </div>
+          </vaadin-vertical-layout>
+        </vaadin-horizontal-layout>
+
+        <style>
+          vaadin-horizontal-layout {
+            height: 200px;
+          }
+
+          .gap-sm {
+            font-size: 10px;
+          }
+
+          .gap-lg {
+            font-size: 20px;
+          }
+
+          .dashed-outline {
+            outline: 1px dashed gray; /* for demonstration purposes only */
+          }
+
+          .text {
+            font-size: 14px; /* restore original font size for item */
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class OrderedLayoutThemeDemos extends DemoReadyEventEmitter(Polymer.Element) {
