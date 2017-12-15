@@ -24,7 +24,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
 
-      :host([vertical]) {
+      :host([orientation="vertical"]) {
         flex-direction: column;
       }
 
@@ -42,11 +42,11 @@ This program is available under Apache License Version 2.0, available at https:/
         min-height: 8px;
       }
 
-      :host(:not([vertical])) > [part="splitter"] {
+      :host(:not([orientation="vertical"])) > [part="splitter"] {
         cursor: ew-resize;
       }
 
-      :host([vertical]) > [part="splitter"] {
+      :host([orientation="vertical"]) > [part="splitter"] {
         cursor: ns-resize;
       }
 
@@ -81,13 +81,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Horizontal and Vertical Layouts
        *
-       * By default, the split is horizontal, meaning that the content elements are
+       * By default, the split's orientation is horizontal, meaning that the content elements are
        * positioned side by side in a flex container with a horizontal layout.
        *
-       * You can change the split mode to vertical by adding the `vertical` attribute:
+       * You can change the split mode to vertical by setting the `orientation` attribute to `"vertical"`:
        *
        * ```html
-       * <vaadin-split-layout vertical>
+       * <vaadin-split-layout orientation="vertical">
        *   <div>Content on the top</div>
        *   <div>Content on the bottom</div>
        * </vaadin-split-layout>
@@ -105,15 +105,15 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-split-layout>
        *   <div>First content element</div>
-       *   <vaadin-split-layout vertical>
+       *   <vaadin-split-layout orientation="vertical">
        *     <div>Second content element</div>
        *     <div>Third content element</div>
        *   </vaadin-split-layout>
        * </vaadin-split-layout>
        * ```
        *
-       * You can also trigger the vertical mode by setting the property:
-       * `splitLayout.vertical = true;`.
+       * You can also trigger the vertical mode in JavaScript by setting the property:
+       * `splitLayout.orientation = "vertical";`.
        *
        * ### Split Layout Element Height
        *
@@ -168,7 +168,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * the content elements are scaled proportionally.
        *
        * When setting initial sizes with relative units, such as percentages, it is
-       * recommended to assing the size for both content elements:
+       * recommended to assign the size for both content elements:
        *
        * ```html
        * <vaadin-split-layout>
@@ -233,12 +233,12 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * Change the split layout to vertical
+             * The split layout's orientation. Possible values are: `horizontal|vertical`.
              */
-            vertical: {
-              type: Boolean,
+            orientation: {
+              type: String,
               reflectToAttribute: true,
-              value: false
+              value: 'horizontal'
             },
 
             _previousPrimaryPointerEvents: String,
@@ -293,7 +293,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          var size = this.vertical ? 'height' : 'width';
+          var size = this.orientation === 'vertical' ? 'height' : 'width';
           if (event.detail.state === 'start') {
             this._startSize = {
               container: this.getBoundingClientRect()[size] - this.$.splitter.getBoundingClientRect()[size],
@@ -304,7 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          var distance = this.vertical ? event.detail.dy : event.detail.dx;
+          var distance = this.orientation === 'vertical' ? event.detail.dy : event.detail.dx;
           this._setFlexBasis(this._primaryChild, this._startSize.primary + distance, this._startSize.container);
           this._setFlexBasis(this._secondaryChild, this._startSize.secondary - distance, this._startSize.container);
 
@@ -328,7 +328,8 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.SplitLayoutElement = SplitLayoutElement;
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.SplitLayoutElement = SplitLayoutElement;
     }
   </script>
 </dom-module>

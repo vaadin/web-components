@@ -322,7 +322,7 @@
           splitLayout = fixture('split-layout');
           splitLayout.style.width = initialSizes.width + 'px';
           splitLayout.style.height = initialSizes.height + 'px';
-          splitLayout.vertical = true;
+          splitLayout.orientation = 'vertical';
           setTimeout(() => {
             first = splitLayout.$.primary.assignedNodes({flatten: true})[0];
             second = splitLayout.$.secondary.assignedNodes({flatten: true})[0];
