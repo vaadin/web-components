@@ -1,3 +1,5 @@
+<link rel="import" href="../../src/vaadin-button.html">
+
 <link rel="import" href="../../../vaadin-valo-theme/color.html">
 <link rel="import" href="../../../vaadin-valo-theme/sizing.html">
 <link rel="import" href="../../../vaadin-valo-theme/spacing.html">
@@ -6,73 +8,79 @@
 
 <dom-module id="valo-button" theme-for="vaadin-button">
   <template>
+    <style include="valo-button-sizing valo-button-style valo-button-states valo-button-types valo-button-colors valo-button-icons">
+      /* This needs to be the last selector for it to take priority */
+      :host([disabled][disabled]) {
+        pointer-events: none;
+        color: var(--valo-disabled-text-color);
+        background-color: var(--valo-contrast-5pct);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-button-sizing">
+  <template>
     <style>
       :host {
-        display: inline-block;
-        color: var(--valo-primary-text-color);
+        --valo-button-size: var(--valo-size-m);
+        min-width: calc(var(--valo-button-size) * 2);
+        min-height: var(--valo-button-size);
+        padding: 0 calc(var(--valo-button-size) / 3 + var(--valo-border-radius) / 2);
+        margin: var(--valo-space-xs) 0;
+        box-sizing: border-box;
+      }
+
+      [part="label"] {
+        padding: calc(var(--valo-button-size) / 6) 0;
+      }
+
+      :host([theme~="small"]) {
+        font-size: var(--valo-font-size-s);
+        --valo-button-size: var(--valo-size-s);
+      }
+
+      :host([theme~="large"]) {
+        font-size: var(--valo-font-size-l);
+        --valo-button-size: var(--valo-size-l);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-button-style">
+  <template>
+    <style>
+      :host {
         font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size, var(--valo-font-size-m));
+        font-size: var(--valo-font-size-m);
+        line-height: var(--valo-line-height-xs);
         font-weight: 500;
-        /* Custom property only needed for the dark theme */
-        background-color: var(--_valo-button-background-color, var(--valo-tint-80pct));
-        min-width: calc(var(--valo-size, var(--valo-size-m)) * 2);
-        min-height: var(--valo-size, var(--valo-size-m));
+        color: var(--valo-primary-text-color);
+        background-color: var(--valo-contrast-5pct);
         border-radius: var(--valo-border-radius);
-        margin: var(--valo-space-xs);
+        cursor: default;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        transition-property: background-color, color, box-shadow;
-        transition-duration: 0.3s;
-        position: relative;
-        box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 1px 2px 0 var(--valo-shade-20pct);
-        cursor: default;
       }
+    </style>
+  </template>
+</dom-module>
 
-      [part="button"] {
-        border: 0;
-        margin: 0;
-        padding: var(--valo-space-xs) calc(var(--valo-size, var(--valo-size-m)) / 3 + var(--valo-border-radius) / 2);
-        background-color: transparent;
-        color: inherit;
-        font: inherit;
-        line-height: normal;
-        text-transform: inherit;
-        outline: none;
-        min-height: inherit;
-        text-shadow: inherit;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: inherit;
-        /* TODO magic number, based on Valo icons size -1px to make it work nicely with Roboto and SF fonts */
-        line-height: calc(var(--valo-size, var(--valo-size-m)) - 13px);
-      }
-
-      [part="button"]::-moz-focus-inner {
-        border: 0;
-      }
-
-      @media (hover: hover) {
-        :host(:hover:not([theme*="tertiary"]):not([active])) {
-          box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 2px 6px 0 var(--valo-shade-20pct);
-        }
-      }
-
-      /* Activation effect */
-
+<dom-module id="valo-button-states">
+  <template>
+    <style>
       :host::before,
       :host::after {
         content: "";
+        /* We rely on the host always being relative */
         position: absolute;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
-        background-color: var(--valo-contrast-5pct);
+        background-color: currentColor;
         border-radius: var(--valo-border-radius);
         opacity: 0;
         transition: opacity 0.2s;
@@ -80,8 +88,22 @@
         pointer-events: none;
       }
 
+      /* Hover */
+
+      :host(:hover)::before {
+        opacity: 0.05;
+      }
+
+      /* Disable for touch devices */
+      @media (pointer: coarse) {
+        :host(:hover)::before {
+          opacity: 0;
+        }
+      }
+
+      /* Active */
+
       :host::after {
-        background-color: currentColor;
         transition: opacity 1.4s, transform 0.1s;
         will-change: opacity, transform;
         filter: blur(8px);
@@ -91,12 +113,8 @@
         transition-duration: 0.05s;
       }
 
-      :host([active]:not([theme~="primary"]):not([theme*="tertiary"])) {
-        box-shadow: 0 0 0 1px var(--valo-shade-10pct), 0 1px 1px 0 var(--valo-shade-10pct);
-      }
-
-      :host([active]:not([theme*="tertiary"]))::before {
-        opacity: 1;
+      :host([active])::before {
+        opacity: 0.1;
         transition-duration: 0s;
       }
 
@@ -106,36 +124,55 @@
         transform: scale(0);
       }
 
-      :host([active][theme*="tertiary"]) {
+      /* Keyboard focus */
+
+      :host([focus-ring]) {
+        box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="valo-button-types">
+  <template>
+    <style>
+      /* Tertiary */
+
+      :host([theme~="tertiary"]),
+      :host([theme~="tertiary-inline"]) {
+        background-color: transparent !important;
+        transition: opacity 0.2s;
+      }
+
+      :host([theme~="tertiary"])::before,
+      :host([theme~="tertiary-inline"])::before {
+        display: none;
+      }
+
+      :host([theme~="tertiary"]) {
+        padding: 0 calc(var(--valo-button-size) / 6);
+      }
+
+      @media (hover: hover) {
+        :host([theme*="tertiary"]:not([active]):hover) {
+          opacity: 0.8;
+        }
+      }
+
+      :host([theme~="tertiary"][active]),
+      :host([theme~="tertiary-inline"][active]) {
         color: var(--valo-body-text-color);
       }
 
-      /* Tertiary */
-
-      :host([theme*="tertiary"]) {
-        background-color: transparent;
-        box-shadow: none;
-      }
-
-      :host([theme*="tertiary"]) [part="button"] {
-        padding: 0 calc(var(--valo-size, var(--valo-size-m)) / 6 + var(--valo-border-radius) / 2);
-      }
-
-      :host([theme*="tertiary"]:not([active]):hover) {
-        opacity: 0.8;
-      }
-
-      /* Tertiary inline (no padding or margin) */
+      /* Tertiary inline ("text button") */
 
       :host([theme~="tertiary-inline"]) {
         margin: 0;
         min-width: 0;
         min-height: 0;
-      }
-
-      :host([theme~="tertiary-inline"]) [part="button"] {
         padding: 0;
         line-height: inherit;
+        font-size: inherit;
       }
 
       /* Primary */
@@ -143,81 +180,24 @@
       :host([theme~="primary"]) {
         background-color: var(--valo-primary-color);
         color: var(--valo-primary-contrast-color);
-        box-shadow: 0 1px 2px 0 var(--valo-shade-40pct);
         font-weight: 600;
-        min-width: calc(var(--valo-size, var(--valo-size-m)) * 2.5);
+        min-width: calc(var(--valo-button-size) * 2.5);
+      }
+
+      :host([theme~="primary"][active])::before {
+        color: var(--valo-contrast-50pct);
       }
 
       :host([theme~="primary"][active])::after {
         opacity: 0.2;
       }
+    </style>
+  </template>
+</dom-module>
 
-      @media (hover: hover) {
-        :host([theme~="primary"]:hover:not([active])) {
-          box-shadow: 0 2px 6px 0 var(--valo-shade-40pct);
-        }
-      }
-
-      /* Small */
-
-      :host([theme~="small"]) {
-        --valo-font-size: var(--valo-font-size-s);
-        --valo-size: var(--valo-size-s);
-      }
-
-      /* Large */
-
-      :host([theme~="large"]) {
-        --valo-font-size: var(--valo-font-size-l);
-        --valo-size: var(--valo-size-l);
-      }
-
-      /* Icon-only */
-
-      :host([theme~="icon"]:not([theme~="tertiary-inline"])) {
-        min-width: var(--valo-size, var(--valo-size-m));
-      }
-
-      :host([theme~="icon"]:not([theme~="tertiary-inline"])) [part="button"] {
-        padding-left: var(--valo-space-s);
-        padding-right: var(--valo-space-s);
-      }
-
-      /* Icons used together with text (not super proud of these calc's) */
-
-      [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
-        margin-left: calc(var(--valo-size, var(--valo-size-m)) / -6);
-        margin-right: calc(var(--valo-size, var(--valo-size-m)) / 9);
-      }
-
-      [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
-        margin-left: calc(var(--valo-size, var(--valo-size-m)) / 9);
-        margin-right: calc(var(--valo-size, var(--valo-size-m)) / -6);
-      }
-
-      :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:first-child:not(:last-child)) {
-        margin-left: 0;
-      }
-
-      :host([theme~="tertiary-inline"]) [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
-        margin-right: 0;
-      }
-
-      [part="button"] ::slotted(iron-icon) {
-        display: inline-block;
-        width: 1.5em;
-        height: 1.5em;
-      }
-
-      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
-      [part="button"] ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: 1em;
-        height: 1em;
-        padding: 4px;
-      }
-
-      /* Color alternatives */
-
+<dom-module id="valo-button-colors">
+  <template>
+    <style>
       :host([theme~="success"]) {
         color: var(--valo-success-text-color);
       }
@@ -244,63 +224,49 @@
         background-color: var(--valo-contrast);
         color: var(--valo-base-color);
       }
-
-      /* Disabled */
-
-      :host([disabled][disabled]) {
-        pointer-events: none;
-        color: var(--valo-disabled-text-color);
-        box-shadow: none;
-      }
-
-      :host([disabled]:not([theme*="tertiary"])) {
-        background-color: var(--valo-contrast-10pct);
-      }
-
-      /* Keyboard focus */
-
-      :host([focus-ring]) {
-        box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
-      }
-
-      /* Hacks department (shame) */
-
-      /* Needed to cancel the 3D push effect in IE11 */
-      ::-ms-backdrop,
-      :host([active]) [part="button"] {
-        transform: translate(-1px, -1px);
-      }
-
-      ::-ms-backdrop,
-      :host([active]) [part="button"] ::slotted(*) {
-        transform: translate(1px, 1px);
-      }
-
-      /* Align the icon nicely with the text, without using flexbox on the parent element (in order to keep text truncation working) */
-      [part="button"] ::slotted(iron-icon) {
-        vertical-align: -0.43em;
-      }
-
-      @-moz-document url-prefix() {
-        /* Firefox is being stupid and truncates (shows an ellipsis) the suffix icon because of the negative margin */
-        [part="button"] ::slotted(iron-icon:last-child:not(:first-child)) {
-          margin-right: 0;
-        }
-
-        /* Firefox is being picky about the vertical alignment */
-        [part="button"] ::slotted(iron-icon) {
-          vertical-align: -0.39em;
-        }
-      }
-
-      @supports (-ms-ime-align: auto) {
-        /* Edge is also being picky about the vertical alignment */
-        [part="button"] ::slotted(iron-icon) {
-          vertical-align: -0.39em;
-        }
-      }
     </style>
   </template>
 </dom-module>
 
-<link rel="import" href="../../src/vaadin-button.html">
+<dom-module id="valo-button-icons">
+  <template>
+    <style>
+      :host ::slotted(iron-icon) {
+        display: inline-block;
+        width: 1.5em;
+        height: 1.5em;
+      }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+      :host ::slotted(iron-icon[icon^="vaadin:"]) {
+        width: 1em;
+        height: 1em;
+        padding: 4px;
+      }
+
+      [part="prefix"] {
+        margin-left: -0.25em;
+        margin-right: 0.25em;
+      }
+
+      [part="suffix"] {
+        margin-left: 0.25em;
+        margin-right: -0.25em;
+      }
+
+      /* Icon-only */
+
+      :host([theme~="icon"]) {
+        min-width: var(--valo-button-size);
+        padding-left: calc(var(--valo-button-size) / 4);
+        padding-right: calc(var(--valo-button-size) / 4);
+      }
+
+      :host([theme~="icon"]) [part="prefix"],
+      :host([theme~="icon"]) [part="suffix"] {
+        margin-left: 0;
+        margin-right: 0;
+      }
+    </style>
+  </template>
+</dom-module>
