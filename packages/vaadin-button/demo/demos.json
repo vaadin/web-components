@@ -2,22 +2,33 @@
   "name": "Vaadin Button",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "button-basic-demos",
     "src": "button-basic-demos.html",
     "meta": {
-      "title": "vaadin-button Basic Examples",
+      "title": "Vaadin Button Basic Examples",
       "description": "",
       "image": ""
      }
   }
   ,
   {
-    "name": "Valo Theme Variations",
+    "name": "Accessibility",
+    "url": "button-accessibility-demos",
+    "src": "button-a11y-demos.html",
+        "meta": {
+      "title": "Vaadin Button Accessibility",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Valo Theme",
     "url": "button-valo-theme-demos",
     "src": "button-valo-theme-demos.html",
         "meta": {
-      "title": "vaadin-button Valo Theme Variations",
+      "title": "Vaadin Button Valo Theme",
       "description": "",
       "image": ""
      }
