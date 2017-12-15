@@ -13,23 +13,48 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-checkbox">
   <template>
     <style>
+      :host {
+        display: inline-block;
+      }
+
+      #label {
+        display: inline-flex;
+        align-items: baseline;
+        outline: none;
+      }
+
+      [part="checkbox"] {
+        position: relative;
+        display: inline-block;
+        flex: none;
+      }
+
+      #nativeCheckbox {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: inherit;
+      }
+
       :host([disabled]) {
         -webkit-tap-highlight-color: transparent;
       }
     </style>
 
-    <label part="wrapper" id="label">
-      <input
-        id="nativeCheckbox"
-        type="checkbox"
-        part="native-checkbox"
-        checked="{{checked::change}}"
-        disabled$="[[disabled]]"
-        indeterminate="{{indeterminate::change}}"
-        role="presentation"
-        tabindex="-1">
-
-      <span part="checkbox"></span>
+    <label id="label">
+      <span part="checkbox">
+        <input
+          id="nativeCheckbox"
+          type="checkbox"
+          checked="{{checked::change}}"
+          disabled$="[[disabled]]"
+          indeterminate="{{indeterminate::change}}"
+          role="presentation"
+          tabindex="-1">
+      </span>
 
       <span part="label">
         <slot></slot>
@@ -54,10 +79,8 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
-       * `wrapper`         | The `<label>` element which wraps the checkbox and [part="label"]
-       * `native-checkbox` | The `<input type="checkbox">` element
-       * `checkbox`        | The `<span>` element for a custom graphical check
-       * `label`           | The `<span>` element for slotted text/HTML label
+       * `checkbox`        | The checkbox element
+       * `label`           | The label content element
        *
        * The following state attributes are available for styling:
        *
