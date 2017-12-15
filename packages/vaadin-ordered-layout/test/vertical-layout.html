@@ -31,6 +31,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="wrap">
+    <template>
+      <div>
+        <vaadin-vertical-layout>
+          <div>Content</div>
+        </vaadin-vertical-layout>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     describe('basic tests', () => {
       let element, c1, c2;
@@ -93,6 +103,22 @@
         expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal('32px'); // 2em in px
         expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal('32px');
         expect(getComputedStyle(element, '::before').getPropertyValue('margin-top')).to.equal('-32px');
+      });
+    });
+
+    describe('outer spacing', () => {
+      let wrapper, element;
+
+      beforeEach(() => {
+        wrapper = fixture('wrap');
+        element = wrapper.firstElementChild;
+      });
+
+      it('should not occupy space outside when applying theme="spacing"', () => {
+        element.setAttribute('theme', 'spacing');
+        wrapper.style.height = '200px';
+        element.style.minHeight = '200px';
+        expect(wrapper.scrollHeight).to.equal(200);
       });
     });
   </script>
