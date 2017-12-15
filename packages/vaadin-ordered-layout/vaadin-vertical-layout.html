@@ -6,34 +6,25 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="vaadin-ordered-layout-mixin.html">
 
 <dom-module id="vaadin-vertical-layout">
   <template>
     <style>
       :host {
         display: flex;
-
-        /* CSS API for host */
-        --vaadin-vertical-layout-gap: 2em; /* (default) */
+        flex-direction: column;
       }
 
       :host([hidden]) {
         display: none !important;
       }
 
+      :host ::slotted(*) {
+        /* Enable grow and shrink for items. */
+        flex: 1 1 auto;
+      }
+
       /* Theme variations */
-
-      :host([theme~="gap-none"]) vaadin-vertical-layout-container {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-
-      :host([theme~="gap-none"]) vaadin-vertical-layout-container ::slotted(*) {
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-
       :host([theme~="margin"]) {
         margin: 2em;
       }
@@ -41,11 +32,23 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([theme~="padding"]) {
         padding: 2em;
       }
+
+      :host([theme~="spacing"]) ::slotted(*) {
+        margin-top: 2em;
+      }
+
+      /*
+        Compensate for the first item margin, so that there is no gap around
+        the layout itself.
+       */
+      :host([theme~="spacing"])::before {
+        content: "";
+        margin-top: -2em;
+      }
     </style>
 
-    <vaadin-vertical-layout-container id="vaadinOrderedLayoutContainer">
-      <slot></slot>
-    </vaadin-vertical-layout-container>
+    <slot></slot>
+
   </template>
 
   <script>
@@ -60,30 +63,21 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-vertical-layout>
        * ```
        *
-       * ### CSS Properties Reference
-       *
-       * The following custom CSS properties are available
-       * on the `<vaadin-vertical-layout>` element:
-       *
-       * Custom CSS property | Description | Default
-       * ---|---|---
-       * `--vaadin-vertical-layout-gap` | Length of the gap between items | `2em`
-       *
        * ### Built-in Theme Variations
        *
-       * `<vaadin-vertical-layout-gap>` supports the following theme variations:
+       * `<vaadin-vertical-layout>` supports the following theme variations:
        *
        * Theme variation | Description
        * ---|---
-       * `theme="gap-none"` | Removes gaps between items
        * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
        * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
+       * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VerticalLayoutElement extends Vaadin.OrderedLayoutMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class VerticalLayoutElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-vertical-layout';
         }
@@ -100,50 +94,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.VerticalLayoutElement = VerticalLayoutElement;
-    }
-  </script>
-</dom-module>
-
-<dom-module id="vaadin-vertical-layout-container">
-  <template>
-    <style>
-      :host {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        /* Internal CSS property used for scoping --vaadin-vertical-layout-gap */
-        --vaadin-vertical-layout-gap-scoped: var(--vaadin-vertical-layout-gap);
-
-        /*
-          Compensate for item margins, so that there are no gaps around
-          the layout itself.
-        */
-        margin-top: calc(-0.5 * var(--vaadin-vertical-layout-gap-scoped));
-        margin-bottom: calc(-0.5 * var(--vaadin-vertical-layout-gap-scoped));
-      }
-
-      :host ::slotted(*) {
-        /* Enable grow and shrink for items. */
-        flex: 1 1 auto;
-
-        /* Margins make gaps between items */
-        margin-top: calc(0.5 * var(--vaadin-vertical-layout-gap-scoped));
-        margin-bottom: calc(0.5 * var(--vaadin-vertical-layout-gap-scoped));
-      }
-    </style>
-    <slot></slot>
-  </template>
-  <script>
-    {
-      /**
-       * For internal use only
-       */
-      class VaadinVerticalLayoutContainer extends Polymer.Element {
-        static get is() {
-          return 'vaadin-vertical-layout-container';
-        }
-      }
-      customElements.define(VaadinVerticalLayoutContainer.is, VaadinVerticalLayoutContainer);
     }
   </script>
 </dom-module>

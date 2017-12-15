@@ -31,23 +31,17 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="nested">
+  <test-fixture id="wrap">
     <template>
-      <vaadin-horizontal-layout id="container">
-        <div id="c1">c1</div>
-        <vaadin-horizontal-layout id="container" class="inner-layout">
-          <div id="c2">c2</div>
+      <div>
+        <vaadin-horizontal-layout>
+          <div>Content</div>
         </vaadin-horizontal-layout>
-      </vaadin-horizontal-layout>
+      </div>
     </template>
   </test-fixture>
 
   <script>
-
-    function getLayout(element) {
-      return element.shadowRoot.lastElementChild;
-    }
-
     describe('basic tests', () => {
       let element, c1, c2;
 
@@ -59,45 +53,12 @@
 
       it('items are next to each other', () => {
         expect(getCoords(element)).to.include({top: 0, right: 300, bottom: 200, left: 0});
-        expect(getCoords(c1)).to.include({top: 0, right: (300 - 32) / 2, bottom: 200, left: 0});
-        expect(getCoords(c2)).to.include({top: 0, right: 300, bottom: 200, left: (300 + 32) / 2});
+        expect(getCoords(c1)).to.include({top: 0, right: 300 / 2, bottom: 200, left: 0});
+        expect(getCoords(c2)).to.include({top: 0, right: 300, bottom: 200, left: 300 / 2});
       });
 
       it('should extend Vaadin.ThemableMixin', () => {
         expect(element.constructor.hasOwnProperty('_memoizedThemableMixinTemplate')).to.be.true;
-      });
-    });
-
-    describe('spacing', () => {
-      let element, c1, c2;
-
-      beforeEach(() => {
-        element = fixture('default');
-        c1 = element.querySelector('#c1');
-        c2 = element.querySelector('#c2');
-      });
-
-      it('should apply default gap', () => {
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('16px'); // 0.5 * 2em in px
-        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('16px');
-      });
-
-      it('should compensate for gap in layout wrapper', () => {
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-16px');
-      });
-
-      it('should support updating with `updateStyles` call', () => {
-        element.updateStyles({
-          '--vaadin-horizontal-layout-gap': '20px'
-        });
-
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('10px'); // 0.5 * 20px in px
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('10px'); // 0.5 * 20px in px
-        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
-        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('10px');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-10px'); // -0.5 * 20px in px
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-10px');
       });
     });
 
@@ -108,16 +69,6 @@
         element = fixture('default');
         c1 = element.querySelector('#c1');
         c2 = element.querySelector('#c2');
-      });
-
-      it('should support theme="gap-none"', () => {
-        element.setAttribute('theme', 'gap-none');
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('0px');
-        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('0px');
-        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('0px');
-        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('0px');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('0px');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('0px');
       });
 
       it('should not have margin or padding by default', () => {
@@ -146,60 +97,28 @@
         expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('32px');
         expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('32px');
       });
-    });
 
-    describe('nested', () => {
-      let element, inner, c1, c2;
-
-      beforeEach(() => {
-        element = fixture('nested');
-        inner = element.querySelector('.inner-layout');
-        c1 = element.querySelector('#c1');
-        c2 = inner.querySelector('#c2');
-      });
-
-      it('should support different gaps in nested layouts', () => {
-        inner.updateStyles({
-          '--vaadin-horizontal-layout-gap': '10px'
-        });
-
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('16px');
-        expect(getComputedStyle(c1).getPropertyValue('margin-right')).to.equal('16px');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-left')).to.equal('-16px');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('margin-right')).to.equal('-16px');
-
-        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('5px');
-        expect(getComputedStyle(c2).getPropertyValue('margin-right')).to.equal('5px');
-        expect(getComputedStyle(getLayout(inner)).getPropertyValue('margin-left')).to.equal('-5px');
-        expect(getComputedStyle(getLayout(inner)).getPropertyValue('margin-right')).to.equal('-5px');
+      it('should support theme="spacing"', () => {
+        element.setAttribute('theme', 'spacing');
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('32px'); // 2em in px
+        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('32px');
+        expect(getComputedStyle(element, '::before').getPropertyValue('margin-left')).to.equal('-32px');
       });
     });
 
-    describe('layout customization api', () => {
-      let element;
+    describe('outer spacing', () => {
+      let wrapper, element;
 
       beforeEach(() => {
-        element = fixture('default');
+        wrapper = fixture('wrap');
+        element = wrapper.firstElementChild;
       });
 
-      it('should have default align-items value of stretch', () => {
-        expect(element._alignItems).to.equal('stretch');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('align-items')).to.equal('stretch');
-      });
-
-      it('should have default justify-content value of flex-start', () => {
-        expect(element._justifyContent).to.equal('flex-start');
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('justify-content')).to.equal('flex-start');
-      });
-
-      it('should support customizing align-items', () => {
-        element._alignItems = 'flex-end';
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('align-items')).to.equal('flex-end');
-      });
-
-      it('should support customizing justify-content', () => {
-        element._justifyContent = 'space-between';
-        expect(getComputedStyle(getLayout(element)).getPropertyValue('justify-content')).to.equal('space-between');
+      it('should not occupy space outside when applying theme="spacing"', () => {
+        element.setAttribute('theme', 'spacing');
+        wrapper.style.width = '200px';
+        element.style.minWidth = '200px';
+        expect(wrapper.scrollWidth).to.equal(200);
       });
     });
   </script>
