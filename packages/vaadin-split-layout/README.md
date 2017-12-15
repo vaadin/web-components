@@ -36,11 +36,11 @@
 -->
 ```html
 <vaadin-split-layout>
-  <vaadin-split-layout vertical>
+  <vaadin-split-layout orientation="vertical">
     <div>First layout content</div>
     <div>Second layout content</div>
   </vaadin-split-layout>
-  <vaadin-split-layout vertical>
+  <vaadin-split-layout orientation="vertical">
     <div>Third layout content</div>
     <div>Fourth layout content</div>
   </vaadin-split-layout>
