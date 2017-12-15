@@ -24,16 +24,6 @@
         color: var(--valo-body-text-color);
       }
 
-      /* This makes the :active style work in IE11 */
-      [part="label"] {
-        pointer-events: none;
-      }
-
-      /* Not sure if this is necessary: should there ever be anything clickable inside the label? */
-      [part="label"] > * {
-        pointer-events: auto;
-      }
-
       [part="label"]:not(:empty) {
         margin: 0.1875em 0.875em 0.1875em 0.375em;
       }
