@@ -38,12 +38,12 @@
     "paper-listbox": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-grid": "^5.0.0-alpha1",
-    "vaadin-item": "^2.0.0-alpha1",
-    "vaadin-list-box": "^1.0.0-alpha4",
+    "vaadin-grid": "^5.0.0",
+    "vaadin-item": "^2.0.0",
+    "vaadin-list-box": "^1.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0",
-    "vaadin-tabs": "^2.0.0-alpha1"
+    "vaadin-tabs": "^2.0.0"
   }
 }
