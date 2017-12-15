@@ -54,7 +54,6 @@
       :host {
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-m);
-        line-height: var(--valo-line-height-xs);
         font-weight: 500;
         color: var(--valo-primary-text-color);
         background-color: var(--valo-contrast-5pct);
@@ -63,6 +62,13 @@
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+      }
+
+      /* Set only for the internal parts so we don’t affect the host vertical alignment */
+      [part="label"],
+      [part="prefix"],
+      [part="suffix"] {
+        line-height: var(--valo-line-height-xs);
       }
     </style>
   </template>
