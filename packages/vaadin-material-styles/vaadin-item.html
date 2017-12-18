@@ -1,0 +1,61 @@
+<link rel="import" href="font-icons.html">
+<link rel="import" href="typography.html">
+<link rel="import" href="../vaadin-item/src/vaadin-item.html">
+
+<dom-module id="material-item" theme-for="vaadin-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 4px calc(16px + 0.25em / 4);
+        padding-right: calc(32px + 0.25em / 4);
+        box-sizing: border-box;
+        line-height: 24px;
+        border-radius: 0.25em;
+        overflow: hidden;
+      }
+
+      @media (pointer: coarse) {
+        :host {
+          min-height: 44px;
+          padding-top: 30px;
+          padding-bottom: 30px;
+        }
+      }
+
+      /* It's the list-box's responsibility to add the focus style */
+      :host([focused]) {
+        outline: none;
+      }
+
+      /* Selected item has an icon */
+
+      :host::before {
+        display: var(--_valo-item-selected-icon-display, none);
+        content: "";
+        font-family: valo-icons;
+        font-size: 24px;
+        line-height: 1;
+        font-weight: 400;
+        width: 24px;
+        margin-right: 26px;
+        color: var(--material-primary-text-color);
+        flex: none;
+      }
+
+      :host([selected])::before {
+        content: "\e902";
+      }
+
+      /* Disabled item */
+
+      :host([disabled]) {
+        color: var(--material-disabled-text-color);
+        cursor: default;
+        pointer-events: none;
+      }
+    </style>
+  </template>
+</dom-module>
