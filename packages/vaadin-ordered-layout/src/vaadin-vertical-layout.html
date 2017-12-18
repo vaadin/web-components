@@ -1,0 +1,95 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+
+<dom-module id="vaadin-vertical-layout">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      /* Theme variations */
+      :host([theme~="margin"]) {
+        margin: 1em;
+      }
+
+      :host([theme~="padding"]) {
+        padding: 1em;
+      }
+
+      :host([theme~="spacing"]) ::slotted(*) {
+        margin-top: 1em;
+      }
+
+      /*
+        Compensate for the first item margin, so that there is no gap around
+        the layout itself.
+       */
+      :host([theme~="spacing"])::before {
+        content: "";
+        margin-top: -1em;
+      }
+    </style>
+
+    <slot></slot>
+
+  </template>
+
+  <script>
+    {
+      /**
+       * `<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.
+       *
+       * ```
+       * <vaadin-vertical-layout>
+       *   <div>Item 1</div>
+       *   <div>Item 2</div>
+       * </vaadin-vertical-layout>
+       * ```
+       *
+       * ### Built-in Theme Variations
+       *
+       * `<vaadin-vertical-layout>` supports the following theme variations:
+       *
+       * Theme variation | Description
+       * ---|---
+       * `theme="margin"` | Applies the default amount of CSS margin for the host element (specified by the theme)
+       * `theme="padding"` | Applies the default amount of CSS padding for the host element (specified by the theme)
+       * `theme="spacing"` | Applies the default amount of CSS margin between items (specified by the theme)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @demo demo/index.html
+       */
+      class VerticalLayoutElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-vertical-layout';
+        }
+
+        static get version() {
+          return '1.0.0-alpha4';
+        }
+      }
+
+      customElements.define(VerticalLayoutElement.is, VerticalLayoutElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.VerticalLayoutElement = VerticalLayoutElement;
+    }
+  </script>
+</dom-module>
