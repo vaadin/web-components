@@ -21,7 +21,7 @@
     <h3>Position</h3>
     <vaadin-demo-snippet id='notification-basic-demos-simple-notification'>
       <template preserve-content>
-        <vaadin-notification opened duration="4000" vertical-align="top" horizontal-align="end">
+        <vaadin-notification opened duration="4000" position="top-end">
           <template>
             This notification is shown in the top right corner
           </template>
@@ -51,7 +51,7 @@
         <dom-bind id="bind-elm">
           <template>
             <vaadin-button on-click="_open">Open Notification</button>
-            <vaadin-notification id="noti-elm" duration="0" horizontal-align="end">
+            <vaadin-notification id="noti-elm" duration="0" position="bottom-end">
               <template>
                 This notification remains opened until the button inside is clicked.
                 <br/>
@@ -85,7 +85,7 @@
             template.innerHTML = '<h4>Alert</h4>This is a Dynamic Notification created with JS';
 
             const notify = document.createElement('vaadin-notification');
-            notify.verticalAlign = 'middle';
+            notify.position = 'middle';
             notify.appendChild(template);
 
             document.body.appendChild(notify);

@@ -36,21 +36,17 @@
 
             <div class="wrapper space">
               <div class="wrapper">
-                <label>Vertical Align</label>
-                <vaadin-radio-group value="{{verticalAlign}}">
+                <label>Position</label>
+                <vaadin-radio-group value="{{position}}">
                   <vaadin-radio-button name="radio-group" value="top-stretch">top-stretch</vaadin-radio-button>
-                  <vaadin-radio-button name="radio-group" value="top">top</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="top-start">top-start</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="top-center">top-center</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="top-end">top-end</vaadin-radio-button>
                   <vaadin-radio-button name="radio-group" value="middle">middle</vaadin-radio-button>
-                  <vaadin-radio-button name="radio-group" value="bottom">bottom</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="bottom-start">bottom-start</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="bottom-center">bottom-center</vaadin-radio-button>
+                  <vaadin-radio-button name="radio-group" value="bottom-end">bottom-end</vaadin-radio-button>
                   <vaadin-radio-button name="radio-group" value="bottom-stretch">bottom-stretch</vaadin-radio-button>
-                </vaadin-radio-group>
-              </div>
-              <div class="wrapper">
-                <label>Horizontal Align</label>
-                <vaadin-radio-group value="{{horizontalAlign}}" disabled="[[_disabled(verticalAlign)]]">
-                  <vaadin-radio-button name="radio-group" value="start">start</vaadin-radio-button>
-                  <vaadin-radio-button name="radio-group" value="center">center</vaadin-radio-button>
-                  <vaadin-radio-button name="radio-group" value="end">end</vaadin-radio-button>
                 </vaadin-radio-group>
               </div>
               <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 80px">
@@ -66,11 +62,8 @@
               is: 'notification-full-demo',
 
               properties: {
-                verticalAlign: {
-                  value: 'bottom'
-                },
-                horizontalAlign: {
-                  value: 'start'
+                position: {
+                  value: 'bottom-start'
                 },
                 duration: {
                   value: 3000
@@ -94,8 +87,7 @@
                 notify.appendChild(template);
                 window.document.body.appendChild(notify);
 
-                notify.verticalAlign = this.verticalAlign;
-                notify.horizontalAlign = this.horizontalAlign;
+                notify.position = this.position;
                 notify.duration = this.duration;
                 notify.opened = true;
 
