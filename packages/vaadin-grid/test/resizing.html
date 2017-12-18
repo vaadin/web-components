@@ -63,6 +63,8 @@
       describe('notifyResize', () => {
         let grid, scroller;
 
+        before(done => HTMLImports.whenReady(done));
+
         beforeEach(done => {
           grid = fixture('default').$.grid;
           grid.dataProvider = infiniteDataProvider;
