@@ -75,8 +75,7 @@
       [part="value"],
       [part="input-field"] ::slotted([part="value"]) {
         padding: 0 0.25em;
-        text-align: var(--valo-text-field-text-align);
-        --_valo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 24px);
+        --_valo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
         -webkit-mask-image: var(--_valo-text-field-overflow-mask-image);
         mask-image: var(--_valo-text-field-overflow-mask-image);
       }
@@ -115,6 +114,7 @@
         background-color: var(--valo-contrast-10pct);
         padding: 0 calc(0.375em + var(--valo-border-radius) / 4);
         font-weight: 500;
+        line-height: 1;
         position: relative;
         height: var(--valo-text-field-size);
         cursor: text;
@@ -139,7 +139,7 @@
 
       /* Hover */
 
-      :host(:hover:not([readonly])):not([focused])) [part="label"] {
+      :host(:hover:not([readonly]):not([focused])) [part="label"] {
         color: var(--valo-body-text-color);
       }
 
@@ -149,7 +149,7 @@
 
       /* Disable for touch devices */
       @media (pointer: coarse) {
-        :host(:hover:not([readonly])):not([focused])) [part="label"] {
+        :host(:hover:not([readonly]):not([focused])) [part="label"] {
           color: var(--valo-secondary-text-color);
         }
 
@@ -264,6 +264,25 @@
 
       :host([theme~="small"][label]) [part="error-message"] {
         font-size: var(--valo-font-size-xxs);
+      }
+
+      /* Text align */
+
+      :host([theme~="align-center"]) [part="value"] {
+        text-align: center;
+        --_valo-text-field-overflow-mask-image: none;
+      }
+
+      :host([theme~="align-right"]) [part="value"] {
+        text-align: right;
+        --_valo-text-field-overflow-mask-image: none;
+      }
+
+      @-moz-document url-prefix() {
+        /* Firefox is smart enough to align overflowing text to right */
+        :host([theme~="align-right"]) [part="value"] {
+          --_valo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+        }
       }
 
       /* Slotted content */

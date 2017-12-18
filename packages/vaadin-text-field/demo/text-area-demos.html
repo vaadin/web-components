@@ -1,24 +1,24 @@
 <dom-module id="text-area-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
     </style>
 
+    <p>The <code>&lt;vaadin-text-area&gt;</code> element has all the same features as the <code>&lt;vaadin-text-field&gt;</code> element. The only difference is that a text field always single-line and text area is always multi-line.</p>
 
-    <h3>Default Text area</h3>
-    <vaadin-demo-snippet id='text-area-demos-default-text-area'>
+    <h3>Basic Text Area</h3>
+    <vaadin-demo-snippet id="text-area-demos-default-text-area">
       <template preserve-content>
         <vaadin-text-area
             label="Write a description"
-            placeholder="Add detailed explanation">
-        </vaadin-text-area>
+            placeholder="Add detailed explanation"></vaadin-text-area>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Text area with max height</h3>
-    <vaadin-demo-snippet id='text-area-demos-text-area-with-max-height'>
+    <h3>Maximum Height</h3>
+    <vaadin-demo-snippet id="text-area-demos-text-area-with-max-height">
       <template preserve-content>
         <style>
           vaadin-text-area.max-height {
@@ -28,13 +28,12 @@
         <vaadin-text-area
             class="max-height"
             label="Text area growing stops at 150px"
-            placeholder="Add more text here">
-        </vaadin-text-area>
+            placeholder="Add more text here"></vaadin-text-area>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Text area with min height</h3>
-    <vaadin-demo-snippet id='text-area-demos-text-area-with-min-height'>
+    <h3>Minimum Height</h3>
+    <vaadin-demo-snippet id="text-area-demos-text-area-with-min-height">
       <template preserve-content>
         <style>
           vaadin-text-area.min-height {
@@ -43,7 +42,7 @@
         </style>
         <vaadin-text-area
             class="min-height"
-            label="Text area won't shrink under 150px"
+            label="Text area won’t shrink under 150px"
             placeholder="Add more text here">
         </vaadin-text-area>
       </template>

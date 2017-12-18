@@ -1,0 +1,48 @@
+<dom-module id="text-field-prefix-suffix-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Text</h3>
+    <vaadin-demo-snippet id="text-field-prefix-suffix-demos-basic">
+      <template preserve-content>
+        <vaadin-text-field label="Dollars" value="1000" style="width: 6em;">
+          <div slot="prefix">$</div>
+        </vaadin-text-field>
+
+        <vaadin-text-field label="Euros" value="1000" theme="align-right" style="width: 6em;">
+          <div slot="suffix">€</div>
+        </vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Icons</h3>
+    <vaadin-demo-snippet id="text-field-prefix-suffix-demos-basic">
+      <template preserve-content>
+        <vaadin-text-field placeholder="Search">
+          <iron-icon icon="valo:magnifier" slot="prefix"></iron-icon>
+        </vaadin-text-field>
+
+        <vaadin-text-field value="joe@example.com">
+          <iron-icon icon="valo:checkmark" slot="suffix"></iron-icon>
+        </vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+  </div>
+  </template>
+  <script>
+    class TextFieldPrefixSuffixDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-field-prefix-suffix-demos';
+      }
+    }
+    customElements.define(TextFieldPrefixSuffixDemos.is, TextFieldPrefixSuffixDemos);
+  </script>
+</dom-module>

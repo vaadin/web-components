@@ -1,19 +1,67 @@
 <dom-module id="text-field-validators-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
     </style>
 
+    <p>Fields are validated on blur. If a field is already invalid, its validity is checked on
+      each key input so that the user gets immediate feedback when the field is again valid.</p>
+
+    <h3>Required</h3>
+    <p>A required field cannot be left empty.</p>
+    <vaadin-demo-snippet id="text-field-basic-demos-required-input">
+      <template preserve-content>
+        <vaadin-text-field required label="Required"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Error Message</h3>
+    <p>The error message is visible <em>only</em> when the field value is invalid.</p>
+    <vaadin-demo-snippet id="text-field-basic-demos-error-message">
+      <template preserve-content>
+        <vaadin-text-field error-message="Please enter a value" required invalid label="Required"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Minlength and Maxlength</h3>
+    <vaadin-demo-snippet id="text-field-basic-demos-minlength-and-maxlength-validation">
+      <template preserve-content>
+        <vaadin-text-field minlength="2" label="Min 2 characters"></vaadin-text-field>
+        <vaadin-text-field maxlength="4" label="Max 4 characters"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Pattern</h3>
+    <p>The <code>pattern</code> property specifies a regular expression that the element’s value is
+      checked against.</p>
+    <vaadin-demo-snippet id="text-field-basic-demos-pattern-validation">
+      <template preserve-content>
+        <vaadin-text-field pattern="\d\d\d*" label="Min 2 numbers"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Prevent Invalid Input</h3>
+    <vaadin-demo-snippet id="text-field-basic-demos-preventing-invalid-input">
+      <template preserve-content>
+        <vaadin-text-field prevent-invalid-input pattern="[0-9]*" label="Numbers only"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
     <h3>Synchronous Custom Validator</h3>
 
     <p>Extend <code>Vaadin.TextFieldElement</code> to create your own custom element,
-      then override the <code>checkValidity()</code> method to validate the user's input</p>
+      then override the <code>checkValidity()</code> method to validate the user’s input.</p>
 
-    <vaadin-demo-snippet id='text-field-validators-demos-synchronous-custom-validator'>
+    <vaadin-demo-snippet id="text-field-validators-demos-synchronous-custom-validator">
       <template preserve-content>
-        <employee-role-text-field label='Position'></employee-role-text-field>
+        <employee-role-text-field label="Position"></employee-role-text-field>
         Valid options: Architect, Developer or Designer
 
         <script>
@@ -41,10 +89,10 @@
       then override the <code>checkValidity()</code> to make your asynchronous validation,
       and finally set the <code>invalid</code> flag appropriately in the callback.</p>
 
-    <vaadin-demo-snippet id='text-field-validators-demos-asynchronous-custom-validator'>
+    <vaadin-demo-snippet id="text-field-validators-demos-asynchronous-custom-validator">
       <template preserve-content>
-        <my-ajax id='ajax1' handle-as='json' url='https://vaadin.com/validate-element'></my-ajax>
-        <chemical-element-text-field label='Element Name'></chemical-element-text-field>
+        <my-ajax id="ajax1" handle-as="json" url="https://vaadin.com/validate-element"></my-ajax>
+        <chemical-element-text-field label="Element Name"></chemical-element-text-field>
         Type a valid Chemical Element such as Hydrogen, Oxygen, Carbon, etc.
 
         <script>
@@ -61,7 +109,7 @@
                 this.ajax.addEventListener('response', function() {
                   var elementName = this.value || '';
                   this.invalid = this.ajax.lastResponse.elements.indexOf(elementName.toLowerCase()) < 0;
-                  this.errorMessage = this.invalid ? '"' + elementName + '" is not a Chemical Element' : '';
+                  this.errorMessage = this.invalid ? `${elementName} is not a Chemical Element` : '';
                 }.bind(this));
               }
 
@@ -79,7 +127,7 @@
     </vaadin-demo-snippet>
   </div>
 
-  <dom-module id='my-ajax'>
+  <dom-module id="my-ajax">
     <template>
     </template>
     <script>

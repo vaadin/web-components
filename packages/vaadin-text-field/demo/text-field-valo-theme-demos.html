@@ -1,24 +1,21 @@
 <dom-module id="text-field-valo-theme-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
     </style>
 
-    <h3>Small</h3>
-    <vaadin-demo-snippet id='text-field-valo-theme-demos-small'>
+
+    <h3>Small Size</h3>
+    <vaadin-demo-snippet id="text-field-valo-theme-demos-sizes">
       <template preserve-content>
-        <vaadin-text-field theme="small" label="Small" placeholder="Placeholder"></vaadin-text-field>
+        <vaadin-text-field theme="small" label="Label" placeholder="Text field"></vaadin-text-field>
+        <vaadin-password-field theme="small" label="Label" placeholder="Password field"></vaadin-password-field>
+        <vaadin-text-area theme="small" label="Label" placeholder="Text area"></vaadin-text-area>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Contrast</h3>
-    <vaadin-demo-snippet id='text-field-valo-theme-demos-contrast'>
-      <template preserve-content>
-        <vaadin-text-field theme="contrast" label="Contrast" placeholder="Placeholder" value="Value"></vaadin-text-field>
-      </template>
-    </vaadin-demo-snippet>
 
   </template>
   <script>
