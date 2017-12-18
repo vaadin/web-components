@@ -44,8 +44,8 @@
       });
 
       it('`_navItems` should only contain vaadin-tabs', () => {
-        expect(nav._navItems.length).to.equal(4);
-        nav._navItems.forEach(item => {
+        expect(nav.items.length).to.equal(4);
+        nav.items.forEach(item => {
           expect(item.tagName.toLowerCase()).to.equal('vaadin-tab');
         });
       });
