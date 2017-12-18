@@ -1,11 +1,9 @@
 <link rel="import" href="color.html">
 <link rel="import" href="font-icons.html">
 
+<link rel="import" href="../vaadin-combo-box/src/vaadin-combo-box.html">
 <link rel="import" href="vaadin-text-field.html">
 <link rel="import" href="vaadin-item.html">
-<link rel="import" href="vaadin-overlay.html">
-<link rel="import" href="menu-overlay.html">
-<link rel="import" href="../vaadin-combo-box/src/vaadin-combo-box.html">
 
 <dom-module id="material-combo-box" theme-for="vaadin-combo-box">
   <template>
@@ -26,7 +24,7 @@
         line-height: 24px;
         font-size: 24px;
         text-align: center;
-        color: var(--material-background-color);
+        color: var(--material-disabled-text-color);
         transition: 0.2s color;
         cursor: default;
       }
@@ -36,7 +34,7 @@
       }
 
       [part$="button"]::before {
-        font-family: "valo-icons";
+        font-family: "material-icons";
       }
 
       [part="toggle-button"]::before {
