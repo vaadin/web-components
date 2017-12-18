@@ -10,23 +10,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-text-area">
   <template>
-    <style>
-      :host {
-        display: inline-flex;
-        width: 175px;
-        outline: none;
-      }
-
+    <style include="vaadin-text-field-shared-styles">
       .vaadin-text-area-container {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
+        flex: auto;
         max-height: inherit; /* MSIE 11 */
         min-height: inherit; /* MSIE 11 */
-      }
-
-      [part="label"]:empty {
-        display: none;
       }
 
       /* The label and the error message should neither grow nor shrink. */
@@ -36,24 +24,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="input-field"] {
-        flex: auto;
-        display: flex;
-        min-height: 4.5em;
         overflow: auto;
         -webkit-overflow-scrolling: touch;
       }
 
       [part="value"] {
-        width: 100%;
-        box-sizing: border-box;
-        flex: 1;
-        min-width: 0;
         resize: none;
-        overflow: hidden;
       }
 
-      [part="value"]::-ms-clear {
-        display: none;
+      [part="value"],
+      [part="input-field"] ::slotted(*) {
+        align-self: flex-start;
       }
     </style>
 
@@ -114,9 +95,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * Part name | Description
        * ----------------|----------------
        * `label` | The label element
-       * `value` | The textarea element
+       * `input-field` | The element that wraps prefix, value and suffix
+       * `value` | The text value element inside the `input-field` element
        * `error-message` | The error message element
-       * `text-area` | The element that wraps prefix, value and suffix
        *
        * The following state attributes are available for styling:
        *
