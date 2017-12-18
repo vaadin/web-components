@@ -22,25 +22,25 @@
 
   <test-fixture id="multiple">
     <template>
-      <vaadin-notification opened vertical-align="top-stretch"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="middle"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="middle"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-stretch"><template>Notificaton</template></vaadin-notification>
 
-      <vaadin-notification opened vertical-align="top-stretch"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="top" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="middle"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom" horizontal-align="end"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened vertical-align="bottom-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-stretch"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="middle"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-start"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="bottom-stretch"><template>Notificaton</template></vaadin-notification>
     </template>
   </test-fixture>
 
@@ -110,9 +110,8 @@
 
         it('should insert notifications in the correct region', () => {
           notifications.forEach(e => {
-            const horizontal = e.getAttribute('horizontal-align');
-            const region = e.verticalAlign + (horizontal ? `-${horizontal}` : '');
-            expect(e._card.slot).to.equal(region);
+            const position = e.getAttribute('position');
+            expect(e._card.slot).to.equal(position);
           });
         });
 
@@ -120,15 +119,15 @@
           const e = notifications[0];
           expect(e._card.slot).to.equal('top-stretch');
 
-          e.verticalAlign = 'bottom-stretch';
+          e.position = 'bottom-stretch';
           expect(e._card.slot).to.equal('bottom-stretch');
         });
 
-        it('should move notification if horizontal alignment changes', () => {
+        it('should move notification if horizontal alignment part of the position changes', () => {
           const e = notifications[1];
           expect(e._card.slot).to.be.equal('top-start');
 
-          e.horizontalAlign = 'end';
+          e.position = 'top-end';
           expect(e._card.slot).to.be.equal('top-end');
         });
 
@@ -139,7 +138,7 @@
 
           const e = notifications[1];
           const initialRegion = e._card.parentNode;
-          e.verticalAlign = 'foo';
+          e.position = 'foo';
           expect(e._card.parentNode).to.be.equal(initialRegion);
           expect(warnSpy).to.be.calledOnce;
 
