@@ -48,6 +48,7 @@
         box-shadow: inset 0 0 0 2px var(--material-disabled-text-color);
         pointer-events: none;
         line-height: 1.4;
+        background-color: transparent;
       }
 
       /* IE11 only */
@@ -97,6 +98,10 @@
 
       :host([checked]) [part="checkbox"]::after {
         transform: scale(0.55) rotate(-135deg);
+      }
+
+      :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+        background-color: transparent;
       }
 
       :host([focus-ring]) [part="checkbox"]::before,

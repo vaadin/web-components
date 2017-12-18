@@ -1,11 +1,9 @@
 <link rel="import" href="font-icons.html">
 
+<link rel="import" href="../vaadin-dropdown-menu/src/vaadin-dropdown-menu.html">
 <link rel="import" href="vaadin-text-field.html">
 <link rel="import" href="vaadin-item.html">
 <link rel="import" href="vaadin-list-box.html">
-<link rel="import" href="vaadin-overlay.html">
-<link rel="import" href="menu-overlay.html">
-<link rel="import" href="../vaadin-dropdown-menu/src/vaadin-dropdown-menu.html">
 
 <dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
@@ -26,16 +24,16 @@
         line-height: 24px;
         font-size: 24px;
         text-align: center;
-        color: var(--material-background-color);
+        color: var(--material-disabled-text-color);
         transition: 0.2s color;
         cursor: default;
       }
 
-      :host(:hover) [part$="button"] {
-      }
+      /*:host(:hover) [part$="button"] {
+      }*/
 
       [part$="button"]::before {
-        font-family: "valo-icons";
+        font-family: "material-icons";
       }
 
       [part="toggle-button"]::before {
@@ -65,8 +63,8 @@
       [part="input-field"],
       [part="value"] {
         cursor: default;
-        background-color: var(---material-text-field-input-line-background-color, #000);
-        opacity: var(---material-text-field-input-line-opacity, 0.42);
+        /*background-color: var(---material-text-field-input-line-background-color, #000);
+        opacity: var(---material-text-field-input-line-opacity, 0.42);*/
       }
 
       /* ShadyCSS limitation workaround */
