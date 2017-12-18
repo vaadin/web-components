@@ -22,9 +22,7 @@
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../vaadin-context-menu/vaadin-context-menu.html">
   <link rel="import" href="../../vaadin-tabs/vaadin-tabs.html">
-  <link rel="import" href="../../vaadin-dropdown-menu/vaadin-dropdown-menu.html">
-  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
-  <link rel="import" href="../../vaadin-item/vaadin-item.html">
+  <link rel="import" href="../../vaadin-tabs/vaadin-tab.html">
 
 
   <div class="container">
@@ -51,47 +49,6 @@
       <vaadin-tab>Ninth tab</vaadin-tab>
       <vaadin-tab>Tenth tab</vaadin-tab>
     </vaadin-tabs>
-
-    <h3>vaadin-list-box</h3>
-    <vaadin-list-box>
-      <vaadin-item>First menu item</vaadin-item>
-      <vaadin-item>Second menu item</vaadin-item>
-      <vaadin-item disabled>Third menu item</vaadin-item>
-      <vaadin-item>Fourth menu item</vaadin-item>
-    </vaadin-list-box>
-
-    <h3>vaadin-list-box selected</h3>
-    <vaadin-list-box selected="2">
-      <vaadin-item>First menu item</vaadin-item>
-      <vaadin-item>Second menu item</vaadin-item>
-      <vaadin-item disabled>Third menu item</vaadin-item>
-      <vaadin-item>Fourth menu item</vaadin-item>
-    </vaadin-list-box>
-
-    <h3>vaadin-dropdown</h3>
-    <vaadin-dropdown-menu>
-      <template>
-        <vaadin-list-box>
-          <vaadin-item>First menu item</vaadin-item>
-          <vaadin-item>Second menu item</vaadin-item>
-          <vaadin-item disabled>Third menu item</vaadin-item>
-          <vaadin-item>Fourth menu item</vaadin-item>
-        </vaadin-list-box>
-      </template>
-    </vaadin-dropdown-menu>
-
-    <h3>vaadin-context-menu</h3>
-    <vaadin-context-menu>
-      <template>
-        <vaadin-list-box style="background: white">
-          <vaadin-item>First menu item</vaadin-item>
-          <vaadin-item>Second menu item</vaadin-item>
-          <vaadin-item disabled>Third menu item</vaadin-item>
-          <vaadin-item>Fourth menu item</vaadin-item>
-        </vaadin-list-box>
-      </template>
-      <p>right-click o long-touch to open the context menu</p>
-    </vaadin-context-menu>
 
   </div>
 </body>
