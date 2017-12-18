@@ -17,7 +17,7 @@
         cursor: default;
       }
 
-      [part$="button"]:hover {
+      :host(:not([readonly])) [part$="button"]:hover {
         color: var(--valo-contrast-80pct);
       }
 
