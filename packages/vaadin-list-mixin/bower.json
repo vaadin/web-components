@@ -32,8 +32,6 @@
     "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^1.0.0",
     "vaadin-context-menu": "^2.0.0",
-    "vaadin-dropdown-menu": "^1.0.0",
-    "vaadin-list-box": "^1.0.0",
     "vaadin-tabs": "^1.0.0",
     "vaadin-item": "^1.0.0"
   },
