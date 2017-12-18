@@ -5,17 +5,17 @@
     "url": "ordered-layout-basic-demos",
     "src": "ordered-layout-basic-demos.html",
     "meta": {
-      "title": "vaadin-ordered-layout Basic Examples",
+      "title": "Vaadin Ordered Layout Basic Examples",
       "description": "",
       "image": ""
     }
   },
   {
-    "name": "Theme variants",
+    "name": "Valo Theme",
     "url": "ordered-layout-theme-demos",
     "src": "ordered-layout-theme-demos.html",
     "meta": {
-      "title": "vaadin-ordered-layout Theme Variants Examples",
+      "title": "Vaadin Ordered Layout Valo Theme",
       "description": "",
       "image": ""
     }
