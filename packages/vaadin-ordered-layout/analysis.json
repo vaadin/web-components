@@ -6,7 +6,7 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-vertical-layout.html",
+        "file": "src/vaadin-vertical-layout.html",
         "start": {
           "line": 90,
           "column": 6
@@ -20,7 +20,7 @@
         {
           "description": "`<vaadin-horizontal-layout>` provides a simple way to horizontally align your HTML elements.\n\n```\n<vaadin-horizontal-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-horizontal-layout>\n```\n\n### Built-in Theme Variations\n\n`<vaadin-horizontal-layout>` supports the following theme variations:\n\nTheme variation | Description\n---|---\n`theme=\"margin\"` | Applies the default amount of CSS margin for the host element (specified by the theme)\n`theme=\"padding\"` | Applies the default amount of CSS padding for the host element (specified by the theme)\n`theme=\"spacing\"` | Applies the default amount of CSS margin between items (specified by the theme)",
           "summary": "",
-          "path": "vaadin-horizontal-layout.html",
+          "path": "src/vaadin-horizontal-layout.html",
           "properties": [],
           "methods": [],
           "staticMethods": [
@@ -29,7 +29,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -79,7 +79,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-horizontal-layout.html",
+                "file": "src/vaadin-horizontal-layout.html",
                 "start": {
                   "line": 43,
                   "column": 4
@@ -99,7 +99,7 @@
         {
           "description": "`<vaadin-vertical-layout>` provides a simple way to vertically align your HTML elements.\n\n```\n<vaadin-vertical-layout>\n  <div>Item 1</div>\n  <div>Item 2</div>\n</vaadin-vertical-layout>\n```\n\n### Built-in Theme Variations\n\n`<vaadin-vertical-layout>` supports the following theme variations:\n\nTheme variation | Description\n---|---\n`theme=\"margin\"` | Applies the default amount of CSS margin for the host element (specified by the theme)\n`theme=\"padding\"` | Applies the default amount of CSS padding for the host element (specified by the theme)\n`theme=\"spacing\"` | Applies the default amount of CSS margin between items (specified by the theme)",
           "summary": "",
-          "path": "vaadin-vertical-layout.html",
+          "path": "src/vaadin-vertical-layout.html",
           "properties": [],
           "methods": [],
           "staticMethods": [
@@ -108,7 +108,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -158,7 +158,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-vertical-layout.html",
+                "file": "src/vaadin-vertical-layout.html",
                 "start": {
                   "line": 45,
                   "column": 4
