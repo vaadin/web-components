@@ -1,0 +1,63 @@
+<link rel="import" href="color.html">
+<link rel="import" href="typography.html">
+<link rel="import" href="../vaadin-overlay/src/vaadin-overlay.html">
+
+<custom-style>
+  <style>
+    html {
+      --valo-overlay-box-shadow:
+          0 0 0 1px var(--material-background-color),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 8px 24px -6px var(--valo-shade-40pct);
+      --valo-raised-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-5pct),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 24px 56px -6px var(--valo-shade-40pct);
+    }
+
+    [theme~="dark"] {
+      --valo-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-10pct),
+          0 1px 6px 0 var(--valo-shade-60pct),
+          0 8px 24px -6px var(--valo-shade-80pct);
+      --valo-raised-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-10pct),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 24px 56px -6px var(--valo-shade-80pct);
+    }
+  </style>
+</custom-style>
+
+<!-- TODO use "vaadin-*-overlay" (if it makes sense) once vaadin-date-picker-overlay uses the generic vaadin-overlay element -->
+<dom-module id="material-overlay" theme-for="vaadin-combo-box-overlay vaadin-context-menu-overlay vaadin-dropdown-menu-overlay">
+  <template>
+    <style>
+      [part="overlay"] {
+        background-color: var(--material-background-color);
+        background-image: linear-gradient(var(--material-disabled-color), var(--material-disabled-color));
+        /*border-radius: var(--valo-border-radius);*/
+        /*box-shadow: var(--valo-overlay-box-shadow);*/
+        color: var(--material-body-text-color);
+        font-family: var(--material-font-family);
+        font-size: var(--material-subhead-font-size);
+        font-weight: 400;
+        /*line-height: var(--valo-line-height);*/
+        letter-spacing: 0;
+        text-transform: none;
+        padding: 4px;;
+      }
+
+      [part="backdrop"] {
+        background-color: var(--material-background-color);
+        animation: 0.2s vaadin-overlay-backdrop-enter;
+        will-change: opacity;
+      }
+
+      @keyframes vaadin-overlay-backdrop-enter {
+        0% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
