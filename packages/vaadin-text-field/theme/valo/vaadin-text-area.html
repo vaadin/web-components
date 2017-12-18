@@ -6,20 +6,21 @@
 <dom-module id="valo-text-area" theme-for="vaadin-text-area">
   <template>
     <style include="valo-text-field">
-      :host {
-        width: calc(var(--valo-size-m) * 10);
-      }
 
       [part="input-field"] {
-        padding-top: var(--valo-space-s);
-        padding-bottom: var(--valo-space-s);
+        /* Equal to the implicit padding in vaadin-text-field */
+        padding-top: calc((var(--valo-text-field-size) - var(--valo-icon-size)) / 2);
+        padding-bottom: calc((var(--valo-text-field-size) - var(--valo-icon-size)) / 2);
         height: auto;
-        min-height: var(--valo-size-m);
         box-sizing: border-box;
+        /* TODO how to make the ::after element not scroll with this container? */
       }
 
       [part="value"] {
+        padding-top: calc((var(--valo-icon-size) - 1em * var(--valo-line-height-s)) / 2);
+        padding-bottom: calc((var(--valo-icon-size) - 1em * var(--valo-line-height-s)) / 2);
         line-height: var(--valo-line-height-s);
+        --_valo-text-field-overflow-mask-image: none;
       }
 
       [part="input-field"] [part="value"] {

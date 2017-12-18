@@ -30,7 +30,7 @@
 <vaadin-text-area label="Description"></vaadin-text-area>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="744" alt="Screenshot of vaadin-text-field">](https://vaadin.com/elements/vaadin-text-field)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="710" alt="Screenshot of vaadin-text-field">](https://vaadin.com/elements/vaadin-text-field)
 
 
 ## Running demos and tests in browser

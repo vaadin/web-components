@@ -7,6 +7,83 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 
+<dom-module id="vaadin-text-field-shared-styles">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        outline: none;
+      }
+
+      :host::before {
+        content: "\2003";
+        width: 0;
+        display: inline-block;
+        /* Size and position this element on the same vertical position as the input-field element
+           to make vertical align for the host element work as expected */
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .vaadin-text-field-container,
+      .vaadin-text-area-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
+      [part="input-field"] {
+        display: flex;
+        align-items: center;
+        flex: auto;
+      }
+
+      /* Reset the native input styles */
+      [part="value"] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        outline: none;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        min-width: 0;
+        font: inherit;
+        font-size: 1em;
+        color: inherit;
+        background-color: transparent;
+        /* Disable default invalid style in Firefox */
+        box-shadow: none;
+      }
+
+      /* Slotted by vaadin-dropdown-menu-text-field */
+      [part="value"],
+      [part="input-field"] ::slotted([part="value"]) {
+        flex: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        /* Really just min-width because of flex */
+        width: 10em;
+        height: 100%;
+      }
+
+      [part="value"]::-ms-clear {
+        display: none;
+      }
+
+      [part="input-field"] ::slotted(*) {
+        flex: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <script>
     window.Vaadin = window.Vaadin || {};
 
