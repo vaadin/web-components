@@ -109,26 +109,15 @@
         });
 
         it('should insert notifications in the correct region', () => {
-          notifications.forEach(e => {
-            const position = e.getAttribute('position');
-            expect(e._card.slot).to.equal(position);
-          });
+          notifications.forEach(e => expect(e._card.slot).to.equal(e.position));
         });
 
-        it('should move notification if vertical alignment changes', () => {
+        it('should move notification if position changes', () => {
           const e = notifications[0];
           expect(e._card.slot).to.equal('top-stretch');
 
           e.position = 'bottom-stretch';
           expect(e._card.slot).to.equal('bottom-stretch');
-        });
-
-        it('should move notification if horizontal alignment part of the position changes', () => {
-          const e = notifications[1];
-          expect(e._card.slot).to.be.equal('top-start');
-
-          e.position = 'top-end';
-          expect(e._card.slot).to.be.equal('top-end');
         });
 
         it('should not move notification and display a warning message on invalid orientation', () => {
