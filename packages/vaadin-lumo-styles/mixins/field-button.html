@@ -1,15 +1,16 @@
 <link rel="import" href="../color.html">
 <link rel="import" href="../font-icons.html">
+<link rel="import" href="../sizing.html">
 
 <dom-module id="valo-field-button">
   <template>
     <style>
       [part$="button"] {
         flex: none;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 24px;
+        width: 1em;
+        height: 1em;
+        line-height: 1;
+        font-size: var(--valo-icon-size);
         text-align: center;
         color: var(--valo-contrast-50pct);
         transition: 0.2s color;
