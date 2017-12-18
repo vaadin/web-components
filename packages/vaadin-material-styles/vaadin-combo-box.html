@@ -1,0 +1,130 @@
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+
+<link rel="import" href="vaadin-text-field.html">
+<link rel="import" href="vaadin-item.html">
+<link rel="import" href="vaadin-overlay.html">
+<link rel="import" href="menu-overlay.html">
+<link rel="import" href="../vaadin-combo-box/src/vaadin-combo-box.html">
+
+<dom-module id="material-combo-box" theme-for="vaadin-combo-box">
+  <template>
+    <style>
+      :host([label]) {
+        margin-top: 16px;
+        vertical-align: var(---vaadin-text-field-vertical-align-offset);
+      }
+
+      [part="text-field"] {
+        display: block;
+        max-width: 100%;
+      }
+
+      [part$="button"] {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 24px;
+        text-align: center;
+        color: var(--material-background-color);
+        transition: 0.2s color;
+        cursor: default;
+      }
+
+      [part$="button"]:hover {
+        color: var(--material-background-color);
+      }
+
+      [part$="button"]::before {
+        font-family: "valo-icons";
+      }
+
+      [part="toggle-button"]::before {
+        content: "\e905";
+      }
+
+      [part="clear-button"]::before {
+        content: "\e907";
+      }
+
+      /* Read-only */
+
+      :host([readonly]) [part="toggle-button"] {
+        display: none;
+      }
+
+      /* Disabled */
+
+      :host([disabled]) [part$="button"] {
+        color: var(--material-disabled-color);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+  <template>
+    <style>
+      [part="overlay"] {
+        padding: 0;
+      }
+
+      /* TODO unsupported selector */
+      #scroller {
+        border-radius: var(--valo-border-radius);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-combo-box-item" theme-for="vaadin-combo-box-item">
+  <template>
+    <style include="material-item">
+      /* TODO duplicated from vaadin-list-box styles. Should find a way to make it DRY */
+
+      :host {
+        cursor: pointer;
+        padding-left: 4px;
+        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+      }
+
+      /* ShadyCSS workaround */
+      :host::before {
+        display: block;
+      }
+
+      /* IE11 flexbox workaround */
+      ::-ms-backdrop,
+      :host {
+        height: 36px;
+      }
+
+      /* Only apply for this particular item, not nested items */
+      :host > * {
+        --_valo-item-selected-icon-display: none;
+      }
+
+      :host([focused]) {
+        background-color: var(--material-background-color);
+      }
+
+      @media (pointer: coarse) {
+        :host([focused]) {
+          background-color: transparent;
+        }
+      }
+
+      :host([selected]) {
+        font-weight: 500;
+      }
+
+      /* TODO ugly hack to add horizontal spacing between the overlay and the item */
+      /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
+      :host {
+        left: 4px;
+        right: 4px;
+        width: auto !important;
+      }
+    </style>
+  </template>
+</dom-module>

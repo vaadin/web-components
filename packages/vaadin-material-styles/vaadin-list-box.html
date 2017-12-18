@@ -1,0 +1,63 @@
+<link rel="import" href="font-icons.html">
+<link rel="import" href="color.html">
+<link rel="import" href="../vaadin-list-box/src/vaadin-list-box.html">
+
+<dom-module id="material-list-box" theme-for="vaadin-list-box">
+  <template>
+    <style>
+      :host {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* IE11 flexbox fix (https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items) */
+      [part="items"] {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      /* Normal item */
+
+      [part="items"] ::slotted(*) {
+        -webkit-tap-highlight-color: var(--material-divider-color);
+        cursor: default;
+      }
+
+      /* TODO this does not match elements extending vaadin-item. This is anyway a workaround until we have "focus-follows-mouse" */
+      [part="items"] ::slotted(vaadin-item) {
+        cursor: pointer;
+      }
+
+      /* Selected item */
+
+      [part="items"] ::slotted([focused]:not([disabled])) {
+        background-color: var(--material-divider-color);
+      }
+
+      /* testing */
+      /*[part="items"] ::slotted([active]:not([disabled])) {
+        background-color: var(--material-divider-color);
+      }*/
+
+      @media (pointer: coarse) {
+        [part="items"] ::slotted([focused]) {
+          background-color: transparent;
+        }
+      }
+
+      [part="items"] ::slotted([selected]) {
+        font-weight: 500;
+      }
+
+      /* Easily add section dividers */
+
+      [part="items"] ::slotted(hr) {
+        height: 1px;
+        border: 0;
+        padding: 0;
+        margin: 8px 2px;
+        background-color: var(--material-divider-color);
+      }
+    </style>
+  </template>
+</dom-module>
