@@ -54,10 +54,10 @@
       it('items are next to each other', () => {
         expect(getCoords(element)).to.include({top: 0, right: 300, bottom: 200, left: 0});
         expect(getCoords(c1)).to.include({top: 0, bottom: 200, left: 0});
-        expect(getCoords(c1).right).to.be.closeTo(15, 1);
+        expect(getCoords(c1).right).to.be.closeTo(18, 3);
         expect(getCoords(c2)).to.include({top: 0, bottom: 200});
-        expect(getCoords(c2).left).to.be.closeTo(15, 1);
-        expect(getCoords(c2).right).to.be.closeTo(30, 1);
+        expect(getCoords(c2).left).to.be.closeTo(18, 3);
+        expect(getCoords(c2).right).to.be.closeTo(36, 6);
       });
 
       it('should extend Vaadin.ThemableMixin', () => {
