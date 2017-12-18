@@ -3,17 +3,18 @@
 <link rel="import" href="../../../vaadin-valo-theme/style.html">
 <link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
 
+<link rel="import" href="../../../vaadin-valo-theme/mixins/menu-overlay.html">
+<link rel="import" href="../../../vaadin-valo-theme/mixins/field-button.html">
+
 <link rel="import" href="../../../vaadin-text-field/theme/valo/vaadin-text-field.html">
 <link rel="import" href="../../../vaadin-item/theme/valo/vaadin-item.html">
 <link rel="import" href="../../../vaadin-list-box/theme/valo/vaadin-list-box.html">
-<link rel="import" href="../../../vaadin-overlay/theme/valo/vaadin-overlay.html">
-<link rel="import" href="../../../vaadin-valo-theme/menu-overlay.html">
 
 <dom-module id="valo-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
-    <style>
+    <style include="valo-field-button">
       :host {
-        width: calc(var(--valo-size-m) * 5);
+        -webkit-tap-highlight-color: transparent;
       }
 
       [selected] {
@@ -21,38 +22,12 @@
         padding-right: 0;
       }
 
-      [part$="button"] {
-        flex: none;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 24px;
-        text-align: center;
-        color: var(--valo-contrast-40pct);
-        transition: 0.2s color;
-        cursor: default;
-      }
-
-      :host(:hover) [part$="button"] {
-        color: var(--valo-contrast-70pct);
-      }
-
-      [part$="button"]::before {
-        font-family: "valo-icons";
-      }
-
       [part="toggle-button"]::before {
         content: "\e905";
       }
 
-      /* Disabled */
-
-      :host([disabled]) {
-        pointer-events: none;
-      }
-
-      :host([disabled]) [part$="button"] {
-        color: var(--valo-contrast-20pct);
+      :host(:hover:not([readonly]):not([disabled])) [part="toggle-button"] {
+        color: var(--valo-contrast-80pct);
       }
     </style>
   </template>
@@ -65,8 +40,7 @@
         width: 100%;
       }
 
-      [part="input-field"],
-      [part="value"] {
+      [part="input-field"] {
         cursor: default;
       }
 
@@ -83,15 +57,24 @@
       [part="input-field"]:focus {
         outline: none;
       }
+
+      [part="value"],
+      [part="input-field"] ::slotted([part="value"]) {
+        width: calc(10em - var(--valo-icon-size));
+      }
     </style>
   </template>
 </dom-module>
 
 <dom-module id="valo-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
   <template>
-    <style>
+    <style include="valo-menu-overlay">
       :host {
         --_valo-item-selected-icon-display: block;
+      }
+
+      [part~="overlay"] {
+        min-width: 10em;
       }
 
       /* TODO not necessarily the best way to target items only */
