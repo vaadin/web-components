@@ -274,15 +274,15 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             position: {
               type: String,
-              value: 'bottom-start'
+              value: 'bottom-start',
+              observer: '_positionChanged'
             }
           };
         }
 
         static get observers() {
           return [
-            '_durationChanged(duration, opened)',
-            '_orientiationChanged(position)'
+            '_durationChanged(duration, opened)'
           ];
         }
 
@@ -367,7 +367,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _orientiationChanged(position) {
+        _positionChanged(position) {
           if (this.opened) {
             this._appendNotificationCard();
           }
