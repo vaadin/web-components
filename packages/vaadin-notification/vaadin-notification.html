@@ -269,23 +269,12 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Vertical alignment of the notification in the viewport
-             * Valid values are `top-stretch|top|middle|bottom|bottom-stretch`
+             * Vertical and horizontal alignment of the notification in the viewport
+             * Valid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`
              */
-            verticalAlign: {
+            position: {
               type: String,
-              value: 'bottom'
-            },
-
-            /**
-             * Horizontal alignment of the notification in the viewport
-             * Only applies for notifications in `top` or `bottom` containers.
-             * Valid values are `start|center|end`
-             * Horizontal alignment is skipped in case verticalAlign is set to `top-stretch|middle|bottom-stretch`
-             */
-            horizontalAlign: {
-              type: String,
-              value: 'start'
+              value: 'bottom-start'
             }
           };
         }
@@ -293,7 +282,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_durationChanged(duration, opened)',
-            '_orientiationChanged(verticalAlign, horizontalAlign)'
+            '_orientiationChanged(position)'
           ];
         }
 
@@ -343,18 +332,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _appendNotificationCard() {
-          const region = /^(top|bottom)$/.test(this.verticalAlign)
-            ? this.verticalAlign + '-' + this.horizontalAlign : this.verticalAlign;
-
-          if (!this._overlay.shadowRoot.querySelector(`slot[name="${region}"]`)) {
+          if (!this._overlay.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
             window.console.warn(
-              `Invalid alignment parameters provided: vertical-align=${this.verticalAlign} horizontal-align=${this.horizontalAlign}`);
+              `Invalid alignment parameter provided: position=${this.position}`);
             return;
           }
 
-          this._card.slot = region;
-          if (this._overlay.firstElementChild &&
-              (this.verticalAlign === 'top' || this.verticalAlign === 'top-stretch')) {
+          this._card.slot = this.position;
+          if (this._overlay.firstElementChild && /^(top-stretch||top)$/.test(this.position)) {
             this._overlay.insertBefore(this._card, this._overlay.firstElementChild);
           } else {
             this._overlay.appendChild(this._card);
@@ -382,7 +367,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _orientiationChanged(vertical, horizontal) {
+        _orientiationChanged(position) {
           if (this.opened) {
             this._appendNotificationCard();
           }
