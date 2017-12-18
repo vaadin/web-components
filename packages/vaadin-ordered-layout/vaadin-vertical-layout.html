@@ -13,28 +13,24 @@ This program is available under Apache License Version 2.0, available at https:/
       :host {
         display: flex;
         flex-direction: column;
+        align-items: flex-start;
       }
 
       :host([hidden]) {
         display: none !important;
       }
 
-      :host ::slotted(*) {
-        /* Enable grow and shrink for items. */
-        flex: 1 1 auto;
-      }
-
       /* Theme variations */
       :host([theme~="margin"]) {
-        margin: 2em;
+        margin: 1em;
       }
 
       :host([theme~="padding"]) {
-        padding: 2em;
+        padding: 1em;
       }
 
       :host([theme~="spacing"]) ::slotted(*) {
-        margin-top: 2em;
+        margin-top: 1em;
       }
 
       /*
@@ -43,7 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       :host([theme~="spacing"])::before {
         content: "";
-        margin-top: -2em;
+        margin-top: -1em;
       }
     </style>
 

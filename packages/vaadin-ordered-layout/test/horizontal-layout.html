@@ -53,8 +53,11 @@
 
       it('items are next to each other', () => {
         expect(getCoords(element)).to.include({top: 0, right: 300, bottom: 200, left: 0});
-        expect(getCoords(c1)).to.include({top: 0, right: 300 / 2, bottom: 200, left: 0});
-        expect(getCoords(c2)).to.include({top: 0, right: 300, bottom: 200, left: 300 / 2});
+        expect(getCoords(c1)).to.include({top: 0, bottom: 200, left: 0});
+        expect(getCoords(c1).right).to.be.closeTo(18, 3);
+        expect(getCoords(c2)).to.include({top: 0, bottom: 200});
+        expect(getCoords(c2).left).to.be.closeTo(18, 3);
+        expect(getCoords(c2).right).to.be.closeTo(36, 6);
       });
 
       it('should extend Vaadin.ThemableMixin', () => {
@@ -84,25 +87,25 @@
 
       it('should support theme="margin"', () => {
         element.setAttribute('theme', 'margin');
-        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal('32px'); // 2em in px
-        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal('32px');
-        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal('32px');
-        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal('16px'); // 1em in px
+        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal('16px');
       });
 
       it('should support theme="padding"', () => {
         element.setAttribute('theme', 'padding');
-        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal('32px'); // 2em in px
-        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('32px');
-        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('32px');
-        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('32px');
+        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal('16px'); // 1em in px
+        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('16px');
       });
 
       it('should support theme="spacing"', () => {
         element.setAttribute('theme', 'spacing');
-        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('32px'); // 2em in px
-        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('32px');
-        expect(getComputedStyle(element, '::before').getPropertyValue('margin-left')).to.equal('-32px');
+        expect(getComputedStyle(c1).getPropertyValue('margin-left')).to.equal('16px'); // 1em in px
+        expect(getComputedStyle(c2).getPropertyValue('margin-left')).to.equal('16px');
+        expect(getComputedStyle(element, '::before').getPropertyValue('margin-left')).to.equal('-16px');
       });
     });
 
