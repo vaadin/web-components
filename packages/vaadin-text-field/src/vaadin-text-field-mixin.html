@@ -62,6 +62,10 @@ This program is available under Apache License Version 2.0, available at https:/
         box-shadow: none;
       }
 
+      [part="input-field"] ::slotted(*) {
+        flex: none;
+      }
+
       /* Slotted by vaadin-dropdown-menu-text-field */
       [part="value"],
       [part="input-field"] ::slotted([part="value"]) {
@@ -75,10 +79,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [part="value"]::-ms-clear {
         display: none;
-      }
-
-      [part="input-field"] ::slotted(*) {
-        flex: none;
       }
     </style>
   </template>
