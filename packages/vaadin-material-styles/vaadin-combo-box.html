@@ -11,6 +11,7 @@
       :host([label]) {
         margin-top: 16px;
         vertical-align: var(---vaadin-text-field-vertical-align-offset);
+        transform: scale(1.0);
       }
 
       [part="text-field"] {
@@ -38,11 +39,11 @@
       }
 
       [part="toggle-button"]::before {
-        content: "\e905";
+        content: "\e5cf";
       }
 
       [part="clear-button"]::before {
-        content: "\e907";
+        content: "\e5cd";
       }
 
       /* Read-only */
@@ -56,6 +57,7 @@
       :host([disabled]) [part$="button"] {
         color: var(--material-disabled-color);
       }
+
     </style>
   </template>
 </dom-module>
@@ -69,7 +71,7 @@
 
       /* TODO unsupported selector */
       #scroller {
-        border-radius: var(--valo-border-radius);
+        border-radius: 14px;
       }
     </style>
   </template>
@@ -83,7 +85,7 @@
       :host {
         cursor: pointer;
         padding-left: 4px;
-        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+        -webkit-tap-highlight-color: var(--material-primary-color);
       }
 
       /* ShadyCSS workaround */
