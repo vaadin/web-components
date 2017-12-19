@@ -5,142 +5,78 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../vaadin-overlay/vaadin-overlay.html">
+<link rel="import" href="../polymer/lib/utils/templatize.html">
 <link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
-
-<dom-module id="vaadin-notification-overlay-default-theme" theme-for="vaadin-notification-overlay">
-  <template>
-    <style>
-      [part="content"] {
-        padding: 4px;
-      }
-
-      [part^="top-"],
-      [part^="bottom-"],
-      [part="middle"] {
-        padding: 0 4px;
-      }
-
-      [part^="top-"] > *,
-      [part^="bottom-"] > *,
-      [part="middle"] > * {
-        margin: 4px 0;
-      }
-    </style>
-  </template>
-</dom-module>
+<link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
 <dom-module id="vaadin-notification-overlay">
   <template>
     <style>
-      [part="content"] {
+      :host {
         position: fixed;
         z-index: 1000;
         top: 0;
         left: 0;
-        bottom: var(--vaadin-overlay-viewport-bottom, 0);
+        bottom: 0;
         right: 0;
         box-sizing: border-box;
 
         display: flex;
         flex-direction: column;
+        align-items: stretch;
         pointer-events: none;
       }
 
-      [part$="-stretch"],
-      [part="top"] [part],
-      [part="bottom"] [part],
-      [part="middle"] {
+      [region-group] {
+        flex: 1 1 0%;
         display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
       }
 
-      [part="middle"] {
-        position: absolute;
-        margin: auto;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        justify-content: center;
+      [region-group="top"] {
+        align-items: flex-start;
       }
 
-      [part="top"],
-      [part="bottom"] {
-        flex: auto;
-        display: flex;
-        justify-content: flex-end;
+      [region-group="bottom"] {
+        align-items: flex-end;
       }
 
-      [part="top"] > [part],
-      [part="bottom"] > [part] {
-        flex: auto;
-        flex-shrink: 1;
-        flex-basis: 0;
-      }
-
-      [part="top-stretch"],
-      [part="top"] > [part] {
-        flex-direction: column-reverse;
-      }
-
-      [part$="-start"] > * {
-        align-self: flex-start;
-      }
-
-      [part$="-end"] > * {
-        align-self: flex-end;
-      }
-
-      [part$="-stretch"] > * {
-        max-width: 100vw;
-      }
-
-      [part="middle"] > *,
-      [part$="-center"] > * {
-        align-self: center;
+      [region-group] > [region] {
+        flex: 1 1 0%;
       }
 
       @media (max-width: 420px) {
-        [part="top"],
-        [part="bottom"] {
+        [region-group] {
           flex-direction: column;
-          flex: 0 1 auto;
+          align-items: stretch;
         }
 
-        [part="top"] > [part],
-        [part="bottom"] > [part] {
-          flex-basis: auto;
+        [region-group="top"] {
+          justify-content: flex-start;
         }
 
-        [part="middle"] {
-          position: relative;
-          margin: inherit;
-          flex: 1;
+        [region-group="bottom"] {
+          justify-content: flex-end;
+        }
+
+        [region-group] > [region] {
+          flex: initial;
         }
       }
     </style>
 
-    <div id="backdrop" part="backdrop" hidden></div>
-
-    <div part="overlay" id="overlay">
-      <div part="content" id="content">
-        <div part="top-stretch"></div>
-        <div part="top">
-          <div part="top-start"></div>
-          <div part="top-center"></div>
-          <div part="top-end"></div>
-        </div>
-        <div part="middle"></div>
-        <div part="bottom">
-          <div part="bottom-start"></div>
-          <div part="bottom-center"></div>
-          <div part="bottom-end"></div>
-        </div>
-        <div part="bottom-stretch"></div>
-      </div>
+    <div region="top-stretch"><slot name="top-stretch"></slot></div>
+    <div region-group="top">
+      <div region="top-start"><slot name="top-start"></slot></div>
+      <div region="top-center"><slot name="top-center"></slot></div>
+      <div region="top-end"><slot name="top-end"></slot></div>
     </div>
+    <div region="middle"><slot name="middle"></slot></div>
+    <div region-group="bottom">
+      <div region="bottom-start"><slot name="bottom-start"></slot></div>
+      <div region="bottom-center"><slot name="bottom-center"></slot></div>
+      <div region="bottom-end"><slot name="bottom-end"></slot></div>
+    </div>
+    <div region="bottom-stretch"><slot name="bottom-stretch"></slot></div>
   </template>
 </dom-module>
 
@@ -148,9 +84,12 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        padding: 8px;
-        width: 100%;
-        max-width: 250px;
+        display: block;
+        margin: 1em;
+      }
+
+      [part="overlay"] {
+        padding: 1em;
         background: lightgrey;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
       }
@@ -164,12 +103,6 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([closing]) {
         animation: close-notification 1000ms;
       }
-
-      @media (max-width: 420px) {
-        :host {
-          max-width: none;
-        }
-      }
     </style>
   </template>
 </dom-module>
@@ -179,13 +112,15 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
-        box-sizing: border-box;
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
         pointer-events: auto;
       }
     </style>
-    <slot></slot>
+
+    <div part="overlay">
+      <div part="content">
+        <slot></slot>
+      </div>
+    </div>
   </template>
 </dom-module>
 
@@ -203,25 +138,61 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
-       * The overlay element.
-       *
-       * ### Styling
-       *
-       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)
-       * for `<vaadin-notification-overlay>` parts.
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       * The notification overlay element.
        *
        * @memberof Vaadin
        */
-      class VaadinNotificationOverlay extends Vaadin.OverlayElement {
+      class VaadinNotificationOverlay extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-notification-overlay';
         }
 
-        ready() {
-          super.ready();
-          this.modeless = true;
+        static get properties() {
+          return {
+            /**
+             * True when the overlay is opened
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              observer: '_openedChanged'
+            }
+          };
+        }
+
+        _openedChanged(opened) {
+          if (opened) {
+            document.body.appendChild(this);
+            if (this._boundIosResizeListener) {
+              this._detectIosNavbar();
+              window.addEventListener('resize', this._boundIosResizeListener);
+            }
+          } else {
+            document.body.removeChild(this);
+            if (this._boundIosResizeListener) {
+              window.removeEventListener('resize', this._boundIosResizeListener);
+            }
+          }
+        }
+
+        constructor() {
+          super();
+
+          if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            this._boundIosResizeListener = () => this._detectIosNavbar();
+          }
+        }
+
+        _detectIosNavbar() {
+          const innerHeight = window.innerHeight;
+          const innerWidth = window.innerWidth;
+          const landscape = innerWidth > innerHeight;
+          const clientHeight = document.documentElement.clientHeight;
+          if (landscape && clientHeight > innerHeight) {
+            this.style.bottom = (clientHeight - innerHeight) + 'px';
+          } else {
+            this.style.bottom = '0';
+          }
         }
       }
 
@@ -229,6 +200,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * The container element for the notification
        *
        * ### Styling
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `overlay` | The notification container
+       * `content` | The content of the notification
        *
        * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
        *
@@ -258,31 +235,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-notification>
        * ```
        *
-       * ### Styling
-       *
-       * The following Shadow DOM parts are available for styling:
-       *
-       * Part name  | Description | Theme for Element
-       * -----------|-------------|------------------
-       * `content`  | The container of all regions | vaadin-notification-overlay
-       * `top-stretch` | top-stretch container | vaadin-notification-overlay
-       * `top` | top container | vaadin-notification-overlay
-       * `top-start` | top-start container, child of top | vaadin-notification-overlay
-       * `top-center` | top-center container, child of top | vaadin-notification-overlay
-       * `top-end` | top-end container, child of top | vaadin-notification-overlay
-       * `middle` | middle container | vaadin-notification-overlay
-       * `bottom` | bottom container | vaadin-notification-overlay
-       * `bottom-start` | bottom-start container, child of bottom | vaadin-notification-overlay
-       * `bottom-center` | bottom-center container, child of bottom | vaadin-notification-overlay
-       * `bottom-end` | bottom-end container, child of bottom | vaadin-notification-overlay
-       * `bottom-stretch` | bottom-stretch container, child of bottom | vaadin-notification-overlay
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-       *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class NotificationElement extends Vaadin.ElementMixin(class extends Polymer.Element {}) {
+      class NotificationElement extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-notification';
         }
@@ -358,12 +314,7 @@ This program is available under Apache License Version 2.0, available at https:/
         get _overlay() {
           if (!NotificationElement._overlay) {
             NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
-            document.body.appendChild(this._overlay);
-
-            // To reduce DOM queries, we cache all regions eligible for appending notifications
-            NotificationElement._overlay.regions = {};
-            Array.from(this._overlay.$.content.querySelectorAll('[part]'))
-              .forEach(e => e.children.length == 0 && (this._overlay.regions[e.getAttribute('part')] = e));
+            document.body.appendChild(NotificationElement._overlay);
           }
           return NotificationElement._overlay;
         }
@@ -395,19 +346,25 @@ This program is available under Apache License Version 2.0, available at https:/
           const region = /^(top|bottom)$/.test(this.verticalAlign)
             ? this.verticalAlign + '-' + this.horizontalAlign : this.verticalAlign;
 
-          if (this._overlay.regions[region]) {
-            this._overlay.regions[region].appendChild(this._card);
-          } else {
+          if (!this._overlay.shadowRoot.querySelector(`slot[name="${region}"]`)) {
             window.console.warn(
               `Invalid alignment parameters provided: vertical-align=${this.verticalAlign} horizontal-align=${this.horizontalAlign}`);
+            return;
+          }
+
+          this._card.slot = region;
+          if (this._overlay.firstElementChild &&
+              (this.verticalAlign === 'top' || this.verticalAlign === 'top-stretch')) {
+            this._overlay.insertBefore(this._card, this._overlay.firstElementChild);
+          } else {
+            this._overlay.appendChild(this._card);
           }
         }
 
         _removeNotificationCard() {
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
           this._card.removeAttribute('closing');
-          this._overlay.opened =
-            Object.keys(this._overlay.regions).reduce((prev, part) => this._overlay.regions[part].hasChildNodes() || prev, false);
+          this._overlay.opened = Boolean(this._overlay.firstElementChild);
         }
 
         _closeNotificationCard() {

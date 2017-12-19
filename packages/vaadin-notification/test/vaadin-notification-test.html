@@ -41,31 +41,64 @@
       afterEach(() => {
         // Close to stop all pending timers.
         notification.close();
-        // Remove overlay from body
-        document.body.removeChild(notification.constructor._overlay);
+        notification._removeNotificationCard(); // Force sync card removal instead of waiting for the animation
         // delete singleton reference, so as it's created in next test
         delete notification.constructor._overlay;
       });
 
       describe('vaadin-notification-overlay', () => {
-        it('vaadin-notification-overlay is in the body', () => {
+        it('should be in the body when notification opens', () => {
           expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
         });
 
-        it('vaadin-notification-overlay is visible after opening', () => {
+        it('should not be in the body when notifications close', () => {
+          notification.close();
+          notification._removeNotificationCard();
+          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(0);
+        });
+
+        it('should not be in the body when notification reopens', () => {
+          notification.close();
+          notification._removeNotificationCard();
+          notification.open();
+          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
+        });
+
+        it('should be visible after opening', () => {
           var isVisible = (elem) => !!(elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length);
           expect(isVisible(document.body.querySelector('vaadin-notification-overlay'))).to.be.true;
         });
 
-        // iOS Safari has incorrect viewport height when navigation bar is
-        // visible in landscape orientation. This is workarounded by exposing
-        // --vaadin-overlay-viewport-bottom in <vaadin-overlay>.
-        if (!window.ShadyCSS || window.ShadyCSS.nativeCss) {
-          it('should support --vaadin-overlay-viewport-bottom CSS property', () => {
-            const overlay = notification.constructor._overlay;
-            overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-            const content = overlay.shadowRoot.querySelector('[part="content"]');
-            expect(getComputedStyle(content).getPropertyValue('bottom')).to.equal('50px');
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          describe('iOS incorrect viewport height workaround', () => {
+            let overlay;
+            beforeEach(() => overlay = document.body.querySelector('vaadin-notification-overlay'));
+
+            it('should set value to bottom when landscape and clientHeight > innerHeight', () => {
+              window.top.document.querySelector('#subsuites').style.height = '250px';
+              const sandbox = sinon.sandbox.create();
+              sandbox.stub(window, 'innerHeight', 200);
+              expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.equal('0px');
+              overlay._detectIosNavbar();
+              expect(getComputedStyle(overlay).getPropertyValue('bottom')).to.not.equal('0px');
+              sandbox.restore();
+              window.top.document.querySelector('#subsuites').style.removeProperty('height');
+            });
+
+            it('should apply the workaround on open', () => {
+              overlay.opened = false;
+              sinon.spy(overlay, '_detectIosNavbar');
+              overlay.opened = true;
+              expect(overlay._detectIosNavbar.called).to.be.true;
+              overlay._detectIosNavbar.restore();
+            });
+
+            it('should apply the workaround on resize', () => {
+              sinon.spy(overlay, '_detectIosNavbar');
+              window.dispatchEvent(new CustomEvent('resize'));
+              expect(overlay._detectIosNavbar.called).to.be.true;
+              overlay._detectIosNavbar.restore();
+            });
           });
         }
       });
