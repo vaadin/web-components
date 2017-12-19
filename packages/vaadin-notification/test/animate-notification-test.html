@@ -22,6 +22,10 @@
           background: lightgrey;
         }
 
+        :host([slot^="bottom"]) {
+          animation: none !important;
+        }
+
         :host([slot="middle"][closing]) {
           animation: test-animation 100ms;
         }
@@ -31,7 +35,7 @@
 
   <test-fixture id="notification">
     <template>
-      <vaadin-notification><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification position="bottom-center"><template>Notificaton</template></vaadin-notification>
 
       <!-- notificatons in middle are animated -->
       <vaadin-notification position="middle"><template>Notificaton</template></vaadin-notification>
