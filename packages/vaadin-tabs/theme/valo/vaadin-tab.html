@@ -1,6 +1,7 @@
 <link rel="import" href="../../../vaadin-valo-theme/color.html">
 <link rel="import" href="../../../vaadin-valo-theme/sizing.html">
 <link rel="import" href="../../../vaadin-valo-theme/style.html">
+<link rel="import" href="../../../vaadin-valo-theme/typography.html">
 
 <dom-module id="valo-tab" theme-for="vaadin-tab">
   <template>
@@ -8,15 +9,22 @@
       :host {
         box-sizing: border-box;
         padding: .25em 1em;
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size-m);
+        line-height: var(--valo-line-height);
         font-weight: 500;
+        opacity: 1;
         color: var(--valo-contrast-60pct);
         transition: 0.2s color, 0.2s transform;
+        flex-shrink: 0;
         display: flex;
         align-items: center;
         position: relative;
         cursor: pointer;
         transform-origin: 50% 100%;
         outline: none;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       :host([orientation="vertical"]) {
@@ -78,7 +86,7 @@
       }
 
       :host::after {
-        box-shadow: 0 0 1px 4px var(--valo-primary-color);
+        box-shadow: 0 0 0 4px var(--valo-primary-color);
         opacity: 0.15;
         transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
       }
@@ -141,6 +149,14 @@
 
       :host([theme~="icon-on-top"]) ::slotted(iron-icon) {
         margin: 0;
+      }
+
+      /* Disabled */
+
+      :host([disabled]) {
+        pointer-events: none;
+        opacity: 1;
+        color: var(--valo-disabled-text-color);
       }
     </style>
   </template>
