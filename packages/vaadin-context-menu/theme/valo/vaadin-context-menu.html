@@ -1,14 +1,14 @@
 <link rel="import" href="../../../vaadin-item/theme/valo/vaadin-item.html">
 <link rel="import" href="../../../vaadin-list-box/theme/valo/vaadin-list-box.html">
 <link rel="import" href="../../../vaadin-overlay/theme/valo/vaadin-overlay.html">
-<link rel="import" href="../../../vaadin-valo-theme/menu-overlay.html">
+<link rel="import" href="../../../vaadin-valo-theme/mixins/menu-overlay.html">
 
 <dom-module id="valo-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
   <template>
-    <style>
+    <style include="valo-menu-overlay">
       /* Don’t highlight the last activated item */
       /* TODO the overlay should also forget the last activated/focused item when reopened */
-      vaadin-list-box vaadin-item[selected] {
+      vaadin-list-box [tabindex][selected] {
         font-weight: 400;
       }
     </style>
