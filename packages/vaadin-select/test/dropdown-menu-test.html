@@ -440,20 +440,20 @@
           expect(focusedSpy).to.be.calledOnce;
         });
 
-        it('should set _phone property and phone attribute to true when dimensions are below 420', () => {
+        it('should set _phone property and phone attribute to true when dimensions are below 420', done => {
           expect(dropdown._phone).to.be.false;
           expect(dropdown._overlayElement.hasAttribute('phone')).to.be.false;
 
           window.top.document.querySelector('#subsuites').style.height = '419px';
           window.top.document.querySelector('#subsuites').style.width = '419px';
 
-          setTimeout(() => {
+          dropdown.addEventListener('iron-resize', () => {
             expect(dropdown._phone).to.be.true;
             expect(dropdown._overlayElement.hasAttribute('phone')).to.be.true;
-          }, 1);
-
-          window.top.document.querySelector('#subsuites').style.removeProperty('height');
-          window.top.document.querySelector('#subsuites').style.removeProperty('width');
+            window.top.document.querySelector('#subsuites').style.removeProperty('height');
+            window.top.document.querySelector('#subsuites').style.removeProperty('width');
+            done();
+          });
         });
 
         it('should remove focused state from the input on closing the overlay if phone', () => {
