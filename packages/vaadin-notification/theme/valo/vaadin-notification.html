@@ -1,0 +1,148 @@
+<link rel="import" href="../../../vaadin-valo-theme/color.html">
+<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
+<link rel="import" href="../../../vaadin-valo-theme/style.html">
+
+<custom-style>
+  <style>
+    html {
+      --valo-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-5pct),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 8px 24px -6px var(--valo-shade-40pct);
+      --valo-raised-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-5pct),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 24px 56px -6px var(--valo-shade-40pct);
+    }
+    [theme~="dark"] {
+      --valo-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-10pct),
+          0 1px 6px 0 var(--valo-shade-60pct),
+          0 8px 24px -6px var(--valo-shade-80pct);
+      --valo-raised-overlay-box-shadow:
+          0 0 0 1px var(--valo-contrast-10pct),
+          0 1px 6px 0 var(--valo-shade-30pct),
+          0 24px 56px -6px var(--valo-shade-80pct);
+    }
+  </style>
+</custom-style>
+
+<dom-module id="valo-notification-card" theme-for="vaadin-notification-card">
+  <template>
+    <style>
+      [part="overlay"] {
+        background-color: var(--valo-base-color);
+        background-image: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
+        border-radius: var(--valo-border-radius);
+        box-shadow: var(--valo-overlay-box-shadow);
+        padding: var(--valo-space-wide-m);
+      }
+
+      [part="content"] {
+        color: var(--valo-body-text-color);
+        font-family: var(--valo-font-family);
+        font-size: var(--valo-font-size-m);
+        font-weight: 400;
+        line-height: var(--valo-line-height);
+        letter-spacing: 0;
+        text-transform: none;
+        box-sizing: border-box;
+      }
+
+      :host([slot^="top"]) {
+        margin-top: var(--valo-space-s);
+      }
+
+      :host([slot^="bottom"]) {
+        margin-bottom: var(--valo-space-s);
+      }
+
+      :host([slot^="middle"]) {
+        width: 20em;
+        max-width: 80vw;
+        margin: var(--valo-space-s) auto;
+      }
+
+      :host([slot^="top"]),
+      :host([slot^="bottom"]) {
+        margin-left: var(--valo-space-m);
+        margin-right: var(--valo-space-m);
+      }
+
+      :host([slot$="stretch"]) {
+        margin: 0;
+        border-radius: 0;
+        width: auto;
+      }
+
+      @keyframes valo-notification-exit-fade-out {
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes valo-notification-enter-fade-in {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      @keyframes valo-notification-enter-slide-down {
+        0% {
+          transform: translateY(-200%);
+          opacity: 0;
+        }
+      }
+
+      @keyframes valo-notification-exit-slide-up {
+        100% {
+          transform: translateY(-200%);
+          opacity: 0;
+        }
+      }
+
+      @keyframes valo-notification-enter-slide-up {
+        0% {
+          transform: translateY(200%);
+          opacity: 0;
+        }
+      }
+
+      @keyframes valo-notification-exit-slide-down {
+        100% {
+          transform: translateY(200%);
+          opacity: 0;
+        }
+      }
+
+      :host([slot="middle"]) {
+        animation: valo-notification-enter-fade-in 300ms;
+      }
+
+      :host([slot="middle"][closing]) {
+        animation: valo-notification-exit-fade-out 300ms;
+      }
+
+      :host([slot^="top"]) {
+        animation: valo-notification-enter-slide-down 300ms;
+      }
+
+      :host([slot^="top"][closing]) {
+        animation: valo-notification-exit-slide-up 300ms;
+      }
+
+      :host([slot^="bottom"]) {
+        animation: valo-notification-enter-slide-up 300ms;
+      }
+
+      :host([slot^="bottom"][closing]) {
+        animation: valo-notification-exit-slide-down 300ms;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../../src/vaadin-notification.html">
