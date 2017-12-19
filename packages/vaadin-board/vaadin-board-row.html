@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <dom-module id="vaadin-board-row">
   <template>
@@ -32,7 +33,7 @@
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class BoardRowElement extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+      class BoardRowElement extends Vaadin.ElementMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
         static get is() {
           return "vaadin-board-row";
         }
@@ -207,7 +208,6 @@
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
       window.Vaadin.BoardRowElement = BoardRowElement;
     })();
   </script>
