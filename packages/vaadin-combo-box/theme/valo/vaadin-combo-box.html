@@ -8,11 +8,6 @@
 <dom-module id="valo-combo-box" theme-for="vaadin-combo-box">
   <template>
   <style include="valo-field-button">
-    [part="text-field"] {
-      /* TODO Relies on knowing the width and padding sizes of vaadin-text-field */
-      width: calc(10em + (0.25em + 0.375em + var(--valo-border-radius) / 4) * 2);
-    }
-
     [part="toggle-button"]::before {
       content: var(--valo-icons-dropdown);
     }
