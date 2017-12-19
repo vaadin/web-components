@@ -136,6 +136,21 @@
         expect(datepicker._inputElement.invalid).to.be.true;
       });
 
+      it('should re-validate old input after selecting date', done => {
+        // Set invalid value.
+        inputValue('foo');
+        expect(datepicker.validate()).to.equal(false);
+
+        datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+          expect(datepicker.invalid).to.equal(false);
+          done();
+        });
+
+        datepicker.open();
+        datepicker.value = '2000-02-01';
+        datepicker.close();
+      });
+
       it('should display the error-message when invalid', () => {
         datepicker.invalid = true;
         datepicker.errorMessage = 'Not cool';
