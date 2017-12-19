@@ -53,10 +53,9 @@
         }
 
         :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
-          background-color: var(--material-background-color);
+          background-color: transparent;
         }
       }
-
 
       [part="input-field"]::before,
       [part="input-field"]::after {
@@ -80,6 +79,17 @@
         transform: scaleX(0);
       }
 
+      :host([disabled]) [part="label"],
+      :host([disabled]) [part="value"],
+      :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
+        color: var(--material-disabled-text-color);
+        -webkit-text-fill-color: var(--material-disabled-text-color);
+      }
+
+      :host([focused]:not([readonly])) [part="input-field"] {
+        background-color: transparent;
+      }
+
       [part="value"] {
         outline: none;
         margin: 0;
@@ -91,6 +101,7 @@
         font-family: inherit;
         font-size: 1em;
         color: inherit;
+        background-color: transparent;
 
         /* Disable default invalid style in Firefox */
         box-shadow: none;
@@ -212,7 +223,7 @@
       }
 
       /* Only target the visible floating label */
-      :host(:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
+      :host([label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
         /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
         transform: scale(1) translateY(24px);
         transition-timing-function: ease, ease, step-start;

@@ -138,6 +138,79 @@
       </template>
     </nice-demo-snippet>
 
+    <h3>Dark theme states</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+        <vaadin-dropdown-menu label="Disabled" disabled value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+
+        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option one</vaadin-item>
+              <vaadin-item>Option two</vaadin-item>
+              <vaadin-item>Option three</vaadin-item>
+              <hr>
+              <vaadin-item disabled>Option four</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </nice-demo-snippet>
+
+    <h3>Dark theme validation</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-dropdown-menu required error-message="Please select an option" label="Required" placeholder="Select an option">
+            <template>
+              <vaadin-list-box>
+                <vaadin-item>Option one</vaadin-item>
+                <vaadin-item>Option two</vaadin-item>
+                <vaadin-item>Option three</vaadin-item>
+                <hr>
+                <vaadin-item disabled>Option four</vaadin-item>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme customized items</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-dropdown-menu label="Select a user" style="width: 15em;">
+            <template>
+              <vaadin-list-box>
+                <person-item>Maxine Richardson</person-item>
+                <person-item>Kristina Howard</person-item>
+                <person-item>Sebastian Harris</person-item>
+
+                <style>
+                  /* Show the email line when inside the list-box, but not inside the dropdown-menu selected item */
+                  person-item {
+                    --person-item-email-display: block;
+                  }
+                </style>
+              </vaadin-list-box>
+            </template>
+          </vaadin-dropdown-menu>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
   </div>
 </body>
 </html>
