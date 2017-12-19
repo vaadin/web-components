@@ -108,11 +108,11 @@
     });
 
     describe('vaadin-dropdown-menu inside flexbox', () => {
-      it('dropdown should have some width', () => {
+      it('dropdown should stretch inside a column flex container', () => {
         const container = fixture('dropdown-in-flexbox');
         const dropdown = container.querySelector('vaadin-dropdown-menu');
         expect(window.getComputedStyle(container).width).to.eql('500px');
-        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.be.lte(300);
+        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.eql(500);
       });
     });
 
