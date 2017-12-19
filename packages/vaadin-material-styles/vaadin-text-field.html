@@ -53,10 +53,9 @@
         }
 
         :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
-          background-color: var(--material-background-color);
+          background-color: transparent;
         }
       }
-
 
       [part="input-field"]::before,
       [part="input-field"]::after {
@@ -104,6 +103,7 @@
         font-family: inherit;
         font-size: 1em;
         color: inherit;
+        background-color: transparent;
 
         /* Disable default invalid style in Firefox */
         box-shadow: none;
