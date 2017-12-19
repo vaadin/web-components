@@ -10,7 +10,6 @@
 
     <h3>Custom Border and Background</h3>
     <vaadin-demo-snippet id="text-field-styling-demos-border-styles">
-    <vaadin-demo-snippet id="text-field-valo-theme-demos-sizes">
       <template preserve-content>
         <vaadin-text-field class="custom-style" label="Label" value="Value"></vaadin-text-field>
         <vaadin-password-field class="custom-style" label="Label" value="Value"></vaadin-password-field>
@@ -21,12 +20,12 @@
           <template>
             <style>
               :host(.custom-style) [part="input-field"] {
-                border: 1px solid #CCC;
-                background-color: #FFF;
+                border: 1px solid #ccc;
+                background-color: #fff;
               }
 
               :host([focused].custom-style) [part="input-field"] {
-                border-color: #AAA;
+                border-color: #aaa;
               }
             </style>
           </template>
