@@ -7,12 +7,12 @@
   <template>
     <style>
       :host {
-        --valo-size: var(--valo-space-s);
+        --valo-split-layout-size: var(--valo-space-s);
       }
 
       [part="splitter"] {
-        min-width: var(--valo-size);
-        min-height: var(--valo-size);
+        min-width: var(--valo-split-layout-size);
+        min-height: var(--valo-split-layout-size);
         background-color: var(--valo-contrast-5pct);
         transition: 0.1s background-color;
       }
@@ -26,8 +26,8 @@
       [part="handle"]::after {
         content: "";
         display: block;
-        width: calc(var(--valo-size) / 2);
-        height: var(--valo-size-m);
+        width: var(--valo-space-xs);
+        height: var(--valo-size-s);
         border-radius: var(--valo-border-radius);
         background-color: var(--valo-contrast-30pct);
         transition: 0.1s background-color;
@@ -40,33 +40,36 @@
       /* Hover style */
 
       [part="splitter"]:hover [part="handle"]::after {
-        background-color: var(--valo-contrast-50pct);
+        background-color: var(--valo-contrast-40pct);
+      }
+
+      /* Disable hover for touch devices */
+      @media (pointer: coarse) {
+        [part="splitter"]:hover [part="handle"]::after {
+          background-color: var(--valo-contrast-30pct);
+        }
       }
 
       /* Active style */
 
-      [part="splitter"]:active {
-        background-color: var(--valo-contrast-10pct);
-      }
-
       [part="splitter"]:active [part="handle"]::after {
-        background-color: var(--valo-contrast-90pct);
+        background-color: var(--valo-contrast-50pct);
       }
 
       /* Small style */
 
       :host([theme~="small"]) {
-        --valo-size: var(--valo-space-xs);
+        --valo-split-layout-size: var(--valo-space-xs);
+      }
+
+      :host([theme~="small"]) [part="handle"]::after {
+        width: calc(var(--valo-space-xs) / 2);
       }
 
       /* Subtle style */
 
       :host([theme~="subtle"]) [part="splitter"] {
         background-color: transparent;
-      }
-
-      :host([theme~="subtle"]:not(:active)) [part="splitter"]:not(:hover) [part="handle"]::after {
-        background-color: var(--valo-contrast-20pct);
       }
     </style>
   </template>
