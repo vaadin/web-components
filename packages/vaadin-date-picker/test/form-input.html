@@ -157,15 +157,6 @@
         expect(datepicker._inputElement.errorMessage).to.equal(datepicker.errorMessage);
       });
 
-      it('should not display the error-message when undefined', done => {
-        datepicker.invalid = true;
-        flush(() => {
-          var error = datepicker.$$('paper-input-error');
-          expect(error).to.equal(null);
-          done();
-        });
-      });
-
       it('should have disabled vaadin-text-field', () => {
         datepicker.disabled = true;
         expect(datepicker._inputElement.hasAttribute('disabled')).to.be.true;
