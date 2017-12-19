@@ -178,10 +178,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host([reordering]) {
-        -ms-user-select: none;
         -moz-user-select: none;
         -webkit-user-select: none;
         user-select: none;
+      }
+
+      #scroller[ie][column-reordering-allowed] [part~="header-cell"] {
+        -ms-user-select: none;
       }
 
       :host([reordering]) #outerscroller {
