@@ -89,6 +89,48 @@
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Dark theme states</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-combo-box label="Enabled" value="Option 1"></vaadin-combo-box>
+          <vaadin-combo-box label="Disabled" value="Option 1" disabled></vaadin-combo-box>
+          <vaadin-combo-box label="Read only" value="Option 1" readonly></vaadin-combo-box>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme validation</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-combo-box required label="Required" placeholder="Choose an option" error-message="Please select an option"></vaadin-combo-box>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme dropdown item template</h3>
+
+    <nice-demo-snippet>
+      <!-- TODO make the overlay adapt to the width of the items -->
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-combo-box label="Person" item-label-path="name" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
+            <template>
+              <style>
+              person-item {
+                --person-item-email-display: block;
+              }
+              </style>
+              <person-item email="[[item.email]]">[[item.name]]</person-item>
+            </template>
+          </vaadin-combo-box>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
     <hr>
 
 
