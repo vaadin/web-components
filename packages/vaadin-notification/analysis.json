@@ -6,7 +6,7 @@
       "description": "",
       "summary": "",
       "sourceRange": {
-        "file": "vaadin-notification.html",
+        "file": "src/vaadin-notification.html",
         "start": {
           "line": 392,
           "column": 6
@@ -20,7 +20,7 @@
         {
           "description": "The notification overlay element.",
           "summary": "",
-          "path": "vaadin-notification.html",
+          "path": "src/vaadin-notification.html",
           "properties": [
             {
               "name": "opened",
@@ -129,7 +129,7 @@
               "description": "",
               "name": "top-stretch",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 66,
                   "column": 30
@@ -144,7 +144,7 @@
               "description": "",
               "name": "top-start",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 68,
                   "column": 30
@@ -159,7 +159,7 @@
               "description": "",
               "name": "top-center",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 69,
                   "column": 31
@@ -174,7 +174,7 @@
               "description": "",
               "name": "top-end",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 70,
                   "column": 28
@@ -189,7 +189,7 @@
               "description": "",
               "name": "middle",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 72,
                   "column": 25
@@ -204,7 +204,7 @@
               "description": "",
               "name": "bottom-start",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 74,
                   "column": 33
@@ -219,7 +219,7 @@
               "description": "",
               "name": "bottom-center",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 75,
                   "column": 34
@@ -234,7 +234,7 @@
               "description": "",
               "name": "bottom-end",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 76,
                   "column": 31
@@ -249,7 +249,7 @@
               "description": "",
               "name": "bottom-stretch",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 78,
                   "column": 33
@@ -266,7 +266,7 @@
         {
           "description": "The container element for the notification\n\n### Styling\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`overlay` | The notification container\n`content` | The content of the notification\n\n[Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)",
           "summary": "",
-          "path": "vaadin-notification.html",
+          "path": "src/vaadin-notification.html",
           "properties": [],
           "methods": [
             {
@@ -293,7 +293,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -338,7 +338,7 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "vaadin-notification.html",
+                "file": "src/vaadin-notification.html",
                 "start": {
                   "line": 120,
                   "column": 8
@@ -358,7 +358,7 @@
         {
           "description": "`<vaadin-notification>` is a Polymer 2 element providing accessible and customizable notifications (toasts).\n\n```\n<vaadin-notification>\n  <template>\n    Your work has been saved\n  </template>\n</vaadin-notification>\n```",
           "summary": "",
-          "path": "vaadin-notification.html",
+          "path": "src/vaadin-notification.html",
           "properties": [
             {
               "name": "duration",
@@ -406,7 +406,7 @@
             {
               "name": "position",
               "type": "string",
-              "description": "Vertical and horizontal alignment of the notification in the viewport\nValid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`",
+              "description": "Alignment of the notification in the viewport\nValid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -414,12 +414,14 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 277,
+                  "line": 278,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "observer": "\"_positionChanged\""
+                }
               },
               "defaultValue": "\"bottom-start\""
             }
@@ -532,7 +534,7 @@
               "params": []
             },
             {
-              "name": "_orientiationChanged",
+              "name": "_positionChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -633,14 +635,14 @@
             },
             {
               "name": "position",
-              "description": "Vertical and horizontal alignment of the notification in the viewport\nValid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`",
+              "description": "Alignment of the notification in the viewport\nValid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`",
               "sourceRange": {
                 "start": {
                   "line": 274,
                   "column": 12
                 },
                 "end": {
-                  "line": 277,
+                  "line": 278,
                   "column": 13
                 }
               },
