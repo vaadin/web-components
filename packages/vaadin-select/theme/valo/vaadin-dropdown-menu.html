@@ -36,10 +36,6 @@
 <dom-module id="valo-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
   <template>
     <style>
-      :host {
-        width: 100%;
-      }
-
       [part="input-field"] {
         cursor: default;
       }
@@ -56,11 +52,6 @@
 
       [part="input-field"]:focus {
         outline: none;
-      }
-
-      [part="value"],
-      [part="input-field"] ::slotted([part="value"]) {
-        width: calc(10em - var(--valo-icon-size));
       }
     </style>
   </template>
