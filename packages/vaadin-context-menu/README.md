@@ -48,7 +48,7 @@
 </vaadin-context-menu>
 ```
 
-[<img src="https://github.com/vaadin/vaadin-context-menu/blob/master/screenshot.png" width="355" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/-/element/vaadin-context-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/vaadin-context-menu)
 
 
 ## Running demos and tests in browser
