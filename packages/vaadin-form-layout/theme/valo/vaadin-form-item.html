@@ -1,7 +1,7 @@
-<link rel="import" href="../../../vaadin-valo-theme/color.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
-<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-valo-styles/typography.html">
 
 <dom-module id="valo-form-item" theme-for="vaadin-form-item">
   <template>
@@ -12,12 +12,12 @@
 
       /* font-weight, margin-bottom, transition and line-height same values as for part label in text-field */
       [part="label"] {
-        color: var(--valo-contrast-60pct);
+        color: var(--valo-secondary-text-color);
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-s);
         font-weight: 500;
         margin-top: var(--valo-space-m);
-        margin-left: calc(var(--valo-text-field-border-radius, var(--valo-border-radius)) / 4);
+        margin-left: calc(var(--valo-border-radius) / 4);
         margin-bottom: var(--valo-space-xs);
         transition: color 0.4s;
         line-height: 1.333;
