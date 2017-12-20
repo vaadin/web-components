@@ -1,4 +1,4 @@
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
 <link rel="import" href="../../src/vaadin-vertical-layout.html">
 <link rel="import" href="vaadin-ordered-layout.html">
 
@@ -15,7 +15,7 @@
        */
       :host([theme~="spacing"])::before {
         content: "";
-        margin-top: -var(--valo-space-m);
+        margin-top: calc(var(--valo-space-m) * -1);
       }
     </style>
   </template>

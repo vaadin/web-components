@@ -29,7 +29,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.1.5",
-    "vaadin-valo-theme": "^2.0.0"
+    "vaadin-valo-styles": "vaadin/vaadin-valo-styles#^2.0.0"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.0",
