@@ -1,10 +1,10 @@
 <link rel="import" href="../../src/vaadin-button.html">
 
-<link rel="import" href="../../../vaadin-valo-theme/color.html">
-<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
-<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-valo-styles/typography.html">
 
 <dom-module id="valo-button" theme-for="vaadin-button">
   <template>
@@ -239,15 +239,15 @@
     <style>
       :host ::slotted(iron-icon) {
         display: inline-block;
-        width: 1.5em;
-        height: 1.5em;
+        width: var(--valo-icon-size);
+        height: var(--valo-icon-size);
       }
 
       /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
       :host ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: 1em;
-        height: 1em;
-        padding: 4px;
+        width: calc(var(--valo-icon-size) - 0.5em);
+        height: calc(var(--valo-icon-size) - 0.5em);
+        padding: 0.25em;
       }
 
       [part="prefix"] {
