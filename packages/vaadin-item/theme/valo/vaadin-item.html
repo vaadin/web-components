@@ -1,8 +1,8 @@
-<link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
-<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
-<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+<link rel="import" href="../../../vaadin-valo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-valo-styles/typography.html">
 
 <dom-module id="valo-item" theme-for="vaadin-item">
   <template>
@@ -10,21 +10,10 @@
       :host {
         display: flex;
         align-items: center;
-        min-height: var(--valo-size-m);
-        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
-        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
         box-sizing: border-box;
         line-height: var(--valo-line-height-s);
         border-radius: var(--valo-border-radius);
         overflow: hidden;
-      }
-
-      @media (pointer: coarse) {
-        :host {
-          min-height: var(--valo-size-l);
-          padding-top: var(--valo-space-s);
-          padding-bottom: var(--valo-space-s);
-        }
       }
 
       /* It's the list-box's responsibility to add the focus style */
