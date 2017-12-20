@@ -35,7 +35,7 @@
 <vaadin-combo-box label="Label" value="Option 1"></vaadin-combo-box>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/docs/img/vaadin-combo-box-item-template-material.png" width="311" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/-/element/vaadin-combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="374" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/vaadin-combo-box)
 
 
 ## Running demos and tests in browser
