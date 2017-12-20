@@ -8,7 +8,7 @@ install:
 - bower install
 
 before_script:
-- gulp lint
+- gulp lint version:check
 
 script:
 - xvfb-run wct --plugin sauce test
