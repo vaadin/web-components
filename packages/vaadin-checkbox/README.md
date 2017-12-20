@@ -28,7 +28,7 @@
 <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="385" alt="Screenshot of vaadin-checkbox, using the default Valo theme">](https://vaadin.com/elements/vaadin-checkbox)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="400" alt="Screenshot of vaadin-checkbox, using the default Valo theme">](https://vaadin.com/elements/vaadin-checkbox)
 
 ## Getting Started
 
