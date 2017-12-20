@@ -34,6 +34,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="347" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/vaadin-tabs)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-tab.html`
+- `src/vaadin-tabs.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-tab.html`
+- `theme/valo/vaadin-tabs.html`
+
+  Element with Valo theme.
+
+- `vaadin-tab.html`
+- `vaadin-tabs.html`
+
+  Alias for theme/valo/vaadin-tab.html
+  theme/valo/vaadin-tabs.html
 
 ## Running demos and tests in browser
 
