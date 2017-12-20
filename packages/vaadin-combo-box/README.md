@@ -30,6 +30,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="374" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/vaadin-combo-box)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-combo-box.html`
+- `src/vaadin-combo-box-light.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-combo-box.html`
+- `theme/valo/vaadin-combo-box-light.html`
+
+  Elements with Valo theme.
+
+- `vaadin-combo-box.html`
+- `vaadin-combo-box-light.html`
+
+  Alias for theme/valo/vaadin-combo-box.html
+  theme/valo/vaadin-combo-box-light.html
 
 ## Running demos and tests in browser
 
