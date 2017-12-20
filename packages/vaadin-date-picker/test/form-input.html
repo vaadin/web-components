@@ -136,19 +136,25 @@
         expect(datepicker._inputElement.invalid).to.be.true;
       });
 
+      it('should re-validate old input after selecting date', done => {
+        // Set invalid value.
+        inputValue('foo');
+        expect(datepicker.validate()).to.equal(false);
+
+        datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
+          expect(datepicker.invalid).to.equal(false);
+          done();
+        });
+
+        datepicker.open();
+        datepicker.value = '2000-02-01';
+        datepicker.close();
+      });
+
       it('should display the error-message when invalid', () => {
         datepicker.invalid = true;
         datepicker.errorMessage = 'Not cool';
         expect(datepicker._inputElement.errorMessage).to.equal(datepicker.errorMessage);
-      });
-
-      it('should not display the error-message when undefined', done => {
-        datepicker.invalid = true;
-        flush(() => {
-          var error = datepicker.$$('paper-input-error');
-          expect(error).to.equal(null);
-          done();
-        });
       });
 
       it('should have disabled vaadin-text-field', () => {

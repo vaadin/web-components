@@ -582,7 +582,8 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
-
+      // reset invalid state on the underlying text field
+      this.invalid = false;
       this.validate();
     }
 
