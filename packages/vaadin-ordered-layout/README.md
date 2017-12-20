@@ -37,6 +37,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/elements/-/element/vaadin-ordered-layout)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-horizontal-layout.html`
+- `src/vaadin-vertical-layout.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-horizontal-layout.html`
+- `theme/valo/vaadin-vertical-layout.html`
+
+  Elements with Valo theme.
+
+- `vaadin-horizontal-layout.html`
+- `vaadin-vertical-layout.html`
+
+  Alias for theme/valo/vaadin-horizontal-layout.html
+  theme/valo/vaadin-vertical-layout.html
 
 ## Running demos and tests in browser
 

@@ -1,0 +1,22 @@
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../src/vaadin-horizontal-layout.html">
+<link rel="import" href="vaadin-ordered-layout.html">
+
+<dom-module id="valo-horizontal-layout" theme-for="vaadin-horizontal-layout">
+  <template>
+    <style include="valo-ordered-layout">
+      :host([theme~="spacing"]) ::slotted(*) {
+        margin-left: var(--valo-space-m);
+      }
+
+      /*
+        Compensate for the first item margin, so that there is no gap around
+        the layout itself.
+       */
+      :host([theme~="spacing"])::before {
+        content: "";
+        margin-left: calc(var(--valo-space-m) * -1);
+      }
+    </style>
+  </template>
+</dom-module>

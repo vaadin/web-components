@@ -67,12 +67,13 @@
     });
 
     describe('theme variations', () => {
-      let element, c1, c2;
+      let element, c1, c2, space;
 
       beforeEach(() => {
         element = fixture('default');
         c1 = element.querySelector('#c1');
         c2 = element.querySelector('#c2');
+        space = window.getCustomCSSPropertyValue(element, '--valo-space-m');
       });
 
       it('should not have margin or padding by default', () => {
@@ -88,25 +89,28 @@
 
       it('should support theme="margin"', () => {
         element.setAttribute('theme', 'margin');
-        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal('16px'); // 1em in px
-        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal('16px');
-        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal('16px');
-        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('margin-top')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('margin-right')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('margin-bottom')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('margin-left')).to.equal(space);
       });
 
       it('should support theme="padding"', () => {
         element.setAttribute('theme', 'padding');
-        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal('16px'); // 1em in px
-        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal('16px');
-        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal('16px');
-        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal('16px');
+        expect(getComputedStyle(element).getPropertyValue('padding-top')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('padding-right')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('padding-bottom')).to.equal(space);
+        expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal(space);
       });
 
-      it('should support theme="spacing"', () => {
+      it('should support theme="spacing"', done => {
         element.setAttribute('theme', 'spacing');
-        expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal('16px'); // 1em in px
-        expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal('16px');
-        expect(getComputedStyle(element, '::before').getPropertyValue('margin-top')).to.equal('-16px');
+        setTimeout(() => {
+          expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal(space);
+          expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal(space);
+          expect(getComputedStyle(element, '::before').getPropertyValue('margin-top')).to.equal('-' + space);
+          done();
+        });
       });
     });
 
