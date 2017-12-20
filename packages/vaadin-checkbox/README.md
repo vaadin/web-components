@@ -30,6 +30,24 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="385" alt="Screenshot of vaadin-checkbox, using the default Valo theme">](https://vaadin.com/elements/vaadin-checkbox)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-checkbox.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-checkbox.html`
+
+  Element with Valo theme.
+
+- `vaadin-checkbox.html`
+
+  Alias for theme/valo/vaadin-checkbox.html
+
 ## Running demos and tests in browser
 
 1. Fork the `vaadin-checkbox` repository and clone it locally.
