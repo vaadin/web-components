@@ -1,31 +1,6 @@
-<link rel="import" href="../../../vaadin-valo-theme/color.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
-
-<custom-style>
-  <style>
-    html {
-      --valo-overlay-box-shadow:
-          0 0 0 1px var(--valo-contrast-5pct),
-          0 1px 6px 0 var(--valo-shade-30pct),
-          0 8px 24px -6px var(--valo-shade-40pct);
-      --valo-raised-overlay-box-shadow:
-          0 0 0 1px var(--valo-contrast-5pct),
-          0 1px 6px 0 var(--valo-shade-30pct),
-          0 24px 56px -6px var(--valo-shade-40pct);
-    }
-    [theme~="dark"] {
-      --valo-overlay-box-shadow:
-          0 0 0 1px var(--valo-contrast-10pct),
-          0 1px 6px 0 var(--valo-shade-60pct),
-          0 8px 24px -6px var(--valo-shade-80pct);
-      --valo-raised-overlay-box-shadow:
-          0 0 0 1px var(--valo-contrast-10pct),
-          0 1px 6px 0 var(--valo-shade-30pct),
-          0 24px 56px -6px var(--valo-shade-80pct);
-    }
-  </style>
-</custom-style>
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/style.html">
 
 <dom-module id="valo-notification-card" theme-for="vaadin-notification-card">
   <template>
@@ -34,7 +9,7 @@
         background-color: var(--valo-base-color);
         background-image: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
         border-radius: var(--valo-border-radius);
-        box-shadow: var(--valo-overlay-box-shadow);
+        box-shadow: var(--valo-box-shadow-m);
         padding: var(--valo-space-wide-m);
       }
 
@@ -43,7 +18,7 @@
         font-family: var(--valo-font-family);
         font-size: var(--valo-font-size-m);
         font-weight: 400;
-        line-height: var(--valo-line-height);
+        line-height: var(--valo-line-height-m);
         letter-spacing: 0;
         text-transform: none;
         box-sizing: border-box;
