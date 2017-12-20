@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Valo Theme Browser Compatibility</title>
+  <title>Vaadin Valo Browser Compatibility</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -35,13 +35,13 @@
 
     <h1>Browser compatibility</h1>
 
-    <p>If you need to support browsers that do not have <a href="http://caniuse.com/#feat=css-variables">native support for CSS Custom Properties</a> (Internet Explorer 11 and Edge 14), there are some limitations how the theming features can be used. These limitations are described below.</p>
+    <p>If you need to support browsers that do not have <a href="http://caniuse.com/#feat=css-variables">native support for CSS Custom Properties</a> (Internet Explorer 11 and Edge 14), there are some limitations how the styling features can be used. These limitations are described below.</p>
 
     <hr>
 
-    <h2 demo-section>Dark themes</h2>
+    <h2 demo-section>Dark color palette</h2>
 
-    <p>In order to apply the <a href="colors.html#light-and-dark-themes">dark theme colors</a>, you need to introduce a new CSS scope in the form of a shadow root, as a custom element. The <a href="https://github.com/webcomponents/shadycss">ShadyCSS</a> shim only polyfills custom property values on shadow root boundaries.</p>
+    <p>In order to apply the <a href="colors.html#light-and-dark-palette">dark color palette</a>, you need to introduce a new CSS scope in the form of a shadow root, as a custom element. The <a href="https://github.com/webcomponents/shadycss">ShadyCSS</a> shim only polyfills custom property values on shadow root boundaries.</p>
 
     <p>The easiest way to create a new shadow root, for which the custom property values are shimmed, is to create a new Polymer element, and include the <code>valo-dark</code> style module inside its template. This makes all the elements inside that shadow root adopt the dark colors.</p>
 
@@ -49,19 +49,19 @@
     <nice-demo-snippet code-only>
       <template slot="source">
         <!-- Import the color style module -->
-        <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/color.html">
 
         <!-- Define a new custom element -->
         <dom-module id="my-dark-ui">
           <template>
             <!-- Include the dark colors -->
             <style include="valo-dark">
-              /* Use any of the theme custom color properties inside this style block */
+              /* Use any of the custom color properties inside this style block */
               /* The background color and font color of this element are already set to the dark variants */
             </style>
           </template>
 
-          <!-- Any HTML that relies on the theme custom color properties -->
+          <!-- Any HTML that relies on the custom color properties -->
 
           <script>
             class MyDarkUI extends Polymer.Element {}

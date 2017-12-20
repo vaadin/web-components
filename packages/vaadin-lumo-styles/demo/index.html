@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Vaadin Valo Theme Getting Started</title>
+  <title>Vaadin Valo Getting Started</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -25,50 +25,54 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <h1>Getting started</h1>
+    <h1>Vaadin Valo Styles</h1>
+    <p>Valo is an evolving design system foundation for modern web applications, used by <a href="https://vaadin.com/elements">Vaadin Elements</a>.</p>
+    <div class="note">
+      <h6>Vaadin Elements</h6>
+      <p>If you just want Valo style UI components, you can use
+        <a href="https://vaadin.com/elements">Vaadin Elements</a> directly, such as
+        <a href="https://vaadin.com/elements/vaadin-text-field">vaadin-text-field</a>,
+        <a href="https://vaadin.com/elements/vaadin-button">vaadin-button</a> or
+        <a href="https://vaadin.com/elements/vaadin-grid">vaadin-grid</a>. You can install those using
+        Bower as well.</p>
+    </div>
 
-    <h2 demo-section>Install</h2>
-    <p>To start using the Valo theme you need to install the
-      <a href="https://github.com/vaadin/vaadin-valo-theme">vaadin-valo-theme</a> package using
+    <h2>Getting started</h2>
+
+    <h3 demo-section>1. Install</h3>
+    <p>To start using the Valo styles you need to install the
+      <a href="https://github.com/vaadin/styles">vaadin-valo-styles</a> package using
       <a href="https://bower.io">Bower</a>.</p>
 
     <nice-demo-snippet code-only>
       <template slot="source">
-        bower install --save vaadin/vaadin-valo-theme
+        bower install --save vaadin/vaadin-valo-styles
       </template>
     </nice-demo-snippet>
 
-    <div class="note">
-      <h6>Vaadin Elements</h6>
-      <p>To have the full benefit of using the theme, you should also use
-        <a href="https://vaadin.com/elements">Vaadin Elements</a>, such as
-        <a href="https://github.com/vaadin/vaadin-text-field">vaadin-text-field</a>,
-        <a href="https://github.com/vaadin/vaadin-button">vaadin-button</a> or
-        <a href="https://github.com/vaadin/vaadin-grid">vaadin-grid</a>. You can install those using
-        Bower as well.</p>
-    </div>
-
-    <h2 demo-section>Import a theme</h2>
-
-    <p>After installing the theme package, import any element specific theme files you need. Here,
-      we are importing the Valo theme for vaadin-text-field.</p>
-
+    <h3 demo-section>2. Import and include global styles</h3>
+    <p>Import and include the global style modules to make your application use Valo styles:</p>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Import the theme before the corresponding element (in index.html or in a separate HTML import) -->
-        <link rel="import" href="bower_components/vaadin-valo-theme/vaadin-text-field.html">
-        <link rel="import" href="bower_components/vaadin-text-field/vaadin-text-field.html">
+        <!-- Place these in your index.html -->
+        <link rel="import" href="bower_components/vaadin-valo-styles/color.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/sizing.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/spacing.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/style.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/typography.html">
+
+        <custom-style>
+          <style include="valo-color valo-typography"></style>
+        </custom-style>
       </template>
     </nice-demo-snippet>
 
-    <h2 demo-section>Next steps</h2>
-
+    <h3 demo-section>3. Next steps</h3>
     <ul>
       <li>Get to know the style guide, such as <b><a href="typography.html">fonts</a></b> and <b>
         <a href="colors.html">colors</a></b>, which affect the overall look and feel of all
           components.</li>
-      <li>Browse the component themes, <b><a href="buttons.html">Buttons</a></b> for example</li>
-      <li>Learn how to <b><a href="customization.html">customize the theme</a></b> to your needs</li>
+      <li>Learn how to <b><a href="customization.html">customize the styles</a></b> to your needs</li>
       <li>Read about <b><a href="compatibility.html">browser compatibility</a></b></li>
     </ul>
 

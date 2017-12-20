@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Valo Theme Sizing and Spacing</title>
+  <title>Vaadin Valo Sizing and Spacing</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -46,20 +46,19 @@
     </demo-navigation>
 
     <h1>Sizing and spacing</h1>
-    <p>The theme defines a set of CSS custom properties you can use to apply consistent sizing and spacing across your application.</p>
+    <p>Valo defines a set of CSS custom properties you can use to apply consistent sizing and spacing across your application.</p>
+
+    <p>Import <code>sizing.html</code> and <code>spacing.html</code> to use them.</p>
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="bower_components/vaadin-valo-styles/sizing.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/spacing.html">
+      </template>
+    </nice-demo-snippet>
 
 
     <h2 demo-section>Sizing</h2>
     <p>Use these properties to adjust the sizing of regular elements (buttons, text fields, list items).</p>
-
-    <div class="note">
-      <p>If you want to use the sizing properties, you need to import them manually.</p>
-      <nice-demo-snippet code-only>
-        <template slot="source">
-          <link rel="import" href="bower_components/vaadin-valo-theme/sizing.html">
-        </template>
-      </nice-demo-snippet>
-    </div>
 
     <nice-demo-snippet>
       <template slot="source">
@@ -117,15 +116,6 @@
 
     <h2 demo-section>Spacing</h2>
     <p>Use these properties to adjust the inter-component spacings, i.e. space outside a regular component (button, text field) or inside a container component (layouts, grid cells)</p>
-
-    <div class="note">
-      <p>If you want to use the spacing properties, you need to import them manually.</p>
-      <nice-demo-snippet code-only>
-        <template slot="source">
-          <link rel="import" href="bower_components/vaadin-valo-theme/spacing.html">
-        </template>
-      </nice-demo-snippet>
-    </div>
 
     <h3>Uniform</h3>
     <p>Use these properties for margin or padding in a single direction or uniformly on all sides.</p>

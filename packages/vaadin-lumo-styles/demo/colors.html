@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Valo Theme Colors</title>
+  <title>Vaadin Valo Colors</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -47,22 +47,25 @@
       <span slot="header">Valo</span>
     </demo-navigation>
 
-    <a href="https://github.com/vaadin/vaadin-valo-theme/blob/master/color.html" class="theme-source-code">Theme source code</a>
+    <a href="https://github.com/vaadin/vaadin-valo-styles/blob/master/color.html" class="theme-source-code">Source code</a>
     <h1>Colors</h1>
-    <p>The theme defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
+    <p>Valo defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
 
-    <p>The default colors are <a href="https://www.w3.org/TR/WCAG20/#visual-audio-contrast">WCAG 2.0</a> compliant (at least 3:1 contrast ratio) unless otherwise noted.</p>
-
-    <p>If you are not importing any component themes, and want to use these colors, you need to import the style module explicitly.</p>
+    <p>Import <code>color.html</code> to use them.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
+        <link rel="import" href="bower_components/vaadin-valo-styles/color.html">
       </template>
     </nice-demo-snippet>
 
+    <div class="note">
+      <h5>Accessibility</h5>
+      <p>The default color palette is <a href="https://www.w3.org/TR/WCAG20/#visual-audio-contrast">WCAG 2.0</a> AA level compliant unless otherwise noted.</p>
+    </div>
+
 
     <h2 demo-section>Base</h2>
-    <p>The base color is used as the main background color for the theme. The <a href="#grayscale">grayscale colors</a> are designed to be used on top of it, and the <a href="#text">text colors</a> are designed to have proper contrast with it.</p>
+    <p>The base color is used as the main background color for the system. The <a href="#grayscale">grayscale colors</a> are designed to be used on top of it, and the <a href="#text">text colors</a> are designed to have proper contrast with it.</p>
     <nice-demo-snippet class="black-5pct">
       <template slot="source">
         <span class="base">Base color</span>
@@ -80,7 +83,7 @@
 
 
     <h2 demo-section>Primary</h2>
-    <p>The most prominent color in the theme. It is used to bring attention to certain elements in the interface. Accompanying text and contrast colors are also defined.</p>
+    <p>The most prominent color in the system. It is used to bring attention to certain elements in the interface. Accompanying text and contrast colors are also defined.</p>
     <nice-demo-snippet>
       <template slot="source">
         <span class="primary-10pct">10%</span>
@@ -142,8 +145,8 @@
     <h2 demo-section>Success</h2>
     <p>Usually a green color, used for success messages and buttons that complete a certain task. Accompanying text and contrast colors are also defined.</p>
     <div class="note warn">
-      <p>The <code>--valo-success-color</code> does not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Use <code><span class="color-swatch" style="background-color: hsl(144, 82%, 38%);"></span>hsl(144, 82%, 38%)</code> if you want to be AA level compliant.</p>
-      <p>The <code>--valo-success-text-color</code> is compliant by default.</p>
+      <p>The <code style=""><span class="color-swatch" style="background-color: var(--valo-success-color);"></span>--valo-success-color</code> does not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Use <code><span class="color-swatch" style="background-color: hsl(144, 82%, 38%);"></span>hsl(144, 82%, 38%)</code> for compliant contrast.</p>
+      <p>The <code><span class="color-swatch" style="background-color: var(--valo-success-text-color);"></span>--valo-success-text-color</code> is compliant by default.</p>
     </div>
     <nice-demo-snippet>
       <template slot="source">
@@ -176,7 +179,7 @@
     <h2 demo-section>Grayscale</h2>
     <p>These colors form the foundation for your application colors. The grayscale colors consist of 11 different shades of “black” and “white”, each with a degree of transparency.</p>
 
-    <p>The tint and shade colors not always pure grayscale by default, but tinted slightly with the theme primary color.</p>
+    <p>The tint and shade colors not always pure grayscale by default, but tinted slightly with the primary color.</p>
 
     <p>The grayscale colors are useful for dividing pages into sections with different backgrounds and borders, or used as text colors, for example.</p>
 
@@ -402,7 +405,8 @@
     <p>The following text colors have the desired contrast with the <a href="#base">Base</a> color.</p>
 
     <div class="note">
-      <p>Note, that <code>--valo-primary-text-color</code> is not necessarily the same as <code>--valo-primary-color</code>. The same applies for the “error” and “success” colors as well.</p>
+      <p>Note, that <code><span class="color-swatch" style="background-color: var(--valo-primary-text-color);"></span>--valo-primary-text-color</code> is not necessarily the same as <code><span class="color-swatch" style="background-color: var(--valo-primary-color);"></span>--valo-primary-color</code>. Use the main color for backgrounds and the “text” version for text.</p>
+      <p>The same applies for the “error” and “success” colors as well.</p>
     </div>
     <div class="note warn">
       <p>The “tertiary” and “disabled” text colors do not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Only use them for text which is not crucial for the end user to see.</p>
@@ -464,15 +468,15 @@
 
 
     <h2 demo-section>Light and dark palette</h2>
-    <p>The theme has a dark color variation available out of the box.</p>
+    <p>The system has a dark color variation available out of the box.</p>
     <p>Each color has two variations: the default variation which is used for the light palette, and another variation used for the dark palette.</p>
     <p><a href="#importing">You need to import</a> and include the “valo-color” style module before you can use the dark palette. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
 
     <h4>1. Import and include the style module</h4>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Import the colors (this is done implicitly by all component themes) -->
-        <link rel="import" href="bower_components/vaadin-valo-theme/color.html">
+        <!-- Import the colors -->
+        <link rel="import" href="bower_components/vaadin-valo-styles/color.html">
 
         <!-- Include the color style module. This will set the background and text color
              for this style scope (html element of a the host of a custom element) -->
@@ -485,7 +489,7 @@
     <h4>2.a. Applying the dark palette for global scope</h4>
     <p>Apply the <code>theme="dark"</code> attribute on the HTML element:</p>
     <code class="block">&lt;html theme="dark"&gt;
-  &lt;!-- The whole page/app will use the dark theme colors --&gt;
+  &lt;!-- The whole page/app will use the dark palette colors --&gt;
 &lt;/html&gt;</code>
 
     <h4>2.b. Applying the dark palette for a single element scope</h4>
@@ -499,7 +503,7 @@
     </nice-demo-snippet>
     <div class="note warn">
       <h6>Browser compatibility</h6>
-      <p>The above example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors, scoped inside an element, work in all supported browsers.</p>
+      <p>The above example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-color-palette">compatibility instructions</a> how to make the dark colors, scoped inside an element, work in all supported browsers.</p>
     </div>
 
     <h3>Dark background color</h3>
@@ -612,7 +616,7 @@
     <h3>Dark palette</h3>
 
     <div class="note">
-      <p>You will see the light palette colors here on Internet Explorer 11 and Edge 14. See <a href="compatibility.html">Browser compatibility</a> for more info.</p>
+      <p>You will see the light palette colors here on Internet Explorer 11 and Edge 14. See <a href="compatibility.html#dark-color-palette">Browser compatibility</a> for more info.</p>
     </div>
 
     <div theme="dark" style="margin: 0 -1em; padding: 1em;">

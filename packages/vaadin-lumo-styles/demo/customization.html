@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Vaadin Valo Theme Customization</title>
+  <title>Vaadin Valo Customization</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -35,33 +35,10 @@
     <h1>Customization</h1>
 
 
-    <h2 demo-section>Common use cases</h2>
-    <h4 class="subtitle">Built-in theme variations</h4>
+    <h3>Light and dark color palettes</h3>
 
-    <p>For common use cases, Valo offers many built-in theme variations you can apply to individual
-      component instances. For example, there is a “primary” theme for buttons, and a ”small” theme
-      for text-fields. The built-in variations are applied using the <code>theme</code> attribute.</p>
-
-    <h6>Example: making a button more prominent using built-in variations</h6>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <vaadin-button theme="primary large">Prominent Button</vaadin-button>
-      </template>
-    </nice-demo-snippet>
-
-    <p>The built-in variations are documented per component, including source code examples how to
-      apply them. See <a href="buttons.html#colors">Button’s color variations</a>
-      for example.</p>
-
-
-    <h3>Light and dark themes</h3>
-
-    <p>Read more about light and dark themes from the
+    <p>Read more about light and dark color palettes from the
       <a href="colors.html#light-and-dark-palette">colors documentation</a>.</p>
-
-
-    <hr>
 
 
     <h2 demo-section>Small adjustments</h2>
@@ -69,7 +46,7 @@
 
     <p>Valo defines global and component specific
       <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
-      that you can use to make smaller adjustments to the theme.</p>
+      that you can use to make smaller adjustments to the styles.</p>
 
     <p>The pages under the “Style guide” section (<a href="colors.html">Colors</a> for example) list
       the custom properties that affect all elements.</p>
@@ -149,7 +126,7 @@
     <h2 demo-section>Advanced styling</h2>
     <h4 class="subtitle">Theme modules</h4>
 
-    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the theme and need to style elements freely.</p>
+    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the element or Valo and need to style elements freely.</p>
 
     <p>Read the documentation for <code>ThemableMixin</code> to learn how theme modules work.</p>
 
