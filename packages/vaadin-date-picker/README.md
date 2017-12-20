@@ -29,6 +29,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/elements/-/element/vaadin-date-picker)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-date-picker.html`
+- `src/vaadin-date-picker-light.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-date-picker.html`
+- `theme/valo/vaadin-date-picker-light.html`
+
+  Elements with Valo theme.
+
+- `vaadin-date-picker.html`
+- `vaadin-date-picker-light.html`
+
+  Alias for theme/valo/vaadin-date-picker.html
+  theme/valo/vaadin-date-picker-light.html
 
 ## Running demos and tests in browser
 
