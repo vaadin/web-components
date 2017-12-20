@@ -109,13 +109,13 @@
 
     <h3>Allow Custom Values</h3>
     <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
-    <vaadin-demo-snippet id="combo-box-advanced-demos-typing-custom-values">
+    <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values">
       <template preserve-content>
         <vaadin-combo-box id="demo1" label="Element" allow-custom-value></vaadin-combo-box>
         <p>Selected value: <span id="selected-value2"></span></p>
 
         <script>
-          window.addDemoReadyListener('#combo-box-advanced-demos-typing-custom-values', function(document) {
+          window.addDemoReadyListener('#combo-box-basic-demos-allow-custom-values', function(document) {
             var combobox = document.querySelector('#demo1');
             combobox.items = elements;
 
