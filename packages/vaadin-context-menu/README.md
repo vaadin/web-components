@@ -50,6 +50,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/vaadin-context-menu)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-context-menu.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-context-menu.html`
+
+  Element with Valo theme.
+
+- `vaadin-context-menu.html`
+
+  Alias for theme/valo/vaadin-context-menu.html
 
 ## Running demos and tests in browser
 
