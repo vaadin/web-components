@@ -33,6 +33,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/vaadin-form-layout)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-form-layout.html`
+- `src/vaadin-form-item.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-form-layout.html`
+- `theme/valo/vaadin-form-item.html`
+
+  Elements with Valo theme.
+
+- `vaadin-form-layout.html`
+- `vaadin-form-item.html`
+
+  Alias for theme/valo/vaadin-form-layout.html
+  theme/valo/vaadin-form-item.html
 
 ## Running demos and tests in browser
 
