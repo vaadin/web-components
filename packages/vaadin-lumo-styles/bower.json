@@ -4,7 +4,7 @@
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "Valo is a design system for Vaadin elements",
+  "description": "Valo is a design system foundation for modern web applications, used by Vaadin Elements",
   "main": "",
   "keywords": [
     "vaadin",

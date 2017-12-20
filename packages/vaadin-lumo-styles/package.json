@@ -1,13 +1,13 @@
 {
-  "name": "vaadin-valo-theme",
-  "version": "2.0.0-alpha5",
-  "description": "Valo is a customizable theme for Vaadin Elements",
+  "name": "vaadin-valo-styles",
+  "version": "2.0.0-alpha6",
+  "description": "Valo is a design system foundation for modern web applications, used by Vaadin Elements",
   "main": "valo.html",
   "repository": "vaadin/vaadin-valo-theme",
   "keywords": [
     "vaadin",
     "valo",
-    "theme",
+    "design-system",
     "web-components",
     "web-component",
     "polymer"
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-valo-theme/issues"
+    "url": "https://github.com/vaadin/vaadin-valo-styles/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
