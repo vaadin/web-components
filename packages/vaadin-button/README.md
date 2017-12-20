@@ -29,6 +29,24 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Valo theme">](https://vaadin.com/elements/-/element/vaadin-button)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-button.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-button.html`
+
+  Element with Valo theme.
+
+- `vaadin-button.html`
+
+  Alias for theme/valo/vaadin-button.html
+
 ## Running demos and tests in browser
 
 1. Fork the `vaadin-button` repository and clone it locally.
