@@ -57,6 +57,23 @@
 
 <img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.gif">
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-grid.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-grid.html`
+
+  Element with Valo theme.
+
+- `vaadin-grid.html`
+
+  Alias for theme/valo/vaadin-grid.html
 
 ## Running demos and tests in browser
 
