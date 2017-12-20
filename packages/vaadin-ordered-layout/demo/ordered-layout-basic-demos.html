@@ -1,6 +1,6 @@
 <dom-module id="ordered-layout-basic-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
@@ -9,24 +9,21 @@
     <vaadin-demo-snippet id='ordered-layout-basic-demos-horizontal-layout'>
       <template preserve-content>
         <vaadin-horizontal-layout>
-          <div class="dashed-outline">
-            Item 1
-          </div>
-          <div class="dashed-outline">
-            Item 2
-          </div>
-          <div class="dashed-outline">
-            Item 3
-          </div>
+          <div class="block">Item 1</div>
+          <div class="block">Item 2</div>
+          <div class="block">Item 3</div>
         </vaadin-horizontal-layout>
 
         <style>
-          vaadin-horizontal-layout {
-            height: 100px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
+          /* For demonstration purposes only */
+          .block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4em;
+            height: 4em;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
           }
         </style>
       </template>
@@ -36,24 +33,21 @@
     <vaadin-demo-snippet id='ordered-layout-basic-demos-vertical-layout'>
       <template preserve-content>
         <vaadin-vertical-layout>
-          <div class="dashed-outline">
-            Item 1
-          </div>
-          <div class="dashed-outline">
-            Item 2
-          </div>
-          <div class="dashed-outline">
-            Item 3
-          </div>
+          <div class="block">Item 1</div>
+          <div class="block">Item 2</div>
+          <div class="block">Item 3</div>
         </vaadin-vertical-layout>
 
         <style>
-          vaadin-vertical-layout {
-            height: 100px;
-          }
-
-          .dashed-outline {
-            outline: 1px dashed gray; /* for demonstration purposes only */
+          /* For demonstration purposes only */
+          .block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4em;
+            height: 4em;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
           }
         </style>
       </template>
