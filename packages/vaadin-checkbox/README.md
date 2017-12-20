@@ -28,9 +28,7 @@
 <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
 ```
 
-<!-- TODO: uncomment when we have a nice screenshot to show
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="200" alt="Screenshot of vaadin-checkbox">](https://vaadin.com/elements/-/element/vaadin-checkbox)
--->
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="385" alt="Screenshot of vaadin-checkbox, using the default Valo theme">](https://vaadin.com/elements/vaadin-checkbox)
 
 ## Running demos and tests in browser
 
