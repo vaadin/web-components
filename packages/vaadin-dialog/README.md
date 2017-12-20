@@ -33,6 +33,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-dialog/master/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/elements/vaadin-dialog)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-dialog.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-dialog.html`
+
+  Element with Valo theme.
+
+- `vaadin-dialog.html`
+
+  Alias for theme/valo/vaadin-dialog.html
 
 ## Running demos and tests in browser
 
