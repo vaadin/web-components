@@ -119,15 +119,15 @@
           expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
 
           // Series doesn't hide when toggle is disabled
-          chart['_seriesVisibilityTogglingDisabled'] = true;
+          chart['_visibilityTogglingDisabled'] = true;
           legend.dispatchEvent(new MouseEvent('click'));
           expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
 
-          chart['_seriesVisibilityTogglingDisabled'] = false;
+          chart['_visibilityTogglingDisabled'] = false;
           legend.dispatchEvent(new MouseEvent('click'));
 
           // Hidden series doesn't show when toggle is disabled
-          chart['_seriesVisibilityTogglingDisabled'] = true;
+          chart['_visibilityTogglingDisabled'] = true;
           legend.dispatchEvent(new MouseEvent('click'));
           expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
 

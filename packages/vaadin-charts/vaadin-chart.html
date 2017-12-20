@@ -464,6 +464,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             click: 'point-click',
             /**
              *
+             * @event point-legend-item-click  Fired when the legend item belonging to the point is clicked
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} point Point object where the event was sent from
+             */
+            legendItemClick: 'point-legend-item-click',
+            /**
+             *
              * @event point-mouse-out  Fired when the mouse leaves the area close to the point
              * @param {Object} detail.originalEvent object with details about the event sent
              * @param {Object} point Point object where the event was sent from
@@ -713,7 +720,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
                 self.dispatchEvent(new CustomEvent(eventList[key], customEvent));
 
-                if (event.type === 'legendItemClick' && chart['_seriesVisibilityTogglingDisabled']) {
+                if (event.type === 'legendItemClick' && chart['_visibilityTogglingDisabled']) {
                   return false;
                 }
               };
