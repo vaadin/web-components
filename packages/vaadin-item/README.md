@@ -30,6 +30,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/elements/vaadin-item)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-item.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-item.html`
+
+  Element with Valo theme.
+
+- `vaadin-item.html`
+
+  Alias for theme/valo/vaadin-item.html
 
 ## Running demos and tests in browser
 
