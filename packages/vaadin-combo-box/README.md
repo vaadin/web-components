@@ -17,14 +17,7 @@
 <custom-element-demo height="300">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../iron-ajax/iron-ajax.html">
-    <link rel="import" href="../paper-item/all-imports.html">
     <link rel="import" href="vaadin-combo-box.html">
-    <style>
-      vaadin-combo-box {
-        width: 300px;
-      }
-    </style>
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
