@@ -33,6 +33,27 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="237" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/elements/vaadin-radio-button)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-radio-button.html`
+- `src/vaadin-radio-group.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-radio-button.html`
+- `theme/valo/vaadin-radio-group.html`
+
+  Elements with Valo theme.
+
+- `vaadin-radio-button.html`
+- `vaadin-radio-group.html`
+
+  Alias for theme/valo/vaadin-radio-button.html
+  theme/valo/vaadin-radio-group.html
 
 ## Running demos and tests in browser
 
