@@ -80,33 +80,6 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 </dom-module>
 
-<dom-module id="vaadin-notification-card-default-theme" theme-for="vaadin-notification-card">
-  <template>
-    <style>
-      :host {
-        display: block;
-        margin: 1em;
-      }
-
-      [part="overlay"] {
-        padding: 1em;
-        background: lightgrey;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.3);
-      }
-
-      @keyframes close-notification {
-        100% {
-          opacity: 0;
-        }
-      }
-
-      :host([closing]) {
-        animation: close-notification 1000ms;
-      }
-    </style>
-  </template>
-</dom-module>
-
 <dom-module id="vaadin-notification-card">
   <template>
     <style>
