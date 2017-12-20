@@ -30,6 +30,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/vaadin-progress-bar)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-progress-bar.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-progress-bar.html`
+
+  Element with Valo theme.
+
+- `vaadin-progress-bar.html`
+
+  Alias for theme/valo/vaadin-progress-bar.html
 
 ## Running demos and tests in browser
 
