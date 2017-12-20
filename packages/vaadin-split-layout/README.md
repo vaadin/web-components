@@ -49,6 +49,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/elements/vaadin-split-layout)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-split-layout.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-split-layout.html`
+
+  Element with Valo theme.
+
+- `vaadin-split-layout.html`
+
+  Alias for theme/valo/vaadin-split-layout.html
 
 ## Running demos and tests in browser
 
