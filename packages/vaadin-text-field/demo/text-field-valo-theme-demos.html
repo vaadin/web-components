@@ -27,6 +27,23 @@
     </vaadin-demo-snippet>
 
 
+    <h3>Hide the Password Field Reveal Button (CSS)</h3>
+    <p>You can also use CSS to hide the reveal button (in addition to the <code>reveal-button-hidden</code>
+      attribute). It can be used to easily hide the reveal button across the whole application.</p>
+    <vaadin-demo-snippet id="text-field-valo-theme-demos-password-field-hide-reveal-button">
+      <template preserve-content>
+        <custom-style>
+          <style>
+            vaadin-password-field {
+              --valo-password-field-reveal-button-display: none;
+            }
+          </style>
+        </custom-style>
+        <vaadin-password-field label="Password" value="secret1"></vaadin-password-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
   </template>
   <script>
     class TextFieldValoThemeDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
