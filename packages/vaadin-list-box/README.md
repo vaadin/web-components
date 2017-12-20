@@ -36,6 +36,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="145" alt="Screenshot of vaadin-list-box">](https://vaadin.com/elements/vaadin-list-box)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-list-box.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-list-box.html`
+
+  Element with Valo theme.
+
+- `vaadin-list-box.html`
+
+  Alias for theme/valo/vaadin-list-box.html
 
 ## Running demos and tests in browser
 
