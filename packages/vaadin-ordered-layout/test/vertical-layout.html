@@ -103,14 +103,22 @@
         expect(getComputedStyle(element).getPropertyValue('padding-left')).to.equal(space);
       });
 
-      it('should support theme="spacing"', done => {
+      it('should support theme="spacing"', () => {
         element.setAttribute('theme', 'spacing');
-        setTimeout(() => {
-          expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal(space);
-          expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal(space);
-          expect(getComputedStyle(element, '::before').getPropertyValue('margin-top')).to.equal('-' + space);
-          done();
-        });
+        expect(getComputedStyle(c1).getPropertyValue('margin-top')).to.equal(space);
+        expect(getComputedStyle(c2).getPropertyValue('margin-top')).to.equal(space);
+      });
+
+      it('should compensate first item margin for theme="spacing"', () => {
+        element.setAttribute('theme', 'spacing');
+        const margin = getComputedStyle(element, '::before').getPropertyValue('margin-top');
+        // in Edge `getComputedStyle` returns `calc` expression for pseudo elements
+        if (navigator.userAgent.match(/Edge/)) {
+          expect(margin).to.contain('-1');
+          expect(margin).to.contain('rem');
+        } else {
+          expect(margin).to.equal('-' + space);
+        }
       });
     });
 
