@@ -32,7 +32,7 @@
 </vaadin-tabs>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="347" alt="Screenshot of vaadin-tabs">](https://vaadin.com/elements/vaadin-tabs)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Valo theme">](https://vaadin.com/elements/vaadin-tabs)
 
 ## Getting Started
 
