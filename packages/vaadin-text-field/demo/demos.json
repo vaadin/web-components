@@ -2,11 +2,41 @@
   "name": "Vaadin Text Field",
   "pages": [
     {
-      "name": "Basic Examples",
+      "name": "Basics",
       "url": "text-field-basic-demos",
       "src": "text-field-basic-demos.html",
       "meta": {
-        "title": "vaadin-text-field Basic Examples",
+        "title": "Vaadin Text Field Basic Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Prefix and Suffix",
+      "url": "text-field-prefix-suffix-demos",
+      "src": "text-field-prefix-suffix-demos.html",
+      "meta": {
+        "title": "Vaadin Text Field Prefix and Suffix Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "Validation",
+      "url": "text-field-validators-demos",
+      "src": "text-field-validators-demos.html",
+      "meta": {
+        "title": "Vaadin Text Field Validation Examples",
+        "description": "",
+        "image": ""
+      }
+    },
+    {
+      "name": "RTL",
+      "url": "text-field-rtl-demos",
+      "src": "text-field-rtl-demos.html",
+      "meta": {
+        "title": "Vaadin Text Field RTL Examples",
         "description": "",
         "image": ""
       }
@@ -16,37 +46,37 @@
       "url": "text-field-password-demos",
       "src": "text-field-password-demos.html",
       "meta": {
-        "title": "vaadin-password-field Basic Examples",
+        "title": "Vaadin Password Field Examples",
         "description": "",
         "image": ""
       }
     },
     {
-      "name": "Text area",
+      "name": "Text Area",
       "url": "text-area-demos",
       "src": "text-area-demos.html",
       "meta": {
-        "title": "vaadin-text-area Basic Examples",
+        "title": "Vaadin Text Area Examples",
         "description": "",
         "image": ""
       }
     },
     {
-      "name": "Custom Validators",
-      "url": "text-field-validators-demos",
-      "src": "text-field-validators-demos.html",
+      "name": "Styling",
+      "url": "text-field-styling-demos",
+      "src": "text-field-styling-demos.html",
       "meta": {
-        "title": "vaadin-text-field Custom Validators",
+        "title": "Vaadin Text Field Styling Examples",
         "description": "",
         "image": ""
       }
     },
     {
-      "name": "Valo Theme Variations",
+      "name": "Valo Theme",
       "url": "text-field-valo-theme-demos",
       "src": "text-field-valo-theme-demos.html",
       "meta": {
-        "title": "vaadin-text-field Valo Theme Variations",
+        "title": "Vaadin Text Field Valo Theme Variations",
         "description": "",
         "image": ""
       }

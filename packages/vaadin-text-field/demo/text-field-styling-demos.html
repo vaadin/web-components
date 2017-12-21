@@ -1,0 +1,45 @@
+<dom-module id="text-field-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <p>Read more about writing custom CSS for themable elements from the <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">styling and theming documentation</a>.</p>
+
+    <h3>Custom Border and Background</h3>
+    <vaadin-demo-snippet id="text-field-styling-demos-border-styles">
+      <template preserve-content>
+        <vaadin-text-field class="custom-style" label="Label" value="Value"></vaadin-text-field>
+        <vaadin-password-field class="custom-style" label="Label" value="Value"></vaadin-password-field>
+        <vaadin-text-area class="custom-style" label="Label" value="Value"></vaadin-text-area>
+
+        <!-- Place in index.html or in a separate HTML import -->
+        <dom-module id="my-text-field-styles" theme-for="vaadin-text-field vaadin-text-area">
+          <template>
+            <style>
+              :host(.custom-style) [part="input-field"] {
+                border: 1px solid #ccc;
+                background-color: #fff;
+              }
+
+              :host([focused].custom-style) [part="input-field"] {
+                border-color: #aaa;
+              }
+            </style>
+          </template>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class TextFieldStylingDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-field-styling-demos';
+      }
+    }
+    customElements.define(TextFieldStylingDemos.is, TextFieldStylingDemos);
+  </script>
+</dom-module>
