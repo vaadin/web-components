@@ -32,6 +32,31 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-text-field/master/screenshot.png" width="710" alt="Screenshot of vaadin-text-field">](https://vaadin.com/elements/vaadin-text-field)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-text-field.html`
+- `src/vaadin-text-area.html`
+- `src/vaadin-password-field.html`
+
+  Unstyled elements.
+
+- `theme/valo/vaadin-text-field.html`
+- `theme/valo/vaadin-text-area.html`
+- `theme/valo/vaadin-password-field.html`
+
+  Elements with Valo theme.
+
+- `vaadin-text-field.html`
+- `vaadin-text-area.html`
+- `vaadin-password-field.html`
+
+  Aliases for theme/valo/vaadin-text-field.html
+  theme/valo/vaadin-text-area.html
+  theme/valo/vaadin-password-field.html
 
 ## Running demos and tests in browser
 

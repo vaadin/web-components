@@ -31,7 +31,9 @@ This program is available under Apache License Version 2.0, available at https:/
       .vaadin-text-area-container {
         display: flex;
         flex-direction: column;
-        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        width: var(--vaadin-text-field-default-width, 12em);
       }
 
       [part="label"]:empty {
@@ -62,23 +64,22 @@ This program is available under Apache License Version 2.0, available at https:/
         box-shadow: none;
       }
 
+      [part="input-field"] ::slotted(*) {
+        flex: none;
+      }
+
       /* Slotted by vaadin-dropdown-menu-text-field */
       [part="value"],
       [part="input-field"] ::slotted([part="value"]) {
         flex: auto;
         white-space: nowrap;
         overflow: hidden;
-        /* Really just min-width because of flex */
-        width: 10em;
+        width: 100%;
         height: 100%;
       }
 
       [part="value"]::-ms-clear {
         display: none;
-      }
-
-      [part="input-field"] ::slotted(*) {
-        flex: none;
       }
     </style>
   </template>
