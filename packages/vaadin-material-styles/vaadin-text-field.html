@@ -2,7 +2,7 @@
 <link rel="import" href="typography.html">
 <link rel="import" href="../vaadin-text-field/src/vaadin-text-field.html">
 
-<dom-module id="material-text-field" theme-for="vaadin-text-field vaadin-text-area">
+<dom-module id="material-text-field" theme-for="vaadin-text-field">
   <template>
     <style>
       :host {
@@ -90,13 +90,15 @@
         background-color: transparent;
       }
 
-      [part="value"] {
+      [part="value"],
+      /* For vaadin-dropdown-menu-text-field */
+      [part="input-field"] ::slotted([part="value"]) {
         outline: none;
         margin: 0;
         border: 0;
         border-radius: 0;
         padding: 8px 0;
-        width: 100%;
+        width: 90%;
         height: 100%;
         font-family: inherit;
         font-size: 1em;
@@ -277,6 +279,13 @@
       :host([theme~="dense"]) [part="error-message"] {
         margin-top: 4px;
       }
+
+      /* Slotted content */
+
+      [part="input-field"] ::slotted(*) {
+        color: var(--material-secondary-text-color);
+      }
+
     </style>
   </template>
 </dom-module>
