@@ -21,7 +21,6 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
-        width: 175px;
       }
 
       :host([hidden]) {
@@ -33,8 +32,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       [part="text-field"] {
-        min-width: 100%;
-        max-width: 100%;
+        width: 100%;
+        min-width: 0;
       }
 
       [part="clear-button"],
@@ -51,9 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       :host([disabled]) [part="clear-button"],
-      :host([disabled]) [part="toggle-button"],
       :host([readonly]) [part="clear-button"],
-      :host([readonly]) [part="toggle-button"],
       :host(:not([has-value])) [part="clear-button"] {
         display: none;
       }

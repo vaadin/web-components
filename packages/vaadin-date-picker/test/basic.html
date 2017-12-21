@@ -537,8 +537,8 @@
           expect(datepicker.$.overlay.opened).not.to.be.ok;
         });
 
-        it('calendar icon should be hidden', () => {
-          expect(toggleButton.clientHeight).to.equal(0);
+        it('calendar icon should not be hidden', () => {
+          expect(toggleButton.clientHeight).not.to.equal(0);
         });
 
         it('clear icon should be hidden', () => {
@@ -644,11 +644,11 @@
       });
 
       describe('Inside flexbox', () => {
-        it('date-picker should have width 175px', () => {
+        it('date-picker should stretch to fit the column flex container', () => {
           const container = fixture('datepicker-in-flexbox');
           const flexDatePicker = container.querySelector('vaadin-date-picker');
           expect(window.getComputedStyle(container).width).to.eql('500px');
-          expect(window.getComputedStyle(flexDatePicker).width).to.eql('175px');
+          expect(window.getComputedStyle(flexDatePicker).width).to.eql('500px');
         });
       });
     });

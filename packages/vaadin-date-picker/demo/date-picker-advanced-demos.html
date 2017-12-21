@@ -1,6 +1,6 @@
 <dom-module id="date-picker-advanced-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
        :host {
         display: block;
       }
@@ -9,7 +9,7 @@
 
 
     <h3>Localizing</h3>
-    <vaadin-demo-snippet id='date-picker-advanced-demos-localizing'>
+    <vaadin-demo-snippet id="date-picker-advanced-demos-localizing">
       <template preserve-content>
         <vaadin-date-picker label="Syntymäpäivä" id="finnish" value="1980-08-14">
         </vaadin-date-picker>
@@ -63,7 +63,7 @@
     <h3>Custom Validator</h3>
     <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
        then override the <code>checkValidity(value)</code> method to validate the input.
-    <vaadin-demo-snippet id='date-picker-advanced-demos-custom-validator'>
+    <vaadin-demo-snippet id="date-picker-advanced-demos-custom-validator">
       <template preserve-content>
         <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
 
@@ -83,7 +83,7 @@
 
 
     <h3>Custom Inputs</h3>
-    <vaadin-demo-snippet id='date-picker-advanced-demos-custom-inputs'>
+    <vaadin-demo-snippet id="date-picker-advanced-demos-custom-inputs">
       <template preserve-content>
         <style is="custom-style">
           .my-input1 input {
@@ -102,7 +102,7 @@
       </template>
     </vaadin-demo-snippet>
 
-    <vaadin-demo-snippet id='date-picker-advanced-demos-custom-inputs'>
+    <vaadin-demo-snippet id="date-picker-advanced-demos-custom-inputs">
       <template preserve-content>
         <style is="custom-style">
           .my-input2 input {
@@ -124,7 +124,6 @@
       </template>
     </vaadin-demo-snippet>
 
-  </div>
   </template>
   <script>
     class DatePickerAdvancedDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {

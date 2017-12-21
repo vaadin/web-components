@@ -1,9 +1,11 @@
-<link rel="import" href="../../../vaadin-valo-theme/color.html">
-<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+
+<link rel="import" href="../../../vaadin-valo-styles/mixins/field-button.html">
 
 <link rel="import" href="../../../vaadin-text-field/theme/valo/vaadin-text-field.html">
-<link rel="import" href="../../../vaadin-valo-theme/font-icons.html">
 
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
@@ -11,72 +13,14 @@
 
 <dom-module id="valo-date-picker" theme-for="vaadin-date-picker">
   <template>
-    <style>
-      :host {
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      :host([label]) {
-        margin-top: var(--valo-space-m);
-        vertical-align: var(---vaadin-text-field-vertical-align-offset);
-      }
-
-      [part="text-field"] {
-        display: block;
-        max-width: 100%;
-      }
-
-      [part$="button"] {
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 24px;
-        text-align: center;
-        color: var(--valo-contrast-40pct);
-        transition: 0.2s color;
-        cursor: default;
-      }
-
-      [part$="button"]:hover {
-        color: var(--valo-contrast-70pct);
-      }
-
-      [part$="button"]::before {
-        font-family: "valo-icons";
-      }
-
-      [part="toggle-button"] {
-        order: -1;
-      }
-
+    <style include="valo-field-button">
       [part="toggle-button"]::before {
-        content: "\e908";
+        content: var(--valo-icons-calendar);
       }
 
       [part="clear-button"]::before {
-        content: "\e907";
+        content: var(--valo-icons-cross);
       }
-
-      :host([disabled]) [part="toggle-button"] {
-        display: block;
-        color: var(--valo-contrast-20pct);
-      }
-
-      /* Overlay width */
-
-      [part="overlay"] {
-        width: calc(var(--valo-size-m) * 10);
-      }
-
-      :host([show-week-numbers]) [part="overlay"]:not([fullscreen]) {
-        width: calc(var(--valo-size-m) * 11);
-      }
-
-      [part="overlay"][fullscreen] {
-        width: 100vw;
-        height: 100vh;
-      }
-
     </style>
   </template>
 </dom-module>
