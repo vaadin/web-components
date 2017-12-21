@@ -24,31 +24,38 @@
 ```
 -->
 ```html
-<template is="dom-bind">
-  <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+<template>
+  <!-- Fetch an array of users to be shown in the grid -->
+  <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-  <vaadin-grid data-provider="[[dataProvider]]" size="200">
+  <!-- The array is set as the <vaadin-grid>'s "items" property -->
+  <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
 
-    <vaadin-grid-column width="50px" flex-grow="0">
+    <vaadin-grid-column width="60px" flex-grow="0">
       <template class="header">#</template>
       <template>[[index]]</template>
+      <!-- If necessary, the footer could be set using <template class="footer"> -->
+      <template class="footer">#</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-column width="50px" flex-grow="0">
-      <template class="header"></template>
-      <template>
-        <iron-image src="[[item.picture.thumbnail]]"></iron-image>
-      </template>
-    </vaadin-grid-column>
-
-    <vaadin-grid-column width="calc(50% - 100px)">
+    <vaadin-grid-column>
       <template class="header">First Name</template>
-      <template>[[item.name.first]]</template>
+      <template>[[item.firstName]]</template>
+      <template class="footer">First Name</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-column width="calc(50% - 100px)">
+    <vaadin-grid-column>
       <template class="header">Last Name</template>
-      <template>[[item.name.last]]</template>
+      <template>[[item.lastName]]</template>
+      <template class="footer">Last Name</template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="150px">
+      <template class="header">Address</template>
+      <template>
+        <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+      </template>
+      <template class="footer">Address</template>
     </vaadin-grid-column>
 
   </vaadin-grid>
