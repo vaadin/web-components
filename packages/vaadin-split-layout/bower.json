@@ -22,7 +22,7 @@
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
-    "vaadin-valo-theme": "^2.0.0",
+    "vaadin-valo-styles": "vaadin/vaadin-valo-styles#^2.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
@@ -30,7 +30,6 @@
     "iron-icon": "^2.0.0",
     "iron-icons": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "paper-button": "^2.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0"
   }
