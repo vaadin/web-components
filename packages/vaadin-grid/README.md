@@ -62,7 +62,7 @@
 </template>
 ```
 
-<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.gif">
+<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.png">
 
 ## Getting Started
 
