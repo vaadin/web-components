@@ -318,6 +318,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('close', this._close.bind(this));
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
+      this.addEventListener('focus', e => this._noInput && e.target.blur());
     }
 
     connectedCallback() {
@@ -526,6 +527,10 @@ This program is available under Apache License Version 2.0, available at https:/
         this._focus();
       }
 
+      if (this._noInput && this.focusElement) {
+        this.focusElement.blur();
+      }
+
       this.updateStyles();
 
       this._ignoreAnnounce = false;
@@ -613,7 +618,7 @@ This program is available under Apache License Version 2.0, available at https:/
     checkValidity(value) {
       var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
       var minMaxValid = !this._selectedDate ||
-      Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
+        Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
       var inputValidity = true;
       if (this._inputElement) {

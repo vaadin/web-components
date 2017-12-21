@@ -89,6 +89,26 @@
         expect(spy.calledOnce).to.be.true;
       });
 
+      it('should blur when focused on fullscreen', () => {
+        datepicker._fullscreen = true;
+
+        var spy = sinon.spy(datepicker, 'blur');
+        datepicker.dispatchEvent(new CustomEvent('focus'));
+
+        expect(spy.called).to.be.true;
+      });
+
+      it('should blur when datepicker is opened on fullscreen', done => {
+        datepicker._fullscreen = true;
+
+        var spy = sinon.spy(datepicker.focusElement, 'blur');
+
+        open(datepicker, () => {
+          expect(spy.called).to.be.true;
+          done();
+        });
+      });
+
       it('should open with open call', done => {
         open(datepicker, () => {
           done();
