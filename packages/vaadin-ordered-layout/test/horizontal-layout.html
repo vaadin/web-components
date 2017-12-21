@@ -72,7 +72,7 @@
         element = fixture('default');
         c1 = element.querySelector('#c1');
         c2 = element.querySelector('#c2');
-        space = window.getCustomCSSPropertyValue(element, '--valo-space-m');
+        space = window.getComputedCSSPropertyValue(element, '--valo-space-m');
       });
 
       it('should not have margin or padding by default', () => {
