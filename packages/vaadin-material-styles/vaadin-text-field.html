@@ -253,6 +253,15 @@
       :host([theme~="dense"]) [part="error-message"] {
         margin-top: 4px;
       }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+
+      [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
+        width: 1em;
+        height: 1em;
+        padding: 4px;
+        margin-right: 4px;
+      }
     </style>
   </template>
 </dom-module>

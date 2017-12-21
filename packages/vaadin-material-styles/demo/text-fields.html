@@ -11,7 +11,11 @@
   <link rel="import" href="common.html">
 
   <link rel="import" href="../vaadin-text-field.html">
+  <link rel="import" href="../vaadin-password-field.html">
+  <link rel="import" href="../vaadin-text-area.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-password-field.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-text-area.html">
 
   <custom-style>
     <style>
@@ -104,6 +108,16 @@
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Types</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-text-field label="Text" value="Value"></vaadin-text-field>
+        <vaadin-password-field label="Password" value="Secret –&nbsp;hush!" placeholder="Type a secret"></vaadin-password-field>
+        <br>
+        <vaadin-text-area label="Text area" value="Value" placeholder="Placeholder"></vaadin-text-area>
+      </template>
+    </nice-demo-snippet>
+
     <h3 demo-section>Dense layout</h3>
     <nice-demo-snippet>
       <template slot="source">
@@ -111,25 +125,86 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Dark theme</h3>
+    <h2 demo-section>Dark theme</h3>
+
+    <h3 demo-section>Label and placeholder</h3>
     <nice-demo-snippet>
       <template slot="source">
         <div theme="dark">
+          <vaadin-text-field placeholder="Placeholder"></vaadin-text-field>
 
-          <vaadin-text-field label="Label" placeholder="Placeholder"></vaadin-text-field>
+          <vaadin-text-field label="Label"></vaadin-text-field>
 
+          <vaadin-text-field label="Label and placeholder" placeholder="Placeholder"></vaadin-text-field>
+
+          <vaadin-text-field label="Label always floating" theme="always-float-label"></vaadin-text-field>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Prefix and suffix</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-text-field placeholder="Search">
+            <iron-icon slot="prefix" icon="vaadin:search"></iron-icon>
+          </vaadin-text-field>
+
+          <vaadin-text-field label="Length"
+                             theme="always-float-label"
+                             placeholder="123"
+                             pattern="[0-9]{0,3}"
+                             prevent-invalid-input
+                             style="width: 6ch;">
+            <span slot="suffix">cm</span>
+          </div>
+        </vaadin-text-field>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>States</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
           <vaadin-text-field label="Focused" value="Value" focused></vaadin-text-field>
+
+          <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
+
+          <vaadin-text-field label="Read-only" value="Value" readonly></vaadin-text-field>
+
+          <vaadin-text-field label="Disabled" placeholder="Placeholder" disabled></vaadin-text-field>
+
+          <vaadin-text-field label="Read-only" placeholder="Placeholder" readonly></vaadin-text-field>
+
+          <vaadin-text-field label="Required" placeholder="I need a value" required></vaadin-text-field>
 
           <vaadin-text-field
             label="With error message"
             value="Invalid"
             pattern="[0-9]+"
-            invalid
-            error-message="Numbers only!">
+            invalid error-message="Numbers only!">
           </vaadin-text-field>
+        </div>
+      </template>
+    </nice-demo-snippet>
 
-          <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
+    <h3 demo-section>Types</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-text-field label="Text" value="Value"></vaadin-text-field>
+          <vaadin-password-field label="Password" value="Secret –&nbsp;hush!" placeholder="Type a secret"></vaadin-password-field>
+          <br>
+          <vaadin-text-area label="Text area" value="Value" placeholder="Placeholder"></vaadin-text-area>
+        </div>
+      </template>
+    </nice-demo-snippet>
 
+    <h3 demo-section>Dense layout</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-text-field theme="dense" label="Label" required error-message="Error message"></vaadin-text-field>
         </div>
       </template>
     </nice-demo-snippet>
