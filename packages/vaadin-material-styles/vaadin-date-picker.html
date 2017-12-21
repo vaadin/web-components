@@ -2,6 +2,7 @@
 <link rel="import" href="typography.html">
 
 <link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker.html">
+<link rel="import" href="./mixins/overlay.html">
 <link rel="import" href="vaadin-button.html">
 <link rel="import" href="vaadin-text-field.html">
 
@@ -19,6 +20,7 @@
       }
 
       [part="text-field"] {
+        display: block;
         max-width: 100%;
         /* Text field margin is moved to the host */
         padding-top: 0;
@@ -49,6 +51,22 @@
         background-color: var(--material-divider-color);
         font-size: calc(var(--material-icon-font-size) - 8px);
       }
+
+      /* Overlay width */
+
+      [part="overlay"] {
+        width: 360px;
+      }
+
+      :host([show-week-numbers]) [part="overlay"]:not([fullscreen]) {
+        width: 396px;;
+      }
+
+      [part="overlay"][fullscreen] {
+        width: 100vw;
+        height: 100vh;
+      }
+
     </style>
   </template>
 </dom-module>
@@ -132,11 +150,14 @@
     </style>
   </template>
 </dom-module>
-<dom-module id="material-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
+<dom-module id="material-date-picker-overlay" theme-for="vaadin-date-picker-overlay-content">
   <template>
     <style include="vaadin-date-picker-overlay-default-theme">
       :host {
         border-radius: 0 0 3px 3px;
+        padding: 4px;
+        right: auto;
+        max-height: 500px;
         background: var(---material-date-picker-overlay-background-color, var(--material-background-color));
       }
 

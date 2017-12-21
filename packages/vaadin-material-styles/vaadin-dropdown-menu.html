@@ -1,9 +1,11 @@
 <link rel="import" href="font-icons.html">
+<link rel="import" href="color.html">
 
 <link rel="import" href="../vaadin-dropdown-menu/src/vaadin-dropdown-menu.html">
 <link rel="import" href="vaadin-text-field.html">
 <link rel="import" href="vaadin-item.html">
 <link rel="import" href="vaadin-list-box.html">
+<link rel="import" href="./mixins/menu-overlay.html">
 
 <dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
@@ -28,9 +30,6 @@
         transition: 0.2s color;
         cursor: default;
       }
-
-      /*:host(:hover) [part$="button"] {
-      }*/
 
       [part$="button"]::before {
         font-family: "material-icons";
@@ -60,11 +59,11 @@
         width: 100%;
       }
 
+      :host([disabled]) [part="input-field"],
       [part="input-field"],
       [part="value"] {
         cursor: default;
-        /*background-color: var(---material-text-field-input-line-background-color, #000);
-        opacity: var(---material-text-field-input-line-opacity, 0.42);*/
+        background-color: transparent;
       }
 
       /* ShadyCSS limitation workaround */
