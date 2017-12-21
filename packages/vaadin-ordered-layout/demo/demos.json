@@ -1,7 +1,7 @@
 {
   "name": "Vaadin Ordered Layout",
   "pages": [{
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "ordered-layout-basic-demos",
     "src": "ordered-layout-basic-demos.html",
     "meta": {
@@ -15,7 +15,7 @@
     "url": "ordered-layout-theme-demos",
     "src": "ordered-layout-theme-demos.html",
     "meta": {
-      "title": "Vaadin Ordered Layout Valo Theme",
+      "title": "Vaadin Ordered Layout Valo Theme Examples",
       "description": "",
       "image": ""
     }
