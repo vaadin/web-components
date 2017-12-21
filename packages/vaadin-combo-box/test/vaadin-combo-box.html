@@ -48,11 +48,11 @@
       });
 
       describe('Inside flexbox', () => {
-        it('combo-box should have width 175px', () => {
+        it('combo-box should stretch to fit the flex container', () => {
           const container = fixture('combobox-in-flexbox');
           const combobox = container.querySelector('vaadin-combo-box');
           expect(window.getComputedStyle(container).width).to.eql('500px');
-          expect(window.getComputedStyle(combobox).width).to.eql('175px');
+          expect(window.getComputedStyle(combobox).width).to.eql('500px');
         });
       });
 

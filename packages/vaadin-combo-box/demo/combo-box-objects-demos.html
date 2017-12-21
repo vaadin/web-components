@@ -1,6 +1,6 @@
 <dom-module id="combo-box-objects-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
        :host {
         display: block;
       }
@@ -10,7 +10,7 @@
 
     <h3>Default Label and Value</h3>
 
-    <vaadin-demo-snippet id='combo-box-objects-demos-default-label-and-value'>
+    <vaadin-demo-snippet id="combo-box-objects-demos-default-label-and-value">
       <template preserve-content>
         <vaadin-combo-box id="numbers-box" label="Number"></vaadin-combo-box>
         <p>Selected item: <span id="selected-item"></span>.</p>
@@ -42,7 +42,7 @@
 
     <h3>Setting Label and Value Path</h3>
 
-    <vaadin-demo-snippet id='combo-box-objects-demos-setting-label-and-value-path'>
+    <vaadin-demo-snippet id="combo-box-objects-demos-setting-label-and-value-path">
       <template preserve-content>
         <vaadin-combo-box id="elements-box" label="Element" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
         <p>Selected element name: <span id="element-name"></span>.</p>
@@ -73,7 +73,7 @@
 
     <h3>Object Items with the Same Value</h3>
 
-    <vaadin-demo-snippet id='combo-box-objects-demos-object-items-with-the-same-value'>
+    <vaadin-demo-snippet id="combo-box-objects-demos-object-items-with-the-same-value">
       <template preserve-content>
         <vaadin-combo-box id="country-synonyms-box" label="Element"></vaadin-combo-box>
         <p>Selected Item: <span id="country-selected-item"></span>.</p>

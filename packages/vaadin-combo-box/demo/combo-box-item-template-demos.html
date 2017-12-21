@@ -1,6 +1,6 @@
 <dom-module id="combo-box-item-template-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
        :host {
         display: block;
       }
@@ -10,7 +10,7 @@
 
     <h3>Custom Item Template</h3>
 
-    <vaadin-demo-snippet id='combo-box-item-template-demos-custom-item-template'>
+    <vaadin-demo-snippet id="combo-box-item-template-demos-custom-item-template">
       <template preserve-content>
         <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol">
           <template>
@@ -33,7 +33,7 @@
 
     <h3>Focused and Selected Flags</h3>
 
-    <vaadin-demo-snippet id='combo-box-item-template-demos-focused-and-selected-flags'>
+    <vaadin-demo-snippet id="combo-box-item-template-demos-focused-and-selected-flags">
       <template preserve-content>
         <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
           <template>
@@ -54,7 +54,7 @@
 
     <h3>Styling Items with Custom Item Element</h3>
 
-    <vaadin-demo-snippet id='combo-box-item-template-demos-styling-items-with-custom-item-element'>
+    <vaadin-demo-snippet id="combo-box-item-template-demos-styling-items-with-custom-item-element">
       <template preserve-content>
         <!-- Step 1: Define a custom element with your template and item styles -->
 
@@ -119,7 +119,7 @@
 
     <h3>Item Template with Paper Item Elements</h3>
 
-    <vaadin-demo-snippet id='combo-box-item-template-demos-item-template-with-paper-item-elements'>
+    <vaadin-demo-snippet id="combo-box-item-template-demos-item-template-with-paper-item-elements">
       <template preserve-content>
         <vaadin-combo-box id="elements-paper-item" item-value-path="email" item-label-path="email">
           <template>
