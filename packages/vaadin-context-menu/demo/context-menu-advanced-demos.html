@@ -1,6 +1,6 @@
 <dom-module id="context-menu-advanced-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
@@ -148,6 +148,8 @@
             This paragraph has a context menu built using basic HTML elements
             and global CSS styles.
           </p>
+
+          <p>Note, that you will not get the same easy keyboard navigation with this approach as when using <code>&lt;vaadin-list-box&gt;</code>.</p>
         </vaadin-context-menu>
       </template>
     </vaadin-demo-snippet>
@@ -163,7 +165,7 @@
                 <vaadin-list-box>
                   <dom-repeat items="[[menuItems]]">
                     <template>
-                      <vaadin-item>Menu Item</vaadin-item>
+                      <vaadin-item>Menu Item [[index]]</vaadin-item>
                     </template>
                   </dom-repeat>
                 </vaadin-list-box>

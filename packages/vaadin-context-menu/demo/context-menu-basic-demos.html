@@ -1,6 +1,6 @@
 <dom-module id="context-menu-basic-demos">
   <template>
-    <style>
+    <style include="vaadin-component-demo-shared-styles">
       :host {
         display: block;
       }
@@ -8,7 +8,7 @@
 
 
     <h3>Basic Usage</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-basic-usage'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-basic-usage">
       <template preserve-content>
         <vaadin-context-menu>
           <template>
@@ -25,7 +25,7 @@
     </vaadin-demo-snippet>
 
     <h3>Custom Listener</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-custom-listener'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-custom-listener">
       <template preserve-content>
         <vaadin-context-menu id="customListener">
           <template>
@@ -49,7 +49,7 @@
 
 
     <h3>Filtering Menu Targets</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-filtering-menu-targets'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-filtering-menu-targets">
       <template preserve-content>
         <vaadin-context-menu selector=".has-menu">
           <template>
@@ -67,7 +67,7 @@
 
 
     <h3>Accessing the Menu Target</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-accessing-the-menu-target'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-accessing-the-menu-target">
       <template preserve-content>
         <vaadin-context-menu selector="li">
           <template>
@@ -87,7 +87,7 @@
 
 
     <h3>Menu Item Events</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-menu-item-events'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-menu-item-events">
       <template preserve-content>
         <dom-module id="my-list-view">
           <template preserve-content>
@@ -141,7 +141,7 @@
 
 
     <h3>JavaScript API</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-javascript-api'>
+    <vaadin-demo-snippet id="context-menu-basic-demos-javascript-api">
       <template preserve-content>
         <vaadin-context-menu id="buttonMenu">
           <template>
@@ -169,24 +169,6 @@
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Selected Item Style</h3>
-    <vaadin-demo-snippet id='context-menu-basic-demos-selected-item-style'>
-      <template preserve-content>
-        <vaadin-context-menu>
-          <template>
-            <vaadin-list-box selected-class="no-selected-styles-please">
-              <vaadin-item>First menu item</vaadin-item>
-              <vaadin-item>Second menu item</vaadin-item>
-            </vaadin-list-box>
-          </template>
-
-          <p>The context menu of this paragraph does not change the items look when opened again.</p>
-        </vaadin-context-menu>
-      </template>
-    </vaadin-demo-snippet>
-
-  </div>
   </template>
   <script>
     class ContextMenuBasicDemos extends DemoReadyEventEmitter(ContextMenuDemo(Polymer.Element)) {
