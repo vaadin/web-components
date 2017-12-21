@@ -25,37 +25,31 @@
 -->
 ```html
 <template>
-  <!-- Fetch an array of users to be shown in the grid -->
-  <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+  <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-  <!-- The array is set as the <vaadin-grid>'s "items" property -->
-  <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
+  <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
 
-    <vaadin-grid-column width="60px" flex-grow="0">
-      <template class="header">#</template>
-      <template>[[index]]</template>
-      <!-- If necessary, the footer could be set using <template class="footer"> -->
-      <template class="footer">#</template>
-    </vaadin-grid-column>
+    <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
 
-    <vaadin-grid-column>
-      <template class="header">First Name</template>
-      <template>[[item.firstName]]</template>
-      <template class="footer">First Name</template>
-    </vaadin-grid-column>
-
-    <vaadin-grid-column>
-      <template class="header">Last Name</template>
-      <template>[[item.lastName]]</template>
-      <template class="footer">Last Name</template>
-    </vaadin-grid-column>
-
-    <vaadin-grid-column width="150px">
-      <template class="header">Address</template>
-      <template>
-        <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+    <vaadin-grid-column width="9em">
+      <template class="header">
+        <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
       </template>
-      <template class="footer">Address</template>
+      <template>[[item.firstName]]</template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="9em">
+      <template class="header">
+        <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+      </template>
+      <template>[[item.lastName]]</template>
+    </vaadin-grid-column>
+
+    <vaadin-grid-column width="15em" flex-grow="2">
+      <template class="header">
+        <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+      </template>
+      <template>[[item.address.street]], [[item.address.city]]</template>
     </vaadin-grid-column>
 
   </vaadin-grid>
