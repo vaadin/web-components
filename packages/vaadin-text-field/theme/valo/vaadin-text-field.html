@@ -32,7 +32,7 @@
         font-weight: 500;
         font-size: var(--valo-font-size-s);
         margin-left: calc(var(--valo-border-radius) / 4);
-        transition: color 0.4s;
+        transition: color 0.2s;
         line-height: 1;
         height: calc(var(--valo-font-size-s) + var(--valo-space-xs));
         overflow: hidden;
@@ -166,8 +166,15 @@
 
       /* Focus-ring */
 
-      :host([focus-ring]:not([readonly])) [part="input-field"] {
+      :host([focus-ring]) [part="input-field"] {
         box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
+      }
+
+      /* Read-only and disabled */
+
+      :host([readonly]) [part="input-field"],
+      :host([disabled]) [part="input-field"] {
+        background-color: var(--valo-contrast-5pct);
       }
 
       /* Disabled style */
@@ -178,7 +185,7 @@
 
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
-      :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
+      :host([disabled]) [part="input-field"] ::slotted(*) {
         color: var(--valo-disabled-text-color);
         -webkit-text-fill-color: var(--valo-disabled-text-color);
       }
@@ -197,10 +204,6 @@
 
       :host([disabled]) [part="value"]::placeholder {
         opacity: 0;
-      }
-
-      :host([disabled]) [part="input-field"] {
-        background-color: var(--valo-contrast-5pct);
       }
 
       /* Required field style */
@@ -287,8 +290,9 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(*) {
+      [part="input-field"] ::slotted(:not([part="value"])) {
         color: var(--valo-secondary-text-color);
+        font-weight: 400;
       }
 
       /* Slotted icons */
