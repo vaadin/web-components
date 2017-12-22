@@ -12,16 +12,17 @@
         line-height: 1;
         font-size: var(--valo-icon-size);
         text-align: center;
-        color: var(--valo-contrast-50pct);
+        color: var(--valo-contrast-60pct);
         transition: 0.2s color;
         cursor: default;
       }
 
       :host(:not([readonly])) [part$="button"]:hover {
-        color: var(--valo-contrast-80pct);
+        color: var(--valo-contrast-90pct);
       }
 
-      :host([disabled]) [part$="button"] {
+      :host([disabled]) [part$="button"],
+      :host([readonly]) [part$="button"] {
         color: var(--valo-contrast-20pct);
       }
 
