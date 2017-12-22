@@ -113,6 +113,8 @@
       let container, grid;
       const loadDebounceTime = 100;
 
+      before(done => HTMLImports.whenReady(done));
+
       beforeEach(() => {
 
         container = fixture('table');

@@ -53,6 +53,8 @@
     describe('column', () => {
       let container, column, grid;
 
+      before(done => HTMLImports.whenReady(done));
+
       beforeEach(() => {
         container = fixture('grid');
         grid = container.$.grid;

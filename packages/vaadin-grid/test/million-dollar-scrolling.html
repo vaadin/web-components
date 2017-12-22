@@ -90,6 +90,8 @@
       let container, grid;
       this.timeout(300000);
 
+      before(done => HTMLImports.whenReady(done));
+
       [100, 10000, 100000, 1000000].forEach((size) => {
         describe(size + ' items', () => {
           beforeEach(done => {

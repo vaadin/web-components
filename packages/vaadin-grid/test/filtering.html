@@ -72,6 +72,8 @@
       let filter;
       let filterWrapper;
 
+      before(done => HTMLImports.whenReady(done));
+
       beforeEach(() => {
 
         filterWrapper = fixture('filter');

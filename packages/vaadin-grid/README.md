@@ -24,39 +24,57 @@
 ```
 -->
 ```html
-<template is="dom-bind">
-  <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+<template>
+  <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-  <vaadin-grid data-provider="[[dataProvider]]" size="200">
+  <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
 
-    <vaadin-grid-column width="50px" flex-grow="0">
-      <template class="header">#</template>
-      <template>[[index]]</template>
-    </vaadin-grid-column>
+    <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
 
-    <vaadin-grid-column width="50px" flex-grow="0">
-      <template class="header"></template>
-      <template>
-        <iron-image src="[[item.picture.thumbnail]]"></iron-image>
+    <vaadin-grid-column width="9em">
+      <template class="header">
+        <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
       </template>
+      <template>[[item.firstName]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-column width="calc(50% - 100px)">
-      <template class="header">First Name</template>
-      <template>[[item.name.first]]</template>
+    <vaadin-grid-column width="9em">
+      <template class="header">
+        <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+      </template>
+      <template>[[item.lastName]]</template>
     </vaadin-grid-column>
 
-    <vaadin-grid-column width="calc(50% - 100px)">
-      <template class="header">Last Name</template>
-      <template>[[item.name.last]]</template>
+    <vaadin-grid-column width="15em" flex-grow="2">
+      <template class="header">
+        <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+      </template>
+      <template>[[item.address.street]], [[item.address.city]]</template>
     </vaadin-grid-column>
 
   </vaadin-grid>
 </template>
 ```
 
-<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.gif">
+<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.png">
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-grid.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-grid.html`
+
+  Element with Valo theme.
+
+- `vaadin-grid.html`
+
+  Alias for theme/valo/vaadin-grid.html
 
 ## Running demos and tests in browser
 
