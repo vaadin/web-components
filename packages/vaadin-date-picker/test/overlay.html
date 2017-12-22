@@ -179,7 +179,7 @@
 
         it('should reflect value in label', () => {
           overlay.i18n.formatDate = date => {
-            return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+            return (date.month + 1) + '/' + date.day + '/' + date.year;
           };
 
           overlay.selectedDate = new Date(2000, 1, 1);

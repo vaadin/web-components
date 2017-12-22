@@ -19,7 +19,7 @@ function getDefaultI18n() {
     today: 'Today',
     cancel: 'Cancel',
     formatDate: function(d) {
-      return (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+      return (d.month + 1) + '/' + d.day + '/' + d.year;
     },
     formatTitle: function(monthName, fullYear) {
       return monthName + ' ' + fullYear;

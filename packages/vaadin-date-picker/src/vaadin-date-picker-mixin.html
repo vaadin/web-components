@@ -152,21 +152,21 @@ This program is available under Apache License Version 2.0, available at https:/
               // Translation of the Cancel button text.
               cancel: 'Cancel',
 
-              // A function to format given `Date` object as
-              // date string.
+              // A function to format given `Object` as
+              // date string. Object is in the format `{ day: ..., month: ..., year: ... }`
               formatDate: d => {
                 // returns a string representation of the given
-                // Date object in 'MM/DD/YYYY' -format
+                // object in 'MM/DD/YYYY' -format
               },
 
-              // A function to parse the given text to a `Date`
-              // object. Must properly parse (at least) text
+              // A function to parse the given text to an `Object` in the format `{ day: ..., month: ..., year: ... }`.
+              // Must properly parse (at least) text
               // formatted by `formatDate`.
               // Setting the property to null will disable
               // keyboard input feature.
               parseDate: text => {
                 // Parses a string in 'MM/DD/YY', 'MM/DD' or 'DD' -format to
-                // a Date object
+                // an `Object` in the format `{ day: ..., month: ..., year: ... }`.
               }
 
               // A function to format given `monthName` and
@@ -196,9 +196,8 @@ This program is available under Apache License Version 2.0, available at https:/
               today: 'Today',
               cancel: 'Cancel',
               formatDate: d => {
-                let yearStr = String(d.getFullYear());
-                yearStr = yearStr.replace(/\d+/, y => '0000'.substr(y.length) + y);
-                return [d.getMonth() + 1, d.getDate(), yearStr].join('/');
+                const yearStr = String(d.year).replace(/\d+/, y => '0000'.substr(y.length) + y);
+                return [d.month + 1, d.day, yearStr].join('/');
               },
               parseDate: text => {
                 const parts = text.split('/');
@@ -220,11 +219,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
 
                 if (date !== undefined) {
-                  const result = new Date(0, 0); // Wrong date (1900-01-01), but with midnight in local time
-                  result.setFullYear(year);
-                  result.setMonth(month);
-                  result.setDate(date);
-                  return result;
+                  return { day: date, month, year };
                 }
               },
               formatTitle: (monthName, fullYear) => {
@@ -376,7 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _parseDate(str) {
       // Parsing with RegExp to ensure correct format
-      var parts = /^(\d{4}|[-+]\d{6})-(\d{2})-(\d{2})$/.exec(str);
+      var parts = /^([-+]\d{1}|\d{2,4}|[-+]\d{6})-(\d{1,2})-(\d{1,2})$/.exec(str);
       if (!parts) {
         return;
       }
@@ -404,7 +399,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
       this.value = this._formatISO(selectedDate);
       this._focusedDate = selectedDate;
-      this._inputValue = selectedDate ? formatDate(selectedDate) : '';
+      this._inputValue = selectedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate)) : '';
     }
 
     _focusedDateChanged(focusedDate, formatDate) {
@@ -412,7 +407,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return;
       }
       if (!this._ignoreFocusedDateChange && !this._noInput) {
-        this._inputValue = focusedDate ? formatDate(focusedDate) : '';
+        this._inputValue = focusedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(focusedDate)) : '';
       }
     }
 
@@ -572,7 +567,10 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreFocusedDateChange = true;
       if (this.i18n.parseDate) {
         var inputValue = this._inputValue || '';
-        var parsedDate = this.i18n.parseDate(inputValue);
+        const dateObject = this.i18n.parseDate(inputValue);
+        const parsedDate = dateObject &&
+          this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
+
         if (this._isValidDate(parsedDate)) {
           this._selectedDate = parsedDate;
         } else {
@@ -616,7 +614,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * @return {boolean} True if the value is valid
      */
     checkValidity(value) {
-      var inputValid = !value || (this._selectedDate && value === this.i18n.formatDate(this._selectedDate));
+      var inputValid = !value ||
+        (this._selectedDate && value === this.i18n.formatDate(Vaadin.DatePickerHelper._extractDateParts(this._selectedDate)));
       var minMaxValid = !this._selectedDate ||
         Vaadin.DatePickerHelper._dateAllowed(this._selectedDate, this._minDate, this._maxDate);
 
@@ -752,7 +751,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _userInputValueChanged(value) {
       if (this.opened && this._inputValue) {
-        var parsedDate = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
+        const dateObject = this.i18n.parseDate && this.i18n.parseDate(this._inputValue);
+        const parsedDate = dateObject &&
+          this._parseDate(`${dateObject.year}-${dateObject.month + 1}-${dateObject.day}`);
+
         if (this._isValidDate(parsedDate)) {
           this._ignoreFocusedDateChange = true;
           if (!Vaadin.DatePickerHelper._dateEquals(parsedDate, this._focusedDate)) {

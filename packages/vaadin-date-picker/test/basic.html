@@ -59,6 +59,21 @@
         setTimeout(done, 1);
       });
 
+      it('should parse date components with varying number of digits', () => {
+        const composeDate = (year, month, day) => {
+          const date = new Date(0, 0);
+          date.setFullYear(parseInt(year));
+          date.setMonth(parseInt(month));
+          date.setDate(parseInt(day));
+          return date;
+        };
+        const _parseDate = datepicker._parseDate;
+
+        expect(_parseDate('2017-11-11')).to.eql(composeDate('2017', '10', '11'));
+        expect(_parseDate('2016-1-1')).to.eql(composeDate('2016', '0', '1'));
+        expect(_parseDate('04-11-2')).to.eql(composeDate('04', '10', '2'));
+      });
+
       it('should have default value', () => {
         expect(datepicker.value).to.equal('');
       });
@@ -447,7 +462,7 @@
           datepicker.set('i18n.firstDayOfWeek', 1);
           datepicker.set('i18n.formatDate', d => {
             if (d) {
-              return [d.getDate(), d.getMonth() + 1, d.getFullYear()].join('.');
+              return [d.day, d.month + 1, d.year].join('.');
             }
           });
           datepicker.set('i18n.calendar', 'Kalenteri');

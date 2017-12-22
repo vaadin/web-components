@@ -165,7 +165,12 @@
                 });
                 dateString = matches.length === 1 ? matches[0] : dateString;
                 // Parse the date (using a 3rd party library)
-                return Sugar.Date.create(dateString);
+                const date = Sugar.Date.create(dateString);
+                return {
+                  day: date.getDate(),
+                  month: date.getMonth(),
+                  year: date.getFullYear()
+                };
               });
             });
           });
