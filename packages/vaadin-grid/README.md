@@ -17,46 +17,51 @@
 <custom-element-demo>
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../iron-ajax/iron-ajax.html">
     <link rel="import" href="vaadin-grid.html">
+    <link rel="import" href="vaadin-grid-selection-column.html">
+    <link rel="import" href="vaadin-grid-sorter.html">
     <next-code-block></next-code-block>
   </template>
 </custom-element-demo>
 ```
 -->
 ```html
-<template>
-  <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
+<dom-bind>
+  <template>
+    <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-  <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+    <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
 
-    <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
+      <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
 
-    <vaadin-grid-column width="9em">
-      <template class="header">
-        <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
-      </template>
-      <template>[[item.firstName]]</template>
-    </vaadin-grid-column>
+      <vaadin-grid-column width="9em">
+        <template class="header">
+          <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+        </template>
+        <template>[[item.firstName]]</template>
+      </vaadin-grid-column>
 
-    <vaadin-grid-column width="9em">
-      <template class="header">
-        <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
-      </template>
-      <template>[[item.lastName]]</template>
-    </vaadin-grid-column>
+      <vaadin-grid-column width="9em">
+        <template class="header">
+          <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+        </template>
+        <template>[[item.lastName]]</template>
+      </vaadin-grid-column>
 
-    <vaadin-grid-column width="15em" flex-grow="2">
-      <template class="header">
-        <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
-      </template>
-      <template>[[item.address.street]], [[item.address.city]]</template>
-    </vaadin-grid-column>
+      <vaadin-grid-column width="15em" flex-grow="2">
+        <template class="header">
+          <vaadin-grid-sorter path="address.street">Address</vaadin-grid-sorter>
+        </template>
+        <template>[[item.address.street]], [[item.address.city]]</template>
+      </vaadin-grid-column>
 
-  </vaadin-grid>
-</template>
+    </vaadin-grid>
+  </template>
+</dom-bind>
 ```
 
-<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.png">
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Valo theme">](https://vaadin.com/elements/vaadin-grid)
 
 ## Getting Started
 
