@@ -1,8 +1,8 @@
-<link rel="import" href="../../../vaadin-valo-theme/color.html">
-<link rel="import" href="../../../vaadin-valo-theme/sizing.html">
-<link rel="import" href="../../../vaadin-valo-theme/spacing.html">
-<link rel="import" href="../../../vaadin-valo-theme/style.html">
-<link rel="import" href="../../../vaadin-valo-theme/typography.html">
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-valo-styles/typography.html">
 
 <dom-module id="valo-month-calendar" theme-for="vaadin-month-calendar">
   <template>
@@ -15,6 +15,7 @@
         font-size: var(--valo-font-size-m);
         color: var(--valo-body-text-color);
         text-align: center;
+        padding: 0 var(--valo-space-xs);
         /* Make the currently focused month be roughly in the center of the overlay */
         /* TODO expose the overlay max-height as a custom property, so it can be used in calc's */
         /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
@@ -22,22 +23,6 @@
          * offset for now, and compensating it in the scroll item height */
         /* transform: translateY(calc(var(--valo-size-m) * 2)); */
         transform: translateY(var(--valo-size-s));
-        /* Make equal horizontal spacing between dates and element edges */
-        padding: 0 calc(100% / 8 / 2);
-      }
-
-      :host([week-numbers]) {
-        /* Make equal horizontal spacing between dates and element edges */
-        /* In case when week numbers are visible, there is one more gap */
-        padding: 0 calc(100% / 9 / 2);
-      }
-
-      /* Disabled state */
-
-      :host([disabled]),
-      [part="date"][disabled] {
-        color: var(--valo-disabled-text-color);
-        cursor: default;
       }
 
       /* Month header */
@@ -68,7 +53,6 @@
       [part="weekday"]:empty,
       [part="week-numbers"] {
         width: var(--valo-size-s);
-        padding-left: var(--valo-space-xs);
       }
 
       /* Date and week number cells */
@@ -79,14 +63,6 @@
         height: var(--valo-size-m);
         line-height: var(--valo-size-m);
         position: relative;
-      }
-
-      @media (pointer: coarse) {
-        [part="date"],
-        [part="week-number"] {
-          height: var(--valo-size-l);
-          line-height: var(--valo-size-l);
-        }
       }
 
       [part="date"]:not(:empty):not([disabled]) {
@@ -149,6 +125,13 @@
         [part="date"][selected]::before {
           content: "";
         }
+      }
+
+      /* Disabled */
+
+      :host([disabled]) * {
+        color: var(--valo-disabled-text-color) !important;
+        cursor: default;
       }
     </style>
   </template>

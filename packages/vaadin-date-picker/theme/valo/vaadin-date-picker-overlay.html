@@ -1,10 +1,49 @@
-<link rel="import" href="../../../vaadin-overlay/theme/valo/vaadin-overlay.html">
+<link rel="import" href="../../../vaadin-valo-styles/mixins/overlay.html">
 
 <dom-module id="valo-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
   <template>
-    <style>
-      [part="overlay"] {
-        padding: 0; /* Override Valo theme for <vaadin-overlay>’s default padding */
+    <style include="valo-overlay">
+      [part="overlay"][part="overlay"] {
+        width: calc(var(--valo-size-m) * 10);
+        max-height: calc(var(--valo-size-m) * 14);
+        overflow: hidden;
+        animation: 0.2s vaadin-menu-overlay-enter;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      @keyframes vaadin-menu-overlay-enter {
+        0% {
+          opacity: 0;
+          transform: translateY(-4px);
+        }
+      }
+
+      :host([show-week-numbers]) [part="overlay"]:not([fullscreen]) {
+        width: calc(var(--valo-size-m) * 11);
+      }
+
+      [part="content"] {
+        padding: 0;
+        height: 100%;
+      }
+
+      :host([fullscreen]) [part~="overlay"][part~="overlay"] {
+        width: 100vw;
+        height: 70vh;
+        flex: none;
+        animation: 0.15s vaadin-date-picker-mobile-overlay-enter cubic-bezier(.215, .61, .355, 1);
+        border-radius: 0;
+      }
+
+      @keyframes vaadin-date-picker-mobile-overlay-enter {
+        0% {
+          transform: translateY(150%);
+        }
+      }
+
+      :host([fullscreen]) [part~="backdrop"] {
+        display: block;
       }
     </style>
   </template>
