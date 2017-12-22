@@ -33,6 +33,23 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="332" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
 
+## Getting Started
+
+Vaadin Elements use the Valo theme by default.
+
+## The file structure for Vaadin Elements
+
+- `src/vaadin-notification.html`
+
+  Unstyled element.
+
+- `theme/valo/vaadin-notification.html`
+
+  Element with Valo theme.
+
+- `vaadin-notification.html`
+
+  Alias for theme/valo/vaadin-notification.html
 
 ## Running demos and tests in browser
 

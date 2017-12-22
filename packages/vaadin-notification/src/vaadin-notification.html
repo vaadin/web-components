@@ -1,0 +1,379 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/templatize.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+
+<dom-module id="vaadin-notification-overlay">
+  <template>
+    <style>
+      :host {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        box-sizing: border-box;
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        pointer-events: none;
+      }
+
+      [region-group] {
+        flex: 1 1 0%;
+        display: flex;
+      }
+
+      [region-group="top"] {
+        align-items: flex-start;
+      }
+
+      [region-group="bottom"] {
+        align-items: flex-end;
+      }
+
+      [region-group] > [region] {
+        flex: 1 1 0%;
+      }
+
+      @media (max-width: 420px) {
+        [region-group] {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        [region-group="top"] {
+          justify-content: flex-start;
+        }
+
+        [region-group="bottom"] {
+          justify-content: flex-end;
+        }
+
+        [region-group] > [region] {
+          flex: initial;
+        }
+      }
+    </style>
+
+    <div region="top-stretch"><slot name="top-stretch"></slot></div>
+    <div region-group="top">
+      <div region="top-start"><slot name="top-start"></slot></div>
+      <div region="top-center"><slot name="top-center"></slot></div>
+      <div region="top-end"><slot name="top-end"></slot></div>
+    </div>
+    <div region="middle"><slot name="middle"></slot></div>
+    <div region-group="bottom">
+      <div region="bottom-start"><slot name="bottom-start"></slot></div>
+      <div region="bottom-center"><slot name="bottom-center"></slot></div>
+      <div region="bottom-end"><slot name="bottom-end"></slot></div>
+    </div>
+    <div region="bottom-stretch"><slot name="bottom-stretch"></slot></div>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-notification-card">
+  <template>
+    <style>
+      :host {
+        display: block;
+        pointer-events: auto;
+      }
+    </style>
+
+    <div part="overlay">
+      <div part="content">
+        <slot></slot>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<dom-module id="vaadin-notification">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+    <vaadin-notification-card id="vaadin-notification-card">
+    </vaadin-notification-card>
+  </template>
+
+  <script>
+    {
+      /**
+       * The notification overlay element.
+       *
+       * @memberof Vaadin
+       */
+      class VaadinNotificationOverlay extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-notification-overlay';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * True when the overlay is opened
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              observer: '_openedChanged'
+            }
+          };
+        }
+
+        _openedChanged(opened) {
+          if (opened) {
+            document.body.appendChild(this);
+            if (this._boundIosResizeListener) {
+              this._detectIosNavbar();
+              window.addEventListener('resize', this._boundIosResizeListener);
+            }
+          } else {
+            document.body.removeChild(this);
+            if (this._boundIosResizeListener) {
+              window.removeEventListener('resize', this._boundIosResizeListener);
+            }
+          }
+        }
+
+        constructor() {
+          super();
+
+          if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            this._boundIosResizeListener = () => this._detectIosNavbar();
+          }
+        }
+
+        _detectIosNavbar() {
+          const innerHeight = window.innerHeight;
+          const innerWidth = window.innerWidth;
+          const landscape = innerWidth > innerHeight;
+          const clientHeight = document.documentElement.clientHeight;
+          if (landscape && clientHeight > innerHeight) {
+            this.style.bottom = (clientHeight - innerHeight) + 'px';
+          } else {
+            this.style.bottom = '0';
+          }
+        }
+      }
+
+      /**
+       * The container element for the notification
+       *
+       * ### Styling
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `overlay` | The notification container
+       * `content` | The content of the notification
+       *
+       * [Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       */
+      class VaadinNotificationCard extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-notification-card';
+        }
+
+        ready() {
+          super.ready();
+          this.setAttribute('role', 'alert');
+          this.setAttribute('aria-live', 'polite');
+        }
+      }
+
+      /**
+       * `<vaadin-notification>` is a Polymer 2 element providing accessible and customizable notifications (toasts).
+       *
+       * ```
+       * <vaadin-notification>
+       *   <template>
+       *     Your work has been saved
+       *   </template>
+       * </vaadin-notification>
+       * ```
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class NotificationElement extends Vaadin.ElementMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-notification';
+        }
+
+        static get version() {
+          return '1.0.0-alpha3';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The duration in milliseconds to show the notification.
+             * Set to `0` or a negative number to disable the notification auto-closing.
+             */
+            duration: {
+              type: Number,
+              value: 7000
+            },
+
+            /**
+             * True if the notification is currently displayed.
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true,
+              observer: '_openedChanged'
+            },
+
+            /**
+             * Alignment of the notification in the viewport
+             * Valid values are `top-stretch|top-start|top-center|top-end|middle|bottom-start|bottom-center|bottom-end|bottom-stretch`
+             */
+            position: {
+              type: String,
+              value: 'bottom-start',
+              observer: '_positionChanged'
+            }
+          };
+        }
+
+        static get observers() {
+          return [
+            '_durationChanged(duration, opened)'
+          ];
+        }
+
+        /**
+         * Opens the notification.
+         */
+        open() {
+          this.opened = true;
+        }
+
+        /**
+         * Closes the notification.
+         */
+        close() {
+          this.opened = false;
+        }
+
+        get _overlay() {
+          if (!NotificationElement._overlay) {
+            NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
+            document.body.appendChild(NotificationElement._overlay);
+          }
+          return NotificationElement._overlay;
+        }
+
+        _openedChanged(opened) {
+          if (opened) {
+            this._overlay.opened = true;
+            if (!this._instance) {
+              const template = this.querySelector('template');
+              const Templatizer = Polymer.Templatize.templatize(template, this, {
+                instanceProps: {
+                  detail: true,
+                  target: true
+                }
+              });
+              this._instance = new Templatizer({});
+              this._card = this.$['vaadin-notification-card'];
+              this._card.appendChild(this._instance.root);
+              this._card.setAttribute('aria-label', this._card.textContent.trim());
+            }
+
+            this._animatedAppendNotificationCard();
+          } else if (this._card) {
+            this._closeNotificationCard();
+          }
+        }
+
+        _animatedAppendNotificationCard() {
+          this._card.setAttribute('opening', '');
+          this._appendNotificationCard();
+          const listener = () => {
+            this._card.removeEventListener('animationend', listener);
+            this._card.removeAttribute('opening');
+          };
+          this._card.addEventListener('animationend', listener);
+        }
+
+        _appendNotificationCard() {
+          if (!this._overlay.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
+            window.console.warn(
+              `Invalid alignment parameter provided: position=${this.position}`);
+            return;
+          }
+
+          this._card.slot = this.position;
+          if (this._overlay.firstElementChild && /^(top-stretch||top)$/.test(this.position)) {
+            this._overlay.insertBefore(this._card, this._overlay.firstElementChild);
+          } else {
+            this._overlay.appendChild(this._card);
+          }
+        }
+
+        _removeNotificationCard() {
+          this._card.parentNode && this._card.parentNode.removeChild(this._card);
+          this._card.removeAttribute('closing');
+          this._overlay.opened = Boolean(this._overlay.firstElementChild);
+        }
+
+        _closeNotificationCard() {
+          this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+          this._card.setAttribute('closing', '');
+          const name = getComputedStyle(this._card).getPropertyValue('animation-name');
+          if (name && name != 'none') {
+            const listener = () => {
+              this._removeNotificationCard();
+              this._card.removeEventListener('animationend', listener);
+            };
+            this._card.addEventListener('animationend', listener);
+          } else {
+            this._removeNotificationCard();
+          }
+        }
+
+        _positionChanged(position) {
+          if (this.opened) {
+            this._animatedAppendNotificationCard();
+          }
+        }
+
+        _durationChanged(duration, opened) {
+          if (opened) {
+            clearTimeout(this._durationTimeoutId);
+            if (duration > 0) {
+              this._durationTimeoutId = setTimeout(() => this.close(), duration);
+            }
+          }
+        }
+      }
+
+      customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
+      customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
+      customElements.define(NotificationElement.is, NotificationElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.NotificationElement = NotificationElement;
+    }
+  </script>
+</dom-module>
