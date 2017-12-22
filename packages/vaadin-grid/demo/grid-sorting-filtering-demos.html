@@ -168,7 +168,7 @@
               <vaadin-grid-column>
                 <template class="header">
                   <vaadin-grid-filter aria-label="First Name" path="name.first" value="[[_filterFirstName]]">
-                    <!--<input placeholder="First Name" value="{{_filterFirstName::input}}" focus-target>-->
+                    <vaadin-text-field slot="filter" placeholder="First Name" value="{{_filterFirstName}}" focus-target></vaadin-text-field>
                   </vaadin-grid-filter>
                 </template>
                 <template>[[item.name.first]]</template>
