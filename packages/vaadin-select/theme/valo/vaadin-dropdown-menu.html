@@ -26,6 +26,7 @@
         content: "\e905";
       }
 
+      /* Highlight the toggle button when hovering over the entire component */
       :host(:hover:not([readonly]):not([disabled])) [part="toggle-button"] {
         color: var(--valo-contrast-80pct);
       }
@@ -68,8 +69,7 @@
         min-width: 10em;
       }
 
-      /* TODO not necessarily the best way to target items only */
-      vaadin-list-box [tabindex] {
+      vaadin-list-box vaadin-item {
         padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
       }
     </style>
