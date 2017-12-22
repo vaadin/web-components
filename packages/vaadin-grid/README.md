@@ -61,7 +61,7 @@
 </dom-bind>
 ```
 
-<img src="https://github.com/vaadin/vaadin-grid/raw/master/screenshot.png">
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Valo theme">](https://vaadin.com/elements/vaadin-grid)
 
 ## Getting Started
 
