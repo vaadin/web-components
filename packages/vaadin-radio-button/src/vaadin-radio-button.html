@@ -13,21 +13,47 @@ This program is available under Apache License Version 2.0, available at https:/
 <dom-module id="vaadin-radio-button">
   <template>
     <style>
+      :host {
+        display: inline-block;
+      }
+
+      #label {
+        display: inline-flex;
+        align-items: baseline;
+        outline: none;
+      }
+
+      [part="radio"] {
+        position: relative;
+        display: inline-block;
+        flex: none;
+      }
+
+      #nativeRadioButton {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: inherit;
+      }
+
       :host([disabled]) {
         -webkit-tap-highlight-color: transparent;
       }
     </style>
 
-    <label part="wrapper" on-click="_preventDefault">
-      <input
-        type="radio"
-        part="native-radio"
-        checked="{{checked::change}}"
-        disabled$="[[disabled]]"
-        role="presentation"
-        tabindex="-1">
-
-      <span part="radio"></span>
+    <label id="label" on-click="_preventDefault">
+      <span part="radio">
+        <input
+          type="radio"
+          id="nativeRadioButton"
+          checked="{{checked::change}}"
+          disabled$="[[disabled]]"
+          role="presentation"
+          tabindex="-1">
+      </span>
 
       <span part="label">
         <slot></slot>
@@ -50,10 +76,8 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Part name         | Description
        * ------------------|----------------
-       * `wrapper`         | The `<label>` element which wrapps the radio button and [part="label"]
-       * `native-radio`    | The `<input type="radio">` element
-       * `radio`           | The `<span>` element for a custom graphical radio button
-       * `label`           | The `<span>` element for slotted text/HTML label
+       * `radio`           | The radio button element
+       * `label`           | The label content element
        *
        * The following state attributes are available for styling:
        *
@@ -169,7 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.shadowRoot.querySelector('[part="wrapper"]');
+          return this.$.label;
         }
 
         _preventDefault(e) {
