@@ -23,8 +23,11 @@
         cursor: default;
       }
 
-      /* TODO this does not match elements extending vaadin-item. This is anyway a workaround until we have "focus-follows-mouse" */
       [part="items"] ::slotted(vaadin-item) {
+        min-height: var(--valo-size-m);
+        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
+        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
+        /* TODO a workaround until we have "focus-follows-mouse" */
         cursor: pointer;
       }
 
@@ -42,6 +45,18 @@
 
       [part="items"] ::slotted([selected]) {
         font-weight: 500;
+      }
+
+      /* Need to use a bold font on Windows (Segoe UI doens't have semibold) */
+      ::-ms-backdrop,
+      [part="items"] ::slotted([selected]) {
+        font-weight: 600;
+      }
+
+      @supports (-ms-ime-align: auto) {
+        [part="items"] ::slotted([selected]) {
+          font-weight: 600;
+        }
       }
 
       /* Easily add section dividers */
