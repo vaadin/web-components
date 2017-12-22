@@ -66,31 +66,13 @@
         overflow: auto;
       }
 
-      /* Styles for the contained vaadin-items */
+      /* Phone layout specific tweaks for contained vaadin-items */
 
-      /* TODO perhaps not the best way to target items using [tabindex], but it works, and does not target the selected item inside vaadin-dropdown-text-field */
-
-      vaadin-list-box [tabindex] {
-        min-height: var(--valo-size-m);
-        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
-        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
-      }
-
-      @media (pointer: coarse) {
-        :host vaadin-list-box [tabindex] {
-          min-height: var(--valo-size-l);
-          padding-top: var(--valo-space-s);
-          padding-bottom: var(--valo-space-s);
-        }
-      }
-
-      /* Phone layout specific tweaks */
-
-      :host([phone]) vaadin-list-box [tabindex] {
+      :host([phone]) vaadin-item {
         margin: 0 var(--valo-space-xs);
       }
 
-      :host([phone]) vaadin-list-box [tabindex][focused] {
+      :host([phone]) vaadin-item[focused] {
         background-color: transparent;
       }
     </style>
