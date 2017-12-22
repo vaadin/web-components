@@ -298,10 +298,20 @@ This program is available under Apache License Version 2.0, available at https:/
               this._card.setAttribute('aria-label', this._card.textContent.trim());
             }
 
-            this._appendNotificationCard();
+            this._animatedAppendNotificationCard();
           } else if (this._card) {
             this._closeNotificationCard();
           }
+        }
+
+        _animatedAppendNotificationCard() {
+          this._card.setAttribute('opening', '');
+          this._appendNotificationCard();
+          const listener = () => {
+            this._card.removeEventListener('animationend', listener);
+            this._card.removeAttribute('opening');
+          };
+          this._card.addEventListener('animationend', listener);
         }
 
         _appendNotificationCard() {
@@ -342,7 +352,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _positionChanged(position) {
           if (this.opened) {
-            this._appendNotificationCard();
+            this._animatedAppendNotificationCard();
           }
         }
 

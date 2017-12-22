@@ -94,7 +94,7 @@
         }
       }
 
-      :host([slot="middle"]) {
+      :host([slot="middle"][opening]) {
         animation: valo-notification-enter-fade-in 300ms;
       }
 
@@ -102,7 +102,7 @@
         animation: valo-notification-exit-fade-out 300ms;
       }
 
-      :host([slot^="top"]) {
+      :host([slot^="top"][opening]) {
         animation: valo-notification-enter-slide-down 300ms;
       }
 
@@ -110,7 +110,7 @@
         animation: valo-notification-exit-slide-up 300ms;
       }
 
-      :host([slot^="bottom"]) {
+      :host([slot^="bottom"][opening]) {
         animation: valo-notification-enter-slide-up 300ms;
       }
 
