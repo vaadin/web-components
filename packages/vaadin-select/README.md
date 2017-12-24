@@ -14,7 +14,7 @@
 
 <!--
 ```
-<custom-element-demo>
+<custom-element-demo height="425">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-dropdown-menu.html">
