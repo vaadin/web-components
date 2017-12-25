@@ -93,10 +93,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-context-menu>
        *   <template>
-       *     <paper-listbox>
-       *       <paper-item>First menu item</paper-item>
-       *       <paper-item>Second menu item</paper-item>
-       *     </paper-listbox>
+       *     <vaadin-list-box>
+       *       <vaadin-item>First menu item</vaadin-item>
+       *       <vaadin-item>Second menu item</vaadin-item>
+       *     </vaadin-list-box>
        *   </template>
        * </vaadin-context-menu>
        * ```
@@ -120,10 +120,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-context-menu>
        *   <template>
-       *     <paper-listbox>
-       *       <paper-item>First menu item</paper-item>
-       *       <paper-item>Second menu item</paper-item>
-       *     </paper-listbox>
+       *     <vaadin-list-box>
+       *       <vaadin-item>First menu item</vaadin-item>
+       *       <vaadin-item>Second menu item</vaadin-item>
+       *     </vaadin-list-box>
        *   </template>
        *
        *   <p>This paragraph has the context menu provided in the above template.</p>
@@ -138,9 +138,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-context-menu id="customListener">
        *   <template>
-       *     <paper-listbox>
+       *     <vaadin-list-box>
        *       ...
-       *     </paper-listbox>
+       *     </vaadin-list-box>
        *   </template>
        * </vaadin-context-menu>
        *
@@ -163,9 +163,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-context-menu selector=".has-menu">
        *   <template>
-       *     <paper-listbox>
+       *     <vaadin-list-box>
        *       ...
-       *     </paper-listbox>
+       *     </vaadin-list-box>
        *   </template>
        *
        *   <p class="has-menu">This paragraph opens the context menu</p>
@@ -187,9 +187,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```html
        * <vaadin-context-menu selector="li">
        *   <template>
-       *     <paper-listbox>
-       *       <paper-item>The menu target: [[target.textContent]]</paper-item>
-       *     </paper-listbox>
+       *     <vaadin-list-box>
+       *       <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
+       *     </vaadin-list-box>
        *   </template>
        *
        *   <ul>
