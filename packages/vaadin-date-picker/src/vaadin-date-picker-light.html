@@ -68,9 +68,9 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ```html
        * <vaadin-date-picker-light>
-       * <iron-input>
-       * <input/>
-       * </iron-input>
+       *   <iron-input>
+       *     <input/>
+       *   </iron-input>
        * </vaadin-date-picker-light>
        * ```
        *
@@ -79,12 +79,13 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ```html
        * <vaadin-date-picker-light attr-for-value="value">
-       * <paper-input label="Birthday">
-       * </paper-input>
+       *   <paper-input label="Birthday">
+       *   </paper-input>
        * </vaadin-date-picker-light>
        * ```
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
        * @mixes Vaadin.DatePickerMixin
        */
       class DatePickerLightElement extends Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.Element)) {
