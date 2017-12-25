@@ -8,12 +8,12 @@
       "sourceRange": {
         "file": "src/vaadin-form-layout.html",
         "start": {
-          "line": 438,
+          "line": 441,
           "column": 6
         },
         "end": {
-          "line": 438,
-          "column": 42
+          "line": 441,
+          "column": 58
         }
       },
       "elements": [
@@ -45,7 +45,31 @@
               ]
             }
           ],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [
             {
               "url": "demo/index.html",
@@ -117,15 +141,15 @@
             {
               "name": "responsiveSteps",
               "type": "Array.<ResponsiveStep>",
-              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsPosition` string of `\"aside\"` or `\"top\"`. At least one item is required.\n\n#### Examples\n\n```javascript\nsplitLayout.responsiveSteps = [{columns: 1}];\n// The layout is always a single column, labels aside.\n```\n\n```javascript\nsplitLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Sets two responsive steps:\n// 1. When the layout width is < 40em, one column, labels aside.\n// 2. Width >= 40em, two columns, labels aside.\n```\n\n```javascript\nsplitLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1, labelsPosition: 'top'},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Default value. Three responsive steps:\n// 1. Width < 20em, one column, labels on top.\n// 2. 20em <= width < 40em, one column, labels aside.\n// 3. Width >= 40em, two columns, labels aside.\n```",
+              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsPosition` string of `\"aside\"` or `\"top\"`. At least one item is required.\n\n#### Examples\n\n```javascript\nformLayout.responsiveSteps = [{columns: 1}];\n// The layout is always a single column, labels aside.\n```\n\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Sets two responsive steps:\n// 1. When the layout width is < 40em, one column, labels aside.\n// 2. Width >= 40em, two columns, labels aside.\n```\n\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1, labelsPosition: 'top'},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Default value. Three responsive steps:\n// 1. Width < 20em, one column, labels on top.\n// 2. 20em <= width < 40em, one column, labels aside.\n// 3. Width >= 40em, two columns, labels aside.\n```",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 227,
+                  "line": 230,
                   "column": 12
                 },
                 "end": {
-                  "line": 237,
+                  "line": 240,
                   "column": 13
                 }
               },
@@ -143,11 +167,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 242,
+                  "line": 245,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -162,11 +186,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 249,
+                  "line": 252,
                   "column": 12
                 },
                 "end": {
-                  "line": 251,
+                  "line": 254,
                   "column": 13
                 }
               },
@@ -182,11 +206,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 261,
+                  "line": 264,
                   "column": 8
                 },
                 "end": {
-                  "line": 280,
+                  "line": 283,
                   "column": 9
                 }
               },
@@ -199,11 +223,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 282,
+                  "line": 285,
                   "column": 8
                 },
                 "end": {
-                  "line": 287,
+                  "line": 290,
                   "column": 9
                 }
               },
@@ -216,11 +240,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 289,
+                  "line": 292,
                   "column": 8
                 },
                 "end": {
-                  "line": 294,
+                  "line": 297,
                   "column": 9
                 }
               },
@@ -237,11 +261,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 296,
+                  "line": 299,
                   "column": 8
                 },
                 "end": {
-                  "line": 320,
+                  "line": 323,
                   "column": 9
                 }
               },
@@ -258,11 +282,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 322,
+                  "line": 325,
                   "column": 8
                 },
                 "end": {
-                  "line": 360,
+                  "line": 363,
                   "column": 9
                 }
               },
@@ -282,11 +306,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 362,
+                  "line": 365,
                   "column": 8
                 },
                 "end": {
-                  "line": 385,
+                  "line": 388,
                   "column": 9
                 }
               },
@@ -299,11 +323,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 387,
+                  "line": 390,
                   "column": 8
                 },
                 "end": {
-                  "line": 389,
+                  "line": 392,
                   "column": 9
                 }
               },
@@ -316,23 +340,48 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 394,
+                  "line": 397,
                   "column": 8
                 },
                 "end": {
-                  "line": 430,
+                  "line": 433,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "...args"
+                  "name": "args",
+                  "rest": true
                 }
               ]
             }
           ],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [
             {
               "url": "demo/index.html",
@@ -342,11 +391,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 163,
+              "line": 165,
               "column": 6
             },
             "end": {
-              "line": 431,
+              "line": 434,
               "column": 7
             }
           },
@@ -356,14 +405,14 @@
           "attributes": [
             {
               "name": "responsive-steps",
-              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsPosition` string of `\"aside\"` or `\"top\"`. At least one item is required.\n\n#### Examples\n\n```javascript\nsplitLayout.responsiveSteps = [{columns: 1}];\n// The layout is always a single column, labels aside.\n```\n\n```javascript\nsplitLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Sets two responsive steps:\n// 1. When the layout width is < 40em, one column, labels aside.\n// 2. Width >= 40em, two columns, labels aside.\n```\n\n```javascript\nsplitLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1, labelsPosition: 'top'},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Default value. Three responsive steps:\n// 1. Width < 20em, one column, labels on top.\n// 2. 20em <= width < 40em, one column, labels aside.\n// 3. Width >= 40em, two columns, labels aside.\n```",
+              "description": "Allows specifying a responsive behavior with the number of columns\nand the label position depending on the layout width.\n\nFormat: array of objects, each object defines one responsive step\nwith `minWidth` CSS length, `columns` number, and optional\n`labelsPosition` string of `\"aside\"` or `\"top\"`. At least one item is required.\n\n#### Examples\n\n```javascript\nformLayout.responsiveSteps = [{columns: 1}];\n// The layout is always a single column, labels aside.\n```\n\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Sets two responsive steps:\n// 1. When the layout width is < 40em, one column, labels aside.\n// 2. Width >= 40em, two columns, labels aside.\n```\n\n```javascript\nformLayout.responsiveSteps = [\n  {minWidth: 0, columns: 1, labelsPosition: 'top'},\n  {minWidth: '20em', columns: 1},\n  {minWidth: '40em', columns: 2}\n];\n// Default value. Three responsive steps:\n// 1. Width < 20em, one column, labels on top.\n// 2. 20em <= width < 40em, one column, labels aside.\n// 3. Width >= 40em, two columns, labels aside.\n```",
               "sourceRange": {
                 "start": {
-                  "line": 227,
+                  "line": 230,
                   "column": 12
                 },
                 "end": {
-                  "line": 237,
+                  "line": 240,
                   "column": 13
                 }
               },
@@ -383,11 +432,11 @@
               "range": {
                 "file": "src/vaadin-form-layout.html",
                 "start": {
-                  "line": 63,
+                  "line": 64,
                   "column": 6
                 },
                 "end": {
-                  "line": 63,
+                  "line": 64,
                   "column": 29
                 }
               }
@@ -395,6 +444,7 @@
           ],
           "tagname": "vaadin-form-layout",
           "mixins": [
+            "Vaadin.ElementMixin",
             "Vaadin.ThemableMixin"
           ]
         }
