@@ -159,11 +159,13 @@ This program is available under Apache License Version 2.0, available at https:/
        * `--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
       class FormLayoutElement extends
-          Vaadin.ElementMixin(Vaadin.ThemableMixin(
+          Vaadin.ElementMixin(
+            Vaadin.ThemableMixin(
               Polymer.mixinBehaviors(
                   [Polymer.IronResizableBehavior],
                   Polymer.Element
