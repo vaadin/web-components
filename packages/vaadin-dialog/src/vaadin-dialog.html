@@ -68,9 +68,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
-      class VaadinDialog extends Vaadin.ElementMixin(class extends Polymer.Element {}) {
+      class VaadinDialog extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-dialog';
         }
