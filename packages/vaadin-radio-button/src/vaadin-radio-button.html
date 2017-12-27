@@ -130,7 +130,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._addActiveListeners();
 
-          this.name = this.getAttribute('name');
+          const attrName = this.getAttribute('name');
+          if (attrName) {
+            this.name = attrName;
+          }
         }
 
         _checkedChanged(checked) {
