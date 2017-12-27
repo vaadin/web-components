@@ -37,7 +37,7 @@
 </vaadin-dropdown-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="200" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
 
 ## Getting Started
 
