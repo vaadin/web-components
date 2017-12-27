@@ -65,8 +65,8 @@
 
       beforeEach(() => {
         vaadinCheckbox = fixture('default');
-        nativeCheckbox = Polymer.dom(vaadinCheckbox.root).querySelector('#nativeCheckbox');
-        label = Polymer.dom(vaadinCheckbox.root).querySelector('[part="label"]');
+        nativeCheckbox = vaadinCheckbox._nativeCheckbox;
+        label = vaadinCheckbox.shadowRoot.querySelector('[part="label"]');
       });
 
       it('should define checkbox label using light DOM', () => {

@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
       }
 
-      #label {
+      label {
         display: inline-flex;
         align-items: baseline;
         outline: none;
@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: none;
       }
 
-      #nativeCheckbox {
+      input[type="checkbox"] {
         position: absolute;
         top: 0;
         left: 0;
@@ -44,10 +44,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <label id="label">
+    <label>
       <span part="checkbox">
         <input
-          id="nativeCheckbox"
           type="checkbox"
           checked="{{checked::change}}"
           disabled$="[[disabled]]"
@@ -146,6 +145,10 @@ This program is available under Apache License Version 2.0, available at https:/
             value: {
               type: String,
               value: 'on'
+            },
+
+            _nativeCheckbox: {
+              type: Object
             }
           };
         }
@@ -171,6 +174,8 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this.setAttribute('role', 'checkbox');
+
+          this._nativeCheckbox = this.shadowRoot.querySelector('input[type="checkbox"]');
 
           this.addEventListener('click', this._handleClick.bind(this));
 
@@ -232,12 +237,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.label;
+          return this.shadowRoot.querySelector('label');
         }
 
         _handleClick(e) {
           if (!this.disabled && !this.indeterminate) {
-            if (e.composedPath()[0] !== this.$.nativeCheckbox) {
+            if (e.composedPath()[0] !== this._nativeCheckbox) {
               e.preventDefault();
               this._toggleChecked();
             }
