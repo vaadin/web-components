@@ -16,9 +16,7 @@
         padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
         padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
         -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
-        /* Need to disable text wrapping because of IE11 flexbox issue https://github.com/philipwalton/flexbugs#flexbug-3 */
-        height: var(--valo-size-m);
-        white-space: nowrap;
+        min-height: var(--valo-size-m);
       }
 
       /* ShadyCSS workaround */
@@ -43,6 +41,18 @@
 
       :host([selected]) {
         font-weight: 500;
+      }
+
+      /* Need to use a bold font on Windows (Segoe UI doesn't have semibold) */
+      ::-ms-backdrop,
+      :host([selected]) {
+        font-weight: 600;
+      }
+
+      @supports (-ms-ime-align: auto) {
+        [part="items"] ::slotted([selected]) {
+          font-weight: 600;
+        }
       }
 
       /* TODO ugly hack to add horizontal spacing between the overlay and the item */
