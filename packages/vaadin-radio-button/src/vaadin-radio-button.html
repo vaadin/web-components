@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: inline-block;
       }
 
-      #label {
+      label {
         display: inline-flex;
         align-items: baseline;
         outline: none;
@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: none;
       }
 
-      #nativeRadioButton {
+      input[type="radio"] {
         position: absolute;
         top: 0;
         left: 0;
@@ -44,11 +44,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <label id="label" on-click="_preventDefault">
+    <label on-click="_preventDefault">
       <span part="radio">
         <input
           type="radio"
-          id="nativeRadioButton"
           checked="{{checked::change}}"
           disabled$="[[disabled]]"
           role="presentation"
@@ -193,7 +192,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get focusElement() {
-          return this.$.label;
+          return this.shadowRoot.querySelector('label');
         }
 
         _preventDefault(e) {
