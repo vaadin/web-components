@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox.html",
         "start": {
-          "line": 256,
+          "line": 261,
           "column": 6
         },
         "end": {
-          "line": 256,
+          "line": 261,
           "column": 54
         }
       },
@@ -115,11 +115,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 158,
+                  "line": 161,
                   "column": 10
                 },
                 "end": {
-                  "line": 158,
+                  "line": 161,
                   "column": 20
                 }
               },
@@ -136,11 +136,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -159,11 +159,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 134,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -181,11 +181,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 148,
+                  "line": 147,
                   "column": 13
                 }
               },
@@ -193,6 +193,25 @@
                 "polymer": {}
               },
               "defaultValue": "\"on\""
+            },
+            {
+              "name": "_nativeCheckbox",
+              "type": "Object",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 149,
+                  "column": 12
+                },
+                "end": {
+                  "line": 151,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
             }
           ],
           "methods": [
@@ -202,11 +221,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 169,
+                  "line": 172,
                   "column": 8
                 },
                 "end": {
-                  "line": 182,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -487,11 +506,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 189,
                   "column": 8
                 },
                 "end": {
-                  "line": 190,
+                  "line": 195,
                   "column": 9
                 }
               },
@@ -508,11 +527,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 192,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 198,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -529,11 +548,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 200,
+                  "line": 205,
                   "column": 8
                 },
                 "end": {
-                  "line": 231,
+                  "line": 236,
                   "column": 9
                 }
               },
@@ -546,11 +565,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 242,
                   "column": 8
                 },
                 "end": {
-                  "line": 244,
+                  "line": 249,
                   "column": 9
                 }
               },
@@ -567,11 +586,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 251,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 253,
                   "column": 9
                 }
               },
@@ -613,11 +632,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 104,
+              "line": 103,
               "column": 6
             },
             "end": {
-              "line": 249,
+              "line": 254,
               "column": 7
             }
           },
@@ -666,11 +685,11 @@
               "description": "True if the checkbox is checked.",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -682,11 +701,11 @@
               "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 134,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -698,11 +717,11 @@
               "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 148,
+                  "line": 147,
                   "column": 13
                 }
               },
@@ -735,11 +754,11 @@
               "range": {
                 "file": "src/vaadin-checkbox.html",
                 "start": {
-                  "line": 59,
+                  "line": 58,
                   "column": 8
                 },
                 "end": {
-                  "line": 59,
+                  "line": 58,
                   "column": 21
                 }
               }
