@@ -6,27 +6,61 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../vaadin-radio-button.html">
   <link rel="import" href="../vaadin-radio-group.html">
 </head>
 
 <body>
+  <dom-module id="x-radio-button">
+    <template>
+      <iron-form id="form">
+        <vaadin-radio-button id="boundname" name="[[radioButtonName]]"></vaadin-radio-button>
+        <vaadin-radio-button id="attrname" name="attrradiobutton"></vaadin-radio-button>
+      </iron-form>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', () => {
+        class XRadioButton extends Polymer.Element {
+          static get is() {
+            return 'x-radio-button';
+          }
+          static get properties() {
+            return {
+              radioButtonName: {
+                type: String,
+                value: 'boundradiobutton'
+              }
+            };
+          }
+        }
+        customElements.define(XRadioButton.is, XRadioButton);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="default">
     <template>
       <vaadin-radio-button name="test-radio">Radio <b>Button</b></vaadin-radio-button>
     </template>
   </test-fixture>
 
+  <test-fixture id="iron-form-radio-button">
+    <template>
+      <x-radio-button></x-radio-button>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-radio-button', () => {
-      var down = node => {
+      const down = node => {
         node.dispatchEvent(new CustomEvent('down'));
       };
-      var up = node => {
+      const up = node => {
         node.dispatchEvent(new CustomEvent('up'));
       };
 
-      var vaadinRadioButton, nativeRadio, label;
+      let vaadinRadioButton, nativeRadio, label;
 
       beforeEach(() => {
         vaadinRadioButton = fixture('default');
@@ -56,7 +90,7 @@
       });
 
       it('should define radio button label using light DOM', () => {
-        var children = label.firstElementChild.assignedNodes();
+        const children = label.firstElementChild.assignedNodes();
         expect(children[0].textContent).to.be.equal('Radio ');
         expect(children[1].outerHTML).to.be.equal('<b>Button</b>');
       });
@@ -89,6 +123,51 @@
         MockInteractions.keyDownOn(vaadinRadioButton, 32);
         MockInteractions.keyUpOn(vaadinRadioButton, 32);
         expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
+      });
+    });
+
+    describe('iron-form-radio-button', () => {
+      let boundNameRadioButton, attrNameRadioButton, form;
+
+      beforeEach(() => {
+        const xRadioButton = fixture('iron-form-radio-button');
+        form = xRadioButton.$.form;
+        boundNameRadioButton = xRadioButton.$.boundname;
+        attrNameRadioButton = xRadioButton.$.attrname;
+      });
+
+      it('should serialize', () => {
+        boundNameRadioButton.checked = true;
+        expect(boundNameRadioButton.name).to.equal('boundradiobutton');
+        expect(form.serializeForm().boundradiobutton).to.equal('on');
+      });
+
+      it('should serialize with a custom value', () => {
+        boundNameRadioButton.checked = true;
+        boundNameRadioButton.value = 'foo';
+        expect(form.serializeForm().boundradiobutton).to.equal('foo');
+      });
+
+      it('should not serialize when not checked', () => {
+        expect(boundNameRadioButton.name).to.be.empty;
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should not serialize without a name', () => {
+        boundNameRadioButton.checked = true;
+        boundNameRadioButton.name = '';
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should not serialize after unchecked', () => {
+        boundNameRadioButton.checked = true;
+        boundNameRadioButton.checked = false;
+        expect(form.serializeForm()).to.be.empty;
+      });
+
+      it('should define the name from an attribute', () => {
+        attrNameRadioButton.checked = true;
+        expect(form.serializeForm().attrradiobutton).to.equal('on');
       });
     });
   </script>
