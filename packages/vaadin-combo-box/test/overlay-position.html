@@ -8,6 +8,7 @@
   <script src='../../web-component-tester/browser.js'></script>
   <link rel='import' href='common.html'>
   <script src="common.js"></script>
+  <link rel="import" href="../../paper-input/paper-input-container.html">
 </head>
 
 <body>
@@ -47,7 +48,7 @@
   <template>
     <x-fixed>
       <paper-input-container>
-        <input>
+        <input slot="input">
       </paper-input-container>
 
       <vaadin-combo-box label='combobox' style='width: 300px'></vaadin-combo-box>

@@ -30,6 +30,9 @@
       document.addEventListener('WebComponentsReady', () => {
         Polymer({
           is: 'x-scope',
+          properties: {
+            items: Array
+          },
           parentMethod: () => {
             return 'quux';
           },

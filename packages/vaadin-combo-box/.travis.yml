@@ -17,6 +17,7 @@ install:
 
 before_script:
   - gulp lint version:check
+  - polymer lint ./src/*.html ./theme/*.html --rules polymer-2
   - xvfb-run -s '-screen 0 1024x768x24' wct
 
 script:
