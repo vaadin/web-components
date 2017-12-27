@@ -108,11 +108,11 @@
     });
 
     describe('vaadin-dropdown-menu inside flexbox', () => {
-      it('dropdown should have some width', () => {
+      it('dropdown should stretch inside a column flex container', () => {
         const container = fixture('dropdown-in-flexbox');
         const dropdown = container.querySelector('vaadin-dropdown-menu');
         expect(window.getComputedStyle(container).width).to.eql('500px');
-        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.be.lte(300);
+        expect(parseFloat(window.getComputedStyle(dropdown).width)).to.eql(500);
       });
     });
 
@@ -122,7 +122,7 @@
       beforeEach(done => {
         dropdown = fixture('withvalue');
         menu = dropdown._menuElement;
-        Polymer.RenderStatus.afterNextRender(menu, done);
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
       });
 
       it('should be possible to set value declaratively', () => {
@@ -440,21 +440,37 @@
           expect(focusedSpy).to.be.calledOnce;
         });
 
-        it('should set _phone property and phone attribute to true when dimensions are below 420', () => {
-          expect(dropdown._phone).to.be.false;
-          expect(dropdown._overlayElement.hasAttribute('phone')).to.be.false;
+        // iOS 10.3 has broken resize event: https://bugs.webkit.org/show_bug.cgi?id=170595
+        if (!/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+          it('should set _phone property and phone attribute to true when dimensions are below 420', done => {
+            expect(dropdown._phone).to.be.false;
+            expect(dropdown._overlayElement.hasAttribute('phone')).to.be.false;
 
-          window.top.document.querySelector('#subsuites').style.height = '419px';
-          window.top.document.querySelector('#subsuites').style.width = '419px';
+            const wrapper = window.top.document.querySelector('#subsuites');
+            const iframe = window.top.document.querySelector('.subsuite');
 
-          setTimeout(() => {
-            expect(dropdown._phone).to.be.true;
-            expect(dropdown._overlayElement.hasAttribute('phone')).to.be.true;
-          }, 1);
+            dropdown.addEventListener('iron-resize', () => {
+              expect(dropdown._phone).to.be.true;
+              expect(dropdown._overlayElement.hasAttribute('phone')).to.be.true;
+              wrapper.style.removeProperty('height');
+              wrapper.style.removeProperty('width');
+              iframe.style.removeProperty('width');
+              iframe.style.removeProperty('height');
+              iframe.style.removeProperty('minHeight');
+              iframe.style.removeProperty('minWidth');
+              done();
+            });
 
-          window.top.document.querySelector('#subsuites').style.removeProperty('height');
-          window.top.document.querySelector('#subsuites').style.removeProperty('width');
-        });
+            wrapper.style.height = '419px';
+            wrapper.style.width = '419px';
+
+            // fix iframe sizing in iOS
+            iframe.style.width = '0';
+            iframe.style.height = '0';
+            iframe.style.minHeight = '419px';
+            iframe.style.minWidth = '419px';
+          });
+        }
 
         it('should remove focused state from the input on closing the overlay if phone', () => {
           dropdown._phone = true;

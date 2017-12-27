@@ -128,7 +128,11 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: inline-block;
-        width: 175px;
+      }
+
+      vaadin-dropdown-menu-text-field {
+        width: 100%;
+        min-width: 0;
       }
 
       :host([hidden]) {
@@ -150,6 +154,8 @@ This program is available under Apache License Version 2.0, available at https:/
         required="[[required]]"
         invalid="[[invalid]]"
         error-message="[[errorMessage]]"
+        readonly$="[[readonly]]"
+        label$="[[label]]"
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
@@ -246,7 +252,6 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             label: {
               type: String,
-              value: ''
             },
 
             /**
