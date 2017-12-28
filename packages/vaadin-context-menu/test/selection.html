@@ -6,8 +6,8 @@
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
-    <link rel="import" href="../../paper-listbox/paper-listbox.html">
-    <link rel="import" href="../../paper-item/paper-item.html">
+    <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+    <link rel="import" href="../../vaadin-item/vaadin-item.html">
     <link rel="import" href="../vaadin-context-menu.html">
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
@@ -18,11 +18,11 @@
       <template>
         <vaadin-context-menu>
           <template>
-            <paper-listbox id="menu">
-              <paper-item>item1</paper-item>
-              <paper-item>item2</paper-item>
-              <paper-item>item3</paper-item>
-            </paper-listbox>
+            <vaadin-list-box id="menu">
+              <vaadin-item>item1</vaadin-item>
+              <vaadin-item>item2</vaadin-item>
+              <vaadin-item>item3</vaadin-item>
+            </vaadin-list-box>
           </template>
         </vaadin-context-menu>
       </template>
@@ -41,7 +41,7 @@
 
           it('should close on item tap', done => {
             listenOnce(menu, 'opened-changed', () => {
-              MockInteractions.tap(menu.$.overlay.root.querySelector('#menu paper-item'));
+              MockInteractions.tap(menu.$.overlay.root.querySelector('#menu vaadin-item'));
               expect(menu.opened).to.eql(false);
               done();
             });
@@ -56,7 +56,7 @@
                   done();
                 });
 
-                MockInteractions.pressEnter(menu.$.overlay.root.querySelector('#menu paper-item'));
+                MockInteractions.pressEnter(menu.$.overlay.root.querySelector('#menu vaadin-item'));
               }, 10);
             });
 
