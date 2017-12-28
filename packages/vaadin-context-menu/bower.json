@@ -35,6 +35,7 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "test-fixture": "^3.0.0",
+    "vaadin-button": "^2.0.0",
     "vaadin-grid": "^5.0.0",
     "vaadin-item": "^2.0.0",
     "vaadin-list-box": "^1.0.0",
