@@ -27,7 +27,7 @@
                 margin-bottom: 0.25em;
               }
 
-              button {
+              vaadin-button {
                 height: 30px;
                 max-width: 160px;
                 font-size: 0.9em;
@@ -49,11 +49,11 @@
                   <vaadin-radio-button name="radio-group" value="bottom-stretch">bottom-stretch</vaadin-radio-button>
                 </vaadin-radio-group>
               </div>
-              <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 80px">
+              <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 100px">
                 <span slot="suffix">ms</span>
               </vaadin-text-field>
               <vaadin-text-field label="Text" value="{{text}}" flex="1" style="width: 300px"></vaadin-text-field>
-              <button on-click="_show">Show Notificaton</button>
+              <vaadin-button on-click="_show">Show Notificaton</vaadin-button>
             </div>
           </template>
           <script>
