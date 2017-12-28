@@ -34,16 +34,12 @@
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "paper-item": "^2.0.0",
-    "paper-listbox": "^2.0.0",
-    "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
     "vaadin-grid": "^5.0.0",
     "vaadin-item": "^2.0.0",
     "vaadin-list-box": "^1.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "^1.0.0",
-    "vaadin-tabs": "^2.0.0"
+    "vaadin-demo-helpers": "^1.2.0"
   }
 }
