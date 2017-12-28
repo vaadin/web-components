@@ -41,7 +41,7 @@
     "iron-ajax": "PolymerElements/iron-ajax#^v2.0.0",
     "app-localize-behavior": "^v2.0.0",
     "iron-list": "^v2.0.4",
-    "vaadin-demo-helpers": "^1.0.0",
+    "vaadin-demo-helpers": "^1.2.0",
     "vaadin-text-field": "^2.0.0",
     "vaadin-checkbox": "^2.0.0",
     "vaadin-button": "^2.0.0"
