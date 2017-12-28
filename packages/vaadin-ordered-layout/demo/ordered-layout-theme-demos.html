@@ -120,6 +120,61 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h4>Spacing Variations</h4>
+    <p>
+      The <code>spacing</code> theme comes with small and large variations:
+      <ul>
+        <li><code>spacing-xs</code> for an extra small space between items;</li>
+        <li><code>spacing-s</code> for a small space between items;</li>
+        <li><code>spacing-l</code> for a large small space between items;</li>
+        <li><code>spacing-xl</code> for an extra large space between items.</li>
+      </ul>
+    </p>
+    <vaadin-demo-snippet id='ordered-layout-theme-demos-spacing-sizes'>
+      <template preserve-content>
+        <vaadin-vertical-layout theme="spacing">
+
+          <vaadin-horizontal-layout theme="spacing-xs">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing-s">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing-l">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing-xl">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+        </vaadin-vertical-layout>
+
+        <style>
+          /* For demonstration purposes only */
+          .block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 4em;
+            height: 4em;
+            background-color: rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class OrderedLayoutThemeDemos extends DemoReadyEventEmitter(Polymer.Element) {
