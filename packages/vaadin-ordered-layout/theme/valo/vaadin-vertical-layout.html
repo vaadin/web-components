@@ -5,17 +5,53 @@
 <dom-module id="valo-vertical-layout" theme-for="vaadin-vertical-layout">
   <template>
     <style include="valo-ordered-layout">
+      :host([theme~="spacing-xs"]) ::slotted(*) {
+        margin-top: var(--valo-space-xs);
+      }
+
+      :host([theme~="spacing-s"]) ::slotted(*) {
+        margin-top: var(--valo-space-s);
+      }
+
       :host([theme~="spacing"]) ::slotted(*) {
         margin-top: var(--valo-space-m);
+      }
+
+      :host([theme~="spacing-l"]) ::slotted(*) {
+        margin-top: var(--valo-space-l);
+      }
+
+      :host([theme~="spacing-xl"]) ::slotted(*) {
+        margin-top: var(--valo-space-xl);
       }
 
       /*
         Compensate for the first item margin, so that there is no gap around
         the layout itself.
        */
+       :host([theme~="spacing-xs"])::before {
+         content: "";
+         margin-top: calc(var(--valo-space-xs) * -1);
+       }
+
+       :host([theme~="spacing-s"])::before {
+         content: "";
+         margin-top: calc(var(--valo-space-s) * -1);
+       }
+
       :host([theme~="spacing"])::before {
         content: "";
         margin-top: calc(var(--valo-space-m) * -1);
+      }
+
+      :host([theme~="spacing-l"])::before {
+        content: "";
+        margin-top: calc(var(--valo-space-l) * -1);
+      }
+
+      :host([theme~="spacing-xl"])::before {
+        content: "";
+        margin-top: calc(var(--valo-space-xl) * -1);
       }
     </style>
   </template>
