@@ -45,11 +45,13 @@
         display: inline-block;
         width: calc(1em + 2px);
         height: calc(1em + 2px);
+        /*width: 1em;
+        height: 1em;*/
         flex: none;
         margin: 0.1875em;
         position: relative;
         border-radius: 50%;
-        background-color: var(--material-secondary-background-color);
+        background-color: transparent;
         transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
         pointer-events: none;
         will-change: transform;
@@ -78,12 +80,37 @@
         will-change: transform, opacity;
       }
 
-      /* Used for the dot */
       [part="radio"]::after {
         content: "";
-        width: 0;
+        /*width: 0;
         height: 0;
-        border: 3px solid var(--material-primary-contrast-color);
+        border: 5px solid var(--material-background-color);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition: 0.25s transform;
+        will-change: transform;
+        background-clip: content-box;*/
+      }
+
+      :host([indeterminate]) [part="radio"],
+      :host([checked]) [part="radio"] {
+        background-color: var(--material-primary-color);
+        /*background-color: transparent;*/
+        /*border: 2px solid green;*/
+      }
+
+      :host([disabled]) [part="radio"] {
+        background-color: var(--material-disabled-text-color);
+        /*border: 2px solid var(--material-disabled-text-color);*/
+      }
+
+      :host([checked]) [part="radio"]::after {
+        width: 9px;
+        height: 9px;
+        border: 2px solid var(--material-background-color);
         border-radius: 50%;
         position: absolute;
         top: 50%;
@@ -92,19 +119,34 @@
         transition: 0.25s transform;
         will-change: transform;
         background-clip: content-box;
+        transform: translate(-50%, -50%) scale(1);
       }
 
-      :host([indeterminate]) [part="radio"],
-      :host([checked]) [part="radio"] {
-        background-color: var(--material-primary-color);
+      :host(:not([checked]):not([indeterminate]):not([disabled])) [part="radio"] {
+        /*border: 2px solid var(--material-body-text-color);*/
+        background-color: var(--material-body-text-color);
+        /*border: 2px solid white;
+        border-radius: 50%;*/
       }
 
-      :host([checked]) [part="radio"]::after {
+      :host(:not([checked])) [part="radio"]::after {
+        width: 0px;
+        height: 0px;
+        border: 6px solid var(--material-background-color);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        transition: 0.25s transform;
+        will-change: transform;
+        background-clip: content-box;
         transform: translate(-50%, -50%) scale(1);
       }
 
       :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="radio"] {
-        background-color: var(--material-secondary-background-color);
+        /*background-color: var(--material-secondary-text-color);*/
+        /*background-color: transparent;*/
       }
 
       :host([active]) [part="radio"] {
@@ -136,11 +178,12 @@
       }
 
       :host([disabled]) [part="radio"] {
+        /*background-color: transparent;*/
         background-color: var(--material-disabled-color);
       }
 
       :host([disabled]) [part="radio"]::after {
-        border-color: var(--material-disabled-color);
+        /*border-color: var(--material-disabled-color);*/
       }
 
       /* Similar workaround as for vaadin-checkbox issue: https://github.com/vaadin/vaadin-checkbox/issues/16 */
