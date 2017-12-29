@@ -16,30 +16,32 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     {
       /**
-      * `<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.
-      *
-      * ```
-      *   <vaadin-tab>
-      *     Tab 1
-      *   </vaadin-tab>
-      * ```
-      *
-      * The following state attributes are available for styling:
-      *
-      * Attribute  | Description | Part name
-      * -----------|-------------|------------
-      * `disabled` | Set to a disabled tab | :host
-      * `focused` | Set when the element is focused | :host
-      * `focus-ring` | Set when the element is keyboard focused | :host
-      * `selected` | Set when the tab is selected | :host
-      * `active` | Set when mousedown or enter/spacebar pressed | :host
-      * `orientation` | Set to `horizontal` or `vertical` dependinng on the direction of items  | :host
-      *
-      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-      *
-      * @memberof Vaadin
-      * @extends Vaadin.ItemElement
-      */
+       * `<vaadin-tab>` is a Polymer 2 element providing an accessible and customizable tab.
+       *
+       * ```
+       *   <vaadin-tab>
+       *     Tab 1
+       *   </vaadin-tab>
+       * ```
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled` | Set to a disabled tab | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       * `selected` | Set when the tab is selected | :host
+       * `active` | Set when mousedown or enter/spacebar pressed | :host
+       * `orientation` | Set to `horizontal` or `vertical` dependinng on the direction of items  | :host
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ItemMixin
+       */
       class TabElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Vaadin.ItemMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-tab';
