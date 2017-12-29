@@ -8,6 +8,8 @@
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
+    <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+    <link rel="import" href="../../vaadin-item/vaadin-item.html">
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <script src="common.js"></script>
@@ -36,9 +38,9 @@
       <template>
         <vaadin-context-menu>
           <template>
-            <paper-listbox id="menu">
-              <paper-item>The menu target: [[target.textContent]]</paper-item>
-            </paper-listbox>
+            <vaadin-list-box id="menu">
+              <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
+            </vaadin-list-box>
           </template>
           <div id="target">
             Foo
