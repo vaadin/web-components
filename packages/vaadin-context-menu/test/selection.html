@@ -41,9 +41,12 @@
 
           it('should close on item tap', done => {
             listenOnce(menu, 'opened-changed', () => {
-              MockInteractions.tap(menu.$.overlay.root.querySelector('#menu vaadin-item'));
-              expect(menu.opened).to.eql(false);
-              done();
+              const listBox = menu.$.overlay.shadowRoot.querySelector('#menu');
+              Polymer.RenderStatus.afterNextRender(listBox, () => {
+                MockInteractions.tap(listBox.items[0]);
+                expect(menu.opened).to.eql(false);
+                done();
+              });
             });
 
             menu._setOpened(true);
@@ -56,7 +59,8 @@
                   done();
                 });
 
-                MockInteractions.pressEnter(menu.$.overlay.root.querySelector('#menu vaadin-item'));
+                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
+                MockInteractions.pressAndReleaseKeyOn(item, 13, [], 'Enter');
               }, 10);
             });
 
@@ -66,8 +70,8 @@
           it('should focus the child element', done => {
             listenOnce(menu, 'opened-changed', () => {
               Polymer.Async.microTask.run(() => {
-                var child = menu.$.overlay.root.querySelector('#menu');
-                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
+                expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
                 done();
               });
             });
@@ -78,8 +82,8 @@
           it('should focus the child element on `contextmenu` event', done => {
             listenOnce(menu, 'opened-changed', () => {
               Polymer.Async.microTask.run(() => {
-                var child = menu.$.overlay.root.querySelector('#menu');
-                expect(menu.$.overlay.root.activeElement).to.eql(child);
+                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
+                expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
                 done();
               });
             });
