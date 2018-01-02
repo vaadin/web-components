@@ -31,7 +31,7 @@
 </vaadin-notification>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="332" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
 
 ## Getting Started
 
