@@ -15,6 +15,7 @@
 ```
 <custom-element-demo>
   <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-progress-bar.html">
     <next-code-block></next-code-block>
   </template>
