@@ -24,7 +24,7 @@
 ```
 -->
 ```html
-<vaadin-notification opened duration="-1">
+<vaadin-notification opened position="middle" duration="-1">
   <template>
     Your work has been saved
   </template>
