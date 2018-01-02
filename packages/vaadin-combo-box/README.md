@@ -40,7 +40,7 @@
 </dom-bind>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="374" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/vaadin-combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/vaadin-combo-box)
 
 ## Getting Started
 
