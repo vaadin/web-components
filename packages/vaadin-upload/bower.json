@@ -21,8 +21,6 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "test",
-    "tasks",
     "gulpfile.js",
     "package-lock.json",
     "wct.conf.js"
