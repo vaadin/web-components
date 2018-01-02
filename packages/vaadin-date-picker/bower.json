@@ -18,6 +18,14 @@
     "url": "git://github.com/vaadin/vaadin-date-picker"
   },
   "license": "Apache-2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "package-lock.json",
+    "wct.conf.js"
+  ],
   "dependencies": {
     "iron-a11y-announcer": "^2.0.0",
     "iron-a11y-keys-behavior": "^2.0.0",
