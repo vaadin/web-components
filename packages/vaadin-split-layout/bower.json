@@ -18,6 +18,14 @@
     "type": "git",
     "url": "git://github.com/vaadin/vaadin-split-layout"
   },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "gulpfile.js",
+    "package-lock.json",
+    "wct.conf.js"
+  ],
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
