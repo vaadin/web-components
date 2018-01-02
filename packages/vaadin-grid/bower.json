@@ -20,9 +20,6 @@
     "**/.*",
     "**/node_modules",
     "**/bower_components",
-    "**/test",
-    "**/java",
-    "**/tasks",
     "gulpfile.js",
     "package-lock.json",
     "wct.conf.js"
