@@ -24,14 +24,14 @@
 ```
 -->
 ```html
-<vaadin-notification opened duration="-1">
+<vaadin-notification opened position="middle" duration="-1">
   <template>
     Your work has been saved
   </template>
 </vaadin-notification>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="332" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
 
 ## Getting Started
 
