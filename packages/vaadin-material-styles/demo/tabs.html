@@ -12,6 +12,8 @@
 
   <link rel="import" href="../vaadin-tabs.html">
 
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+
   <style>
     [unresolved] {
       opacity: 0;
@@ -36,15 +38,7 @@
         <vaadin-tabs>
           <vaadin-tab>Tab one</vaadin-tab>
           <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs orientation="vertical">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
+          <vaadin-tab>Tab three with a long name</vaadin-tab>
         </vaadin-tabs>
       </template>
     </nice-demo-snippet>
@@ -53,26 +47,6 @@
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-tabs>
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-          <vaadin-tab>Tab four</vaadin-tab>
-          <vaadin-tab>Tab five</vaadin-tab>
-          <vaadin-tab>Tab six</vaadin-tab>
-          <vaadin-tab>Tab seven</vaadin-tab>
-          <vaadin-tab>Tab eight</vaadin-tab>
-          <vaadin-tab>Tab nine</vaadin-tab>
-          <vaadin-tab>Tab ten</vaadin-tab>
-          <vaadin-tab>Tab eleven</vaadin-tab>
-          <vaadin-tab>Tab twelve</vaadin-tab>
-          <vaadin-tab>Tab thirteen</vaadin-tab>
-          <vaadin-tab>Tab fourteen</vaadin-tab>
-          <vaadin-tab>Tab fifteen</vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs orientation="vertical" style="height: 130px;">
           <vaadin-tab>Tab one</vaadin-tab>
           <vaadin-tab>Tab two</vaadin-tab>
           <vaadin-tab>Tab three</vaadin-tab>
@@ -102,86 +76,42 @@
           <vaadin-tab>Tab four</vaadin-tab>
           <vaadin-tab>Tab five</vaadin-tab>
         </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs orientation="vertical">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab disabled>Disabled tab</vaadin-tab>
-          <vaadin-tab>Tab four</vaadin-tab>
-          <vaadin-tab>Tab five</vaadin-tab>
-        </vaadin-tabs>
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Icons</h3>
+    <h3 demo-section>Icons and text</h3>
 
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-tabs>
-          <vaadin-tab>
-            <iron-icon icon="valo:user"></iron-icon>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="alarm"></iron-icon>
             <span>Tab one</span>
           </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:plane"></iron-icon>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="face"></iron-icon>
             <span>Tab two</span>
           </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:bell"></iron-icon>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="info"></iron-icon>
             <span>Tab three</span>
           </vaadin-tab>
         </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
 
-        <br>
-
-        <vaadin-tabs orientation="vertical">
-          <vaadin-tab>
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Tab one</span>
-          </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:plane"></iron-icon>
-            <span>Tab two</span>
-          </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:bell"></iron-icon>
-            <span>Tab three</span>
-          </vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
+    <h3 demo-section>Icons only</h3>
+    <nice-demo-snippet>
+      <template slot="source">
         <vaadin-tabs>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Tab one</span>
+          <vaadin-tab>
+            <iron-icon icon="alarm"></iron-icon>
           </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:plane"></iron-icon>
-            <span>Tab two</span>
+          <vaadin-tab>
+            <iron-icon icon="face"></iron-icon>
           </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:bell"></iron-icon>
-            <span>Tab three</span>
-          </vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs orientation="vertical" style="width: 120px;">
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Tab one</span>
-          </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:plane"></iron-icon>
-            <span>Tab two</span>
-          </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:bell"></iron-icon>
-            <span>Tab three</span>
+          <vaadin-tab>
+            <iron-icon icon="info"></iron-icon>
           </vaadin-tab>
         </vaadin-tabs>
       </template>
@@ -194,94 +124,6 @@
           <vaadin-tab>Tab one</vaadin-tab>
           <vaadin-tab>Tab two</vaadin-tab>
           <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs orientation="vertical" theme="small">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-      </template>
-    </nice-demo-snippet>
-
-    <h3 demo-section>Minimal</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-tabs theme="minimal">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-
-        <br>
-
-        <vaadin-tabs theme="minimal" orientation="vertical">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-        </vaadin-tabs>
-      </template>
-    </nice-demo-snippet>
-
-    <h3 demo-section>Pills</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-tabs theme="pill">
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-          <vaadin-tab>Tab four</vaadin-tab>
-        </vaadin-tabs>
-
-        <br><br>
-
-        <vaadin-tabs theme="pill">
-          <vaadin-tab>
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Tab one</span>
-          </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:plane"></iron-icon>
-            <span>Tab two</span>
-          </vaadin-tab>
-          <vaadin-tab>
-            <iron-icon icon="valo:bell"></iron-icon>
-            <span>Tab three</span>
-          </vaadin-tab>
-        </vaadin-tabs>
-
-        <br><br>
-
-        <vaadin-tabs theme="pill">
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:user"></iron-icon>
-            <span>Tab one</span>
-          </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:plane"></iron-icon>
-            <span>Tab two</span>
-          </vaadin-tab>
-          <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:bell"></iron-icon>
-            <span>Tab three</span>
-          </vaadin-tab>
-        </vaadin-tabs>
-      </template>
-    </nice-demo-snippet>
-
-    <h3 demo-section>Vertical sections</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <vaadin-tabs orientation="vertical">
-          <h6>Section title</h6>
-          <vaadin-tab>Tab one</vaadin-tab>
-          <vaadin-tab>Tab two</vaadin-tab>
-          <vaadin-tab>Tab three</vaadin-tab>
-          <h6>Section title</h6>
-          <vaadin-tab>Tab four</vaadin-tab>
-          <vaadin-tab>Tab five</vaadin-tab>
         </vaadin-tabs>
       </template>
     </nice-demo-snippet>
@@ -298,13 +140,86 @@
             <vaadin-tab>Tab two</vaadin-tab>
             <vaadin-tab>Tab three</vaadin-tab>
           </vaadin-tabs>
+        </div>
+      </template>
+    </nice-demo-snippet>
 
-          <br>
-
-          <vaadin-tabs orientation="vertical">
+    <h3 demo-section>Dark theme scrollable tabs</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-tabs>
             <vaadin-tab>Tab one</vaadin-tab>
             <vaadin-tab>Tab two</vaadin-tab>
             <vaadin-tab>Tab three</vaadin-tab>
+            <vaadin-tab>Tab four</vaadin-tab>
+            <vaadin-tab>Tab five</vaadin-tab>
+            <vaadin-tab>Tab six</vaadin-tab>
+            <vaadin-tab>Tab seven</vaadin-tab>
+            <vaadin-tab>Tab eight</vaadin-tab>
+            <vaadin-tab>Tab nine</vaadin-tab>
+            <vaadin-tab>Tab ten</vaadin-tab>
+            <vaadin-tab>Tab eleven</vaadin-tab>
+            <vaadin-tab>Tab twelve</vaadin-tab>
+            <vaadin-tab>Tab thirteen</vaadin-tab>
+            <vaadin-tab>Tab fourteen</vaadin-tab>
+            <vaadin-tab>Tab fifteen</vaadin-tab>
+          </vaadin-tabs>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme disabled tabs</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-tabs>
+            <vaadin-tab>Tab one</vaadin-tab>
+            <vaadin-tab>Tab two</vaadin-tab>
+            <vaadin-tab disabled>Disabled tab</vaadin-tab>
+            <vaadin-tab>Tab four</vaadin-tab>
+            <vaadin-tab>Tab five</vaadin-tab>
+          </vaadin-tabs>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme icons</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-tabs>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="alarm"></iron-icon>
+              <span>Tab one</span>
+            </vaadin-tab>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="face"></iron-icon>
+              <span>Tab two</span>
+            </vaadin-tab>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="info"></iron-icon>
+              <span>Tab three</span>
+            </vaadin-tab>
+          </vaadin-tabs>
+        </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Dark theme icons only</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <div theme="dark">
+          <vaadin-tabs>
+            <vaadin-tab>
+              <iron-icon icon="alarm"></iron-icon>
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="face"></iron-icon>
+            </vaadin-tab>
+            <vaadin-tab>
+              <iron-icon icon="info"></iron-icon>
+            </vaadin-tab>
           </vaadin-tabs>
         </div>
       </template>
