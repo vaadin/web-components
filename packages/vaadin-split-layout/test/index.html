@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-split-layout tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
@@ -15,10 +16,12 @@
     // Needs to be loaded after the polyfill
     WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
 
-    WCT.loadSuites([
-      'vaadin-split-layout_test.html',
-      'vaadin-split-layout_test.html?dom=shadow'
-    ]);
+    WCT.loadSuites(
+      window.VaadinSplitLayoutSuites
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+    );
   </script>
 </body>
 
