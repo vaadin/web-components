@@ -27,7 +27,7 @@
         align-items: center;
       }
     </style>
-    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-split-layout.html">
     <next-code-block></next-code-block>
   </template>
