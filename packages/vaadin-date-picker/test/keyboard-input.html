@@ -100,6 +100,18 @@
           expect(focusedDate().getDate()).to.equal(20);
         });
 
+        it('should change focused date on input when closed', (done) => {
+          datepicker.value = '2000-01-01';
+          expect(focusedDate().getDate()).to.equal(1);
+
+          datepicker.$.overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(focusedDate().getDate()).to.equal(30);
+            done();
+          });
+          datepicker._inputValue = '1/30/2000';
+          target.dispatchEvent(new CustomEvent('input', {bubbles: true, composed: true}));
+        });
+
         it('should update focus on input change', () => {
           inputText('1/20/20');
           inputText('17');

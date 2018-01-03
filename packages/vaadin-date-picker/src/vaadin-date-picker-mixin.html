@@ -742,11 +742,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onUserInput(e) {
-      this._userInputValueChanged();
-
       if (!this.opened) {
         this.open();
       }
+      this._userInputValueChanged();
     }
 
     _userInputValueChanged(value) {
