@@ -4,19 +4,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-  <title>vaadin-progress tests</title>
+  <title>vaadin-progress-bar tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
   <script>
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-loader.js');
 
-    WCT.loadSuites([
-      'vaadin-progress-bar.html'
-    ].reduce(function(suites, suite) {
-      return suites.concat([suite, `${suite}?wc-shadydom=true`]);
-    }, []));
+    WCT.loadSuites(
+      window.VaadinProgressBarSuites
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+    );
   </script>
 </body>
 
