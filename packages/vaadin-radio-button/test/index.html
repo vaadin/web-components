@@ -6,18 +6,19 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-radio-button tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
   <script>
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
-    WCT.loadSuites([
-      'vaadin-radio-button.html',
-      'vaadin-radio-group.html'
-    ].reduce(function(suites, suite) {
-      return suites.concat([suite, `${suite}?wc-shadydom=true`]);
-    }, []));
+    WCT.loadSuites(
+      window.VaadinRadioButtonSuites
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+    );
   </script>
 </body>
 
