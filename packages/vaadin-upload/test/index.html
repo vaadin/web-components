@@ -6,20 +6,19 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-upload tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
   <script>
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
-    WCT.loadSuites([
-      'upload.html',
-      'adding-files.html',
-      'file-list.html'
-    ].reduce(function(suites, suite) {
-      // wc-shadydom=true - enable shady when running tests in Polymer v2
-      return suites.concat([suite, suite + '?wc-shadydom=true']);
-    }, []));
+    WCT.loadSuites(
+      window.VaadinUploadSuites
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+    );
   </script>
 </body>
 
