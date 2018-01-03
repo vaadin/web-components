@@ -141,11 +141,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this.addEventListener('click', this._onClick.bind(this));
         }
 
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this._isConnected = true;
         }
 
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this._isConnected = false;
