@@ -91,14 +91,14 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        /** @private */
+        /** @protected */
         connectedCallback() {
           super.connectedCallback();
           this._addNodeObserver();
           this._updateFlexAndWidth();
         }
 
-        /** @private */
+        /** @protected */
         disconnectedCallback() {
           super.disconnectedCallback();
           this._observer && this._observer.disconnect();
