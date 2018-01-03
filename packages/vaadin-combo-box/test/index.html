@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-combo-box tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
@@ -21,23 +22,7 @@
 
     WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
 
-    WCT.loadSuites([
-      'vaadin-combo-box.html',
-      'toggling-dropdown.html',
-      'overlay-position.html',
-      'selecting-items.html',
-      'form-input.html',
-      'filtering.html',
-      'keyboard.html',
-      'scrolling.html',
-      'aria.html',
-      'using-object-values.html',
-      'data-binding.html',
-      'late-upgrade.html',
-      'vaadin-combo-box-light.html',
-      'item-template.html',
-      'vaadin-combo-box-dropdown.html'
-    ]);
+    WCT.loadSuites(window.VaadinComboBoxSuites);
   </script>
 </body>
 
