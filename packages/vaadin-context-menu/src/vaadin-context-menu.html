@@ -297,15 +297,7 @@ This program is available under Apache License Version 2.0, available at https:/
           super();
           this._boundOpen = this.open.bind(this);
           this._boundClose = this.close.bind(this);
-        }
-
-        ready() {
-          super.ready();
-
-          this.$.overlay.addEventListener('contextmenu', e => {
-            this.close();
-            this._preventDefault(e);
-          });
+          this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
         }
 
         _onOverlayOpened(e) {
@@ -390,6 +382,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
             this._instance = new Templatizer({});
             this.$.overlay.content = this._instance.root;
+          }
+
+          if (opened) {
+            document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
+          } else {
+            document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           }
 
           this.$.overlay.opened = opened;
@@ -477,6 +475,13 @@ This program is available under Apache License Version 2.0, available at https:/
             Polymer.Gestures.removeListener(node, evType, handler);
           } else {
             node.removeEventListener(evType, handler);
+          }
+        }
+
+        _onGlobalContextMenu(e) {
+          if (!e.shiftKey) {
+            e.preventDefault();
+            this.close();
           }
         }
       }
