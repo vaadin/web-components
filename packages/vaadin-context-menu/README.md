@@ -20,7 +20,7 @@
         font-family: sans-serif;
       }
     </style>
-    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="../vaadin-list-box/vaadin-list-box.html">
     <link rel="import" href="../vaadin-item/vaadin-item.html">
     <link rel="import" href="vaadin-context-menu.html">
