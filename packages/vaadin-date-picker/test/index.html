@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-date-picker tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
@@ -14,19 +15,7 @@
       WCT._config.environmentScripts.push('webcomponentsjs/custom-elements-es5-adapter.js');
     }
 
-    WCT.loadSuites([
-      'basic.html',
-      'dropdown.html',
-      'overlay.html',
-      'month-calendar.html',
-      'scroller.html',
-      'form-input.html',
-      'custom-input.html',
-      'keyboard-navigation.html',
-      'keyboard-input.html',
-      'late-upgrade.html',
-      'wai-aria.html'
-    ]);
+    WCT.loadSuites(window.VaadinDatePickerSuites);
   </script>
 </body>
 
