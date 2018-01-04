@@ -1,6 +1,8 @@
 var argv = require('yargs').argv;
 
 module.exports = {
+  testTimeout: 180 * 1000,
+
   registerHooks: function(context) {
     var saucelabsPlatforms = [
       'macOS 10.12/iphone@10.3',
@@ -22,5 +24,9 @@ module.exports = {
     } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
     }
+  },
+
+  plugins: {
+    'random-output': true
   }
 };
