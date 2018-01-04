@@ -149,6 +149,13 @@
         background-color: var(--valo-contrast-30pct);
       }
 
+      /* Disable hover for touch devices */
+      @media (pointer: coarse) {
+        :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
+          background-color: var(--valo-contrast-20pct);
+        }
+      }
+
       /* Active */
 
       :host([active]) [part="checkbox"] {
