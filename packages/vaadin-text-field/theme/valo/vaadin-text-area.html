@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-valo-styles/color.html">
 <link rel="import" href="../../../vaadin-valo-styles/sizing.html">
 <link rel="import" href="../../../vaadin-valo-styles/typography.html">
 
@@ -12,7 +13,25 @@
         padding-bottom: calc((var(--valo-text-field-size) - var(--valo-icon-size)) / 2);
         height: auto;
         box-sizing: border-box;
-        /* TODO how to make the ::after element not scroll with this container? */
+        transition: background-color 0.1s;
+      }
+
+      [part="input-field"]::after {
+        display: none;
+      }
+
+      :host(:hover:not([readonly]):not([focused])) [part="input-field"] {
+        background-color: var(--valo-contrast-20pct);
+      }
+
+      @media (pointer: coarse) {
+        :host(:hover:not([readonly]):not([focused])) [part="input-field"] {
+          background-color: var(--valo-contrast-10pct);
+        }
+
+        :host(:active:not([readonly]):not([focused])) [part="input-field"] {
+          background-color: var(--valo-contrast-20pct);
+        }
       }
 
       [part="value"] {
