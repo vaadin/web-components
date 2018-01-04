@@ -13,7 +13,7 @@
 
 <body>
   <script>
-    document.addEventListener('WebComponentsReady', () => {
+    listenForEvent(document, 'WebComponentsReady', () => {
       class DatePicker2016Element extends Vaadin.DatePickerElement {
         checkValidity(value) {
           return new Date(value).getFullYear() === 2016;
