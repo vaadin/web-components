@@ -33,7 +33,7 @@
       }
 
       [part="label"]:not(:empty) {
-        margin: 0.1875em 0.875em 0.1875em 0.375em;
+        margin: 4px 0.875em 4px 0.375em;
       }
 
       [part="native-radio"] {
@@ -46,7 +46,7 @@
         width: 20px;
         height: 20px;
         flex: none;
-        margin: 0.1875em;
+        margin: 4px;
         position: relative;
         border-radius: 50%;
         background-color: transparent;
@@ -171,18 +171,6 @@
       /* Similar workaround as for vaadin-checkbox issue: https://github.com/vaadin/vaadin-checkbox/issues/16 */
       [part="native-radio"]:checked ~ [part="radio"] {
         opacity: 1;
-      }
-    </style>
-  </template>
-</dom-module>
-
-
-<dom-module id="material-radio-group" theme-for="vaadin-radio-group">
-  <template>
-    <style>
-      :host([theme~="vertical"]) {
-        display: flex;
-        flex-direction: column;
       }
     </style>
   </template>
