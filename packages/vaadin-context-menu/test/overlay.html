@@ -30,8 +30,9 @@
 
         afterEach(() => menu.$.overlay.opened = false);
 
-        function contextmenu(x, y, shiftKey) {
+        function contextmenu(x, y, shiftKey, target) {
           shiftKey = shiftKey || false;
+          target = target || menu;
           let e;
           try {
             e = new MouseEvent('contextmenu', {
@@ -198,17 +199,23 @@
             });
           });
 
-          it('should close on backdrop contextmenu', done => {
+          it('should close on menu contextmenu', done => {
             listenOnce(menu, 'opened-changed', () => {
               expect(menu.opened).to.eql(false);
               done();
             });
 
-            const e = new CustomEvent('contextmenu', {
-              cancelable: true,
-              bubbles: true
+            const e = contextmenu(0, 0, false, menu.$.overlay);
+            expect(e.defaultPrevented).to.be.true;
+          });
+
+          it('should close on outside contextmenu', done => {
+            listenOnce(menu, 'opened-changed', () => {
+              expect(menu.opened).to.eql(false);
+              done();
             });
-            menu.$.overlay.dispatchEvent(e);
+
+            const e = contextmenu(0, 0, false, document.body);
             expect(e.defaultPrevented).to.be.true;
           });
 
@@ -232,6 +239,22 @@
             menu.$.overlay.dispatchEvent(new CustomEvent('click'));
 
             expect(menu.opened).to.eql(true);
+          });
+
+          describe('with shift key', () => {
+            it('should not close on menu contextmenu', () => {
+              const e = contextmenu(0, 0, true, menu.$.overlay);
+
+              expect(menu.opened).to.be.true;
+              expect(e.defaultPrevented).to.be.false;
+            });
+
+            it('should not close on outside contextmenu', () => {
+              const e = contextmenu(0, 0, true, document.body);
+
+              expect(menu.opened).to.be.true;
+              expect(e.defaultPrevented).to.be.false;
+            });
           });
         });
 
