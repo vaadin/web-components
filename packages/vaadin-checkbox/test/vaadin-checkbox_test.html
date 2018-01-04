@@ -140,6 +140,14 @@
         expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('mixed');
       });
 
+      it('should set indeterminate to false when clicked the first time', () => {
+        vaadinCheckbox.indeterminate = true;
+
+        vaadinCheckbox.click();
+
+        expect(vaadinCheckbox.indeterminate).to.be.false;
+      });
+
       it('native checkbox should have the `presentation` role', () => {
         expect(vaadinCheckbox.getAttribute('role')).to.be.eql('checkbox');
       });

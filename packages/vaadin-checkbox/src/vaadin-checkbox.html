@@ -241,10 +241,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _handleClick(e) {
-          if (!this.disabled && !this.indeterminate) {
-            if (e.composedPath()[0] !== this._nativeCheckbox) {
-              e.preventDefault();
-              this._toggleChecked();
+          if (!this.disabled) {
+            if (!this.indeterminate) {
+              if (e.composedPath()[0] !== this._nativeCheckbox) {
+                e.preventDefault();
+                this._toggleChecked();
+              }
+            } else {
+              /*
+               * Required for IE 11 and Edge.
+               * See issue here: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7344418/
+               */
+              this.indeterminate = false;
             }
           }
         }
