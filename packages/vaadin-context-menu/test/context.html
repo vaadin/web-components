@@ -22,7 +22,7 @@
         </div>
       </template>
       <script>
-        document.addEventListener('WebComponentsReady', () => {
+        listenOnce(document, 'WebComponentsReady', () => {
           class Xfoo extends Polymer.Element {
             static get is() {
               return 'x-foo';
