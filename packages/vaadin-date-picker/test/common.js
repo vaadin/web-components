@@ -108,6 +108,8 @@ function monkeyPatchNativeFocus() {
     Vaadin.ButtonElement.prototype.focus = function() {
       this._setFocused(true);
     };
+  }
+  if (window.Vaadin && Vaadin.DatePickerElement) {
     Vaadin.DatePickerElement.prototype.blur = function() {
       this._inputElement._setFocused(false);
     };
