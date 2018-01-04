@@ -17,6 +17,12 @@
     [unresolved] {
       opacity: 0;
     }
+
+    div[theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #f7f7f7;
+      --nice-demo-snippet-view-source-background-color: #070707;
+      --nice-demo-snippet-code-color: #000;
+    }
   </style>
 </head>
 
@@ -97,10 +103,9 @@
     <hr>
 
     <h3 demo-section>Dark theme direction</h3>
-
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <h5>Horizontal</h5>
           <vaadin-radio-group>
             <vaadin-radio-button checked>Option one</vaadin-radio-button>
@@ -114,15 +119,15 @@
             <vaadin-radio-button>Option two</vaadin-radio-button>
             <vaadin-radio-button>Option three</vaadin-radio-button>
           </vaadin-radio-group>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme disabled</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <h5>Individual options disabled</h5>
           <vaadin-radio-group>
             <vaadin-radio-button checked>Option one</vaadin-radio-button>
@@ -136,15 +141,15 @@
             <vaadin-radio-button>Option two</vaadin-radio-button>
             <vaadin-radio-button>Option three</vaadin-radio-button>
           </vaadin-radio-group>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme multi-line label</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-radio-group theme="vertical">
             <vaadin-radio-button>
               <b>Option</b>
@@ -161,10 +166,9 @@
               <div>Description</div>
             </vaadin-radio-button>
           </vaadin-radio-group>
-        </div>
-      </template>
-    </nice-demo-snippet>
-
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <hr>
 
