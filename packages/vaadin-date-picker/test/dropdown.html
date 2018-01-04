@@ -111,11 +111,12 @@
     });
 
     describe('Dropdown-wrapped', () => {
-      var datepicker, overlayContent;
+      var datepicker, overlayContent, clearButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker-wrapped').$.datepicker;
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
         overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
@@ -133,6 +134,15 @@
           done();
         });
         datepicker.open();
+      });
+
+      it('should not close on clear-button down', () => {
+        datepicker.open();
+        datepicker.value = '2001-01-01';
+
+        tap(clearButton);
+
+        expect(datepicker.$.overlay.opened).to.be.true;
       });
 
     });

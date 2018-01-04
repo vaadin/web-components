@@ -195,15 +195,12 @@
           expect(window.getComputedStyle(clearButton).display).to.not.equal('none');
         });
 
-        it('should clear the value and fire a close on clear', () => {
+        it('should clear the value', () => {
           overlay.selectedDate = new Date();
-          var spy = sinon.spy();
-          overlay.addEventListener('close', spy);
 
           tap(clearButton);
 
           expect(overlay.selectedDate).to.equal('');
-          expect(spy.calledOnce).to.be.true;
         });
 
       });
