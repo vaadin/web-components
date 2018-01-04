@@ -249,12 +249,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Keep focus attribute in focusElement for styling
           this._overlayContent.addEventListener('focus', () => this.focusElement._setFocused(true));
+
+          this.$.overlay.addEventListener('vaadin-overlay-close', this._onVaadinOverlayClose.bind(this));
         }
 
-        _clear(e) {
-          e.stopPropagation();
+        _onVaadinOverlayClose(e) {
+          if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
+            e.preventDefault();
+          }
+        }
+
+        _clear() {
           this.value = '';
-          this.close();
           this.validate();
         }
 
