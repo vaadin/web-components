@@ -10,6 +10,7 @@
     <link rel="import" href="../vaadin-context-menu.html">
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <script src="common.js"></script>
   </head>
   <body>
     <dom-module id="context-menu-button">
@@ -20,7 +21,7 @@
         <button on-click="_showMenu" id="button">Show context menu</button>
       </template>
       <script>
-        document.addEventListener('WebComponentsReady', () => {
+        listenOnce(document, 'WebComponentsReady', () => {
           class ContextMenuButton extends Polymer.Element {
             static get is() {
               return 'context-menu-button';

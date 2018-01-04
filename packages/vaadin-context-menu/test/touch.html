@@ -17,7 +17,7 @@
 
 <body>
   <script>
-    window.addEventListener('WebComponentsReady', () => {
+    listenOnce(document, 'WebComponentsReady', () => {
       class TestWrapper extends Polymer.Element {
         static get template() {
           return `
@@ -32,7 +32,6 @@
       }
       customElements.define('test-wrapper', TestWrapper);
     });
-
   </script>
 
   <test-fixture id="default">
