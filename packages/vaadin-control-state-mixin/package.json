@@ -32,6 +32,7 @@
     "polymer-cli": "^1.2.0",
     "stylelint": "^8.0.0",
     "stylelint-config-vaadin": "latest",
+    "wct-random-output": "^0.1.1",
     "web-component-tester": "^6.0.0",
     "yargs": "latest"
   }
