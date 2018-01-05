@@ -115,10 +115,6 @@
         filter: blur(8px);
       }
 
-      :host([active]) {
-        transition-duration: 0.05s;
-      }
-
       :host([active])::before {
         opacity: 0.1;
         transition-duration: 0s;
@@ -126,7 +122,7 @@
 
       :host([active])::after {
         opacity: 0.1;
-        transition-duration: 0.05s, 0s;
+        transition-duration: 0s, 0s;
         transform: scale(0);
       }
 
@@ -167,7 +163,8 @@
 
       :host([theme~="tertiary"][active]),
       :host([theme~="tertiary-inline"][active]) {
-        color: var(--valo-body-text-color);
+        opacity: 0.5;
+        transition-duration: 0s;
       }
 
       /* Tertiary inline ("text button") */
@@ -190,8 +187,12 @@
         min-width: calc(var(--valo-button-size) * 2.5);
       }
 
+      :host([theme~="primary"]:hover)::before {
+        opacity: 0.1;
+      }
+
       :host([theme~="primary"][active])::before {
-        color: var(--valo-contrast-50pct);
+        background-color: var(--valo-shade-20pct);
       }
 
       :host([theme~="primary"][active])::after {
