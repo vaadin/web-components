@@ -160,15 +160,15 @@
             {
               "name": "disconnectedCallback",
               "description": "",
-              "privacy": "public",
+              "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 92,
+                  "line": 95,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 104,
                   "column": 5
                 }
               },
@@ -183,11 +183,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 106,
                   "column": 4
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 5
                 }
               },
@@ -206,11 +206,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 107,
+                  "line": 110,
                   "column": 4
                 },
                 "end": {
-                  "line": 115,
+                  "line": 118,
                   "column": 5
                 }
               },
@@ -229,11 +229,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 117,
+                  "line": 120,
                   "column": 4
                 },
                 "end": {
-                  "line": 128,
+                  "line": 131,
                   "column": 5
                 }
               },
@@ -252,11 +252,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 130,
+                  "line": 133,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 139,
                   "column": 5
                 }
               },
@@ -275,11 +275,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 138,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 5
                 }
               },
@@ -298,11 +298,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 153,
                   "column": 5
                 }
               },
@@ -554,14 +554,14 @@
             {
               "name": "disconnectedCallback",
               "description": "",
-              "privacy": "public",
+              "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 92,
+                  "line": 95,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 104,
                   "column": 5
                 }
               },
@@ -574,11 +574,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 103,
+                  "line": 106,
                   "column": 4
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 5
                 }
               },
@@ -595,11 +595,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 107,
+                  "line": 110,
                   "column": 4
                 },
                 "end": {
-                  "line": 115,
+                  "line": 118,
                   "column": 5
                 }
               },
@@ -616,11 +616,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 120,
                   "column": 4
                 },
                 "end": {
-                  "line": 128,
+                  "line": 131,
                   "column": 5
                 }
               },
@@ -637,11 +637,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 133,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 139,
                   "column": 5
                 }
               },
@@ -658,11 +658,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 141,
                   "column": 4
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 5
                 }
               },
@@ -679,11 +679,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 4
                 },
                 "end": {
-                  "line": 150,
+                  "line": 153,
                   "column": 5
                 }
               },
@@ -704,7 +704,7 @@
               "column": 2
             },
             "end": {
-              "line": 151,
+              "line": 154,
               "column": 3
             }
           },
