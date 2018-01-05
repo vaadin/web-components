@@ -9,6 +9,8 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
+  <link rel="import" href="../../vaadin-date-picker/vaadin-date-picker.html">
+  <link rel="import" href="../../vaadin-combo-box/vaadin-combo-box.html">
   <link rel="import" href="common.html">
 </head>
 
@@ -60,6 +62,17 @@
             <button tabindex="1">button with tabindex="1"</button>
             <input type="text">
             <vaadin-button>vaadin-button</vaadin-button>
+
+            <hr size="1" />
+            <h3>Custom components also participate in focus trap</h3>
+
+            <vaadin-date-picker label="Date of Birth"></vaadin-date-picker>
+            <br>
+            <vaadin-combo-box label="Favourite Color" items='[{"label": "Blue"}, {"label": "Pink"}, {"label": "Magenta"}]'>
+              <template>
+                [[index]]: <b> [[item.label]]</b>
+              </template>
+            </vaadin-combo-box>
           </template>
         </vaadin-overlay>
 
