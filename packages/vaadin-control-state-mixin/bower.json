@@ -31,7 +31,6 @@
     "iron-input": "^2.0.0",
     "paper-button": "^2.0.0",
     "paper-input": "^2.0.0",
-    "mock-http-request": "abuinitski/MockHttpRequest#npm_fix",
     "vaadin-button": "master",
     "vaadin-checkbox": "master",
     "vaadin-combo-box": "master",
@@ -40,8 +39,7 @@
     "vaadin-item": "master",
     "vaadin-list-box": "master",
     "vaadin-radio-button": "master",
-    "vaadin-text-field": "master",
-    "vaadin-upload": "master"
+    "vaadin-text-field": "master"
   },
   "dependencies": {
     "polymer": "^2.0.0"
