@@ -16,10 +16,22 @@
         box-shadow: inset 0 -1px 0 0 var(--material-background-color);
         position: relative;
         min-height: 48px;
+        display: flex;
       }
 
       :host [part="tabs"] ::slotted(vaadin-tab) {
         justify-content: center;
+        margin: 0 auto;
+        min-width: 160px;
+        max-width: 264px;
+      }
+
+      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab) {
+        justify-content: center;
+        margin: 0;
+        flex: 1;
+        min-width: 0;
+        max-width: 100%;
       }
 
       [part="forward-button"],
@@ -97,10 +109,9 @@
         min-height: 36px;
       }
 
-      /* Minimal and pill themes */
+      /* Minimal themes */
 
-      :host([theme~="minimal"]),
-      :host([theme~="pill"]) {
+      :host([theme~="minimal"]) {
         box-shadow: none;
         /* This doesn't work with ShadyCSS */
         --_material-tab-marker-display: none;
@@ -108,9 +119,7 @@
 
       /* Workaround for the above ShadyCSS issue */
       :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
-      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after,
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
+      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
         display: none;
       }
 
@@ -132,46 +141,6 @@
         --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
       }
 
-      /* Pill theme */
-      :host([theme~="pill"]) {
-        display: inline-flex;
-        max-width: 100%;
-        min-height: 36px;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab) {
-        border: 1px solid transparent;
-        background-color: var(--material-background-color);
-        margin-left: 1px;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
-        padding-left: calc(2px + 1em);
-        border-radius: 0 0 0 0;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
-        padding-right: calc(2px + 1em);
-        border-radius: 0 0 0 0;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        border: 1px solid var(--material-background-color);
-        background-color: var(--material-base-color);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        color: var(--material-primary-text-color);
-        box-shadow: 1px 0 0 0 var(--material-background-color), -1px 0 0 0 var(--material-background-color);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:first-child) {
-        box-shadow: 1px 0 0 0 var(--material-background-color);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:last-child) {
-        box-shadow: -1px 0 0 0 var(--material-background-color);
-      }
     </style>
   </template>
 </dom-module>

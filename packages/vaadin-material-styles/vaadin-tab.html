@@ -13,16 +13,15 @@
         font-size: var(--material-body-font-size);
         text-transform: uppercase;
         word-wrap: break-word;
-        max-width: 200px;
+        overflow: hidden;
         line-height: 1;
         font-weight: 500;
         opacity: 1;
         color: var(--material-secondary-text-color);
         transition: 0.2s color, 0.2s transform;
-        flex-shrink: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        /* flex-shrink: 0; */
+        /* align-items: center; */
+        text-align: center;
         position: relative;
         cursor: pointer;
         transform-origin: 50% 100%;
@@ -34,10 +33,11 @@
       :host(:hover),
       :host([focus-ring]) {
         color: var(--material-body-text-color);
+        background-color: var(--material-divider-color);
       }
 
       :host([focus-ring]) {
-        background-color: transparent;
+        background-color: var(--material-disabled-text-color);
       }
 
       :host([selected]) {
@@ -57,7 +57,7 @@
         display: var(--_material-tab-marker-display, block);
         bottom: 0;
         left: 50%;
-        width: 200px;
+        width: 100%;
         max-width: 100%;
         height: 2px;
         max-height: 80%;
@@ -81,20 +81,23 @@
       }
 
       :host([selected])::before,
-      :host([selected]:not([active]))::after,
-      :host([focus-ring])::before {
+      :host([selected]:not([active]))::after {
         transform: translateX(-50%) scale(1);
         transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
       }
 
+      :host([focus-ring])::before {
+        transform: translateX(-50%) scale(1);
+      }
+
       :host([selected][focus-ring]:not([active]))::before,
       :host([selected][focus-ring]:not([active]))::after {
-        transform: translateX(-50%) scale(1.2);
+        transform: translateX(-50%) scale(1);
       }
 
       :host([active][focus-ring])::before,
       :host([active][focus-ring])::after {
-        transform: translateX(-50%) scale(0.9);
+        transform: translateX(-50%) scale(1);
       }
 
       :host([selected]:not([active]))::after {

@@ -18,6 +18,16 @@
     [unresolved] {
       opacity: 0;
     }
+
+    nice-demo-snippet {
+      padding-top: 20px;
+    }
+
+    div[theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #f7f7f7;
+      --nice-demo-snippet-view-source-background-color: #070707;
+      --nice-demo-snippet-code-color: #000000;
+    }
   </style>
 </head>
 
@@ -32,10 +42,37 @@
     <h1>Tabs</h1>
 
     <h3 demo-section>Default configuration</h3>
-
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-tabs>
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+          <vaadin-tab>Tab three with a long name</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Tabs with fixed width</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-tabs theme="fixed">
+          <vaadin-tab>Tab one</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-tabs theme="fixed">
+          <vaadin-tab>Tab one</vaadin-tab>
+          <vaadin-tab>Tab two</vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-tabs theme="fixed">
           <vaadin-tab>Tab one</vaadin-tab>
           <vaadin-tab>Tab two</vaadin-tab>
           <vaadin-tab>Tab three with a long name</vaadin-tab>
@@ -100,6 +137,42 @@
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Icons and text with fixed width</h3>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-tabs theme="fixed">
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="alarm"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="face"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-tabs theme="fixed">
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="alarm"></iron-icon>
+            <span>Tab one</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="face"></iron-icon>
+            <span>Tab two</span>
+          </vaadin-tab>
+          <vaadin-tab theme="icon-on-top">
+            <iron-icon icon="info"></iron-icon>
+            <span>Tab three</span>
+          </vaadin-tab>
+        </vaadin-tabs>
+      </template>
+    </nice-demo-snippet>
+
     <h3 demo-section>Icons only</h3>
     <nice-demo-snippet>
       <template slot="source">
@@ -132,22 +205,35 @@
 
     <h3 demo-section>Dark theme default configuration</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-tabs>
             <vaadin-tab>Tab one</vaadin-tab>
             <vaadin-tab>Tab two</vaadin-tab>
             <vaadin-tab>Tab three</vaadin-tab>
           </vaadin-tabs>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
+
+    <h3 demo-section>Tabs with fixed width</h3>
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
+          <vaadin-tabs theme="fixed">
+            <vaadin-tab>Tab one</vaadin-tab>
+            <vaadin-tab>Tab two</vaadin-tab>
+            <vaadin-tab>Tab three</vaadin-tab>
+          </vaadin-tabs>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme scrollable tabs</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-tabs>
             <vaadin-tab>Tab one</vaadin-tab>
             <vaadin-tab>Tab two</vaadin-tab>
@@ -165,14 +251,14 @@
             <vaadin-tab>Tab fourteen</vaadin-tab>
             <vaadin-tab>Tab fifteen</vaadin-tab>
           </vaadin-tabs>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme disabled tabs</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-tabs>
             <vaadin-tab>Tab one</vaadin-tab>
             <vaadin-tab>Tab two</vaadin-tab>
@@ -180,14 +266,14 @@
             <vaadin-tab>Tab four</vaadin-tab>
             <vaadin-tab>Tab five</vaadin-tab>
           </vaadin-tabs>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme icons</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-tabs>
             <vaadin-tab theme="icon-on-top">
               <iron-icon icon="alarm"></iron-icon>
@@ -202,14 +288,14 @@
               <span>Tab three</span>
             </vaadin-tab>
           </vaadin-tabs>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme icons only</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-tabs>
             <vaadin-tab>
               <iron-icon icon="alarm"></iron-icon>
@@ -221,9 +307,9 @@
               <iron-icon icon="info"></iron-icon>
             </vaadin-tab>
           </vaadin-tabs>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h2 demo-section>Styling API</h2>
 
