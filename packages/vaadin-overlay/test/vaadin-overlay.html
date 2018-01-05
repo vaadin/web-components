@@ -526,7 +526,7 @@
         expect(focusableElements[1]).to.eql(overlay.$.content.querySelector('select'));
         expect(focusableElements[2]).to.eql(overlay.$.content.querySelector('button'));
         expect(focusableElements[3]).to.eql(overlay.$.content.querySelector('input'));
-        expect(focusableElements[4]).to.eql(overlay.$.content.querySelector('vaadin-button'));
+        expect(focusableElements[4]).to.eql(overlay.$.content.querySelector('vaadin-button').shadowRoot.querySelector('button'));
       });
 
       it('should focus focusable elements inside the content when focusTrap = true', (done) => {
