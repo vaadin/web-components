@@ -130,7 +130,7 @@
         left: 0;
         border-radius: inherit;
         pointer-events: none;
-        background-color: var(--valo-contrast-40pct);
+        background-color: var(--valo-contrast-50pct);
         opacity: 0;
         transition: transform 0.15s, opacity 0.2s;
         transform-origin: 100% 0;
@@ -147,7 +147,7 @@
         opacity: 0.1;
       }
 
-      /* Disable for touch devices */
+      /* Touch device adjustment */
       @media (pointer: coarse) {
         :host(:hover:not([readonly]):not([focused])) [part="label"] {
           color: var(--valo-secondary-text-color);
@@ -155,6 +155,10 @@
 
         :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
           opacity: 0;
+        }
+
+        :host(:active:not([readonly]):not([focused])) [part="input-field"]::after {
+          opacity: 0.2;
         }
       }
 
