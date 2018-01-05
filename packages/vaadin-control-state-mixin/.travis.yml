@@ -19,10 +19,17 @@ before_script:
   - gulp lint
   - xvfb-run -s '-screen 0 1024x768x24' wct
 
+env:
+  - TEST_SUITE=mobile
+  - TEST_SUITE=polyfilled
+  - TEST_SUITE=desktop
+
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      wct --env saucelabs;
+      wct --env saucelabs:$TEST_SUITE --expanded --verbose;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      wct --env saucelabs-cron;
+      if [[ "$TEST_SUITE" = "desktop" ]]; then
+        wct --env saucelabs-cron;
+      fi;
     fi
