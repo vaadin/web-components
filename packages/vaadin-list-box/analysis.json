@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-list-box.html",
         "start": {
-          "line": 100,
+          "line": 101,
           "column": 6
         },
         "end": {
-          "line": 100,
-          "column": 42
+          "line": 101,
+          "column": 52
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-list-box>` is a Polymer 2 element for menus\n\n```\n  <vaadin-list-box selected=\"2\">\n    <vaadin-item>Item 1</vaadin-item>\n    <vaadin-item>Item 2</vaadin-item>\n    <vaadin-item>Item 3</vaadin-item>\n    <vaadin-item>Item 4</vaadin-item>\n  </vaadin-list-box>\n```\n\n### Styling\n\n[Generic styling/theming documentation](https://cdn.vaadin.com/vaadin-valo-theme/0.3.1/demo/customization.html)\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|------------------------\n`items`           | The items container",
+          "description": "`<vaadin-list-box>` is a Polymer 2 element for menus\n\n```\n  <vaadin-list-box selected=\"2\">\n    <vaadin-item>Item 1</vaadin-item>\n    <vaadin-item>Item 2</vaadin-item>\n    <vaadin-item>Item 3</vaadin-item>\n    <vaadin-item>Item 4</vaadin-item>\n  </vaadin-list-box>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|------------------------\n`items`           | The items container\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-list-box.html",
           "properties": [
@@ -74,11 +74,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 79,
+                  "line": 80,
                   "column": 12
                 },
                 "end": {
-                  "line": 81,
+                  "line": 82,
                   "column": 13
                 }
               },
@@ -120,11 +120,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 85,
+                  "line": 86,
                   "column": 8
                 },
                 "end": {
-                  "line": 88,
+                  "line": 89,
                   "column": 9
                 }
               },
@@ -138,11 +138,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 75,
+                  "line": 70,
                   "column": 4
                 },
                 "end": {
-                  "line": 90,
+                  "line": 85,
                   "column": 5
                 }
               },
@@ -167,11 +167,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 96,
+                  "line": 91,
                   "column": 4
                 },
                 "end": {
-                  "line": 98,
+                  "line": 93,
                   "column": 5
                 }
               },
@@ -190,11 +190,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 100,
+                  "line": 95,
                   "column": 4
                 },
                 "end": {
-                  "line": 106,
+                  "line": 101,
                   "column": 5
                 }
               },
@@ -213,11 +213,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 108,
+                  "line": 103,
                   "column": 4
                 },
                 "end": {
-                  "line": 149,
+                  "line": 144,
                   "column": 5
                 }
               },
@@ -236,11 +236,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 151,
+                  "line": 146,
                   "column": 4
                 },
                 "end": {
-                  "line": 166,
+                  "line": 161,
                   "column": 5
                 }
               },
@@ -265,11 +265,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 168,
+                  "line": 163,
                   "column": 4
                 },
                 "end": {
-                  "line": 172,
+                  "line": 167,
                   "column": 5
                 }
               },
@@ -288,11 +288,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 169,
                   "column": 4
                 },
                 "end": {
-                  "line": 180,
+                  "line": 175,
                   "column": 5
                 }
               },
@@ -311,11 +311,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 182,
+                  "line": 177,
                   "column": 4
                 },
                 "end": {
-                  "line": 186,
+                  "line": 181,
                   "column": 5
                 }
               },
@@ -330,11 +330,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 194,
+                  "line": 189,
                   "column": 4
                 },
                 "end": {
-                  "line": 213,
+                  "line": 208,
                   "column": 5
                 }
               },
@@ -353,11 +353,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 220,
+                  "line": 215,
                   "column": 4
                 },
                 "end": {
-                  "line": 222,
+                  "line": 217,
                   "column": 5
                 }
               },
@@ -404,11 +404,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 65,
+              "line": 66,
               "column": 6
             },
             "end": {
-              "line": 93,
+              "line": 94,
               "column": 7
             }
           },
@@ -483,11 +483,11 @@
               "range": {
                 "file": "src/vaadin-list-box.html",
                 "start": {
-                  "line": 32,
+                  "line": 33,
                   "column": 6
                 },
                 "end": {
-                  "line": 32,
+                  "line": 33,
                   "column": 19
                 }
               }
