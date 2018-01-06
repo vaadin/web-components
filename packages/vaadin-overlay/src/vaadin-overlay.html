@@ -346,17 +346,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // TAB
         if (event.key === 'Tab' && this.focusTrap) {
-          const focusableElements = this._getFocusableElements();
-          const focusedElementIndex = focusableElements.indexOf(this._focusedElement);
-
-          // Cycle to the next button
-          if (!event.shiftKey) {
-            this._setFocus(focusedElementIndex, 1, focusableElements);
-
-          // Cycle to the prev button
-          } else {
-            this._setFocus(focusedElementIndex, -1, focusableElements);
-          }
+          // if only tab key is pressed, cycle forward, else cycle backwards.
+          this._cycleTab(event.shiftKey ? -1 : 1);
 
           event.preventDefault();
 
@@ -386,7 +377,7 @@ This program is available under Apache License Version 2.0, available at https:/
               // Focus
               //  - the overlay content by default
               //  - or the first focusable element if focusTrap is true
-              this._setFocus(-1, 1);
+              this._cycleTab(1, -1);
             }
 
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
@@ -467,11 +458,12 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.content.appendChild(content);
       }
 
-      _setFocus(index, increment, focusableElements) {
+      _cycleTab(increment, index) {
         if (!this.focusTrap) {
           return;
         }
-        focusableElements = focusableElements || this._getFocusableElements();
+        const focusableElements = this._getFocusableElements();
+        index = index || focusableElements.indexOf(this._focusedElement);
 
         // search for visible elements and select the next possible match
         for (let i = 0; i < focusableElements.length; i++) {
@@ -488,10 +480,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // determine if element is visible
           const el = focusableElements[index];
-          if (this._isVisible(el)) {
-            this._focusedElement = el;
-            return el.focus();
-          }
+          this._focusedElement = el;
+          return el.focus();
         }
 
         // fallback if there are no focusable elements
@@ -499,14 +489,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.overlay.focus();
       }
 
-      // borrowed from jqeury $(elem).is(':visible') implementation
-      _isVisible(elem) {
-        return elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
-      }
-
-      _getFocusableElements(container) {
+      _getFocusableElements() {
         // collect all focusable elements
-        return Polymer.IronFocusablesHelper.getTabbableNodes(container || this.$.content).
+        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.content).
           filter(element => !element.shadowRoot || Polymer.IronFocusablesHelper.getTabbableNodes(element).length === 0);
       }
 
