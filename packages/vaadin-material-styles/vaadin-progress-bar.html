@@ -29,67 +29,26 @@
       /* Indeterminate mode */
 
       :host([indeterminate]) [part="value"] {
-        --material-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--material-divider-color) 10%, var(--material-primary-color));
-        --material-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--material-divider-color) 10%, var(--material-primary-color));
-        width: 100%;
-        background-color: transparent !important;
-        background-image: var(--material-progress-indeterminate-progress-bar-background);
-        opacity: 0.75;
+        --material-progress-indeterminate-progress-bar-background: var(--material-primary-color);
+        width: 30%;
+        height: 4px;
+        background-color: var(--material-progress-indeterminate-progress-bar-background);
+        overflow: hidden;
         will-change: transform;
-        animation: vaadin-progress-slide 1.6s infinite cubic-bezier(.645, .045, .355, 1), vaadin-progress-scale 1.6s infinite cubic-bezier(.645, .045, .355, 1);
+        animation: running-progress 2s linear infinite;
       }
 
-      @keyframes vaadin-progress-slide {
-        0% {
-          transform-origin: 0% 0%;
-        }
-
-        50% {
-          transform-origin: 100% 0%;
-          background-image: var(--material-progress-indeterminate-progress-bar-background);
-        }
-
-        50.1% {
-          transform-origin: 100% 0%;
-          background-image: var(--material-progress-indeterminate-progress-bar-background-reverse);
-        }
-
-        100% {
-          transform-origin: 0% 0%;
-          background-image: var(--material-progress-indeterminate-progress-bar-background-reverse);
-        }
+      @-webkit-keyframes running-progress {
+        0% { margin-left: 0%; margin-right: 100%; width: 0%;}
+        30% { margin-left: 0%; margin-right: 70%; width: 30%;}
+        70% { margin-left: 70%; margin-right: 0%; width: 30%; }
+        100% { margin-left: 100%; margin-right: 0; width: 0%; }
       }
-
-      @keyframes vaadin-progress-scale {
-        0% { transform: scaleX(0.015); }
-        25% { transform: scaleX(0.4); }
-        50% { transform: scaleX(0.015); }
-        50.1% { transform: scaleX(0.015); }
-        75% { transform: scaleX(0.4); }
-        100% { transform: scaleX(0.015); }
-      }
-
-      :host(:not([aria-valuenow])) [part="value"]::before,
-      :host([indeterminate]) [part="value"]::before {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 100%;
-        border-radius: inherit;
-        background-color: var(--material-primary-color);
-        will-change: opacity;
-        animation: vaadin-progress-pulse3 1.6s infinite cubic-bezier(.645, .045, .355, 1);
-      }
-
-      @keyframes vaadin-progress-pulse3 {
-        0% { opacity: 1; }
-        10% { opacity: 0; }
-        40% { opacity: 0; }
-        50% { opacity: 1; }
-        50.1% { opacity: 1; }
-        60% { opacity: 0; }
-        90% { opacity: 0; }
-        100% { opacity: 1; }
+      @keyframes running-progress {
+        0% { margin-left: 0%; margin-right: 100%; width: 0%;}
+        30% { margin-left: 0%; margin-right: 70%; width: 30%;}
+        70% { margin-left: 70%; margin-right: 0%; width: 30%; }
+        100% { margin-left: 100%; margin-right: 0; width: 0%; }
       }
 
       /* Contrast color */
@@ -97,8 +56,7 @@
       :host([theme~="contrast"]) [part="value"],
       :host([theme~="contrast"]) [part="value"]::before {
         background-color: var(--material-body-text-color);
-        --material-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--material-divider-color) 10%, var(--material-body-text-color));
-        --material-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--material-divider-color) 10%, var(--material-secondary-text-color));
+        --material-progress-indeterminate-progress-bar-background: var(--material-body-text-color);
       }
 
       /* Error color */
@@ -106,8 +64,7 @@
       :host([theme~="error"]) [part="value"],
       :host([theme~="error"]) [part="value"]::before {
         background-color: var(--material-error-color);
-        --material-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--material-divider-color) 10%, var(--material-error-color));
-        --material-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--material-divider-color) 10%, var(--material-error-color));
+        --material-progress-indeterminate-progress-bar-background: var(--material-error-color);
       }
 
       /* Primary color */
@@ -115,8 +72,7 @@
       :host([theme~="success"]) [part="value"],
       :host([theme~="success"]) [part="value"]::before {
         background-color: var(---material-success-color);
-        --material-progress-indeterminate-progress-bar-background: linear-gradient(to right, var(--material-divider-color) 10%, var(---material-success-color));
-        --material-progress-indeterminate-progress-bar-background-reverse: linear-gradient(to left, var(--material-divider-color) 10%, var(---material-success-color));
+        --material-progress-indeterminate-progress-bar-background: var(---material-success-color);
       }
     </style>
   </template>
