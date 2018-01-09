@@ -16,6 +16,16 @@
     [unresolved] {
       opacity: 0;
     }
+
+    nice-demo-snippet {
+      padding-top: 20px;
+    }
+
+    div[theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #f7f7f7;
+      --nice-demo-snippet-view-source-background-color: #070707;
+      --nice-demo-snippet-code-color: #000000;
+    }
   </style>
 </head>
 
@@ -53,28 +63,28 @@
 
     <h3>Dark theme</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
-          <vaadin-context-menu>
-            <template>
-              <vaadin-list-box>
-                <vaadin-item>First menu item</vaadin-item>
-                <vaadin-item>Second menu item</vaadin-item>
-                <vaadin-item>Third menu item</vaadin-item>
-                <hr>
-                <vaadin-item disabled>Fourth menu item</vaadin-item>
-                <vaadin-item disabled>Fifth menu item</vaadin-item>
-                <hr>
-                <vaadin-item>Sixth menu item</vaadin-item>
-              </vaadin-list-box>
-            </template>
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
+            <vaadin-context-menu>
+              <template>
+                <vaadin-list-box>
+                  <vaadin-item>First menu item</vaadin-item>
+                  <vaadin-item>Second menu item</vaadin-item>
+                  <vaadin-item>Third menu item</vaadin-item>
+                  <hr>
+                  <vaadin-item disabled>Fourth menu item</vaadin-item>
+                  <vaadin-item disabled>Fifth menu item</vaadin-item>
+                  <hr>
+                  <vaadin-item>Sixth menu item</vaadin-item>
+                </vaadin-list-box>
+              </template>
 
-            Open a context menu with <b>right click</b> or with <b>long touch.</b>
-          </vaadin-context-menu>
-        </div>
-      </template>
-    </nice-demo-snippet>
+              Open a context menu with <b>right click</b> or with <b>long touch.</b>
+            </vaadin-context-menu>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
   </div>
 </body>

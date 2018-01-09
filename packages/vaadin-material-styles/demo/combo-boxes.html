@@ -17,6 +17,16 @@
     [unresolved] {
       opacity: 0;
     }
+
+    nice-demo-snippet {
+      padding-top: 20px;
+    }
+
+    div[theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #f7f7f7;
+      --nice-demo-snippet-view-source-background-color: #070707;
+      --nice-demo-snippet-code-color: #000000;
+    }
   </style>
 </head>
 
@@ -28,7 +38,6 @@
       <span slot="header">Material</span>
     </demo-navigation>
 
-    <a href="https://github.com/vaadin/vaadin-material-theme/blob/master/vaadin-combo-box.html" class="theme-source-code">Theme source code</a>
     <h1>Combo box</h1>
 
     <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text field</a>.</p>
@@ -80,43 +89,43 @@
 
     <h3 demo-section>Dark theme label, placeholder and value</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-combo-box label="Label" placeholder="Placeholder"></vaadin-combo-box>
           <vaadin-combo-box label="Label" value="Option 1"></vaadin-combo-box>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme states</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-combo-box label="Enabled" value="Option 1"></vaadin-combo-box>
           <vaadin-combo-box label="Disabled" value="Option 1" disabled></vaadin-combo-box>
           <vaadin-combo-box label="Read only" value="Option 1" readonly></vaadin-combo-box>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme validation</h3>
 
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-combo-box required label="Required" placeholder="Choose an option" error-message="Please select an option"></vaadin-combo-box>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme dropdown item template</h3>
 
-    <nice-demo-snippet>
-      <!-- TODO make the overlay adapt to the width of the items -->
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <!-- TODO make the overlay adapt to the width of the items -->
+        <template slot="source">
           <vaadin-combo-box label="Person" item-label-path="name" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
             <template>
               <style>
@@ -127,9 +136,9 @@
               <person-item email="[[item.email]]">[[item.name]]</person-item>
             </template>
           </vaadin-combo-box>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <hr>
 
