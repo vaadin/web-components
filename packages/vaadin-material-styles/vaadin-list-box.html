@@ -14,7 +14,6 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        /*background-color: var(--material-background-color);*/
       }
 
       /* Normal item */
@@ -24,9 +23,10 @@
         cursor: default;
       }
 
-      /* TODO this does not match elements extending vaadin-item. This is anyway a workaround until we have "focus-follows-mouse" */
       [part="items"] ::slotted(vaadin-item) {
         cursor: pointer;
+        min-height: 36px;
+        padding: 4px 0;
       }
 
       /* Selected item */
