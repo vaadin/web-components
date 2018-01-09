@@ -8,10 +8,10 @@
 
 <dom-module id="material-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
   <template>
-    <style>
+    <style include="material-menu-overlay">
       /* Don’t highlight the last activated item */
       /* TODO the overlay should also forget the last activated/focused item when reopened */
-      vaadin-list-box vaadin-item[selected] {
+      vaadin-list-box [tabindex][selected] {
         font-weight: 400;
       }
     </style>

@@ -9,12 +9,9 @@
       :host {
         display: flex;
         align-items: center;
-        min-height: 36px;
-        padding: 4px calc(16px + 0.25em / 4);
-        padding-right: calc(32px + 0.25em / 4);
         box-sizing: border-box;
         line-height: 24px;
-        border-radius: 0.25em;
+        border-radius: 0;
         overflow: hidden;
       }
 
@@ -36,18 +33,18 @@
       :host::before {
         display: var(--_valo-item-selected-icon-display, none);
         content: "";
-        font-family: material-icons;
+        font-family: valo-icons;
         font-size: 24px;
         line-height: 1;
         font-weight: 400;
         width: 24px;
-        margin-right: 26px;
+        margin-right: 4px;
         color: var(--material-primary-text-color);
         flex: none;
       }
 
       :host([selected])::before {
-        content: "\e5ca";
+        content: "\e902";
       }
 
       /* Disabled item */
