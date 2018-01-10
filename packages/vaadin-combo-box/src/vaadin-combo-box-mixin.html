@@ -583,17 +583,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _selectedItemChanged(selectedItem) {
-      if (!this.filteredItems) {
-        return;
-      }
-
       if (selectedItem === null || selectedItem === undefined) {
-        if (!this.allowCustomValue) {
-          this.value = '';
-        }
+        if (this.filteredItems) {
+          if (!this.allowCustomValue) {
+            this.value = '';
+          }
 
-        this._updateHasValue(this.value !== '');
-        this._inputElementValue = this.value;
+          this._updateHasValue(this.value !== '');
+          this._inputElementValue = this.value;
+        }
       } else {
         const value = this._getItemValue(selectedItem);
         if (this.value !== value) {
@@ -610,7 +608,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this.$.overlay._selectedItem = selectedItem;
-      this._focusedIndex = this.filteredItems.indexOf(selectedItem);
+      if (this.filteredItems) {
+        this._focusedIndex = this.filteredItems.indexOf(selectedItem);
+      }
     }
 
     _valueChanged(value, oldVal) {
