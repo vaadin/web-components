@@ -587,9 +587,9 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this.filteredItems) {
           if (!this.allowCustomValue) {
             this.value = '';
-          }
+    	    }
 
-          this._setHasValue(this.value !== '');
+          this._updateHasValue(this.value !== '');
           this._inputElementValue = this.value;
         }
       } else {
