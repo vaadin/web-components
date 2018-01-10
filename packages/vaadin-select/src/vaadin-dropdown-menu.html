@@ -454,6 +454,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (opened) {
+            this._openedWithFocusRing = this.hasAttribute('focus-ring');
             this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
@@ -465,6 +466,9 @@ This program is available under Apache License Version 2.0, available at https:/
               this._setFocused(false);
             } else {
               this.focusElement.focus();
+              if (this._openedWithFocusRing) {
+                this.focusElement.setAttribute('focus-ring', '');
+              }
             }
             this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
