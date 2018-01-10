@@ -298,7 +298,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_validateInput(_selectedDate, _minDate, _maxDate)',
         '_selectedDateChanged(_selectedDate, i18n.formatDate)',
         '_focusedDateChanged(_focusedDate, i18n.formatDate)',
-        '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)'
+        '_announceFocusedDate(_focusedDate, opened, _ignoreAnnounce)',
+        '_openChanged(opened)'
       ];
     }
 
@@ -314,6 +315,12 @@ This program is available under Apache License Version 2.0, available at https:/
       this._overlayContent.addEventListener('focus-input', this._focusAndSelect.bind(this));
       this.addEventListener('input', this._onUserInput.bind(this));
       this.addEventListener('focus', e => this._noInput && e.target.blur());
+    }
+
+    _openChanged(opened) {
+      if (opened) {
+        this._openedWithFocusRing = this.hasAttribute('focus-ring');
+      }
     }
 
     /**
