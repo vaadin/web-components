@@ -17,6 +17,16 @@
       vaadin-text-field {
         margin-right: 16px;
       }
+
+      nice-demo-snippet {
+        padding-top: 20px;
+      }
+
+      div[theme="dark"] nice-demo-snippet {
+        --nice-demo-snippet-code-background-color: #f7f7f7;
+        --nice-demo-snippet-view-source-background-color: #070707;
+        --nice-demo-snippet-code-color: #000000;
+      }
     </style>
   </custom-style>
 
@@ -123,9 +133,9 @@
     <h2 demo-section>Dark theme</h3>
 
     <h3 demo-section>Label and placeholder</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-text-field placeholder="Placeholder"></vaadin-text-field>
 
           <vaadin-text-field label="Label"></vaadin-text-field>
@@ -133,14 +143,14 @@
           <vaadin-text-field label="Label and placeholder" placeholder="Placeholder"></vaadin-text-field>
 
           <vaadin-text-field label="Label always floating" theme="always-float-label"></vaadin-text-field>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Prefix and suffix</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-text-field placeholder="Search">
             <iron-icon slot="prefix" icon="vaadin:search"></iron-icon>
           </vaadin-text-field>
@@ -152,15 +162,15 @@
                              prevent-invalid-input
                              style="width: 6ch;">
             <span slot="suffix">cm</span>
-          </div>
-        </vaadin-text-field>
-      </template>
-    </nice-demo-snippet>
+          </vaadin-text-field>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>States</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-text-field label="Focused" value="Value" focused></vaadin-text-field>
 
           <vaadin-text-field label="Disabled" value="Value" disabled></vaadin-text-field>
@@ -179,30 +189,30 @@
             pattern="[0-9]+"
             invalid error-message="Numbers only!">
           </vaadin-text-field>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Types</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-text-field label="Text" value="Value"></vaadin-text-field>
           <vaadin-password-field label="Password" value="Secret –&nbsp;hush!" placeholder="Type a secret"></vaadin-password-field>
           <br>
           <vaadin-text-area label="Text area" value="Value" placeholder="Placeholder"></vaadin-text-area>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dense layout</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
           <vaadin-text-field theme="dense" label="Label" required error-message="Error message"></vaadin-text-field>
-        </div>
-      </template>
-    </nice-demo-snippet>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
   </div>
 </body>
