@@ -24,7 +24,7 @@
          (no label, with label, without prefix, with prefix, etc.) */
 
       :host([label]) {
-        vertical-align: 24px;
+        vertical-align: 22px;
       }
 
       [part="label"]:empty {
@@ -37,12 +37,13 @@
       }
 
       :host(:not([label])) {
-        vertical-align: calc(24px - 3px);
+        vertical-align: 22px;
       }
 
       [part="input-field"] {
         position: relative;
         height: 32px;
+        padding-left: 0;
         padding-bottom: 2px;
         background-color: transparent;
       }
@@ -79,6 +80,25 @@
         transform: scaleX(0);
       }
 
+      /* Focus-ring */
+
+      :host([required][focus-ring]) [part="input-field"],
+      :host([focus-ring]) [part="input-field"] {
+        box-shadow: none;
+      }
+
+      :host([required][focus-ring]) [part="input-field"]::after,
+      :host([focus-ring]) [part="input-field"]::after,
+      :host([readonly]) [part="input-field"]::after,
+      :host([required]) [part="input-field"]::after {
+        height: 0;
+      }
+
+      :host([readonly]) [part="input-field"],
+      :host([disabled]) [part="input-field"] {
+        background-color: transparent;
+      }
+
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
       :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
@@ -88,6 +108,11 @@
 
       :host([focused]:not([readonly])) [part="input-field"] {
         background-color: transparent;
+      }
+
+      :host([focused]) [part="input-field"]::before {
+        background-color: var(--material-primary-color);
+        transform: none;
       }
 
       [part="value"],
@@ -157,6 +182,7 @@
         display: block;
         font-size: 1em;
         line-height: 1;
+        height: 18px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
