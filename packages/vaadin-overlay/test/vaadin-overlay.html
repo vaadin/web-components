@@ -6,10 +6,28 @@
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
   <link rel="import" href="../vaadin-overlay.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
 </head>
 
 <body>
+  <dom-module id="container-with-shadow">
+    <template>
+      <input type="text" id="text">
+      <vaadin-text-field></vaadin-text-field>
+    </template>
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        window.customElements.define('container-with-shadow', class extends Polymer.Element {
+          static get is() {
+            return 'container-with-shadow';
+          }
+        });
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="default">
     <template>
       <div>
@@ -40,6 +58,18 @@
           </vaadin-overlay>
         </div>
       </div>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="focus-trap">
+    <template>
+      <vaadin-overlay>
+        <template>
+          <container-with-shadow>
+          </container-with-shadow>
+          <input type="text" id="text">
+        </template>
+      </vaadin-overlay>
     </template>
   </test-fixture>
 
@@ -526,7 +556,18 @@
         expect(focusableElements[1]).to.eql(overlay.$.content.querySelector('select'));
         expect(focusableElements[2]).to.eql(overlay.$.content.querySelector('button'));
         expect(focusableElements[3]).to.eql(overlay.$.content.querySelector('input'));
-        expect(focusableElements[4]).to.eql(overlay.$.content.querySelector('vaadin-button'));
+        expect(focusableElements[4]).to.eql(overlay.$.content.querySelector('vaadin-button').shadowRoot.querySelector('button'));
+      });
+
+      it('should properly detect multiple focusables in web component shadowRoots', () => {
+        const overlay = fixture('focus-trap');
+        overlay.focusTrap = true;
+
+        const focusableElements = overlay._getFocusableElements();
+
+        expect(focusableElements.length).to.eql(3);
+        expect(focusableElements[0]).to.eql(
+          overlay.$.content.querySelector('container-with-shadow').$.text);
       });
 
       it('should focus focusable elements inside the content when focusTrap = true', (done) => {

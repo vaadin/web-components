@@ -25,7 +25,8 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.1",
-    "vaadin-valo-styles": "vaadin/vaadin-valo-styles#^2.0.0"
+    "vaadin-valo-styles": "vaadin/vaadin-valo-styles#^2.0.0",
+    "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#^2.2.1"
   },
   "devDependencies": {
     "elements-demo-resources": "^2.0.0",

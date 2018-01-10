@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../iron-overlay-behavior/iron-focusables-helper.html">
 
 <dom-module id="vaadin-overlay">
   <template>
@@ -345,17 +346,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // TAB
         if (event.key === 'Tab' && this.focusTrap) {
-          const focusableElements = this._getFocusableElements();
-          const focusedElementIndex = focusableElements.indexOf(this._focusedElement);
-
-          // Cycle to the next button
-          if (!event.shiftKey) {
-            this._setFocus(focusedElementIndex, 1);
-
-          // Cycle to the prev button
-          } else {
-            this._setFocus(focusedElementIndex, -1);
-          }
+          // if only tab key is pressed, cycle forward, else cycle backwards.
+          this._cycleTab(event.shiftKey ? -1 : 1);
 
           event.preventDefault();
 
@@ -385,7 +377,7 @@ This program is available under Apache License Version 2.0, available at https:/
               // Focus
               //  - the overlay content by default
               //  - or the first focusable element if focusTrap is true
-              this._setFocus(-1, 1);
+              this._cycleTab(1, -1);
             }
 
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
@@ -466,12 +458,12 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.content.appendChild(content);
       }
 
-      _setFocus(index, increment) {
+      _cycleTab(increment, index) {
         if (!this.focusTrap) {
           return;
         }
-
         const focusableElements = this._getFocusableElements();
+        index = index || focusableElements.indexOf(this._focusedElement);
 
         // search for visible elements and select the next possible match
         for (let i = 0; i < focusableElements.length; i++) {
@@ -488,10 +480,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // determine if element is visible
           const el = focusableElements[index];
-          if (this._isVisible(el)) {
-            this._focusedElement = el;
-            return el.focus();
-          }
+          this._focusedElement = el;
+          return el.focus();
         }
 
         // fallback if there are no focusable elements
@@ -499,35 +489,10 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.overlay.focus();
       }
 
-      // borrowed from jqeury $(elem).is(':visible') implementation
-      _isVisible(elem) {
-        return elem.offsetWidth || elem.offsetHeight || elem.getClientRects().length;
-      }
-
       _getFocusableElements() {
         // collect all focusable elements
-        const focusableElements = Array.from(this.$.content.querySelectorAll(
-          '[tabindex], button, input, select, textarea, object, iframe, label, a[href], area[href]'
-        )).filter((el) => {
-          return el.getAttribute('tabindex') !== '-1';
-        });
-
-        // sort focusable elements according to tabindex
-        return focusableElements.sort((a, b) => {
-          a = parseInt(a.getAttribute('tabindex')) || 0;
-          b = parseInt(b.getAttribute('tabindex')) || 0;
-          if (a === b) {
-            return 0;
-          } else if (a === 0) {
-            return 1;
-          } else if (b === 0) {
-            return -1;
-          } else if (a < b) {
-            return -1;
-          } else if (a > b) {
-            return 1;
-          }
-        });
+        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.content).
+          filter(element => !element.shadowRoot || Polymer.IronFocusablesHelper.getTabbableNodes(element).length === 0);
       }
 
       _processPendingMutationObserversFor(node) {
