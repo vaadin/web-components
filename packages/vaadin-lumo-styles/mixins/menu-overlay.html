@@ -53,6 +53,15 @@
           background-image: inherit;
           --_lumo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
           -webkit-mask-image: var(--_lumo-menu-overlay-mask-image);
+        }
+      }
+
+      /*
+        TODO: CSS custom property in `mask-image` causes crash in Edge
+        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+      */
+      @-moz-document url-prefix() {
+        :host([phone]) [part="overlay"]::after {
           mask-image: var(--_lumo-menu-overlay-mask-image);
         }
       }
