@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox.html",
         "start": {
-          "line": 261,
+          "line": 269,
           "column": 6
         },
         "end": {
-          "line": 261,
+          "line": 269,
           "column": 54
         }
       },
@@ -569,7 +569,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 249,
+                  "line": 257,
                   "column": 9
                 }
               },
@@ -586,11 +586,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 259,
                   "column": 8
                 },
                 "end": {
-                  "line": 253,
+                  "line": 261,
                   "column": 9
                 }
               },
@@ -636,7 +636,7 @@
               "column": 6
             },
             "end": {
-              "line": 254,
+              "line": 262,
               "column": 7
             }
           },

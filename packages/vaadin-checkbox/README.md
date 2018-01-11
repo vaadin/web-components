@@ -28,11 +28,11 @@
 <vaadin-checkbox indeterminate>Indeterminate</vaadin-checkbox>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="400" alt="Screenshot of vaadin-checkbox, using the default Valo theme">](https://vaadin.com/elements/vaadin-checkbox)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-checkbox/master/screenshot.png" width="400" alt="Screenshot of vaadin-checkbox, using the default Lumo theme">](https://vaadin.com/elements/vaadin-checkbox)
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -40,13 +40,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-checkbox.html`
+- `theme/lumo/vaadin-checkbox.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-checkbox.html`
 
-  Alias for theme/valo/vaadin-checkbox.html
+  Alias for theme/lumo/vaadin-checkbox.html
 
 ## Running demos and tests in browser
 

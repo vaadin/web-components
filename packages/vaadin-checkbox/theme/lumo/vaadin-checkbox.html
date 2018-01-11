@@ -1,9 +1,9 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
 
-<dom-module id="valo-checkbox" theme-for="vaadin-checkbox">
+<dom-module id="lumo-checkbox" theme-for="vaadin-checkbox">
   <template>
-    <style include="valo-checkbox-style valo-checkbox-effects">
+    <style include="lumo-checkbox-style lumo-checkbox-effects">
       /* IE11 only */
       ::-ms-backdrop,
       [part="checkbox"] {
@@ -14,7 +14,7 @@
 </dom-module>
 
 
-<dom-module id="valo-checkbox-style">
+<dom-module id="lumo-checkbox-style">
   <template>
     <style>
       :host {
@@ -33,8 +33,8 @@
         height: calc(1em + 2px);
         margin: 0.1875em;
         position: relative;
-        border-radius: var(--valo-border-radius);
-        background-color: var(--valo-contrast-20pct);
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-20pct);
         transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
         pointer-events: none;
         will-change: transform;
@@ -43,7 +43,7 @@
 
       :host([indeterminate]) [part="checkbox"],
       :host([checked]) [part="checkbox"] {
-        background-color: var(--valo-primary-color);
+        background-color: var(--lumo-primary-color);
       }
 
       /* Needed to align the checkbox nicely on the baseline */
@@ -57,7 +57,7 @@
         display: inline-block;
         width: 0;
         height: 0;
-        border: 0 solid var(--valo-primary-contrast-color);
+        border: 0 solid var(--lumo-primary-contrast-color);
         border-width: 0.1875em 0 0 0.1875em;
         box-sizing: border-box;
         transform-origin: 0 0;
@@ -85,21 +85,21 @@
         right: 22%;
         width: auto;
         border: 0;
-        background-color: var(--valo-primary-contrast-color);
+        background-color: var(--lumo-primary-contrast-color);
         transition: opacity 0.25s;
       }
 
       /* Focus ring */
 
       :host([focus-ring]) [part="checkbox"] {
-        box-shadow: 0 0 0 3px var(--valo-primary-color-50pct);
+        box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
       }
 
       /* Disabled */
 
       :host([disabled]) {
         pointer-events: none;
-        color: var(--valo-disabled-text-color);
+        color: var(--lumo-disabled-text-color);
       }
 
       :host([disabled]) [part="label"] ::slotted(*) {
@@ -107,21 +107,21 @@
       }
 
       :host([disabled]) [part="checkbox"] {
-        background-color: var(--valo-contrast-10pct);
+        background-color: var(--lumo-contrast-10pct);
       }
 
       :host([disabled]) [part="checkbox"]::after {
-        border-color: var(--valo-contrast-30pct);
+        border-color: var(--lumo-contrast-30pct);
       }
 
       :host([indeterminate][disabled]) [part="checkbox"]::after {
-        background-color: var(--valo-contrast-30pct);
+        background-color: var(--lumo-contrast-30pct);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-checkbox-effects">
+<dom-module id="lumo-checkbox-effects">
   <template>
     <style>
       /* Transition the checkmark if activated with the mouse (disabled for grid select-all this way) */
@@ -146,13 +146,13 @@
       /* Hover */
 
       :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
-        background-color: var(--valo-contrast-30pct);
+        background-color: var(--lumo-contrast-30pct);
       }
 
       /* Disable hover for touch devices */
       @media (pointer: coarse) {
         :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="checkbox"] {
-          background-color: var(--valo-contrast-20pct);
+          background-color: var(--lumo-contrast-20pct);
         }
       }
 
