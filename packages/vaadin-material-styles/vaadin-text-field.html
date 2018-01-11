@@ -80,6 +80,12 @@
         transform: scaleX(0);
       }
 
+      /* Hover */
+
+      :host(:hover:not([readonly]):not([focused])) [part="label"] {
+        color: var(--material-body-text-color);
+      }
+
       /* Focus-ring */
 
       :host([required][focus-ring]) [part="input-field"],
