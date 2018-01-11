@@ -12,11 +12,11 @@
      }
   },
   {
-    "name": "Valo Theme Variations",
-    "url": "progress-bar-valo-theme-demos",
-    "src": "progress-bar-valo-theme-demos.html",
+    "name": "Lumo Theme Variations",
+    "url": "progress-bar-lumo-theme-demos",
+    "src": "progress-bar-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-progress-bar Valo Theme Variations",
+      "title": "vaadin-progress-bar Lumo Theme Variations",
       "description": "",
       "image": ""
     }

@@ -33,7 +33,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -41,13 +41,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-progress-bar.html`
+- `theme/lumo/vaadin-progress-bar.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-progress-bar.html`
 
-  Alias for theme/valo/vaadin-progress-bar.html
+  Alias for theme/lumo/vaadin-progress-bar.html
 
 ## Running demos and tests in browser
 
