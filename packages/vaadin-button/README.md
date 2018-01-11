@@ -27,11 +27,11 @@
 <vaadin-button disabled>Button Two</vaadin-button>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Valo theme">](https://vaadin.com/elements/-/element/vaadin-button)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Lumo theme">](https://vaadin.com/elements/-/element/vaadin-button)
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -39,13 +39,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-button.html`
+- `theme/lumo/vaadin-button.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-button.html`
 
-  Alias for theme/valo/vaadin-button.html
+  Alias for theme/lumo/vaadin-button.html
 
 ## Running demos and tests in browser
 

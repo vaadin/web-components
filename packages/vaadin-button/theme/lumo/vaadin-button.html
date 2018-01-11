@@ -1,63 +1,63 @@
 <link rel="import" href="../../src/vaadin-button.html">
 
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="valo-button" theme-for="vaadin-button">
+<dom-module id="lumo-button" theme-for="vaadin-button">
   <template>
-    <style include="valo-button-sizing valo-button-style valo-button-states valo-button-types valo-button-colors valo-button-icons">
+    <style include="lumo-button-sizing lumo-button-style lumo-button-states lumo-button-types lumo-button-colors lumo-button-icons">
       /* This needs to be the last selector for it to take priority */
       :host([disabled][disabled]) {
         pointer-events: none;
-        color: var(--valo-disabled-text-color);
-        background-color: var(--valo-contrast-5pct);
+        color: var(--lumo-disabled-text-color);
+        background-color: var(--lumo-contrast-5pct);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-button-sizing">
+<dom-module id="lumo-button-sizing">
   <template>
     <style>
       :host {
-        --valo-button-size: var(--valo-size-m);
-        min-width: calc(var(--valo-button-size) * 2);
-        min-height: var(--valo-button-size);
-        padding: 0 calc(var(--valo-button-size) / 3 + var(--valo-border-radius) / 2);
-        margin: var(--valo-space-xs) 0;
+        --lumo-button-size: var(--lumo-size-m);
+        min-width: calc(var(--lumo-button-size) * 2);
+        min-height: var(--lumo-button-size);
+        padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
+        margin: var(--lumo-space-xs) 0;
         box-sizing: border-box;
       }
 
       [part="label"] {
-        padding: calc(var(--valo-button-size) / 6) 0;
+        padding: calc(var(--lumo-button-size) / 6) 0;
       }
 
       :host([theme~="small"]) {
-        font-size: var(--valo-font-size-s);
-        --valo-button-size: var(--valo-size-s);
+        font-size: var(--lumo-font-size-s);
+        --lumo-button-size: var(--lumo-size-s);
       }
 
       :host([theme~="large"]) {
-        font-size: var(--valo-font-size-l);
-        --valo-button-size: var(--valo-size-l);
+        font-size: var(--lumo-font-size-l);
+        --lumo-button-size: var(--lumo-size-l);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-button-style">
+<dom-module id="lumo-button-style">
   <template>
     <style>
       :host {
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size-m);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
         font-weight: 500;
-        color: var(--valo-primary-text-color);
-        background-color: var(--valo-contrast-5pct);
-        border-radius: var(--valo-border-radius);
+        color: var(--lumo-primary-text-color);
+        background-color: var(--lumo-contrast-5pct);
+        border-radius: var(--lumo-border-radius);
         cursor: default;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
@@ -68,13 +68,13 @@
       [part="label"],
       [part="prefix"],
       [part="suffix"] {
-        line-height: var(--valo-line-height-xs);
+        line-height: var(--lumo-line-height-xs);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-button-states">
+<dom-module id="lumo-button-states">
   <template>
     <style>
       :host::before,
@@ -87,7 +87,7 @@
         bottom: 0;
         left: 0;
         background-color: currentColor;
-        border-radius: var(--valo-border-radius);
+        border-radius: var(--lumo-border-radius);
         opacity: 0;
         transition: opacity 0.2s;
         will-change: opacity;
@@ -129,13 +129,13 @@
       /* Keyboard focus */
 
       :host([focus-ring]) {
-        box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-button-types">
+<dom-module id="lumo-button-types">
   <template>
     <style>
       /* Tertiary */
@@ -152,7 +152,7 @@
       }
 
       :host([theme~="tertiary"]) {
-        padding: 0 calc(var(--valo-button-size) / 6);
+        padding: 0 calc(var(--lumo-button-size) / 6);
       }
 
       @media (hover: hover) {
@@ -181,10 +181,10 @@
       /* Primary */
 
       :host([theme~="primary"]) {
-        background-color: var(--valo-primary-color);
-        color: var(--valo-primary-contrast-color);
+        background-color: var(--lumo-primary-color);
+        color: var(--lumo-primary-contrast-color);
         font-weight: 600;
-        min-width: calc(var(--valo-button-size) * 2.5);
+        min-width: calc(var(--lumo-button-size) * 2.5);
       }
 
       :host([theme~="primary"]:hover)::before {
@@ -192,7 +192,7 @@
       }
 
       :host([theme~="primary"][active])::before {
-        background-color: var(--valo-shade-20pct);
+        background-color: var(--lumo-shade-20pct);
       }
 
       :host([theme~="primary"][active])::after {
@@ -202,52 +202,52 @@
   </template>
 </dom-module>
 
-<dom-module id="valo-button-colors">
+<dom-module id="lumo-button-colors">
   <template>
     <style>
       :host([theme~="success"]) {
-        color: var(--valo-success-text-color);
+        color: var(--lumo-success-text-color);
       }
 
       :host([theme~="success"][theme~="primary"]) {
-        background-color: var(--valo-success-color);
-        color: var(--valo-success-contrast-color);
+        background-color: var(--lumo-success-color);
+        color: var(--lumo-success-contrast-color);
       }
 
       :host([theme~="error"]) {
-        color: var(--valo-error-text-color);
+        color: var(--lumo-error-text-color);
       }
 
       :host([theme~="error"][theme~="primary"]) {
-        background-color: var(--valo-error-color);
-        color: var(--valo-error-contrast-color);
+        background-color: var(--lumo-error-color);
+        color: var(--lumo-error-contrast-color);
       }
 
       :host([theme~="contrast"]) {
-        color: var(--valo-contrast);
+        color: var(--lumo-contrast);
       }
 
       :host([theme~="contrast"][theme~="primary"]) {
-        background-color: var(--valo-contrast);
-        color: var(--valo-base-color);
+        background-color: var(--lumo-contrast);
+        color: var(--lumo-base-color);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-button-icons">
+<dom-module id="lumo-button-icons">
   <template>
     <style>
       :host ::slotted(iron-icon) {
         display: inline-block;
-        width: var(--valo-icon-size);
-        height: var(--valo-icon-size);
+        width: var(--lumo-icon-size);
+        height: var(--lumo-icon-size);
       }
 
-      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
       :host ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: calc(var(--valo-icon-size) - 0.5em);
-        height: calc(var(--valo-icon-size) - 0.5em);
+        width: calc(var(--lumo-icon-size) - 0.5em);
+        height: calc(var(--lumo-icon-size) - 0.5em);
         padding: 0.25em;
       }
 
@@ -264,9 +264,9 @@
       /* Icon-only */
 
       :host([theme~="icon"]) {
-        min-width: var(--valo-button-size);
-        padding-left: calc(var(--valo-button-size) / 4);
-        padding-right: calc(var(--valo-button-size) / 4);
+        min-width: var(--lumo-button-size);
+        padding-left: calc(var(--lumo-button-size) / 4);
+        padding-right: calc(var(--lumo-button-size) / 4);
       }
 
       :host([theme~="icon"]) [part="prefix"],

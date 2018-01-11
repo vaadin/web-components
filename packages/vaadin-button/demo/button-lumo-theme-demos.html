@@ -1,4 +1,4 @@
-<dom-module id="button-valo-theme-demos">
+<dom-module id="button-lumo-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -58,12 +58,12 @@
       <template preserve-content>
         <!-- Icon in place of label -->
         <vaadin-button theme="icon" aria-label="Add new item">
-          <iron-icon icon="valo:plus"></iron-icon>
+          <iron-icon icon="lumo:plus"></iron-icon>
         </vaadin-button>
 
         <!-- With "prefix/suffix" slot -->
         <vaadin-button theme="icon" aria-label="Delete item">
-          <iron-icon icon="valo:cross" slot="prefix"></iron-icon>
+          <iron-icon icon="lumo:cross" slot="prefix"></iron-icon>
         </vaadin-button>
       </template>
     </vaadin-demo-snippet>
@@ -71,11 +71,11 @@
 
   </template>
   <script>
-    class ButtonValoThemeDemos extends DemoReadyEventEmitter(ButtonDemo(Polymer.Element)) {
+    class ButtonLumoThemeDemos extends DemoReadyEventEmitter(ButtonDemo(Polymer.Element)) {
       static get is() {
-        return 'button-valo-theme-demos';
+        return 'button-lumo-theme-demos';
       }
     }
-    customElements.define(ButtonValoThemeDemos.is, ButtonValoThemeDemos);
+    customElements.define(ButtonLumoThemeDemos.is, ButtonLumoThemeDemos);
   </script>
 </dom-module>
