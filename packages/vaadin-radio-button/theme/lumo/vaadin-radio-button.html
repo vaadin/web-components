@@ -1,7 +1,7 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
 
-<dom-module id="valo-radio-button" theme-for="vaadin-radio-button">
+<dom-module id="lumo-radio-button" theme-for="vaadin-radio-button">
   <template>
     <style>
       :host {
@@ -21,7 +21,7 @@
         margin: 0.1875em;
         position: relative;
         border-radius: 50%;
-        background-color: var(--valo-contrast-20pct);
+        background-color: var(--lumo-contrast-20pct);
         transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), background-color 0.15s;
         pointer-events: none;
         will-change: transform;
@@ -49,7 +49,7 @@
         content: "";
         width: 0;
         height: 0;
-        border: 3px solid var(--valo-primary-contrast-color);
+        border: 3px solid var(--lumo-primary-contrast-color);
         border-radius: 50%;
         position: absolute;
         top: 50%;
@@ -61,7 +61,7 @@
       }
 
       :host([checked]) [part="radio"] {
-        background-color: var(--valo-primary-color);
+        background-color: var(--lumo-primary-color);
       }
 
       :host([checked]) [part="radio"]::after {
@@ -69,7 +69,7 @@
       }
 
       :host(:not([checked]):not([indeterminate]):not([disabled]):hover) [part="radio"] {
-        background-color: var(--valo-contrast-30pct);
+        background-color: var(--lumo-contrast-30pct);
       }
 
       :host([active]) [part="radio"] {
@@ -88,12 +88,12 @@
       }
 
       :host([focus-ring]) [part="radio"] {
-        box-shadow: 0 0 0 3px var(--valo-primary-color-50pct);
+        box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
       }
 
       :host([disabled]) {
         pointer-events: none;
-        color: var(--valo-disabled-text-color);
+        color: var(--lumo-disabled-text-color);
       }
 
       :host([disabled]) ::slotted(*) {
@@ -101,11 +101,11 @@
       }
 
       :host([disabled]) [part="radio"] {
-        background-color: var(--valo-contrast-10pct);
+        background-color: var(--lumo-contrast-10pct);
       }
 
       :host([disabled]) [part="radio"]::after {
-        border-color: var(--valo-contrast-30pct);
+        border-color: var(--lumo-contrast-30pct);
       }
 
       /* IE11 only */

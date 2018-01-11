@@ -24,11 +24,11 @@
   }
   ,
   {
-    "name": "Valo Theme Variations",
-    "url": "radio-group-valo-theme-demos",
-    "src": "radio-group-valo-theme-demos.html",
+    "name": "Lumo Theme Variations",
+    "url": "radio-group-lumo-theme-demos",
+    "src": "radio-group-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-radio-button Valo Theme Variations",
+      "title": "vaadin-radio-button Lumo Theme Variations",
       "description": "",
       "image": ""
     }

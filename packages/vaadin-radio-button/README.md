@@ -35,7 +35,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -44,16 +44,16 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled elements.
 
-- `theme/valo/vaadin-radio-button.html`
-- `theme/valo/vaadin-radio-group.html`
+- `theme/lumo/vaadin-radio-button.html`
+- `theme/lumo/vaadin-radio-group.html`
 
-  Elements with Valo theme.
+  Elements with Lumo theme.
 
 - `vaadin-radio-button.html`
 - `vaadin-radio-group.html`
 
-  Alias for theme/valo/vaadin-radio-button.html
-  theme/valo/vaadin-radio-group.html
+  Alias for theme/lumo/vaadin-radio-button.html
+  theme/lumo/vaadin-radio-group.html
 
 ## Running demos and tests in browser
 

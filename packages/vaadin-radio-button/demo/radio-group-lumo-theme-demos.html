@@ -1,4 +1,4 @@
-<dom-module id="radio-group-valo-theme-demos">
+<dom-module id="radio-group-lumo-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,7 +7,7 @@
     </style>
 
     <h3>Direction</h3>
-    <vaadin-demo-snippet id="radio-group-valo-theme-demos-direction">
+    <vaadin-demo-snippet id="radio-group-lumo-theme-demos-direction">
       <template preserve-content>
         <h4>Horizontal</h4>
         <vaadin-radio-group>
@@ -26,7 +26,7 @@
     </vaadin-demo-snippet>
 
     <h3>Multi-line Label</h3>
-    <vaadin-demo-snippet id="radio-group-valo-theme-demos-multi-line-label">
+    <vaadin-demo-snippet id="radio-group-lumo-theme-demos-multi-line-label">
       <template preserve-content>
         <vaadin-radio-group theme="vertical">
           <vaadin-radio-button>
@@ -49,11 +49,11 @@
 
   </template>
   <script>
-    class RadioGroupValoThemeDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
+    class RadioGroupLumoThemeDemos extends DemoReadyEventEmitter(RadioButtonDemo(Polymer.Element)) {
       static get is() {
-        return 'radio-group-valo-theme-demos';
+        return 'radio-group-lumo-theme-demos';
       }
     }
-    customElements.define(RadioGroupValoThemeDemos.is, RadioGroupValoThemeDemos);
+    customElements.define(RadioGroupLumoThemeDemos.is, RadioGroupLumoThemeDemos);
   </script>
 </dom-module>
