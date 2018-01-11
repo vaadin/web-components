@@ -64,9 +64,18 @@
       [part="tabs"] {
         --_valo-tabs-overflow-mask-image: none;
         -webkit-mask-image: var(--_valo-tabs-overflow-mask-image);
-        mask-image: var(--_valo-tabs-overflow-mask-image);
         /* For IE11 */
         min-height: var(--valo-size-l);
+      }
+
+      /*
+        TODO: CSS custom property in `mask-image` causes crash in Edge
+        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+      */
+      @-moz-document url-prefix() {
+        [part="tabs"] {
+          mask-image: var(--_valo-tabs-overflow-mask-image);
+        }
       }
 
       /* Horizontal tabs overflow */
