@@ -82,6 +82,10 @@ This program is available under Apache License Version 2.0, available at https:/
         margin: 0;
       }
 
+      [part~="row"][loading] [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
+        opacity: 0;
+      }
+
       #items [part~="row"] {
         position: absolute;
       }
