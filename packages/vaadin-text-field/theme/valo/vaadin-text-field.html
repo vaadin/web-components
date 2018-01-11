@@ -77,12 +77,22 @@
         padding: 0 0.25em;
         --_valo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
         -webkit-mask-image: var(--_valo-text-field-overflow-mask-image);
-        mask-image: var(--_valo-text-field-overflow-mask-image);
       }
 
       [part="value"]:focus {
         -webkit-mask-image: none;
         mask-image: none;
+      }
+
+      /*
+        TODO: CSS custom property in `mask-image` causes crash in Edge
+        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+      */
+      @-moz-document url-prefix() {
+        [part="value"],
+        [part="input-field"] ::slotted([part="value"]) {
+          mask-image: var(--_valo-text-field-overflow-mask-image);
+        }
       }
 
       [part="value"]::-webkit-input-placeholder {
