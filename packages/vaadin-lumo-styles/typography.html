@@ -5,34 +5,34 @@
   <style>
     html {
       /* Font families */
-      --valo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Ubuntu, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      --lumo-font-family: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI", Ubuntu, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 
       /* Font sizes */
-      --valo-font-size-xxxl: 2.25rem;
-      --valo-font-size-xxl: 1.75rem;
-      --valo-font-size-xl: 1.375rem;
-      --valo-font-size-l: 1.125rem;
-      --valo-font-size-m: 1rem;
-      --valo-font-size-s: .875rem;
-      --valo-font-size-xs: .8125rem;
-      --valo-font-size-xxs: .75rem;
+      --lumo-font-size-xxxl: 2.25rem;
+      --lumo-font-size-xxl: 1.75rem;
+      --lumo-font-size-xl: 1.375rem;
+      --lumo-font-size-l: 1.125rem;
+      --lumo-font-size-m: 1rem;
+      --lumo-font-size-s: .875rem;
+      --lumo-font-size-xs: .8125rem;
+      --lumo-font-size-xxs: .75rem;
 
       /* Line heights */
-      --valo-line-height-m: 1.625;
-      --valo-line-height-s: 1.375;
-      --valo-line-height-xs: 1.25;
+      --lumo-line-height-m: 1.625;
+      --lumo-line-height-s: 1.375;
+      --lumo-line-height-xs: 1.25;
     }
 
   </style>
 </custom-style>
 
-<dom-module id="valo-typography">
+<dom-module id="lumo-typography">
   <template>
     <style>
       body {
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size, var(--valo-font-size-m));
-        line-height: var(--valo-line-height-m);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
+        line-height: var(--lumo-line-height-m);
         -webkit-text-size-adjust: 100%;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -44,33 +44,33 @@
       h4,
       h5,
       h6 {
-        color: var(--valo-header-text-color);
+        color: var(--lumo-header-text-color);
         font-weight: 600;
-        line-height: var(--valo-line-height-xs);
+        line-height: var(--lumo-line-height-xs);
       }
 
       h1 {
-        font-size: var(--valo-font-size-xxxl);
+        font-size: var(--lumo-font-size-xxxl);
       }
 
       h2 {
-        font-size: var(--valo-font-size-xxl);
+        font-size: var(--lumo-font-size-xxl);
       }
 
       h3 {
-        font-size: var(--valo-font-size-xl);
+        font-size: var(--lumo-font-size-xl);
       }
 
       h4 {
-        font-size: var(--valo-font-size-l);
+        font-size: var(--lumo-font-size-l);
       }
 
       h5 {
-        font-size: var(--valo-font-size-m);
+        font-size: var(--lumo-font-size-m);
       }
 
       h6 {
-        font-size: var(--valo-font-size-s);
+        font-size: var(--lumo-font-size-s);
       }
 
       a {

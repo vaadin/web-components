@@ -2,9 +2,9 @@
 <link rel="import" href="../spacing.html">
 <link rel="import" href="overlay.html">
 
-<dom-module id="valo-menu-overlay">
+<dom-module id="lumo-menu-overlay">
   <template>
-    <style include="valo-overlay">
+    <style include="lumo-overlay">
       [part="overlay"] {
         animation: 0.2s vaadin-menu-overlay-enter;
         will-change: opacity, transform;
@@ -27,7 +27,7 @@
       :host([phone]) [part="overlay"] {
         animation: 0.15s vaadin-mobile-menu-overlay-enter cubic-bezier(.215, .61, .355, 1);
         border-radius: 0;
-        box-shadow: 0 6px 56px 0 var(--valo-shade-80pct);
+        box-shadow: 0 6px 56px 0 var(--lumo-shade-80pct);
         overflow: visible;
         padding: 0;
         position: relative;
@@ -51,16 +51,16 @@
           left: 0;
           background-color: inherit;
           background-image: inherit;
-          --_valo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
-          -webkit-mask-image: var(--_valo-menu-overlay-mask-image);
-          mask-image: var(--_valo-menu-overlay-mask-image);
+          --_lumo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
+          -webkit-mask-image: var(--_lumo-menu-overlay-mask-image);
+          mask-image: var(--_lumo-menu-overlay-mask-image);
         }
       }
 
       /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
       :host([phone][phone]) [part="content"] {
         max-height: 50vh;
-        padding: 30px var(--valo-space-s);
+        padding: 30px var(--lumo-space-s);
         box-sizing: border-box;
         -webkit-overflow-scrolling: touch;
         overflow: auto;
@@ -69,7 +69,7 @@
       /* Phone layout specific tweaks for contained vaadin-items */
 
       :host([phone]) vaadin-item {
-        margin: 0 var(--valo-space-xs);
+        margin: 0 var(--lumo-space-xs);
       }
 
       :host([phone]) vaadin-item[focused] {

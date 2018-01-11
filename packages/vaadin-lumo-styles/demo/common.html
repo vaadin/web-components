@@ -27,7 +27,7 @@
 
 <!-- Include theme to global scope -->
 <custom-style>
-  <style include="valo-color valo-typography"></style>
+  <style include="lumo-color lumo-typography"></style>
 </custom-style>
 
 <custom-style>
@@ -42,7 +42,7 @@
     }
 
     #theme-select {
-      font-size: var(--valo-font-size-m);
+      font-size: var(--lumo-font-size-m);
       margin-left: 1em;
       display: inline-block;
       vertical-align: baseline;
@@ -66,14 +66,14 @@
     hr {
       height: 0;
       border: 0;
-      border-top: 2px solid var(--valo-contrast-10pct);
-      margin: var(--valo-space-xl) 0;
+      border-top: 2px solid var(--lumo-contrast-10pct);
+      margin: var(--lumo-space-xl) 0;
     }
 
     dl.custom-properties {
-      font-size: var(--valo-font-size-s);
-      border-left: 4px solid var(--valo-shade-10pct);
-      background-color: var(--valo-shade-5pct);
+      font-size: var(--lumo-font-size-s);
+      border-left: 4px solid var(--lumo-shade-10pct);
+      background-color: var(--lumo-shade-5pct);
       padding: 1em 2em;
     }
 
@@ -83,7 +83,7 @@
     }
 
     dl.custom-properties dd {
-      color: var(--valo-secondary-text-color);
+      color: var(--lumo-secondary-text-color);
     }
 
     dl.custom-properties dt code {
@@ -95,39 +95,39 @@
       width: 0.75em;
       height: 0.75em;
       border-radius: 50%;
-      box-shadow: 0 0 0 1px var(--valo-shade-20pct);
+      box-shadow: 0 0 0 1px var(--lumo-shade-20pct);
       margin-right: 0.2em;
     }
 
     code {
-      background-color: var(--valo-shade-5pct);
-      border-radius: var(--valo-border-radius);
+      background-color: var(--lumo-shade-5pct);
+      border-radius: var(--lumo-border-radius);
       padding: 0 0.2em;
       font-family: "Source Code Pro", "Courier New", Courier, monospace;
-      font-size: var(--valo-font-size-s);
+      font-size: var(--lumo-font-size-s);
     }
 
     code.block {
       display: block;
       white-space: pre;
-      border: 1px solid var(--valo-shade-10pct);
+      border: 1px solid var(--lumo-shade-10pct);
       padding: 1em;
-      font-size: var(--valo-font-size-xs);
+      font-size: var(--lumo-font-size-xs);
       margin: 1em 0;
     }
 
     nice-demo-snippet {
-      border-radius: var(--valo-border-radius);
+      border-radius: var(--lumo-border-radius);
       --nice-demo-snippet-code-font-family: Menlo, Consolas, monospace;
-      --nice-demo-snippet-code-background-color: var(--valo-shade-5pct);
-      --nice-demo-snippet-border-color: var(--valo-contrast-10pct);
-      --nice-demo-snippet-view-source-background-color: var(--valo-base-color);
-      --nice-demo-snippet-view-source-background-image: linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
+      --nice-demo-snippet-code-background-color: var(--lumo-shade-5pct);
+      --nice-demo-snippet-border-color: var(--lumo-contrast-10pct);
+      --nice-demo-snippet-view-source-background-color: var(--lumo-base-color);
+      --nice-demo-snippet-view-source-background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
     }
 
     [theme="dark"] nice-demo-snippet {
       --nice-demo-snippet-code-background-color: #FFF;
-      --nice-demo-snippet-code-color: var(--valo-shade-70pct);
+      --nice-demo-snippet-code-color: var(--lumo-shade-70pct);
     }
 
     nice-demo-snippet h5:first-child {
@@ -135,20 +135,20 @@
     }
 
     demo-navigation {
-      --demo-navigation-sidebar-background-color: var(--valo-shade-5pct);
-      --demo-navigation-current-section-border: 2px solid var(--valo-contrast-10pct);
-      --demo-navigation-selected-item-color: var(--valo-primary-text-color);
-      --demo-navigation-item-color: var(--valo-secondary-text-color);
+      --demo-navigation-sidebar-background-color: var(--lumo-shade-5pct);
+      --demo-navigation-current-section-border: 2px solid var(--lumo-contrast-10pct);
+      --demo-navigation-selected-item-color: var(--lumo-primary-text-color);
+      --demo-navigation-item-color: var(--lumo-secondary-text-color);
       --demo-navigation-item-opacity: 1;
-      --demo-navigation-header-background: var(--valo-base-color) linear-gradient(var(--valo-contrast-5pct), var(--valo-contrast-5pct));
-      --demo-navigation-header-box-shadow: 0 0 1px 2px var(--valo-shade-5pct), 0 0 1px 4px var(--valo-shade-5pct), 0 0 1px 6px var(--valo-shade-5pct);
-      --demo-navigation-drawer-background-color: var(--valo-base-color);
-      --demo-navigation-drawer-curtain-background-color: var(--valo-shade-30pct);
+      --demo-navigation-header-background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+      --demo-navigation-header-box-shadow: 0 0 1px 2px var(--lumo-shade-5pct), 0 0 1px 4px var(--lumo-shade-5pct), 0 0 1px 6px var(--lumo-shade-5pct);
+      --demo-navigation-drawer-background-color: var(--lumo-base-color);
+      --demo-navigation-drawer-curtain-background-color: var(--lumo-shade-30pct);
     }
 
     .theme-source-code {
       display: inline-block;
-      font-size: var(--valo-font-size-s);
+      font-size: var(--lumo-font-size-s);
       height: 1em;
       line-height: 1em;
       float: right;
@@ -168,13 +168,13 @@
     }
 
     .note {
-      background-color: var(--valo-primary-color-10pct);
-      border-color: var(--valo-primary-color-50pct);
+      background-color: var(--lumo-primary-color-10pct);
+      border-color: var(--lumo-primary-color-50pct);
     }
 
     [theme~="dark"] .note.warn {
-      background-color: var(--valo-error-color-10pct);
-      border-color: var(--valo-error-color-50pct);
+      background-color: var(--lumo-error-color-10pct);
+      border-color: var(--lumo-error-color-50pct);
     }
   </style>
 </custom-style>

@@ -2,7 +2,7 @@
 <link rel="import" href="../font-icons.html">
 <link rel="import" href="../sizing.html">
 
-<dom-module id="valo-field-button">
+<dom-module id="lumo-field-button">
   <template>
     <style>
       [part$="button"] {
@@ -10,24 +10,24 @@
         width: 1em;
         height: 1em;
         line-height: 1;
-        font-size: var(--valo-icon-size);
+        font-size: var(--lumo-icon-size);
         text-align: center;
-        color: var(--valo-contrast-60pct);
+        color: var(--lumo-contrast-60pct);
         transition: 0.2s color;
         cursor: default;
       }
 
       :host(:not([readonly])) [part$="button"]:hover {
-        color: var(--valo-contrast-90pct);
+        color: var(--lumo-contrast-90pct);
       }
 
       :host([disabled]) [part$="button"],
       :host([readonly]) [part$="button"] {
-        color: var(--valo-contrast-20pct);
+        color: var(--lumo-contrast-20pct);
       }
 
       [part$="button"]::before {
-        font-family: "valo-icons";
+        font-family: "lumo-icons";
       }
     </style>
   </template>

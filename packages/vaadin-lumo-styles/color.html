@@ -5,167 +5,167 @@
   <style>
     html {
       /* Base (background) color */
-      --valo-base-color: #FFF;
+      --lumo-base-color: #FFF;
 
       /* Tints */
-      --valo-tint-5pct: hsla(0, 0%, 100%, 0.3);
-      --valo-tint-10pct: hsla(0, 0%, 100%, 0.37);
-      --valo-tint-20pct: hsla(0, 0%, 100%, 0.44);
-      --valo-tint-30pct: hsla(0, 0%, 100%, 0.5);
-      --valo-tint-40pct: hsla(0, 0%, 100%, 0.57);
-      --valo-tint-50pct: hsla(0, 0%, 100%, 0.64);
-      --valo-tint-60pct: hsla(0, 0%, 100%, 0.7);
-      --valo-tint-70pct: hsla(0, 0%, 100%, 0.77);
-      --valo-tint-80pct: hsla(0, 0%, 100%, 0.84);
-      --valo-tint-90pct: hsla(0, 0%, 100%, 0.9);
-      --valo-tint: #FFF;
+      --lumo-tint-5pct: hsla(0, 0%, 100%, 0.3);
+      --lumo-tint-10pct: hsla(0, 0%, 100%, 0.37);
+      --lumo-tint-20pct: hsla(0, 0%, 100%, 0.44);
+      --lumo-tint-30pct: hsla(0, 0%, 100%, 0.5);
+      --lumo-tint-40pct: hsla(0, 0%, 100%, 0.57);
+      --lumo-tint-50pct: hsla(0, 0%, 100%, 0.64);
+      --lumo-tint-60pct: hsla(0, 0%, 100%, 0.7);
+      --lumo-tint-70pct: hsla(0, 0%, 100%, 0.77);
+      --lumo-tint-80pct: hsla(0, 0%, 100%, 0.84);
+      --lumo-tint-90pct: hsla(0, 0%, 100%, 0.9);
+      --lumo-tint: #FFF;
 
       /* Shades */
-      --valo-shade-5pct: hsla(214, 61%, 25%, 0.06);
-      --valo-shade-10pct: hsla(214, 57%, 24%, 0.1);
-      --valo-shade-20pct: hsla(214, 53%, 23%, 0.16);
-      --valo-shade-30pct: hsla(214, 50%, 22%, 0.26);
-      --valo-shade-40pct: hsla(214, 47%, 21%, 0.38);
-      --valo-shade-50pct: hsla(214, 45%, 20%, 0.5);
-      --valo-shade-60pct: hsla(214, 43%, 19%, 0.61);
-      --valo-shade-70pct: hsla(214, 42%, 18%, 0.72);
-      --valo-shade-80pct: hsla(214, 41%, 17%, 0.83);
-      --valo-shade-90pct: hsla(214, 40%, 16%, 0.94);
-      --valo-shade: hsl(214, 35%, 15%);
+      --lumo-shade-5pct: hsla(214, 61%, 25%, 0.06);
+      --lumo-shade-10pct: hsla(214, 57%, 24%, 0.1);
+      --lumo-shade-20pct: hsla(214, 53%, 23%, 0.16);
+      --lumo-shade-30pct: hsla(214, 50%, 22%, 0.26);
+      --lumo-shade-40pct: hsla(214, 47%, 21%, 0.38);
+      --lumo-shade-50pct: hsla(214, 45%, 20%, 0.5);
+      --lumo-shade-60pct: hsla(214, 43%, 19%, 0.61);
+      --lumo-shade-70pct: hsla(214, 42%, 18%, 0.72);
+      --lumo-shade-80pct: hsla(214, 41%, 17%, 0.83);
+      --lumo-shade-90pct: hsla(214, 40%, 16%, 0.94);
+      --lumo-shade: hsl(214, 35%, 15%);
 
       /* Contrast colors */
-      --valo-contrast-5pct: var(--valo-shade-5pct);
-      --valo-contrast-10pct: var(--valo-shade-10pct);
-      --valo-contrast-20pct: var(--valo-shade-20pct);
-      --valo-contrast-30pct: var(--valo-shade-30pct);
-      --valo-contrast-40pct: var(--valo-shade-40pct);
-      --valo-contrast-50pct: var(--valo-shade-50pct);
-      --valo-contrast-60pct: var(--valo-shade-60pct);
-      --valo-contrast-70pct: var(--valo-shade-70pct);
-      --valo-contrast-80pct: var(--valo-shade-80pct);
-      --valo-contrast-90pct: var(--valo-shade-90pct);
-      --valo-contrast: var(--valo-shade);
+      --lumo-contrast-5pct: var(--lumo-shade-5pct);
+      --lumo-contrast-10pct: var(--lumo-shade-10pct);
+      --lumo-contrast-20pct: var(--lumo-shade-20pct);
+      --lumo-contrast-30pct: var(--lumo-shade-30pct);
+      --lumo-contrast-40pct: var(--lumo-shade-40pct);
+      --lumo-contrast-50pct: var(--lumo-shade-50pct);
+      --lumo-contrast-60pct: var(--lumo-shade-60pct);
+      --lumo-contrast-70pct: var(--lumo-shade-70pct);
+      --lumo-contrast-80pct: var(--lumo-shade-80pct);
+      --lumo-contrast-90pct: var(--lumo-shade-90pct);
+      --lumo-contrast: var(--lumo-shade);
 
       /* Text colors */
-      --valo-header-text-color: var(--valo-contrast);
-      --valo-body-text-color: var(--valo-contrast-90pct);
-      --valo-secondary-text-color: var(--valo-contrast-70pct);
-      --valo-tertiary-text-color: var(--valo-contrast-50pct);
-      --valo-disabled-text-color: var(--valo-contrast-30pct);
+      --lumo-header-text-color: var(--lumo-contrast);
+      --lumo-body-text-color: var(--lumo-contrast-90pct);
+      --lumo-secondary-text-color: var(--lumo-contrast-70pct);
+      --lumo-tertiary-text-color: var(--lumo-contrast-50pct);
+      --lumo-disabled-text-color: var(--lumo-contrast-30pct);
 
       /* Primary colors */
-      --valo-primary-color: hsl(214, 90%, 52%);
-      --valo-primary-color-50pct: hsla(214, 90%, 52%, 0.5);
-      --valo-primary-color-10pct: hsla(214, 90%, 52%, 0.1);
-      --valo-primary-text-color: var(--valo-primary-color);
-      --valo-primary-contrast-color: #FFF;
+      --lumo-primary-color: hsl(214, 90%, 52%);
+      --lumo-primary-color-50pct: hsla(214, 90%, 52%, 0.5);
+      --lumo-primary-color-10pct: hsla(214, 90%, 52%, 0.1);
+      --lumo-primary-text-color: var(--lumo-primary-color);
+      --lumo-primary-contrast-color: #FFF;
 
       /* Error colors */
-      --valo-error-color: hsl(3, 100%, 61%);
-      --valo-error-color-50pct: hsla(3, 100%, 60%, 0.5);
-      --valo-error-color-10pct: hsla(3, 100%, 60%, 0.1);
-      --valo-error-text-color: hsl(3, 92%, 53%);
-      --valo-error-contrast-color: #FFF;
+      --lumo-error-color: hsl(3, 100%, 61%);
+      --lumo-error-color-50pct: hsla(3, 100%, 60%, 0.5);
+      --lumo-error-color-10pct: hsla(3, 100%, 60%, 0.1);
+      --lumo-error-text-color: hsl(3, 92%, 53%);
+      --lumo-error-contrast-color: #FFF;
 
       /* Success colors */
-      --valo-success-color: hsl(145, 80%, 42%); /* hsl(144,82%,37%); */
-      --valo-success-color-50pct: hsla(145, 76%, 44%, 0.55);
-      --valo-success-color-10pct: hsla(145, 76%, 44%, 0.12);
-      --valo-success-text-color: hsl(145, 100%, 32%);
-      --valo-success-contrast-color: #FFF;
+      --lumo-success-color: hsl(145, 80%, 42%); /* hsl(144,82%,37%); */
+      --lumo-success-color-50pct: hsla(145, 76%, 44%, 0.55);
+      --lumo-success-color-10pct: hsla(145, 76%, 44%, 0.12);
+      --lumo-success-text-color: hsl(145, 100%, 32%);
+      --lumo-success-contrast-color: #FFF;
     }
   </style>
 </custom-style>
 
-<dom-module id="valo-color">
+<dom-module id="lumo-color">
   <template>
     <style>
       [theme~="dark"] {
         /* Base (background) color */
-        --valo-base-color: hsl(214, 35%, 21%);
+        --lumo-base-color: hsl(214, 35%, 21%);
 
         /* Tints */
-        --valo-tint-5pct: hsla(214, 65%, 85%, 0.06);
-        --valo-tint-10pct: hsla(214, 60%, 80%, 0.14);
-        --valo-tint-20pct: hsla(214, 64%, 82%, 0.23);
-        --valo-tint-30pct: hsla(214, 69%, 84%, 0.32);
-        --valo-tint-40pct: hsla(214, 73%, 86%, 0.41);
-        --valo-tint-50pct: hsla(214, 78%, 88%, 0.5);
-        --valo-tint-60pct: hsla(214, 82%, 90%, 0.6);
-        --valo-tint-70pct: hsla(214, 87%, 92%, 0.7);
-        --valo-tint-80pct: hsla(214, 91%, 94%, 0.8);
-        --valo-tint-90pct: hsla(214, 96%, 96%, 0.9);
-        --valo-tint: hsl(214, 100%, 98%);
+        --lumo-tint-5pct: hsla(214, 65%, 85%, 0.06);
+        --lumo-tint-10pct: hsla(214, 60%, 80%, 0.14);
+        --lumo-tint-20pct: hsla(214, 64%, 82%, 0.23);
+        --lumo-tint-30pct: hsla(214, 69%, 84%, 0.32);
+        --lumo-tint-40pct: hsla(214, 73%, 86%, 0.41);
+        --lumo-tint-50pct: hsla(214, 78%, 88%, 0.5);
+        --lumo-tint-60pct: hsla(214, 82%, 90%, 0.6);
+        --lumo-tint-70pct: hsla(214, 87%, 92%, 0.7);
+        --lumo-tint-80pct: hsla(214, 91%, 94%, 0.8);
+        --lumo-tint-90pct: hsla(214, 96%, 96%, 0.9);
+        --lumo-tint: hsl(214, 100%, 98%);
 
         /* Shades */
-        --valo-shade-5pct: hsla(214, 0%, 0%, 0.08);
-        --valo-shade-10pct: hsla(214, 4%, 2%, 0.15);
-        --valo-shade-20pct: hsla(214, 8%, 4%, 0.23);
-        --valo-shade-30pct: hsla(214, 12%, 6%, 0.32);
-        --valo-shade-40pct: hsla(214, 16%, 8%, 0.41);
-        --valo-shade-50pct: hsla(214, 20%, 10%, 0.5);
-        --valo-shade-60pct: hsla(214, 24%, 12%, 0.6);
-        --valo-shade-70pct: hsla(214, 28%, 13%, 0.7);
-        --valo-shade-80pct: hsla(214, 32%, 13%, 0.8);
-        --valo-shade-90pct: hsla(214, 33%, 13%, 0.9);
-        --valo-shade: hsl(214, 33%, 13%);
+        --lumo-shade-5pct: hsla(214, 0%, 0%, 0.08);
+        --lumo-shade-10pct: hsla(214, 4%, 2%, 0.15);
+        --lumo-shade-20pct: hsla(214, 8%, 4%, 0.23);
+        --lumo-shade-30pct: hsla(214, 12%, 6%, 0.32);
+        --lumo-shade-40pct: hsla(214, 16%, 8%, 0.41);
+        --lumo-shade-50pct: hsla(214, 20%, 10%, 0.5);
+        --lumo-shade-60pct: hsla(214, 24%, 12%, 0.6);
+        --lumo-shade-70pct: hsla(214, 28%, 13%, 0.7);
+        --lumo-shade-80pct: hsla(214, 32%, 13%, 0.8);
+        --lumo-shade-90pct: hsla(214, 33%, 13%, 0.9);
+        --lumo-shade: hsl(214, 33%, 13%);
 
         /* Contrast colors */
-        --valo-contrast-5pct: var(--valo-tint-5pct);
-        --valo-contrast-10pct: var(--valo-tint-10pct);
-        --valo-contrast-20pct: var(--valo-tint-20pct);
-        --valo-contrast-30pct: var(--valo-tint-30pct);
-        --valo-contrast-40pct: var(--valo-tint-40pct);
-        --valo-contrast-50pct: var(--valo-tint-50pct);
-        --valo-contrast-60pct: var(--valo-tint-60pct);
-        --valo-contrast-70pct: var(--valo-tint-70pct);
-        --valo-contrast-80pct: var(--valo-tint-80pct);
-        --valo-contrast-90pct: var(--valo-tint-90pct);
-        --valo-contrast: var(--valo-tint);
+        --lumo-contrast-5pct: var(--lumo-tint-5pct);
+        --lumo-contrast-10pct: var(--lumo-tint-10pct);
+        --lumo-contrast-20pct: var(--lumo-tint-20pct);
+        --lumo-contrast-30pct: var(--lumo-tint-30pct);
+        --lumo-contrast-40pct: var(--lumo-tint-40pct);
+        --lumo-contrast-50pct: var(--lumo-tint-50pct);
+        --lumo-contrast-60pct: var(--lumo-tint-60pct);
+        --lumo-contrast-70pct: var(--lumo-tint-70pct);
+        --lumo-contrast-80pct: var(--lumo-tint-80pct);
+        --lumo-contrast-90pct: var(--lumo-tint-90pct);
+        --lumo-contrast: var(--lumo-tint);
 
         /* Text colors */
-        --valo-header-text-color: var(--valo-contrast);
-        --valo-body-text-color: var(--valo-contrast-90pct);
-        --valo-secondary-text-color: var(--valo-contrast-70pct);
-        --valo-tertiary-text-color: var(--valo-contrast-50pct);
-        --valo-disabled-text-color: var(--valo-contrast-30pct);
+        --lumo-header-text-color: var(--lumo-contrast);
+        --lumo-body-text-color: var(--lumo-contrast-90pct);
+        --lumo-secondary-text-color: var(--lumo-contrast-70pct);
+        --lumo-tertiary-text-color: var(--lumo-contrast-50pct);
+        --lumo-disabled-text-color: var(--lumo-contrast-30pct);
 
         /* Primary colors */
-        --valo-primary-color: hsl(214, 86%, 55%);
-        --valo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
-        --valo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
-        --valo-primary-text-color: hsl(214, 100%, 70%);
-        --valo-primary-contrast-color: #FFF;
+        --lumo-primary-color: hsl(214, 86%, 55%);
+        --lumo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
+        --lumo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
+        --lumo-primary-text-color: hsl(214, 100%, 70%);
+        --lumo-primary-contrast-color: #FFF;
 
         /* Error colors */
-        --valo-error-color: hsl(3, 90%, 63%);
-        --valo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
-        --valo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
-        --valo-error-text-color: hsl(3, 100%, 67%);
+        --lumo-error-color: hsl(3, 90%, 63%);
+        --lumo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
+        --lumo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
+        --lumo-error-text-color: hsl(3, 100%, 67%);
 
         /* Success colors */
-        --valo-success-color: hsl(145, 65%, 42%);
-        --valo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
-        --valo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
-        --valo-success-text-color: hsl(145, 85%, 47%);
+        --lumo-success-color: hsl(145, 65%, 42%);
+        --lumo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
+        --lumo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
+        --lumo-success-text-color: hsl(145, 85%, 47%);
 
         /* TODO see if we can avoid duplicating the overlay styles here */
-        --valo-box-shadow-m: 0 1px 6px 0 var(--valo-shade-60pct), 0 8px 24px -6px var(--valo-shade-80pct);
-        --valo-box-shadow-xl: 0 4px 18px -2px var(--valo-shade-30pct), 0 24px 56px -6px var(--valo-shade-40pct);
+        --lumo-box-shadow-m: 0 1px 6px 0 var(--lumo-shade-60pct), 0 8px 24px -6px var(--lumo-shade-80pct);
+        --lumo-box-shadow-xl: 0 4px 18px -2px var(--lumo-shade-30pct), 0 24px 56px -6px var(--lumo-shade-40pct);
 
         /* Set the base colors */
-        color: var(--valo-body-text-color);
+        color: var(--lumo-body-text-color);
       }
 
       html {
-        color: var(--valo-body-text-color);
-        background-color: var(--valo-base-color);
+        color: var(--lumo-body-text-color);
+        background-color: var(--lumo-base-color);
       }
 
       /* Can’t combine with the above selector because that doesn’t work in Firefox */
       :host {
-        color: var(--valo-body-text-color);
-        background-color: var(--valo-base-color);
+        color: var(--lumo-body-text-color);
+        background-color: var(--lumo-base-color);
       }
 
       /* Limit setting the background color to certain elements only */
@@ -176,97 +176,97 @@
       header[theme~="dark"],
       footer[theme~="dark"],
       nav[theme~="dark"] {
-        background-color: var(--valo-base-color);
+        background-color: var(--lumo-base-color);
       }
 
       /* Set link color */
       a {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
       }
     </style>
   </template>
 </dom-module>
 
 <!-- TODO: only needed for IE11/Edge14. This is a copy-paste of the [theme~=dark] selector above, and it should be automatically generated by a build script -->
-<dom-module id="valo-dark">
+<dom-module id="lumo-dark">
   <template>
     <style>
       :host {
         /* Base (background) color */
-        --valo-base-color: hsl(214, 35%, 21%);
+        --lumo-base-color: hsl(214, 35%, 21%);
 
         /* Tints */
-        --valo-tint-5pct: hsla(214, 65%, 85%, 0.06);
-        --valo-tint-10pct: hsla(214, 60%, 80%, 0.14);
-        --valo-tint-20pct: hsla(214, 64%, 82%, 0.23);
-        --valo-tint-30pct: hsla(214, 69%, 84%, 0.32);
-        --valo-tint-40pct: hsla(214, 73%, 86%, 0.41);
-        --valo-tint-50pct: hsla(214, 78%, 88%, 0.5);
-        --valo-tint-60pct: hsla(214, 82%, 90%, 0.6);
-        --valo-tint-70pct: hsla(214, 87%, 92%, 0.7);
-        --valo-tint-80pct: hsla(214, 91%, 94%, 0.8);
-        --valo-tint-90pct: hsla(214, 96%, 96%, 0.9);
-        --valo-tint: hsl(214, 100%, 98%);
+        --lumo-tint-5pct: hsla(214, 65%, 85%, 0.06);
+        --lumo-tint-10pct: hsla(214, 60%, 80%, 0.14);
+        --lumo-tint-20pct: hsla(214, 64%, 82%, 0.23);
+        --lumo-tint-30pct: hsla(214, 69%, 84%, 0.32);
+        --lumo-tint-40pct: hsla(214, 73%, 86%, 0.41);
+        --lumo-tint-50pct: hsla(214, 78%, 88%, 0.5);
+        --lumo-tint-60pct: hsla(214, 82%, 90%, 0.6);
+        --lumo-tint-70pct: hsla(214, 87%, 92%, 0.7);
+        --lumo-tint-80pct: hsla(214, 91%, 94%, 0.8);
+        --lumo-tint-90pct: hsla(214, 96%, 96%, 0.9);
+        --lumo-tint: hsl(214, 100%, 98%);
 
         /* Shades */
-        --valo-shade-5pct: hsla(214, 0%, 0%, 0.08);
-        --valo-shade-10pct: hsla(214, 4%, 2%, 0.15);
-        --valo-shade-20pct: hsla(214, 8%, 4%, 0.23);
-        --valo-shade-30pct: hsla(214, 12%, 6%, 0.32);
-        --valo-shade-40pct: hsla(214, 16%, 8%, 0.41);
-        --valo-shade-50pct: hsla(214, 20%, 10%, 0.5);
-        --valo-shade-60pct: hsla(214, 24%, 12%, 0.6);
-        --valo-shade-70pct: hsla(214, 28%, 13%, 0.7);
-        --valo-shade-80pct: hsla(214, 32%, 13%, 0.8);
-        --valo-shade-90pct: hsla(214, 33%, 13%, 0.9);
-        --valo-shade: hsl(214, 33%, 13%);
+        --lumo-shade-5pct: hsla(214, 0%, 0%, 0.08);
+        --lumo-shade-10pct: hsla(214, 4%, 2%, 0.15);
+        --lumo-shade-20pct: hsla(214, 8%, 4%, 0.23);
+        --lumo-shade-30pct: hsla(214, 12%, 6%, 0.32);
+        --lumo-shade-40pct: hsla(214, 16%, 8%, 0.41);
+        --lumo-shade-50pct: hsla(214, 20%, 10%, 0.5);
+        --lumo-shade-60pct: hsla(214, 24%, 12%, 0.6);
+        --lumo-shade-70pct: hsla(214, 28%, 13%, 0.7);
+        --lumo-shade-80pct: hsla(214, 32%, 13%, 0.8);
+        --lumo-shade-90pct: hsla(214, 33%, 13%, 0.9);
+        --lumo-shade: hsl(214, 33%, 13%);
 
         /* Contrast colors */
-        --valo-contrast-5pct: var(--valo-tint-5pct);
-        --valo-contrast-10pct: var(--valo-tint-10pct);
-        --valo-contrast-20pct: var(--valo-tint-20pct);
-        --valo-contrast-30pct: var(--valo-tint-30pct);
-        --valo-contrast-40pct: var(--valo-tint-40pct);
-        --valo-contrast-50pct: var(--valo-tint-50pct);
-        --valo-contrast-60pct: var(--valo-tint-60pct);
-        --valo-contrast-70pct: var(--valo-tint-70pct);
-        --valo-contrast-80pct: var(--valo-tint-80pct);
-        --valo-contrast-90pct: var(--valo-tint-90pct);
-        --valo-contrast: var(--valo-tint);
+        --lumo-contrast-5pct: var(--lumo-tint-5pct);
+        --lumo-contrast-10pct: var(--lumo-tint-10pct);
+        --lumo-contrast-20pct: var(--lumo-tint-20pct);
+        --lumo-contrast-30pct: var(--lumo-tint-30pct);
+        --lumo-contrast-40pct: var(--lumo-tint-40pct);
+        --lumo-contrast-50pct: var(--lumo-tint-50pct);
+        --lumo-contrast-60pct: var(--lumo-tint-60pct);
+        --lumo-contrast-70pct: var(--lumo-tint-70pct);
+        --lumo-contrast-80pct: var(--lumo-tint-80pct);
+        --lumo-contrast-90pct: var(--lumo-tint-90pct);
+        --lumo-contrast: var(--lumo-tint);
 
         /* Text colors */
-        --valo-header-text-color: var(--valo-contrast);
-        --valo-body-text-color: var(--valo-contrast-90pct);
-        --valo-secondary-text-color: var(--valo-contrast-70pct);
-        --valo-tertiary-text-color: var(--valo-contrast-50pct);
-        --valo-disabled-text-color: var(--valo-contrast-30pct);
+        --lumo-header-text-color: var(--lumo-contrast);
+        --lumo-body-text-color: var(--lumo-contrast-90pct);
+        --lumo-secondary-text-color: var(--lumo-contrast-70pct);
+        --lumo-tertiary-text-color: var(--lumo-contrast-50pct);
+        --lumo-disabled-text-color: var(--lumo-contrast-30pct);
 
         /* Primary colors */
-        --valo-primary-color: hsl(214, 86%, 55%);
-        --valo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
-        --valo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
-        --valo-primary-text-color: hsl(214, 100%, 70%);
-        --valo-primary-contrast-color: #FFF;
+        --lumo-primary-color: hsl(214, 86%, 55%);
+        --lumo-primary-color-50pct: hsla(214, 86%, 55%, 0.5);
+        --lumo-primary-color-10pct: hsla(214, 90%, 63%, 0.1);
+        --lumo-primary-text-color: hsl(214, 100%, 70%);
+        --lumo-primary-contrast-color: #FFF;
 
         /* Error colors */
-        --valo-error-color: hsl(3, 90%, 63%);
-        --valo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
-        --valo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
-        --valo-error-text-color: hsl(3, 100%, 67%);
+        --lumo-error-color: hsl(3, 90%, 63%);
+        --lumo-error-color-50pct: hsla(3, 90%, 63%, 0.5);
+        --lumo-error-color-10pct: hsla(3, 90%, 63%, 0.1);
+        --lumo-error-text-color: hsl(3, 100%, 67%);
 
         /* Success colors */
-        --valo-success-color: hsl(145, 65%, 42%);
-        --valo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
-        --valo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
-        --valo-success-text-color: hsl(145, 85%, 47%);
+        --lumo-success-color: hsl(145, 65%, 42%);
+        --lumo-success-color-50pct: hsla(145, 65%, 42%, 0.5);
+        --lumo-success-color-10pct: hsla(145, 65%, 42%, 0.1);
+        --lumo-success-text-color: hsl(145, 85%, 47%);
 
         /* TODO see if we can avoid duplicating the overlay styles here */
-        --valo-box-shadow-m: 0 1px 6px 0 var(--valo-shade-60pct), 0 8px 24px -6px var(--valo-shade-80pct);
-        --valo-box-shadow-xl: 0 4px 18px -2px var(--valo-shade-30pct), 0 24px 56px -6px var(--valo-shade-40pct);
+        --lumo-box-shadow-m: 0 1px 6px 0 var(--lumo-shade-60pct), 0 8px 24px -6px var(--lumo-shade-80pct);
+        --lumo-box-shadow-xl: 0 4px 18px -2px var(--lumo-shade-30pct), 0 24px 56px -6px var(--lumo-shade-40pct);
 
         /* Set the base colors */
-        color: var(--valo-body-text-color);
-        background-color: var(--valo-base-color);
+        color: var(--lumo-body-text-color);
+        background-color: var(--lumo-base-color);
       }
     </style>
   </template>

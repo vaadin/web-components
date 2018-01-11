@@ -1,14 +1,14 @@
 {
-  "name": "vaadin-valo-styles",
+  "name": "vaadin-lumo-styles",
   "homepage": "https://vaadin.com/elements",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "Valo is a design system foundation for modern web applications, used by Vaadin Elements",
+  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin Elements",
   "main": "",
   "keywords": [
     "vaadin",
-    "valo",
+    "lumo",
     "design-system",
     "web-components",
     "web-component",

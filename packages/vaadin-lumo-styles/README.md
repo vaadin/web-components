@@ -1,35 +1,35 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-valo-theme.svg)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-valo-theme.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-valo-theme)
+![Bower version](https://img.shields.io/bower/v/vaadin-lumo-theme.svg)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-lumo-theme.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-lumo-theme)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# Valo Theme for Vaadin Elements
+# Lumo Theme for Vaadin Elements
 
-`vaadin-valo-theme` is customizable theme for the [Vaadin Core Elements](https://vaadin.com/elements).
+`vaadin-lumo-theme` is customizable theme for the [Vaadin Core Elements](https://vaadin.com/elements).
 
 ## Demos and documentation
 
-Links to demos and documentation can be found from the [release notes](https://github.com/vaadin/vaadin-valo-theme/releases).
+Links to demos and documentation can be found from the [release notes](https://github.com/vaadin/vaadin-lumo-theme/releases).
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-valo-theme` repository and clone it locally.
+1. Fork the `vaadin-lumo-theme` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-valo-theme` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-lumo-theme` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-valo-theme/demo
-  - http://127.0.0.1:8080/components/vaadin-valo-theme/test
+  - http://127.0.0.1:8080/components/vaadin-lumo-theme/demo
+  - http://127.0.0.1:8080/components/vaadin-lumo-theme/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-valo-theme` directory, run `polymer test`
+1. When in the `vaadin-lumo-theme` directory, run `polymer test`
 
 
 ## Following the coding style

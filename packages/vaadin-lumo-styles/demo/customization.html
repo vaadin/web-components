@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Vaadin Valo Customization</title>
+  <title>Vaadin Lumo Customization</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
@@ -17,7 +17,7 @@
 
     .subtitle {
       font-weight: 400;
-      color: var(--valo-secondary-text-color);
+      color: var(--lumo-secondary-text-color);
       margin-top: -1.2em;
       margin-bottom: 1em;
     }
@@ -29,7 +29,7 @@
   <div class="vertical-section-container centered">
 
     <demo-navigation>
-      <span slot="header">Valo</span>
+      <span slot="header">Lumo</span>
     </demo-navigation>
 
     <h1>Customization</h1>
@@ -44,7 +44,7 @@
     <h2 demo-section>Small adjustments</h2>
     <h4 class="subtitle">CSS custom properties</h4>
 
-    <p>Valo defines global and component specific
+    <p>Lumo defines global and component specific
       <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
       that you can use to make smaller adjustments to the styles.</p>
 
@@ -70,7 +70,7 @@
         <custom-style>
           <style>
             html {
-              --valo-border-radius: 2px;
+              --lumo-border-radius: 2px;
             }
           </style>
         </custom-style>
@@ -90,7 +90,7 @@
         <custom-style>
           <style>
             vaadin-button {
-              --valo-border-radius: 2px;
+              --lumo-border-radius: 2px;
             }
           </style>
         </custom-style>
@@ -101,7 +101,7 @@
       as the buttons you want to style.</p>
 
     <p>To work around this limitation, we can target the button specific
-      <code>--valo-button-border-radius</code> custom property instead, and apply that in the
+      <code>--lumo-button-border-radius</code> custom property instead, and apply that in the
       global scope:</p>
 
     <h6>Example: Changing the border radius of one component using a component specific custom property in the global style scope</h6>
@@ -112,7 +112,7 @@
         <custom-style>
           <style>
             html {
-              --valo-button-border-radius: 2px;
+              --lumo-button-border-radius: 2px;
             }
           </style>
         </custom-style>
@@ -126,11 +126,11 @@
     <h2 demo-section>Advanced styling</h2>
     <h4 class="subtitle">Theme modules</h4>
 
-    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the element or Valo and need to style elements freely.</p>
+    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the element or Lumo and need to style elements freely.</p>
 
     <p>Read the documentation for <code>ThemableMixin</code> to learn how theme modules work.</p>
 
-    <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">Theme module documentation <iron-icon icon="valo:arrow-right"></iron-icon></a>
+    <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">Theme module documentation <iron-icon icon="lumo:arrow-right"></iron-icon></a>
 
   </div>
 </body>

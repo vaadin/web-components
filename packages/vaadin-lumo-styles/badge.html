@@ -4,7 +4,7 @@
 <link rel="import" href="sizing.html">
 <link rel="import" href="spacing.html">
 
-<dom-module id="valo-badge">
+<dom-module id="lumo-badge">
   <template>
     <style>
       [theme~="badge"] {
@@ -12,15 +12,15 @@
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
-        height: var(--valo-size-xxs);
-        margin: var(--valo-space-xs);
-        padding-left: calc(0.45em + var(--valo-border-radius) / 4);
-        padding-right: calc(0.45em + var(--valo-border-radius) / 4);
-        color: var(--valo-primary-text-color);
-        background-color: var(--valo-primary-color-10pct);
-        border-radius: var(--valo-border-radius);
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size-xs);
+        height: var(--lumo-size-xxs);
+        margin: var(--lumo-space-xs);
+        padding-left: calc(0.45em + var(--lumo-border-radius) / 4);
+        padding-right: calc(0.45em + var(--lumo-border-radius) / 4);
+        color: var(--lumo-primary-text-color);
+        background-color: var(--lumo-primary-color-10pct);
+        border-radius: var(--lumo-border-radius);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-xs);
         line-height: 1;
         font-weight: 500;
         text-transform: initial;
@@ -28,47 +28,47 @@
       }
 
       [theme~="badge"][theme~="small"] {
-        font-size: var(--valo-font-size-xxs);
-        height: var(--valo-size-xxxs);
+        font-size: var(--lumo-font-size-xxs);
+        height: var(--lumo-size-xxxs);
       }
 
       /* Colors */
 
       [theme~="badge"][theme~="success"] {
-        color: var(--valo-success-text-color);
-        background-color: var(--valo-success-color-10pct);
+        color: var(--lumo-success-text-color);
+        background-color: var(--lumo-success-color-10pct);
       }
 
       [theme~="badge"][theme~="error"] {
-        color: var(--valo-error-text-color);
-        background-color: var(--valo-error-color-10pct);
+        color: var(--lumo-error-text-color);
+        background-color: var(--lumo-error-color-10pct);
       }
 
       [theme~="badge"][theme~="contrast"] {
-        color: var(--valo-contrast-80pct);
-        background-color: var(--valo-contrast-5pct);
+        color: var(--lumo-contrast-80pct);
+        background-color: var(--lumo-contrast-5pct);
       }
 
       /* Primary */
 
       [theme~="badge"][theme~="primary"] {
-        color: var(--valo-primary-contrast-color);
-        background-color: var(--valo-primary-color);
+        color: var(--lumo-primary-contrast-color);
+        background-color: var(--lumo-primary-color);
       }
 
       [theme~="badge"][theme~="success"][theme~="primary"] {
-        color: var(--valo-success-contrast-color);
-        background-color: var(--valo-success-color);
+        color: var(--lumo-success-contrast-color);
+        background-color: var(--lumo-success-color);
       }
 
       [theme~="badge"][theme~="error"][theme~="primary"] {
-        color: var(--valo-error-contrast-color);
-        background-color: var(--valo-error-color);
+        color: var(--lumo-error-contrast-color);
+        background-color: var(--lumo-error-color);
       }
 
       [theme~="badge"][theme~="contrast"][theme~="primary"] {
-        color: var(--valo-base-color);
-        background-color: var(--valo-contrast);
+        color: var(--lumo-base-color);
+        background-color: var(--lumo-contrast);
       }
 
       /* Links */
@@ -80,13 +80,13 @@
       /* Icon */
 
       [theme~="badge"][icon] {
-        width: var(--valo-size-xxs);
-        padding: var(--valo-space-xxs);
+        width: var(--lumo-size-xxs);
+        padding: var(--lumo-space-xxs);
       }
 
       [theme~="badge"][icon][theme~="small"] {
-        width: var(--valo-size-xxxs);
-        height: var(--valo-size-xxxs);
+        width: var(--lumo-size-xxxs);
+        height: var(--lumo-size-xxxs);
         padding: 0;
       }
 
@@ -102,7 +102,7 @@
         height: 1em;
         padding: 0;
         border-radius: 50%;
-        background-color: var(--valo-primary-color);
+        background-color: var(--lumo-primary-color);
       }
 
       [theme~="badge"][theme~="small"]:not([icon]):empty {
@@ -111,21 +111,21 @@
       }
 
       [theme~="badge"][theme~="contrast"]:not([icon]):empty {
-        background-color: var(--valo-contrast);
+        background-color: var(--lumo-contrast);
       }
 
       [theme~="badge"][theme~="success"]:not([icon]):empty {
-        background-color: var(--valo-success-color);
+        background-color: var(--lumo-success-color);
       }
 
       [theme~="badge"][theme~="error"]:not([icon]):empty {
-        background-color: var(--valo-error-color);
+        background-color: var(--lumo-error-color);
       }
 
       /* Pill */
 
       [theme~="badge"][theme~="pill"] {
-        --valo-border-radius: calc(var(--valo-size-xxs) / 2);
+        --lumo-border-radius: calc(var(--lumo-size-xxs) / 2);
       }
     </style>
   </template>

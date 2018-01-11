@@ -3,29 +3,29 @@
 <link rel="import" href="../style.html">
 <link rel="import" href="../typography.html">
 
-<dom-module id="valo-overlay">
+<dom-module id="lumo-overlay">
   <template>
     <style>
       [part="overlay"] {
-        background-color: var(--valo-base-color);
-        background-image: linear-gradient(var(--valo-tint-5pct), var(--valo-tint-5pct));
-        border-radius: var(--valo-border-radius);
-        box-shadow: 0 0 0 1px var(--valo-contrast-5pct), var(--valo-box-shadow-m);
-        color: var(--valo-body-text-color);
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size-m);
+        background-color: var(--lumo-base-color);
+        background-image: linear-gradient(var(--lumo-tint-5pct), var(--lumo-tint-5pct));
+        border-radius: var(--lumo-border-radius);
+        box-shadow: 0 0 0 1px var(--lumo-contrast-5pct), var(--lumo-box-shadow-m);
+        color: var(--lumo-body-text-color);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
         font-weight: 400;
-        line-height: var(--valo-line-height-m);
+        line-height: var(--lumo-line-height-m);
         letter-spacing: 0;
         text-transform: none;
       }
 
       [part="content"] {
-        padding: var(--valo-space-xs);
+        padding: var(--lumo-space-xs);
       }
 
       [part="backdrop"] {
-        background-color: var(--valo-shade-40pct);
+        background-color: var(--lumo-shade-40pct);
         animation: 0.2s vaadin-overlay-backdrop-enter;
         will-change: opacity;
       }

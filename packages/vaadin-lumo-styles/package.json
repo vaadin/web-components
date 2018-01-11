@@ -1,12 +1,12 @@
 {
-  "name": "vaadin-valo-styles",
+  "name": "vaadin-lumo-styles",
   "version": "2.0.0-alpha7",
-  "description": "Valo is a design system foundation for modern web applications, used by Vaadin Elements",
-  "main": "valo.html",
-  "repository": "vaadin/vaadin-valo-theme",
+  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin Elements",
+  "main": "lumo.html",
+  "repository": "vaadin/vaadin-lumo-theme",
   "keywords": [
     "vaadin",
-    "valo",
+    "lumo",
     "design-system",
     "web-components",
     "web-component",
@@ -15,7 +15,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-valo-styles/issues"
+    "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
   },
   "homepage": "https://vaadin.com/elements",
   "scripts": {
