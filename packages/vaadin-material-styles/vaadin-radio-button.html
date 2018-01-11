@@ -72,7 +72,7 @@
         width: 100%;
         height: 100%;
         border-radius: inherit;
-        background-color: var(--material-disabled-color);
+        background-color: var(--material-primary-color);
         transform: scale(3);
         opacity: 0;
         transition: transform 0.1s, opacity 0.8s;
@@ -102,15 +102,7 @@
         border-color: var(--material-secondary-text-color);
       }
 
-      :host([active]) [part="radio"] {
-        transform: scale(0.9);
-        transition-duration: 0.05s;
-      }
-
-      :host([active][checked]) [part="radio"] {
-        transform: scale(1.1);
-      }
-
+      :host([active][checked]) [part="radio"]::before,
       :host([active]:not([checked])) [part="radio"]::before {
         transition-duration: 0.01s, 0.01s;
         transform: scale(0);
