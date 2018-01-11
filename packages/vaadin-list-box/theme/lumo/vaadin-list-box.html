@@ -1,8 +1,8 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
 
-<dom-module id="valo-list-box" theme-for="vaadin-list-box">
+<dom-module id="lumo-list-box" theme-for="vaadin-list-box">
   <template>
     <style>
       :host {
@@ -19,14 +19,14 @@
       /* Normal item */
 
       [part="items"] ::slotted(*) {
-        -webkit-tap-highlight-color: var(--valo-primary-color-10pct);
+        -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
         cursor: default;
       }
 
       [part="items"] ::slotted(vaadin-item) {
-        min-height: var(--valo-size-m);
-        padding: var(--valo-space-xs) calc(var(--valo-space-m) + var(--valo-border-radius) / 4);
-        padding-right: calc(var(--valo-space-l) + var(--valo-border-radius) / 4);
+        min-height: var(--lumo-size-m);
+        padding: var(--lumo-space-xs) calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
+        padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
         /* TODO a workaround until we have "focus-follows-mouse" */
         cursor: pointer;
       }
@@ -34,7 +34,7 @@
       /* Selected item */
 
       [part="items"] ::slotted([focused]:not([disabled])) {
-        background-color: var(--valo-primary-color-10pct);
+        background-color: var(--lumo-primary-color-10pct);
       }
 
       @media (pointer: coarse) {
@@ -65,8 +65,8 @@
         height: 1px;
         border: 0;
         padding: 0;
-        margin: var(--valo-space-s) var(--valo-border-radius);
-        background-color: var(--valo-contrast-10pct);
+        margin: var(--lumo-space-s) var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-10pct);
       }
     </style>
   </template>
