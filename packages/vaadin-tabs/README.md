@@ -32,11 +32,11 @@
 </vaadin-tabs>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Valo theme">](https://vaadin.com/elements/vaadin-tabs)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Lumo theme">](https://vaadin.com/elements/vaadin-tabs)
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -45,16 +45,16 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-tab.html`
-- `theme/valo/vaadin-tabs.html`
+- `theme/lumo/vaadin-tab.html`
+- `theme/lumo/vaadin-tabs.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-tab.html`
 - `vaadin-tabs.html`
 
-  Alias for theme/valo/vaadin-tab.html
-  theme/valo/vaadin-tabs.html
+  Alias for theme/lumo/vaadin-tab.html
+  theme/lumo/vaadin-tabs.html
 
 ## Running demos and tests in browser
 

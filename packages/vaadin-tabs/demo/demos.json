@@ -24,11 +24,11 @@
   }
   ,
   {
-    "name": "Valo Theme Variations",
-    "url": "tabs-valo-theme-demos",
-    "src": "tabs-valo-theme-demos.html",
+    "name": "Lumo Theme Variations",
+    "url": "tabs-lumo-theme-demos",
+    "src": "tabs-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-tabs Valo Theme Variations",
+      "title": "vaadin-tabs Lumo Theme Variations",
       "description": "",
       "image": ""
      }

@@ -1,20 +1,20 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="valo-tab" theme-for="vaadin-tab">
+<dom-module id="lumo-tab" theme-for="vaadin-tab">
   <template>
     <style>
       :host {
         box-sizing: border-box;
         padding: .25em 1em;
-        font-family: var(--valo-font-family);
-        font-size: var(--valo-font-size-m);
-        line-height: var(--valo-line-height-m);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-m);
         font-weight: 500;
         opacity: 1;
-        color: var(--valo-contrast-60pct);
+        color: var(--lumo-contrast-60pct);
         transition: 0.2s color, 0.2s transform;
         flex-shrink: 0;
         display: flex;
@@ -33,7 +33,7 @@
 
       :host(:hover),
       :host([focus-ring]) {
-        color: var(--valo-body-text-color);
+        color: var(--lumo-body-text-color);
       }
 
       :host([focus-ring]) {
@@ -41,12 +41,12 @@
       }
 
       :host([selected]) {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
         transition: 0.6s color;
       }
 
       :host([active]:not([selected])) {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
         transition-duration: 0.1s;
       }
 
@@ -54,15 +54,15 @@
       :host::after {
         content: "";
         position: absolute;
-        display: var(--_valo-tab-marker-display, block);
+        display: var(--_lumo-tab-marker-display, block);
         bottom: 0;
         left: 50%;
         width: 2.5em;
         max-width: 80%;
         height: 2px;
         max-height: 80%;
-        background-color: var(--valo-contrast-60pct);
-        border-radius: var(--valo-border-radius) var(--valo-border-radius) 0 0;
+        background-color: var(--lumo-contrast-60pct);
+        border-radius: var(--lumo-border-radius) var(--lumo-border-radius) 0 0;
         transform: translateX(-50%) scale(0);
         transform-origin: 50% 100%;
         transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
@@ -71,7 +71,7 @@
 
       :host([selected])::before,
       :host([selected])::after {
-        background-color: var(--valo-primary-color);
+        background-color: var(--lumo-primary-color);
       }
 
       :host([orientation="vertical"])::before,
@@ -81,12 +81,12 @@
         transform: translateY(50%) scale(0);
         width: 2px;
         height: 3em;
-        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+        border-radius: 0 var(--lumo-border-radius) var(--lumo-border-radius) 0;
         transform-origin: 100% 50%;
       }
 
       :host::after {
-        box-shadow: 0 0 0 4px var(--valo-primary-color);
+        box-shadow: 0 0 0 4px var(--lumo-primary-color);
         opacity: 0.15;
         transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
       }
@@ -156,7 +156,7 @@
       :host([disabled]) {
         pointer-events: none;
         opacity: 1;
-        color: var(--valo-disabled-text-color);
+        color: var(--lumo-disabled-text-color);
       }
     </style>
   </template>

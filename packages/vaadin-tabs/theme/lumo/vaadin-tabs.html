@@ -1,11 +1,11 @@
-<link rel="import" href="../../../vaadin-valo-styles/font-icons.html">
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="valo-tabs" theme-for="vaadin-tabs">
+<dom-module id="lumo-tabs" theme-for="vaadin-tabs">
   <template>
     <style>
       :host {
@@ -13,9 +13,9 @@
       }
 
       :host(:not([orientation="vertical"])) {
-        box-shadow: inset 0 -1px 0 0 var(--valo-contrast-10pct);
+        box-shadow: inset 0 -1px 0 0 var(--lumo-contrast-10pct);
         position: relative;
-        min-height: var(--valo-size-l);
+        min-height: var(--lumo-size-l);
       }
 
       :host([orientation="horizontal"]) [part="tabs"] ::slotted(vaadin-tab) {
@@ -23,16 +23,16 @@
       }
 
       :host([orientation="vertical"]) {
-        box-shadow: -1px 0 0 0 var(--valo-contrast-10pct);
+        box-shadow: -1px 0 0 0 var(--lumo-contrast-10pct);
       }
 
       [part="forward-button"],
       [part="back-button"] {
         position: absolute;
         z-index: 1;
-        font-family: valo-icons;
-        color: var(--valo-tertiary-text-color);
-        font-size: var(--valo-icon-size);
+        font-family: lumo-icons;
+        color: var(--lumo-tertiary-text-color);
+        font-size: var(--lumo-icon-size);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -52,20 +52,20 @@
       }
 
       [part="forward-button"]::after {
-        content: var(--valo-icons-angle-right);
+        content: var(--lumo-icons-angle-right);
       }
 
       [part="back-button"]::after {
-        content: var(--valo-icons-angle-left);
+        content: var(--lumo-icons-angle-left);
       }
 
       /* Tabs overflow */
 
       [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: none;
-        -webkit-mask-image: var(--_valo-tabs-overflow-mask-image);
+        --_lumo-tabs-overflow-mask-image: none;
+        -webkit-mask-image: var(--_lumo-tabs-overflow-mask-image);
         /* For IE11 */
-        min-height: var(--valo-size-l);
+        min-height: var(--lumo-size-l);
       }
 
       /*
@@ -74,7 +74,7 @@
       */
       @-moz-document url-prefix() {
         [part="tabs"] {
-          mask-image: var(--_valo-tabs-overflow-mask-image);
+          mask-image: var(--_lumo-tabs-overflow-mask-image);
         }
       }
 
@@ -82,49 +82,49 @@
 
       /* Both ends overflowing */
       :host([overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em, #000 calc(100% - 4em), transparent calc(100% - 2em));
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em, #000 calc(100% - 4em), transparent calc(100% - 2em));
       }
 
       /* End overflowing */
       :host([overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 4em), transparent calc(100% - 2em));
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 4em), transparent calc(100% - 2em));
       }
 
       /* Start overflowing */
       :host([overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em);
       }
 
       /* Vertical tabs overflow */
 
       /* Both ends overflowing */
       :host([overflow~="start"][overflow~="end"][orientation="vertical"]) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 2em, #000 calc(100% - 2em), transparent);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(transparent, #000 2em, #000 calc(100% - 2em), transparent);
       }
 
       /* End overflowing */
       :host([overflow~="end"][orientation="vertical"]) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 2em), transparent);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(#000 calc(100% - 2em), transparent);
       }
 
       /* Start overflowing */
       :host([overflow~="start"][orientation="vertical"]) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(transparent, #000 2em);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(transparent, #000 2em);
       }
 
       :host ::slotted(:not(vaadin-tab)) {
-        margin-left: var(--valo-space-m);
+        margin-left: var(--lumo-space-m);
       }
 
       /* Small theme */
 
       :host([theme~="small"]) {
-        font-size: var(--valo-font-size-s);
-        min-height: var(--valo-size-m);
+        font-size: var(--lumo-font-size-s);
+        min-height: var(--lumo-size-m);
       }
 
       :host([theme~="small"]) [part="tabs"] {
-        min-height: var(--valo-size-m);
+        min-height: var(--lumo-size-m);
       }
 
       /* Minimal and pill themes */
@@ -133,7 +133,7 @@
       :host([theme~="pill"]) {
         box-shadow: none;
         /* This doesn't work with ShadyCSS */
-        --_valo-tab-marker-display: none;
+        --_lumo-tab-marker-display: none;
       }
 
       /* Workaround for the above ShadyCSS issue */
@@ -151,56 +151,56 @@
       }
 
       :host([theme~="hide-scroll-buttons"][overflow~="start"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em, #000 calc(100% - 2em), transparent 100%);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em, #000 calc(100% - 2em), transparent 100%);
       }
 
       :host([theme~="hide-scroll-buttons"][overflow~="end"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 2em), transparent 100%);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 2em), transparent 100%);
       }
 
       :host([theme~="hide-scroll-buttons"][overflow~="start"]:not([orientation="vertical"])) [part="tabs"] {
-        --_valo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
+        --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
       }
 
       /* Pill theme */
       :host([theme~="pill"]) {
         display: inline-flex;
         max-width: 100%;
-        min-height: var(--valo-size-m);
+        min-height: var(--lumo-size-m);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab) {
         border: 1px solid transparent;
-        background-color: var(--valo-contrast-10pct);
+        background-color: var(--lumo-contrast-10pct);
         margin-left: 1px;
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
-        padding-left: calc(var(--valo-border-radius) / 3 + 1em);
-        border-radius: var(--valo-border-radius) 0 0 var(--valo-border-radius);
+        padding-left: calc(var(--lumo-border-radius) / 3 + 1em);
+        border-radius: var(--lumo-border-radius) 0 0 var(--lumo-border-radius);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
-        padding-right: calc(var(--valo-border-radius) / 3 + 1em);
-        border-radius: 0 var(--valo-border-radius) var(--valo-border-radius) 0;
+        padding-right: calc(var(--lumo-border-radius) / 3 + 1em);
+        border-radius: 0 var(--lumo-border-radius) var(--lumo-border-radius) 0;
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        border: 1px solid var(--valo-contrast-10pct);
-        background-color: var(--valo-base-color);
+        border: 1px solid var(--lumo-contrast-10pct);
+        background-color: var(--lumo-base-color);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        color: var(--valo-primary-text-color);
-        box-shadow: 1px 0 0 0 var(--valo-contrast-10pct), -1px 0 0 0 var(--valo-contrast-10pct);
+        color: var(--lumo-primary-text-color);
+        box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct), -1px 0 0 0 var(--lumo-contrast-10pct);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:first-child) {
-        box-shadow: 1px 0 0 0 var(--valo-contrast-10pct);
+        box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct);
       }
 
       :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:last-child) {
-        box-shadow: -1px 0 0 0 var(--valo-contrast-10pct);
+        box-shadow: -1px 0 0 0 var(--lumo-contrast-10pct);
       }
     </style>
   </template>

@@ -1,4 +1,4 @@
-<dom-module id="tabs-valo-theme-demos">
+<dom-module id="tabs-lumo-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,19 +7,19 @@
     </style>
 
     <h3>Icons</h3>
-    <vaadin-demo-snippet id='tabs-valo-theme-demos-icons'>
+    <vaadin-demo-snippet id='tabs-lumo-theme-demos-icons'>
       <template preserve-content>
         <vaadin-tabs>
           <vaadin-tab>
-            <iron-icon icon="valo:user"></iron-icon>
+            <iron-icon icon="lumo:user"></iron-icon>
             <span>Tab one</span>
           </vaadin-tab>
           <vaadin-tab>
-            <iron-icon icon="valo:plane"></iron-icon>
+            <iron-icon icon="lumo:plane"></iron-icon>
             <span>Tab two</span>
           </vaadin-tab>
           <vaadin-tab>
-            <iron-icon icon="valo:bell"></iron-icon>
+            <iron-icon icon="lumo:bell"></iron-icon>
             <span>Tab three</span>
           </vaadin-tab>
         </vaadin-tabs>
@@ -28,15 +28,15 @@
 
         <vaadin-tabs orientation="vertical">
           <vaadin-tab>
-            <iron-icon icon="valo:user"></iron-icon>
+            <iron-icon icon="lumo:user"></iron-icon>
             <span>Tab one</span>
           </vaadin-tab>
           <vaadin-tab>
-            <iron-icon icon="valo:plane"></iron-icon>
+            <iron-icon icon="lumo:plane"></iron-icon>
             <span>Tab two</span>
           </vaadin-tab>
           <vaadin-tab>
-            <iron-icon icon="valo:bell"></iron-icon>
+            <iron-icon icon="lumo:bell"></iron-icon>
             <span>Tab three</span>
           </vaadin-tab>
         </vaadin-tabs>
@@ -45,15 +45,15 @@
 
         <vaadin-tabs>
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:user"></iron-icon>
+            <iron-icon icon="lumo:user"></iron-icon>
             <span>Tab one</span>
           </vaadin-tab>
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:plane"></iron-icon>
+            <iron-icon icon="lumo:plane"></iron-icon>
             <span>Tab two</span>
           </vaadin-tab>
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:bell"></iron-icon>
+            <iron-icon icon="lumo:bell"></iron-icon>
             <span>Tab three</span>
           </vaadin-tab>
         </vaadin-tabs>
@@ -62,15 +62,15 @@
 
         <vaadin-tabs orientation="vertical" style="width: 120px;">
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:user"></iron-icon>
+            <iron-icon icon="lumo:user"></iron-icon>
             <span>Tab one</span>
           </vaadin-tab>
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:plane"></iron-icon>
+            <iron-icon icon="lumo:plane"></iron-icon>
             <span>Tab two</span>
           </vaadin-tab>
           <vaadin-tab theme="icon-on-top">
-            <iron-icon icon="valo:bell"></iron-icon>
+            <iron-icon icon="lumo:bell"></iron-icon>
             <span>Tab three</span>
           </vaadin-tab>
         </vaadin-tabs>
@@ -78,7 +78,7 @@
     </vaadin-demo-snippet>
 
     <h3>Hide Scroll Buttons</h3>
-    <vaadin-demo-snippet id='tabs-valo-theme-demos-hide-scroll-buttons'>
+    <vaadin-demo-snippet id='tabs-lumo-theme-demos-hide-scroll-buttons'>
       <template preserve-content>
         <vaadin-tabs theme="hide-scroll-buttons">
           <vaadin-tab>Tab one</vaadin-tab>
@@ -101,7 +101,7 @@
     </vaadin-demo-snippet>
 
     <h3>Small Size</h3>
-    <vaadin-demo-snippet id='tabs-valo-theme-demos-small-size'>
+    <vaadin-demo-snippet id='tabs-lumo-theme-demos-small-size'>
       <template preserve-content>
         <vaadin-tabs theme="small">
           <vaadin-tab>Tab one</vaadin-tab>
@@ -120,7 +120,7 @@
     </vaadin-demo-snippet>
 
     <h3>Minimal</h3>
-    <vaadin-demo-snippet id='tabs-valo-theme-demos-minimal'>
+    <vaadin-demo-snippet id='tabs-lumo-theme-demos-minimal'>
       <template preserve-content>
         <vaadin-tabs theme="minimal">
           <vaadin-tab>Tab one</vaadin-tab>
@@ -140,11 +140,11 @@
 
   </template>
   <script>
-    class TabsValoThemeDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
+    class TabsLumoThemeDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
       static get is() {
-        return 'tabs-valo-theme-demos';
+        return 'tabs-lumo-theme-demos';
       }
     }
-    customElements.define(TabsValoThemeDemos.is, TabsValoThemeDemos);
+    customElements.define(TabsLumoThemeDemos.is, TabsLumoThemeDemos);
   </script>
 </dom-module>
