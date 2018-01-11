@@ -143,11 +143,20 @@
         /* Fade out overflowing content */
         --_valo-grid-cell-overflow-mask-image: linear-gradient(to left, transparent, #000 calc(var(--valo-space-m) + 0.5em));
         -webkit-mask-image: var(--_valo-grid-cell-overflow-mask-image);
-        mask-image: var(--_valo-grid-cell-overflow-mask-image);
         cursor: default;
         padding: var(--valo-space-s) var(--valo-space-m);
         box-sizing: border-box;
         line-height: var(--valo-line-height-s);
+      }
+
+      /*
+        TODO: CSS custom property in `mask-image` causes crash in Edge
+        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+      */
+      @-moz-document url-prefix() {
+        [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+          mask-image: var(--_valo-grid-cell-overflow-mask-image);
+        }
       }
 
       /* Compact theme */
