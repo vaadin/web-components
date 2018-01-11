@@ -1,28 +1,28 @@
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../src/vaadin-horizontal-layout.html">
 <link rel="import" href="vaadin-ordered-layout.html">
 
-<dom-module id="valo-horizontal-layout" theme-for="vaadin-horizontal-layout">
+<dom-module id="lumo-horizontal-layout" theme-for="vaadin-horizontal-layout">
   <template>
-    <style include="valo-ordered-layout">
+    <style include="lumo-ordered-layout">
       :host([theme~="spacing-xs"]) ::slotted(*) {
-        margin-left: var(--valo-space-xs);
+        margin-left: var(--lumo-space-xs);
       }
 
       :host([theme~="spacing-s"]) ::slotted(*) {
-        margin-left: var(--valo-space-s);
+        margin-left: var(--lumo-space-s);
       }
 
       :host([theme~="spacing"]) ::slotted(*) {
-        margin-left: var(--valo-space-m);
+        margin-left: var(--lumo-space-m);
       }
 
       :host([theme~="spacing-l"]) ::slotted(*) {
-        margin-left: var(--valo-space-l);
+        margin-left: var(--lumo-space-l);
       }
 
       :host([theme~="spacing-xl"]) ::slotted(*) {
-        margin-left: var(--valo-space-xl);
+        margin-left: var(--lumo-space-xl);
       }
 
       /*
@@ -31,27 +31,27 @@
        */
       :host([theme~="spacing-xs"])::before {
         content: "";
-        margin-left: calc(var(--valo-space-xs) * -1);
+        margin-left: calc(var(--lumo-space-xs) * -1);
       }
 
       :host([theme~="spacing-s"])::before {
         content: "";
-        margin-left: calc(var(--valo-space-s) * -1);
+        margin-left: calc(var(--lumo-space-s) * -1);
       }
 
       :host([theme~="spacing"])::before {
         content: "";
-        margin-left: calc(var(--valo-space-m) * -1);
+        margin-left: calc(var(--lumo-space-m) * -1);
       }
 
       :host([theme~="spacing-l"])::before {
         content: "";
-        margin-left: calc(var(--valo-space-l) * -1);
+        margin-left: calc(var(--lumo-space-l) * -1);
       }
 
       :host([theme~="spacing-xl"])::before {
         content: "";
-        margin-left: calc(var(--valo-space-xl) * -1);
+        margin-left: calc(var(--lumo-space-xl) * -1);
       }
     </style>
   </template>

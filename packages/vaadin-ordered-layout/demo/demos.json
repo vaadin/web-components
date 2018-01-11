@@ -11,11 +11,11 @@
     }
   },
   {
-    "name": "Valo Theme",
+    "name": "Lumo Theme",
     "url": "ordered-layout-theme-demos",
     "src": "ordered-layout-theme-demos.html",
     "meta": {
-      "title": "Vaadin Ordered Layout Valo Theme Examples",
+      "title": "Vaadin Ordered Layout Lumo Theme Examples",
       "description": "",
       "image": ""
     }
