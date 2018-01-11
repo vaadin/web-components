@@ -740,7 +740,7 @@
             }
           },
           "privacy": "private",
-          "superclass": "Vaadin.OverlayElement",
+          "superclass": "HTMLElement",
           "name": "Vaadin.VaadinComboBoxOverlay",
           "attributes": [
             {
@@ -1405,7 +1405,7 @@
             },
             {
               "name": "item",
-              "type": "(String | Object)",
+              "type": "(String|Object)",
               "description": "The item to render",
               "privacy": "public",
               "sourceRange": {
@@ -1618,7 +1618,7 @@
                 }
               },
               "metadata": {},
-              "type": "(String | Object)"
+              "type": "(String|Object)"
             },
             {
               "name": "label",
@@ -2400,7 +2400,7 @@
             },
             {
               "name": "root",
-              "type": "(StampedTemplate | HTMLElement | ShadowRoot)",
+              "type": "(StampedTemplate|HTMLElement|ShadowRoot)",
               "description": "",
               "privacy": "public",
               "sourceRange": {
@@ -3090,7 +3090,7 @@
                 }
               ],
               "return": {
-                "type": "(string | undefined)",
+                "type": "(string|undefined)",
                 "desc": "String serialized from the provided property value."
               },
               "inheritedFrom": "Polymer.PropertyAccessors"
@@ -3678,7 +3678,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(number | string)>)",
+                  "type": "(string|!Array.<(number|string)>)",
                   "description": "Path to set"
                 },
                 {
@@ -3919,12 +3919,12 @@
               "params": [
                 {
                   "name": "to",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Target path to link."
                 },
                 {
                   "name": "from",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Source path to link."
                 }
               ],
@@ -3952,7 +3952,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Target path to unlink."
                 }
               ],
@@ -4013,7 +4013,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to the value\n  to read.  The path may be specified as a string (e.g. `foo.bar.baz`)\n  or an array of path parts (e.g. `['foo.bar', 'baz']`).  Note that\n  bracketed expressions are not supported; string-based path parts\n  *must* be separated by dots.  Note that when dereferencing array\n  indices, the index may be used as a dotted part directly\n  (e.g. `users.12.name` or `['users', 12, 'name']`)."
                 },
                 {
@@ -4047,7 +4047,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to the value\n  to write.  The path may be specified as a string (e.g. `'foo.bar.baz'`)\n  or an array of path parts (e.g. `['foo.bar', 'baz']`).  Note that\n  bracketed expressions are not supported; string-based path parts\n  *must* be separated by dots.  Note that when dereferencing array\n  indices, the index may be used as a dotted part directly\n  (e.g. `'users.12.name'` or `['users', 12, 'name']`)."
                 },
                 {
@@ -4085,14 +4085,11 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to push onto array"
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -4120,7 +4117,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -4149,7 +4146,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
@@ -4163,10 +4160,7 @@
                   "description": "Number of items to remove."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to insert into array."
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -4194,7 +4188,7 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 }
               ],
@@ -4223,14 +4217,11 @@
               "params": [
                 {
                   "name": "path",
-                  "type": "(string | !Array.<(string | number)>)",
+                  "type": "(string|!Array.<(string|number)>)",
                   "description": "Path to array."
                 },
                 {
-                  "name": "items",
-                  "type": "...*",
-                  "rest": true,
-                  "description": "Items to insert info array"
+                  "name": "...items"
                 }
               ],
               "return": {
@@ -4329,7 +4320,7 @@
                 },
                 {
                   "name": "method",
-                  "type": "(string | function (*, *))",
+                  "type": "(string|function (*, *))",
                   "description": "Function or name of observer method to call"
                 },
                 {
@@ -4367,7 +4358,7 @@
                 },
                 {
                   "name": "dynamicFn",
-                  "type": "(boolean | Object)=",
+                  "type": "(boolean|Object)=",
                   "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
                 }
               ],
@@ -4461,7 +4452,7 @@
                 },
                 {
                   "name": "dynamicFn",
-                  "type": "(boolean | Object)=",
+                  "type": "(boolean|Object)=",
                   "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
                 }
               ],
@@ -5541,7 +5532,7 @@
                 },
                 {
                   "name": "method",
-                  "type": "(string | function (*, *))",
+                  "type": "(string|function (*, *))",
                   "description": "Function or name of observer method to call"
                 },
                 {
@@ -5579,7 +5570,7 @@
                 },
                 {
                   "name": "dynamicFn",
-                  "type": "(boolean | Object)=",
+                  "type": "(boolean|Object)=",
                   "description": "Boolean or object map indicating"
                 }
               ],
@@ -5707,7 +5698,7 @@
                 },
                 {
                   "name": "dynamicFn",
-                  "type": "(boolean | Object)=",
+                  "type": "(boolean|Object)=",
                   "description": "Boolean or object map indicating whether\n  method names should be included as a dependency to the effect."
                 }
               ],
@@ -5969,7 +5960,7 @@
             }
           },
           "privacy": "private",
-          "superclass": "Polymer.Element",
+          "superclass": "HTMLElement",
           "name": "Vaadin.ComboBoxOverlayElement",
           "attributes": [
             {

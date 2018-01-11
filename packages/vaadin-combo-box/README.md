@@ -44,7 +44,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -53,16 +53,16 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled elements.
 
-- `theme/valo/vaadin-combo-box.html`
-- `theme/valo/vaadin-combo-box-light.html`
+- `theme/lumo/vaadin-combo-box.html`
+- `theme/lumo/vaadin-combo-box-light.html`
 
-  Elements with Valo theme.
+  Elements with Lumo theme.
 
 - `vaadin-combo-box.html`
 - `vaadin-combo-box-light.html`
 
-  Alias for theme/valo/vaadin-combo-box.html
-  theme/valo/vaadin-combo-box-light.html
+  Alias for theme/lumo/vaadin-combo-box.html
+  theme/lumo/vaadin-combo-box-light.html
 
 ## Running demos and tests in browser
 
