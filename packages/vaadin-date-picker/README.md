@@ -31,7 +31,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -40,16 +40,16 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled elements.
 
-- `theme/valo/vaadin-date-picker.html`
-- `theme/valo/vaadin-date-picker-light.html`
+- `theme/lumo/vaadin-date-picker.html`
+- `theme/lumo/vaadin-date-picker-light.html`
 
-  Elements with Valo theme.
+  Elements with Lumo theme.
 
 - `vaadin-date-picker.html`
 - `vaadin-date-picker-light.html`
 
-  Alias for theme/valo/vaadin-date-picker.html
-  theme/valo/vaadin-date-picker-light.html
+  Alias for theme/lumo/vaadin-date-picker.html
+  theme/lumo/vaadin-date-picker-light.html
 
 ## Running demos and tests in browser
 

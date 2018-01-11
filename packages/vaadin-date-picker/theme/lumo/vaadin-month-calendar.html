@@ -1,10 +1,10 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="valo-month-calendar" theme-for="vaadin-month-calendar">
+<dom-module id="lumo-month-calendar" theme-for="vaadin-month-calendar">
   <template>
     <style>
       :host {
@@ -12,27 +12,27 @@
         -ms-user-select: none;
         -webkit-user-select: none;
         user-select: none;
-        font-size: var(--valo-font-size-m);
-        color: var(--valo-body-text-color);
+        font-size: var(--lumo-font-size-m);
+        color: var(--lumo-body-text-color);
         text-align: center;
-        padding: 0 var(--valo-space-xs);
+        padding: 0 var(--lumo-space-xs);
         /* Make the currently focused month be roughly in the center of the overlay */
         /* TODO expose the overlay max-height as a custom property, so it can be used in calc's */
         /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
          * will overlap the other, and the user can’t click on a date to select it. Using smaller
          * offset for now, and compensating it in the scroll item height */
-        /* transform: translateY(calc(var(--valo-size-m) * 2)); */
-        transform: translateY(var(--valo-size-s));
+        /* transform: translateY(calc(var(--lumo-size-m) * 2)); */
+        transform: translateY(var(--lumo-size-s));
       }
 
       /* Month header */
 
       [part="month-header"] {
-        color: var(--valo-header-text-color);
-        font-size: var(--valo-font-size-l);
+        color: var(--lumo-header-text-color);
+        font-size: var(--lumo-font-size-l);
         line-height: 1;
         font-weight: 500;
-        margin-bottom: var(--valo-space-m);
+        margin-bottom: var(--lumo-space-m);
       }
 
       /* Week days and numbers */
@@ -40,19 +40,19 @@
       [part="weekdays"],
       [part="weekday"],
       [part="week-numbers"] {
-        font-size: var(--valo-font-size-xs);
+        font-size: var(--lumo-font-size-xs);
         line-height: 1;
-        color: var(--valo-tertiary-text-color);
+        color: var(--lumo-tertiary-text-color);
       }
 
       [part="weekdays"] {
-        margin-bottom: var(--valo-space-s);
+        margin-bottom: var(--lumo-space-s);
       }
 
       /* TODO should have part="week-number" for the cell in weekdays-container */
       [part="weekday"]:empty,
       [part="week-numbers"] {
-        width: var(--valo-size-s);
+        width: var(--lumo-size-s);
       }
 
       /* Date and week number cells */
@@ -60,8 +60,8 @@
       [part="date"],
       [part="week-number"] {
         box-sizing: border-box;
-        height: var(--valo-size-m);
-        line-height: var(--valo-size-m);
+        height: var(--lumo-size-m);
+        line-height: var(--lumo-size-m);
         position: relative;
       }
 
@@ -72,13 +72,13 @@
       /* Today date */
 
       [part="date"][today] {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
       }
 
       /* Focused date */
 
       [part="date"][focused] {
-        color: var(--valo-primary-contrast-color);
+        color: var(--lumo-primary-contrast-color);
       }
 
       [part="date"][focused]::before,
@@ -97,8 +97,8 @@
         height: 80%;
         max-height: 100%;
         max-width: 100%;
-        background-color: var(--valo-primary-color);
-        border-radius: var(--valo-border-radius);
+        background-color: var(--lumo-primary-color);
+        border-radius: var(--lumo-border-radius);
       }
 
       [part="date"][selected]:not([focused])::before {
@@ -119,7 +119,7 @@
         }
 
         [part="date"][today]:not([selected]) {
-          color: var(--valo-primary-text-color);
+          color: var(--lumo-primary-text-color);
         }
 
         [part="date"][selected]::before {
@@ -130,7 +130,7 @@
       /* Disabled */
 
       :host([disabled]) * {
-        color: var(--valo-disabled-text-color) !important;
+        color: var(--lumo-disabled-text-color) !important;
         cursor: default;
       }
     </style>
