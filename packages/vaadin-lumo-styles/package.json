@@ -3,7 +3,7 @@
   "version": "2.0.0-alpha7",
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin Elements",
   "main": "lumo.html",
-  "repository": "vaadin/vaadin-lumo-theme",
+  "repository": "vaadin/vaadin-lumo-styles",
   "keywords": [
     "vaadin",
     "lumo",
