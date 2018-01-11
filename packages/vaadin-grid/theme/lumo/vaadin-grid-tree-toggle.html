@@ -1,14 +1,14 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 
-<dom-module id="valo-grid-tree-toggle" theme-for="vaadin-grid-tree-toggle">
+<dom-module id="lumo-grid-tree-toggle" theme-for="vaadin-grid-tree-toggle">
   <template>
     <style>
       :host {
         --vaadin-grid-tree-toggle-level-offset: 2em;
         align-items: center;
         vertical-align: middle;
-        margin-left: calc(var(--valo-space-s) * -1);
+        margin-left: calc(var(--lumo-space-s) * -1);
         -webkit-tap-highlight-color: transparent;
       }
 
@@ -23,7 +23,7 @@
         width: 1em;
         height: 1em;
         text-align: center;
-        color: var(--valo-contrast-50pct);
+        color: var(--lumo-contrast-50pct);
         /* Increase touch target area */
         padding: calc(1em / 3);
         margin: calc(1em / -3);
@@ -32,22 +32,22 @@
 
       @media (hover: hover) {
         :host(:hover) [part="toggle"] {
-          color: var(--valo-contrast-80pct);
+          color: var(--lumo-contrast-80pct);
         }
       }
 
       [part="toggle"]::before {
-        font-family: "valo-icons";
+        font-family: "lumo-icons";
         display: inline-block;
         height: 100%;
       }
 
       :host(:not([expanded])) [part="toggle"]::before {
-        content: var(--valo-icons-angle-right);
+        content: var(--lumo-icons-angle-right);
       }
 
       :host([expanded]) [part="toggle"]::before {
-        content: var(--valo-icons-angle-right);
+        content: var(--lumo-icons-angle-right);
         transform: rotate(90deg);
       }
 
@@ -62,9 +62,9 @@
       :host([theme~="connectors"]) #level-spacer::before {
         display: block;
         content: "";
-        margin-top: calc(var(--valo-space-m) * -1);
-        height: calc(var(--valo-space-m) + 3em);
-        background-image: linear-gradient(to right, transparent calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px), var(--valo-contrast-10pct) calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px));
+        margin-top: calc(var(--lumo-space-m) * -1);
+        height: calc(var(--lumo-space-m) + 3em);
+        background-image: linear-gradient(to right, transparent calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px), var(--lumo-contrast-10pct) calc(var(--vaadin-grid-tree-toggle-level-offset) - 1px));
         background-size: var(--vaadin-grid-tree-toggle-level-offset) var(--vaadin-grid-tree-toggle-level-offset);
         background-position: calc(var(--vaadin-grid-tree-toggle-level-offset) / 2 - 2px) 0;
       }

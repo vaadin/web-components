@@ -101,11 +101,11 @@
   }
   ,
   {
-    "name": "Valo Theme Variations",
-    "url": "grid-valo-theme-demos",
-    "src": "grid-valo-theme-demos.html",
+    "name": "Lumo Theme Variations",
+    "url": "grid-lumo-theme-demos",
+    "src": "grid-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-grid – Valo Theme Variations",
+      "title": "vaadin-grid – Lumo Theme Variations",
       "description": "",
       "image": ""
     }

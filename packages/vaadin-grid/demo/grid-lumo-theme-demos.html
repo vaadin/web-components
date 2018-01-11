@@ -1,4 +1,4 @@
-<dom-module id="grid-valo-theme-demos">
+<dom-module id="grid-lumo-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,7 +8,7 @@
 
     <h3>Compact</h3>
     <p><code>&lt;vaadin-grid <b>theme="compact"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-compact'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-compact'>
       <template preserve-content>
         <dom-bind>
           <template>
@@ -48,7 +48,7 @@
 
     <h3>Borderless</h3>
     <p><code>&lt;vaadin-grid <b>theme="borderless"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-borderless'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-borderless'>
       <template preserve-content>
         <dom-bind>
           <template>
@@ -88,7 +88,7 @@
 
     <h3>Row Dividers</h3>
     <p><code>&lt;vaadin-grid <b>theme="row-dividers"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-row-dividers'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-row-dividers'>
       <template preserve-content>
         <dom-bind>
           <template>
@@ -127,7 +127,7 @@
 
     <h3>Column Dividers</h3>
     <p><code>&lt;vaadin-grid <b>theme="column-dividers"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-column-dividers'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-column-dividers'>
       <template preserve-content>
         <dom-bind>
           <template>
@@ -167,7 +167,7 @@
 
     <h3>Row Stripes</h3>
     <p><code>&lt;vaadin-grid <b>theme="row-stripes"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-row-stripes'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-row-stripes'>
       <template preserve-content>
         <dom-bind>
           <template>
@@ -209,7 +209,7 @@
     <p><code>&lt;vaadin-grid <b>theme="wrap-cell-content"</b>&gt;</code></p>
     <p>By default, cell contents don’t wrap and all overflowing content is either clipped or truncated. Apply the <code>wrap-cell-content</code> theme to make the cell content wrap instead.</p>
     <p>This example is also using the <code>row-dividers</code> theme variant to make the content easier to read.</p>
-    <vaadin-demo-snippet id='grid-valo-theme-demos-wrap-cell-content'>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-wrap-cell-content'>
       <template preserve-content>
         <dom-bind >
           <template>
@@ -249,11 +249,11 @@
 
   </template>
   <script>
-    class GridValoThemeDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+    class GridLumoThemeDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
       static get is() {
-        return 'grid-valo-theme-demos';
+        return 'grid-lumo-theme-demos';
       }
     }
-    customElements.define(GridValoThemeDemos.is, GridValoThemeDemos);
+    customElements.define(GridLumoThemeDemos.is, GridLumoThemeDemos);
   </script>
 </dom-module>

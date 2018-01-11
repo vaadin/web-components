@@ -1,6 +1,6 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
 
-<dom-module id="valo-grid-sorter" theme-for="vaadin-grid-sorter">
+<dom-module id="lumo-grid-sorter" theme-for="vaadin-grid-sorter">
   <template>
     <style>
       :host {
@@ -19,7 +19,7 @@
       }
 
       [part="indicators"] {
-        margin-left: var(--valo-space-s);
+        margin-left: var(--lumo-space-s);
       }
 
       :host(:not([direction])) [part="indicators"]::before {
@@ -27,11 +27,11 @@
       }
 
       :host([direction]) {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
       }
 
       [part="order"] {
-        font-size: var(--valo-font-size-xxs);
+        font-size: var(--lumo-font-size-xxs);
         line-height: 1;
       }
     </style>

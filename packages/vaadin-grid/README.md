@@ -61,11 +61,11 @@
 </dom-bind>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Valo theme">](https://vaadin.com/elements/vaadin-grid)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Lumo theme">](https://vaadin.com/elements/vaadin-grid)
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -73,13 +73,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-grid.html`
+- `theme/lumo/vaadin-grid.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-grid.html`
 
-  Alias for theme/valo/vaadin-grid.html
+  Alias for theme/lumo/vaadin-grid.html
 
 ## Running demos and tests in browser
 
