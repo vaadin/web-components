@@ -51,7 +51,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -59,13 +59,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-split-layout.html`
+- `theme/lumo/vaadin-split-layout.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-split-layout.html`
 
-  Alias for theme/valo/vaadin-split-layout.html
+  Alias for theme/lumo/vaadin-split-layout.html
 
 ## Running demos and tests in browser
 
