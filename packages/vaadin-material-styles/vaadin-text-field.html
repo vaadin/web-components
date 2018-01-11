@@ -195,7 +195,6 @@
         color: var(--material-secondary-text-color);
         transform-origin: 0 75%;
         transform: scale(0.75);
-        width: 133%;
         transition: transform 0.175s, color 0.175s, width 0.175s;
         transition-timing-function: ease, ease, step-end;
       }
@@ -261,7 +260,6 @@
         /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
         transform: scale(1) translateY(24px);
         transition-timing-function: ease, ease, step-start;
-        width: 100%;
         pointer-events: none;
         left: auto;
         transition-delay: 0.1s;
@@ -283,6 +281,7 @@
 
       :host([required]) [part="label"]::after {
         content: " *";
+        color: inherit;
       }
 
       /* Dense style */
