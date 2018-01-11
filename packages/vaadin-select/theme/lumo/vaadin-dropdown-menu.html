@@ -1,18 +1,18 @@
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
 
-<link rel="import" href="../../../vaadin-valo-styles/mixins/menu-overlay.html">
-<link rel="import" href="../../../vaadin-valo-styles/mixins/field-button.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/field-button.html">
 
-<link rel="import" href="../../../vaadin-text-field/theme/valo/vaadin-text-field.html">
-<link rel="import" href="../../../vaadin-item/theme/valo/vaadin-item.html">
-<link rel="import" href="../../../vaadin-list-box/theme/valo/vaadin-list-box.html">
+<link rel="import" href="../../../vaadin-text-field/theme/lumo/vaadin-text-field.html">
+<link rel="import" href="../../../vaadin-item/theme/lumo/vaadin-item.html">
+<link rel="import" href="../../../vaadin-list-box/theme/lumo/vaadin-list-box.html">
 
-<dom-module id="valo-dropdown-menu" theme-for="vaadin-dropdown-menu">
+<dom-module id="lumo-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
-    <style include="valo-field-button">
+    <style include="lumo-field-button">
       :host {
         -webkit-tap-highlight-color: transparent;
       }
@@ -28,13 +28,13 @@
 
       /* Highlight the toggle button when hovering over the entire component */
       :host(:hover:not([readonly]):not([disabled])) [part="toggle-button"] {
-        color: var(--valo-contrast-80pct);
+        color: var(--lumo-contrast-80pct);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="valo-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+<dom-module id="lumo-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
   <template>
     <style>
       [part="input-field"] {
@@ -58,11 +58,11 @@
   </template>
 </dom-module>
 
-<dom-module id="valo-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+<dom-module id="lumo-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
   <template>
-    <style include="valo-menu-overlay">
+    <style include="lumo-menu-overlay">
       :host {
-        --_valo-item-selected-icon-display: block;
+        --_lumo-item-selected-icon-display: block;
       }
 
       [part~="overlay"] {
@@ -70,7 +70,7 @@
       }
 
       vaadin-list-box vaadin-item {
-        padding-left: calc(var(--valo-space-xs) + var(--valo-border-radius) / 4);
+        padding-left: calc(var(--lumo-space-xs) + var(--lumo-border-radius) / 4);
       }
     </style>
   </template>

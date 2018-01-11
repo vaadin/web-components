@@ -41,7 +41,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -49,13 +49,13 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled element.
 
-- `theme/valo/vaadin-dropdown-menu.html`
+- `theme/lumo/vaadin-dropdown-menu.html`
 
-  Element with Valo theme.
+  Element with Lumo theme.
 
 - `vaadin-dropdown-menu.html`
 
-  Alias for theme/valo/vaadin-dropdown-menu.html
+  Alias for theme/lumo/vaadin-dropdown-menu.html
 
 ## Running demos and tests in browser
 
