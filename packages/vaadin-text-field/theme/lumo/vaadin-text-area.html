@@ -1,16 +1,16 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
 <link rel="import" href="vaadin-text-field.html">
 
-<dom-module id="valo-text-area" theme-for="vaadin-text-area">
+<dom-module id="lumo-text-area" theme-for="vaadin-text-area">
   <template>
-    <style include="valo-text-field">
+    <style include="lumo-text-field">
       [part="input-field"] {
         /* Equal to the implicit padding in vaadin-text-field */
-        padding-top: calc((var(--valo-text-field-size) - var(--valo-icon-size)) / 2);
-        padding-bottom: calc((var(--valo-text-field-size) - var(--valo-icon-size)) / 2);
+        padding-top: calc((var(--lumo-text-field-size) - var(--lumo-icon-size)) / 2);
+        padding-bottom: calc((var(--lumo-text-field-size) - var(--lumo-icon-size)) / 2);
         height: auto;
         box-sizing: border-box;
         transition: background-color 0.1s;
@@ -21,24 +21,24 @@
       }
 
       :host(:hover:not([readonly]):not([focused])) [part="input-field"] {
-        background-color: var(--valo-contrast-20pct);
+        background-color: var(--lumo-contrast-20pct);
       }
 
       @media (pointer: coarse) {
         :host(:hover:not([readonly]):not([focused])) [part="input-field"] {
-          background-color: var(--valo-contrast-10pct);
+          background-color: var(--lumo-contrast-10pct);
         }
 
         :host(:active:not([readonly]):not([focused])) [part="input-field"] {
-          background-color: var(--valo-contrast-20pct);
+          background-color: var(--lumo-contrast-20pct);
         }
       }
 
       [part="value"] {
-        padding-top: calc((var(--valo-icon-size) - 1em * var(--valo-line-height-s)) / 2);
-        padding-bottom: calc((var(--valo-icon-size) - 1em * var(--valo-line-height-s)) / 2);
-        line-height: var(--valo-line-height-s);
-        --_valo-text-field-overflow-mask-image: none;
+        padding-top: calc((var(--lumo-icon-size) - 1em * var(--lumo-line-height-s)) / 2);
+        padding-bottom: calc((var(--lumo-icon-size) - 1em * var(--lumo-line-height-s)) / 2);
+        line-height: var(--lumo-line-height-s);
+        --_lumo-text-field-overflow-mask-image: none;
       }
 
       [part="input-field"] [part="value"] {

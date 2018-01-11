@@ -34,7 +34,7 @@
 
 ## Getting Started
 
-Vaadin Elements use the Valo theme by default.
+Vaadin Elements use the Lumo theme by default.
 
 ## The file structure for Vaadin Elements
 
@@ -44,19 +44,19 @@ Vaadin Elements use the Valo theme by default.
 
   Unstyled elements.
 
-- `theme/valo/vaadin-text-field.html`
-- `theme/valo/vaadin-text-area.html`
-- `theme/valo/vaadin-password-field.html`
+- `theme/lumo/vaadin-text-field.html`
+- `theme/lumo/vaadin-text-area.html`
+- `theme/lumo/vaadin-password-field.html`
 
-  Elements with Valo theme.
+  Elements with Lumo theme.
 
 - `vaadin-text-field.html`
 - `vaadin-text-area.html`
 - `vaadin-password-field.html`
 
-  Aliases for theme/valo/vaadin-text-field.html
-  theme/valo/vaadin-text-area.html
-  theme/valo/vaadin-password-field.html
+  Aliases for theme/lumo/vaadin-text-field.html
+  theme/lumo/vaadin-text-area.html
+  theme/lumo/vaadin-password-field.html
 
 ## Running demos and tests in browser
 

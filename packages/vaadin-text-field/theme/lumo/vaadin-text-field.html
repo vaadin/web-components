@@ -1,40 +1,40 @@
-<link rel="import" href="../../../vaadin-valo-styles/color.html">
-<link rel="import" href="../../../vaadin-valo-styles/sizing.html">
-<link rel="import" href="../../../vaadin-valo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-valo-styles/style.html">
-<link rel="import" href="../../../vaadin-valo-styles/typography.html">
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<dom-module id="valo-text-field" theme-for="vaadin-text-field">
+<dom-module id="lumo-text-field" theme-for="vaadin-text-field">
   <template>
     <style>
       :host {
-        --valo-text-field-size: var(--valo-size-m);
-        color: var(--valo-body-text-color);
-        font-size: var(--valo-font-size-m);
-        font-family: var(--valo-font-family);
+        --lumo-text-field-size: var(--lumo-size-m);
+        color: var(--lumo-body-text-color);
+        font-size: var(--lumo-font-size-m);
+        font-family: var(--lumo-font-family);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
       }
 
       :host::before {
-        height: var(--valo-text-field-size);
+        height: var(--lumo-text-field-size);
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
         /* input-field margin-top */
-        margin-top: var(--valo-space-xs);
+        margin-top: var(--lumo-space-xs);
       }
 
       [part="label"] {
         align-self: flex-start;
-        color: var(--valo-secondary-text-color);
+        color: var(--lumo-secondary-text-color);
         font-weight: 500;
-        font-size: var(--valo-font-size-s);
-        margin-left: calc(var(--valo-border-radius) / 4);
+        font-size: var(--lumo-font-size-s);
+        margin-left: calc(var(--lumo-border-radius) / 4);
         transition: color 0.2s;
         line-height: 1;
-        height: calc(var(--valo-font-size-s) + var(--valo-space-xs));
+        height: calc(var(--lumo-font-size-s) + var(--lumo-space-xs));
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -45,15 +45,15 @@
 
       :host([label])::before {
         /* Label height + input-field margin-top */
-        margin-top: calc(var(--valo-font-size-s) + var(--valo-space-xs) * 2);
+        margin-top: calc(var(--lumo-font-size-s) + var(--lumo-space-xs) * 2);
       }
 
       :host([label]) {
-        margin-top: var(--valo-space-m);
+        margin-top: var(--lumo-space-m);
       }
 
       :host([focused]:not([readonly])) [part="label"] {
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
       }
 
       :host([required]) [part="label"] {
@@ -62,10 +62,10 @@
 
       /* Used for required and invalid indicators */
       [part="label"]::after {
-        content: var(--valo-required-field-indicator, "•");
+        content: var(--lumo-required-field-indicator, "•");
         transition: opacity 0.2s;
         opacity: 0;
-        color: var(--valo-primary-text-color);
+        color: var(--lumo-primary-text-color);
         position: absolute;
         right: 0;
         width: 1em;
@@ -75,8 +75,8 @@
       [part="value"],
       [part="input-field"] ::slotted([part="value"]) {
         padding: 0 0.25em;
-        --_valo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
-        -webkit-mask-image: var(--_valo-text-field-overflow-mask-image);
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+        -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       }
 
       [part="value"]:focus {
@@ -91,7 +91,7 @@
       @-moz-document url-prefix() {
         [part="value"],
         [part="input-field"] ::slotted([part="value"]) {
-          mask-image: var(--_valo-text-field-overflow-mask-image);
+          mask-image: var(--_lumo-text-field-overflow-mask-image);
         }
       }
 
@@ -119,14 +119,14 @@
       }
 
       [part="input-field"] {
-        margin: var(--valo-space-xs) 0;
-        border-radius: var(--valo-border-radius);
-        background-color: var(--valo-contrast-10pct);
-        padding: 0 calc(0.375em + var(--valo-border-radius) / 4);
+        margin: var(--lumo-space-xs) 0;
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-contrast-10pct);
+        padding: 0 calc(0.375em + var(--lumo-border-radius) / 4);
         font-weight: 500;
         line-height: 1;
         position: relative;
-        height: var(--valo-text-field-size);
+        height: var(--lumo-text-field-size);
         cursor: text;
       }
 
@@ -140,7 +140,7 @@
         left: 0;
         border-radius: inherit;
         pointer-events: none;
-        background-color: var(--valo-contrast-50pct);
+        background-color: var(--lumo-contrast-50pct);
         opacity: 0;
         transition: transform 0.15s, opacity 0.2s;
         transform-origin: 100% 0;
@@ -150,7 +150,7 @@
       /* Hover */
 
       :host(:hover:not([readonly]):not([focused])) [part="label"] {
-        color: var(--valo-body-text-color);
+        color: var(--lumo-body-text-color);
       }
 
       :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
@@ -160,7 +160,7 @@
       /* Touch device adjustment */
       @media (pointer: coarse) {
         :host(:hover:not([readonly]):not([focused])) [part="label"] {
-          color: var(--valo-secondary-text-color);
+          color: var(--lumo-secondary-text-color);
         }
 
         :host(:hover:not([readonly]):not([focused])) [part="input-field"]::after {
@@ -181,14 +181,14 @@
       /* Focus-ring */
 
       :host([focus-ring]) [part="input-field"] {
-        box-shadow: 0 0 0 2px var(--valo-primary-color-50pct);
+        box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
 
       /* Read-only and disabled */
 
       :host([readonly]) [part="input-field"],
       :host([disabled]) [part="input-field"] {
-        background-color: var(--valo-contrast-5pct);
+        background-color: var(--lumo-contrast-5pct);
       }
 
       /* Disabled style */
@@ -200,8 +200,8 @@
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
       :host([disabled]) [part="input-field"] ::slotted(*) {
-        color: var(--valo-disabled-text-color);
-        -webkit-text-fill-color: var(--valo-disabled-text-color);
+        color: var(--lumo-disabled-text-color);
+        -webkit-text-fill-color: var(--lumo-disabled-text-color);
       }
 
       :host([disabled]) [part="value"]::-webkit-input-placeholder {
@@ -229,28 +229,28 @@
       /* Invalid style */
 
       :host([invalid]) [part="label"]::after {
-        color: var(--valo-error-text-color);
+        color: var(--lumo-error-text-color);
       }
 
       :host([invalid]) [part="input-field"] {
-        background-color: var(--valo-error-color-10pct);
+        background-color: var(--lumo-error-color-10pct);
       }
 
       :host([invalid]) [part="input-field"]::after {
-        background-color: var(--valo-error-color-50pct);
+        background-color: var(--lumo-error-color-50pct);
       }
 
       :host([invalid][focus-ring]) [part="input-field"] {
-        box-shadow: 0 0 0 2px var(--valo-error-color-50pct);
+        box-shadow: 0 0 0 2px var(--lumo-error-color-50pct);
       }
 
       /* Error message */
 
       [part="error-message"] {
-        margin-left: calc(var(--valo-border-radius) / 4);
-        font-size: var(--valo-font-size-xs);
-        line-height: var(--valo-line-height-xs);
-        color: var(--valo-error-text-color);
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+        color: var(--lumo-error-text-color);
         will-change: max-height;
         transition: 0.4s max-height;
         max-height: 5em;
@@ -260,7 +260,7 @@
       [part="error-message"]:not(:empty)::after {
         content: "";
         display: block;
-        height: var(--valo-space-s);
+        height: var(--lumo-space-s);
       }
 
       :host(:not([invalid])) [part="error-message"] {
@@ -271,57 +271,57 @@
       /* Small theme */
 
       :host([theme~="small"]) {
-        font-size: var(--valo-font-size-s);
-        --valo-text-field-size: var(--valo-size-s);
+        font-size: var(--lumo-font-size-s);
+        --lumo-text-field-size: var(--lumo-size-s);
       }
 
       :host([theme~="small"][label]) [part="label"] {
-        font-size: var(--valo-font-size-xs);
+        font-size: var(--lumo-font-size-xs);
       }
 
       :host([theme~="small"][label]) [part="error-message"] {
-        font-size: var(--valo-font-size-xxs);
+        font-size: var(--lumo-font-size-xxs);
       }
 
       /* Text align */
 
       :host([theme~="align-center"]) [part="value"] {
         text-align: center;
-        --_valo-text-field-overflow-mask-image: none;
+        --_lumo-text-field-overflow-mask-image: none;
       }
 
       :host([theme~="align-right"]) [part="value"] {
         text-align: right;
-        --_valo-text-field-overflow-mask-image: none;
+        --_lumo-text-field-overflow-mask-image: none;
       }
 
       @-moz-document url-prefix() {
         /* Firefox is smart enough to align overflowing text to right */
         :host([theme~="align-right"]) [part="value"] {
-          --_valo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
+          --_lumo-text-field-overflow-mask-image: linear-gradient(to right, transparent 0.25em, #000 1.5em);
         }
       }
 
       /* Slotted content */
 
       [part="input-field"] ::slotted(:not([part="value"])) {
-        color: var(--valo-secondary-text-color);
+        color: var(--lumo-secondary-text-color);
         font-weight: 400;
       }
 
       /* Slotted icons */
 
       [part="input-field"] ::slotted(iron-icon) {
-        color: var(--valo-contrast-50pct);
-        width: var(--valo-icon-size);
-        height: var(--valo-icon-size);
+        color: var(--lumo-contrast-50pct);
+        width: var(--lumo-icon-size);
+        height: var(--lumo-icon-size);
       }
 
-      /* Vaadin icons are based on a 16x16 grid (unlike Valo and Material icons with 24x24), so they look too big by default */
+      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
 
       [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: calc(var(--valo-icon-size) - 0.5em);
-        height: calc(var(--valo-icon-size) - 0.5em);
+        width: calc(var(--lumo-icon-size) - 0.5em);
+        height: calc(var(--lumo-icon-size) - 0.5em);
         padding: 0.25em;
       }
     </style>

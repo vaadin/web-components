@@ -1,4 +1,4 @@
-<dom-module id="text-field-valo-theme-demos">
+<dom-module id="text-field-lumo-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -8,7 +8,7 @@
 
 
     <h3>Text Align</h3>
-    <vaadin-demo-snippet id="text-field-valo-theme-demos-text-align">
+    <vaadin-demo-snippet id="text-field-lumo-theme-demos-text-align">
       <template preserve-content>
         <vaadin-text-field value="left"></vaadin-text-field>
         <vaadin-text-field value="center" theme="align-center"></vaadin-text-field>
@@ -18,7 +18,7 @@
 
 
     <h3>Small Size</h3>
-    <vaadin-demo-snippet id="text-field-valo-theme-demos-sizes">
+    <vaadin-demo-snippet id="text-field-lumo-theme-demos-sizes">
       <template preserve-content>
         <vaadin-text-field theme="small" label="Label" placeholder="Text field"></vaadin-text-field>
         <vaadin-password-field theme="small" label="Label" placeholder="Password field"></vaadin-password-field>
@@ -30,12 +30,12 @@
     <h3>Hide the Password Field Reveal Button (CSS)</h3>
     <p>You can also use CSS to hide the reveal button (in addition to the <code>reveal-button-hidden</code>
       attribute). It can be used to easily hide the reveal button across the whole application.</p>
-    <vaadin-demo-snippet id="text-field-valo-theme-demos-password-field-hide-reveal-button">
+    <vaadin-demo-snippet id="text-field-lumo-theme-demos-password-field-hide-reveal-button">
       <template preserve-content>
         <custom-style>
           <style>
             vaadin-password-field {
-              --valo-password-field-reveal-button-display: none;
+              --lumo-password-field-reveal-button-display: none;
             }
           </style>
         </custom-style>
@@ -46,11 +46,11 @@
 
   </template>
   <script>
-    class TextFieldValoThemeDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+    class TextFieldLumoThemeDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
       static get is() {
-        return 'text-field-valo-theme-demos';
+        return 'text-field-lumo-theme-demos';
       }
     }
-    customElements.define(TextFieldValoThemeDemos.is, TextFieldValoThemeDemos);
+    customElements.define(TextFieldLumoThemeDemos.is, TextFieldLumoThemeDemos);
   </script>
 </dom-module>

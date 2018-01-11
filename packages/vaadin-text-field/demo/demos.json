@@ -72,11 +72,11 @@
       }
     },
     {
-      "name": "Valo Theme",
-      "url": "text-field-valo-theme-demos",
-      "src": "text-field-valo-theme-demos.html",
+      "name": "Lumo Theme",
+      "url": "text-field-lumo-theme-demos",
+      "src": "text-field-lumo-theme-demos.html",
       "meta": {
-        "title": "Vaadin Text Field Valo Theme Variations",
+        "title": "Vaadin Text Field Lumo Theme Variations",
         "description": "",
         "image": ""
       }
