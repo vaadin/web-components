@@ -105,22 +105,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       syncOuterScroller() {
-        if (!this._syncingScrollTarget) {
-          this._syncingOuterScroller = true;
-          this.scrollTop = this.scrollTarget.scrollTop;
-          this.scrollLeft = this.scrollTarget.scrollLeft;
-        }
-        this._syncingScrollTarget = false;
+        this.scrollTop = this.scrollTarget.scrollTop;
+        this.scrollLeft = this.scrollTarget.scrollLeft;
       }
 
       _syncScrollTarget() {
-        if (!this._syncingOuterScroller) {
-          this._syncingScrollTarget = true;
+        requestAnimationFrame(() => {
           this.scrollTarget.scrollTop = this.scrollTop;
           this.scrollTarget.scrollLeft = this.scrollLeft;
           this.scrollHandler._scrollHandler();
-        }
-        this._syncingOuterScroller = false;
+        });
+
       }
 
     }
