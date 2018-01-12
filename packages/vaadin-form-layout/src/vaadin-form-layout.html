@@ -29,14 +29,6 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: baseline; /* default `stretch` is not appropriate */
 
         flex-wrap: wrap; /* the items should wrap */
-
-        /*
-          To implement the column gap, horizontal margins for the items is used,
-          see slotted elements style below. We need to compensate item margins
-          in the wrapper, so that the are no gaps around the layout itself.
-        */
-        margin-left: calc(-0.5 * var(--vaadin-form-layout-column-gap));
-        margin-right: calc(-0.5 * var(--vaadin-form-layout-column-gap));
       }
 
       #layout ::slotted(*) {
@@ -59,6 +51,10 @@ This program is available under Apache License Version 2.0, available at https:/
         content: '';
         flex: 1 1 100%;
         width: 9999px; /* for Firefox :-( */
+
+        /* No gaps are necessary */
+        margin-left: 0;
+        margin-right: 0;
       }
     </style>
     <div id="layout">
@@ -411,23 +407,56 @@ This program is available under Apache License Version 2.0, available at https:/
             ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
             : getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap');
 
-          Array.from(this.children).forEach(child => {
-            let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+          const direction = getComputedStyle(this).direction;
+          const marginStartProp = 'margin-' + (direction === 'ltr' ? 'left' : 'right');
+          const marginEndProp = 'margin-' + (direction === 'ltr' ? 'right' : 'left');
 
-            // Never span further than the number of columns
-            colspan = Math.min(colspan, this._columnCount);
+          let col = 0;
+          Array.from(this.children).forEach((child) => {
+            if (child.localName === 'br') {
+              // Line break child, no need to adjust width or margins.
+              // The next child will start a new row, reset the column counter.
+              col = 0;
+            } else if (getComputedStyle(child).display !== 'none') {
+              let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
 
-            const childRatio = colspan / this._columnCount;
+              // Never span further than the number of columns
+              colspan = Math.min(colspan, this._columnCount);
 
-            // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
-            // otherwise the items might wrap, resizing is wobbly
-            child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
+              const childRatio = colspan / this._columnCount;
 
-            if (child.localName === 'vaadin-form-item') {
-              if (this._labelsOnTop) {
-                child.setAttribute('label-position', 'top');
+              // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
+              // otherwise the items might wrap, resizing is wobbly
+              child.style.width = `calc(${childRatio * 99.999}% - ${1 - childRatio} * ${columnGap})`;
+
+              if (col + colspan > this._columnCount) {
+                // Too big to fit on this row, let’s wrap it
+                col = 0;
+              }
+
+              // At the start edge
+              if (col === 0) {
+                child.style.setProperty(marginStartProp, '0px');
               } else {
-                child.removeAttribute('label-position');
+                child.style.removeProperty(marginStartProp);
+              }
+
+              // At the end edge
+              if (col + colspan === this._columnCount) {
+                child.style.setProperty(marginEndProp, '0px');
+              } else {
+                child.style.removeProperty(marginEndProp);
+              }
+
+              // Move the column counter
+              col = (col + colspan) % this._columnCount;
+
+              if (child.localName === 'vaadin-form-item') {
+                if (this._labelsOnTop) {
+                  child.setAttribute('label-position', 'top');
+                } else {
+                  child.removeAttribute('label-position');
+                }
               }
             }
           });
