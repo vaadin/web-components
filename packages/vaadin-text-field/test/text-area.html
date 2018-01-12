@@ -70,7 +70,13 @@
           });
         });
 
-        ['autocomplete', 'readonly', 'required'].forEach(prop => {
+        ['autocapitalize'].forEach(function(prop) {
+          it('should set boolean attribute ' + prop, function() {
+            assertAttrCanBeSet(prop, 'off');
+          });
+        });
+
+        ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach(prop => {
           it('should set boolean attribute ' + prop, () => {
             assertAttrCanBeSet(prop, true);
             assertAttrCanBeSet(prop, false);

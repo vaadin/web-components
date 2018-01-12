@@ -71,6 +71,12 @@
           });
         });
 
+        ['autocapitalize'].forEach(function(prop) {
+          it('should set boolean attribute ' + prop, function() {
+            assertAttrCanBeSet(prop, 'off');
+          });
+        });
+
         ['autocomplete', 'autocorrect', 'readonly', 'required'].forEach(function(prop) {
           it('should set boolean attribute ' + prop, function() {
             assertAttrCanBeSet(prop, true);

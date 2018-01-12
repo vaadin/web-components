@@ -23,6 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <input part="value"
           autocomplete$="[[autocomplete]]"
           autocorrect$="[[autocorrect]]"
+          autocapitalize$="[[autocapitalize]]"
           autofocus$="[[autofocus]]"
           disabled$="[[disabled]]"
           list="[[list]]"
@@ -115,19 +116,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-
-
-            /**
-             * This is a property supported by Safari that is used to control whether
-             * autocorrection should be enabled when the user is entering/editing the text.
-             * Possible values are:
-             * on: Enable autocorrection.
-             * off: Disable autocorrection.
-             */
-            autocorrect: {
-              type: String
-            },
-
             /**
              * Identifies a list of pre-defined options to suggest to the user.
              * The value must be the id of a <datalist> element in the same document.

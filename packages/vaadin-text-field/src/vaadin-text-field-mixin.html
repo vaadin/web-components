@@ -106,6 +106,30 @@ This program is available under Apache License Version 2.0, available at https:/
           type: String
         },
 
+          /**
+           * This is a property supported by Safari that is used to control whether
+           * autocorrection should be enabled when the user is entering/editing the text.
+           * Possible values are:
+           * on: Enable autocorrection.
+           * off: Disable autocorrection.
+           */
+          autocorrect: {
+            type: String
+          },
+
+          /**
+           * This is a property supported by Safari that is used to control whether
+           * autocapitalization should be enabled when the user is entering/editing the text.
+           * Possible values are:
+           * characters: Characters capitalization.
+           * words: Words capitalization.
+           * sentences: Sentences capitalization.
+           * off: No capitalization.
+           */
+          autocapitalize: {
+            type: String
+          },
+
         /**
          * Error to show when the input value is invalid.
          */
