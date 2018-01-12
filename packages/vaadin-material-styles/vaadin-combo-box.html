@@ -9,7 +9,10 @@
 <dom-module id="material-combo-box" theme-for="vaadin-combo-box">
   <template>
     <style>
-      [part$="button"] {
+      :host {
+        outline: none;
+      }
+      /* [part$="button"] {
         width: 24px;
         height: 24px;
         line-height: 24px;
@@ -18,10 +21,7 @@
         color: var(--material-disabled-text-color);
         transition: 0.2s color;
         cursor: default;
-      }
-
-      [part$="button"]:hover {
-      }
+      } */
 
       [part$="button"]::before {
         font-family: "material-icons";
