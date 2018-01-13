@@ -125,24 +125,17 @@ This program is available under Apache License Version 2.0, available at https:/
       (deltaX < 0 && el.scrollLeft > 0);
     }
 
-    /**
-     * Update the models, the position of the
-     * items in the viewport and recycle tiles as needed.
-     */
-    _afterScroll(e) {
-      // this._adjustVirtualIndexOffset(delta);
-
-      this._translateStationaryElements();
-
-      if (!this.hasAttribute('reordering')) {
-        this._toggleAttribute('scrolling', true, this.$.scroller);
-        this._toggleAttribute('scroll-period', true, this.$.scroller);
+    _scheduleScrolling() {
+      if (!this._scrollingFrame) {
+        // Defer setting state attributes to avoid Edge hiccups
+        this._scrollingFrame = requestAnimationFrame(() => this._toggleAttribute('scrolling', true, this.$.scroller));
       }
-
       this._debounceScrolling = Polymer.Debouncer.debounce(
         this._debounceScrolling,
         Polymer.Async.timeOut.after(100),
         () => {
+          cancelAnimationFrame(this._scrollingFrame);
+          delete this._scrollingFrame;
           this._toggleAttribute('scrolling', false, this.$.scroller);
           if (!this.$.outerscroller.outerScrolling) {
             this._reorderRows();
@@ -150,13 +143,26 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       );
 
+      if (!this._scrollPeriodFrame) {
+        this._scrollPeriodFrame = requestAnimationFrame(() => this._toggleAttribute('scroll-period', true, this.$.scroller));
+      }
       this._debounceScrollPeriod = Polymer.Debouncer.debounce(
         this._debounceScrollPeriod,
         Polymer.Async.timeOut.after(1000),
         () => {
+          cancelAnimationFrame(this._scrollPeriodFrame);
+          delete this._scrollPeriodFrame;
           this._toggleAttribute('scroll-period', false, this.$.scroller);
         }
       );
+    }
+
+    _afterScroll() {
+      this._translateStationaryElements();
+
+      if (!this.hasAttribute('reordering')) {
+        this._scheduleScrolling();
+      }
 
       this.$.outerscroller.syncOuterScroller();
     }
