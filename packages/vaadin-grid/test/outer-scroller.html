@@ -62,15 +62,6 @@
   <script>
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-    function wheel(target, deltaX, deltaY, ctrlKey) {
-      const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
-      e.deltaX = deltaX;
-      e.deltaY = deltaY;
-      e.ctrlKey = ctrlKey;
-      target.dispatchEvent(e);
-      return e;
-    }
-
     describe('outer scroller', () => {
       let grid;
       let scroller;
@@ -109,10 +100,9 @@
         expect(e.defaultPrevented).to.be.false;
       });
 
-      it('should invoke onScroll synchronously', () => {
-        const spy = sinon.spy(grid, '_translateStationaryElements');
+      it('should invoke onScroll synchronously', done => {
+        const spy = sinon.stub(grid, '_translateStationaryElements', done);
         outerScroller._syncScrollTarget();
-        expect(spy.called).to.be.true;
       });
 
       it('should invoke frozen element translate handler', done => {
@@ -166,14 +156,37 @@
           outerScroller.scrollLeft = 100;
         });
 
-        it('should scroll the outer scroller', done => {
-          target.addEventListener('scroll', () => {
-            animationFrameFlush(() => {
-              expect(outerScroller.scrollLeft).to.equal(100);
-              done();
-            });
-          });
-          target.scrollLeft = 100;
+        it('should scroll the outer scroller', () => {
+          wheel(grid, 100, 0);
+          expect(outerScroller.scrollLeft).to.equal(100);
+        });
+
+        it('should only sync outer scroller when wheel scrolling host or passthrough', () => {
+          const spy = sinon.spy(outerScroller, 'syncOuterScroller');
+
+          // Not wheelscrolling nor passthrough
+          outerScroller.passthrough = false;
+          grid._scrollHandler();
+          expect(spy.called).to.be.false;
+
+          // Wheel scrolling only
+          grid._wheelScrolling = true;
+          grid._scrollHandler();
+          expect(spy.called).to.be.true;
+
+          // Passthrough only
+          spy.reset();
+          grid._wheelScrolling = false;
+          outerScroller.passthrough = true;
+          grid._scrollHandler();
+          expect(spy.called).to.be.true;
+        });
+
+        it('should not invoke afterScroll on scroll event while outer scrolling', () => {
+          const spy = sinon.spy(grid, '_afterScroll');
+          outerScroller.dispatchEvent(new Event('mousedown'));
+          grid.$.table.dispatchEvent(new Event('scroll'));
+          expect(spy.called).to.be.false;
         });
 
       });
@@ -269,7 +282,9 @@
               expect(outerScrollerAccessible()).to.equal(outerScrollerScrollable());
               done();
             });
-            move(tableRect.width, 1);
+            requestAnimationFrame(() => {
+              move(tableRect.width, 1);
+            });
           });
 
         });

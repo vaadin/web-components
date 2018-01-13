@@ -53,6 +53,7 @@
     "flushGrid": false,
     "fire": false,
     "getContainerCell": false,
-    "footerTrap": false
+    "footerTrap": false,
+    "wheel": false
   }
 }

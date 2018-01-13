@@ -99,14 +99,11 @@
             grid = container.$.grid;
             grid.dataProvider = infiniteDataProvider;
             grid.size = size;
-            flushGrid(grid);
-            grid.$.table.scrollTop = grid.$.table.scrollHeight;
-            grid._scrollHandler();
-            setTimeout(() => {
-              grid.$.table.scrollTop = 0;
-              grid._scrollHandler();
+
+            scrollToEnd(grid, () => {
+              grid._scrollToIndex(0);
               done();
-            }, 50);
+            });
           });
 
           it('should be able to scroll to half-way', () => {
@@ -137,7 +134,7 @@
           });
 
           it('should be able to manually scroll to end', done => {
-            grid.$.table.scrollTop = grid.$.table.scrollHeight - 20000;
+            grid._scrollToIndex(grid.size * 0.99);
 
             simulateScrollToEnd(grid, () => {
               expect(getCellContent(getLastVisibleItem(grid)).textContent).to.contain('item' + (grid.size - 1));

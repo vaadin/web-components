@@ -99,7 +99,8 @@
           it('should be bound to header cells', () => {
             column.width = '20%';
 
-            expect(getContainerCell(grid.$.header, 0, 0).style.width).to.eql('calc(20% + 100px)');
+            const width = getContainerCell(grid.$.header, 0, 0).style.width;
+            expect(width).to.be.oneOf(['calc(20% + 100px)', 'calc(100px + 20%)']);
           });
 
           it('should be bound to row cells', () => {

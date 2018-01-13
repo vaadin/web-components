@@ -85,6 +85,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     };
   }
 
+  function wheel(target, deltaX, deltaY, ctrlKey) {
+    const e = new CustomEvent('wheel', {bubbles: true, cancelable: true});
+    e.deltaX = deltaX;
+    e.deltaY = deltaY;
+    e.ctrlKey = ctrlKey;
+    target.dispatchEvent(e);
+    return e;
+  }
+
   function buildDataSet(size) {
     const data = [];
     while (data.length < size) {

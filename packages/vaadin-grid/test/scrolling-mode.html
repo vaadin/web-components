@@ -131,6 +131,53 @@
         expect(grid.scrollHeight - grid.clientHeight).to.equal(0);
       });
 
+      it('should mark wheel scroll', () => {
+        const scroller = grid.$.scroller;
+        expect(scroller.hasAttribute('wheel-scrolling')).to.be.false;
+        expect(grid._wheelScrolling).not.to.be.ok;
+        wheel(grid, 0, 0);
+
+        expect(scroller.hasAttribute('wheel-scrolling')).to.be.true;
+        expect(grid._wheelScrolling).to.be.ok;
+        grid._debouncerWheelScrolling.flush();
+
+        expect(scroller.hasAttribute('wheel-scrolling')).to.be.false;
+        expect(grid._wheelScrolling).not.to.be.ok;
+      });
+
+      it('should defer adding scrolling state attributes', done => {
+        flushGrid(grid);
+        const scroller = grid.$.scroller;
+        grid.$.table.addEventListener('scroll', () => {
+          expect(scroller.hasAttribute('scrolling')).to.be.false;
+          requestAnimationFrame(() => {
+            expect(scroller.hasAttribute('scrolling')).to.be.true;
+            done();
+          });
+        });
+        grid.$.table.scrollLeft = 1;
+      });
+
+      it('should not invoke afterScroll on scroll event while wheel scrolling', () => {
+        const spy = sinon.spy(grid, '_afterScroll');
+        wheel(grid, 0, 0);
+        grid.$.table.dispatchEvent(new Event('scroll'));
+        expect(spy.called).to.be.false;
+      });
+
+      it('should invoke afterScroll on scroll event while not wheel scrolling', () => {
+        const spy = sinon.spy(grid, '_afterScroll');
+        grid.$.table.dispatchEvent(new Event('scroll'));
+        expect(spy.called).to.be.true;
+      });
+
+      it('should avoid jumpy headers on Edge while wheel scrolling', () => {
+        grid._edge = true;
+        expect(window.getComputedStyle(grid.$.table).zIndex).not.to.equal('auto');
+        wheel(grid, 0, 0);
+        expect(window.getComputedStyle(grid.$.table).zIndex).to.equal('auto');
+      });
+
     });
   </script>
 
