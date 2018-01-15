@@ -42,8 +42,9 @@
       }
 
       :host([active]:not([selected])) {
-        color: var(--material-primary-text-color);
-        transition-duration: 0.1s;
+        color: var(--material-body-text-color);
+        background-color: var(--material-background-color);
+        transition: 0.1s background-color cubic-bezier(0.4, 0, 1, 1);
       }
 
       :host::before,
@@ -68,48 +69,6 @@
       :host([selected])::before,
       :host([selected])::after {
         background-color: var(--material-primary-color);
-      }
-
-      :host::after {
-        box-shadow: 0 0 0 4px var(--material-primary-color);
-        opacity: 0.15;
-        transition: 0.15s 0.02s transform, 0.8s 0.17s opacity;
-      }
-
-      :host([selected])::before,
-      :host([selected]:not([active]))::after {
-        transform: translateX(-50%) scale(1);
-        transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
-      }
-
-      :host([focus-ring])::before {
-        transform: translateX(-50%) scale(1);
-      }
-
-      :host([selected][focus-ring]:not([active]))::before,
-      :host([selected][focus-ring]:not([active]))::after {
-        transform: translateX(-50%) scale(1);
-      }
-
-      :host([active][focus-ring])::before,
-      :host([active][focus-ring])::after {
-        transform: translateX(-50%) scale(1);
-      }
-
-      :host([selected]:not([active]))::after {
-        opacity: 0;
-      }
-
-      :host ::slotted(iron-icon) {
-        margin: 0 4px;
-      }
-
-      :host ::slotted(iron-icon:first-child) {
-        margin-left: 0;
-      }
-
-      :host ::slotted(iron-icon:last-child) {
-        margin-right: 0;
       }
 
       :host([theme~="icon-on-top"]) {
