@@ -38,19 +38,18 @@
     <template>
       <div style="width: 300px; overflow: auto;">
         <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
-          <div at-start>1</div>
-          <div>2</div>
-          <div at-end>3</div>
+          <div at-start>1 start</div>
+          <div>2 mid</div>
+          <div at-end>3 end</div>
           <br>
           <div style="display: none;">invisible</div>
+          <div at-start="">4 start</div>
           <br>
-          <div colspan="2" at-start>4</div>
-          <div at-end>5</div>
-          <br>
-          <div at-start>6</div>
-          <div colspan="2" at-end>7</div>
-          <br>
-          <div colspan="3" at-start at-end>8</div>
+          <div at-start>5 start</div>
+          <div colspan="2" at-end>6 end</div>
+          <div colspan="2" at-start>7 start</div>
+          <div at-end>8 end</div>
+          <div colspan="3" at-start at-end>9 start to end</div>
         </vaadin-form-layout>
       </div>
     </template>
@@ -59,11 +58,9 @@
   <script>
     function getParsedWidth(el) {
       const width = el.style.getPropertyValue('width');
-      const components = width.replace(/^calc\((.*)\)$/, '$1').split(' - ');
-      return {
-        percentage: components[0],
-        gap: components[1]
-      };
+      const components = width.replace(/^calc\((.*)\)$/, '$1').split(/ [+-] /);
+      const [percentage, gap] = components.sort((a, b) => b.indexOf('%'));
+      return {percentage, gap};
     }
 
     describe('basic features', function() {
@@ -290,6 +287,7 @@
       it('should apply default column-gap', function() {
         expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
           '0.5 * 2rem', // MSIE
+          '-1rem', // Edge
           '1rem'
         ]);
         expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // zero because it's first
@@ -304,6 +302,7 @@
         });
         expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
           '0.5 * 2cm', // MSIE
+          '-1cm', // Edge
           '1cm'
         ]);
         expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-width')).to.equal('4cm');
