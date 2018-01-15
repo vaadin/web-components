@@ -19,7 +19,7 @@
         display: flex;
       }
 
-      :host [part="tabs"] ::slotted(vaadin-tab) {
+      :host(:not([theme~="fixed"])) [part="tabs"] ::slotted(vaadin-tab) {
         justify-content: center;
         margin: 0;
         min-width: 160px;
@@ -30,8 +30,16 @@
         justify-content: center;
         margin: 0;
         flex: 1;
-        min-width: 160px;
+        min-width: 72px;
         max-width: 264px;
+      }
+
+      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
+        margin-left: auto;
+      }
+
+      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
+        margin-right: auto;
       }
 
       [part="forward-button"],
@@ -67,6 +75,14 @@
         content: "\e903";
       }
 
+      :host([theme="fixed"]) [part="forward-button"] {
+        display: none;
+      }
+
+      :host([theme="fixed"]) [part="back-button"] {
+        display: none;
+      }
+
       /* Tabs overflow */
 
       [part="tabs"] {
@@ -80,47 +96,22 @@
       /* Horizontal tabs overflow */
 
       /* Both ends overflowing */
-      :host([overflow~="start"][overflow~="end"]) [part="tabs"] {
+      :host(:not([theme="fixed"])[overflow~="start"][overflow~="end"]) [part="tabs"] {
         --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em, #000 calc(100% - 4em), transparent calc(100% - 2em));
       }
 
       /* End overflowing */
-      :host([overflow~="end"]) [part="tabs"] {
+      :host(:not([theme="fixed"])[overflow~="end"]) [part="tabs"] {
         --_material-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 4em), transparent calc(100% - 2em));
       }
 
       /* Start overflowing */
-      :host([overflow~="start"]) [part="tabs"] {
+      :host(:not([theme="fixed"])[overflow~="start"]) [part="tabs"] {
         --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em);
       }
 
       :host ::slotted(:not(vaadin-tab)) {
         margin-left: 16px;
-      }
-
-      /* Small theme */
-
-      :host([theme~="small"]) {
-        font-size: var(--material-subhead-font-size);
-        min-height: 36px;
-      }
-
-      :host([theme~="small"]) [part="tabs"] {
-        min-height: 36px;
-      }
-
-      /* Minimal themes */
-
-      :host([theme~="minimal"]) {
-        box-shadow: none;
-        /* This doesn't work with ShadyCSS */
-        --_material-tab-marker-display: none;
-      }
-
-      /* Workaround for the above ShadyCSS issue */
-      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
-      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
-        display: none;
       }
 
       /* No-button theme */

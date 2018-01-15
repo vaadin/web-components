@@ -8,7 +8,7 @@
     <style>
       :host {
         box-sizing: border-box;
-        padding: .25em 1em;
+        padding: 4px 12px;
         font-family: var(--material-font-family);
         font-size: var(--material-body-font-size);
         text-transform: uppercase;
@@ -19,8 +19,6 @@
         opacity: 1;
         color: var(--material-secondary-text-color);
         transition: 0.2s color, 0.2s transform;
-        /* flex-shrink: 0; */
-        /* align-items: center; */
         text-align: center;
         position: relative;
         cursor: pointer;
@@ -31,17 +29,15 @@
       }
 
       :host(:hover),
+      :host(:focus),
       :host([focus-ring]) {
         color: var(--material-body-text-color);
         background-color: var(--material-divider-color);
       }
 
-      :host([focus-ring]) {
-        background-color: var(--material-disabled-text-color);
-      }
-
-      :host([selected]) {
+      :host([selected]:not(:focus)) {
         color: var(--material-body-text-color);
+        background-color: transparent;
         transition: 0.6s color;
       }
 
