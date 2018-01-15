@@ -95,6 +95,19 @@
       [tabindex] {
         padding-left: 2px;
       }
+
+      [part="content"] vaadin-item::before {
+        content: "";
+      }
+
+      :host([phone]) {
+        top: 0 !important;
+        left: 0 !important;
+        padding: 24px;
+        align-items: center;
+        justify-content: center;
+      }
+
     </style>
   </template>
 </dom-module>

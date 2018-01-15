@@ -23,7 +23,7 @@
         padding: 0;
       }
 
-      :host([phone]) [part="overlay"] {
+      /* :host([phone]) [part="overlay"] {
         animation: 0.15s vaadin-mobile-menu-overlay-enter cubic-bezier(.215, .61, .355, 1);
         border-radius: 0;
         box-shadow: 0 6px 56px 0 var(--valo-shade-80pct);
@@ -36,10 +36,10 @@
         0% {
           transform: translateY(150%);
         }
-      }
+      } */
 
       /* Gradient fade-out at the top and bottom edges */
-      :host([phone]) [part="overlay"]::after {
+      /* :host([phone]) [part="overlay"]::after {
         content: "";
         pointer-events: none;
         position: absolute;
@@ -52,12 +52,11 @@
         --_material-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
         -webkit-mask-image: var(--_material-menu-overlay-mask-image);
         mask-image: var(--_material-menu-overlay-mask-image);
-      }
+      } */
 
       /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
       :host([phone][phone]) [part="content"] {
         max-height: 50vh;
-        padding: 30px 30px;
         box-sizing: border-box;
         -webkit-overflow-scrolling: touch;
         overflow: auto;
@@ -82,7 +81,8 @@
       /* Phone layout specific tweaks */
 
       :host([phone]) vaadin-list-box vaadin-item {
-        margin: 0 4px;
+        /* margin: 0 4px; */
+        margin: 0;
       }
 
       :host([phone]) vaadin-list-box vaadin-item[focused] {
