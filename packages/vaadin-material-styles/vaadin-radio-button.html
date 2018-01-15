@@ -27,11 +27,6 @@
         will-change: transform;
       }
 
-      /* Not sure if this is necessary: should there ever be anything clickable inside the label? */
-      [part="label"] > * {
-        pointer-events: auto;
-      }
-
       [part="label"]:not(:empty) {
         margin: 4px 0.875em 4px 0.375em;
       }
@@ -133,11 +128,6 @@
       }
       :host([disabled][checked]) [part="radio"]::after {
         border-color: var(--material-disabled-text-color);
-      }
-
-      /* Similar workaround as for vaadin-checkbox issue: https://github.com/vaadin/vaadin-checkbox/issues/16 */
-      [part="native-radio"]:checked ~ [part="radio"] {
-        opacity: 1;
       }
     </style>
   </template>
