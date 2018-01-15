@@ -18,7 +18,6 @@
       [part="value"] {
         border-radius: 4px;
         background-color: var(--material-primary-color);
-        /* Use width instead of transform to preserve border radius */
         transform: none;
         width: calc(var(--vaadin-progress-value) * 100%);
         min-width: 0.25em;
@@ -62,19 +61,3 @@
     </style>
   </template>
 </dom-module>
-
-<!-- Safari fails to declare animations for pseudo elements inside a shadow DOM -->
-<custom-style>
-  <style>
-    @keyframes vaadin-progress-pulse3 {
-      0% { opacity: 1; }
-      10% { opacity: 0; }
-      40% { opacity: 0; }
-      50% { opacity: 1; }
-      50.1% { opacity: 1; }
-      60% { opacity: 0; }
-      90% { opacity: 0; }
-      100% { opacity: 1; }
-    }
-  </style>
-</custom-style>
