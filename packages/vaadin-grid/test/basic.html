@@ -61,6 +61,22 @@
         expect(grid.lastVisibleIndex, Math.ceil(((grid._scrollTop + grid.offsetHeight) / actualHeight) - 1));
       });
 
+      it('Should change the opacity of cell content in loading rows from 1 to 0 and back', () => {
+        const firstRow = grid.shadowRoot.querySelector('#items [part~="row"]');
+        const cellContent = grid.querySelector('vaadin-grid-cell-content');
+
+        expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
+
+        firstRow.setAttribute('loading', '');
+
+        expect(window.getComputedStyle(cellContent).opacity).to.eql('0');
+
+        firstRow.removeAttribute('loading', '');
+
+        expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
+      });
+
+
       it('scroll to index', () => {
         grid.size = 100;
 
