@@ -17,8 +17,14 @@
       opacity: 0;
     }
 
-    nice-demo-snippet vaadin-progress-bar:first-child {
-      margin-top: 2em;
+    nice-demo-snippet {
+      padding-top: 20px;
+    }
+
+    div[theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #f7f7f7;
+      --nice-demo-snippet-view-source-background-color: #070707;
+      --nice-demo-snippet-code-color: #000000;
     }
   </style>
 </head>
@@ -51,61 +57,41 @@
     <h3 demo-section>Colors</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <h5>Contrast</h5>
-        <vaadin-progress-bar theme="contrast" value="0.7"></vaadin-progress-bar>
-        <h6>Indeterminate</h6>
-        <vaadin-progress-bar theme="contrast" indeterminate></vaadin-progress-bar>
-
         <h5>Error</h5>
         <vaadin-progress-bar theme="error" value="0.7"></vaadin-progress-bar>
         <h6>Indeterminate</h6>
         <vaadin-progress-bar theme="error" indeterminate></vaadin-progress-bar>
-
-        <h5>Success</h5>
-        <vaadin-progress-bar theme="success" value="0.7"></vaadin-progress-bar>
-        <h6>Indeterminate</h6>
-        <vaadin-progress-bar theme="success" indeterminate></vaadin-progress-bar>
       </template>
     </nice-demo-snippet>
 
     <h3 demo-section>Dark theme value</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
-          <h6>Static</h6>
-          <vaadin-progress-bar value="0.7"></vaadin-progress-bar>
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
+            <h6>Static</h6>
+            <vaadin-progress-bar value="0.7"></vaadin-progress-bar>
 
-          <h6>Live</h6>
-          <!-- Value updated with a background script -->
-          <vaadin-progress-bar id="dark-dynamic"></vaadin-progress-bar>
+            <h6>Live</h6>
+            <!-- Value updated with a background script -->
+            <vaadin-progress-bar id="dark-dynamic"></vaadin-progress-bar>
 
-          <h6>Indeterminate</h6>
-          <vaadin-progress-bar indeterminate></vaadin-progress-bar>
-        </div>
-      </template>
-    </nice-demo-snippet>
+            <h6>Indeterminate</h6>
+            <vaadin-progress-bar indeterminate></vaadin-progress-bar>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <h3 demo-section>Dark theme colors</h3>
-    <nice-demo-snippet>
-      <template slot="source">
-        <div theme="dark">
-          <h5>Contrast</h5>
-          <vaadin-progress-bar theme="contrast" value="0.7"></vaadin-progress-bar>
-          <h6>Indeterminate</h6>
-          <vaadin-progress-bar theme="contrast" indeterminate></vaadin-progress-bar>
-
-          <h5>Error</h5>
-          <vaadin-progress-bar theme="error" value="0.7"></vaadin-progress-bar>
-          <h6>Indeterminate</h6>
-          <vaadin-progress-bar theme="error" indeterminate></vaadin-progress-bar>
-
-          <h5>Success</h5>
-          <vaadin-progress-bar theme="success" value="0.7"></vaadin-progress-bar>
-          <h6>Indeterminate</h6>
-          <vaadin-progress-bar theme="success" indeterminate></vaadin-progress-bar>
-        </div>
-      </template>
-    </nice-demo-snippet>
+    <div theme="dark">
+      <nice-demo-snippet>
+        <template slot="source">
+            <h5>Error</h5>
+            <vaadin-progress-bar theme="error" value="0.7"></vaadin-progress-bar>
+            <h6>Indeterminate</h6>
+            <vaadin-progress-bar theme="error" indeterminate></vaadin-progress-bar>
+        </template>
+      </nice-demo-snippet>
+    </div>
 
     <script>
       document.addEventListener('WebComponentsReady', function() {
