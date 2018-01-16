@@ -18,7 +18,8 @@
 
   <custom-style>
     <style>
-      nice-demo-snippet > div {
+      nice-demo-snippet > div,
+      nice-demo-snippet > .demo > div {
         display: flex;
         border-radius: var(--lumo-border-radius);
         overflow: hidden;
@@ -49,7 +50,7 @@
 
     <a href="https://github.com/vaadin/vaadin-lumo-styles/blob/master/color.html" class="theme-source-code">Source code</a>
     <h1>Colors</h1>
-    <p>Lumo defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
+    <p>Lumo defines a set of style modules and CSS custom properties you can use to apply a consistent color palette across your application.</p>
 
     <p>Import <code>color.html</code> to use them.</p>
     <nice-demo-snippet code-only>
@@ -59,9 +60,52 @@
     </nice-demo-snippet>
 
     <div class="note">
-      <h5>Accessibility</h5>
+      <h6>Accessibility</h6>
       <p>The default color palette is <a href="https://www.w3.org/TR/WCAG20/#visual-audio-contrast">WCAG 2.0</a> AA level compliant unless otherwise noted.</p>
     </div>
+
+
+    <h2 demo-section>Style module</h2>
+    <p>Include the color style module to easily apply basic colors for any style scope (e.g. index.html for global scope). It will set the background, text and link colors and enable you to use the dark palette colors inside that style scope.</p>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- Add directly to index.html or use a separate HTML import -->
+        <custom-style>
+          <style include="lumo-color"></style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Dark palette</h2>
+    <p>The dark color palette is available when you include the <a href="#main-style-module">main style module</a>.</p>
+    <p>You can apply the <code>theme="dark"</code> attribute on any element inside the style scope where you include the main style module.</p>
+    <p>If you include the main style module in the global scope (i.e. index.html), you can apply the <code>theme="dark"</code> attribute on the <code>html</code> element directly, to make the whole page adopt the dark color palette.</p>
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- Import the style modules -->
+        <link rel="import" href="bower_components/vaadin-lumo-styles/color.html">
+
+        <!-- Include the "lumo-light" style module -->
+        <custom-style>
+          <style include="lumo-light"></style>
+        </custom-style>
+
+        <div theme="dark">
+          <!-- Everything inside this element will use the dark palette colors -->
+        </div>
+      </template>
+    </nice-demo-snippet>
+    <div class="note warn">
+      <h6>Browser compatibility</h6>
+      <p>This example doesn’t work in Internet Explorer 11 or EdgeHTML 14. Read the <a href="compatility.html#dark-color-palette">browser compatibility instructions</a> if you need to support those browsers.</p>
+    </div>
+
+    <h3>Dark background color</h3>
+
+    <p>When you apply the <code>theme="dark"</code> attribute for the following elements, they will also set their background color to the dark palette <a href="#base">Base</a> color.</p>
+    <pre>html, body, div, section, main, header, footer, nav</pre>
 
 
     <h2 demo-section>Base</h2>
@@ -145,6 +189,7 @@
     <h2 demo-section>Success</h2>
     <p>Usually a green color, used for success messages and buttons that complete a certain task. Accompanying text and contrast colors are also defined.</p>
     <div class="note warn">
+      <h6>Accessibility</h6>
       <p>The <code style=""><span class="color-swatch" style="background-color: var(--lumo-success-color);"></span>--lumo-success-color</code> does not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Use <code><span class="color-swatch" style="background-color: hsl(144, 82%, 38%);"></span>hsl(144, 82%, 38%)</code> for compliant contrast.</p>
       <p>The <code><span class="color-swatch" style="background-color: var(--lumo-success-text-color);"></span>--lumo-success-text-color</code> is compliant by default.</p>
     </div>
@@ -184,7 +229,7 @@
     <p>The grayscale colors are useful for dividing pages into sections with different backgrounds and borders, or used as text colors, for example.</p>
 
     <div class="note warn">
-      <h6>Ensure proper contrast</h6>
+      <h6>Accessibility</h6>
       <p>The default text colors are tested to have enough contrast on top of the <a href="#base">Base</a> color and “Base + 5–20% <a href="#contrast">Contrast</a> color”. Avoid using a a higher Contrast color as a background color for any important content.</p>
     </div>
 
@@ -405,10 +450,12 @@
     <p>The following text colors have the desired contrast with the <a href="#base">Base</a> color.</p>
 
     <div class="note">
+      <h6>Separate text colors</h6>
       <p>Note, that <code><span class="color-swatch" style="background-color: var(--lumo-primary-text-color);"></span>--lumo-primary-text-color</code> is not necessarily the same as <code><span class="color-swatch" style="background-color: var(--lumo-primary-color);"></span>--lumo-primary-color</code>. Use the main color for backgrounds and the “text” version for text.</p>
       <p>The same applies for the “error” and “success” colors as well.</p>
     </div>
     <div class="note warn">
+      <h6>Accessibility</h6>
       <p>The “tertiary” and “disabled” text colors do not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Only use them for text which is not crucial for the end user to see.</p>
     </div>
 
@@ -462,64 +509,6 @@
         </custom-style>
       </template>
     </nice-demo-snippet>
-
-
-    <hr>
-
-
-    <h2 demo-section>Light and dark palette</h2>
-    <p>The system has a dark color variation available out of the box.</p>
-    <p>Each color has two variations: the default variation which is used for the light palette, and another variation used for the dark palette.</p>
-    <p><a href="#importing">You need to import</a> and include the “lumo-color” style module before you can use the dark palette. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
-
-    <h4>1. Import and include the style module</h4>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Import the colors -->
-        <link rel="import" href="bower_components/vaadin-lumo-styles/color.html">
-
-        <!-- Include the color style module. This will set the background and text color
-             for this style scope (html element of a the host of a custom element) -->
-        <custom-style>
-          <style include="lumo-color"></style>
-        </custom-style>
-      </template>
-    </nice-demo-snippet>
-
-    <h4>2.a. Applying the dark palette for global scope</h4>
-    <p>Apply the <code>theme="dark"</code> attribute on the HTML element:</p>
-    <code class="block">&lt;html theme="dark"&gt;
-  &lt;!-- The whole page/app will use the dark palette colors --&gt;
-&lt;/html&gt;</code>
-
-    <h4>2.b. Applying the dark palette for a single element scope</h4>
-    <p>You can apply the <code>theme="dark"</code> attribute on any element inside the style scope where you include the style module:</p>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <div theme="dark">
-          <!-- Everything inside this element will use the dark palette colors -->
-        </div>
-      </template>
-    </nice-demo-snippet>
-    <div class="note warn">
-      <h6>Browser compatibility</h6>
-      <p>The above example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-color-palette">compatibility instructions</a> how to make the dark colors, scoped inside an element, work in all supported browsers.</p>
-    </div>
-
-    <h3>Dark background color</h3>
-
-    <p>The following elements, when you apply the <code>theme="dark"</code> attribute for them, will also set their background color to the dark palette <a href="#base">Base</a> color.</p>
-    <ul>
-      <li>html</li>
-      <li>body</li>
-      <li>div</li>
-      <li>section</li>
-      <li>main</li>
-      <li>header</li>
-      <li>footer</li>
-      <li>nav</li>
-    </ul>
-
 
 
     <hr>

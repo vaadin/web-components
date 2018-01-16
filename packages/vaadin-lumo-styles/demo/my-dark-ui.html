@@ -1,0 +1,23 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../color.html">
+
+<dom-module id="my-dark-ui">
+  <template>
+    <style include="lumo-color">
+    :host {
+      display: block;
+      padding: 1em;
+      color: var(--lumo-primary-text-color);
+    }
+    </style>
+    Hello, dark world!
+  </template>
+  <script>
+      class MyDarkUI extends Polymer.Element {
+        static get is() {
+          return 'my-dark-ui';
+        }
+      }
+      customElements.define(MyDarkUI.is, MyDarkUI);
+  </script>
+</dom-module>
