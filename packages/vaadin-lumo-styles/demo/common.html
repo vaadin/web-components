@@ -75,6 +75,7 @@
       border-left: 4px solid var(--lumo-shade-10pct);
       background-color: var(--lumo-shade-5pct);
       padding: 1em 2em;
+      margin: 0;
     }
 
     dl.custom-properties dt {
@@ -121,8 +122,18 @@
       --nice-demo-snippet-code-font-family: Menlo, Consolas, monospace;
       --nice-demo-snippet-code-background-color: var(--lumo-shade-5pct);
       --nice-demo-snippet-border-color: var(--lumo-contrast-10pct);
-      --nice-demo-snippet-view-source-background-color: var(--lumo-base-color);
-      --nice-demo-snippet-view-source-background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+      --nice-demo-snippet-view-source-color: var(--lumo-secondary-text-color);
+      --nice-demo-snippet-view-source-background-color: var(--lumo-contrast-5pct);
+      --nice-demo-snippet-view-source-hover-background-color: var(--lumo-contrast-10pct);
+      --nice-demo-snippet-view-source-checked-background-color: var(--lumo-primary-color);
+      --nice-demo-snippet-view-source-checked-color: var(--lumo-primary-contrast-color);
+      --nice-demo-snippet-view-source-focus-box-shadow: 0 0 0 3px var(--lumo-primary-color-50pct);
+    }
+
+    h2 + nice-demo-snippet,
+    h3 + nice-demo-snippet,
+    h4 + nice-demo-snippet {
+      margin-top: 0;
     }
 
     [theme="dark"] nice-demo-snippet {
