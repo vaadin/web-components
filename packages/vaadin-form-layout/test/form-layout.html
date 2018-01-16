@@ -57,7 +57,10 @@
       });
 
       it('should have max-width set to 100%', function() {
-        expect(getComputedStyle(layout).getPropertyValue('max-width')).to.eql('100%');
+        expect(getComputedStyle(layout).getPropertyValue('max-width')).to.be.oneOf([
+          '900px', // some browsers (IE, Safari) return px computed style
+          '100%'
+        ]);
       });
 
       it('should distribute vaadin-text-field', function() {
