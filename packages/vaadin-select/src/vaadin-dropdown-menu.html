@@ -210,14 +210,17 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
       class DropdownMenuElement extends
-        Vaadin.ElementMixin(Vaadin.ControlStateMixin(
-          Vaadin.ThemableMixin(
-            Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)))) {
+        Vaadin.ElementMixin(
+          Vaadin.ControlStateMixin(
+            Vaadin.ThemableMixin(
+              Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)))) {
+
         static get is() {
           return 'vaadin-dropdown-menu';
         }
@@ -251,7 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
              * String used for the label element.
              */
             label: {
-              type: String,
+              type: String
             },
 
             /**
