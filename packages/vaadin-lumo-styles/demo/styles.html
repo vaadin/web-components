@@ -15,6 +15,32 @@
       opacity: 0;
     }
   </style>
+
+  <custom-style>
+    <style>
+      [class^="box"] {
+        display: inline-block;
+        width: var(--lumo-size-xl);
+        height: var(--lumo-size-xl);
+        margin: var(--lumo-space-s);
+        background-color: var(--lumo-contrast-20pct);
+      }
+
+      [class^="shadow"] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--lumo-secondary-text-color);
+        font-size: var(--lumo-font-size-s);
+        width: var(--lumo-size-xl);
+        height: var(--lumo-size-xl);
+        margin: var(--lumo-space-xl);
+        border-radius: var(--lumo-border-radius);
+        background-color: var(--lumo-tint-5pct);
+      }
+    </style>
+  </custom-style>
 </head>
 
 <body unresolved>
@@ -47,20 +73,13 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <div class="box1"></div>
-        <div class="box2"></div>
-        <div class="box3"></div>
+        <div class="box"></div>
+        <div class="box box2"></div>
+        <div class="box box3"></div>
 
         <custom-style>
           <style>
-            .box1,
-            .box2,
-            .box3 {
-              display: inline-block;
-              width: 3em;
-              height: 3em;
-              margin: 1em;
-              background-color: var(--lumo-contrast-20pct);
+            .box {
               border-radius: var(--lumo-border-radius);
             }
 
@@ -78,28 +97,39 @@
 
 
 
-    <h2 demo-section>Shadow</h2>
+    <h2 demo-section>Box Shadow</h2>
 
     <nice-demo-snippet>
       <template slot="source">
-        <div class="shadow">M</div>
-        <div class="shadow xl">XL</div>
+        <div class="shadow-s">S</div>
+        <div class="shadow-m">M</div>
+        <div class="shadow-l">L</div>
+        <div class="shadow-xl">XL</div>
 
         <custom-style>
           <style>
-            .shadow {
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              width: 6em;
-              height: 6em;
-              margin: 3em;
-              border-radius: var(--lumo-border-radius);
-              box-shadow: var(--lumo-box-shadow-m);
+            .shadow-s {
+              box-shadow: var(--lumo-box-shadow-s);
+              width: var(--lumo-size-m);
+              height: var(--lumo-size-m);
             }
 
-            .xl {
+            .shadow-m {
+              box-shadow: var(--lumo-box-shadow-m);
+              width: var(--lumo-size-l);
+              height: var(--lumo-size-l);
+            }
+
+            .shadow-l {
+              box-shadow: var(--lumo-box-shadow-l);
+              width: var(--lumo-size-xl);
+              height: var(--lumo-size-xl);
+            }
+
+            .shadow-xl {
               box-shadow: var(--lumo-box-shadow-xl);
+              width: calc(var(--lumo-size-xl) * 1.4);
+              height: calc(var(--lumo-size-xl) * 1.4);
             }
           </style>
         </custom-style>
@@ -119,7 +149,9 @@
 
     <h5>Shadow</h5>
     <dl class="custom-properties">
+      <dt>--lumo-box-shadow-s</dt>
       <dt>--lumo-box-shadow-m</dt>
+      <dt>--lumo-box-shadow-l</dt>
       <dt>--lumo-box-shadow-xl</dt>
     </dl>
 
