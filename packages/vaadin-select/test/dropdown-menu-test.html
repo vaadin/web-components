@@ -1,4 +1,4 @@
-!doctype html>
+<!doctype html>
 
 <head>
   <meta charset="UTF-8">
@@ -273,7 +273,7 @@
           dropdown.setAttribute('focus-ring', '');
           dropdown.opened = true;
           dropdown.opened = false;
-          expect(dropdown.hasAttribute('focus-ring')).to.be.true;
+          expect(dropdown.focusElement.hasAttribute('focus-ring')).to.be.true;
         });
 
         it('overlay should be opened on click event on input field', () => {
