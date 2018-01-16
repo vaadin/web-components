@@ -18,20 +18,42 @@
 
   <custom-style>
     <style>
-      nice-demo-snippet span {
-        vertical-align: middle;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 2em;
-        height: 2em;
-        font-size: var(--lumo-font-size-s);
-        background-color: var(--lumo-contrast-20pct);
-        background-clip: content-box;
+      nice-demo-snippet > div,
+      nice-demo-snippet > .demo > div {
+        display: flex;
+        align-items: flex-end;
+        overflow: auto;
       }
 
-      nice-demo-snippet span[class^="space"] {
-        outline: 1px dashed var(--lumo-contrast-40pct);
+      nice-demo-snippet span {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin: 0.25rem;
+        font-size: var(--lumo-font-size-xs);
+        background-color: var(--lumo-base-color);
+        color: var(--lumo-secondary-text-color);
+        background-clip: content-box;
+        position: relative;
+        font-weight: 600;
+      }
+
+      nice-demo-snippet span[class^="size"] {
+        background-color: var(--lumo-contrast-10pct);
+      }
+
+      nice-demo-snippet span[class^="space"]::before {
+        content: "";
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: var(--lumo-contrast-10pct);
       }
     </style>
   </custom-style>
@@ -64,31 +86,21 @@
     <h2 demo-section>Sizing</h2>
     <p>Use these properties to adjust the sizing of regular elements (buttons, text fields, list items).</p>
 
+    <p><b>M is the standard size</b>, and it is primarily used to size buttons, text fields and list items. If you adjust the sizing, make sure to keep it large enough for touch targets.</p>
+
     <nice-demo-snippet>
       <template slot="source">
-        <span class="size-xl">XL</span>
-        <span class="size-l">L</span>
-        <span class="size-m">M</span>
-        <span class="size-s">S</span>
         <span class="size-xs">XS</span>
-        <span class="size-xxs">XXS</span>
-        <span class="size-xxxs">XXXS</span>
+        <span class="size-s">S</span>
+        <span class="size-m">M</span>
+        <span class="size-l">L</span>
+        <span class="size-xl">XL</span>
 
         <custom-style>
           <style>
-            .size-xl {
-              width: var(--lumo-size-xl);
-              height: var(--lumo-size-xl);
-            }
-
-            .size-l {
-              width: var(--lumo-size-l);
-              height: var(--lumo-size-l);
-            }
-
-            .size-m {
-              width: var(--lumo-size-m);
-              height: var(--lumo-size-m);
+            .size-xs {
+              width: var(--lumo-size-xs);
+              height: var(--lumo-size-xs);
             }
 
             .size-s {
@@ -96,21 +108,19 @@
               height: var(--lumo-size-s);
             }
 
-            .size-xs {
-              width: var(--lumo-size-xs);
-              height: var(--lumo-size-xs);
+            .size-m {
+              width: var(--lumo-size-m);
+              height: var(--lumo-size-m);
             }
 
-            .size-xxs {
-              width: var(--lumo-size-xxs);
-              height: var(--lumo-size-xxs);
-              font-size: 0.5em;
+            .size-l {
+              width: var(--lumo-size-l);
+              height: var(--lumo-size-l);
             }
 
-            .size-xxxs {
-              width: var(--lumo-size-xxxs);
-              height: var(--lumo-size-xxxs);
-              font-size: 0.2em;
+            .size-xl {
+              width: var(--lumo-size-xl);
+              height: var(--lumo-size-xl);
             }
           </style>
         </custom-style>
@@ -126,37 +136,32 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <span class="space-xl">XL</span>
-        <span class="space-l">L</span>
-        <span class="space-m">M</span>
-        <span class="space-s">S</span>
         <span class="space-xs">XS</span>
-        <span class="space-xxs">XXS</span>
+        <span class="space-s">S</span>
+        <span class="space-m">M</span>
+        <span class="space-l">L</span>
+        <span class="space-xl">XL</span>
 
         <custom-style>
           <style>
-            .space-xl {
-              padding: var(--lumo-space-xl);
-            }
-
-            .space-l {
-              padding: var(--lumo-space-l);
-            }
-
-            .space-m {
-              padding: var(--lumo-space-m);
+            .space-xs {
+              padding: var(--lumo-space-xs);
             }
 
             .space-s {
               padding: var(--lumo-space-s);
             }
 
-            .space-xs {
-              padding: var(--lumo-space-xs);
+            .space-m {
+              padding: var(--lumo-space-m);
             }
 
-            .space-xxs {
-              padding: var(--lumo-space-xxs);
+            .space-l {
+              padding: var(--lumo-space-l);
+            }
+
+            .space-xl {
+              padding: var(--lumo-space-xl);
             }
           </style>
         </custom-style>
@@ -169,37 +174,32 @@
 
     <nice-demo-snippet class="space">
       <template slot="source">
-        <span class="space-wide-xl">XL</span>
-        <span class="space-wide-l">L</span>
-        <span class="space-wide-m">M</span>
-        <span class="space-wide-s">S</span>
         <span class="space-wide-xs">XS</span>
-        <span class="space-wide-xxs">XXS</span>
+        <span class="space-wide-s">S</span>
+        <span class="space-wide-m">M</span>
+        <span class="space-wide-l">L</span>
+        <span class="space-wide-xl">XL</span>
 
         <custom-style>
           <style>
-            .space-wide-xl {
-              padding: var(--lumo-space-wide-xl);
-            }
-
-            .space-wide-l {
-              padding: var(--lumo-space-wide-l);
-            }
-
-            .space-wide-m {
-              padding: var(--lumo-space-wide-m);
+            .space-wide-xs {
+              padding: var(--lumo-space-wide-xs);
             }
 
             .space-wide-s {
               padding: var(--lumo-space-wide-s);
             }
 
-            .space-wide-xs {
-              padding: var(--lumo-space-wide-xs);
+            .space-wide-m {
+              padding: var(--lumo-space-wide-m);
             }
 
-            .space-wide-xxs {
-              padding: var(--lumo-space-wide-xxs);
+            .space-wide-l {
+              padding: var(--lumo-space-wide-l);
+            }
+
+            .space-wide-xl {
+              padding: var(--lumo-space-wide-xl);
             }
           </style>
         </custom-style>
@@ -212,37 +212,32 @@
 
     <nice-demo-snippet class="space">
       <template slot="source">
-        <span class="space-tall-xl">XL</span>
-        <span class="space-tall-l">L</span>
-        <span class="space-tall-m">M</span>
-        <span class="space-tall-s">S</span>
         <span class="space-tall-xs">XS</span>
-        <span class="space-tall-xxs">XXS</span>
+        <span class="space-tall-s">S</span>
+        <span class="space-tall-m">M</span>
+        <span class="space-tall-l">L</span>
+        <span class="space-tall-xl">XL</span>
 
         <custom-style>
           <style>
-            .space-tall-xl {
-              padding: var(--lumo-space-tall-xl);
-            }
-
-            .space-tall-l {
-              padding: var(--lumo-space-tall-l);
-            }
-
-            .space-tall-m {
-              padding: var(--lumo-space-tall-m);
+            .space-tall-xs {
+              padding: var(--lumo-space-tall-xs);
             }
 
             .space-tall-s {
               padding: var(--lumo-space-tall-s);
             }
 
-            .space-tall-xs {
-              padding: var(--lumo-space-tall-xs);
+            .space-tall-m {
+              padding: var(--lumo-space-tall-m);
             }
 
-            .space-tall-xxs {
-              padding: var(--lumo-space-tall-xxs);
+            .space-tall-l {
+              padding: var(--lumo-space-tall-l);
+            }
+
+            .space-tall-xl {
+              padding: var(--lumo-space-tall-xl);
             }
           </style>
         </custom-style>
@@ -254,44 +249,38 @@
 
     <h5>Size</h5>
     <dl class="custom-properties">
-      <dt>--lumo-size-xl</dt>
-      <dt>--lumo-size-l</dt>
-      <dt>--lumo-size-m</dt>
-      <dt>--lumo-size-s</dt>
       <dt>--lumo-size-xs</dt>
-      <dt>--lumo-size-xxs</dt>
-      <dt>--lumo-size-xxxs</dt>
-      <dt>--lumo-icon-size</dt>
+      <dt>--lumo-size-s</dt>
+      <dt>--lumo-size-m</dt>
+      <dt>--lumo-size-l</dt>
+      <dt>--lumo-size-xl</dt>
     </dl>
 
     <h5>Space</h5>
     <dl class="custom-properties">
-      <dt>--lumo-space-xl</dt>
-      <dt>--lumo-space-l</dt>
-      <dt>--lumo-space-m</dt>
-      <dt>--lumo-space-s</dt>
       <dt>--lumo-space-xs</dt>
-      <dt>--lumo-space-xxs</dt>
+      <dt>--lumo-space-s</dt>
+      <dt>--lumo-space-m</dt>
+      <dt>--lumo-space-l</dt>
+      <dt>--lumo-space-xl</dt>
     </dl>
 
     <h5>Space, wide</h5>
     <dl class="custom-properties">
-      <dt>--lumo-space-wide-xl</dt>
-      <dt>--lumo-space-wide-l</dt>
-      <dt>--lumo-space-wide-m</dt>
-      <dt>--lumo-space-wide-s</dt>
       <dt>--lumo-space-wide-xs</dt>
-      <dt>--lumo-space-wide-xxs</dt>
+      <dt>--lumo-space-wide-s</dt>
+      <dt>--lumo-space-wide-m</dt>
+      <dt>--lumo-space-wide-l</dt>
+      <dt>--lumo-space-wide-xl</dt>
     </dl>
 
     <h5>Space, tall</h5>
     <dl class="custom-properties">
-      <dt>--lumo-space-tall-xl</dt>
-      <dt>--lumo-space-tall-l</dt>
-      <dt>--lumo-space-tall-m</dt>
-      <dt>--lumo-space-tall-s</dt>
       <dt>--lumo-space-tall-xs</dt>
-      <dt>--lumo-space-tall-xxs</dt>
+      <dt>--lumo-space-tall-s</dt>
+      <dt>--lumo-space-tall-m</dt>
+      <dt>--lumo-space-tall-l</dt>
+      <dt>--lumo-space-tall-xl</dt>
     </dl>
 
   </div>

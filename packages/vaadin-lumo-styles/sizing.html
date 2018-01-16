@@ -4,16 +4,17 @@
 <custom-style>
   <style>
     html {
-      --lumo-size-xxxs: 1.125rem;
-      --lumo-size-xxs: 1.375rem;
       --lumo-size-xs: 1.625rem;
       --lumo-size-s: 1.875rem;
       --lumo-size-m: 2.25rem;
       --lumo-size-l: 2.75rem;
       --lumo-size-xl: 3.5rem;
 
-      /* 24px when the default font-size is 16px */
-      --lumo-icon-size: 1.5em;
+      /* Icons */
+      --lumo-icon-size-s: 1em;
+      --lumo-icon-size-m: 1.5em;
+      /* For backwards compatibility */
+      --lumo-icon-size: var(--lumo-icon-size-m);
     }
   </style>
 </custom-style>
