@@ -41,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-dropdown-menu-overlay">
   <script>
-    {
+    (function() {
       /**
        * The overlay element.
        *
@@ -61,7 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
       customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
-    }
+    })();
   </script>
 </dom-module>
 
@@ -76,7 +76,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-dropdown-menu-text-field">
   <script>
-    {
+    (function() {
       let memoizedTemplate;
       /**
        * The text-field element.
@@ -119,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
       customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
-    }
+    })();
   </script>
 </dom-module>
 
@@ -170,7 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    {
+    (function() {
       /**
        * `<vaadin-dropdown-menu>` is a Polymer 2 element for selecting values from a list of items.
        *
@@ -567,6 +567,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.DropdownMenuElement = DropdownMenuElement;
-    }
+    })();
   </script>
 </dom-module>
