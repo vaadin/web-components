@@ -56,6 +56,10 @@
         expect(slot).to.be.ok;
       });
 
+      it('should have max-width set to 100%', function() {
+        expect(getComputedStyle(layout).getPropertyValue('max-width')).to.eql('100%');
+      });
+
       it('should distribute vaadin-text-field', function() {
         var vaadinTextField = layout.querySelector('vaadin-text-field');
         expect(vaadinTextField).to.be.ok;
