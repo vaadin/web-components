@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    {
+    (function() {
       /**
        * `<vaadin-list-box>` is a Polymer 2 element for menus
        *
@@ -100,6 +100,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.ListBoxElement = ListBoxElement;
-    }
+    })();
   </script>
 </dom-module>
