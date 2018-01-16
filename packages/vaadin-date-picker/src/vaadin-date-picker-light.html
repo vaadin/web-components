@@ -55,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </iron-media-query>
   </template>
   <script>
-    {
+    (function() {
       /**
        *
        * `<vaadin-date-picker-light>` is a customizable version of the `<vaadin-date-picker>` providing
@@ -130,6 +130,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.DatePickerLightElement = DatePickerLightElement;
-    }
+    })();
   </script>
 </dom-module>

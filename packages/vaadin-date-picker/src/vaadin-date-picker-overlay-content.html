@@ -226,7 +226,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <iron-media-query query="(min-width: 375px)" query-matches="{{_desktopMode}}"></iron-media-query>
   </template>
   <script>
-    {
+    (function() {
       /**
        * @private
        */
@@ -910,6 +910,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.DatePickerOverlayContentElement = DatePickerOverlayContentElement;
-    }
+    })();
   </script>
 </dom-module>
