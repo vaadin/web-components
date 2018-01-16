@@ -2,7 +2,7 @@
 <html>
 <head>
 <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-<link rel="import" href="../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../color.html">
 <link rel="import" href="../../vaadin-button/vaadin-button.html">
 <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
 
@@ -29,12 +29,12 @@
         document.querySelector('dom-bind')._toggle = function(e) {
           if (e.target.parentNode.hasAttribute('theme')) {
             e.target.parentNode.removeAttribute('theme');
-            e.target.parentNode.querySelector('h1').innerHTML = "Light";
+            e.target.parentNode.querySelector('h1').innerHTML = 'Light';
           } else {
             e.target.parentNode.setAttribute('theme', 'dark');
-            e.target.parentNode.querySelector('h1').innerHTML = "Dark";
+            e.target.parentNode.querySelector('h1').innerHTML = 'Dark';
           }
-        }
+        };
       });
     </script>
   </template>
@@ -67,10 +67,10 @@
         _toggle() {
           if (this.hasAttribute('theme')) {
             this.removeAttribute('theme');
-            this.root.querySelector('h1').innerHTML = "Light";
+            this.root.querySelector('h1').innerHTML = 'Light';
           } else {
             this.setAttribute('theme', 'dark');
-            this.root.querySelector('h1').innerHTML = "Dark";
+            this.root.querySelector('h1').innerHTML = 'Dark';
           }
           this.updateStyles();
         }
