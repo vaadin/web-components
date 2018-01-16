@@ -15,8 +15,18 @@
       opacity: 0;
     }
 
-    .headers * {
+    .text-styles h1,
+    .text-styles h2,
+    .text-styles h3,
+    .text-styles h4,
+    .text-styles h5,
+    .text-styles h6,
+    .text-styles p {
       margin: 0;
+    }
+
+    .font-sizes {
+      line-height: 1.1;
     }
   </style>
 </head>
@@ -41,9 +51,8 @@
       </template>
     </nice-demo-snippet>
 
-    <h2 demo-section>Global style modules</h2>
-    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope (e.g. index.html). It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
-    <p>If needed, you can include the style module in any other <a href="customization.html#what-is-a-style-scope-">style scope</a> as well.</p>
+    <h2 demo-section>Style module</h2>
+    <p>Include the typography style module to easily apply basic typographic styles for any style scope. It will set the font family, font size and line height for the root element (<code>html</code> in the global scope), as well as specify header and link styles.</p>
 
     <nice-demo-snippet code-only>
       <template slot="source">
@@ -54,7 +63,7 @@
       </template>
     </nice-demo-snippet>
 
-    <nice-demo-snippet class="headers">
+    <nice-demo-snippet class="text-styles">
       <template slot="source">
         <h1>Header 1</h1>
         <h2>Header 2</h2>
@@ -62,6 +71,10 @@
         <h4>Header 4</h4>
         <h5>Header 5</h5>
         <h6>Header 6</h6>
+        <p>Plain text.</p>
+        <p><a href="">Link</a></p>
+        <p theme="font-size-s">Small size text.</p>
+        <p theme="font-size-xs">Extra small size text.</p>
       </template>
     </nice-demo-snippet>
 
@@ -83,9 +96,9 @@
     </nice-demo-snippet>
 
     <h2 demo-section>Font size</h2>
-    <p>The following font sizes are available to use. The default font size for most elements is <code>--lumo-font-size-m</code>.</p>
+    <p>The following font sizes are available to use. <b>M is the standard size</b>, and is used by most elements by default.</p>
 
-    <nice-demo-snippet>
+    <nice-demo-snippet class="font-sizes">
       <template slot="source">
         <div class="font-size-xxxl">Font size XXXL</div>
         <div class="font-size-xxl">Font size XXL</div>

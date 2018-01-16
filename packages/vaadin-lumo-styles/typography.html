@@ -29,7 +29,7 @@
 <dom-module id="lumo-typography">
   <template>
     <style>
-      body {
+      html {
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size, var(--lumo-font-size-m));
         line-height: var(--lumo-line-height-m);
@@ -38,15 +38,37 @@
         -moz-osx-font-smoothing: grayscale;
       }
 
+      /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
+      :host {
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size, var(--lumo-font-size-m));
+        line-height: var(--lumo-line-height-m);
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      small,
+      [theme~="font-size-s"] {
+        font-size: var(--lumo-font-size-s);
+        line-height: var(--lumo-line-height-s);
+      }
+
+      [theme~="font-size-xs"] {
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+      }
+
       h1,
       h2,
       h3,
       h4,
       h5,
       h6 {
-        color: var(--lumo-header-text-color);
         font-weight: 600;
         line-height: var(--lumo-line-height-xs);
+        margin-top: 1.25em;
+        margin-bottom: 0.75em;
       }
 
       h1 {
@@ -71,6 +93,11 @@
 
       h6 {
         font-size: var(--lumo-font-size-s);
+      }
+
+      p {
+        margin-top: 0.5em;
+        margin-bottom: 1em;
       }
 
       a {
