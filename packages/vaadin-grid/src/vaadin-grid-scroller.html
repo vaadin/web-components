@@ -8,7 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="iron-list.html">
 
 <script>
-  {
+  (function() {
     /**
      * This Element is used internally by vaadin-grid.
      *
@@ -341,5 +341,5 @@ This program is available under Apache License Version 2.0, available at https:/
     window.Vaadin = window.Vaadin || {};
     window.Vaadin.Grid = window.Vaadin.Grid || {};
     Vaadin.Grid.ScrollerElement = GridScrollerElement;
-  }
+  })();
 </script>

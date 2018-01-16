@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 
 <script>
-  {
+  (function() {
     /**
      * `vaadin-grid-templatizer` is a helper element for the `vaadin-grid` that is preparing and
      * stamping instances of cells and columns templates
@@ -166,5 +166,5 @@ This program is available under Apache License Version 2.0, available at https:/
     window.Vaadin = window.Vaadin || {};
     window.Vaadin.Grid = window.Vaadin.Grid || {};
     Vaadin.Grid.Templatizer = GridTemplatizer;
-  }
+  })();
 </script>

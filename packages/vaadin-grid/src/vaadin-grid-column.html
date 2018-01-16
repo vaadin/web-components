@@ -344,7 +344,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-grid-column">
   <script>
-  {
+  (function() {
     /**
      * A `<vaadin-grid-column>` is used to configure how a column in `<vaadin-grid>`
      * should look like by using HTML templates.
@@ -404,6 +404,6 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     window.Vaadin = window.Vaadin || {};
     Vaadin.GridColumnElement = GridColumnElement;
-  }
+  })();
   </script>
 </dom-module>

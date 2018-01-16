@@ -11,7 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-grid-column-group">
   <script>
-    {
+    (function() {
       /**
        * A `<vaadin-grid-column-group>` is used to make groups of colums in `<vaadin-grid>` and
        * to configure additional headers and footers.
@@ -275,6 +275,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.GridColumnGroupElement = GridColumnGroupElement;
-    }
+    })();
   </script>
 </dom-module>

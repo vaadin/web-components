@@ -22,7 +22,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-  {
+  (function() {
     /**
      * `<vaadin-grid-selection-column>` is a helper element for the `<vaadin-grid>`
      * that provides default templates and functionality for item selection.
@@ -237,6 +237,6 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     window.Vaadin = window.Vaadin || {};
     Vaadin.GridSelectionColumnElement = GridSelectionColumnElement;
-  }
+  })();
   </script>
 </dom-module>
