@@ -67,7 +67,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    {
+    (function() {
       /**
        * `<vaadin-split-layout>` is a Polymer element implementing a split layout for two
        * content elements with a draggable splitter between them.
@@ -330,6 +330,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.SplitLayoutElement = SplitLayoutElement;
-    }
+    })();
   </script>
 </dom-module>
