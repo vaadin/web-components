@@ -21,9 +21,8 @@
         /* Use width instead of transform to preserve border radius */
         transform: none;
         width: calc(var(--vaadin-progress-value) * 100%);
-        min-width: 0.25em;
         will-change: width;
-        transition: 0.2s width;
+        transition: 0.1s width linear;
       }
 
       /* Indeterminate mode */
