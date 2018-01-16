@@ -1,9 +1,7 @@
 <!doctype html>
 <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
-<link rel="import" href="../bower_components/vaadin-button/vaadin-button.html">
-<link rel="import" href="../vaadin-button.html">
+<link rel="import" href="../../vaadin-button/vaadin-button.html">
 <link rel="import" href="../icons.html">
-<link rel="import" href="../../vaadin-icons/vaadin-icons.html">
 
 <custom-style>
   <style include="lumo-typography lumo-color">
@@ -35,21 +33,25 @@
 <vaadin-button style="width: 100px;">Longer text for a button</vaadin-button>
 
 <vaadin-button style="width: 100px;">
-  <iron-icon icon="lumo:plus"></iron-icon><span>Longer text for a button</span>
+  <iron-icon icon="lumo:plus" slot="prefix"></iron-icon>
+  <span>Longer text for a button</span>
 </vaadin-button>
 
 <vaadin-button style="width: 100px;">
-  <span>Longer text for a button</span><iron-icon icon="lumo:plus"></iron-icon>
+  <span>Longer text for a button</span>
+  <iron-icon icon="lumo:plus" slot="suffix"></iron-icon>
 </vaadin-button>
 
 <vaadin-button style="width: 300px;">Longer text for a button</vaadin-button>
 
 <vaadin-button style="width: 300px;">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Longer text for a button</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Longer text for a button</span>
 </vaadin-button>
 
 <vaadin-button style="width: 300px;">
-  <span>Longer text for a button</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Longer text for a button</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
 
 
@@ -59,32 +61,19 @@
 
 <h2>Icons</h2>
 
-<vaadin-button aria-label="Icon-only button">
+<vaadin-button aria-label="Icon-only button" theme="icon">
   <iron-icon icon="lumo:plus"></iron-icon>
 </vaadin-button>
 
 <vaadin-button>
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button>
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
-
-<vaadin-button>
-  <iron-icon icon="vaadin:bell-o"></iron-icon><span>Icon prefix</span>
-</vaadin-button>
-
-
-<vaadin-button>
-  <iron-icon icon="lumo:edit"></iron-icon>Icon prefix
-</vaadin-button>
-
-<vaadin-button>
-  Icon suffix <iron-icon icon="lumo:arrow-right"></iron-icon>
-</vaadin-button>
-
-<span>(last two without a wrapping span for the label)</span>
 
 
 
@@ -92,52 +81,46 @@
 
 <h2>Icons and size presets</h2>
 
-<vaadin-button aria-label="Icon-only button" theme="large">
+<vaadin-button aria-label="Icon-only button" theme="large icon">
   <iron-icon icon="lumo:plus"></iron-icon>
 </vaadin-button>
 
 <vaadin-button theme="large">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button theme="large">
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
 
-<vaadin-button theme="large">
-  <iron-icon icon="vaadin:arrow-left"></iron-icon><span>Vaadin Icons</span>
-</vaadin-button>
-
-<vaadin-button aria-label="Icon-only button" theme="small">
+<vaadin-button aria-label="Icon-only button" theme="small icon">
   <iron-icon icon="lumo:plus"></iron-icon>
 </vaadin-button>
 
 <vaadin-button theme="small">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button theme="small">
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="prefix"></iron-icon>
 </vaadin-button>
 
-<vaadin-button theme="small">
-  <iron-icon icon="vaadin:arrow-left"></iron-icon><span>Vaadin Icons</span>
-</vaadin-button>
-
-<vaadin-button aria-label="Icon-only button" theme="x-small">
+<vaadin-button aria-label="Icon-only button" theme="x-small icon">
   <iron-icon icon="lumo:plus"></iron-icon>
 </vaadin-button>
 
 <vaadin-button theme="x-small">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button theme="x-small">
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
-</vaadin-button>
-
-<vaadin-button theme="x-small">
-  <iron-icon icon="vaadin:arrow-left"></iron-icon><span>Vaadin Icons</span>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
 
 
@@ -145,17 +128,21 @@
 <h2>Button styles</h2>
 
 <vaadin-button theme="tertiary">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button theme="tertiary">
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
 
 <vaadin-button theme="tertiary inline">
-  <iron-icon icon="lumo:edit"></iron-icon><span>Icon prefix</span>
+  <iron-icon icon="lumo:edit" slot="prefix"></iron-icon>
+  <span>Icon prefix</span>
 </vaadin-button>
 
 <vaadin-button theme="tertiary inline">
-  <span>Icon suffix</span><iron-icon icon="lumo:arrow-right"></iron-icon>
+  <span>Icon suffix</span>
+  <iron-icon icon="lumo:arrow-right" slot="suffix"></iron-icon>
 </vaadin-button>
