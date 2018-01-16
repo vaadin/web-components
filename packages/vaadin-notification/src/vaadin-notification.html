@@ -109,7 +109,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    {
+    (function() {
       /**
        * The notification overlay element.
        *
@@ -375,6 +375,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.NotificationElement = NotificationElement;
-    }
+    })();
   </script>
 </dom-module>
