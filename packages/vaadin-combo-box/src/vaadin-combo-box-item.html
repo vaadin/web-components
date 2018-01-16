@@ -22,7 +22,7 @@ This program is available under Apache License Version 2.0, available at https:/
 </dom-module>
 
 <script>
-  {
+  (function() {
     /**
      * The default element used for items in the vaadin-combobox.
      *
@@ -131,5 +131,5 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     window.Vaadin = window.Vaadin || {};
     Vaadin.ComboBoxItemElement = ComboBoxItemElement;
-  }
+  })();
 </script>
