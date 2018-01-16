@@ -23,7 +23,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <slot></slot>
   </template>
   <script>
-    {
+    (function() {
       /**
        * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
        *
@@ -48,6 +48,6 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       window.Vaadin = window.Vaadin || {};
       Vaadin.ItemElement = ItemElement;
-    }
+    })();
   </script>
 </dom-module>
