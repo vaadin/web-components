@@ -40,7 +40,7 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
 
   <script>
-    {
+    (function() {
       /**
        * `<vaadin-progress-bar>` is a Polymer 2 progress bar.
        *
@@ -93,6 +93,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.ProgressBarElement = ProgressBarElement;
-    }
+    })();
   </script>
 </dom-module>
