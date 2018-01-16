@@ -34,13 +34,6 @@
 
     <h1>Customization</h1>
 
-
-    <h3>Light and dark color palettes</h3>
-
-    <p>Read more about light and dark color palettes from the
-      <a href="colors.html#light-and-dark-palette">colors documentation</a>.</p>
-
-
     <h2 demo-section>Small adjustments</h2>
     <h4 class="subtitle">CSS custom properties</h4>
 
@@ -58,11 +51,16 @@
       <code>index.html</code>):</p>
 
     <div class="note">
-      <p>Use the <code>&lt;custom-style&gt;</code> element for
-        <a href="compatibility.html">cross-browser compatility</a>.</p>
+      <h6>Browser compatibility</h6>
+      <p>Use the <code>&lt;custom-style&gt;</code> element for <a href="compatibility.html">cross-browser compatility</a>. You should import it explicitly from the Polymer package.</p>
+      <nice-demo-snippet code-only>
+        <template slot="source">
+          <link rel="import" href="bower_components/polymer/lib/elements/custom-style.html">
+        </template>
+      </nice-demo-snippet>
     </div>
 
-    <h6>Example: changing the border radius of all elements with a global style</h6>
+    <h5>Example: changing the border radius of all elements with a global style</h5>
 
     <nice-demo-snippet code-only>
       <template slot="source">

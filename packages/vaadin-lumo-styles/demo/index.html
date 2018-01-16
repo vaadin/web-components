@@ -26,16 +26,7 @@
     </demo-navigation>
 
     <h1>Vaadin Lumo Styles</h1>
-    <p>Lumo is an evolving design system foundation for modern web applications, used by <a href="https://vaadin.com/elements">Vaadin Elements</a>.</p>
-    <div class="note">
-      <h6>Vaadin Elements</h6>
-      <p>If you just want Lumo style UI components, you can use
-        <a href="https://vaadin.com/elements">Vaadin Elements</a> directly, such as
-        <a href="https://vaadin.com/elements/vaadin-text-field">vaadin-text-field</a>,
-        <a href="https://vaadin.com/elements/vaadin-button">vaadin-button</a> or
-        <a href="https://vaadin.com/elements/vaadin-grid">vaadin-grid</a>. You can install those using
-        Bower as well.</p>
-    </div>
+    <p>Lumo is an evolving design system foundation for modern web applications. <a href="https://vaadin.com/elements">Vaadin Elements</a> implement Lumo as their default theme.</p>
 
     <h2>Getting started</h2>
 
@@ -50,8 +41,8 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>2. Import and include global styles</h3>
-    <p>Import and include the global style modules to make your application use Lumo styles:</p>
+    <h3 demo-section>2. Import and include main style modules</h3>
+    <p>Import and include the main style modules in the global scope to make your application use Lumo styles:</p>
     <nice-demo-snippet code-only>
       <template slot="source">
         <!-- Place these in your index.html -->
@@ -61,6 +52,7 @@
         <link rel="import" href="bower_components/vaadin-lumo-styles/style.html">
         <link rel="import" href="bower_components/vaadin-lumo-styles/typography.html">
 
+        <!-- Include the main style modules in global scope (index.html) -->
         <custom-style>
           <style include="lumo-color lumo-typography"></style>
         </custom-style>
@@ -69,10 +61,17 @@
 
     <h3 demo-section>3. Next steps</h3>
     <ul>
-      <li>Get to know the style guide, such as <b><a href="typography.html">Typography</a></b> and <b>
-        <a href="colors.html">Colors</a></b>, which affect the overall look and feel of all parts of the app.</li>
+      <li>Get to know the style guide which defines the overall look and feel of the system.
+        <ul>
+          <li><b><a href="typography.html">Typography</a></b></li>
+          <li><b><a href="colors.html">Color</a></b></li>
+          <li><b><a href="styles.html">Style</a></b></li>
+          <li><b><a href="sizing-and-spacing.html">Sizing and Spacing</a></b></li>
+        </ul>
+      </li>
       <li>Get to know the utilities, like <b><a href="badges.html">Badges</a></b>, which offer ready-made styles for small but common use cases.</li>
-      <li>Learn how to <b><a href="customization.html">customize the styles</a></b> to your needs. Remember to read about <b><a href="compatibility.html">browser compatibility</a></b>.</li>
+      <li>Learn how to <b><a href="customization.html">customize the styles</a></b> to your needs.</li>
+      <li>Remember to read about <b><a href="compatibility.html">browser compatibility</a></b>, if you need to support Internet Explorer 11 or EdgeHTML 14.</li>
     </ul>
 
   </div>
