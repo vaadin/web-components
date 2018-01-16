@@ -1,8 +1,6 @@
 <link rel="import" href="style.html">
 <link rel="import" href="color.html">
 <link rel="import" href="typography.html">
-<link rel="import" href="sizing.html">
-<link rel="import" href="spacing.html">
 
 <dom-module id="lumo-badge">
   <template>
@@ -12,24 +10,29 @@
         align-items: center;
         justify-content: center;
         box-sizing: border-box;
-        height: var(--lumo-size-xxs);
-        margin: var(--lumo-space-xs);
-        padding-left: calc(0.45em + var(--lumo-border-radius) / 4);
-        padding-right: calc(0.45em + var(--lumo-border-radius) / 4);
+        padding: 0.25em calc(0.4em + var(--lumo-border-radius) / 4);
         color: var(--lumo-primary-text-color);
         background-color: var(--lumo-primary-color-10pct);
         border-radius: var(--lumo-border-radius);
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size-xs);
-        line-height: 1;
+        line-height: var(--lumo-line-height-xs);
         font-weight: 500;
         text-transform: initial;
         letter-spacing: initial;
+        min-width: calc(var(--lumo-line-height-xs) * 1em + 0.45em);
+      }
+
+      /* Ensure proper vertical alignment */
+      [theme~="badge"]::before {
+        display: inline-block;
+        content: "\2003";
+        width: 0;
       }
 
       [theme~="badge"][theme~="small"] {
         font-size: var(--lumo-font-size-xxs);
-        height: var(--lumo-size-xxxs);
+        line-height: 1;
       }
 
       /* Colors */
@@ -79,25 +82,37 @@
 
       /* Icon */
 
+      [theme~="badge"] iron-icon {
+        margin: -0.25em 0;
+        --iron-icon-width: 1.5em;
+        --iron-icon-height: 1.5em;
+      }
+
+      [theme~="badge"] iron-icon:first-child {
+        margin-left: -0.375em;
+      }
+
+      [theme~="badge"] iron-icon:last-child {
+        margin-right: -0.375em;
+      }
+
       [theme~="badge"][icon] {
-        width: var(--lumo-size-xxs);
-        padding: var(--lumo-space-xxs);
+        min-width: 0;
+        padding: 0;
+        font-size: 1rem;
+        --iron-icon-width: var(--lumo-icon-size-m);
+        --iron-icon-height: var(--lumo-icon-size-m);
       }
 
       [theme~="badge"][icon][theme~="small"] {
-        width: var(--lumo-size-xxxs);
-        height: var(--lumo-size-xxxs);
-        padding: 0;
+        --iron-icon-width: var(--lumo-icon-size-s);
+        --iron-icon-height: var(--lumo-icon-size-s);
       }
 
       /* Empty */
 
-      [theme~="badge"]:not([icon]):empty::before {
-        /* Needed to align the badge nicely on the baseline */
-        content: "\2003";
-      }
-
       [theme~="badge"]:not([icon]):empty {
+        min-width: 0;
         width: 1em;
         height: 1em;
         padding: 0;
@@ -125,7 +140,7 @@
       /* Pill */
 
       [theme~="badge"][theme~="pill"] {
-        --lumo-border-radius: calc(var(--lumo-size-xxs) / 2);
+        --lumo-border-radius: 1em;
       }
     </style>
   </template>
