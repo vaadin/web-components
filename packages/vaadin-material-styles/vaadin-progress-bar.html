@@ -31,20 +31,21 @@
         background-color: var(--material-progress-indeterminate-progress-bar-background);
         overflow: hidden;
         will-change: transform;
-        animation: running-progress 2s linear infinite;
+        animation: running-progress 4s linear infinite;
       }
 
       @-webkit-keyframes running-progress {
-        0% { margin-left: 0%; margin-right: 100%; width: 0%;}
-        30% { margin-left: 0%; margin-right: 70%; width: 30%;}
-        70% { margin-left: 70%; margin-right: 0%; width: 30%; }
-        100% { margin-left: 100%; margin-right: 0; width: 0%; }
+        0% { margin-left: 0; margin-right: 100%; width: 0%;}
+        37.5% { margin-left: 0; margin-right: 40%; width: 60%;}
+        62.5% { margin-left: 40%; margin-right: 0; width: 60%;}
+        100% { margin-left: 100%; margin-right: 0; width: 0%;}
       }
+
       @keyframes running-progress {
-        0% { margin-left: 0%; margin-right: 100%; width: 0%;}
-        30% { margin-left: 0%; margin-right: 70%; width: 30%;}
-        70% { margin-left: 70%; margin-right: 0%; width: 30%; }
-        100% { margin-left: 100%; margin-right: 0; width: 0%; }
+        0% { margin-left: 0; margin-right: 100%; width: 0%;}
+        37.5% { margin-left: 0; margin-right: 40%; width: 60%;}
+        62.5% { margin-left: 40%; margin-right: 0; width: 60%;}
+        100% { margin-left: 100%; margin-right: 0; width: 0%;}
       }
 
       /* Error color */
