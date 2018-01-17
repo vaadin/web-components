@@ -5,6 +5,10 @@
   <template>
     <style include="material-menu-overlay">
 
+    :host {
+      -ms-overflow-style: none;
+    }
+    
     [part="content"] vaadin-combo-box-item[focused] {
       background-color: var(--material-divider-color);
     }
