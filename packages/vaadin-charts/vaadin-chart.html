@@ -169,12 +169,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * polymer serve --open
        * ```
        *
-       * ### Install License Key
-       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key.
-       *
-       * You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
-       *
-       * If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again
+       * ### Validating your License
+       * After one day using Vaadin Charts in a development environment you will see a pop-up that asks you
+       * to validate your license by signing in to vaadin.com.
        *
        * @memberof Vaadin
        * @demo demo/index.html
@@ -267,7 +264,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /** @private */
         connectedCallback() {
           super.connectedCallback();
-          this.__addLicenseChecker();
           this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
             const options = Object.assign({}, this.options);
@@ -515,14 +511,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           };
         }
 
-
-        __addLicenseChecker() {
-          var licenseChecker = document.createElement('vaadin-license-checker');
-          licenseChecker.productName = 'vaadin-charts';
-          licenseChecker.productVersion = '6.0.0';
-          licenseChecker.productCaption = 'Vaadin Charts';
-          this.shadowRoot.appendChild(licenseChecker);
-        }
 
         __addChildObserver() {
           Polymer.RenderStatus.beforeNextRender(this, () => {
@@ -881,6 +869,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @namespace Vaadin
        */
       window.Vaadin.ChartElement = ChartElement;
+      if (window.Vaadin.runIfDevelopmentMode) {
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', ChartElement);
+      }
+
     }
   </script>
 </dom-module>

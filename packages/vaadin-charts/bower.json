@@ -33,7 +33,7 @@
     "highcharts": "^5.0.0",
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "^1.0.0",
-    "vaadin-license-checker": "vaadin/license-checker#^1.0.0",
+    "vaadin-license-checker": "vaadin/license-checker#^2.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
@@ -42,6 +42,6 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-board": "1.1.0-beta1"
+    "vaadin-board": "^2.0.0"
   }
 }
