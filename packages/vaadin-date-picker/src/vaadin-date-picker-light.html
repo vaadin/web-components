@@ -44,7 +44,7 @@ This program is available under Apache License Version 2.0, available at https:/
           max-date="[[_maxDate]]"
           on-date-tap="_close"
           role="dialog"
-          part="overlay">
+          part="overlay-content">
         </vaadin-date-picker-overlay-content>
       </template>
     </vaadin-date-picker-overlay>
@@ -83,6 +83,16 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </paper-input>
        * </vaadin-date-picker-light>
        * ```
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description | Theme for Element
+       * ----------------|----------------|----------------
+       * `overlay-content` | The overlay element | vaadin-date-picker-light
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
