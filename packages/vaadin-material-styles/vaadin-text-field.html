@@ -237,6 +237,10 @@
         color: var(--material-error-text-color);
       }
 
+      :host([invalid]) [part="input-field"] {
+        background-color: transparent;
+      }
+
       :host([invalid]) [part="input-field"]::after {
         background-color: var(--material-error-color);
         transform: none;

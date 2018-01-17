@@ -66,11 +66,6 @@
         background-color: transparent;
       }
 
-      /* ShadyCSS limitation workaround */
-      [part="input-field"] ::slotted([part="value"]) [selected]::before {
-        display: none;
-      }
-
       /* IE11 flexbox fix (https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items) */
       [part="input-field"] ::slotted([part="value"]) {
         display: flex;
@@ -88,24 +83,27 @@
   <template>
     <style>
       :host {
-        --_valo-item-selected-icon-display: block;
-      }
-
-      /* TODO not necessarily the best way to target items only */
-      [tabindex] {
-        padding-left: 2px;
       }
 
       [part="content"] vaadin-item::before {
         content: "";
       }
 
-      :host([phone]) {
-        top: 0 !important;
-        left: 0 !important;
-        padding: 24px;
-        align-items: center;
-        justify-content: center;
+      [part="content"] vaadin-item:hover,
+      [part="content"] vaadin-item[focused] {
+        background-color: var(--material-divider-color);
+      }
+
+      [part="content"]:hover vaadin-item[focused] {
+        background-color: transparent;
+      }
+
+      [part="content"] vaadin-item[focused]:hover {
+        background-color: var(--material-divider-color);
+      }
+
+      [part="content"] vaadin-item {
+        background-color: transparent;
       }
 
     </style>
