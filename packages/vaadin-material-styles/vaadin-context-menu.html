@@ -14,9 +14,21 @@
         background-color: transparent;
       }
 
-      [part="content"] vaadin-item:focus,
+      [part="content"] vaadin-item[focused],
       [part="content"] vaadin-item:hover {
         background-color: var(--material-divider-color);
+      }
+
+      [part="content"]:hover vaadin-item[focused] {
+        background-color: transparent;
+      }
+
+      [part="content"] vaadin-item[focused]:hover {
+        background-color: var(--material-divider-color);
+      }
+
+      [part="content"] vaadin-item {
+        background-color: transparent;
       }
 
     </style>
