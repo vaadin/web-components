@@ -11,15 +11,14 @@
     <style include="material-menu-overlay">
       vaadin-list-box [tabindex][selected] {
         font-weight: 400;
+        background-color: transparent;
       }
 
-      :host([phone]) {
-        top: 0 !important;
-        left: 0 !important;
-        padding: 24px;
-        align-items: center;
-        justify-content: center;
+      [part="content"] vaadin-item:focus,
+      [part="content"] vaadin-item:hover {
+        background-color: var(--material-divider-color);
       }
+
     </style>
   </template>
 </dom-module>

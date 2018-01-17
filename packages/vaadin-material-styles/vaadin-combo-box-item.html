@@ -32,8 +32,8 @@
         --_valo-item-selected-icon-display: none;
       }
 
-      :host([focused]) {
-        background-color: var(--material-background-color);
+      :host(:hover) {
+        background-color: var(--material-divider-color);
       }
 
       @media (pointer: coarse) {
@@ -44,6 +44,11 @@
 
       :host([selected]) {
         font-weight: 500;
+        background-color: transparent;
+      }
+
+      :host([selected]:hover) {
+        background-color: var(--material-divider-color);
       }
 
       ::-ms-backdrop,
