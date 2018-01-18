@@ -64,7 +64,7 @@
 
     <h2 demo-section>Available icons</h2>
 
-    <p>Click/focus an icon to view details.</p>
+    <p theme="font-size-s">Click/focus an icon to view details.</p>
     <div class="lumo-icons">
       <dom-repeat id="lumo-icons">
         <template>
@@ -268,14 +268,15 @@
           iron-icon.l {
             --iron-icon-width: var(--lumo-icon-size-l);
             --iron-icon-height: var(--lumo-icon-size-l);
-            margin: calc(var(--lumo-icon-size-s) / 2);
+            margin: 0.75em 0.5em 0.75em 0.25em
           }
 
           h4 {
             text-transform: capitalize;
-            margin: 0;
-            font-size: var(--lumo-font-size-s);
-            font-weight: 500;
+            margin: -0.5em 0 0.5em;
+            font-size: var(--lumo-font-size-xs);
+            font-weight: 400;
+            color: var(--lumo-secondary-text-color);
           }
 
           dl {
