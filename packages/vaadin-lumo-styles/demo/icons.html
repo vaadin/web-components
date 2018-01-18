@@ -315,24 +315,26 @@
         </dl>
       </template>
       <script>
-        class LumoIcon extends Polymer.Element {
-          static get is() {
-            return 'lumo-icon';
+        document.addEventListener('WebComponentsReady', function() {
+          class LumoIcon extends Polymer.Element {
+            static get is() {
+              return 'lumo-icon';
+            }
+            static get properties() {
+              return {
+                name: String
+              };
+            }
+            ready() {
+              super.ready();
+              this.setAttribute('tabindex', 0);
+            }
+            formatName(name) {
+              return name.replace('-', ' ');
+            }
           }
-          static get properties() {
-            return {
-              name: String
-            };
-          }
-          ready() {
-            super.ready();
-            this.setAttribute('tabindex', 0);
-          }
-          formatName(name) {
-            return name.replace('-', ' ');
-          }
-        }
-        customElements.define(LumoIcon.is, LumoIcon);
+          customElements.define(LumoIcon.is, LumoIcon);
+        });
       </script>
     </dom-module>
 
