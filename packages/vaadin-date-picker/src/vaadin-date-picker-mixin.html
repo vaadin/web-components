@@ -316,12 +316,18 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('focus', e => this._noInput && e.target.blur());
     }
 
+    /**
+     * @protected
+     */
     connectedCallback() {
       super.connectedCallback();
 
       this.$.overlay.addEventListener('vaadin-overlay-escape-press', this._boundFocus);
     }
 
+    /**
+     * @protected
+     */
     disconnectedCallback() {
       super.disconnectedCallback();
 
