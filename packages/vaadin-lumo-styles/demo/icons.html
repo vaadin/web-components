@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Vaadin Lumo Icons</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+
+  <custom-style>
+    <style>
+      .lumo-icons {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -1em;
+      }
+
+      .lumo-icons lumo-icon {
+        flex: auto;
+        margin: 1em;
+      }
+
+      [class^="icon-size"] {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        width: 2rem;
+        height: 2rem;
+        margin: 0.25rem;
+        background-color: var(--lumo-base-color);
+        color: var(--lumo-secondary-text-color);
+        background-clip: content-box;
+        position: relative;
+        font-weight: 600;
+        background-color: var(--lumo-contrast-10pct);
+      }
+    </style>
+  </custom-style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Lumo</span>
+    </demo-navigation>
+
+    <div class="theme-source-code">Source code: <a href="https://github.com/vaadin/vaadin-lumo-styles/blob/master/icons.html">SVG sprites</a>, <a href="https://github.com/vaadin/vaadin-lumo-styles/blob/master/font-icons.html">Font icons</a></div>
+    <h1>Icons</h1>
+
+    <p>Lumo comes with a set of icons that are designed to fit in with the default Lumo style.</p>
+
+
+    <h2 demo-section>Available icons</h2>
+
+    <p>Click/focus an icon to view details.</p>
+    <div class="lumo-icons">
+      <dom-repeat id="lumo-icons">
+        <template>
+          <lumo-icon name="[[item]]"></lumo-icon>
+        </template>
+      </dom-repeat>
+    </div>
+
+
+    <h2 demo-section>Usage instructions</h2>
+
+    <h3>SVG sprites</h3>
+
+    <p>The SVG sprites are used with the <a href="https://www.webcomponents.org/element/PolymerElements/iron-icon"><code>iron-icon</code></a> element.</p>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="bower_components/vaadin-lumo-styles/icons.html">
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <iron-icon icon="lumo:edit"></iron-icon>
+        <iron-icon icon="lumo:cog"></iron-icon>
+        <iron-icon icon="lumo:search"></iron-icon>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h3>Font icons</h3>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <link rel="import" href="bower_components/vaadin-lumo-styles/font-icons.html">
+      </template>
+    </nice-demo-snippet>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <span class="font-icon edit"></span>
+        <span class="font-icon cog"></span>
+        <span class="font-icon search"></span>
+
+        <custom-style>
+          <style>
+            .font-icon {
+              font-family: lumo-icons;
+              font-size: var(--lumo-icon-size-m);
+            }
+
+            .font-icon.edit::before {
+              content: var(--lumo-icons-edit);
+            }
+
+            .font-icon.cog::before {
+              content: var(--lumo-icons-cog);
+            }
+
+            .font-icon.search::before {
+              content: var(--lumo-icons-search);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <h2 demo-section>Icon size</h2>
+
+    <p>Use the icon size custom properties to set consistent sizes for all icons across your app. The Lumo icons are drawn on a 24&times;24 pixel canvas – the <b>M size</b> fits that by default.</p>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <h5>SVG</h5>
+        <iron-icon icon="lumo:edit" class="size-s"></iron-icon>
+        <iron-icon icon="lumo:edit" class="size-m"></iron-icon>
+        <iron-icon icon="lumo:edit" class="size-l"></iron-icon>
+
+        <h5>Font icon</h5>
+        <span class="font-icon size-s"></span>
+        <span class="font-icon size-m"></span>
+        <span class="font-icon size-l"></span>
+
+        <custom-style>
+          <style>
+            .font-icon {
+              font-family: lumo-icons;
+              font-size: var(--lumo-icon-size-m);
+              vertical-align: middle;
+            }
+
+            .font-icon::before {
+              content: var(--lumo-icons-search);
+            }
+
+            /* Control iron-icons with width and height */
+
+            iron-icon.size-s {
+              width: var(--lumo-icon-size-s);
+              height: var(--lumo-icon-size-s);
+            }
+
+            iron-icon.size-m {
+              width: var(--lumo-icon-size-m);
+              height: var(--lumo-icon-size-m);
+            }
+
+            iron-icon.size-l {
+              width: var(--lumo-icon-size-l);
+              height: var(--lumo-icon-size-l);
+            }
+
+            /* Control font icons with font-size */
+
+            .font-icon.size-s {
+              font-size: var(--lumo-icon-size-s);
+            }
+
+            .font-icon.size-m {
+              font-size: var(--lumo-icon-size-m);
+            }
+
+            .font-icon.size-l {
+              font-size: var(--lumo-icon-size-l);
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+
+    <hr>
+
+
+    <h2 demo-section>Custom properties</h2>
+
+    <h5>Icon size</h5>
+    <dl class="custom-properties">
+      <dt>--lumo-icon-size-s</dt>
+      <dt>--lumo-icon-size-m</dt>
+      <dt>--lumo-icon-size-l</dt>
+    </dl>
+
+
+    <script>
+      document.addEventListener('WebComponentsReady', function() {
+        let iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'lumo');
+        let lumoIcons = iconsets[0].getIconNames().map((name) => name.split(':')[1]);
+        document.querySelector('#lumo-icons').items = lumoIcons;
+      });
+    </script>
+
+    <dom-module id="lumo-icon">
+      <template>
+        <style>
+          :host {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            border-radius: var(--lumo-border-radius);
+          }
+
+          :host(:hover:not(:focus)) {
+            background-color: var(--lumo-contrast-5pct);
+          }
+
+          :host(:focus) {
+            z-index: 1;
+            outline: none;
+            box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
+            cursor: default;
+          }
+
+          .samples {
+            display: flex;
+            align-items: center;
+          }
+
+          iron-icon.s {
+            --iron-icon-width: var(--lumo-icon-size-s);
+            --iron-icon-height: var(--lumo-icon-size-s);
+            margin: calc((var(--lumo-icon-size-l) - var(--lumo-icon-size-s)) / 2);
+          }
+
+          iron-icon.m {
+            --iron-icon-width: var(--lumo-icon-size-m);
+            --iron-icon-height: var(--lumo-icon-size-m);
+            margin: calc((var(--lumo-icon-size-l) - var(--lumo-icon-size-m)) / 2);
+          }
+
+          iron-icon.l {
+            --iron-icon-width: var(--lumo-icon-size-l);
+            --iron-icon-height: var(--lumo-icon-size-l);
+            margin: calc(var(--lumo-icon-size-s) / 2);
+          }
+
+          h4 {
+            text-transform: capitalize;
+            margin: 0;
+            font-size: var(--lumo-font-size-s);
+            font-weight: 500;
+          }
+
+          dl {
+            font-size: var(--lumo-font-size-xs);
+            line-height: var(--lumo-line-height-xs);
+            position: absolute;
+            top: 100%;
+            opacity: 0;
+            background-color: var(--lumo-base-color);
+            background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+            pointer-events: none;
+            border-radius: var(--lumo-border-radius);
+            padding: 0.75em 0.75em 0;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: var(--lumo-box-shadow-s);
+            transition: opacity 120ms;
+          }
+
+          :host(:focus) dl {
+            opacity: 1;
+            pointer-events: auto;
+          }
+
+          dt {
+            font-weight: 500;
+          }
+
+          dd {
+            color: var(--lumo-secondary-text-color);
+            margin: 0;
+            margin-bottom: 0.75em;
+          }
+        </style>
+        <div class="samples">
+          <iron-icon icon="lumo:[[name]]" class="l"></iron-icon>
+          <iron-icon icon="lumo:[[name]]" class="m"></iron-icon>
+          <iron-icon icon="lumo:[[name]]" class="s"></iron-icon>
+        </div>
+        <h4>[[formatName(name)]]</h4>
+        <dl>
+          <dt>SVG sprite</dt><dd>[[name]]</dd>
+          <dt>Font icon property</dt><dd>--lumo-icons-[[name]]</dd>
+        </dl>
+      </template>
+      <script>
+        class LumoIcon extends Polymer.Element {
+          static get is() {
+            return 'lumo-icon';
+          }
+          static get properties() {
+            return {
+              name: String
+            };
+          }
+          ready() {
+            super.ready();
+            this.setAttribute('tabindex', 0);
+          }
+          formatName(name) {
+            return name.replace('-', ' ');
+          }
+        }
+        customElements.define(LumoIcon.is, LumoIcon);
+      </script>
+    </dom-module>
+
+  </div>
+</body>
+</html>
