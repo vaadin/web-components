@@ -31,14 +31,6 @@ This program is available under Apache License Version 2.0, available at https:/
         align-items: baseline; /* default `stretch` is not appropriate */
 
         flex-wrap: wrap; /* the items should wrap */
-
-        /*
-          To implement the column gap, horizontal margins for the items is used,
-          see slotted elements style below. We need to compensate item margins
-          in the wrapper, so that the are no gaps around the layout itself.
-        */
-        margin-left: calc(-0.5 * var(--vaadin-form-layout-column-gap));
-        margin-right: calc(-0.5 * var(--vaadin-form-layout-column-gap));
       }
 
       #layout ::slotted(*) {
@@ -388,6 +380,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this._columnCount = selectedStep.columns;
             this._labelsOnTop = selectedStep.labelsPosition === 'top';
           }
+
+          if (/\b(Edge|Trident)\//.test(navigator.userAgent)) {
+            if (this.offsetWidth !== this._lastOffsetWidth) {
+              this.updateStyles(); // force breaks sizes update in IE and Edge
+              this._lastOffsetWidth = this.offsetWidth;
+            }
+          }
         }
 
         _invokeUpdateStyles() {
@@ -413,23 +412,69 @@ This program is available under Apache License Version 2.0, available at https:/
             ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
             : getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap');
 
-          Array.from(this.children).forEach(child => {
-            let colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+          const direction = getComputedStyle(this).direction;
+          const marginStartProp = 'margin-' + (direction === 'ltr' ? 'left' : 'right');
+          const marginEndProp = 'margin-' + (direction === 'ltr' ? 'right' : 'left');
 
-            // Never span further than the number of columns
-            colspan = Math.min(colspan, this._columnCount);
+          const containerWidth = this.offsetWidth;
 
-            const childRatio = colspan / this._columnCount;
+          if (window.ShadyDOM) {
+            window.ShadyDOM.flush(); // `getComputedStyle` below needs that
+          }
 
-            // Note: using 99.999% for 100% fixes rounding errors in MS Edge,
-            // otherwise the items might wrap, resizing is wobbly
-            child.style.width = `calc(${childRatio * 99.999}% - ${columnGap})`;
+          let col = 0;
+          Array.from(this.children).forEach((child) => {
+            if (getComputedStyle(child).display !== 'none') {
+              let colspan;
 
-            if (child.localName === 'vaadin-form-item') {
-              if (this._labelsOnTop) {
-                child.setAttribute('label-position', 'top');
+              if (child.localName === 'br') {
+                colspan = this._columnCount - col;
               } else {
-                child.removeAttribute('label-position');
+                colspan = this._naturalNumberOrOne(parseFloat(child.getAttribute('colspan')));
+
+                // Never span further than the number of columns
+                colspan = Math.min(colspan, this._columnCount);
+              }
+
+              const childRatio = colspan / this._columnCount;
+
+              if (child.localName === 'br') {
+                // IE and Edge only accept fixed padding
+                child.style.paddingRight = `calc(${childRatio * containerWidth}px - ${1 - childRatio} * ${columnGap})`;
+              } else {
+                // Note: using 99.9% for 100% fixes rounding errors in MS Edge
+                // (< v16), otherwise the items might wrap, resizing is wobbly.
+                child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnGap})`;
+              }
+
+              if (col + colspan > this._columnCount) {
+                // Too big to fit on this row, let’s wrap it
+                col = 0;
+              }
+
+              // At the start edge
+              if (col === 0) {
+                child.style.setProperty(marginStartProp, '0px');
+              } else {
+                child.style.removeProperty(marginStartProp);
+              }
+
+              // At the end edge
+              if (col + colspan === this._columnCount) {
+                child.style.setProperty(marginEndProp, '0px');
+              } else {
+                child.style.removeProperty(marginEndProp);
+              }
+
+              // Move the column counter
+              col = (col + colspan) % this._columnCount;
+
+              if (child.localName === 'vaadin-form-item') {
+                if (this._labelsOnTop) {
+                  child.setAttribute('label-position', 'top');
+                } else {
+                  child.removeAttribute('label-position');
+                }
               }
             }
           });

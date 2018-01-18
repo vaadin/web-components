@@ -34,14 +34,33 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="overflow">
+    <template>
+      <div style="width: 300px; overflow: auto;">
+        <vaadin-form-layout responsive-steps='[{"columns": 3}]'>
+          <div at-start>1 start</div>
+          <div>2 mid</div>
+          <div at-end>3 end</div>
+          <br>
+          <div style="display: none;">invisible</div>
+          <div at-start="">4 start</div>
+          <br>
+          <div at-start>5 start</div>
+          <div colspan="2" at-end>6 end</div>
+          <div colspan="2" at-start>7 start</div>
+          <div at-end>8 end</div>
+          <div colspan="3" at-start at-end>9 start to end</div>
+        </vaadin-form-layout>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     function getParsedWidth(el) {
-      var width = el.style.getPropertyValue('width');
-      var components = width.replace(/^calc\((.*)\)$/, '$1').split(' - ');
-      return {
-        percentage: components[0],
-        gap: components[1]
-      };
+      const width = el.style.getPropertyValue('width');
+      const components = width.replace(/^calc\((.*)\)$/, '$1').split(/ [+-] /);
+      const [percentage, gap] = components.sort((a, b) => b.indexOf('%'));
+      return {percentage, gap};
     }
 
     describe('basic features', function() {
@@ -273,14 +292,13 @@
       });
 
       it('should apply default column-gap', function() {
-        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2rem');
-        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('16px'); // 0.5 * 2em in px
-        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px');
-      });
-
-      it('should compensate for column-gap in layout wrapper', function() {
-        expect(getComputedStyle(layout.$.layout).getPropertyValue('margin-left')).to.equal('-16px'); // -0.5 * 2em in px
-        expect(getComputedStyle(layout.$.layout).getPropertyValue('margin-right')).to.equal('-16px');
+        expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
+          '0.5 * 2rem', // MSIE
+          '-1rem', // Edge
+          '1rem'
+        ]);
+        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-left')).to.equal('0px'); // zero because it's first
+        expect(getComputedStyle(layout.firstElementChild).getPropertyValue('margin-right')).to.equal('16px'); // 0.5 * 2rem in px
       });
 
       it('should support updating with `updateStyles` call', function() {
@@ -289,7 +307,11 @@
           '--vaadin-form-layout-label-width': '4cm',
           '--vaadin-form-layout-label-gap': '1cm'
         });
-        expect(getParsedWidth(layout.firstElementChild).gap).to.equal('2cm');
+        expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
+          '0.5 * 2cm', // MSIE
+          '-1cm', // Edge
+          '1cm'
+        ]);
         expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-width')).to.equal('4cm');
         expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-gap')).to.equal('1cm');
       });
@@ -320,6 +342,56 @@
 
         // invalid means 1
         expect(estimateEffectiveColspan(layout.children[5])).to.be.closeTo(1, .1);
+      });
+    });
+
+    describe('container overflow', function() {
+      let container, layout;
+
+      beforeEach(() => {
+        container = fixture('overflow');
+        layout = container.firstElementChild;
+      });
+
+      it('should not overflow containers horizontally', () => {
+        expect(container.scrollWidth).to.equal(container.clientWidth);
+      });
+
+      describe('no gaps on edges', () => {
+        it('should not have gaps on the left edge', () => {
+          const containerRect = container.getBoundingClientRect();
+          Array.from(layout.querySelectorAll('[at-start]')).forEach(child => {
+            expect(child.getBoundingClientRect().left).to.be.closeTo(containerRect.left, .5);
+          });
+        });
+
+        it('should not have gaps on the right edge', () => {
+          const containerRect = container.getBoundingClientRect();
+          Array.from(layout.querySelectorAll('[at-end]')).forEach(child => {
+            expect(child.getBoundingClientRect().right).to.be.closeTo(containerRect.right, .5);
+          });
+        });
+      });
+
+      describe('no gaps on edges (rtl)', () => {
+        beforeEach(() => {
+          container.dir = 'rtl';
+          layout.updateStyles();
+        });
+
+        it('should not have gaps on the right edge', () => {
+          const containerRect = container.getBoundingClientRect();
+          Array.from(layout.querySelectorAll('[at-start]')).forEach(child => {
+            expect(child.getBoundingClientRect().right).to.be.closeTo(containerRect.right, .5);
+          });
+        });
+
+        it('should not have gaps on the left edge', () => {
+          const containerRect = container.getBoundingClientRect();
+          Array.from(layout.querySelectorAll('[at-end]')).forEach(child => {
+            expect(child.getBoundingClientRect().left).to.be.closeTo(containerRect.left, .5);
+          });
+        });
       });
     });
   </script>
