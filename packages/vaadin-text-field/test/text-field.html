@@ -115,6 +115,26 @@
           textField.value = false;
           expect(textField.hasAttribute('has-value')).to.be.true;
         });
+
+        it('setting label updates has-label attribute', function() {
+          textField.label = 'foo';
+          expect(textField.hasAttribute('has-label')).to.be.true;
+        });
+
+        it('setting label to empty string does not update has-label attribute', function() {
+          textField.label = '';
+          expect(textField.hasAttribute('has-label')).to.be.false;
+        });
+
+        it('setting label to null does not update has-label attribute', function() {
+          textField.label = null;
+          expect(textField.hasAttribute('has-label')).to.be.false;
+        });
+
+        it('setting number label updates has-label attribute', function() {
+          textField.label = 0;
+          expect(textField.hasAttribute('has-label')).to.be.true;
+        });
       });
 
       if (!window.ShadyDOM) {
