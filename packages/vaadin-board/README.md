@@ -26,23 +26,24 @@ $ bower install --save vaadin/vaadin-board
 ### Use Vaadin Board
  Create your first Vaadin Board
 ```
-<vaadin-board-row>
+<vaadin-board>
+  <vaadin-board-row>
     <div class="top a" board-cols="2">top A</div>
     <div class="top b">top B</div>
     <div class="top c">top C</div>
-</vaadin-board-row>
-<vaadin-board-row>
+  </vaadin-board-row>
+  <vaadin-board-row>
     <div class="mid">mid</div>
-</vaadin-board-row>
-<vaadin-board-row>
+  </vaadin-board-row>
+  <vaadin-board-row>
     <div class="low a">low A</div>
     <vaadin-board-row>
-        <div class="top a">low B / A</div>
-        <div class="top b">low B / B</div>
-        <div class="top c">low B / C</div>
-        <div class="top d">low B / D</div>
+      <div class="top a">low B / A</div>
+      <div class="top b">low B / B</div>
+      <div class="top c">low B / C</div>
+      <div class="top d">low B / D</div>
     </vaadin-board-row>
-    </vaadin-board-row>
+  </vaadin-board-row>
 </vaadin-board>
 ```
 
