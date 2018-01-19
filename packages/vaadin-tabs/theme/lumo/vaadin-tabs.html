@@ -25,6 +25,11 @@
 
       :host([orientation="vertical"]) {
         box-shadow: -1px 0 0 0 var(--lumo-contrast-10pct);
+        display: inline-flex;
+      }
+
+      :host([orientation="vertical"]) [part="tabs"] {
+        width: 100%;
       }
 
       [part="forward-button"],
@@ -33,7 +38,7 @@
         z-index: 1;
         font-family: lumo-icons;
         color: var(--lumo-tertiary-text-color);
-        font-size: var(--lumo-icon-size);
+        font-size: var(--lumo-icon-size-m);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -113,19 +118,19 @@
         --_lumo-tabs-overflow-mask-image: linear-gradient(transparent, #000 2em);
       }
 
-      :host ::slotted(:not(vaadin-tab)) {
+      :host [part="tabs"] ::slotted(:not(vaadin-tab)) {
         margin-left: var(--lumo-space-m);
       }
 
       /* Small theme */
 
-      :host([theme~="small"]) {
-        font-size: var(--lumo-font-size-s);
+      :host([theme~="small"]),
+      :host([theme~="small"]) [part="tabs"] {
         min-height: var(--lumo-size-m);
       }
 
-      :host([theme~="small"]) [part="tabs"] {
-        min-height: var(--lumo-size-m);
+      :host([theme~="small"]) [part="tabs"] ::slotted(vaadin-tab) {
+        font-size: var(--lumo-font-size-s);
       }
 
       /* Minimal and pill themes */
