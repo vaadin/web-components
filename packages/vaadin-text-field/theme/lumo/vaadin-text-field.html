@@ -122,22 +122,24 @@
         margin: var(--lumo-space-xs) 0;
         border-radius: var(--lumo-border-radius);
         background-color: var(--lumo-contrast-10pct);
-        padding: 0 calc(0.375em + var(--lumo-border-radius) / 4);
+        padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
         font-weight: 500;
         line-height: 1;
         position: relative;
         height: var(--lumo-text-field-size);
         cursor: text;
+        box-sizing: border-box;
+        border: 1px solid transparent;
       }
 
       /* Used for hover and activation effects */
       [part="input-field"]::after {
         content: "";
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        top: -1px;
+        right: -1px;
+        bottom: -1px;
+        left: -1px;
         border-radius: inherit;
         pointer-events: none;
         background-color: var(--lumo-contrast-50pct);
@@ -185,10 +187,31 @@
       }
 
       /* Read-only and disabled */
+      :host([readonly]) [part="value"]::-webkit-input-placeholder,
+      :host([disabled]) [part="value"]::-webkit-input-placeholder {
+        opacity: 0;
+      }
 
-      :host([readonly]) [part="input-field"],
-      :host([disabled]) [part="input-field"] {
-        background-color: var(--lumo-contrast-5pct);
+      :host([readonly]) [part="value"]:-ms-input-placeholder,
+      :host([disabled]) [part="value"]:-ms-input-placeholder {
+        opacity: 0;
+      }
+
+      :host([readonly]) [part="value"]::-moz-placeholder,
+      :host([disabled]) [part="value"]::-moz-placeholder {
+        opacity: 0;
+      }
+
+      :host([readonly]) [part="value"]::placeholder,
+      :host([disabled]) [part="value"]::placeholder {
+        opacity: 0;
+      }
+
+      /* Read-only */
+
+      :host([readonly]) [part="input-field"] {
+        background-color: transparent;
+        border: 1px dashed var(--lumo-contrast-40pct);
       }
 
       /* Disabled style */
@@ -197,27 +220,15 @@
         pointer-events: none;
       }
 
+      :host([disabled]) [part="input-field"] {
+        background-color: var(--lumo-contrast-5pct);
+      }
+
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
       :host([disabled]) [part="input-field"] ::slotted(*) {
         color: var(--lumo-disabled-text-color);
         -webkit-text-fill-color: var(--lumo-disabled-text-color);
-      }
-
-      :host([disabled]) [part="value"]::-webkit-input-placeholder {
-        opacity: 0;
-      }
-
-      :host([disabled]) [part="value"]:-ms-input-placeholder {
-        opacity: 0;
-      }
-
-      :host([disabled]) [part="value"]::-moz-placeholder {
-        opacity: 0;
-      }
-
-      :host([disabled]) [part="value"]::placeholder {
-        opacity: 0;
       }
 
       /* Required field style */
