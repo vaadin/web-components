@@ -30,7 +30,8 @@ gulp.task('lint:html', function() {
     'test/**/*.html'
   ])
     .pipe(htmlExtract({
-      sel: 'script, code-example code'
+      sel: 'script, code-example code',
+      strip: true
     }))
     .pipe(eslint())
     .pipe(eslint.format())
