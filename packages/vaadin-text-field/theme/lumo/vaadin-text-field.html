@@ -43,12 +43,12 @@
         box-sizing: border-box;
       }
 
-      :host([label])::before {
+      :host([has-label])::before {
         /* Label height + input-field margin-top */
         margin-top: calc(var(--lumo-font-size-s) + var(--lumo-space-xs) * 2);
       }
 
-      :host([label]) {
+      :host([has-label]) {
         margin-top: var(--lumo-space-m);
       }
 
@@ -275,11 +275,11 @@
         --lumo-text-field-size: var(--lumo-size-s);
       }
 
-      :host([theme~="small"][label]) [part="label"] {
+      :host([theme~="small"][has-label]) [part="label"] {
         font-size: var(--lumo-font-size-xs);
       }
 
-      :host([theme~="small"][label]) [part="error-message"] {
+      :host([theme~="small"][has-label]) [part="error-message"] {
         font-size: var(--lumo-font-size-xxs);
       }
 

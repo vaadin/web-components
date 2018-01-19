@@ -119,7 +119,8 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           label: {
             type: String,
-            value: ''
+            value: '',
+            observer: '_labelChanged'
           },
 
           /**
@@ -231,6 +232,14 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('has-value', '');
         } else {
           this.removeAttribute('has-value');
+        }
+      }
+
+      _labelChanged(label) {
+        if (label !== '' && label != null) {
+          this.setAttribute('has-label', '');
+        } else {
+          this.removeAttribute('has-label');
         }
       }
 
