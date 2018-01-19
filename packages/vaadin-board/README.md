@@ -20,7 +20,7 @@ $ bower install --save vaadin/vaadin-board
 ### Import Vaadin Board
  Add html import
 ```
-<link rel="import" href="bower_components/vaadin/vaadin-board.html">
+<link rel="import" href="bower_components/vaadin-board/vaadin-board.html">
 <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 ```
 ### Use Vaadin Board
