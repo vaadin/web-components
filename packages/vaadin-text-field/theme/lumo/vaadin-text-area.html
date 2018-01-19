@@ -9,11 +9,12 @@
     <style include="lumo-text-field">
       [part="input-field"] {
         /* Equal to the implicit padding in vaadin-text-field */
-        padding-top: calc((var(--lumo-text-field-size) - var(--lumo-icon-size-m)) / 2);
-        padding-bottom: calc((var(--lumo-text-field-size) - var(--lumo-icon-size-m)) / 2);
+        padding-top: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
+        padding-bottom: calc((var(--lumo-text-field-size) - 1em * var(--lumo-line-height-s)) / 2);
         height: auto;
         box-sizing: border-box;
         transition: background-color 0.1s;
+        line-height: var(--lumo-line-height-s);
       }
 
       [part="input-field"]::after {
@@ -35,10 +36,13 @@
       }
 
       [part="value"] {
-        padding-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / 2);
-        padding-bottom: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / 2);
-        line-height: var(--lumo-line-height-s);
+        line-height: inherit;
         --_lumo-text-field-overflow-mask-image: none;
+      }
+
+      /* Vertically align icon prefix/suffix with the first line of text */
+      [part="input-field"] ::slotted(iron-icon) {
+        margin-top: calc((var(--lumo-icon-size-m) - 1em * var(--lumo-line-height-s)) / -2)
       }
 
       [part="input-field"] [part="value"] {
