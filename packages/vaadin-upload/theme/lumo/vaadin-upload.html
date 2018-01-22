@@ -11,6 +11,10 @@
 <dom-module id="lumo-upload" theme-for="vaadin-upload">
   <template>
     <style>
+      :host {
+        line-height: var(--lumo-line-height-m);
+      }
+
       :host(:not([nodrop])) {
         overflow: hidden;
       }
@@ -63,6 +67,12 @@
         justify-content: space-between;
       }
 
+      [part="status"],
+      [part="error"] {
+        color: var(--lumo-secondary-text-color);
+        font-size: var(--lumo-font-size-s);
+      }
+
       [part="info"] {
         display: flex;
       }
@@ -77,6 +87,11 @@
 
       [part="progress"][complete] {
         display: none;
+      }
+
+      [part="done-icon"],
+      [part="warning-icon"] {
+        margin-right: var(--lumo-space-xs);
       }
 
       [part="done-icon"],
@@ -111,6 +126,7 @@
       [part="clear-button"]::before {
         content: var(--lumo-icons-cross);
         color: var(--lumo-shade-50pct);
+        margin-left: var(--lumo-space-xs);
       }
 
       [part="meta"] {
