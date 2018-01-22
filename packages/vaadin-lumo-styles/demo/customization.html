@@ -14,13 +14,6 @@
     [unresolved] {
       opacity: 0;
     }
-
-    .subtitle {
-      font-weight: 400;
-      color: var(--lumo-secondary-text-color);
-      margin-top: -1.2em;
-      margin-bottom: 1em;
-    }
   </style>
 </head>
 
@@ -34,21 +27,25 @@
 
     <h1>Customization</h1>
 
-    <h2 demo-section>Small adjustments</h2>
-    <h4 class="subtitle">CSS custom properties</h4>
+    <p>When the default styles are not suitable, you can adjust them with in the following ways.</p>
 
-    <p>Lumo defines global and component specific
-      <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
+    <h2 demo-section>CSS custom properties</h2>
+
+    <p>Lumo defines global <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
       that you can use to make smaller adjustments to the styles.</p>
 
-    <p>The pages under the “Style guide” section (<a href="colors.html">Colors</a> for example) list
-      the custom properties that affect all elements.</p>
+    <p>The pages under the “Foundation” section (<a href="colors.html">Colors</a> for example) list
+      the custom properties that affect all elements that .</p>
 
     <h3>Global changes</h3>
 
     <p>As an example, if you wish to adjust the border radius for all elements that are affected by
-      it, you can place the following code in the top level scope of you application (e.g.
-      <code>index.html</code>):</p>
+      it, you can place the following code in the global style scope of you application:</p>
+
+    <div class="note">
+      <h6>Style scopes</h6>
+      <p>With the addition of Shadow DOM, styles on a webpage can be divided into global and local scoped styles.<br><a href="https://github.com/vaadin/vaadin-themable-mixin/wiki/1.-Style-Scopes">Learn more about style scopes</a></p>
+    </div>
 
     <div class="note">
       <h6>Browser compatibility</h6>
@@ -59,8 +56,6 @@
         </template>
       </nice-demo-snippet>
     </div>
-
-    <h5>Example: changing the border radius of all elements with a global style</h5>
 
     <nice-demo-snippet code-only>
       <template slot="source">
@@ -80,8 +75,6 @@
     <p>If you wish to adjust the border radius for <code>vaadin-button</code> specifically, for example, you can
       do the following:</p>
 
-    <h6>Example: Changing the border radius of one component using a common custom property</h6>
-
     <nice-demo-snippet code-only>
       <template slot="source">
         <!-- This needs to be in the same style scope as the vaadin-button -->
@@ -95,36 +88,19 @@
       </template>
     </nice-demo-snippet>
 
-    <p>This only works if the styles are placed in the same <a href="#what-is-a-style-scope-">style scope</a>
-      as the buttons you want to style.</p>
-
-    <p>To work around this limitation, we can target the button specific
-      <code>--lumo-button-border-radius</code> custom property instead, and apply that in the
-      global scope:</p>
-
-    <h6>Example: Changing the border radius of one component using a component specific custom property in the global style scope</h6>
-
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <!-- Add directly to index.html or use a separate HTML import -->
-        <custom-style>
-          <style>
-            html {
-              --lumo-button-border-radius: 2px;
-            }
-          </style>
-        </custom-style>
-      </template>
-    </nice-demo-snippet>
+    <div class="note">
+      <h6>Global scope</h6>
+      <p>This only works if the styles are placed in the same <a href="#what-is-a-style-scope-">style scope</a>
+      as the buttons you want to style. To work around this limitation you need to use a <a href="#advanced-styling">theme module</a>.</p>
+    </div>
 
 
     <hr>
 
 
-    <h2 demo-section>Advanced styling</h2>
-    <h4 class="subtitle">Theme modules</h4>
+    <h2 demo-section>Theme modules</h2>
 
-    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the element or Lumo and need to style elements freely.</p>
+    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by Lumo and need to style elements freely.</p>
 
     <p>Read the documentation for <code>ThemableMixin</code> to learn how theme modules work.</p>
 
