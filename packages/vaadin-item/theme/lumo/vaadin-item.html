@@ -11,33 +11,39 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
-        line-height: var(--lumo-line-height-s);
-        border-radius: var(--lumo-border-radius);
-        overflow: hidden;
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-xs);
+        font-weight: 400;
+        padding: var(--lumo-space-s) var(--lumo-space-m);
+        -webkit-tap-highlight-color: transparent;
       }
 
-      /* It's the list-box's responsibility to add the focus style */
-      :host([focused]) {
-        outline: none;
-      }
-
-      /* Selected item has an icon */
-
-      :host::before {
+      /* Selectable items have a checkmark icon */
+      :host([tabindex])::before {
         display: var(--_lumo-item-selected-icon-display, none);
-        content: "";
+        content: var(--lumo-icons-checkmark);
         font-family: lumo-icons;
-        font-size: 24px;
+        font-size: var(--lumo-icon-size-m);
         line-height: 1;
         font-weight: 400;
-        width: 24px;
-        margin-right: var(--lumo-space-xs);
+        width: 1em;
+        height: 1em;
+        margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
         color: var(--lumo-primary-text-color);
         flex: none;
+        opacity: 0;
+        transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), opacity 0.1s;
       }
 
       :host([selected])::before {
-        content: "\e902";
+        opacity: 1;
+      }
+
+      :host([active]:not([selected]))::before {
+        transform: scale(0.8);
+        opacity: 0;
+        transition-duration: 0s;
       }
 
       /* Disabled item */
