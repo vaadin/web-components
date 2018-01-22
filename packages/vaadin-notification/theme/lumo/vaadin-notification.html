@@ -3,34 +3,22 @@
 <link rel="import" href="../../../vaadin-lumo-styles/style.html">
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/overlay.html">
+
 <dom-module id="lumo-notification-card" theme-for="vaadin-notification-card">
   <template>
-    <style>
+    <style include="lumo-overlay">
+      :host {
+        position: relative;
+        margin: var(--lumo-space-s);
+      }
+
       [part="overlay"] {
-        background-color: var(--lumo-base-color);
         background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
-        border-radius: var(--lumo-border-radius);
-        box-shadow: var(--lumo-box-shadow-m);
-        padding: var(--lumo-space-wide-m);
       }
 
       [part="content"] {
-        color: var(--lumo-body-text-color);
-        font-family: var(--lumo-font-family);
-        font-size: var(--lumo-font-size-m);
-        font-weight: 400;
-        line-height: var(--lumo-line-height-m);
-        letter-spacing: 0;
-        text-transform: none;
-        box-sizing: border-box;
-      }
-
-      :host([slot^="top"]) {
-        margin-top: var(--lumo-space-s);
-      }
-
-      :host([slot^="bottom"]) {
-        margin-bottom: var(--lumo-space-s);
+        padding: var(--lumo-space-wide-m);
       }
 
       :host([slot^="middle"]) {
@@ -39,16 +27,12 @@
         margin: var(--lumo-space-s) auto;
       }
 
-      :host([slot^="top"]),
-      :host([slot^="bottom"]) {
-        margin-left: var(--lumo-space-m);
-        margin-right: var(--lumo-space-m);
-      }
-
       :host([slot$="stretch"]) {
         margin: 0;
+      }
+
+      :host([slot$="stretch"]) [part="overlay"] {
         border-radius: 0;
-        width: auto;
       }
 
       @keyframes lumo-notification-exit-fade-out {
@@ -60,9 +44,6 @@
       @keyframes lumo-notification-enter-fade-in {
         0% {
           opacity: 0;
-        }
-        100% {
-          opacity: 1;
         }
       }
 
