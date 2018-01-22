@@ -292,6 +292,10 @@
       });
 
       it('should apply default column-gap', function() {
+        // override to not depend on the theme changes
+        layout.style.setProperty('--lumo-space-l', '2rem');
+        layout.updateStyles({'--lumo-space-l': '2rem'});
+
         expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
           '0.5 * 2rem', // MSIE
           '-1rem', // Edge
