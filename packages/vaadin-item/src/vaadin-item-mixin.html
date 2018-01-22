@@ -132,7 +132,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _setActive(active) {
-      if (active) {
+      // Only activate items which are focusable
+      if (active && this.hasAttribute('tabindex')) {
         this.setAttribute('active', '');
       } else {
         this.removeAttribute('active');
