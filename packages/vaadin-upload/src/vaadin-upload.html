@@ -27,30 +27,8 @@ This program is available under Apache License Version 2.0, available at https:/
       div[hidden] {
         display: none;
       }
-
-      :host(:not([nodrop])) {
-        overflow: hidden;
-      }
-
-      [part="primary-buttons"] {
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      [part="drop-label"] {
-        display: flex;
-        flex: 1 1 auto;
-        align-self: center;
-      }
-
-      [part="drop-label-icon"] {
-        font-family: 'vaadin-upload-icons';
-      }
-
-      [part="drop-label-icon"]::before {
-        content: "\e905";
-      }
     </style>
+
     <div part="primary-buttons">
       <div id="addFiles" on-click="_onAddFilesClick">
         <slot name="add-button">
