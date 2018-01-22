@@ -223,13 +223,13 @@
       it('should serialize', () => {
         boundNameCheckbox.checked = true;
         expect(boundNameCheckbox.name).to.equal('boundcheckbox');
-        expect(form.serializeForm().boundcheckbox).to.equal('on');
+        expect(form.serializeForm().boundcheckbox).to.include('on');
       });
 
       it('should serialize with a custom value', () => {
         boundNameCheckbox.checked = true;
         boundNameCheckbox.value = 'foo';
-        expect(form.serializeForm().boundcheckbox).to.equal('foo');
+        expect(form.serializeForm().boundcheckbox).to.include('foo');
       });
 
       it('should not serialize when not checked', () => {
@@ -251,7 +251,7 @@
 
       it('should define the name from an attribute', () => {
         attrNameCheckbox.checked = true;
-        expect(form.serializeForm().attrcheckbox).to.equal('on');
+        expect(form.serializeForm().attrcheckbox).to.include('on');
       });
 
     });
