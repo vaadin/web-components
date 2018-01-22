@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-notification-overlay">
+<dom-module id="vaadin-notification-container">
   <template>
     <style>
       :host {
@@ -111,19 +111,19 @@ This program is available under Apache License Version 2.0, available at https:/
   <script>
     (function() {
       /**
-       * The notification overlay element.
+       * The container element for all notifications.
        *
        * @memberof Vaadin
        */
-      class VaadinNotificationOverlay extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
+      class VaadinNotificationContainer extends Vaadin.ThemableMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
-          return 'vaadin-notification-overlay';
+          return 'vaadin-notification-container';
         }
 
         static get properties() {
           return {
             /**
-             * True when the overlay is opened
+             * True when the container is opened
              */
             opened: {
               type: Boolean,
@@ -274,17 +274,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this.opened = false;
         }
 
-        get _overlay() {
-          if (!NotificationElement._overlay) {
-            NotificationElement._overlay = document.createElement('vaadin-notification-overlay');
-            document.body.appendChild(NotificationElement._overlay);
+        get _container() {
+          if (!NotificationElement._container) {
+            NotificationElement._container = document.createElement('vaadin-notification-container');
+            document.body.appendChild(NotificationElement._container);
           }
-          return NotificationElement._overlay;
+          return NotificationElement._container;
         }
 
         _openedChanged(opened) {
           if (opened) {
-            this._overlay.opened = true;
+            this._container.opened = true;
             if (!this._instance) {
               const template = this.querySelector('template');
               const Templatizer = Polymer.Templatize.templatize(template, this, {
@@ -316,24 +316,24 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _appendNotificationCard() {
-          if (!this._overlay.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
+          if (!this._container.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
             window.console.warn(
               `Invalid alignment parameter provided: position=${this.position}`);
             return;
           }
 
           this._card.slot = this.position;
-          if (this._overlay.firstElementChild && /^(top-stretch||top)$/.test(this.position)) {
-            this._overlay.insertBefore(this._card, this._overlay.firstElementChild);
+          if (this._container.firstElementChild && /^(top-stretch||top)$/.test(this.position)) {
+            this._container.insertBefore(this._card, this._container.firstElementChild);
           } else {
-            this._overlay.appendChild(this._card);
+            this._container.appendChild(this._card);
           }
         }
 
         _removeNotificationCard() {
           this._card.parentNode && this._card.parentNode.removeChild(this._card);
           this._card.removeAttribute('closing');
-          this._overlay.opened = Boolean(this._overlay.firstElementChild);
+          this._container.opened = Boolean(this._container.firstElementChild);
         }
 
         _closeNotificationCard() {
@@ -367,7 +367,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinNotificationOverlay.is, VaadinNotificationOverlay);
+      customElements.define(VaadinNotificationContainer.is, VaadinNotificationContainer);
       customElements.define(VaadinNotificationCard.is, VaadinNotificationCard);
       customElements.define(NotificationElement.is, NotificationElement);
 

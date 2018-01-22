@@ -18,14 +18,14 @@
       },
       "elements": [
         {
-          "description": "The notification overlay element.",
+          "description": "The container element for all notifications.",
           "summary": "",
           "path": "src/vaadin-notification.html",
           "properties": [
             {
               "name": "opened",
               "type": "boolean",
-              "description": "True when the overlay is opened",
+              "description": "True when the container is opened",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -100,11 +100,11 @@
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.VaadinNotificationOverlay",
+          "name": "Vaadin.VaadinNotificationContainer",
           "attributes": [
             {
               "name": "opened",
-              "description": "True when the overlay is opened",
+              "description": "True when the container is opened",
               "sourceRange": {
                 "start": {
                   "line": 127,
@@ -261,7 +261,7 @@
               }
             }
           ],
-          "tagname": "vaadin-notification-overlay"
+          "tagname": "vaadin-notification-container"
         },
         {
           "description": "The container element for the notification\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`overlay` | The notification container\n`content` | The content of the notification\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
@@ -287,7 +287,31 @@
               "params": []
             }
           ],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 46,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                }
+              ],
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [],
           "metadata": {},
           "sourceRange": {

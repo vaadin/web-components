@@ -44,11 +44,11 @@
 
   <script>
     describe('animated notifications', function() {
-      let notifications, overlay;
+      let notifications, container;
 
       beforeEach(done => {
         notifications = Array.from(fixture('notification'));
-        overlay = notifications[0]._overlay;
+        container = notifications[0]._container;
 
         // Change default duration and wait for both notifications to be closed;
         const duration = 20;
@@ -77,9 +77,9 @@
           });
         });
 
-        it('should close the overlay when all active notifications dissapear', done => {
+        it('should close the container when all active notifications dissapear', done => {
           notifications[1]._card.addEventListener('animationend', () => {
-            expect(overlay.opened).to.be.false;
+            expect(container.opened).to.be.false;
             done();
           });
         });
