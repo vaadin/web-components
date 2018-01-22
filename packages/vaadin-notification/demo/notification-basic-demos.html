@@ -7,11 +7,11 @@
     </style>
 
     <h3>Simple Notification</h3>
-    <vaadin-demo-snippet id='notification-basic-demos-simple-notification'>
+    <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
       <template preserve-content>
         <vaadin-notification opened duration="4000">
           <template>
-            <h3>Notice</h3>
+            <b>Notice</b><br>
             This notification has HTML content
           </template>
         </vaadin-notification>
@@ -19,7 +19,7 @@
     </vaadin-demo-snippet>
 
     <h3>Position</h3>
-    <vaadin-demo-snippet id='notification-basic-demos-simple-notification'>
+    <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
       <template preserve-content>
         <vaadin-notification opened duration="4000" position="top-end">
           <template>
@@ -30,7 +30,7 @@
     </vaadin-demo-snippet>
 
     <h3>Binding the `opened` property</h3>
-    <vaadin-demo-snippet id='notification-basic-demos-binding'>
+    <vaadin-demo-snippet id="notification-basic-demos-binding">
       <template preserve-content>
         <dom-bind>
           <template>
@@ -46,7 +46,7 @@
     </vaadin-demo-snippet>
 
     <h3>Interacting with Content</h3>
-    <vaadin-demo-snippet id='notification-basic-demos-interaction'>
+    <vaadin-demo-snippet id="notification-basic-demos-interaction">
       <template preserve-content>
         <dom-bind id="bind-elm">
           <template>
@@ -76,13 +76,13 @@
     </vaadin-demo-snippet>
 
     <h3>Using from JavaScript</h3>
-    <vaadin-demo-snippet id='notification-basic-demos-using-from-js'>
+    <vaadin-demo-snippet id="notification-basic-demos-using-from-js">
       <template preserve-content>
         <vaadin-button onclick="showNotification()">Trigger the dynamic notification</vaadin-button>
         <script>
           window.showNotification = function() {
             const template = document.createElement('template');
-            template.innerHTML = '<h4>Alert</h4>This is a Dynamic Notification created with JS';
+            template.innerHTML = '<b>Alert</b><br>This is a dynamic notification created with JavaScript';
 
             const notify = document.createElement('vaadin-notification');
             notify.position = 'middle';

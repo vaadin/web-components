@@ -2,11 +2,11 @@
   "name": "Vaadin Notification",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "notification-basic-demos",
     "src": "notification-basic-demos.html",
     "meta": {
-      "title": "vaadin-notification Basic Examples",
+      "title": "Vaadin Notification Basic Examples",
       "description": "",
       "image": ""
      }
@@ -17,7 +17,7 @@
     "url": "notification-advanced-demos",
     "src": "notification-advanced-demos.html",
     "meta": {
-      "title": "vaadin-notification Advanced Examples",
+      "title": "Vaadin Notification Advanced Examples",
       "description": "",
       "image": ""
      }
