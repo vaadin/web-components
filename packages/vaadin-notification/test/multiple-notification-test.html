@@ -46,13 +46,13 @@
 
   <script>
     describe('multiple notification', function() {
-      let notifications, overlay, regions;
+      let notifications, container, regions;
 
       beforeEach(done => {
         notifications = Array.from(fixture('multiple'));
-        overlay = notifications[0]._overlay;
+        container = notifications[0]._container;
         // Object.values is unsupported in old browsers
-        regions = Array.from(overlay.shadowRoot.querySelectorAll('[region]'));
+        regions = Array.from(container.shadowRoot.querySelectorAll('[region]'));
         // To ensure computed styles are applied.
         setTimeout(done);
       });
@@ -64,30 +64,30 @@
           el._removeNotificationCard();
         });
         // delete singleton reference, so as it's created in next test
-        delete notifications[0].constructor._overlay;
+        delete notifications[0].constructor._container;
       });
 
-      describe('vaadin-notification-overlay', () => {
-        it('should be only one instance of vaadin-notification-overlay in the dom', () => {
-          expect(document.body.querySelectorAll('vaadin-notification-overlay').length).to.be.equal(1);
+      describe('vaadin-notification-container', () => {
+        it('should be only one instance of vaadin-notification-container in the dom', () => {
+          expect(document.body.querySelectorAll('vaadin-notification-container').length).to.be.equal(1);
         });
 
-        it('overlay should be a singleton', () => {
-          expect(notifications[0]._overlay).to.be.equal(notifications[1]._overlay);
+        it('container should be a singleton', () => {
+          expect(notifications[0]._container).to.be.equal(notifications[1]._container);
         });
 
-        it('should close the overlay when all active notifications dissapear', done => {
+        it('should close the container when all active notifications dissapear', done => {
           // Set the same duration to all notifications but one
           notifications.forEach(elm => elm.duration = 2);
           notifications[1].duration = 5;
 
-          expect(overlay.opened).to.be.true;
+          expect(container.opened).to.be.true;
           setTimeout(() => {
-            expect(overlay.opened).to.be.true;
-            notifications[1]._overlay.querySelector('[slot="top-start"]').addEventListener('animationend', (e) => {
+            expect(container.opened).to.be.true;
+            notifications[1]._container.querySelector('[slot="top-start"]').addEventListener('animationend', (e) => {
               if (e.animationName.indexOf('-exit-') !== -1) {
                 setTimeout(() => {
-                  expect(overlay.opened).to.be.false;
+                  expect(container.opened).to.be.false;
                   done();
                 });
               }
@@ -105,7 +105,7 @@
             'bottom-start', 'bottom-center', 'bottom-end',
             'bottom-stretch'
           ].forEach(regionName => {
-            const region = overlay.shadowRoot.querySelector(`[region="${regionName}"]`);
+            const region = container.shadowRoot.querySelector(`[region="${regionName}"]`);
             expect(region).to.not.be.null;
             expect(region.firstElementChild.localName).to.equal('slot');
             expect(region.firstElementChild.getAttribute('name')).to.equal(regionName);
@@ -149,7 +149,7 @@
 
       describe('styles', () => {
         it('content should ignore pointer events', () => {
-          expect(getComputedStyle(overlay)['pointer-events']).to.equal('none');
+          expect(getComputedStyle(container)['pointer-events']).to.equal('none');
         });
 
         it('notification should respomnd to pointer events', () => {
@@ -159,20 +159,20 @@
         });
 
         it('host should have flex-direction column', () => {
-          expect(getComputedStyle(overlay).flexDirection).to.equal('column');
+          expect(getComputedStyle(container).flexDirection).to.equal('column');
         });
 
         it('host should have align items stretch', () => {
-          expect(getComputedStyle(overlay).alignItems).to.equal('stretch');
+          expect(getComputedStyle(container).alignItems).to.equal('stretch');
         });
 
         it('host should have align items stretch', () => {
-          expect(getComputedStyle(overlay).alignItems).to.equal('stretch');
+          expect(getComputedStyle(container).alignItems).to.equal('stretch');
         });
 
         it('all region groups and host should be flex containers', () => {
-          const groups = Array.from(overlay.shadowRoot.querySelectorAll('[region-group]'));
-          groups.push(overlay);
+          const groups = Array.from(container.shadowRoot.querySelectorAll('[region-group]'));
+          groups.push(container);
           groups.forEach(el => expect(getComputedStyle(el).display).to.equal('flex'));
         });
 
@@ -182,15 +182,15 @@
 
         it('all region groups should have flex-direction row', () => {
           [
-            overlay.shadowRoot.querySelector('[region-group="top"]'),
-            overlay.shadowRoot.querySelector('[region-group="bottom"]')
+            container.shadowRoot.querySelector('[region-group="top"]'),
+            container.shadowRoot.querySelector('[region-group="bottom"]')
           ].forEach(el => expect(getComputedStyle(el).flexDirection).to.equal('row'));
         });
 
         it('all region groups should have equal flex streching', () => {
           [
-            overlay.shadowRoot.querySelector('[region-group="top"]'),
-            overlay.shadowRoot.querySelector('[region-group="bottom"]')
+            container.shadowRoot.querySelector('[region-group="top"]'),
+            container.shadowRoot.querySelector('[region-group="bottom"]')
           ].forEach(el => {
             expect(getComputedStyle(el).flexGrow).to.equal('1');
             expect(parseFloat(getComputedStyle(el).flexBasis)).to.equal(0);
@@ -198,27 +198,27 @@
         });
 
         it('all grouped regions should have equal flex stretching', () => {
-          Array.from(overlay.shadowRoot.querySelectorAll('[region-group] > [region]')).forEach(el => {
+          Array.from(container.shadowRoot.querySelectorAll('[region-group] > [region]')).forEach(el => {
             expect(getComputedStyle(el).flexGrow).to.equal('1');
             expect(parseFloat(getComputedStyle(el).flexBasis)).to.equal(0);
           });
         });
 
         it('middle region should not have flex streching', () => {
-          const middleRegion = overlay.shadowRoot.querySelector('[region="middle"]');
+          const middleRegion = container.shadowRoot.querySelector('[region="middle"]');
           expect(getComputedStyle(middleRegion).flexGrow).to.equal('0');
           expect(getComputedStyle(middleRegion).flexBasis).to.equal('auto');
         });
 
         it('top region group should align regions to start', () => {
           expect(getComputedStyle(
-            overlay.shadowRoot.querySelector('[region-group="top"]')
+            container.shadowRoot.querySelector('[region-group="top"]')
           ).alignItems).to.equal('flex-start');
         });
 
         it('bottom region group should align regions to end', () => {
           expect(getComputedStyle(
-            overlay.shadowRoot.querySelector('[region-group="bottom"]')
+            container.shadowRoot.querySelector('[region-group="bottom"]')
           ).alignItems).to.equal('flex-end');
         });
 
