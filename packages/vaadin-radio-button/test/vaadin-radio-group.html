@@ -83,7 +83,7 @@
         expect(vaadinRadioButtonList[2].tabindex).to.eq(0);
       });
 
-      it('next/first radio button should be focused and checked after right/down ', () => {
+      it('next/first radio button should be focused and checked after right/down', () => {
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
@@ -98,7 +98,7 @@
         expect(vaadinRadioButtonList[2].checked).to.be.false;
       });
 
-      it('previous/last radio button should be focused and checked after left/up ', () => {
+      it('previous/last radio button should be focused and checked after left/up', () => {
         vaadinRadioButtonList[1].checked = true;
 
         MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
@@ -112,6 +112,33 @@
         expect(vaadinRadioButtonList[0].checked).to.be.false;
       });
 
+      it('next/first radio button should have focus-ring attribute after right/down', () => {
+        vaadinRadioButtonList[1].focus();
+        vaadinRadioButtonList[1].checked = true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 39);
+
+        expect(vaadinRadioButtonList[2].hasAttribute('focus-ring')).to.be.true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 40);
+        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 40);
+        expect(vaadinRadioButtonList[0].hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('previous/last radio button should have focus-ring attribute after left/up', () => {
+        vaadinRadioButtonList[1].focus();
+        vaadinRadioButtonList[1].checked = true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 37);
+        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 37);
+        expect(vaadinRadioButtonList[0].hasAttribute('focus-ring')).to.be.true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 38);
+        MockInteractions.keyUpOn(vaadinRadioButtonGroup, 38);
+        expect(vaadinRadioButtonList[2].hasAttribute('focus-ring')).to.be.true;
+      });
+
       it('should miss disabled button after right/down', () => {
         buttonsListWithDisabled[1].checked = true;
 
@@ -121,7 +148,7 @@
         expect(buttonsListWithDisabled[3].checked).to.be.true;
       });
 
-      it('should miss disabled button after left/up ', () => {
+      it('should miss disabled button after left/up', () => {
         buttonsListWithDisabled[3].checked = true;
 
         MockInteractions.keyDownOn(groupWithDisabledButton, 37);
