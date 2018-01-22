@@ -69,20 +69,10 @@
       /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
       :host([phone][phone]) [part="content"] {
         max-height: 50vh;
-        padding: 30px var(--lumo-space-s);
+        padding: 30px var(--lumo-space-m);
         box-sizing: border-box;
         -webkit-overflow-scrolling: touch;
         overflow: auto;
-      }
-
-      /* Phone layout specific tweaks for contained vaadin-items */
-
-      :host([phone]) vaadin-item {
-        margin: 0 var(--lumo-space-xs);
-      }
-
-      :host([phone]) vaadin-item[focused] {
-        background-color: transparent;
       }
     </style>
   </template>
