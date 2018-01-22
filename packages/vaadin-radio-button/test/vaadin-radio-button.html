@@ -139,13 +139,13 @@
       it('should serialize', () => {
         boundNameRadioButton.checked = true;
         expect(boundNameRadioButton.name).to.equal('boundradiobutton');
-        expect(form.serializeForm().boundradiobutton).to.equal('on');
+        expect(form.serializeForm().boundradiobutton).to.include('on');
       });
 
       it('should serialize with a custom value', () => {
         boundNameRadioButton.checked = true;
         boundNameRadioButton.value = 'foo';
-        expect(form.serializeForm().boundradiobutton).to.equal('foo');
+        expect(form.serializeForm().boundradiobutton).to.include('foo');
       });
 
       it('should not serialize when not checked', () => {
@@ -167,7 +167,7 @@
 
       it('should define the name from an attribute', () => {
         attrNameRadioButton.checked = true;
-        expect(form.serializeForm().attrradiobutton).to.equal('on');
+        expect(form.serializeForm().attrradiobutton).to.include('on');
       });
     });
   </script>
