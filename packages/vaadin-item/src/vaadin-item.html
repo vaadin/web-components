@@ -27,6 +27,24 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * `<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.
        *
+       * ```
+       *   <vaadin-item>
+       *     Item content
+       *   </vaadin-item>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled` | Set to a disabled item | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       * `selected` | Set when the item is selected | :host
+       * `active` | Set when mousedown or enter/spacebar pressed | :host
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ItemMixin
        * @mixes Vaadin.ThemableMixin
