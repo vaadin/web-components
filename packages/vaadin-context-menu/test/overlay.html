@@ -176,6 +176,37 @@
               expect(event.defaultPrevented).to.not.eql(true);
             });
           });
+
+          describe('<vaadin-overlay> iOS viewport workaround (phone mode)', () => {
+            it('should have zero bottom by default', done => {
+              if (menu._phone) {
+                listenOnce(menu, 'opened-changed', () => {
+                  expect(parseFloat(getComputedStyle(menu.$.overlay).bottom)).to.equal(0);
+                  done();
+                });
+
+                contextmenu();
+              } else {
+                done();
+              }
+            });
+
+            it('should accept --vaadin-overlay-viewport-bottom CSS property', done => {
+              if (menu._phone) {
+                listenOnce(menu, 'opened-changed', () => {
+                  menu.$.overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
+                  menu.$.overlay.updateStyles({'--vaadin-overlay-viewport-bottom': '50px'});
+
+                  expect(getComputedStyle(menu.$.overlay).bottom).to.equal('50px');
+                  done();
+                });
+
+                contextmenu();
+              } else {
+                done();
+              }
+            });
+          });
         });
 
         describe('closing', () => {
