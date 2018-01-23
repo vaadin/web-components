@@ -45,7 +45,7 @@
               </template>
             </vaadin-notification>
             <vaadin-button onclick=bcenter.open()>Bottom center</vaadin-button>
-            <vaadin-notification id="bcenter" duration="2000" position="bottom-center">
+            <vaadin-notification id="bcenter" duration="200000" position="bottom-center">
               <template>
                 Bottom center (timeout 2s.)
               </template>
@@ -83,13 +83,41 @@
           </template>
         </nice-demo-snippet>
 
+        <h3>Other Notifications</h3>
+        <nice-demo-snippet id='testing-notifications'>
+          <template slot="source">
+            <vaadin-button onclick=nopos.open()>No position</vaadin-button>
+            <vaadin-notification id="nopos" duration="200000">
+              <template>
+                <p>No position</p>
+                <vaadin-button onclick=nopos.close() theme="primary">Close</vaadin-button>
+              </template>
+            </vaadin-notification>
+            <vaadin-button onclick=stretch.open()>Stretch</vaadin-button>
+            <vaadin-notification id="stretch" duration="200000" position="bottom-stretch">
+              <template>
+                <p>Stretch</p>
+                <vaadin-button onclick=stretch.close() theme="primary">Close</vaadin-button>
+              </template>
+            </vaadin-notification>
+            <vaadin-button onclick=middle.open()>Middle</vaadin-button>
+            <vaadin-notification id="middle" duration="2000" position="middle">
+              <template>
+                Middle (timeout 2s.)
+              </template>
+            </vaadin-notification>
+          </template>
+        </nice-demo-snippet>
+
         <h3>Persistent Notification</h3>
         <nice-demo-snippet id='persistent-notification'>
           <template slot="source">
             <vaadin-button onclick=persistent.open()>Open notification</vaadin-button>
             <vaadin-notification id="persistent" duration="200000" position="bottom-center">
               <template>
-                Notification text
+                <p>
+                  Notification text
+                </p>
                 <vaadin-button onclick=persistent.close() theme="primary">Close</vaadin-button>
               </template>
             </vaadin-notification>
