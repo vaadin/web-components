@@ -1,12 +1,19 @@
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
 <link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
 
 <dom-module id="lumo-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
   <template>
     <style include="lumo-menu-overlay">
-      /* Don’t highlight the last activated item */
-      /* TODO the overlay should also forget the last activated/focused item when reopened */
-      vaadin-list-box [tabindex][selected] {
-        font-weight: 400;
+    /* TODO These style overrides should not be needed.
+       We should instead offer a way to have non-selectable items inside the context menu. */
+
+      :host vaadin-list-box {
+        --_lumo-item-selected-icon-display: none;
+      }
+
+      :host vaadin-list-box vaadin-item {
+        padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
       }
     </style>
   </template>
