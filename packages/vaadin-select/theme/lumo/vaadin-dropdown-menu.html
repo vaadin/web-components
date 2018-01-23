@@ -66,11 +66,18 @@
       }
 
       [part~="overlay"] {
-        min-width: 10em;
+        /* TODO should get the width of the host/text-field element as a custom property */
+        min-width: 12em;
       }
 
-      vaadin-list-box vaadin-item {
-        padding-left: calc(var(--lumo-space-xs) + var(--lumo-border-radius) / 4);
+      /* Small viewport adjustment */
+      :host([phone]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
+        left: 0 !important;
+        align-items: stretch;
+        justify-content: flex-end;
       }
     </style>
   </template>
