@@ -232,13 +232,23 @@
           upload._uploadFile(file);
         });
 
+        it('should fire the `upload-retry` event on retrying', done => {
+          upload.addEventListener('upload-retry', e => {
+            Polymer.Base.async(() => {
+              expect(file.uploading).to.be.ok;
+              done();
+            }, 100);
+          });
+          upload._retryFileUpload(file);
+        });
+
         it('should propagate with-credentials to the xhr', done => {
           upload.withCredentials = true;
           upload.addEventListener('upload-start', e => {
             e.preventDefault();
             expect(e.detail.xhr.withCredentials).to.be.true;
             done();
-          });                    
+          });
           upload._uploadFile(file);
         });
 

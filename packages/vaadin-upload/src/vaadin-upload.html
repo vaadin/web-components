@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 <link rel="import" href="vaadin-upload-icons.html">
@@ -670,7 +671,7 @@ This program is available under Apache License Version 2.0, available at https:/
             })
           );
           if (evt) {
-            this.async(this._uploadFile.bind(this, file));
+            Polymer.Async.microTask.run(this._uploadFile.bind(this, file));
           }
         }
 
