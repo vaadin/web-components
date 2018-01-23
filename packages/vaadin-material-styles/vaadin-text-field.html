@@ -280,6 +280,11 @@
         animation: reveal 0.2s;
       }
 
+      :host(:not([invalid])) [part="error-message"] {
+        max-height: 0;
+        overflow: hidden;
+      }
+
       @keyframes reveal {
         0% {
           opacity: 0;
