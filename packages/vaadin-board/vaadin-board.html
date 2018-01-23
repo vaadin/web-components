@@ -45,15 +45,6 @@ Responsive layout, with several features.
           super();
         }
 
-        ready() {
-          super.ready();
-          var licenseChecker = document.createElement('vaadin-license-checker');
-          licenseChecker.productName = "vaadin-board";
-          licenseChecker.productVersion = "2.0.0-alpha1";
-          licenseChecker.productCaption = "Vaadin Board";
-          this.shadowRoot.appendChild(licenseChecker);
-        }
-
         connectedCallback() {
           super.connectedCallback();
         }
