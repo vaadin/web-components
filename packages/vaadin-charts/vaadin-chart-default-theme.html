@@ -19,7 +19,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
  *
  * License: www.highcharts.com/license
  */
- .highcharts-container {
+.highcharts-container {
   position: relative;
   overflow: hidden;
   width: 100%;
@@ -47,6 +47,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 .highcharts-emphasized {
   font-style: italic;
+}
+
+.highcharts-anchor {
+  cursor: pointer;
 }
 
 .highcharts-background {
@@ -157,6 +161,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 .highcharts-tooltip-box {
   stroke-width: 1px;
+  fill: #f7f7f7;
+  fill-opacity: 0.85;
+}
+
+.highcharts-tooltip-box .highcharts-label-box {
   fill: #f7f7f7;
   fill-opacity: 0.85;
 }
@@ -282,7 +291,7 @@ g.highcharts-series,
   stroke-width: 0;
 }
 
-.highcharts-data-label text {
+.highcharts-data-label text, text.highcharts-data-label {
   fill: #333333;
 }
 
@@ -295,7 +304,7 @@ g.highcharts-series,
   stroke-width: 0;
 }
 
-.highcharts-point-select {
+.highcharts-series:not(.highcharts-pie-series) .highcharts-point-select {
   fill: #cccccc;
   stroke: #000000;
 }
@@ -321,11 +330,6 @@ g.highcharts-series,
 .highcharts-pie-series .highcharts-point-hover {
   fill-opacity: 0.75;
   transition: fill-opacity 50ms;
-}
-
-.highcharts-pie-series .highcharts-point-select {
-  fill: inherit;
-  stroke: inherit;
 }
 
 .highcharts-funnel-series .highcharts-point {
@@ -462,7 +466,7 @@ g.highcharts-series,
   stroke-width: 1px;
 }
 
-/* Highcharts More */
+/* Highcharts More and modules */
 .highcharts-boxplot-box {
   fill: #ffffff;
 }
@@ -497,6 +501,20 @@ g.highcharts-series,
 .highcharts-waterfall-series .highcharts-graph {
   stroke: #333333;
   stroke-dasharray: 1, 3;
+}
+
+.highcharts-sankey-series .highcharts-point {
+  stroke-width: 0;
+}
+
+.highcharts-sankey-series .highcharts-link {
+  transition: fill 250ms, fill-opacity 250ms;
+  fill-opacity: 0.5;
+}
+
+.highcharts-sankey-series .highcharts-point-hover.highcharts-link {
+  transition: fill 50ms, fill-opacity 50ms;
+  fill-opacity: 1;
 }
 
 /* Highstock */
@@ -764,7 +782,9 @@ input.highcharts-range-selector {
   cursor: pointer;
 }
 
-.highcharts-drilldown-data-label text, .highcharts-drilldown-axis-label {
+.highcharts-drilldown-data-label text,
+text.highcharts-drilldown-data-label,
+.highcharts-drilldown-axis-label {
   cursor: pointer;
   fill: #003399;
   font-weight: bold;
@@ -776,6 +796,29 @@ input.highcharts-range-selector {
   font-weight: bold;
   font-size: 12px;
   fill: #666666;
+}
+
+/* Drag-panes module */
+.highcharts-axis-resizer {
+  cursor: ns-resize;
+  stroke: black;
+  stroke-width: 2px;
+}
+
+/* Bullet type series */
+.highcharts-bullet-target {
+  stroke-width: 0;
+}
+
+/* Lineargauge type series */
+.highcharts-lineargauge-target {
+  stroke-width: 1px;
+  stroke: #333333;
+}
+
+.highcharts-lineargauge-target-line {
+  stroke-width: 1px;
+  stroke: #333333;
 }
 /* stylelint-enable */
     </style>
