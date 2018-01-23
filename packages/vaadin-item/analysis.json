@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-item.html",
         "start": {
-          "line": 48,
+          "line": 66,
           "column": 6
         },
         "end": {
-          "line": 48,
+          "line": 66,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.",
+          "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.\n\n```\n  <vaadin-item>\n    Item content\n  </vaadin-item>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled item | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the item is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host",
           "summary": "",
           "path": "src/vaadin-item.html",
           "properties": [
@@ -344,11 +344,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 33,
+              "line": 51,
               "column": 6
             },
             "end": {
-              "line": 41,
+              "line": 59,
               "column": 7
             }
           },
