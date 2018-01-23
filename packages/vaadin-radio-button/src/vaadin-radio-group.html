@@ -146,9 +146,12 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
 
-        _selectButton(element) {
+        _selectButton(element, setFocusRing) {
           if (this.contains(this.getRootNode().activeElement)) {
             element.focus();
+            if (setFocusRing) {
+              element.setAttribute('focus-ring', '');
+            }
           }
           this._changeSelectedButton(element);
         }
@@ -167,7 +170,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (nextButton.disabled) {
             this._selectNextButton(nextButton);
           } else {
-            this._selectButton(nextButton);
+            this._selectButton(nextButton, true);
           }
         }
 
@@ -181,7 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (previousButton.disabled) {
             this._selectPreviousButton(previousButton);
           } else {
-            this._selectButton(previousButton);
+            this._selectButton(previousButton, true);
           }
         }
 
