@@ -6,13 +6,17 @@
 <dom-module id="lumo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style include="lumo-menu-overlay">
-      [part="content"] {
-        padding: 0;
+      [part="overlay"] {
+        overflow: hidden;
+        border-radius: var(--lumo-border-radius);
       }
 
-      /* TODO unsupported selector */
-      #scroller {
-        border-radius: var(--lumo-border-radius);
+      [part="content"] {
+        padding: 0;
+        /* TODO using a legacy mixin (unsupported) */
+        --iron-list-items-container: {
+          border: var(--lumo-space-xs) solid transparent;
+        };
       }
     </style>
   </template>

@@ -7,60 +7,39 @@
 <dom-module id="lumo-combo-box-item" theme-for="vaadin-combo-box-item">
   <template>
     <style include="lumo-item">
-      /* TODO partly duplicated from lumo-menu-overlay styles. Should find a way to make it DRY */
+      /* TODO partly duplicated from vaadin-list-box styles. Should find a way to make it DRY */
 
       :host {
         cursor: pointer;
-        padding-top: var(--lumo-space-xs);
-        padding-bottom: var(--lumo-space-xs);
-        padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
-        padding-left: calc(var(--lumo-space-xs) + var(--lumo-border-radius) / 4);
         -webkit-tap-highlight-color: var(--lumo-primary-color-10pct);
-        min-height: var(--lumo-size-m);
+        padding-left: calc(var(--lumo-border-radius) / 4);
+        padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
+        transition: background-color 100ms;
+        border-radius: var(--lumo-border-radius);
+        overflow: hidden;
       }
 
-      /* ShadyCSS workaround */
+      /* ShadyCSS workaround (show the selected item checkmark) */
       :host::before {
         display: block;
       }
 
-      /* Only apply for this particular item, not nested items */
-      :host > * {
-        --_lumo-item-selected-icon-display: none;
-      }
-
-      :host([focused]) {
+      :host(:hover) {
         background-color: var(--lumo-primary-color-10pct);
       }
 
+      :host([focused]:not([disabled])) {
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
       @media (pointer: coarse) {
-        :host([focused]) {
+        :host(:hover) {
           background-color: transparent;
         }
-      }
 
-      :host([selected]) {
-        font-weight: 500;
-      }
-
-      /* Need to use a bold font on Windows (Segoe UI doesn't have semibold) */
-      ::-ms-backdrop,
-      :host([selected]) {
-        font-weight: 600;
-      }
-
-      @supports (-ms-ime-align: auto) {
-        [part="items"] ::slotted([selected]) {
-          font-weight: 600;
+        :host([focused]:not([disabled])) {
+          box-shadow: none;
         }
-      }
-
-      /* TODO ugly hack to add horizontal spacing between the overlay and the item */
-      /* Should eventually be fixed so that using paddings for the combo box overlay is straightforward */
-      :host {
-        left: var(--lumo-space-xs);
-        right: var(--lumo-space-xs);
-        width: auto !important;
       }
     </style>
   </template>
