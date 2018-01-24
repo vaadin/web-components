@@ -311,6 +311,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this.notifyResize();
 
           if (event.detail.state === 'end') {
+            this.dispatchEvent(new CustomEvent('splitter-dragend'));
+
             delete this._startSize;
           }
         }
@@ -320,6 +322,12 @@ This program is available under Apache License Version 2.0, available at https:/
          * element and any nested elements with `IronResizableBehavior`.
          *
          * @event iron-resize
+         */
+
+        /**
+         * Fired after dragging the splitter have ended.
+         *
+         * @event splitter-dragend
          */
       }
 

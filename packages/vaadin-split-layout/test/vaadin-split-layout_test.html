@@ -295,6 +295,14 @@
             expect(spy.callCount).to.be.above(0);
           });
 
+          it('should dispatch `splitter-dragend` event', () => {
+            const spy = sinon.spy();
+            splitLayout.addEventListener('splitter-dragend', spy);
+
+            dragHandle(distance);
+
+            expect(spy.called).to.be.true;
+          });
         });
 
       }
