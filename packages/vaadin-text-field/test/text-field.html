@@ -147,7 +147,26 @@
           });
         });
       }
+    });
 
+    describe('events', function() {
+      let textField, input;
+
+      beforeEach(function() {
+        textField = fixture('default');
+        input = textField.focusElement;
+      });
+
+      it('should dispatch change event on native input change', done => {
+        const changeEvent = new Event('change');
+
+        textField.addEventListener('change', e => {
+          expect(e.detail.sourceEvent).to.equal(changeEvent);
+          done();
+        });
+
+        input.dispatchEvent(changeEvent);
+      });
     });
   </script>
 </body>

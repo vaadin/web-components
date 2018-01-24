@@ -220,6 +220,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _onChange(e) {
+      // In the Shadow DOM, the `change` event is not leaked into the
+      // ancestor tree, so we must do this manually.
+      const changeEvent = new CustomEvent('change', {
+        detail: {
+          sourceEvent: e
+        },
+        bubbles: e.bubbles,
+        cancelable: e.cancelable,
+      });
+      this.dispatchEvent(changeEvent);
+    }
+
     _valueChanged(newVal, oldVal) {
       // setting initial value to empty string, skip validation
       if (newVal === '' && oldVal === undefined) {
@@ -311,5 +324,11 @@ This program is available under Apache License Version 2.0, available at https:/
         });
       }
     }
+
+    /**
+     * Fired when the user commits a value change.
+     *
+     * @event change
+     */
   };
 </script>
