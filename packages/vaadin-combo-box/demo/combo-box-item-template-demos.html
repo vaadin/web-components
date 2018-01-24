@@ -11,10 +11,12 @@
 
     <vaadin-demo-snippet id="combo-box-item-template-demos-custom-item-template">
       <template preserve-content>
-        <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol">
+        <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
           <template>
-            <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
-            array index: [[index]]
+            <span>
+              <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+              array index: [[index]]
+            </span>
           </template>
         </vaadin-combo-box>
 
@@ -34,10 +36,12 @@
 
     <vaadin-demo-snippet id="combo-box-item-template-demos-focused-and-selected-flags">
       <template preserve-content>
-        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon" style="display: block; max-width: 320px;">
           <template>
-            <b>[[item]]</b><br>
-            selected: [[selected]], focused: [[focused]]
+            <span>
+              <b>[[item]]</b><br>
+              selected: [[selected]], focused: [[focused]]
+            </span>
           </template>
         </vaadin-combo-box>
 
@@ -100,7 +104,7 @@
 
         <!-- Step 2: Use your custom element in the item template of <vaadin-combo-box> -->
 
-        <vaadin-combo-box id="elements-my-item-box" label="Element" item-label-path="name" item-value-path="symbol">
+        <vaadin-combo-box id="elements-my-item-box" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
           <template>
             <my-item index="[[index]]" item="[[item]]" selected$="[[selected]]"></my-item>
           </template>
@@ -120,13 +124,14 @@
 
     <vaadin-demo-snippet id="combo-box-item-template-demos-item-template-with-paper-item-elements">
       <template preserve-content>
-        <vaadin-combo-box id="elements-paper-item" item-value-path="email" item-label-path="email">
+        <vaadin-combo-box id="elements-paper-item" item-value-path="email" item-label-path="email" style="display: block; max-width: 400px;">
           <template>
             <paper-icon-item>
               <img src="[[item.picture.thumbnail]]" style="border-radius: 50%; width: 48px; height: 48px;" slot="item-icon">
               <paper-item-body two-line style="min-height: 0">
                 <div style="text-transform: capitalize">[[item.name.first]] [[item.name.last]]</div>
                 <div secondary>[[item.email]]</div>
+              </paper-item-body>
             </paper-icon-item>
           </template>
         </vaadin-combo-box>
