@@ -38,9 +38,9 @@
         vaadinChart.setAttribute('title', 'Custom title');
         container.appendChild(vaadinChart);
         setTimeout(() => {
-          expect(vaadinChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Custom title'); 
+          expect(vaadinChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Custom title');
           done();
-        }, 20);
+        }, 30);
       });
 
       it('should be able to add series', done => {

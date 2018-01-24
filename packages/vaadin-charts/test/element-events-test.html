@@ -71,7 +71,7 @@
         chart.addEventListener('chart-redraw', chartRedrawListener);
         setTimeout(() => {
           chart.configuration.redraw();
-        });
+        }, 10);
       });
 
       it('should trigger chart events to declarative listeners', done => {
