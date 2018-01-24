@@ -228,6 +228,17 @@
 
         expect(changeSpy.callCount).to.equal(0);
       });
+
+      it('should not set composed flag to true on `change` event', done => {
+        combobox.addEventListener('change', e => {
+          expect(e.composed).to.be.false;
+          done();
+        });
+
+        combobox.open();
+        combobox.value = 'foo';
+        combobox.close();
+      });
     });
   });
 
