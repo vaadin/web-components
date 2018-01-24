@@ -180,13 +180,13 @@ This program is available under Apache License Version 2.0, available at https:/
       const {cache, scaledIndex} = this._cache.getCacheAndIndex(index);
       const item = cache.items[scaledIndex];
       if (item) {
-        el.removeAttribute('loading');
+        this._toggleAttribute('loading', false, el);
         this._updateItem(el, item);
         if (this._isExpanded(item)) {
           cache.ensureSubCacheForScaledIndex(scaledIndex);
         }
       } else {
-        el.setAttribute('loading', '');
+        this._toggleAttribute('loading', true, el);
         this._loadPage(this._getPageForIndex(scaledIndex), cache);
       }
 
@@ -303,7 +303,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Array.from(this.$.items.children).forEach(row => {
             const cachedItem = this._cache.getItemForIndex(row.index);
             if (items.indexOf(cachedItem) > -1) {
-              row.removeAttribute('loading');
+              this._toggleAttribute('loading', false, row);
               this._updateItem(row, cachedItem);
             }
           });

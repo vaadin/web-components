@@ -88,7 +88,7 @@ This program is available under Apache License Version 2.0, available at https:/
       cell.setAttribute('part', 'cell details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
-      cell.setAttribute('frozen', '');
+      this._toggleAttribute('frozen', true, cell);
     }
 
     _toggleDetailsCell(row, item) {

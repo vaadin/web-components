@@ -297,11 +297,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _toggleAttribute(name, on, element) {
-      if (on) {
-        element.setAttribute(name, '');
-      } else {
-        element.removeAttribute(name);
+    _toggleAttribute(name, bool, node) {
+      if (node.hasAttribute(name) === !bool) {
+        if (bool) {
+          node.setAttribute(name, '');
+        } else {
+          node.removeAttribute(name);
+        }
       }
     }
 

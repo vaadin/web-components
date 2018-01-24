@@ -41,6 +41,45 @@
         flushGrid(grid);
       });
 
+      describe('toggle attribute', () => {
+        let node;
+
+        beforeEach(() => {
+          node = {};
+          node.setAttribute = sinon.spy();
+          node.removeAttribute = sinon.spy();
+        });
+
+        it('should set attribute', () => {
+          node.hasAttribute = () => false;
+          grid._toggleAttribute('foo', true, node);
+          expect(node.setAttribute.called).to.be.true;
+        });
+
+        it('should not re-set attribute', () => {
+          node.hasAttribute = () => true;
+          grid._toggleAttribute('foo', true, node);
+          expect(node.setAttribute.called).to.be.false;
+        });
+
+        it('should remove attribute', () => {
+          node.hasAttribute = () => true;
+          grid._toggleAttribute('foo', false, node);
+          grid._toggleAttribute('foo', '', node);
+          grid._toggleAttribute('foo', undefined, node);
+          expect(node.removeAttribute.callCount).to.equal(3);
+        });
+
+        it('should not re-remove attribute', () => {
+          node.hasAttribute = () => false;
+          grid._toggleAttribute('foo', false, node);
+          grid._toggleAttribute('foo', '', node);
+          grid._toggleAttribute('foo', undefined, node);
+          expect(node.removeAttribute.called).to.be.false;
+        });
+
+      });
+
       it('check physical item heights', () => {
         const rowHeight = grid._physicalItems[0].offsetHeight;
 
