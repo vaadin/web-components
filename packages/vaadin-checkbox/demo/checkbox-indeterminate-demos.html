@@ -1,7 +1,7 @@
 <dom-module id="checkbox-indeterminate-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
-       :host {
+      :host {
         display: block;
       }
     </style>
@@ -19,26 +19,26 @@
           </template>
           <script>
             window.addDemoReadyListener('#checkbox-indeterminate-demo', function(document) {
-              class XIndeterminateCheckboxExample extends Polymer.Element {
-                static get is() {
-                  return 'x-indeterminate-checkbox-example';
-                }
-                ready() {
-                  super.ready();
+              Polymer({
+                is: 'x-indeterminate-checkbox-example',
+
+                ready: function() {
                   this.optionOne = true;
-                }
-                _isAllSelected(optionOne, optionTwo) {
+                },
+
+                _isAllSelected: function(optionOne, optionTwo) {
                   return (optionOne === true) && (optionOne == optionTwo);
-                }
-                _isIndeterminate(optionOne, optionTwo) {
+                },
+
+                _isIndeterminate: function(optionOne, optionTwo) {
                   return optionOne != optionTwo;
-                }
-                _selectAll(e) {
+                },
+
+                _selectAll: function(e) {
                   this.optionOne = e.detail.value;
                   this.optionTwo = e.detail.value;
                 }
-              }
-              window.customElements.define(XIndeterminateCheckboxExample.is, XIndeterminateCheckboxExample);
+              });
             });
           </script>
         </dom-module>
