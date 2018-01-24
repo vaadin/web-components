@@ -35,6 +35,22 @@
         border-radius: 0;
       }
 
+      @media (min-width: 421px) {
+        :host(:not([slot$="stretch"])) {
+          display: flex;
+        }
+
+        :host([slot$="end"]) {
+          justify-content: flex-end;
+        }
+
+        :host([slot^="middle"]),
+        :host([slot$="center"]) {
+          display: flex;
+          justify-content: center;
+        }
+      }
+
       @keyframes lumo-notification-exit-fade-out {
         100% {
           opacity: 0;
