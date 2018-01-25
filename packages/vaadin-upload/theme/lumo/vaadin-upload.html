@@ -89,11 +89,24 @@
       [part="info"] {
         display: flex;
         align-items: baseline;
+        flex: auto;
+      }
+
+      [part="meta"] {
+        width: 0.001px;
+        flex: 1 1 auto;
+      }
+
+      [part="name"] {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       [part="commands"] {
         display: flex;
         align-items: baseline;
+        flex: none;
       }
 
       [part="done-icon"],
@@ -117,6 +130,7 @@
       [part="start-button"],
       [part="retry-button"],
       [part="clear-button"] {
+        flex: none;
         margin-left: var(--lumo-space-xs);
       }
 
