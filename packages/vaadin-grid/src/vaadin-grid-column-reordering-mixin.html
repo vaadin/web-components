@@ -195,8 +195,14 @@ This program is available under Apache License Version 2.0, available at https:/
         cell = this.shadowRoot.elementFromPoint(x, y);
       } else {
         cell = document.elementFromPoint(x, y);
+
+        // Workaround a FF58 bug
+        if (cell.localName === 'vaadin-grid-cell-content') {
+          cell = cell.assignedSlot.parentNode;
+        }
+
       }
-      this.$.scroller.removeAttribute('no-content-pointer-events', '');
+      this.$.scroller.removeAttribute('no-content-pointer-events');
 
       // Make sure the element is actually a cell
       if (cell && cell._column) {

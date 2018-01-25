@@ -178,6 +178,53 @@
         expect(window.getComputedStyle(grid.$.table).zIndex).to.equal('auto');
       });
 
+      describe('overflow attribute', () => {
+
+        it('bottom right', () => {
+          grid._scrollToIndex(0);
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.equal('bottom right');
+        });
+
+        it('bottom left', () => {
+          grid._scrollToIndex(0);
+          grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+          grid._scrollHandler();
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.equal('bottom left');
+        });
+
+        it('bottom top', () => {
+          grid._scrollToIndex(1);
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.contain('top');
+          expect(grid.getAttribute('overflow')).to.contain('bottom');
+        });
+
+        it('left right', () => {
+          grid.$.table.scrollLeft = 1;
+          grid._scrollHandler();
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.contain('left');
+          expect(grid.getAttribute('overflow')).to.contain('right');
+        });
+
+        it('top right', () => {
+          scrollToEnd(grid);
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.equal('top right');
+        });
+
+        it('top left', () => {
+          scrollToEnd(grid);
+          grid.$.table.scrollLeft = grid.$.table.scrollWidth;
+          grid._scrollHandler();
+          flushGrid(grid);
+          expect(grid.getAttribute('overflow')).to.equal('top left');
+        });
+
+      });
+
     });
   </script>
 

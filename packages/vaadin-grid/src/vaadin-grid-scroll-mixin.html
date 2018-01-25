@@ -191,6 +191,42 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._wheelScrolling || this.$.outerscroller.passthrough) {
         this.$.outerscroller.syncOuterScroller();
       }
+
+      this._updateOverflow();
+    }
+
+    _updateOverflow() {
+      // Set overflow styling attributes
+      let overflow = '';
+      const table = this.$.table;
+      if (table.scrollTop < table.scrollHeight - table.clientHeight) {
+        overflow += ' bottom';
+      }
+
+      if (table.scrollTop > 0) {
+        overflow += ' top';
+      }
+
+      if (table.scrollLeft < table.scrollWidth - table.clientWidth) {
+        overflow += ' right';
+      }
+
+      if (table.scrollLeft > 0) {
+        overflow += ' left';
+      }
+
+      this._debounceOverflow = Polymer.Debouncer.debounce(
+        this._debounceOverflow,
+        Polymer.Async.animationFrame,
+        () => {
+          const value = overflow.trim();
+          if (value.length > 0 && this.getAttribute('overflow') !== value) {
+            this.setAttribute('overflow', value);
+          } else if (value.length == 0 && this.hasAttribute('overflow')) {
+            this.removeAttribute('overflow');
+          }
+        }
+      );
     }
 
     // correct order needed for preserving correct tab order between cell contents.
