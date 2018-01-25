@@ -126,7 +126,7 @@
               {name: 'Don Quixote.pdf', progress: 100, complete: true},
               {name: 'Hamlet.pdf', progress: 100, complete: true}
             ];
-            upload.set('i18n.addFiles.many', 'Select books');
+            upload.set('i18n.addFiles.many', 'Select Books...');
           });
         </script>
       </template>
@@ -138,7 +138,7 @@
       <template preserve-content>
         <vaadin-upload id="upload">
           <button slot="add-button">
-            UPLOAD BUTTON
+            Add Files...
           </button>
         </vaadin-upload>
       </template>
@@ -163,8 +163,8 @@
 
             // Change upload button text
             upload.set('i18n.addFiles', {
-              one: 'Add File',
-              many: 'Add Files'
+              one: 'Add File...',
+              many: 'Add Files...'
             });
           });
         </script>
