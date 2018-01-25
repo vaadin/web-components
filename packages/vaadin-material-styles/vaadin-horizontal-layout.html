@@ -14,10 +14,10 @@
         margin-left: 16px;
       }
       :host([theme~="spacing-l"]) ::slotted(*) {
-        margin-left: 32px;
+        margin-left: 24px;
       }
       :host([theme~="spacing-xl"]) ::slotted(*) {
-        margin-left: 64px;
+        margin-left: 40px;
       }
       /*
         Compensate for the first item margin, so that there is no gap around
@@ -37,11 +37,11 @@
       }
       :host([theme~="spacing-l"])::before {
         content: "";
-        margin-left: -32px;
+        margin-left: -24px;
       }
       :host([theme~="spacing-xl"])::before {
         content: "";
-        margin-left: -64px;
+        margin-left: -40px;
       }
     </style>
   </template>

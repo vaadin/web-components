@@ -12,10 +12,21 @@
 
   <link rel="import" href="../vaadin-horizontal-layout.html">
   <link rel="import" href="../vaadin-vertical-layout.html">
+  <link rel="import" href="../color.html">
 
   <style>
     [unresolved] {
       opacity: 0;
+    }
+    /* For demonstration purposes only */
+    .block {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4em;
+      height: 4em;
+      background-color: var(--material-divider-color);
+      border: 1px solid var(--material-disabled-color);
     }
 
   </style>
@@ -42,7 +53,7 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Dark theme horizontal layout</h3>
+    <h3 demo-section>Dark theme</h3>
     <nice-demo-snippet>
       <template slot="source">
         <div theme="dark">
@@ -52,6 +63,39 @@
             <div class="block">Item 3</div>
           </vaadin-horizontal-layout>
         </div>
+      </template>
+    </nice-demo-snippet>
+
+    <h3 demo-section>Horizontal spacing</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-vertical-layout theme="spacing">
+
+          <vaadin-horizontal-layout theme="spacing-s">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing-l">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+          <vaadin-horizontal-layout theme="spacing-xl">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-horizontal-layout>
+
+        </vaadin-vertical-layout>
       </template>
     </nice-demo-snippet>
 
@@ -68,7 +112,7 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Dark theme vertical layout</h3>
+    <h3 demo-section>Dark theme</h3>
     <nice-demo-snippet>
       <template slot="source">
         <div theme="dark">
@@ -81,6 +125,38 @@
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Vertical spacing</h3>
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-horizontal-layout theme="spacing">
+
+          <vaadin-vertical-layout theme="spacing-s">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-vertical-layout>
+
+          <vaadin-vertical-layout theme="spacing">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-vertical-layout>
+
+          <vaadin-vertical-layout theme="spacing-l">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-vertical-layout>
+
+          <vaadin-vertical-layout theme="spacing-xl">
+            <div class="block">Item 1</div>
+            <div class="block">Item 2</div>
+            <div class="block">Item 3</div>
+          </vaadin-vertical-layout>
+
+        </vaadin-horizontal-layout>
+      </template>
+    </nice-demo-snippet>
   </div>
 </body>
 </html>
