@@ -67,7 +67,7 @@
         });
 
         it('should not overflow content', done => {
-          upload.style.width = '100px';
+          upload.style.width = '150px';
           upload._addFile(createFiles(1)[0]);
           Polymer.dom.flush();
           Polymer.RenderStatus.afterNextRender(upload, () => {
