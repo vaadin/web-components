@@ -24,6 +24,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (grid._debouncerLoad) {
       grid._debouncerLoad.flush();
     }
+    if (grid._debounceOverflow) {
+      grid._debounceOverflow.flush();
+    }
   }
 
   function getCell(grid, index) {
@@ -107,6 +110,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     // Ensure rows are in order
     grid._debounceScrolling.flush();
+
+    grid.$.table.scrollTop = grid.$.table.scrollHeight;
+    grid._scrollHandler();
     flushGrid(grid);
     if (callback) {
       callback();
