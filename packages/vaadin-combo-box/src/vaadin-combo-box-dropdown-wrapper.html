@@ -42,8 +42,17 @@ This program is available under Apache License Version 2.0, available at https:/
         <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
           <iron-list id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
-              <vaadin-combo-box-item on-click="_onItemClick" index="[[index]]" item="[[item]]" label="[[getItemLabel(item)]]" selected="[[_isItemSelected(item, _selectedItem)]]"
-                role$="[[_getAriaRole(index)]]" aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]" focused="[[_isItemFocused(_focusedIndex,index)]]" touch-device$="[[touchDevice]]">
+              <vaadin-combo-box-item
+                on-click="_onItemClick"
+                index="[[index]]"
+                item="[[item]]"
+                label="[[getItemLabel(item)]]"
+                selected="[[_isItemSelected(item, _selectedItem)]]"
+                role$="[[_getAriaRole(index)]]"
+                aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
+                focused="[[_isItemFocused(_focusedIndex,index)]]"
+                touch-device$="[[touchDevice]]"
+                tabindex="-1">
               </vaadin-combo-box-item>
             </template>
           </iron-list>
