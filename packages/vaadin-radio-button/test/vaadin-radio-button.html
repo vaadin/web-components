@@ -15,8 +15,10 @@
   <dom-module id="x-radio-button">
     <template>
       <iron-form id="form">
-        <vaadin-radio-button id="boundname" name="[[radioButtonName]]"></vaadin-radio-button>
-        <vaadin-radio-button id="attrname" name="attrradiobutton"></vaadin-radio-button>
+        <form>
+          <vaadin-radio-button id="boundname" name="[[radioButtonName]]"></vaadin-radio-button>
+          <vaadin-radio-button id="attrname" name="attrradiobutton"></vaadin-radio-button>
+        </form>
       </iron-form>
     </template>
     <script>
@@ -139,13 +141,13 @@
       it('should serialize', () => {
         boundNameRadioButton.checked = true;
         expect(boundNameRadioButton.name).to.equal('boundradiobutton');
-        expect(form.serializeForm().boundradiobutton).to.include('on');
+        expect(form.serializeForm().boundradiobutton).to.equal('on');
       });
 
       it('should serialize with a custom value', () => {
         boundNameRadioButton.checked = true;
         boundNameRadioButton.value = 'foo';
-        expect(form.serializeForm().boundradiobutton).to.include('foo');
+        expect(form.serializeForm().boundradiobutton).to.equal('foo');
       });
 
       it('should not serialize when not checked', () => {
@@ -167,7 +169,7 @@
 
       it('should define the name from an attribute', () => {
         attrNameRadioButton.checked = true;
-        expect(form.serializeForm().attrradiobutton).to.include('on');
+        expect(form.serializeForm().attrradiobutton).to.equal('on');
       });
     });
   </script>
