@@ -136,6 +136,20 @@
         datepicker.open();
       });
 
+      it('should restore attribute focus-ring if it was initially set before opening', () => {
+        datepicker.setAttribute('focus-ring', '');
+        datepicker.opened = true;
+        datepicker.opened = false;
+        expect(datepicker.hasAttribute('focus-ring')).to.be.true;
+      });
+
+      it('should remove attribute focus-ring if it was not initially set before opening', () => {
+        datepicker.opened = true;
+        datepicker.setAttribute('focus-ring', '');
+        datepicker.opened = false;
+        expect(datepicker.focusElement.hasAttribute('focus-ring')).to.be.false;
+      });
+
       it('should not close on clear-button down', () => {
         datepicker.open();
         datepicker.value = '2001-01-01';

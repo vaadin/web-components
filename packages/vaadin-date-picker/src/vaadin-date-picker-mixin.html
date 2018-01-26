@@ -494,6 +494,8 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onOverlayOpened() {
+      this._openedWithFocusRing = this.hasAttribute('focus-ring') || (this.focusElement && this.focusElement.hasAttribute('focus-ring'));
+
       var parsedInitialPosition = this._parseDate(this.initialPosition);
 
       var initialPosition = this._selectedDate || this._overlayContent.initialPosition ||
