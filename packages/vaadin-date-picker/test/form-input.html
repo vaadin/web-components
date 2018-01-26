@@ -36,9 +36,9 @@
   </test-fixture>
 
   <test-fixture id="datepicker-in-form">
-    <template is="dom-template">
+    <template>
       <iron-form>
-        <form is="iron-form">
+        <form>
           <vaadin-date-picker name="foo"></vaadin-date-picker>
         </form>
       </iron-form>
@@ -199,12 +199,11 @@
     });
 
     describe('using as a field in an iron-form', () => {
-      var datepicker, ironForm, form;
+      var datepicker, ironForm;
 
       beforeEach(done => {
         ironForm = fixture('datepicker-in-form');
         datepicker = ironForm.querySelector('vaadin-date-picker');
-        form = ironForm.querySelector('form');
         overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
