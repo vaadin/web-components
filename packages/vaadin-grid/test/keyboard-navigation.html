@@ -692,6 +692,30 @@
           expect(getFocusedRowIndex()).to.equal(0);
         });
 
+        describe('column _order support', () => {
+          beforeEach(() => {
+            grid._columnTree[0][0]._order = 100000000;
+            grid._columnTree[0][1]._order = 200000000;
+            grid._columnTree[0][2]._order = 1100000000;
+          });
+
+          it('should follow _order when navigating right', () => {
+            focusItem(0);
+
+            right();
+
+            expect(getFocusedCellIndex()).to.equal(1);
+          });
+
+          it('should follow _order when navigating left', () => {
+            getRowCell(0, 2).focus();
+
+            left();
+
+            expect(getFocusedCellIndex()).to.equal(1);
+          });
+        });
+
         describe('with hidden columns', () => {
           it('should skip over hidden column with right arrow', () => {
             grid._columnTree[0][1].hidden = true;
