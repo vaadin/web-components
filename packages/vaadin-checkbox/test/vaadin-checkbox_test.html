@@ -14,8 +14,10 @@
   <dom-module id="x-checkbox">
     <template>
       <iron-form id="form">
-        <vaadin-checkbox id="boundname" name="[[checkboxName]]"></vaadin-checkbox>
-        <vaadin-checkbox id="attrname" name="attrcheckbox"></vaadin-checkbox>
+        <form>
+          <vaadin-checkbox id="boundname" name="[[checkboxName]]"></vaadin-checkbox>
+          <vaadin-checkbox id="attrname" name="attrcheckbox"></vaadin-checkbox>
+        </form>
       </iron-form>
     </template>
     <script>
@@ -223,13 +225,13 @@
       it('should serialize', () => {
         boundNameCheckbox.checked = true;
         expect(boundNameCheckbox.name).to.equal('boundcheckbox');
-        expect(form.serializeForm().boundcheckbox).to.include('on');
+        expect(form.serializeForm().boundcheckbox).to.equal('on');
       });
 
       it('should serialize with a custom value', () => {
         boundNameCheckbox.checked = true;
         boundNameCheckbox.value = 'foo';
-        expect(form.serializeForm().boundcheckbox).to.include('foo');
+        expect(form.serializeForm().boundcheckbox).to.equal('foo');
       });
 
       it('should not serialize when not checked', () => {
@@ -251,7 +253,7 @@
 
       it('should define the name from an attribute', () => {
         attrNameCheckbox.checked = true;
-        expect(form.serializeForm().attrcheckbox).to.include('on');
+        expect(form.serializeForm().attrcheckbox).to.equal('on');
       });
 
     });
