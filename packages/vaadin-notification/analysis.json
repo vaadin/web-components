@@ -287,31 +287,7 @@
               "params": []
             }
           ],
-          "staticMethods": [
-            {
-              "name": "_includeStyle",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
-                "start": {
-                  "line": 46,
-                  "column": 4
-                },
-                "end": {
-                  "line": 50,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "moduleName"
-                }
-              ],
-              "inheritedFrom": "Vaadin.ThemableMixin"
-            }
-          ],
+          "staticMethods": [],
           "demos": [],
           "metadata": {},
           "sourceRange": {
