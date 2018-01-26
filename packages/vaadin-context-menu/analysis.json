@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-context-menu.html",
         "start": {
-          "line": 492,
+          "line": 491,
           "column": 6
         },
         "end": {
-          "line": 492,
+          "line": 491,
           "column": 60
         }
       },
@@ -207,7 +207,7 @@
           "tagname": "vaadin-device-detector"
         },
         {
-          "description": "The overlay element.\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)\nfor `<vaadin-context-menu-overlay>` parts.\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "The overlay element.\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)\nfor `<vaadin-context-menu-overlay>` parts.\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-context-menu.html",
           "properties": [],
@@ -217,11 +217,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 58,
+              "line": 57,
               "column": 6
             },
             "end": {
-              "line": 62,
+              "line": 61,
               "column": 7
             }
           },
@@ -249,11 +249,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 230,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 232,
+                  "line": 231,
                   "column": 13
                 }
               },
@@ -268,11 +268,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 236,
                   "column": 12
                 },
                 "end": {
-                  "line": 242,
+                  "line": 241,
                   "column": 13
                 }
               },
@@ -291,11 +291,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 246,
                   "column": 12
                 },
                 "end": {
-                  "line": 250,
+                  "line": 249,
                   "column": 13
                 }
               },
@@ -311,11 +311,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 258,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 263,
                   "column": 13
                 }
               },
@@ -330,11 +330,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 268,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 272,
                   "column": 13
                 }
               },
@@ -352,11 +352,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 274,
                   "column": 12
                 },
                 "end": {
-                  "line": 275,
+                  "line": 274,
                   "column": 28
                 }
               },
@@ -371,11 +371,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 277,
+                  "line": 276,
                   "column": 12
                 },
                 "end": {
-                  "line": 277,
+                  "line": 276,
                   "column": 36
                 }
               },
@@ -390,11 +390,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 279,
+                  "line": 278,
                   "column": 12
                 },
                 "end": {
-                  "line": 279,
+                  "line": 278,
                   "column": 31
                 }
               },
@@ -409,11 +409,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 280,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 280,
                   "column": 30
                 }
               },
@@ -428,11 +428,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 283,
+                  "line": 282,
                   "column": 12
                 },
                 "end": {
-                  "line": 283,
+                  "line": 282,
                   "column": 34
                 }
               },
@@ -448,11 +448,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 302,
+                  "line": 301,
                   "column": 8
                 },
                 "end": {
-                  "line": 317,
+                  "line": 316,
                   "column": 9
                 }
               },
@@ -469,11 +469,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 318,
                   "column": 8
                 },
                 "end": {
-                  "line": 340,
+                  "line": 339,
                   "column": 9
                 }
               },
@@ -493,11 +493,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 342,
+                  "line": 341,
                   "column": 8
                 },
                 "end": {
-                  "line": 360,
+                  "line": 359,
                   "column": 9
                 }
               },
@@ -517,11 +517,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 362,
+                  "line": 361,
                   "column": 8
                 },
                 "end": {
-                  "line": 364,
+                  "line": 363,
                   "column": 9
                 }
               },
@@ -538,11 +538,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 366,
+                  "line": 365,
                   "column": 8
                 },
                 "end": {
-                  "line": 393,
+                  "line": 392,
                   "column": 9
                 }
               },
@@ -559,11 +559,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 395,
+                  "line": 394,
                   "column": 8
                 },
                 "end": {
-                  "line": 401,
+                  "line": 400,
                   "column": 9
                 }
               },
@@ -583,11 +583,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 406,
+                  "line": 405,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 407,
                   "column": 9
                 }
               },
@@ -600,11 +600,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 410,
+                  "line": 409,
                   "column": 8
                 },
                 "end": {
-                  "line": 420,
+                  "line": 419,
                   "column": 9
                 }
               },
@@ -621,11 +621,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 426,
+                  "line": 425,
                   "column": 8
                 },
                 "end": {
-                  "line": 446,
+                  "line": 445,
                   "column": 9
                 }
               },
@@ -644,11 +644,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 448,
+                  "line": 447,
                   "column": 8
                 },
                 "end": {
-                  "line": 462,
+                  "line": 461,
                   "column": 9
                 }
               },
@@ -668,11 +668,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 464,
+                  "line": 463,
                   "column": 8
                 },
                 "end": {
-                  "line": 470,
+                  "line": 469,
                   "column": 9
                 }
               },
@@ -695,11 +695,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 472,
+                  "line": 471,
                   "column": 8
                 },
                 "end": {
-                  "line": 478,
+                  "line": 477,
                   "column": 9
                 }
               },
@@ -722,11 +722,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 480,
+                  "line": 479,
                   "column": 8
                 },
                 "end": {
-                  "line": 485,
+                  "line": 484,
                   "column": 9
                 }
               },
@@ -748,11 +748,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 213,
+              "line": 212,
               "column": 6
             },
             "end": {
-              "line": 486,
+              "line": 485,
               "column": 7
             }
           },
@@ -765,11 +765,11 @@
               "description": "CSS selector that can be used to target any child element\nof the context menu to listen for `openOn` events.",
               "sourceRange": {
                 "start": {
-                  "line": 230,
+                  "line": 229,
                   "column": 12
                 },
                 "end": {
-                  "line": 232,
+                  "line": 231,
                   "column": 13
                 }
               },
@@ -781,11 +781,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 236,
                   "column": 12
                 },
                 "end": {
-                  "line": 242,
+                  "line": 241,
                   "column": 13
                 }
               },
@@ -797,11 +797,11 @@
               "description": "Event name to listen for opening the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 246,
                   "column": 12
                 },
                 "end": {
-                  "line": 250,
+                  "line": 249,
                   "column": 13
                 }
               },
@@ -813,11 +813,11 @@
               "description": "The target element that's listened to for context menu opening events.\nBy default the vaadin-context-menu listens to the target's `vaadin-contextmenu`\nevents.",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 258,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 263,
                   "column": 13
                 }
               },
@@ -829,11 +829,11 @@
               "description": "Event name to listen for closing the context menu.",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 268,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 272,
                   "column": 13
                 }
               },
@@ -860,11 +860,11 @@
               "range": {
                 "file": "src/vaadin-context-menu.html",
                 "start": {
-                  "line": 81,
+                  "line": 80,
                   "column": 4
                 },
                 "end": {
-                  "line": 81,
+                  "line": 80,
                   "column": 27
                 }
               }
