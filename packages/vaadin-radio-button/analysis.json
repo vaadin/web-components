@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-radio-group.html",
         "start": {
-          "line": 223,
+          "line": 226,
           "column": 6
         },
         "end": {
-          "line": 223,
+          "line": 226,
           "column": 42
         }
       },
@@ -845,7 +845,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 153,
+                  "line": 156,
                   "column": 9
                 }
               },
@@ -853,6 +853,9 @@
               "params": [
                 {
                   "name": "element"
+                },
+                {
+                  "name": "setFocusRing"
                 }
               ]
             },
@@ -862,11 +865,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 8
                 },
                 "end": {
-                  "line": 157,
+                  "line": 160,
                   "column": 9
                 }
               },
@@ -879,11 +882,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 159,
+                  "line": 162,
                   "column": 8
                 },
                 "end": {
-                  "line": 171,
+                  "line": 174,
                   "column": 9
                 }
               },
@@ -900,11 +903,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 176,
                   "column": 8
                 },
                 "end": {
-                  "line": 185,
+                  "line": 188,
                   "column": 9
                 }
               },
@@ -921,11 +924,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 190,
                   "column": 8
                 },
                 "end": {
-                  "line": 191,
+                  "line": 194,
                   "column": 9
                 }
               },
@@ -942,11 +945,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 193,
+                  "line": 196,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 200,
                   "column": 9
                 }
               },
@@ -963,11 +966,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 199,
+                  "line": 202,
                   "column": 8
                 },
                 "end": {
-                  "line": 209,
+                  "line": 212,
                   "column": 9
                 }
               },
@@ -987,11 +990,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 214,
                   "column": 8
                 },
                 "end": {
-                  "line": 214,
+                  "line": 217,
                   "column": 9
                 }
               },
@@ -1041,7 +1044,7 @@
               "column": 6
             },
             "end": {
-              "line": 216,
+              "line": 219,
               "column": 7
             }
           },
