@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-dropdown-menu.html",
         "start": {
-          "line": 567,
+          "line": 557,
           "column": 6
         },
         "end": {
-          "line": 567,
+          "line": 557,
           "column": 62
         }
       },
@@ -708,16 +708,16 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 57,
+              "line": 43,
               "column": 6
             },
             "end": {
-              "line": 61,
+              "line": 47,
               "column": 7
             }
           },
           "privacy": "public",
-          "superclass": "Vaadin.OverlayElement",
+          "superclass": "HTMLElement",
           "name": "Vaadin.VaadinDropdownMenuOverlayElement",
           "attributes": [
             {
@@ -1033,14 +1033,12 @@
                   "column": 10
                 },
                 "end": {
-                  "line": 123,
+                  "line": 122,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {
-                  "observer": "\"_labelChanged\""
-                }
+                "polymer": {}
               },
               "defaultValue": "\"\"",
               "inheritedFrom": "Vaadin.TextFieldMixin"
@@ -1053,11 +1051,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 10
                 },
                 "end": {
-                  "line": 130,
+                  "line": 129,
                   "column": 11
                 }
               },
@@ -1074,11 +1072,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 134,
                   "column": 10
                 },
                 "end": {
-                  "line": 137,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -1095,11 +1093,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 141,
                   "column": 10
                 },
                 "end": {
-                  "line": 144,
+                  "line": 143,
                   "column": 11
                 }
               },
@@ -1116,11 +1114,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 151,
+                  "line": 150,
                   "column": 11
                 }
               },
@@ -1137,11 +1135,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 155,
                   "column": 10
                 },
                 "end": {
-                  "line": 159,
+                  "line": 158,
                   "column": 11
                 }
               },
@@ -1158,11 +1156,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 163,
                   "column": 10
                 },
                 "end": {
-                  "line": 167,
+                  "line": 166,
                   "column": 11
                 }
               },
@@ -1179,11 +1177,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 173,
                   "column": 10
                 },
                 "end": {
-                  "line": 179,
+                  "line": 178,
                   "column": 11
                 }
               },
@@ -1204,11 +1202,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 183,
                   "column": 10
                 },
                 "end": {
-                  "line": 189,
+                  "line": 188,
                   "column": 11
                 }
               },
@@ -1228,11 +1226,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 10
                 },
                 "end": {
-                  "line": 197,
+                  "line": 196,
                   "column": 11
                 }
               },
@@ -1249,11 +1247,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 199,
+                  "line": 198,
                   "column": 10
                 },
                 "end": {
-                  "line": 201,
+                  "line": 200,
                   "column": 11
                 }
               },
@@ -1270,11 +1268,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 203,
+                  "line": 202,
                   "column": 10
                 },
                 "end": {
-                  "line": 205,
+                  "line": 204,
                   "column": 11
                 }
               },
@@ -1291,11 +1289,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 125,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 126,
                   "column": 13
                 }
               },
@@ -1312,11 +1310,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 133,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 134,
                   "column": 13
                 }
               },
@@ -1333,11 +1331,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 141,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 143,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -1354,11 +1352,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 148,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 150,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -1376,11 +1374,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 258,
+                  "line": 249,
                   "column": 6
                 },
                 "end": {
-                  "line": 267,
+                  "line": 258,
                   "column": 7
                 }
               },
@@ -1605,11 +1603,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 213,
+                  "line": 212,
                   "column": 6
                 },
                 "end": {
-                  "line": 220,
+                  "line": 219,
                   "column": 7
                 }
               },
@@ -1628,11 +1626,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 222,
+                  "line": 221,
                   "column": 6
                 },
                 "end": {
-                  "line": 235,
+                  "line": 234,
                   "column": 7
                 }
               },
@@ -1648,40 +1646,17 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
-              "name": "_labelChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
-                "start": {
-                  "line": 237,
-                  "column": 6
-                },
-                "end": {
-                  "line": 243,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "label"
-                }
-              ],
-              "inheritedFrom": "Vaadin.TextFieldMixin"
-            },
-            {
               "name": "checkValidity",
               "description": "Returns true if the current input value satisfies all constraints (if any)",
               "privacy": "public",
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 249,
+                  "line": 240,
                   "column": 6
                 },
                 "end": {
-                  "line": 255,
+                  "line": 246,
                   "column": 7
                 }
               },
@@ -1699,11 +1674,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 275,
+                  "line": 266,
                   "column": 6
                 },
                 "end": {
-                  "line": 277,
+                  "line": 268,
                   "column": 7
                 }
               },
@@ -1722,11 +1697,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 279,
+                  "line": 270,
                   "column": 6
                 },
                 "end": {
-                  "line": 281,
+                  "line": 272,
                   "column": 7
                 }
               },
@@ -1751,11 +1726,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 283,
+                  "line": 274,
                   "column": 6
                 },
                 "end": {
-                  "line": 285,
+                  "line": 276,
                   "column": 7
                 }
               },
@@ -1777,11 +1752,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 287,
+                  "line": 278,
                   "column": 6
                 },
                 "end": {
-                  "line": 289,
+                  "line": 280,
                   "column": 7
                 }
               },
@@ -1806,11 +1781,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 294,
+                  "line": 285,
                   "column": 6
                 },
                 "end": {
-                  "line": 312,
+                  "line": 303,
                   "column": 7
                 }
               },
@@ -1858,16 +1833,16 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 93,
+              "line": 79,
               "column": 6
             },
             "end": {
-              "line": 119,
+              "line": 105,
               "column": 7
             }
           },
           "privacy": "public",
-          "superclass": "Vaadin.TextFieldElement",
+          "superclass": "HTMLElement",
           "name": "Vaadin.VaadinDropdownMenuTextFieldElement",
           "attributes": [
             {
@@ -1952,7 +1927,7 @@
                   "column": 10
                 },
                 "end": {
-                  "line": 123,
+                  "line": 122,
                   "column": 11
                 }
               },
@@ -1966,11 +1941,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 127,
                   "column": 10
                 },
                 "end": {
-                  "line": 130,
+                  "line": 129,
                   "column": 11
                 }
               },
@@ -1984,11 +1959,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 134,
                   "column": 10
                 },
                 "end": {
-                  "line": 137,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -2002,11 +1977,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 141,
                   "column": 10
                 },
                 "end": {
-                  "line": 144,
+                  "line": 143,
                   "column": 11
                 }
               },
@@ -2020,11 +1995,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 151,
+                  "line": 150,
                   "column": 11
                 }
               },
@@ -2038,11 +2013,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 155,
                   "column": 10
                 },
                 "end": {
-                  "line": 159,
+                  "line": 158,
                   "column": 11
                 }
               },
@@ -2056,11 +2031,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 163,
                   "column": 10
                 },
                 "end": {
-                  "line": 167,
+                  "line": 166,
                   "column": 11
                 }
               },
@@ -2074,11 +2049,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 173,
                   "column": 10
                 },
                 "end": {
-                  "line": 179,
+                  "line": 178,
                   "column": 11
                 }
               },
@@ -2092,11 +2067,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 183,
                   "column": 10
                 },
                 "end": {
-                  "line": 189,
+                  "line": 188,
                   "column": 11
                 }
               },
@@ -2110,11 +2085,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 194,
                   "column": 10
                 },
                 "end": {
-                  "line": 197,
+                  "line": 196,
                   "column": 11
                 }
               },
@@ -2128,11 +2103,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 125,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 126,
                   "column": 13
                 }
               },
@@ -2146,11 +2121,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 133,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 134,
                   "column": 13
                 }
               },
@@ -2164,11 +2139,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 141,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 143,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -2182,11 +2157,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
-                  "line": 148,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 150,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -2301,11 +2276,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 235,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 241,
+                  "line": 227,
                   "column": 13
                 }
               },
@@ -2324,11 +2299,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 232,
                   "column": 12
                 },
                 "end": {
-                  "line": 249,
+                  "line": 235,
                   "column": 13
                 }
               },
@@ -2344,11 +2319,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 254,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 256,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -2363,11 +2338,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 257,
                   "column": 12
                 },
                 "end": {
-                  "line": 276,
+                  "line": 262,
                   "column": 13
                 }
               },
@@ -2386,11 +2361,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 267,
                   "column": 12
                 },
                 "end": {
-                  "line": 285,
+                  "line": 271,
                   "column": 13
                 }
               },
@@ -2407,11 +2382,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 290,
+                  "line": 276,
                   "column": 12
                 },
                 "end": {
-                  "line": 295,
+                  "line": 281,
                   "column": 13
                 }
               },
@@ -2429,11 +2404,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 300,
+                  "line": 286,
                   "column": 12
                 },
                 "end": {
-                  "line": 303,
+                  "line": 289,
                   "column": 13
                 }
               },
@@ -2448,11 +2423,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 312,
+                  "line": 298,
                   "column": 12
                 },
                 "end": {
-                  "line": 314,
+                  "line": 300,
                   "column": 13
                 }
               },
@@ -2467,11 +2442,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 305,
                   "column": 12
                 },
                 "end": {
-                  "line": 323,
+                  "line": 309,
                   "column": 13
                 }
               },
@@ -2487,11 +2462,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 325,
+                  "line": 311,
                   "column": 12
                 },
                 "end": {
-                  "line": 325,
+                  "line": 311,
                   "column": 27
                 }
               },
@@ -2506,11 +2481,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 327,
+                  "line": 313,
                   "column": 12
                 },
                 "end": {
-                  "line": 329,
+                  "line": 315,
                   "column": 13
                 }
               },
@@ -2526,11 +2501,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 331,
+                  "line": 317,
                   "column": 12
                 },
                 "end": {
-                  "line": 331,
+                  "line": 317,
                   "column": 35
                 }
               },
@@ -2545,11 +2520,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 333,
+                  "line": 319,
                   "column": 12
                 },
                 "end": {
-                  "line": 333,
+                  "line": 319,
                   "column": 33
                 }
               },
@@ -2564,11 +2539,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 335,
+                  "line": 321,
                   "column": 12
                 },
                 "end": {
-                  "line": 335,
+                  "line": 321,
                   "column": 34
                 }
               },
@@ -2583,11 +2558,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 337,
+                  "line": 323,
                   "column": 12
                 },
                 "end": {
-                  "line": 337,
+                  "line": 323,
                   "column": 26
                 }
               },
@@ -2603,11 +2578,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 360,
+                  "line": 346,
                   "column": 8
                 },
                 "end": {
-                  "line": 385,
+                  "line": 371,
                   "column": 9
                 }
               },
@@ -2620,11 +2595,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 355,
+                  "line": 341,
                   "column": 8
                 },
                 "end": {
-                  "line": 358,
+                  "line": 344,
                   "column": 9
                 }
               },
@@ -2637,11 +2612,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 393,
+                  "line": 379,
                   "column": 8
                 },
                 "end": {
-                  "line": 398,
+                  "line": 384,
                   "column": 9
                 }
               },
@@ -2654,11 +2629,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 537,
+                  "line": 527,
                   "column": 8
                 },
                 "end": {
-                  "line": 542,
+                  "line": 532,
                   "column": 9
                 }
               },
@@ -2824,11 +2799,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 401,
+                  "line": 387,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 394,
                   "column": 9
                 }
               },
@@ -2841,11 +2816,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 410,
+                  "line": 396,
                   "column": 8
                 },
                 "end": {
-                  "line": 412,
+                  "line": 398,
                   "column": 9
                 }
               },
@@ -2862,11 +2837,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 414,
+                  "line": 400,
                   "column": 8
                 },
                 "end": {
-                  "line": 426,
+                  "line": 412,
                   "column": 9
                 }
               },
@@ -2886,11 +2861,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 428,
+                  "line": 414,
                   "column": 8
                 },
                 "end": {
-                  "line": 433,
+                  "line": 419,
                   "column": 9
                 }
               },
@@ -2907,11 +2882,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 435,
+                  "line": 421,
                   "column": 8
                 },
                 "end": {
-                  "line": 439,
+                  "line": 425,
                   "column": 9
                 }
               },
@@ -2928,11 +2903,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 441,
+                  "line": 427,
                   "column": 8
                 },
                 "end": {
-                  "line": 470,
+                  "line": 460,
                   "column": 9
                 }
               },
@@ -2952,11 +2927,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 472,
+                  "line": 462,
                   "column": 8
                 },
                 "end": {
-                  "line": 486,
+                  "line": 476,
                   "column": 9
                 }
               },
@@ -2969,11 +2944,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 488,
+                  "line": 478,
                   "column": 8
                 },
                 "end": {
-                  "line": 490,
+                  "line": 480,
                   "column": 9
                 }
               },
@@ -2993,11 +2968,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 492,
+                  "line": 482,
                   "column": 8
                 },
                 "end": {
-                  "line": 521,
+                  "line": 511,
                   "column": 9
                 }
               },
@@ -3010,11 +2985,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 523,
+                  "line": 513,
                   "column": 8
                 },
                 "end": {
-                  "line": 534,
+                  "line": 524,
                   "column": 9
                 }
               },
@@ -3034,11 +3009,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 544,
+                  "line": 534,
                   "column": 8
                 },
                 "end": {
-                  "line": 550,
+                  "line": 540,
                   "column": 9
                 }
               },
@@ -3051,11 +3026,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 557,
+                  "line": 547,
                   "column": 8
                 },
                 "end": {
-                  "line": 559,
+                  "line": 549,
                   "column": 9
                 }
               },
@@ -3101,11 +3076,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 216,
+              "line": 202,
               "column": 6
             },
             "end": {
-              "line": 560,
+              "line": 550,
               "column": 7
             }
           },
@@ -3154,11 +3129,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 235,
+                  "line": 221,
                   "column": 12
                 },
                 "end": {
-                  "line": 241,
+                  "line": 227,
                   "column": 13
                 }
               },
@@ -3170,11 +3145,11 @@
               "description": "The error message to display when the dropdown menu value is invalid",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 232,
                   "column": 12
                 },
                 "end": {
-                  "line": 249,
+                  "line": 235,
                   "column": 13
                 }
               },
@@ -3186,11 +3161,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 254,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 256,
+                  "line": 242,
                   "column": 13
                 }
               },
@@ -3202,11 +3177,11 @@
               "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialisation, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.\nHint: If you do not want to select any item by default, you can either set all\nthe values of inner vaadin-items, or set the vaadin-dropdown-menu value to\nan inexistent value in the items list.",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 257,
                   "column": 12
                 },
                 "end": {
-                  "line": 276,
+                  "line": 262,
                   "column": 13
                 }
               },
@@ -3218,11 +3193,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 267,
                   "column": 12
                 },
                 "end": {
-                  "line": 285,
+                  "line": 271,
                   "column": 13
                 }
               },
@@ -3234,11 +3209,11 @@
               "description": "Set to true if the value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 290,
+                  "line": 276,
                   "column": 12
                 },
                 "end": {
-                  "line": 295,
+                  "line": 281,
                   "column": 13
                 }
               },
@@ -3250,11 +3225,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 300,
+                  "line": 286,
                   "column": 12
                 },
                 "end": {
-                  "line": 303,
+                  "line": 289,
                   "column": 13
                 }
               },
@@ -3266,11 +3241,11 @@
               "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be displayed in the case that there\nis no item selected, or the selected item has an empty\nstring label, or the selected item has no label and it's\nDOM content is empty.",
               "sourceRange": {
                 "start": {
-                  "line": 312,
+                  "line": 298,
                   "column": 12
                 },
                 "end": {
-                  "line": 314,
+                  "line": 300,
                   "column": 13
                 }
               },
@@ -3282,11 +3257,11 @@
               "description": "When present, it specifies that the element is read-only.",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 305,
                   "column": 12
                 },
                 "end": {
-                  "line": 323,
+                  "line": 309,
                   "column": 13
                 }
               },
@@ -3325,11 +3300,11 @@
               "range": {
                 "file": "src/vaadin-dropdown-menu.html",
                 "start": {
-                  "line": 158,
+                  "line": 144,
                   "column": 6
                 },
                 "end": {
-                  "line": 158,
+                  "line": 144,
                   "column": 47
                 }
               }
