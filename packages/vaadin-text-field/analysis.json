@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-text-area.html",
         "start": {
-          "line": 180,
+          "line": 182,
           "column": 6
         },
         "end": {
-          "line": 180,
+          "line": 182,
           "column": 42
         }
       },
@@ -130,6 +130,48 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "type": "string",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "type": "string",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "errorMessage",
               "type": "string",
               "description": "Error to show when the input value is invalid.",
@@ -137,11 +179,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -159,11 +201,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -183,11 +225,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -204,11 +246,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -225,11 +267,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -246,11 +288,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -267,11 +309,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -288,11 +330,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -309,11 +351,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -334,11 +376,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -358,11 +400,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -379,11 +421,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 199,
+                  "line": 223,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 225,
                   "column": 9
                 }
               },
@@ -400,11 +442,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 203,
+                  "line": 227,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -414,36 +456,17 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
-              "name": "autocorrect",
-              "type": "string",
-              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 126,
-                  "column": 12
-                },
-                "end": {
-                  "line": 128,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
               "name": "list",
               "type": "string",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 124,
                   "column": 13
                 }
               },
@@ -458,11 +481,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 130,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 132,
                   "column": 13
                 }
               },
@@ -477,11 +500,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 137,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -498,11 +521,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 271,
+                  "line": 295,
                   "column": 4
                 },
                 "end": {
-                  "line": 280,
+                  "line": 304,
                   "column": 5
                 }
               },
@@ -727,11 +750,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 213,
+                  "line": 237,
                   "column": 4
                 },
                 "end": {
-                  "line": 220,
+                  "line": 244,
                   "column": 5
                 }
               },
@@ -750,11 +773,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 222,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 233,
+                  "line": 257,
                   "column": 5
                 }
               },
@@ -773,11 +796,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 235,
+                  "line": 259,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -799,11 +822,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 256,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -822,11 +845,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 262,
+                  "line": 286,
                   "column": 4
                 },
                 "end": {
-                  "line": 268,
+                  "line": 292,
                   "column": 5
                 }
               },
@@ -844,11 +867,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 288,
+                  "line": 312,
                   "column": 4
                 },
                 "end": {
-                  "line": 290,
+                  "line": 314,
                   "column": 5
                 }
               },
@@ -867,11 +890,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 292,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 294,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -896,11 +919,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 296,
+                  "line": 320,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -922,11 +945,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 300,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 302,
+                  "line": 326,
                   "column": 5
                 }
               },
@@ -951,11 +974,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 307,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 325,
+                  "line": 349,
                   "column": 5
                 }
               },
@@ -1008,11 +1031,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 106,
+              "line": 107,
               "column": 6
             },
             "end": {
-              "line": 154,
+              "line": 142,
               "column": 7
             }
           },
@@ -1075,16 +1098,52 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "error-message",
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -1098,11 +1157,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -1116,11 +1175,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -1134,11 +1193,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -1152,11 +1211,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -1170,11 +1229,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -1188,11 +1247,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -1206,11 +1265,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -1224,11 +1283,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -1242,11 +1301,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -1260,11 +1319,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -1273,31 +1332,15 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
-              "name": "autocorrect",
-              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
-              "sourceRange": {
-                "start": {
-                  "line": 126,
-                  "column": 12
-                },
-                "end": {
-                  "line": 128,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
               "name": "list",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "start": {
-                  "line": 134,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 124,
                   "column": 13
                 }
               },
@@ -1309,11 +1352,11 @@
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 130,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 132,
                   "column": 13
                 }
               },
@@ -1325,11 +1368,11 @@
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 137,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -1372,11 +1415,11 @@
               "range": {
                 "file": "src/vaadin-text-field.html",
                 "start": {
-                  "line": 46,
+                  "line": 47,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 35
                 }
               }
@@ -1501,6 +1544,48 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "type": "string",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "type": "string",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "errorMessage",
               "type": "string",
               "description": "Error to show when the input value is invalid.",
@@ -1508,11 +1593,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -1530,11 +1615,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -1554,11 +1639,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -1575,11 +1660,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -1596,11 +1681,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -1617,11 +1702,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -1638,11 +1723,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -1659,11 +1744,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -1680,11 +1765,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -1705,11 +1790,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -1729,11 +1814,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -1750,11 +1835,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 199,
+                  "line": 223,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 225,
                   "column": 9
                 }
               },
@@ -1771,11 +1856,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 203,
+                  "line": 227,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -1785,27 +1870,6 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
-              "name": "autocorrect",
-              "type": "string",
-              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
-              "privacy": "public",
-              "sourceRange": {
-                "file": "vaadin-text-field.html",
-                "start": {
-                  "line": 126,
-                  "column": 12
-                },
-                "end": {
-                  "line": 128,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.TextFieldElement"
-            },
-            {
               "name": "list",
               "type": "string",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
@@ -1813,11 +1877,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 134,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 124,
                   "column": 13
                 }
               },
@@ -1834,11 +1898,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 142,
+                  "line": 130,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 132,
                   "column": 13
                 }
               },
@@ -1855,11 +1919,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 149,
+                  "line": 137,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -2147,11 +2211,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 213,
+                  "line": 237,
                   "column": 4
                 },
                 "end": {
-                  "line": 220,
+                  "line": 244,
                   "column": 5
                 }
               },
@@ -2170,11 +2234,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 222,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 233,
+                  "line": 257,
                   "column": 5
                 }
               },
@@ -2193,11 +2257,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 235,
+                  "line": 259,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -2219,11 +2283,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 256,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -2242,11 +2306,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 262,
+                  "line": 286,
                   "column": 4
                 },
                 "end": {
-                  "line": 268,
+                  "line": 292,
                   "column": 5
                 }
               },
@@ -2264,11 +2328,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 288,
+                  "line": 312,
                   "column": 4
                 },
                 "end": {
-                  "line": 290,
+                  "line": 314,
                   "column": 5
                 }
               },
@@ -2287,11 +2351,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 292,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 294,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -2316,11 +2380,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 296,
+                  "line": 320,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -2342,11 +2406,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 300,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 302,
+                  "line": 326,
                   "column": 5
                 }
               },
@@ -2371,11 +2435,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 307,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 325,
+                  "line": 349,
                   "column": 5
                 }
               },
@@ -2554,16 +2618,52 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "error-message",
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -2577,11 +2677,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -2595,11 +2695,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -2613,11 +2713,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -2631,11 +2731,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -2649,11 +2749,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -2667,11 +2767,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -2685,11 +2785,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -2703,11 +2803,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -2721,11 +2821,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -2739,11 +2839,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -2752,34 +2852,16 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
-              "name": "autocorrect",
-              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
-              "sourceRange": {
-                "file": "vaadin-text-field.html",
-                "start": {
-                  "line": 126,
-                  "column": 12
-                },
-                "end": {
-                  "line": 128,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string",
-              "inheritedFrom": "Vaadin.TextFieldElement"
-            },
-            {
               "name": "list",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 134,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 124,
                   "column": 13
                 }
               },
@@ -2793,11 +2875,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 142,
+                  "line": 130,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 132,
                   "column": 13
                 }
               },
@@ -2811,11 +2893,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field.html",
                 "start": {
-                  "line": 149,
+                  "line": 137,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -2985,6 +3067,48 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "type": "string",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "type": "string",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              },
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "errorMessage",
               "type": "string",
               "description": "Error to show when the input value is invalid.",
@@ -2992,11 +3116,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -3014,11 +3138,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -3038,11 +3162,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -3059,11 +3183,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -3080,11 +3204,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -3101,11 +3225,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -3122,11 +3246,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -3143,11 +3267,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -3164,11 +3288,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -3189,11 +3313,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -3213,11 +3337,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -3234,11 +3358,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 199,
+                  "line": 223,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 225,
                   "column": 9
                 }
               },
@@ -3255,11 +3379,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 203,
+                  "line": 227,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -3276,11 +3400,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 136,
+                  "line": 138,
                   "column": 8
                 },
                 "end": {
-                  "line": 139,
+                  "line": 141,
                   "column": 9
                 }
               },
@@ -3504,11 +3628,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 213,
+                  "line": 237,
                   "column": 4
                 },
                 "end": {
-                  "line": 220,
+                  "line": 244,
                   "column": 5
                 }
               },
@@ -3527,11 +3651,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 222,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 233,
+                  "line": 257,
                   "column": 5
                 }
               },
@@ -3550,11 +3674,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 235,
+                  "line": 259,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -3576,11 +3700,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 250,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 256,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -3599,11 +3723,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 262,
+                  "line": 286,
                   "column": 4
                 },
                 "end": {
-                  "line": 268,
+                  "line": 292,
                   "column": 5
                 }
               },
@@ -3621,11 +3745,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 288,
+                  "line": 312,
                   "column": 4
                 },
                 "end": {
-                  "line": 290,
+                  "line": 314,
                   "column": 5
                 }
               },
@@ -3644,11 +3768,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 292,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 294,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -3673,11 +3797,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 296,
+                  "line": 320,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -3699,11 +3823,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 300,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 302,
+                  "line": 326,
                   "column": 5
                 }
               },
@@ -3728,11 +3852,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 307,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 325,
+                  "line": 349,
                   "column": 5
                 }
               },
@@ -3756,11 +3880,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 143,
+                  "line": 145,
                   "column": 9
                 }
               },
@@ -3777,11 +3901,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 147,
                   "column": 8
                 },
                 "end": {
-                  "line": 172,
+                  "line": 174,
                   "column": 9
                 }
               },
@@ -3823,11 +3947,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 121,
+              "line": 123,
               "column": 6
             },
             "end": {
-              "line": 173,
+              "line": 175,
               "column": 7
             }
           },
@@ -3890,16 +4014,52 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "autocorrect",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
+              "name": "autocapitalize",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string",
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "error-message",
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -3913,11 +4073,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -3931,11 +4091,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -3949,11 +4109,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -3967,11 +4127,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -3985,11 +4145,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -4003,11 +4163,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -4021,11 +4181,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -4039,11 +4199,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -4057,11 +4217,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -4075,11 +4235,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -4123,11 +4283,11 @@
               "range": {
                 "file": "src/vaadin-text-area.html",
                 "start": {
-                  "line": 67,
+                  "line": 69,
                   "column": 8
                 },
                 "end": {
-                  "line": 67,
+                  "line": 69,
                   "column": 35
                 }
               }
@@ -4252,17 +4412,55 @@
               }
             },
             {
+              "name": "autocorrect",
+              "type": "string",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 115,
+                  "column": 8
+                },
+                "end": {
+                  "line": 117,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
+              "name": "autocapitalize",
+              "type": "string",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 128,
+                  "column": 8
+                },
+                "end": {
+                  "line": 130,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
               "name": "errorMessage",
               "type": "string",
               "description": "Error to show when the input value is invalid.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 111,
+                  "line": 135,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 138,
                   "column": 9
                 }
               },
@@ -4278,11 +4476,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 119,
+                  "line": 143,
                   "column": 8
                 },
                 "end": {
-                  "line": 123,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -4300,11 +4498,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 152,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 154,
                   "column": 9
                 }
               },
@@ -4319,11 +4517,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -4338,11 +4536,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -4357,11 +4555,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -4376,11 +4574,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -4395,11 +4593,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -4414,11 +4612,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -4437,11 +4635,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -4459,11 +4657,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -4478,11 +4676,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 199,
+                  "line": 223,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 225,
                   "column": 9
                 }
               },
@@ -4497,11 +4695,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 227,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -4517,11 +4715,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 295,
                   "column": 4
                 },
                 "end": {
-                  "line": 280,
+                  "line": 304,
                   "column": 5
                 }
               },
@@ -4744,11 +4942,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 213,
+                  "line": 237,
                   "column": 4
                 },
                 "end": {
-                  "line": 220,
+                  "line": 244,
                   "column": 5
                 }
               },
@@ -4765,11 +4963,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 222,
+                  "line": 246,
                   "column": 4
                 },
                 "end": {
-                  "line": 233,
+                  "line": 257,
                   "column": 5
                 }
               },
@@ -4786,11 +4984,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 235,
+                  "line": 259,
                   "column": 4
                 },
                 "end": {
-                  "line": 248,
+                  "line": 272,
                   "column": 5
                 }
               },
@@ -4810,11 +5008,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 274,
                   "column": 4
                 },
                 "end": {
-                  "line": 256,
+                  "line": 280,
                   "column": 5
                 }
               },
@@ -4831,11 +5029,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 262,
+                  "line": 286,
                   "column": 4
                 },
                 "end": {
-                  "line": 268,
+                  "line": 292,
                   "column": 5
                 }
               },
@@ -4851,11 +5049,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 288,
+                  "line": 312,
                   "column": 4
                 },
                 "end": {
-                  "line": 290,
+                  "line": 314,
                   "column": 5
                 }
               },
@@ -4872,11 +5070,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 292,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 294,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -4899,11 +5097,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 296,
+                  "line": 320,
                   "column": 4
                 },
                 "end": {
-                  "line": 298,
+                  "line": 322,
                   "column": 5
                 }
               },
@@ -4923,11 +5121,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 300,
+                  "line": 324,
                   "column": 4
                 },
                 "end": {
-                  "line": 302,
+                  "line": 326,
                   "column": 5
                 }
               },
@@ -4950,11 +5148,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 307,
+                  "line": 331,
                   "column": 4
                 },
                 "end": {
-                  "line": 325,
+                  "line": 349,
                   "column": 5
                 }
               },
@@ -4981,7 +5179,7 @@
               "column": 2
             },
             "end": {
-              "line": 332,
+              "line": 356,
               "column": 3
             }
           },
@@ -5041,15 +5239,15 @@
               "type": "string"
             },
             {
-              "name": "error-message",
-              "description": "Error to show when the input value is invalid.",
+              "name": "autocorrect",
+              "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
               "sourceRange": {
                 "start": {
-                  "line": 111,
+                  "line": 115,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 117,
                   "column": 9
                 }
               },
@@ -5057,24 +5255,8 @@
               "type": "string"
             },
             {
-              "name": "label",
-              "description": "String used for the label element.",
-              "sourceRange": {
-                "start": {
-                  "line": 119,
-                  "column": 8
-                },
-                "end": {
-                  "line": 123,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "type": "string"
-            },
-            {
-              "name": "maxlength",
-              "description": "Maximum number of characters (in Unicode code points) that the user can enter.",
+              "name": "autocapitalize",
+              "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
               "sourceRange": {
                 "start": {
                   "line": 128,
@@ -5086,6 +5268,54 @@
                 }
               },
               "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the input value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 135,
+                  "column": 8
+                },
+                "end": {
+                  "line": 138,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "label",
+              "description": "String used for the label element.",
+              "sourceRange": {
+                "start": {
+                  "line": 143,
+                  "column": 8
+                },
+                "end": {
+                  "line": 147,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "maxlength",
+              "description": "Maximum number of characters (in Unicode code points) that the user can enter.",
+              "sourceRange": {
+                "start": {
+                  "line": 152,
+                  "column": 8
+                },
+                "end": {
+                  "line": 154,
+                  "column": 9
+                }
+              },
+              "metadata": {},
               "type": "number"
             },
             {
@@ -5093,11 +5323,11 @@
               "description": "Minimum number of characters (in Unicode code points) that the user can enter.",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 159,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -5109,11 +5339,11 @@
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 144,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -5125,11 +5355,11 @@
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
                 "start": {
-                  "line": 149,
+                  "line": 173,
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 175,
                   "column": 9
                 }
               },
@@ -5141,11 +5371,11 @@
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
                 "start": {
-                  "line": 156,
+                  "line": 180,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -5157,11 +5387,11 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 164,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 191,
                   "column": 9
                 }
               },
@@ -5173,11 +5403,11 @@
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 198,
                   "column": 8
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -5189,11 +5419,11 @@
               "description": "This property is set to true when the control value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 184,
+                  "line": 208,
                   "column": 8
                 },
                 "end": {
-                  "line": 189,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -5205,11 +5435,11 @@
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
                 "start": {
-                  "line": 195,
+                  "line": 219,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 221,
                   "column": 9
                 }
               },
