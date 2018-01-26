@@ -454,7 +454,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (opened) {
-            this._openedWithFocusRing = this.hasAttribute('focus-ring');
+            this._openedWithFocusRing = this.hasAttribute('focus-ring') || this.focusElement.hasAttribute('focus-ring');
             this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
