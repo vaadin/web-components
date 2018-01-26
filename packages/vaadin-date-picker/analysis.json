@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-date-picker.html",
         "start": {
-          "line": 304,
+          "line": 309,
           "column": 6
         },
         "end": {
-          "line": 304,
+          "line": 309,
           "column": 58
         }
       },
@@ -919,7 +919,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 537,
+                  "line": 539,
                   "column": 5
                 }
               },
@@ -934,11 +934,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 541,
+                  "line": 543,
                   "column": 4
                 },
                 "end": {
-                  "line": 555,
+                  "line": 557,
                   "column": 5
                 }
               },
@@ -957,11 +957,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 557,
+                  "line": 559,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 598,
                   "column": 5
                 }
               },
@@ -976,11 +976,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 598,
+                  "line": 600,
                   "column": 4
                 },
                 "end": {
-                  "line": 600,
+                  "line": 602,
                   "column": 5
                 }
               },
@@ -995,11 +995,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 608,
+                  "line": 610,
                   "column": 4
                 },
                 "end": {
-                  "line": 611,
+                  "line": 613,
                   "column": 5
                 }
               },
@@ -1024,11 +1024,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 621,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 639,
+                  "line": 641,
                   "column": 5
                 }
               },
@@ -1053,11 +1053,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 641,
+                  "line": 643,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -1076,11 +1076,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 647,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 655,
                   "column": 5
                 }
               },
@@ -1095,11 +1095,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 655,
+                  "line": 657,
                   "column": 4
                 },
                 "end": {
-                  "line": 658,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -1114,11 +1114,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 660,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 666,
                   "column": 5
                 }
               },
@@ -1140,11 +1140,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 666,
+                  "line": 668,
                   "column": 4
                 },
                 "end": {
-                  "line": 668,
+                  "line": 670,
                   "column": 5
                 }
               },
@@ -1163,11 +1163,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 673,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 682,
+                  "line": 684,
                   "column": 5
                 }
               },
@@ -1186,11 +1186,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 684,
+                  "line": 686,
                   "column": 4
                 },
                 "end": {
-                  "line": 686,
+                  "line": 688,
                   "column": 5
                 }
               },
@@ -1209,11 +1209,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 688,
+                  "line": 690,
                   "column": 4
                 },
                 "end": {
-                  "line": 741,
+                  "line": 743,
                   "column": 5
                 }
               },
@@ -1232,11 +1232,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 743,
+                  "line": 745,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -1261,11 +1261,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 749,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 754,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -1284,11 +1284,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 756,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 770,
+                  "line": 772,
                   "column": 5
                 }
               },
@@ -1307,11 +1307,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 772,
+                  "line": 774,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 778,
                   "column": 5
                 }
               },
@@ -2390,11 +2390,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 647,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 655,
                   "column": 5
                 }
               },
@@ -2843,7 +2843,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 537,
+                  "line": 539,
                   "column": 5
                 }
               },
@@ -2858,11 +2858,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 541,
+                  "line": 543,
                   "column": 4
                 },
                 "end": {
-                  "line": 555,
+                  "line": 557,
                   "column": 5
                 }
               },
@@ -2881,11 +2881,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 557,
+                  "line": 559,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 598,
                   "column": 5
                 }
               },
@@ -2900,11 +2900,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 598,
+                  "line": 600,
                   "column": 4
                 },
                 "end": {
-                  "line": 600,
+                  "line": 602,
                   "column": 5
                 }
               },
@@ -2919,11 +2919,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 608,
+                  "line": 610,
                   "column": 4
                 },
                 "end": {
-                  "line": 611,
+                  "line": 613,
                   "column": 5
                 }
               },
@@ -2948,11 +2948,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 621,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 639,
+                  "line": 641,
                   "column": 5
                 }
               },
@@ -2977,11 +2977,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 641,
+                  "line": 643,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -3000,11 +3000,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 655,
+                  "line": 657,
                   "column": 4
                 },
                 "end": {
-                  "line": 658,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -3019,11 +3019,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 660,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 666,
                   "column": 5
                 }
               },
@@ -3045,11 +3045,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 666,
+                  "line": 668,
                   "column": 4
                 },
                 "end": {
-                  "line": 668,
+                  "line": 670,
                   "column": 5
                 }
               },
@@ -3068,11 +3068,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 673,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 682,
+                  "line": 684,
                   "column": 5
                 }
               },
@@ -3091,11 +3091,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 684,
+                  "line": 686,
                   "column": 4
                 },
                 "end": {
-                  "line": 686,
+                  "line": 688,
                   "column": 5
                 }
               },
@@ -3114,11 +3114,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 688,
+                  "line": 690,
                   "column": 4
                 },
                 "end": {
-                  "line": 741,
+                  "line": 743,
                   "column": 5
                 }
               },
@@ -3137,11 +3137,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 743,
+                  "line": 745,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -3166,11 +3166,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 749,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 754,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -3189,11 +3189,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 756,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 770,
+                  "line": 772,
                   "column": 5
                 }
               },
@@ -3212,11 +3212,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 772,
+                  "line": 774,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 778,
                   "column": 5
                 }
               },
@@ -3302,7 +3302,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 263,
+                  "line": 268,
                   "column": 9
                 }
               },
@@ -3319,11 +3319,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 265,
+                  "line": 270,
                   "column": 8
                 },
                 "end": {
-                  "line": 268,
+                  "line": 273,
                   "column": 9
                 }
               },
@@ -3336,11 +3336,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 275,
                   "column": 8
                 },
                 "end": {
-                  "line": 273,
+                  "line": 278,
                   "column": 9
                 }
               },
@@ -3357,11 +3357,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 275,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 277,
+                  "line": 282,
                   "column": 9
                 }
               },
@@ -3374,11 +3374,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 287,
+                  "line": 292,
                   "column": 8
                 },
                 "end": {
-                  "line": 289,
+                  "line": 294,
                   "column": 9
                 }
               },
@@ -3428,7 +3428,7 @@
               "column": 6
             },
             "end": {
-              "line": 297,
+              "line": 302,
               "column": 7
             }
           },
@@ -4558,7 +4558,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 537,
+                  "line": 539,
                   "column": 5
                 }
               },
@@ -4571,11 +4571,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 541,
+                  "line": 543,
                   "column": 4
                 },
                 "end": {
-                  "line": 555,
+                  "line": 557,
                   "column": 5
                 }
               },
@@ -4592,11 +4592,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 557,
+                  "line": 559,
                   "column": 4
                 },
                 "end": {
-                  "line": 596,
+                  "line": 598,
                   "column": 5
                 }
               },
@@ -4609,11 +4609,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 598,
+                  "line": 600,
                   "column": 4
                 },
                 "end": {
-                  "line": 600,
+                  "line": 602,
                   "column": 5
                 }
               },
@@ -4626,11 +4626,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 608,
+                  "line": 610,
                   "column": 4
                 },
                 "end": {
-                  "line": 611,
+                  "line": 613,
                   "column": 5
                 }
               },
@@ -4653,11 +4653,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 621,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 639,
+                  "line": 641,
                   "column": 5
                 }
               },
@@ -4680,11 +4680,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 641,
+                  "line": 643,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 647,
                   "column": 5
                 }
               },
@@ -4701,11 +4701,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 647,
+                  "line": 649,
                   "column": 4
                 },
                 "end": {
-                  "line": 653,
+                  "line": 655,
                   "column": 5
                 }
               },
@@ -4718,11 +4718,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 655,
+                  "line": 657,
                   "column": 4
                 },
                 "end": {
-                  "line": 658,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -4735,11 +4735,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 660,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 666,
                   "column": 5
                 }
               },
@@ -4759,11 +4759,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 666,
+                  "line": 668,
                   "column": 4
                 },
                 "end": {
-                  "line": 668,
+                  "line": 670,
                   "column": 5
                 }
               },
@@ -4780,11 +4780,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 673,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 682,
+                  "line": 684,
                   "column": 5
                 }
               },
@@ -4801,11 +4801,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 684,
+                  "line": 686,
                   "column": 4
                 },
                 "end": {
-                  "line": 686,
+                  "line": 688,
                   "column": 5
                 }
               },
@@ -4822,11 +4822,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 688,
+                  "line": 690,
                   "column": 4
                 },
                 "end": {
-                  "line": 741,
+                  "line": 743,
                   "column": 5
                 }
               },
@@ -4843,11 +4843,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 743,
+                  "line": 745,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 749,
                   "column": 5
                 }
               },
@@ -4870,11 +4870,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 749,
+                  "line": 751,
                   "column": 4
                 },
                 "end": {
-                  "line": 754,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -4891,11 +4891,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 756,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 770,
+                  "line": 772,
                   "column": 5
                 }
               },
@@ -4912,11 +4912,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 772,
+                  "line": 774,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 778,
                   "column": 5
                 }
               },
@@ -4943,7 +4943,7 @@
               "column": 2
             },
             "end": {
-              "line": 777,
+              "line": 779,
               "column": 3
             }
           },
@@ -5293,7 +5293,7 @@
   ],
   "elements": [
     {
-      "description": "The overlay element.\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/vaadin-overlay.html)\nfor `<vaadin-date-picker-overlay>` parts.\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+      "description": "The overlay element.\n\n### Styling\n\nSee [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)\nfor `<vaadin-date-picker-overlay>` parts.\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
       "summary": "",
       "path": "src/vaadin-date-picker-overlay.html",
       "properties": [
@@ -5992,7 +5992,7 @@
         }
       },
       "privacy": "public",
-      "superclass": "Vaadin.OverlayElement",
+      "superclass": "HTMLElement",
       "name": "VaadinDatePickerOverlayElement",
       "attributes": [
         {
@@ -7752,7 +7752,7 @@
         },
         {
           "name": "root",
-          "type": "(StampedTemplate | HTMLElement | ShadowRoot)",
+          "type": "(StampedTemplate|HTMLElement|ShadowRoot)",
           "description": "",
           "privacy": "public",
           "sourceRange": {
@@ -8379,7 +8379,7 @@
             }
           ],
           "return": {
-            "type": "(string | undefined)",
+            "type": "(string|undefined)",
             "desc": "String serialized from the provided property value."
           },
           "inheritedFrom": "Polymer.PropertyAccessors"
@@ -8967,7 +8967,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(number | string)>)",
+              "type": "(string|!Array.<(number|string)>)",
               "description": "Path to set"
             },
             {
@@ -9208,12 +9208,12 @@
           "params": [
             {
               "name": "to",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Target path to link."
             },
             {
               "name": "from",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Source path to link."
             }
           ],
@@ -9241,7 +9241,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Target path to unlink."
             }
           ],
@@ -9302,7 +9302,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to the value\n  to read.  The path may be specified as a string (e.g. `foo.bar.baz`)\n  or an array of path parts (e.g. `['foo.bar', 'baz']`).  Note that\n  bracketed expressions are not supported; string-based path parts\n  *must* be separated by dots.  Note that when dereferencing array\n  indices, the index may be used as a dotted part directly\n  (e.g. `users.12.name` or `['users', 12, 'name']`)."
             },
             {
@@ -9336,7 +9336,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to the value\n  to write.  The path may be specified as a string (e.g. `'foo.bar.baz'`)\n  or an array of path parts (e.g. `['foo.bar', 'baz']`).  Note that\n  bracketed expressions are not supported; string-based path parts\n  *must* be separated by dots.  Note that when dereferencing array\n  indices, the index may be used as a dotted part directly\n  (e.g. `'users.12.name'` or `['users', 12, 'name']`)."
             },
             {
@@ -9374,14 +9374,11 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to push onto array"
+              "name": "...items"
             }
           ],
           "return": {
@@ -9409,7 +9406,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to array."
             }
           ],
@@ -9438,7 +9435,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to array."
             },
             {
@@ -9452,10 +9449,7 @@
               "description": "Number of items to remove."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert into array."
+              "name": "...items"
             }
           ],
           "return": {
@@ -9483,7 +9477,7 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to array."
             }
           ],
@@ -9512,14 +9506,11 @@
           "params": [
             {
               "name": "path",
-              "type": "(string | !Array.<(string | number)>)",
+              "type": "(string|!Array.<(string|number)>)",
               "description": "Path to array."
             },
             {
-              "name": "items",
-              "type": "...*",
-              "rest": true,
-              "description": "Items to insert info array"
+              "name": "...items"
             }
           ],
           "return": {
@@ -9618,7 +9609,7 @@
             },
             {
               "name": "method",
-              "type": "(string | function (*, *))",
+              "type": "(string|function (*, *))",
               "description": "Function or name of observer method to call"
             },
             {
@@ -9656,7 +9647,7 @@
             },
             {
               "name": "dynamicFn",
-              "type": "(boolean | Object)=",
+              "type": "(boolean|Object)=",
               "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
             }
           ],
@@ -9750,7 +9741,7 @@
             },
             {
               "name": "dynamicFn",
-              "type": "(boolean | Object)=",
+              "type": "(boolean|Object)=",
               "description": "Boolean or object map indicating\n  whether method names should be included as a dependency to the effect."
             }
           ],
@@ -10508,7 +10499,7 @@
             },
             {
               "name": "method",
-              "type": "(string | function (*, *))",
+              "type": "(string|function (*, *))",
               "description": "Function or name of observer method to call"
             },
             {
@@ -10546,7 +10537,7 @@
             },
             {
               "name": "dynamicFn",
-              "type": "(boolean | Object)=",
+              "type": "(boolean|Object)=",
               "description": "Boolean or object map indicating"
             }
           ],
@@ -10674,7 +10665,7 @@
             },
             {
               "name": "dynamicFn",
-              "type": "(boolean | Object)=",
+              "type": "(boolean|Object)=",
               "description": "Boolean or object map indicating whether\n  method names should be included as a dependency to the effect."
             }
           ],
@@ -10936,7 +10927,7 @@
         }
       },
       "privacy": "private",
-      "superclass": "Polymer.Element",
+      "superclass": "HTMLElement",
       "name": "InfiniteScrollerElement",
       "attributes": [
         {
