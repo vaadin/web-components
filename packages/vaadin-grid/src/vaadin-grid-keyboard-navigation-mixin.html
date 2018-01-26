@@ -242,7 +242,8 @@ This program is available under Apache License Version 2.0, available at https:/
       // original _focusedColumnOrder in the sorted array of orders
       // of the visible columns on the destination row.
       const dstColumns = this._getColumns(activeRowGroup, dstRowIndex);
-      const dstSortedColumnOrders = dstColumns.filter(c => !c.hidden).map(c => c._order).sort();
+      const dstSortedColumnOrders = dstColumns.filter(c => !c.hidden).map(c => c._order)
+        .sort((b, a) => (b - a));
       const maxOrderedColumnIndex = dstSortedColumnOrders.length - 1;
       const orderedColumnIndex = dstSortedColumnOrders.indexOf(
         dstSortedColumnOrders.slice(0).sort((b, a) =>
