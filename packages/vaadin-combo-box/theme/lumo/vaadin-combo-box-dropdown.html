@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/style.html">
 
 <link rel="import" href="../../../vaadin-overlay/theme/lumo/vaadin-overlay.html">
@@ -6,13 +7,20 @@
 <dom-module id="lumo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style include="lumo-menu-overlay">
+      [part="overlay"] {
+        overflow: hidden;
+        border-radius: var(--lumo-border-radius);
+      }
+
       [part="content"] {
         padding: 0;
       }
 
-      /* TODO unsupported selector */
-      #scroller {
-        border-radius: var(--lumo-border-radius);
+      iron-list {
+        /* TODO using a legacy mixin (unsupported) */
+        --iron-list-items-container: {
+          border: var(--lumo-space-xs) solid transparent;
+        }
       }
     </style>
   </template>
