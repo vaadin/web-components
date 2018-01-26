@@ -260,6 +260,8 @@ This program is available under Apache License Version 2.0, available at https:/
         _onVaadinOverlayClose(e) {
           if (this._openedWithFocusRing && this.hasAttribute('focused')) {
             this.focusElement.setAttribute('focus-ring', '');
+          } else if (!this.hasAttribute('focused')){
+            this.focusElement.blur();
           }
           if (e.detail.sourceEvent && e.detail.sourceEvent.composedPath().indexOf(this) !== -1) {
             e.preventDefault();
