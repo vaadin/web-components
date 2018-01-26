@@ -54,6 +54,13 @@
         expect(combobox.opened).to.be.true;
       });
 
+      it('should restore attribute focus-ring if it was initially set before opening and combo-box is focused', () => {
+        combobox.setAttribute('focus-ring', '');
+        combobox.opened = true;
+        combobox.opened = false;
+        expect(!combobox.hasAttribute('focused') || combobox.focusElement.hasAttribute('focus-ring')).to.be.true;
+      });
+
       it('should open synchronously by clicking input', () => {
         expect(combobox.opened).to.be.false;
         fireMousedownMouseupClick(combobox.inputElement);
