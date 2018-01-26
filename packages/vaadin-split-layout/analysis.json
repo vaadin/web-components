@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-split-layout.html",
         "start": {
-          "line": 330,
+          "line": 338,
           "column": 6
         },
         "end": {
-          "line": 330,
+          "line": 338,
           "column": 42
         }
       },
@@ -249,7 +249,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 315,
+                  "line": 317,
                   "column": 9
                 }
               },
@@ -299,7 +299,7 @@
               "column": 6
             },
             "end": {
-              "line": 323,
+              "line": 331,
               "column": 7
             }
           },
@@ -329,6 +329,12 @@
               "type": "CustomEvent",
               "name": "iron-resize",
               "description": "iron-resize",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "splitter-dragend",
+              "description": "splitter-dragend",
               "metadata": {}
             }
           ],
