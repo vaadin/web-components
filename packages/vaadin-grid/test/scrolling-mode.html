@@ -158,19 +158,6 @@
         grid.$.table.scrollLeft = 1;
       });
 
-      it('should not invoke afterScroll on scroll event while wheel scrolling', () => {
-        const spy = sinon.spy(grid, '_afterScroll');
-        wheel(grid, 0, 0);
-        grid.$.table.dispatchEvent(new Event('scroll'));
-        expect(spy.called).to.be.false;
-      });
-
-      it('should invoke afterScroll on scroll event while not wheel scrolling', () => {
-        const spy = sinon.spy(grid, '_afterScroll');
-        grid.$.table.dispatchEvent(new Event('scroll'));
-        expect(spy.called).to.be.true;
-      });
-
       it('should avoid jumpy headers on Edge while wheel scrolling', () => {
         grid._edge = true;
         expect(window.getComputedStyle(grid.$.table).zIndex).not.to.equal('auto');
