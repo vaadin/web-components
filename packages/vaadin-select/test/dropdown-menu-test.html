@@ -269,6 +269,13 @@
           expect(dropdown.opened).to.be.false;
         });
 
+        it('should restore attribute focus-ring if it was initially set before opening', () => {
+          dropdown.setAttribute('focus-ring', '');
+          dropdown.opened = true;
+          dropdown.opened = false;
+          expect(dropdown.focusElement.hasAttribute('focus-ring')).to.be.true;
+        });
+
         it('overlay should be opened on click event on input field', () => {
           expect(dropdown._overlayElement.opened).to.be.false;
           MockInteractions.tap(input.root.querySelector('[part="input-field"]'));
