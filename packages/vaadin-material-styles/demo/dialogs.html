@@ -18,6 +18,13 @@
       opacity: 0;
     }
   </style>
+  <script>
+    openDialog = function(id) {
+      var dialog = document.querySelector(id);
+      dialog.opened = true;
+      console.log("onclick");
+    };
+  </script>
 </head>
 
 <body unresolved>
@@ -32,7 +39,7 @@
 
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dialog>
+        <vaadin-dialog id="simpleDialog">
           <template>
             <h3>Simple dialog</h3>
             <p>This simple dialog will close by pressing the Esc key, or by a mouse click anywhere
@@ -40,28 +47,24 @@
           </template>
         </vaadin-dialog>
 
-        <vaadin-button id="showDialog">Show simple dialog</vaadin-button>
+        <vaadin-button onclick=openDialog('#simpleDialog')>Show simple dialog</vaadin-button>
 
-        <script>
-          window.addEventListener('WebComponentsReady', function() {
-            var button = document.querySelector('#showDialog');
-            button.addEventListener('click', function() {
-              this.previousElementSibling.opened = true;
-            });
-          });
-        </script>
       </template>
     </nice-demo-snippet>
 
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-dialog id="simpledialog">
+        <vaadin-dialog id="buttondialog">
           <template>
-            <div>This simple dialog will close by pressing the Esc key,</div>
+            <div>Dialog with two buttons will close by pressing the Esc key,</div>
             <div> or by a mouse click anywhere outside the dialog area</div>
+            <div class="buttons">
+              <vaadin-button theme="primary">Text1</vaadin-button>
+              <vaadin-button theme="primary">Text2</vaadin-button>
+            </div>
           </template>
         </vaadin-dialog>
-        <vaadin-button onclick="showSimpleDialog">Show dialog</vaadin-button>
+        <vaadin-button onclick=openDialog('#buttondialog')>Show dialog</vaadin-button>
       </template>
     </nice-demo-snippet>
 
@@ -77,7 +80,7 @@
               <div> or by a mouse click anywhere outside the dialog area</div>
             </template>
           </vaadin-dialog>
-          <vaadin-button onclick="showSimpleDialog">Show dialog</vaadin-button>
+          <vaadin-button onclick=openDialog('#simpledarkdialog')>Show dialog</vaadin-button>
         </div>
       </template>
     </nice-demo-snippet>
