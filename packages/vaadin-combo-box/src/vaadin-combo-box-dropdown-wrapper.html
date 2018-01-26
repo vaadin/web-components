@@ -34,13 +34,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
             -webkit-overflow-scrolling: touch;
-          }
 
-          #selector {
-            --iron-list-items-container: {
-              border-top: 8px solid transparent;
-              border-bottom: 8px solid transparent;
-            };
+            /* Fixes scrollbar disappearing when "Show scroll bars: Always" enabled in Safari */
+            box-shadow: 0 0 0 white;
           }
         </style>
         <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
