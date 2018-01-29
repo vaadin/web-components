@@ -46,10 +46,10 @@
                 <template class="footer">Last Name</template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="150px">
+              <vaadin-grid-column width="8em">
                 <template class="header">Address</template>
                 <template>
-                  <p style="white-space: normal">[[item.address.street]], [[item.address.city]]</p>
+                  <div style="white-space: normal">[[item.address.street]], [[item.address.city]]</div>
                 </template>
                 <template class="footer">Address</template>
               </vaadin-grid-column>
@@ -102,9 +102,7 @@
 
               <vaadin-grid-column width="200px">
                 <template class="header">Email</template>
-                <template>
-                  <div>[[item.firstName]].[[item.lastName]]@example.com</div>
-                </template>
+                <template>[[item.firstName]].[[item.lastName]]@example.com</template>
               </vaadin-grid-column>
 
             </vaadin-grid>

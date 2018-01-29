@@ -20,18 +20,14 @@
           <template>
             <style>
               .details {
-                padding: 10px;
-                margin: 10px;
                 display: flex;
-                justify-content: space-around;
-                align-items: center;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
                 font-size: 20px;
               }
 
               img {
                 width: 80px;
                 height: 80px;
+                margin: 20px;
               }
             </style>
 
@@ -42,7 +38,10 @@
               <template class="row-details">
                 <div class="details">
                   <img src="[[item.picture.large]]"></img>
-                  <p>Hi! My name is [[item.name.first]]!</p>
+                  <p>
+                    Hi! My name is [[item.name.first]]!<br>
+                    <small>[[item.email]]</small>
+                  </p>
                 </div>
               </template>
 
@@ -93,18 +92,14 @@
               }
 
               .details {
-                padding: 10px;
-                margin: 10px;
                 display: flex;
-                justify-content: space-around;
-                align-items: center;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
                 font-size: 20px;
               }
 
               img {
                 width: 80px;
                 height: 80px;
+                margin: 20px;
               }
             </style>
 
@@ -115,7 +110,10 @@
               <template class="row-details">
                 <div class="details">
                   <img src="[[item.picture.large]]"></img>
-                  <p>Hi! My name is [[item.name.first]]!</p>
+                  <p>
+                    Hi! My name is [[item.name.first]]!<br>
+                    <small>[[item.email]]</small>
+                  </p>
                 </div>
               </template>
 

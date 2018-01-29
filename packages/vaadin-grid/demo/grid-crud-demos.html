@@ -26,54 +26,46 @@
         <dom-module id="x-crud">
           <template preserve-content>
             <style>
-              input[readonly] {
-                border: 2px solid transparent;
-              }
-
-              input {
-                font: inherit;
-              }
-
-              vaadin-button[hidden] {
-                display: none;
+              vaadin-grid vaadin-text-field {
+                width: 100%;
               }
             </style>
             <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
 
             <div style="margin-bottom: 20px">
-              <vaadin-text-field id="firstname" placeholder="First Name"></vaadin-text-field>
-              <vaadin-text-field id="lastname" placeholder="Last Name"></vaadin-text-field>
+              <vaadin-text-field id="firstname" label="First Name"></vaadin-text-field>
+              <vaadin-text-field id="lastname" label="Last Name"></vaadin-text-field>
               <vaadin-button on-click="_add">Add</vaadin-button>
             </div>
 
-            <vaadin-grid id="grid" items="[[items]]">
+            <vaadin-grid theme="compact" id="grid" items="[[items]]">
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">First Name</template>
                 <template>
-                  <input id="first-[[index]]" value="[[item.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]">
+                  <vaadin-text-field id="first-[[index]]" value="[[item.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column>
+              <vaadin-grid-column resizable>
                 <template class="header">Last Name</template>
                 <template>
-                  <input value="[[item.name.last]]" on-input="_storeLast" readonly$="[[!_isEditing(editing, item)]]">
+                  <vaadin-text-field id="last-[[index]]" value="[[item.name.last]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="200px">
+              <vaadin-grid-column width="12em" resizable>
                 <template class="header">Email</template>
                 <template>
                   <div>[[item.name.first]].[[item.name.last]]@example.com</div>
                 </template>
               </vaadin-grid-column>
 
-              <vaadin-grid-column width="200px">
+              <vaadin-grid-column width="14em">
                 <template>
-                  <div style="display: flex; justify-content: flex-end;">
-                    <vaadin-button hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]">Edit</vaadin-button>
-                    <vaadin-button hidden="[[editing]]" on-click="_remove" theme="error">Remove</vaadin-button>
+                  <div style="text-align: right;">
+                    <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit"><iron-icon icon="lumo:edit"></iron-icon></vaadin-button>
+                    <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete"><iron-icon icon="lumo:cross"></iron-icon></vaadin-button>
                     <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
                     <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
                   </div>
@@ -95,14 +87,6 @@
                   this.editing = null;
                 },
 
-                _storeFirst: function(e) {
-                  this._first = e.target.value;
-                },
-
-                _storeLast: function(e) {
-                  this._last = e.target.value;
-                },
-
                 _isEditing: function(editing, item) {
                   return item === editing;
                 },
@@ -111,26 +95,25 @@
                   var item = e.model.item;
                   this.editing = item;
 
-                  this._first = item.name.first;
-                  this._last = item.name.last;
-
                   this.$.grid.querySelector('#first-' + e.model.index).focus();
                 },
 
                 _save: function(e) {
                   var item = e.model.item;
-                  item.name.first = this._first;
-                  item.name.last = this._last;
+                  item.name.first = this.$.grid.querySelector('#first-' + e.model.index).value;
+                  item.name.last = this.$.grid.querySelector('#last-' + e.model.index).value;
 
                   this.editing = null;
 
                   this.$.grid.clearCache();
+                  this.$.grid.querySelector('#edit-button').focus();
                 },
 
                 _cancel: function() {
                   this.editing = null;
 
                   this.$.grid.clearCache();
+                  this.$.grid.querySelector('#edit-button').focus();
                 },
 
                 _add: function(e) {
