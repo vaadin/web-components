@@ -39,6 +39,7 @@ This program is available under Apache License Version 2.0, available at https:/
         overflow: auto;
         z-index: -2;
         position: relative;
+        outline: none;
       }
 
       /* Avoid jumpy headers on Edge & IE */
@@ -107,7 +108,9 @@ This program is available under Apache License Version 2.0, available at https:/
         display: flex;
         width: 100%;
         position: relative;
-        align-items: stretch;
+        align-items: center;
+        padding: 0;
+        white-space: nowrap;
       }
 
       [part~="details-cell"] {
@@ -115,14 +118,13 @@ This program is available under Apache License Version 2.0, available at https:/
         bottom: 0;
         width: 100%;
         box-sizing: border-box;
+        padding: 0;
       }
 
-      [part~="cell"]:not([part~="details-cell"]) ::slotted(vaadin-grid-cell-content) {
+      [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        display: block;
         width: 100%;
-        display: inline-flex;
-        justify-content: center;
-        flex-direction: column;
-        white-space: nowrap;
+        box-sizing: border-box;
         overflow: hidden;
       }
 
@@ -132,6 +134,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       [frozen] {
         z-index: 2;
+        will-change: transform;
       }
 
       #outerscroller {
@@ -241,11 +244,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       .sizer [part~="details-cell"] {
-        display: none;
+        display: none !important;
       }
 
       .sizer [part~="cell"][hidden] {
-        display: none;
+        display: none !important;
       }
 
       .sizer [part~="cell"] {
@@ -264,7 +267,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       .sizer [part~="cell"] ::slotted(vaadin-grid-cell-content) {
-        display: none;
+        display: none !important;
       }
 
       /* Fixed mode (Tablet Edge) */
@@ -296,4 +299,3 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
   </template>
 </dom-module>
-

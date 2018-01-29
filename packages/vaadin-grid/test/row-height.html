@@ -75,7 +75,7 @@
   <script>
     describe('rows', () => {
 
-      let grid, header, rows, defaultHeight, wrappers;
+      let grid, header, rows, defaultHeight, cells;
 
       function init(fixtureName, cb) {
         grid = fixture(fixtureName);
@@ -86,7 +86,7 @@
           rows = getRows(grid.$.items);
           defaultHeight = getRows(header)[0].clientHeight;
 
-          wrappers = getRowCells(rows[0]).map(cell => getCellContent(cell));
+          cells = getRowCells(rows[0]);
 
           cb();
         });
@@ -95,11 +95,11 @@
         header = grid.$.header;
       }
 
-      it('should have higher wrappers on each row cell', done => {
+      it('should have higher cells on each row', done => {
         init('two-columns', () => {
-          wrappers[0].style.height = wrappers[0].clientHeight * 2 + 'px';
+          cells[0].style.height = cells[0].clientHeight * 2 + 'px';
           flush(() => {
-            expect(wrappers[1].clientHeight).to.equal(wrappers[0].clientHeight);
+            expect(cells[1].clientHeight).to.equal(cells[0].clientHeight);
             done();
           });
         });

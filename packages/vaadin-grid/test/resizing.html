@@ -82,7 +82,7 @@
         it('should update header height', () => {
           const _bottom = grid.$.header.getBoundingClientRect().bottom;
 
-          grid.style.fontSize = '40px';
+          getHeaderCellContent(grid, 0, 0).style.fontSize = '100px';
           grid.notifyResize();
 
           const _newBottom = grid.$.header.getBoundingClientRect().bottom;
@@ -92,7 +92,7 @@
         });
 
         it('should update footer height', () => {
-          grid.style.fontSize = '40px';
+          getContainerCellContent(grid.$.footer, 0, 0).style.fontSize = '100px';
           grid.notifyResize();
           scrollToEnd(grid);
 
@@ -108,7 +108,7 @@
           const detailsCell = cells.pop();
           const _height = detailsCell.getBoundingClientRect().height;
 
-          grid.style.fontSize = '40px';
+          grid.style.fontSize = '100px';
           grid.notifyResize();
           flushGrid(grid);
 

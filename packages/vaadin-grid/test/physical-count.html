@@ -33,6 +33,11 @@
         :host(.small) [part~="cell"] {
           line-height: 10px;
           padding: 0 !important;
+          min-height: 0;
+        }
+
+        :host(.small) [part~="cell"]::slotted(vaadin-grid-cell-content) {
+          padding: 0 !important;
         }
       </style>
     </template>
