@@ -46,11 +46,6 @@
         display: none;
       }
 
-      /* IE11 flexbox fix (https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items) */
-      [part="input-field"] ::slotted([part="value"]) {
-        display: flex;
-      }
-
       [part="input-field"]:focus {
         outline: none;
       }
