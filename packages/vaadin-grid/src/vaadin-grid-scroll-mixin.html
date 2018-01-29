@@ -188,8 +188,16 @@ This program is available under Apache License Version 2.0, available at https:/
         this._scheduleScrolling();
       }
 
-      if (this._wheelScrolling || this.$.outerscroller.passthrough) {
-        this.$.outerscroller.syncOuterScroller();
+      const os = this.$.outerscroller;
+      if (!this._ios && (this._wheelScrolling || os.passthrough)) {
+        os.syncOuterScroller();
+      }
+
+      if (this._ios) {
+        // Enable vertical rubberband feedback
+        const overScroll = Math.max(-os.scrollTop, 0) ||
+          Math.min(0, os.scrollHeight - os.scrollTop - os.offsetHeight);
+        this.$.items.style.transform = `translateY(${overScroll}px)`;
       }
 
       this._updateOverflow();
@@ -266,7 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Array.from(this.root.querySelectorAll('[part~="cell"]')).forEach(function(cell) {
             cell.style.transform = '';
           });
-          this._frozenCells = Array.prototype.slice.call(this.root.querySelectorAll('[frozen]'));
+          this._frozenCells = Array.prototype.slice.call(this.$.table.querySelectorAll('[frozen]'));
           this._translateStationaryElements();
         }
       );

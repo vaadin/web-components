@@ -165,6 +165,16 @@
         expect(window.getComputedStyle(grid.$.table).zIndex).to.equal('auto');
       });
 
+      it('should not sync outer scroller on IOS', done => {
+        grid._ios = true;
+        const spy = sinon.spy(grid.$.outerscroller, 'syncOuterScroller');
+        grid.$.table.addEventListener('scroll', () => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+        grid.$.table.scrollTop += 1;
+      });
+
       describe('overflow attribute', () => {
 
         it('bottom right', () => {
