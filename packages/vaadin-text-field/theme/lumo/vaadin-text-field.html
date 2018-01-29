@@ -74,8 +74,10 @@
 
       [part="value"],
       [part="input-field"] ::slotted([part="value"]) {
+        cursor: inherit;
+        min-height: var(--lumo-text-field-size);
         padding: 0 0.25em;
-        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent 0.25em, #000 1.5em);
+        --_lumo-text-field-overflow-mask-image: linear-gradient(to left, transparent, #000 1.25em);
         -webkit-mask-image: var(--_lumo-text-field-overflow-mask-image);
       }
 
@@ -126,20 +128,18 @@
         font-weight: 500;
         line-height: 1;
         position: relative;
-        height: var(--lumo-text-field-size);
         cursor: text;
         box-sizing: border-box;
-        border: 1px solid transparent;
       }
 
       /* Used for hover and activation effects */
       [part="input-field"]::after {
         content: "";
         position: absolute;
-        top: -1px;
-        right: -1px;
-        bottom: -1px;
-        left: -1px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
         border-radius: inherit;
         pointer-events: none;
         background-color: var(--lumo-contrast-50pct);
@@ -177,7 +177,7 @@
       /* Trigger when not focusing using the keyboard */
       :host([focused]:not([focus-ring]):not([readonly])) [part="input-field"]::after {
         transform: scaleX(0);
-        transition: transform 0.15s, opacity 1s;
+        transition-duration: 0.15s, 1s;
       }
 
       /* Focus-ring */
@@ -212,7 +212,13 @@
       :host([readonly]) [part="input-field"] {
         color: var(--lumo-secondary-text-color);
         background-color: transparent;
-        border: 1px dashed var(--lumo-contrast-40pct);
+        cursor: default;
+      }
+
+      :host([readonly]) [part="input-field"]::after {
+        background-color: transparent;
+        opacity: 1;
+        border: 1px dashed var(--lumo-contrast-30pct);
       }
 
       /* Disabled style */
