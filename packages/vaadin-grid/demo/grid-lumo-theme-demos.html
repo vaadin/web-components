@@ -6,6 +6,8 @@
       }
     </style>
 
+    <p>You can combine all of these variants together, e.g. <code>&lt;vaadin-grid <b>theme="compact no-row-borders row-stripes"</b>&gt;</code></p>
+
     <h3>Compact</h3>
     <p><code>&lt;vaadin-grid <b>theme="compact"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-lumo-theme-demos-compact'>
@@ -46,15 +48,15 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Borderless</h3>
-    <p><code>&lt;vaadin-grid <b>theme="borderless"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-lumo-theme-demos-borderless'>
+    <h3>No border</h3>
+    <p><code>&lt;vaadin-grid <b>theme="no-border"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-bordered'>
       <template preserve-content>
         <dom-bind>
           <template>
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <vaadin-grid theme="borderless" items="[[users.result]]" column-reordering-allowed multi-sort>
+            <vaadin-grid theme="no-border" items="[[users.result]]" column-reordering-allowed multi-sort>
 
               <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
 
@@ -86,15 +88,15 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Row Dividers</h3>
-    <p><code>&lt;vaadin-grid <b>theme="row-dividers"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-lumo-theme-demos-row-dividers'>
+    <h3>No row borders</h3>
+    <p><code>&lt;vaadin-grid <b>theme="no-row-borders"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-row-borders'>
       <template preserve-content>
         <dom-bind>
           <template>
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <vaadin-grid theme="row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+            <vaadin-grid theme="no-row-borders" items="[[users.result]]" column-reordering-allowed multi-sort>
 
               <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
 
@@ -125,15 +127,15 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Column Dividers</h3>
-    <p><code>&lt;vaadin-grid <b>theme="column-dividers"</b>&gt;</code></p>
-    <vaadin-demo-snippet id='grid-lumo-theme-demos-column-dividers'>
+    <h3>Column borders</h3>
+    <p><code>&lt;vaadin-grid <b>theme="column-borders"</b>&gt;</code></p>
+    <vaadin-demo-snippet id='grid-lumo-theme-demos-column-borders'>
       <template preserve-content>
         <dom-bind>
           <template>
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <vaadin-grid theme="column-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+            <vaadin-grid theme="column-borders" items="[[users.result]]" column-reordering-allowed multi-sort>
 
               <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
 
@@ -208,14 +210,13 @@
     <h3>Wrap Cell Content</h3>
     <p><code>&lt;vaadin-grid <b>theme="wrap-cell-content"</b>&gt;</code></p>
     <p>By default, cell contents don’t wrap and all overflowing content is either clipped or truncated. Apply the <code>wrap-cell-content</code> theme to make the cell content wrap instead.</p>
-    <p>This example is also using the <code>row-dividers</code> theme variant to make the content easier to read.</p>
     <vaadin-demo-snippet id='grid-lumo-theme-demos-wrap-cell-content'>
       <template preserve-content>
         <dom-bind >
           <template>
             <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=20" handle-as="json" last-response="{{users}}"></iron-ajax>
 
-            <vaadin-grid theme="wrap-cell-content row-dividers" items="[[users.result]]" column-reordering-allowed multi-sort>
+            <vaadin-grid theme="wrap-cell-content" items="[[users.result]]" column-reordering-allowed multi-sort>
 
               <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
 

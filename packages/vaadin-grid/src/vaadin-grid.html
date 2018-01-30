@@ -203,6 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `expanded` | Expanded row | row
      * `loading` | Row that is waiting for data from data provider | row
      * `odd` | Odd row | row
+     * `first` | The first body row | row
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
@@ -467,6 +468,7 @@ This program is available under Apache License Version 2.0, available at https:/
             cell._instance.index = index;
           }
         });
+        this._toggleAttribute('first', index === 0, row);
         this._toggleAttribute('odd', index % 2, row);
         this._a11yUpdateRowRowindex(row, index);
         this._getItem(index, row);

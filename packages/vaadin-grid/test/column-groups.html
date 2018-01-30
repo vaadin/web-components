@@ -342,20 +342,6 @@
           animationFrameFlush(done);
         });
 
-        it('should have a border below the header', () => {
-          const cells = header.querySelectorAll('[part~="cell"]');
-          const cellOnLastRow = cells[cells.length - 1];
-
-          expect(window.getComputedStyle(cellOnLastRow).borderBottomStyle).to.eql('solid');
-        });
-
-        it('should have a border above the footer', () => {
-          const cells = footer.querySelectorAll('[part~="cell"]');
-          const cellOnFirstRow = cells[0];
-
-          expect(window.getComputedStyle(cellOnFirstRow).borderTopStyle).to.eql('solid');
-        });
-
         it('should have right content in header', () => {
           expect(getHeaderCellContent(0, 0)).to.equal('group-0');
           expect(getHeaderCellContent(0, 1)).to.equal('group-1');

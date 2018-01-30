@@ -59,7 +59,7 @@
       it('update size using item index', done => {
         const firstItem = getFirstVisibleItem(grid);
 
-        expect(firstItem.offsetHeight).to.equal(20);
+        expect(firstItem.offsetHeight).to.be.below(100);
 
         grid.classList.add('high');
         flushGrid(grid);
@@ -69,7 +69,7 @@
         grid.style.display = 'none';
         flush(() => {
           grid.style.display = 'block';
-          expect(firstItem.offsetHeight).to.eql(102);
+          expect(firstItem.offsetHeight).not.to.be.below(100);
           done();
         });
       });
