@@ -187,7 +187,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *
        * 1. Create a theme file (for example `shared-styles.html`). The theme's dom-module must declare `theme-for=vaadin-chart`.
        * 2. Import `vaadin-chart-default-theme.html` and declare `include="vaadin-chart-default-theme"`
-       * on the theme module's style tag to customize Chart's default theme.
+       * on the theme module's style tag to customize Chart's default theme. If there are multiple theme
+       * modules *only one* of them should declare this `include`.
        * 3. Specify the desired CSS rules in the theme file.
        * 4. If multiple charts are present, each one can be specifically targeted using the host selector e.g `:host(.my-chart-class)`.
        * 5. Import the theme file.
