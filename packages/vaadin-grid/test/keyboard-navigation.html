@@ -1066,6 +1066,7 @@
             grid.items = undefined;
             grid.size = 200;
             grid.dataProvider = infiniteDataProvider;
+            grid._scrollToIndex(0);
             flushGrid(grid);
             animationFrameFlush(done);
           });
