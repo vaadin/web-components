@@ -322,7 +322,7 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(:not([part="value"])) {
+      [part="input-field"] ::slotted(:not([part]):not(iron-icon)) {
         color: var(--lumo-secondary-text-color);
         font-weight: 400;
       }
@@ -330,7 +330,7 @@
       /* Slotted icons */
 
       [part="input-field"] ::slotted(iron-icon) {
-        color: var(--lumo-contrast-50pct);
+        color: var(--lumo-contrast-60pct);
         width: var(--lumo-icon-size-m);
         height: var(--lumo-icon-size-m);
       }
