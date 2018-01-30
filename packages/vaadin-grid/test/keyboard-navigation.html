@@ -1183,6 +1183,17 @@
 
               expect(grid.hasAttribute('navigating')).to.be.true;
             });
+
+            it('should not hide navigation mode if a header cell is focused', () => {
+              focusFirstHeaderCell();
+              right();
+
+              expect(grid.hasAttribute('navigating')).to.be.true;
+
+              grid._scrollToIndex(100);
+
+              expect(grid.hasAttribute('navigating')).to.be.true;
+            });
           });
         });
       });

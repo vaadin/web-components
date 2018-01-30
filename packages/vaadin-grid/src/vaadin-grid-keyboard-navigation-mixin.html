@@ -457,12 +457,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (e.composedPath().indexOf(this.$.table) === 3) {
         const cell = e.composedPath()[0];
-        const rowGroup = cell.parentNode.parentNode;
-        if (rowGroup === this.$.header) {
+        this._activeRowGroup = cell.parentNode.parentNode;
+        if (this._activeRowGroup === this.$.header) {
           this._headerFocusable = cell;
-        } else if (rowGroup === this.$.items) {
+        } else if (this._activeRowGroup === this.$.items) {
           this._itemsFocusable = cell;
-        } else if (rowGroup === this.$.footer) {
+        } else if (this._activeRowGroup === this.$.footer) {
           this._footerFocusable = cell;
         }
         // Inform cell content of the focus (used in <vaadin-grid-sorter>)
@@ -494,7 +494,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _preventScrollerRotatingCellFocus(item, index) {
-      if (item.index === this._focusedItemIndex && this.hasAttribute('navigating')) {
+      if (item.index === this._focusedItemIndex && this.hasAttribute('navigating') && this._activeRowGroup === this.$.items) {
         // Focused item has went, hide navigation mode
         this._navigatingIsHidden = true;
         this._toggleAttribute('navigating', false, this);
