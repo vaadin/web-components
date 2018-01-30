@@ -32,6 +32,7 @@
     "getCellContent": false,
     "getBodyCellContent": false,
     "getHeaderCellContent": false,
+    "getContainerCellContent": false,
     "getFirstVisibleItem": false,
     "getLastVisibleItem": false,
     "simulateScroll": false,
