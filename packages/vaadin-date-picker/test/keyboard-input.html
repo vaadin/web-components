@@ -355,6 +355,21 @@
             });
           });
 
+          it('should cancel on overlay content esc', done => {
+            datepicker.value = '';
+            open(datepicker, () => {
+              inputText('1/2/2000 ');
+              arrowDown();
+              arrowDown();
+              const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('vaadin-date-picker-overlay-content').$.monthScroller;
+              target = overlayContent;
+              esc();
+              expect(datepicker.opened).to.be.false;
+              expect(datepicker.value).not.to.be.ok;
+              done();
+            });
+          });
+
           it('should not change value on esc', done => {
             datepicker.value = '2000-01-01';
             datepicker.$.overlay.addEventListener('vaadin-overlay-close', () => {
