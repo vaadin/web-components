@@ -38,11 +38,6 @@
     beforeEach(() => {
       comboBox = fixture('combobox');
       comboBox.items = ['foo', 'bar', 'baz'];
-
-      // make iron-input pick up child input
-      if (comboBox._bindableInput._initSlottedInput) {
-        comboBox._bindableInput._initSlottedInput();
-      }
     });
 
     describe('setting the input field value', () => {

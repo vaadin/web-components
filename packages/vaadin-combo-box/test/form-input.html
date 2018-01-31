@@ -20,7 +20,7 @@
   </test-fixture>
 
   <test-fixture id="combobox-in-form">
-    <template is="dom-template">
+    <template>
       <iron-form>
         <form>
           <vaadin-combo-box></vaadin-combo-box>
@@ -36,11 +36,6 @@
       beforeEach(() => {
         comboBox = fixture('combobox');
         comboBox.allowCustomValue = true;
-
-        // make iron-input pick up child input
-        if (comboBox._bindableInput._initSlottedInput) {
-          comboBox._bindableInput._initSlottedInput();
-        }
       });
 
       it('should be required', () => {
