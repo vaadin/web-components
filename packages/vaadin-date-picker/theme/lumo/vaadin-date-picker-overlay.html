@@ -28,7 +28,17 @@
         height: 100%;
       }
 
+      :host([fullscreen]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
+        left: 0 !important;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+
       :host([fullscreen]) [part~="overlay"][part~="overlay"] {
+        max-height: initial;
         width: 100vw;
         height: 70vh;
         flex: none;
