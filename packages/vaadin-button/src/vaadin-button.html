@@ -156,6 +156,19 @@ This program is available under Apache License Version 2.0, available at https:/
           this._addActiveListeners();
         }
 
+        /**
+         * @protected
+         */
+        disconnectedCallback() {
+          super.disconnectedCallback();
+
+          // `active` state is preserved when the element is disconnected between keydown and keyup events.
+          // reproducible in `<vaadin-date-picker>` when closing on `Cancel` or `Today` click.
+          if (this.hasAttribute('active')) {
+            this.removeAttribute('active');
+          }
+        }
+
         _addActiveListeners() {
           Polymer.Gestures.addListener(this, 'down', () => !this.disabled && this.setAttribute('active', ''));
           Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
