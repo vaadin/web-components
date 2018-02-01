@@ -22,20 +22,6 @@ This program is available under Apache License Version 2.0, available at https:/
       [part="content"] {
         background-color: #fff;
       }
-
-      :host([phone]) {
-        top: 0 !important;
-        right: 0 !important;
-        bottom: var(--vaadin-overlay-viewport-bottom) !important;
-        left: 0 !important;
-        align-items: stretch;
-        justify-content: flex-end;
-      }
-
-      :host([phone]) [part="content"] {
-        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
-        max-height: 80vh;
-      }
     </style>
   </template>
 </dom-module>
