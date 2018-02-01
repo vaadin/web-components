@@ -165,18 +165,18 @@
         expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
       });
 
-      it('should have defalut label-gap', function() {
-        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-label-gap')).to.equal('1em');
-        expect(getComputedStyle(item.$.gap).width).to.equal('16px'); // 1em in px
+      it('should have defalut label-spacing', function() {
+        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-label-spacing')).to.equal('1em');
+        expect(getComputedStyle(item.$.spacing).width).to.equal('16px'); // 1em in px
       });
 
-      it('should apply label-gap', function() {
-        item.updateStyles({'--vaadin-form-item-label-gap': '8px'});
-        expect(getComputedStyle(item.$.gap).width).to.equal('8px');
+      it('should apply label-spacing', function() {
+        item.updateStyles({'--vaadin-form-item-label-spacing': '8px'});
+        expect(getComputedStyle(item.$.spacing).width).to.equal('8px');
       });
 
-      it('should not have default row-gap', function() {
-        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-row-gap')).to.equal('0');
+      it('should not have default row-spacing', function() {
+        expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-row-spacing')).to.equal('0');
         expect(parseFloat(getComputedStyle(item).marginTop)).to.equal(0);
         expect(parseFloat(getComputedStyle(item).marginBottom)).to.equal(0);
       });
