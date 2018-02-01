@@ -131,6 +131,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
       document.body.removeEventListener('keydown', this._boundKeydownListener, true);
       document.body.removeEventListener('keyup', this._boundKeyupListener, true);
+
+      // in non-Chrome browsers, blur does not fire on the element when it is disconnected.
+      // reproducible in `<vaadin-date-picker>` when closing on `Cancel` or `Today` click.
+      if (this.hasAttribute('focused')) {
+        this._setFocused(false);
+      }
     }
 
     _setFocused(focused) {
