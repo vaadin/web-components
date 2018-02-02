@@ -17,10 +17,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /* CSS API for host */
         --vaadin-form-item-label-width: 8em;
-        --vaadin-form-item-label-gap: 1em;
-        --vaadin-form-item-row-gap: 1em;
+        --vaadin-form-item-label-spacing: 1em;
+        --vaadin-form-item-row-spacing: 1em;
 
-        margin: calc(0.5 * var(--vaadin-form-item-row-gap)) 0;
+        margin: calc(0.5 * var(--vaadin-form-item-row-spacing)) 0;
       }
 
       :host([label-position="top"]) {
@@ -37,8 +37,8 @@ This program is available under Apache License Version 2.0, available at https:/
         width: auto;
       }
 
-      #gap {
-        width: var(--vaadin-form-item-label-gap);
+      #spacing {
+        width: var(--vaadin-form-item-label-spacing);
         flex: 0 0 auto;
       }
 
@@ -55,7 +55,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <div id="label" part="label" on-click="_onLabelClick">
       <slot name="label" id="labelSlot"></slot>
     </div>
-    <div id="gap"></div>
+    <div id="spacing"></div>
     <div id="content">
       <slot id="contentSlot"></slot>
     </div>
@@ -160,8 +160,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * Custom CSS property | Description | Default
        * ---|---|---
        * `--vaadin-form-item-label-width` | Width of the label column when the labels are aside | `8em`
-       * `--vaadin-form-item-label-gap` | Length of the gap between the label column and the input column when the labels are aside | `1em`
-       * `--vaadin-form-item-row-gap` | Height of the gap between the form item elements | `1em`
+       * `--vaadin-form-item-label-spacing` | Spacing between the label column and the input column when the labels are aside | `1em`
+       * `--vaadin-form-item-row-spacing` | Height of the spacing between the form item elements | `1em`
        * 
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *

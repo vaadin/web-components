@@ -59,8 +59,8 @@
     function getParsedWidth(el) {
       const width = el.style.getPropertyValue('width');
       const components = width.replace(/^calc\((.*)\)$/, '$1').split(/ [+-] /);
-      const [percentage, gap] = components.sort((a, b) => b.indexOf('%'));
-      return {percentage, gap};
+      const [percentage, spacing] = components.sort((a, b) => b.indexOf('%'));
+      return {percentage, spacing};
     }
 
     describe('basic features', function() {
@@ -291,12 +291,12 @@
         layout = fixture('default');
       });
 
-      it('should apply default column-gap', function() {
+      it('should apply default column-spacing', function() {
         // override to not depend on the theme changes
         layout.style.setProperty('--lumo-space-l', '2rem');
         layout.updateStyles({'--lumo-space-l': '2rem'});
 
-        expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
+        expect(getParsedWidth(layout.firstElementChild).spacing).to.be.oneOf([
           '0.5 * 2rem', // MSIE
           '-1rem', // Edge
           '1rem'
@@ -307,17 +307,17 @@
 
       it('should support updating with `updateStyles` call', function() {
         layout.updateStyles({
-          '--vaadin-form-layout-column-gap': '2cm',
+          '--vaadin-form-layout-column-spacing': '2cm',
           '--vaadin-form-layout-label-width': '4cm',
-          '--vaadin-form-layout-label-gap': '1cm'
+          '--vaadin-form-layout-label-spacing': '1cm'
         });
-        expect(getParsedWidth(layout.firstElementChild).gap).to.be.oneOf([
+        expect(getParsedWidth(layout.firstElementChild).spacing).to.be.oneOf([
           '0.5 * 2cm', // MSIE
           '-1cm', // Edge
           '1cm'
         ]);
         expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-width')).to.equal('4cm');
-        expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-gap')).to.equal('1cm');
+        expect(getCustomCSSPropertyValue(layout, '--vaadin-form-layout-label-spacing')).to.equal('1cm');
       });
     });
 
@@ -361,15 +361,15 @@
         expect(container.scrollWidth).to.equal(container.clientWidth);
       });
 
-      describe('no gaps on edges', () => {
-        it('should not have gaps on the left edge', () => {
+      describe('no spacing on edges', () => {
+        it('should not have spacing on the left edge', () => {
           const containerRect = container.getBoundingClientRect();
           Array.from(layout.querySelectorAll('[at-start]')).forEach(child => {
             expect(child.getBoundingClientRect().left).to.be.closeTo(containerRect.left, .5);
           });
         });
 
-        it('should not have gaps on the right edge', () => {
+        it('should not have spacing on the right edge', () => {
           const containerRect = container.getBoundingClientRect();
           Array.from(layout.querySelectorAll('[at-end]')).forEach(child => {
             expect(child.getBoundingClientRect().right).to.be.closeTo(containerRect.right, .5);
@@ -377,20 +377,20 @@
         });
       });
 
-      describe('no gaps on edges (rtl)', () => {
+      describe('no spacing on edges (rtl)', () => {
         beforeEach(() => {
           container.dir = 'rtl';
           layout.updateStyles();
         });
 
-        it('should not have gaps on the right edge', () => {
+        it('should not have spacing on the right edge', () => {
           const containerRect = container.getBoundingClientRect();
           Array.from(layout.querySelectorAll('[at-start]')).forEach(child => {
             expect(child.getBoundingClientRect().right).to.be.closeTo(containerRect.right, .5);
           });
         });
 
-        it('should not have gaps on the left edge', () => {
+        it('should not have spacing on the left edge', () => {
           const containerRect = container.getBoundingClientRect();
           Array.from(layout.querySelectorAll('[at-end]')).forEach(child => {
             expect(child.getBoundingClientRect().left).to.be.closeTo(containerRect.left, .5);

@@ -260,12 +260,12 @@
         <th>Default</th>
       </tr>
       <tr>
-        <td><code style="white-space: nowrap;">--vaadin-form-layout-column-gap</code></td>
-        <td>Length of the gap between columns</td>
+        <td><code style="white-space: nowrap;">--vaadin-form-layout-column-spacing</code></td>
+        <td>Length of the spacing between columns</td>
         <td><code>2em</code></td>
       </tr>
     </table>
-    <p>Additionaly, <code>&lt;vaadin-form-item&gt;</code> supports:</p>
+    <p>Additionally, <code>&lt;vaadin-form-item&gt;</code> supports:</p>
     <table>
       <tr>
         <th>CSS Property</th>
@@ -278,13 +278,13 @@
         <td><code>8em</code></td>
       </tr>
       <tr>
-        <td><code style="white-space: nowrap;">--vaadin-form-item-label-gap</code></td>
-        <td>Length of the gap between the label and input columns when the labels are aside</td>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-label-spacing</code></td>
+        <td>Length of the spacing between the label and input columns when the labels are aside</td>
         <td><code>1em</code></td>
       </tr>
       <tr>
-        <td><code style="white-space: nowrap;">--vaadin-form-item-row-gap</code></td>
-        <td>Height of the gap between the form item elements</td>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-row-spacing</code></td>
+        <td>Height of the spacing between the form item elements</td>
         <td><code>1em</code></td>
       </tr>
     </table>
@@ -295,13 +295,13 @@
             <style>
 
               vaadin-form-layout {
-                --vaadin-form-layout-column-gap: 4em;
+                --vaadin-form-layout-column-spacing: 4em;
               }
 
               vaadin-form-item {
                 --vaadin-form-item-label-width: 6em;
-                --vaadin-form-item-label-gap: 1em;
-                --vaadin-form-item-row-gap: 1.25em;
+                --vaadin-form-item-label-spacing: 1em;
+                --vaadin-form-item-row-spacing: 1.25em;
               }
 
             </style>
@@ -343,7 +343,7 @@
     <h3>Vaadin Text Fields as Form Items</h3>
     <p>
       <strong>Note:</strong> When not using <code>&lt;vaadin-form-item&gt;</code>, vertical
-      gaps between the form rows should be added manually. For example, use CSS to add
+      spacing between the form rows should be added manually. For example, use CSS to add
       vertical margin for the <code>&lt;vaadin-text-field&gt;</code> child elements:
     </p>
     <vaadin-demo-snippet id='form-layout-basic-demos-vaadin-text-fields-as-form-items'>

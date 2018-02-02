@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
         max-width: 100%;
 
         /* CSS API for host */
-        --vaadin-form-layout-column-gap: 2em; /* (default) */
+        --vaadin-form-layout-column-spacing: 2em; /* (default) */
       }
 
       :host([hidden]) {
@@ -34,13 +34,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       #layout ::slotted(*) {
-        /* Items should neigher grow nor shrink. */
+        /* Items should neither grow nor shrink. */
         flex-grow: 0;
         flex-shrink: 0;
 
-        /* Margins make gaps between the columns */
-        margin-left: calc(0.5 * var(--vaadin-form-layout-column-gap));
-        margin-right: calc(0.5 * var(--vaadin-form-layout-column-gap));
+        /* Margins make spacing between the columns */
+        margin-left: calc(0.5 * var(--vaadin-form-layout-column-spacing));
+        margin-right: calc(0.5 * var(--vaadin-form-layout-column-spacing));
       }
 
       #layout ::slotted(br) {
@@ -150,7 +150,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Custom CSS property | Description | Default
        * ---|---|---
-       * `--vaadin-form-layout-column-gap` | Length of the gap between columns | `2em`
+       * `--vaadin-form-layout-column-spacing` | Length of the spacing between columns | `2em`
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
@@ -399,15 +399,15 @@ This program is available under Apache License Version 2.0, available at https:/
           /*
             The item width formula:
 
-                itemWidth = colspan / columnCount * 100% - columnGap
+                itemWidth = colspan / columnCount * 100% - columnSpacing
 
-            We have to subtract columnGap, because the column gap space is taken
-            by item margins of 1/2 * gap on both sides
+            We have to subtract columnSpacing, because the column spacing space is taken
+            by item margins of 1/2 * spacing on both sides
           */
 
-          const columnGap = window.ShadyCSS
-            ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-gap')
-            : getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-gap');
+          const columnSpacing = window.ShadyCSS
+            ? window.ShadyCSS.getComputedStyleValue(this, '--vaadin-form-layout-column-spacing')
+            : getComputedStyle(this).getPropertyValue('--vaadin-form-layout-column-spacing');
 
           const direction = getComputedStyle(this).direction;
           const marginStartProp = 'margin-' + (direction === 'ltr' ? 'left' : 'right');
@@ -437,11 +437,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
               if (child.localName === 'br') {
                 // IE and Edge only accept fixed padding
-                child.style.paddingRight = `calc(${childRatio * containerWidth}px - ${1 - childRatio} * ${columnGap})`;
+                child.style.paddingRight = `calc(${childRatio * containerWidth}px - ${1 - childRatio} * ${columnSpacing})`;
               } else {
                 // Note: using 99.9% for 100% fixes rounding errors in MS Edge
                 // (< v16), otherwise the items might wrap, resizing is wobbly.
-                child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnGap})`;
+                child.style.width = `calc(${childRatio * 99.9}% - ${1 - childRatio} * ${columnSpacing})`;
               }
 
               if (col + colspan > this._columnCount) {
