@@ -148,7 +148,7 @@
         item = fixture('default');
       });
 
-      it('should have defalut label-width', function() {
+      it('should have default label-width', function() {
         expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-label-width')).to.equal('8em');
         const labelFontSize = parseFloat(getComputedStyle(item.$.label).fontSize);
         expect(parseFloat(getComputedStyle(item.$.label).width)).to.be.closeTo(8 * labelFontSize, 0.5);
@@ -165,7 +165,7 @@
         expect(getComputedStyle(item.$.label).width).to.not.equal('100px');
       });
 
-      it('should have defalut label-spacing', function() {
+      it('should have default label-spacing', function() {
         expect(getCustomCSSPropertyValue(item, '--vaadin-form-item-label-spacing')).to.equal('1em');
         expect(getComputedStyle(item.$.spacing).width).to.equal('16px'); // 1em in px
       });
