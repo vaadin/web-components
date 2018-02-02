@@ -20,6 +20,7 @@ gulp.task('lint:js', function() {
 gulp.task('lint:html', function() {
   return gulp.src([
     '*.html',
+    'src/**/*.html',
     'demo/**/*.html',
     'test/**/*.html'
   ])
@@ -35,7 +36,9 @@ gulp.task('lint:html', function() {
 gulp.task('lint:css', function() {
   return gulp.src([
     '*.html',
+    'src/**/*.html',
     'demo/**/*.html',
+    'theme/**/*.html',
     'test/**/*.html'
   ])
     .pipe(htmlExtract({
