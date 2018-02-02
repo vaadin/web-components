@@ -40,11 +40,6 @@
 
       beforeEach(() => {
         comboBox = fixture('combobox');
-
-        // make iron-input pick up child input
-        if (comboBox._bindableInput._initSlottedInput) {
-          comboBox._bindableInput._initSlottedInput();
-        }
       });
 
       describe('Inside flexbox', () => {
