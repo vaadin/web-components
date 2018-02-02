@@ -182,8 +182,8 @@ This program is available under Apache License Version 2.0, available at https:/
         _onLabelClick(e) {
           // No `Array.prototype.find` in MSIE, using `filter` instead :-(
           const firstContentElementChild = Array.prototype.filter.call(
-              this.$.contentSlot.assignedNodes(),
-              (e) => e.nodeType === Node.ELEMENT_NODE
+            this.$.contentSlot.assignedNodes(),
+            (e) => e.nodeType === Node.ELEMENT_NODE
           )[0];
           if (firstContentElementChild) {
             firstContentElementChild.focus();
