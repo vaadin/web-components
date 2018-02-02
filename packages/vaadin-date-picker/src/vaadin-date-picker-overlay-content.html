@@ -689,7 +689,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Keyboard Navigation
          */
         _eventKey(e) {
-          var keys = ['down', 'up', 'right', 'left', 'enter', 'space', 'home', 'end', 'pageup', 'pagedown', 'tab'];
+          var keys = ['down', 'up', 'right', 'left', 'enter', 'space', 'home', 'end', 'pageup', 'pagedown', 'tab', 'esc'];
 
           for (var i = 0; i < keys.length; i++) {
             var k = keys[i];
@@ -787,6 +787,9 @@ This program is available under Apache License Version 2.0, available at https:/
                 break;
               case 'pageup':
                 this._moveFocusByMonths(e.shiftKey ? -12 : -1);
+                break;
+              case 'esc':
+                this._cancel();
                 break;
             }
           }
