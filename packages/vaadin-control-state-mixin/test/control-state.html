@@ -289,6 +289,13 @@
             done();
           });
         });
+
+        it('should remove focused attribute when disconnected from the DOM', () => {
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
+          customElement.parentNode.removeChild(customElement);
+          window.ShadyDOM && window.ShadyDOM.flush();
+          expect(customElement.hasAttribute('focused')).to.be.false;
+        });
       });
     });
 
