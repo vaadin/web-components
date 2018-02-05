@@ -40,13 +40,13 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @private
        */
-      class VaadinDialogOverlay extends Vaadin.OverlayElement {
+      class DialogOverlayElement extends Vaadin.OverlayElement {
         static get is() {
           return 'vaadin-dialog-overlay';
         }
       }
 
-      customElements.define(VaadinDialogOverlay.is, VaadinDialogOverlay);
+      customElements.define(DialogOverlayElement.is, DialogOverlayElement);
 
 
       /**
@@ -71,7 +71,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
-      class VaadinDialog extends Vaadin.ElementMixin(Polymer.Element) {
+      class DialogElement extends Vaadin.ElementMixin(Polymer.Element) {
         static get is() {
           return 'vaadin-dialog';
         }
@@ -172,11 +172,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinDialog.is, VaadinDialog);
+      customElements.define(DialogElement.is, DialogElement);
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinDialog = VaadinDialog;
+      window.Vaadin.DialogElement = DialogElement;
     })();
   </script>
 </dom-module>
