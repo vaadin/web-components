@@ -453,13 +453,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onOpened() {
-      // Pre P2 iron-list used a debouncer to render. Now that we syncronously render items,
+      // Pre P2 iron-list used a debouncer to render. Now that we synchronously render items,
       // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
       // because that will cause problems to say the least.
       Polymer.flush && Polymer.flush();
 
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders
-      // the items synchonously. It is required to have the items rendered
+      // the items synchronously. It is required to have the items rendered
       // before we update the overlay and the list positions and sizes.
       this.$.overlay.ensureItemsRendered();
       this.$.overlay._selector.toggleScrollListener(true);
