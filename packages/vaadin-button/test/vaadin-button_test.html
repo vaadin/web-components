@@ -115,6 +115,12 @@
         expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
 
+      it('should not have active attribute when disconnected from the DOM', () => {
+        MockInteractions.keyDownOn(vaadinButton, 32);
+        vaadinButton.parentNode.removeChild(vaadinButton);
+        window.ShadyDOM && window.ShadyDOM.flush();
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
+      });
     });
   </script>
 </body>
