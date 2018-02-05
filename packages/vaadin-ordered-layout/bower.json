@@ -31,7 +31,6 @@
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0"
   },
   "devDependencies": {
-    "elements-demo-resources": "^2.0.0",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
