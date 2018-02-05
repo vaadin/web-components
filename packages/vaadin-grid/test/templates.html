@@ -98,6 +98,21 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="items">
+    <template>
+      <dom-bind>
+        <template>
+          <div id="div">[[items.0.foo]]</div>
+          <vaadin-grid id="grid" items="{{items}}">
+            <vaadin-grid-column>
+              <template><input value="{{item.foo::input}}"></template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </template>
+      </template>
+    </dom-bind>
+  </test-fixture>
+
   <script>
     function getHeaderCell(grid, index) {
       return grid.$.header.querySelectorAll('[part~="cell"]')[index];
@@ -282,6 +297,25 @@
           input.value = 'bar0';
 
           expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
+        });
+      });
+
+      describe('using items array', () => {
+        let input, div, grid;
+
+        beforeEach(() => {
+          const bind = fixture('items');
+          bind.set('items', [{foo: 'bar'}]);
+          div = bind.$.div;
+          grid = bind.$.grid;
+          flushGrid(bind.$.grid);
+          input = grid.querySelector('input');
+        });
+
+        it('should notify items array path', () => {
+          input.value = 'baz';
+          input.dispatchEvent(new CustomEvent('input'));
+          expect(div.textContent).to.equal('baz');
         });
       });
     });
