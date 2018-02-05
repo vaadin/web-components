@@ -41,12 +41,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @extends Vaadin.OverlayElement
        */
-      class VaadinDropdownMenuOverlayElement extends Vaadin.OverlayElement {
+      class DropdownMenuOverlayElement extends Vaadin.OverlayElement {
         static get is() {
           return 'vaadin-dropdown-menu-overlay';
         }
       }
-      customElements.define(VaadinDropdownMenuOverlayElement.is, VaadinDropdownMenuOverlayElement);
+      customElements.define(DropdownMenuOverlayElement.is, DropdownMenuOverlayElement);
     })();
   </script>
 </dom-module>
@@ -77,7 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @extends Vaadin.TextFieldElement
        */
-      class VaadinDropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
+      class DropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
         static get is() {
           return 'vaadin-dropdown-menu-text-field';
         }
@@ -104,7 +104,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.root.querySelector('[part=input-field]');
         }
       }
-      customElements.define(VaadinDropdownMenuTextFieldElement.is, VaadinDropdownMenuTextFieldElement);
+      customElements.define(DropdownMenuTextFieldElement.is, DropdownMenuTextFieldElement);
     })();
   </script>
 </dom-module>
