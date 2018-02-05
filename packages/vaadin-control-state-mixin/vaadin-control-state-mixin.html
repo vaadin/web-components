@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
         /**
          * Internal property needed to listen to `tabindex` attribute changes.
          *
-         * For changing the tabindex of this component use the native `tabIndex` propety.
+         * For changing the tabindex of this component use the native `tabIndex` property.
          * @private
          */
         tabindex: {
@@ -29,7 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
       };
 
       if (window.ShadyDOM) {
-        // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programatically.
+        // ShadyDOM browsers need the `tabIndex` in order to notify when the user changes it programmatically.
         properties['tabIndex'] = properties.tabindex;
       }
 
