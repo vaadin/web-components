@@ -18,7 +18,7 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * @memberof Vaadin
        */
-      class DeviceDetector extends (class extends Polymer.Element {}) {
+      class DeviceDetectorElement extends (class extends Polymer.Element {}) {
 
         static get is() {
           return 'vaadin-device-detector';
@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-            /*
+            /**
              * `true`, when running in a phone.
              */
             phone: {
@@ -35,7 +35,7 @@ This program is available under Apache License Version 2.0, available at https:/
               notify: true
             },
 
-            /*
+            /**
              * `true`, when running in a touch device.
              * @default false
              */
@@ -45,7 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
               value: () => this._touch()
             },
 
-            /*
+            /**
              * `true`, when running in a tablet/desktop device.
              */
             wide: {
@@ -69,12 +69,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(DeviceDetector.is, DeviceDetector);
-      /**
-       * @namespace Vaadin
-       */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.DeviceDetector = DeviceDetector;
+      customElements.define(DeviceDetectorElement.is, DeviceDetectorElement);
     })();
   </script>
 </dom-module>
