@@ -180,11 +180,17 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ComboBoxMixin
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class ComboBoxElement extends Vaadin.ElementMixin(Vaadin.ControlStateMixin(Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element)))) {
+      class ComboBoxElement extends
+        Vaadin.ElementMixin(
+          Vaadin.ControlStateMixin(
+            Vaadin.ThemableMixin(
+              Vaadin.ComboBoxMixin(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-combo-box';
