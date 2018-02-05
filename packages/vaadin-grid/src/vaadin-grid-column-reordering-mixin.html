@@ -224,10 +224,22 @@ This program is available under Apache License Version 2.0, available at https:/
       this._reorderGhost.style.transform = `translate(${this._reorderGhost._left}px, ${this._reorderGhost._top}px)`;
     }
 
+    _getInnerText(e) {
+      if (e.localName) {
+        // Custom implementation needed since IE11 doesn't respect the spec in case of hidden elements
+        if (getComputedStyle(e).display === 'none') {
+          return '';
+        } else {
+          return Array.from(e.childNodes).map(n => this._getInnerText(n)).join('');
+        }
+      } else {
+        return e.textContent;
+      }
+    }
+
     _updateGhost(cell) {
       const ghost = this._reorderGhost;
-
-      ghost.textContent = cell._content.innerText;
+      ghost.textContent = this._getInnerText(cell._content);
       const style = window.getComputedStyle(cell);
       ['boxSizing', 'display', 'width', 'height', 'background', 'alignItems', 'padding', 'border', 'flex-direction', 'overflow']
         .forEach(propertyName => ghost.style[propertyName] = style[propertyName]);

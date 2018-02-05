@@ -23,7 +23,7 @@
         <dom-repeat items="[1, 2, 3, 4]" as="col">
           <template is="dom-repeat" items="[1, 2, 3, 4]" as="col">
             <vaadin-grid-column resizable>
-              <template class="header">[[col]]</template>
+              <template class="header"><span hidden>0</span><span>[[col]]</span></template>
               <template>[[col]]</template>
               <template class="footer">[[col]]</template>
             </vaadin-grid-column>
