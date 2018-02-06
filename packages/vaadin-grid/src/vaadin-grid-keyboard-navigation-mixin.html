@@ -124,11 +124,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _ensureScrolledToIndex(index) {
-      const visibleItemsCount = this._lastVisibleIndex - this._firstVisibleIndex - 1;
-      if (index <= this._firstVisibleIndex) {
+      const targetRowInDom = Array.from(this.$.items.children).filter(child => child.index === index)[0];
+      if (!targetRowInDom) {
         this._scrollToIndex(index);
-      } else if (index >= this._firstVisibleIndex + visibleItemsCount) {
-        this._scrollToIndex(index - visibleItemsCount);
       }
     }
 

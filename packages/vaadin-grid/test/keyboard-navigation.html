@@ -1163,6 +1163,14 @@
             expect(grid.shadowRoot.activeElement).to.equal(getContainerCell(grid.$.header, 0, 0));
           });
 
+          it('should not scroll if the new focused item in viewport', () => {
+            focusItem(0);
+            ctrlEnd();
+            const scrollTop = grid.$.table.scrollTop;
+            up();
+            expect(grid.$.table.scrollTop).to.equal(scrollTop);
+          });
+
           describe('rotating focus indicator prevention', () => {
             it('should hide navigation mode when a focused row goes off screen', () => {
               focusItem(0);
