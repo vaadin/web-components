@@ -84,60 +84,78 @@
           "methods": [
             {
               "name": "_addEventListenerToNode",
-              "description": "",
+              "description": "Add the event listener to the node if it is a gestures event.",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
-                  "line": 47,
+                  "line": 55,
                   "column": 6
                 },
                 "end": {
-                  "line": 51,
+                  "line": 59,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "node"
+                  "name": "node",
+                  "type": "!Node",
+                  "description": "Node to add event listener to"
                 },
                 {
-                  "name": "eventName"
+                  "name": "eventName",
+                  "type": "string",
+                  "description": "Name of event"
                 },
                 {
-                  "name": "handler"
+                  "name": "handler",
+                  "type": "function (!Event): void",
+                  "description": "Listener function to add"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Polymer.GestureEventListeners"
             },
             {
               "name": "_removeEventListenerFromNode",
-              "description": "",
+              "description": "Remove the event listener to the node if it is a gestures event.",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
-                  "line": 53,
+                  "line": 69,
                   "column": 6
                 },
                 "end": {
-                  "line": 57,
+                  "line": 73,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "node"
+                  "name": "node",
+                  "type": "!Node",
+                  "description": "Node to remove event listener from"
                 },
                 {
-                  "name": "eventName"
+                  "name": "eventName",
+                  "type": "string",
+                  "description": "Name of event"
                 },
                 {
-                  "name": "handler"
+                  "name": "handler",
+                  "type": "function (!Event): void",
+                  "description": "Listener function to remove"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Polymer.GestureEventListeners"
             },
             {
