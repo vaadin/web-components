@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 102,
+                  "line": 100,
                   "column": 24
                 }
               },
@@ -49,11 +49,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 112,
+                  "line": 110,
                   "column": 8
                 },
                 "end": {
-                  "line": 116,
+                  "line": 114,
                   "column": 9
                 }
               },
@@ -70,11 +70,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 116,
                   "column": 8
                 },
                 "end": {
-                  "line": 126,
+                  "line": 124,
                   "column": 9
                 }
               },
@@ -87,11 +87,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 126,
                   "column": 8
                 },
                 "end": {
-                  "line": 130,
+                  "line": 128,
                   "column": 9
                 }
               },
@@ -108,11 +108,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 132,
+                  "line": 130,
                   "column": 8
                 },
                 "end": {
-                  "line": 141,
+                  "line": 139,
                   "column": 9
                 }
               },
@@ -158,11 +158,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 95,
+              "line": 93,
               "column": 6
             },
             "end": {
-              "line": 180,
+              "line": 178,
               "column": 7
             }
           },
@@ -175,11 +175,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 102,
+                  "line": 100,
                   "column": 24
                 }
               },
@@ -352,7 +352,7 @@
             {
               "name": "files",
               "type": "Array",
-              "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while trasferring data to the server.",
+              "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while transferring data to the server.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -1320,7 +1320,7 @@
             },
             {
               "name": "files",
-              "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while trasferring data to the server.",
+              "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while transferring data to the server.",
               "sourceRange": {
                 "start": {
                   "line": 196,
