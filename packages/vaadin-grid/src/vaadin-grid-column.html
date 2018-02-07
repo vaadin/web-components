@@ -333,10 +333,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._allCells.forEach(cell => this._toggleAttribute('hidden', hidden, cell));
 
-      if (hidden !== undefined && this._grid) {
+      if (!!hidden !== !!this._previousHidden && this._grid) {
         this._grid._updateLastFrozen && this._grid._updateLastFrozen();
         this._grid.notifyResize && this._grid.notifyResize();
       }
+      this._previousHidden = hidden;
     }
 
   };

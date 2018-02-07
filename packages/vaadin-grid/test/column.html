@@ -152,6 +152,21 @@
 
             expect(window.getComputedStyle(getContainerCell(grid.$.footer, 0, 0)).display).to.eql('none');
           });
+
+          it('should notify resize', () => {
+            const spy = sinon.spy(grid, 'notifyResize');
+            column.hidden = true;
+            expect(spy.callCount).to.equal(1);
+            column.hidden = false;
+            expect(spy.callCount).to.equal(2);
+          });
+
+          it('should not notify resize', () => {
+            const spy = sinon.spy(grid, 'notifyResize');
+            expect(column.hidden).to.be.undefined;
+            column.hidden = false;
+            expect(spy.called).to.be.false;
+          });
         });
       });
 
