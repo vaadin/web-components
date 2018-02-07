@@ -47,7 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
         };
 
         // After timeout event is already retargeted to the parent element in case there is one.
-        // So we are assinging the target synchronously on event dispatched.
+        // So we are assigning the target synchronously on event dispatched.
         const t = e.composedPath()[0] || e.target;
 
         this._timerId = setTimeout(() => {
