@@ -8,12 +8,25 @@
         -ms-overflow-style: none;
       }
 
+      [part="content"] {
+        padding: 0;
+      }
+
       [part="content"] vaadin-combo-box-item[focused] {
         background-color: var(--material-divider-color);
       }
 
       [part="content"]:hover vaadin-combo-box-item[focused] {
         background-color: transparent;
+      }
+
+      iron-list {
+        /* TODO using a legacy mixin (unsupported) */
+        --iron-list-items-container: {
+          border-width: 8px 0;
+          border-style: solid;
+          border-color: transparent;
+        }
       }
     </style>
   </template>
