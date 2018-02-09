@@ -122,7 +122,7 @@
         margin-left: var(--lumo-space-m);
       }
 
-      /* Small theme */
+      /* Small */
 
       :host([theme~="small"]),
       :host([theme~="small"]) [part="tabs"] {
@@ -133,10 +133,9 @@
         font-size: var(--lumo-font-size-s);
       }
 
-      /* Minimal and pill themes */
+      /* Minimal */
 
-      :host([theme~="minimal"]),
-      :host([theme~="pill"]) {
+      :host([theme~="minimal"]) {
         box-shadow: none;
         /* This doesn't work with ShadyCSS */
         --_lumo-tab-marker-display: none;
@@ -144,13 +143,12 @@
 
       /* Workaround for the above ShadyCSS issue */
       :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::before,
-      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after,
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
+      :host([theme~="minimal"]) [part="tabs"] ::slotted(vaadin-tab[selected])::after {
         display: none;
       }
 
-      /* No-button theme */
+      /* Hide-scroll-buttons */
+
       :host([theme~="hide-scroll-buttons"]) [part="back-button"],
       :host([theme~="hide-scroll-buttons"]) [part="forward-button"] {
         display: none;
@@ -168,45 +166,10 @@
         --_lumo-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
       }
 
-      /* Pill theme */
-      :host([theme~="pill"]) {
-        display: inline-flex;
-        max-width: 100%;
-        min-height: var(--lumo-size-m);
-      }
+      /* Equal-width tabs */
 
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab) {
-        border: 1px solid transparent;
-        background-color: var(--lumo-contrast-10pct);
-        margin-left: 1px;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
-        padding-left: calc(var(--lumo-border-radius) / 3 + 1em);
-        border-radius: var(--lumo-border-radius) 0 0 var(--lumo-border-radius);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
-        padding-right: calc(var(--lumo-border-radius) / 3 + 1em);
-        border-radius: 0 var(--lumo-border-radius) var(--lumo-border-radius) 0;
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        border: 1px solid var(--lumo-contrast-10pct);
-        background-color: var(--lumo-base-color);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]) {
-        color: var(--lumo-primary-text-color);
-        box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct), -1px 0 0 0 var(--lumo-contrast-10pct);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:first-child) {
-        box-shadow: 1px 0 0 0 var(--lumo-contrast-10pct);
-      }
-
-      :host([theme~="pill"]) [part="tabs"] ::slotted(vaadin-tab[selected]:last-child) {
-        box-shadow: -1px 0 0 0 var(--lumo-contrast-10pct);
+      :host([theme~="equal-width-tabs"]) [part="tabs"] ::slotted(vaadin-tab) {
+        flex: 1;
       }
     </style>
   </template>
