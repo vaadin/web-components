@@ -13,9 +13,10 @@
         font-size: var(--lumo-font-size-m);
         line-height: var(--lumo-line-height-m);
         font-weight: 500;
+        text-align: center;
         opacity: 1;
         color: var(--lumo-contrast-60pct);
-        transition: 0.2s color, 0.2s transform;
+        transition: 0.15s color, 0.2s transform;
         flex-shrink: 0;
         display: flex;
         align-items: center;
@@ -34,10 +35,6 @@
       :host(:hover),
       :host([focus-ring]) {
         color: var(--lumo-body-text-color);
-      }
-
-      :host([focus-ring]) {
-        background-color: transparent;
       }
 
       :host([selected]) {
@@ -92,36 +89,14 @@
       }
 
       :host([selected])::before,
-      :host([selected]:not([active]))::after,
-      :host([focus-ring])::before {
+      :host([selected])::after {
         transform: translateX(-50%) scale(1);
         transition-timing-function: cubic-bezier(.12, .32, .54, 1.5);
       }
 
       :host([orientation="vertical"][selected])::before,
-      :host([orientation="vertical"][selected]:not([active]))::after,
-      :host([orientation="vertical"][focus-ring])::before {
+      :host([orientation="vertical"][selected])::after {
         transform: translateY(50%) scale(1);
-      }
-
-      :host([selected][focus-ring]:not([active]))::before,
-      :host([selected][focus-ring]:not([active]))::after {
-        transform: translateX(-50%) scale(1.2);
-      }
-
-      :host([orientation="vertical"][selected][focus-ring]:not([active]))::before,
-      :host([orientation="vertical"][selected][focus-ring]:not([active]))::after {
-        transform: translateY(50%) scale(1.2);
-      }
-
-      :host([active][focus-ring])::before,
-      :host([active][focus-ring])::after {
-        transform: translateX(-50%) scale(0.9);
-      }
-
-      :host([orientation="vertical"][active][focus-ring])::before,
-      :host([orientation="vertical"][active][focus-ring])::after {
-        transform: translateY(50%) scale(0.9);
       }
 
       :host([selected]:not([active]))::after {
@@ -157,6 +132,13 @@
         pointer-events: none;
         opacity: 1;
         color: var(--lumo-disabled-text-color);
+      }
+
+      /* Focus-ring */
+
+      :host([focus-ring]) {
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+        border-radius: var(--lumo-border-radius);
       }
     </style>
   </template>
