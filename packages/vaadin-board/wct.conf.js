@@ -12,7 +12,7 @@ module.exports = {
         {
           'browserName': 'MicrosoftEdge',
           'platform': 'Windows 10',
-          'version': '14.14393'
+          'version': '16'
         },
         {
           'browserName': 'Internet Explorer',
