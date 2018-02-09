@@ -21,6 +21,18 @@
       </vaadin-tabs>
     </template>
   </test-fixture>
+
+  <test-fixture id="flex-child">
+    <template>
+      <div style="display: flex; width: 400px;">
+        <vaadin-tabs>
+          <vaadin-tab>Foo</vaadin-tab>
+          <vaadin-tab>Bar</vaadin-tab>
+        </vaadin-tabs>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     const safari10 = /Apple.* Version\/(9|10)/.test(navigator.userAgent);
 
@@ -129,5 +141,24 @@
         });
       });
     });
+
+    describe('flex-child', () => {
+      let nav;
+
+      beforeEach(done => {
+        const wrapper = fixture('flex-child');
+        nav = wrapper.querySelector('vaadin-tabs');
+        Polymer.RenderStatus.afterNextRender(nav, () => {
+          nav._observer.flush();
+          done();
+        });
+      });
+
+      it('should have width above zero', () => {
+        expect(nav.offsetWidth).to.be.above(0);
+      });
+
+    });
+
   </script>
 </body>
