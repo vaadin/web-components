@@ -479,6 +479,35 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _hasContent(selected) {
+          if (!selected) {
+            return false;
+          }
+          return Boolean(
+            selected.hasAttribute('label') ?
+              selected.getAttribute('label') :
+              selected.textContent.trim() || selected.children.length
+          );
+        }
+
+        _attachSelectedItem(selected) {
+          if (!selected) {
+            return;
+          }
+          let labelItem;
+          if (selected.hasAttribute('label')) {
+            labelItem = document.createElement('vaadin-item');
+            labelItem.textContent = selected.getAttribute('label');
+            labelItem.selected = true;
+          } else {
+            labelItem = selected.cloneNode(true);
+          }
+
+          labelItem.removeAttribute('tabindex');
+
+          this._valueElement.appendChild(labelItem);
+        }
+
         _updateAriaExpanded(opened, toggleElement) {
           toggleElement && toggleElement.setAttribute('aria-expanded', opened);
         }
@@ -488,24 +517,18 @@ This program is available under Apache License Version 2.0, available at https:/
           this._valueElement.innerHTML = '';
 
           const selected = this._items[this._menuElement.selected];
-          let hasContent;
-          if (selected) {
-            let labelItem;
-            if (selected.hasAttribute('label')) {
-              hasContent = selected.getAttribute('label');
-              labelItem = document.createElement('vaadin-item');
-              labelItem.textContent = hasContent;
-              labelItem.selected = true;
-            } else {
-              hasContent = selected.textContent.trim() || selected.children.length;
-              labelItem = selected.cloneNode(true);
-            }
-            labelItem.removeAttribute('tabindex');
-            this._valueElement.appendChild(labelItem);
-          }
+
+          const hasContent = this._hasContent(selected);
 
           // Toggle visibility of _valueElement vs fallback input with placeholder
           this._valueElement.slot = hasContent ? 'value' : '';
+
+          // Ensure the slot distribution to apply correct style scope for cloned item
+          if (hasContent && window.ShadyDOM) {
+            window.ShadyDOM.flush();
+          }
+
+          this._attachSelectedItem(selected);
 
           if (!this._valueChanging) {
             this._selectedChanging = true;
