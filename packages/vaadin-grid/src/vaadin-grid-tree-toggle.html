@@ -183,7 +183,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const value = Number(level).toString();
         this.style['---level'] = value;
         // Async is to make DOM updates applied before evaluating the style
-        // update, requered for polyfilled RTL support in MSIE and Edge.
+        // update, required for polyfilled RTL support in MSIE and Edge.
         this._debouncerUpdateLevel = Polymer.Debouncer.debounce(
           this._debouncerUpdateLevel,
           Polymer.Async.microTask,
