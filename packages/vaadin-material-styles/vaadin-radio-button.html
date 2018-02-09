@@ -19,7 +19,6 @@
         outline: none;
       }
 
-
       /* This makes the :active style work in IE11 */
       [part="label"] {
         pointer-events: none;
@@ -126,6 +125,7 @@
       :host([disabled][checked]) [part="radio"] {
         border-color: var(--material-disabled-text-color);
       }
+
       :host([disabled][checked]) [part="radio"]::after {
         border-color: var(--material-disabled-text-color);
       }

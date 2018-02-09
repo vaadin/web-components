@@ -4,18 +4,17 @@
 <dom-module id="material-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
     <style include="material-menu-overlay">
+      :host {
+        -ms-overflow-style: none;
+      }
 
-    :host {
-      -ms-overflow-style: none;
-    }
-    
-    [part="content"] vaadin-combo-box-item[focused] {
-      background-color: var(--material-divider-color);
-    }
+      [part="content"] vaadin-combo-box-item[focused] {
+        background-color: var(--material-divider-color);
+      }
 
-    [part="content"]:hover vaadin-combo-box-item[focused] {
-      background-color: transparent;
-    }
+      [part="content"]:hover vaadin-combo-box-item[focused] {
+        background-color: transparent;
+      }
     </style>
   </template>
 </dom-module>
