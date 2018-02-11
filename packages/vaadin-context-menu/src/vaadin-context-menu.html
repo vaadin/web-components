@@ -288,10 +288,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _onOverlayOpened(e) {
           if (e.detail.value === true) {
-            // wait for a microtask before focusing the child element
+            // wait for a timeOut before focusing the child element
             // to allow overlay to position itself correctly first.
             // Otherwise, the browser window will jump scroll.
-            Polymer.Async.microTask.run(() => {
+            Polymer.Async.timeOut.run(() => {
               const child = this.$.overlay.root.querySelector('#content :not(style):not(slot)');
               if (child) {
                 child.focus();
