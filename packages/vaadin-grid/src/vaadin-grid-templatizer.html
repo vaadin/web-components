@@ -121,9 +121,10 @@ This program is available under Apache License Version 2.0, available at https:/
                 });
               }
 
-              if (Array.isArray(this._grid.items)) {
+              const itemPrefix = 'item.';
+              if (Array.isArray(this._grid.items) && prop.indexOf(itemPrefix) === 0) {
                 const itemsIndex = this._grid.items.indexOf(inst.item);
-                const path = prop.slice('item.'.length);
+                const path = prop.slice(itemPrefix.length);
                 this._grid.notifyPath(`items.${itemsIndex}.${path}`, value);
               }
 
