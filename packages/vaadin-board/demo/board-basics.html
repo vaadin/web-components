@@ -1,0 +1,149 @@
+<dom-module id="board-basics">
+  <template>
+    <style>
+        :host {
+          display: block;
+          --vaadin-board-width-medium: 700px;
+          --vaadin-board-width-small: 375px;
+        }
+    </style>
+
+
+    <h3>Automatic responsive layout</h3>
+    <vaadin-demo-snippet id='board-basics-layout'>
+      <template preserve-content>
+        <vaadin-board>
+          <vaadin-board-row>
+            <div class="cell1">This could be chart 1</div>
+            <div class="cell2">This could be chart 2</div>
+            <div class="cell3">This could be chart 3</div>
+            <div class="cell4">This could be chart 4</div>
+          </vaadin-board-row>
+        </vaadin-board>
+
+
+        <!-- Optional, only for visualization purposes -->
+        <style>
+          .cell1,
+          .cell2,
+          .cell3,
+          .cell4 {
+            padding: 1em;
+            text-align: center;
+            color: white;
+          }
+          .cell1 { background: #003E53; }
+          .cell2 { background: #00506B; }
+          .cell3 { background: #006C90; }
+          .cell4 { background: #0090C0; }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Multiple rows and up to four columns supported</h3>
+    <vaadin-demo-snippet id='board-basics-rows-and-columns'>
+      <template preserve-content>
+        <vaadin-board>
+          <vaadin-board-row>
+            <div class="cell1">Cell 1</div>
+            <div class="cell2">Cell 2</div>
+            <div class="cell3">Cell 3</div>
+            <div class="cell4">Cell 4</div>
+          </vaadin-board-row>
+          <vaadin-board-row>
+            <div class="cell5">Cell 5</div>
+            <div class="cell6">Cell 6</div>
+            <div class="cell7">Cell 7</div>
+          </vaadin-board-row>
+          <vaadin-board-row>
+            <div class="cell8">Cell 8</div>
+            <div class="cell9">Cell 9</div>
+          </vaadin-board-row>
+          <vaadin-board-row>
+            <div class="cell10">Cell 10</div>
+          </vaadin-board-row>
+        </vaadin-board>
+
+
+        <!-- Optional, only for visualization purposes -->
+        <style>
+          .cell1,
+          .cell2,
+          .cell3,
+          .cell4,
+          .cell5,
+          .cell6,
+          .cell7,
+          .cell8,
+          .cell9,
+          .cell10 {
+            padding: 1em;
+            text-align: center;
+          }
+          .cell1 { background: #003E53; }
+          .cell2 { background: #00506B; }
+          .cell3 { background: #006C90; }
+          .cell4 { background: #0090C0; }
+          .cell5 { background: #00B4F0; }
+          .cell6 { background: #33C3F3; }
+          .cell7 { background: #66D2F6; }
+          .cell8 { background: #99E1F9; }
+          .cell9 { background: #CCF0FC; }
+          .cell10 { background: #E5F7FD; }
+
+          .cell1,
+          .cell2,
+          .cell3,
+          .cell4,
+          .cell5 {
+            color: white;
+          }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Spanning multiple slots</h3>
+    <vaadin-demo-snippet id='board-basics-spanning'>
+      <template preserve-content>
+        <vaadin-board>
+          <vaadin-board-row>
+            <div class="cell1" board-cols="2">This could be big chart 1</div>
+            <div class="cell2">This could be chart 2</div>
+          </vaadin-board-row>
+          <vaadin-board-row>
+            <div class="cell3">This could be chart 3</div>
+            <div class="cell4" board-cols="2">This could be big chart 4</div>
+          </vaadin-board-row>
+        </vaadin-board>
+
+
+        <!-- Optional, only for visualization purposes -->
+        <style>
+          .cell1,
+          .cell2,
+          .cell3,
+          .cell4 {
+            padding: 1em;
+            text-align: center;
+            color: white;
+          }
+          .cell1 { background: #003E53; }
+          .cell2 { background: #00506B; }
+          .cell3 { background: #006C90; }
+          .cell4 { background: #0090C0; }
+        </style>
+      </template>
+    </vaadin-demo-snippet>
+
+  </div>
+  </template>
+  <script>
+    class BoardBasics extends DemoReadyEventEmitter(BoardDemo(Polymer.Element)) {
+      static get is() {
+        return 'board-basics';
+      }
+    }
+    customElements.define(BoardBasics.is, BoardBasics);
+  </script>
+</dom-module>

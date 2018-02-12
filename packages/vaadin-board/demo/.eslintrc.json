@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "no-console": 0,
+    "no-global-assign": 0
+  },
+  "globals": {
+    "BoardDemo": false,
+    "DemoReadyEventEmitter":false
+  }
+}

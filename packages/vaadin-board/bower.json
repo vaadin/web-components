@@ -13,7 +13,10 @@
     "app-layout": "PolymerElements/app-layout#v2.0.0",
     "web-component-tester": "^6.1.5",
     "webcomponentsjs": "^1.0.0",
-    "test-fixture": "^3.0.0-rc.1"
+    "test-fixture": "^3.0.0-rc.1",
+    "vaadin-demo-helpers": "^1.2.3",
+    "iron-icon": "^2.0.1",
+    "vaadin-lumo-styles": "^1.0.0-beta1"
   },
   "resolutions": {
     "test-fixture": "^3.0.0-rc.1",

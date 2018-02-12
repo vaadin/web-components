@@ -1,39 +1,28 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <title>Vaadin Board Examples</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-    <title>vaadin-board demo</title>
+  <custom-style>
+    <style include="vaadin-component-demo-shared-styles"></style>
+</custom-style>
+</head>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+<body>
+  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
+  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
 
-    <link rel="import" href="../vaadin-board.html">
-    <link rel="stylesheet" type="text/css" href="style.css">
-  </head>
-  <body unresolved>
-    <div class="vertical-section-container centered">
-      <h3>Basic vaadin-board demo</h3>
-      <vaadin-board>
-        <vaadin-board-row>
-          <div class="top a">top A</div>
-          <div class="top b">top B</div>
-          <div class="top c">top C</div>
-          <div class="top d">top D</div>
-        </vaadin-board-row>
-        <vaadin-board-row>
-          <div class="mid">mid</div>
-        </vaadin-board-row>
-        <vaadin-board-row>
-          <div class="low a">low A</div>
-          <vaadin-board-row>
-            <div class="top a">low B / A</div>
-            <div class="top b">low B / B</div>
-            <div class="top c">low B / C</div>
-            <div class="top d">low B / D</div>
-          </vaadin-board-row>
-        </vaadin-board-row>
-      </vaadin-board>
-    </div>
-  </body>
+  <link rel="import" href="board-demo.html">
+
+  <link rel="import" href="../vaadin-board.html">
+  <link rel="import" href="../../iron-icon/iron-icon.html">
+  <link rel="import" href="../../vaadin-lumo-styles/icons.html">
+
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
+</body>
 </html>
