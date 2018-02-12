@@ -126,7 +126,7 @@
 
     <!--
       Note: use <nice-demo-snippet> for this example. The original
-      <vaadin-demo-snippet id='form-layout-basic-demos-single-column'> makes JSON attribute values unreadible.
+      <vaadin-demo-snippet id='form-layout-basic-demos-single-column'> makes JSON attribute values unreadable.
     -->
     <nice-demo-snippet>
       <script type="text/html" slot="source">
@@ -327,12 +327,9 @@
         </dom-module>
         <script>
           window.addDemoReadyListener('#form-layout-basic-demos-custom-css-properties', function(document) {
-            class MyFormElement extends Polymer.Element {
-              static get is() {
-                return 'my-form';
-              }
-            }
-            customElements.define(MyFormElement.is, MyFormElement);
+            Polymer({
+              is: 'my-form'
+            });
           });
         </script>
         <my-form></my-form>
