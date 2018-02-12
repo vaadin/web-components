@@ -23,7 +23,7 @@
       /* Strange gymnastics to make fields vertically align nicely in most cases
          (no label, with label, without prefix, with prefix, etc.) */
 
-      :host([label]) {
+      :host([has-label]) {
         vertical-align: 22px;
         margin-top: 16px;
       }
@@ -37,7 +37,7 @@
         position: absolute;
       }
 
-      :host(:not([label])) {
+      :host(:not([has-label])) {
         vertical-align: 22px;
         /* vertical-align: 21px; */
       }
@@ -167,23 +167,23 @@
         opacity: 1;
       }
 
-      :host([label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-webkit-input-placeholder {
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-webkit-input-placeholder {
         opacity: 0;
         transition-delay: 0;
       }
 
-      :host([label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-moz-placeholder {
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-moz-placeholder {
         opacity: 0;
         transition-delay: 0;
       }
 
-      :host([label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::placeholder {
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::placeholder {
         opacity: 0;
         transition-delay: 0;
       }
 
       /* IE11 doesn’t show the placeholder when the input is focused, so it’s basically useless for this theme */
-      :host([label]) [part="value"]:-ms-input-placeholder {
+      :host([has-label]) [part="value"]:-ms-input-placeholder {
         opacity: 0;
       }
 
@@ -263,7 +263,7 @@
       }
 
       /* Only target the visible floating label */
-      :host([label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
+      :host([has-label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
         /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
         transform: scale(1) translateY(25px);
         transition-timing-function: ease, ease, step-start;
