@@ -158,6 +158,11 @@
         expect(nav.offsetWidth).to.be.above(0);
       });
 
+      it('should not scroll', () => {
+        // Edge & IE11 apply roundings to the metrics, need to assert by 1px
+        expect(nav.$.scroll.scrollWidth).to.be.closeTo(nav.$.scroll.offsetWidth, 1);
+      });
+
     });
 
   </script>
