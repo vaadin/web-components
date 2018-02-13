@@ -162,9 +162,11 @@
       });
 
       describe('inside a parent scope', () => {
+        let xGrid;
 
         beforeEach(() => {
-          grid = fixture('with-scope').$.grid;
+          xGrid = fixture('with-scope');
+          grid = xGrid.$.grid;
           grid.items = ['foo', 'bar', 'baz'];
           flushGrid(grid);
           bodyRows = getRows(grid.$.items);
@@ -181,6 +183,13 @@
           const secondRowCells = getRowCells(bodyRows[1]);
           expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
           expect(getCellContent(secondRowCells[1]).textContent.trim()).to.equal('1-details');
+        });
+
+        it('should change the details template', () => {
+          grid.openItemDetails('foo');
+          xGrid.innerHTML = '<template class="row-details">[[item]]-bar</template>';
+          flushGrid(grid);
+          expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo-bar');
         });
       });
 

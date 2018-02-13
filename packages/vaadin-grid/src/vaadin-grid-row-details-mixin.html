@@ -49,8 +49,14 @@ This program is available under Apache License Version 2.0, available at https:/
         templatizer.template = rowDetailsTemplate;
         rowDetailsTemplate.templatizer = templatizer;
 
-        // Ensure the rows have a row details cell
-        Array.from(this.$.items.children).forEach(row => this._updateRow(row, this._columnTree[this._columnTree.length - 1]));
+
+        Array.from(this.$.items.children).forEach(row => {
+          // Ensure the rows have a row details cell
+          this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+          // Clear any old template instances
+          delete row.querySelector('[part~=details-cell]')._instance;
+        });
+        this._update();
       }
     }
 
