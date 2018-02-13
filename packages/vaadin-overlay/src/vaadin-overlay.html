@@ -454,11 +454,22 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.content.appendChild(content);
       }
 
+      _isFocused(element) {
+        return element && element.getRootNode().activeElement === element;
+      }
+
       _cycleTab(increment, index) {
         if (!this.focusTrap) {
           return;
         }
         const focusableElements = this._getFocusableElements();
+
+        if (!this._isFocused(this._focusedElement)) {
+          this._focusedElement = focusableElements.reduce((prev, e) => {
+            return !prev && e.getRootNode().activeElement === e ? e : prev;
+          }, undefined);
+        }
+
         index = index || focusableElements.indexOf(this._focusedElement);
 
         // search for visible elements and select the next possible match
@@ -507,3 +518,4 @@ This program is available under Apache License Version 2.0, available at https:/
     Vaadin.OverlayElement = OverlayElement;
   })();
 </script>
+
