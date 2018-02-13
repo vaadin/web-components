@@ -29,7 +29,7 @@
   <dom-module id="x-grid">
     <template>
       <vaadin-grid id="grid" style="width: 50px; height: 400px;">
-        <template class="row-details"><span>[[index]]</span>-details</template>
+        <slot></slot>
         <vaadin-grid-column>
           <template>[[index]]</template>
         </vaadin-grid-column>
@@ -46,7 +46,9 @@
 
   <test-fixture id="with-scope">
     <template>
-      <x-grid></x-grid>
+      <x-grid>
+        <template class="row-details"><span>[[index]]</span>-details</template>
+      </x-grid>
     </template>
   </test-fixture>
 
