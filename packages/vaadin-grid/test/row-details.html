@@ -29,7 +29,7 @@
   <dom-module id="x-grid">
     <template>
       <vaadin-grid id="grid" style="width: 50px; height: 400px;">
-        <slot></slot>
+        <template class="row-details"><span>[[index]]</span>-details</template>
         <vaadin-grid-column>
           <template>[[index]]</template>
         </vaadin-grid-column>
@@ -46,9 +46,33 @@
 
   <test-fixture id="with-scope">
     <template>
-      <x-grid>
+      <x-grid></x-grid>
+    </template>
+  </test-fixture>
+
+  <dom-module id="slotted-grid">
+    <template>
+      <vaadin-grid id="grid" style="width: 50px; height: 400px;">
+        <slot></slot>
+        <vaadin-grid-column>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      HTMLImports.whenReady(() => {
+        Polymer({
+          is: 'slotted-grid'
+        });
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="slotted-template">
+    <template>
+      <slotted-grid>
         <template class="row-details"><span>[[index]]</span>-details</template>
-      </x-grid>
+      </slotted-grid>
     </template>
   </test-fixture>
 
@@ -162,11 +186,9 @@
       });
 
       describe('inside a parent scope', () => {
-        let xGrid;
 
         beforeEach(() => {
-          xGrid = fixture('with-scope');
-          grid = xGrid.$.grid;
+          grid = fixture('with-scope').$.grid;
           grid.items = ['foo', 'bar', 'baz'];
           flushGrid(grid);
           bodyRows = getRows(grid.$.items);
@@ -184,10 +206,33 @@
           expect(getCellContent(firstRowCells[1]).textContent.trim()).to.equal('0-details');
           expect(getCellContent(secondRowCells[1]).textContent.trim()).to.equal('1-details');
         });
+      });
+
+      describe('slotted template', () => {
+        let slottedGrid;
+
+        beforeEach(() => {
+          slottedGrid = fixture('slotted-template');
+          grid = slottedGrid.$.grid;
+          grid.items = ['foo', 'bar', 'baz'];
+          flushGrid(grid);
+          bodyRows = getRows(grid.$.items);
+        });
+
+        it('should support slotted details templates', () => {
+          grid.openItemDetails('foo');
+          expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('0-details');
+        });
 
         it('should change the details template', () => {
           grid.openItemDetails('foo');
-          xGrid.innerHTML = '<template class="row-details">[[item]]-bar</template>';
+
+          const newTemplate = document.createElement('template');
+          newTemplate.classList.add('row-details');
+          newTemplate.innerHTML = '[[item]]-bar';
+
+          slottedGrid.innerHTML = '';
+          slottedGrid.appendChild(newTemplate);
           flushGrid(grid);
           expect(getBodyCellContent(grid, 0, 1).textContent.trim()).to.equal('foo-bar');
         });
