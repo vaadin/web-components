@@ -26,6 +26,11 @@
         --_lumo-item-selected-icon-display: none;
       }
 
+      /* ShadyCSS workaround (to hide the selected item checkmark) */
+      :host vaadin-list-box vaadin-item::before {
+        display: none;
+      }
+
       :host vaadin-list-box vaadin-item {
         padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
       }
