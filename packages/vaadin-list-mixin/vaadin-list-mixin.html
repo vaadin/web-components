@@ -94,6 +94,10 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _onClick(event) {
+      if (event.metaKey || event.shiftKey || event.ctrlKey) {
+        return;
+      }
+
       const item = this._filterItems(event.composedPath())[0];
       let idx;
       if (item && !item.disabled && ((idx = this.items.indexOf(item)) >= 0)) {
