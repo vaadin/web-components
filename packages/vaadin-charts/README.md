@@ -15,7 +15,7 @@
 
 ### Install Vaadin Charts
 ```
-$ bower install --save vaadin-charts#6.0.0-alpha14
+$ bower install --save vaadin-charts#6.0.0-alpha15
 ```
 
 ### Import Vaadin Charts
@@ -34,7 +34,7 @@ Create your first Vaadin Chart
 ```
 
 ### Install License Key
-After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key. 
+After one day using Vaadin Charts in a development environment you will see a pop-up that asks you to enter the license key.
 You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
 If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again.
 
