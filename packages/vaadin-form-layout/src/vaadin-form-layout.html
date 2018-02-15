@@ -311,7 +311,8 @@ This program is available under Apache License Version 2.0, available at https:/
             return true;
           }
 
-          return this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing') !== '';
+          // Safari 9 sets invalid CSS rules' value to `null`
+          return ['', null].indexOf(this._styleElement.sheet.cssRules[0].style.getPropertyValue('word-spacing')) < 0;
         }
 
         _responsiveStepsChanged(responsiveSteps, oldResponsiveSteps) {
