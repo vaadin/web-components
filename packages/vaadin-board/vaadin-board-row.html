@@ -49,6 +49,7 @@
           this._LARGE_VIEWPORT_CLASSNAME = "large";
 
           this._oldWidth = 0;
+          this._oldBreakpoints = {'smallSize': 600, 'mediumSize': 960};
           this._oldFlexBasis = [];
         }
         ready() {
@@ -182,7 +183,10 @@
 
         _recalculateFlexBasis(forceResize) {
           const width = this.getBoundingClientRect().width;
-          if (forceResize || width != this._oldWidth) {
+          const breakpoints = this._measureBreakpointsInPx();
+          if (forceResize || width != this._oldWidth
+              || breakpoints.smallSize != this._oldBreakpoints.smallSize
+              || breakpoints.mediumSize != this._oldBreakpoints.mediumSize) {
             const nodes = this.$.insertionPoint.assignedNodes({ flatten: true });
             const isElementNode = function (node) {
               return !((node.nodeType === node.TEXT_NODE)
@@ -190,7 +194,6 @@
                 || (node instanceof Polymer.DomIf));
             }
             const filteredNodes = nodes.filter(isElementNode);
-            const breakpoints = this._measureBreakpointsInPx();
             this._addStyleNames(width, breakpoints);
             const boardCols = this._parseBoardCols(filteredNodes);
             const colsInRow = boardCols.reduce((a, b) => a + b, 0);
@@ -202,6 +205,7 @@
               }
             });
             this._oldWidth = width;
+            this._oldBreakpoints = breakpoints;
           }
         }
 
