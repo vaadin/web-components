@@ -68,16 +68,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _addNodeObserver() {
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+
         if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
           info.removedNodes.filter(this._isColumnElement).length > 0) {
           this._updateColumnTree();
         }
 
-        // in native Shadow, tab order goes first through shadow root, then moves over
-        // to light children. We need to make sure footer focus trap is always
-        // the very last element that can be tabbed into.
-        if (Polymer.Settings.useNativeShadow || Polymer.Settings.useShadow) {
-          // Polymer.dom(this).appendChild(this.$.footerFocusTrap);
+        const rowDetailsTemplate = info.addedNodes.filter(n => n.localName === 'template' && n.classList.contains('row-details'))[0];
+        if (rowDetailsTemplate && this._rowDetailsTemplate !== rowDetailsTemplate) {
+          this._rowDetailsTemplate = rowDetailsTemplate;
         }
 
         this._debouncerCheckImports = Polymer.Debouncer.debounce(
