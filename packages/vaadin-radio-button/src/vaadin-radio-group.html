@@ -147,13 +147,20 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _selectButton(element, setFocusRing) {
-          if (this.contains(this.getRootNode().activeElement)) {
+          if (this._containsFocus()) {
             element.focus();
             if (setFocusRing) {
               element.setAttribute('focus-ring', '');
             }
           }
           this._changeSelectedButton(element);
+        }
+
+        _containsFocus() {
+          const root = this.getRootNode();
+          // Safari 9 needs polyfilled `_activeElement` to return correct node
+          const activeElement = root._activeElement !== undefined ? root._activeElement : root.activeElement;
+          return this.contains(activeElement);
         }
 
         _hasEnabledButtons() {
