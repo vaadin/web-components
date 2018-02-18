@@ -37,11 +37,6 @@
           flex: none;
         }
 
-        vaadin-button iron-icon[icon^="vaadin:"] {
-          width: 1em;
-          height: 1em;
-        }
-
         .large-icon {
           width: var(--lumo-icon-size-l);
           height: var(--lumo-icon-size-l);
@@ -90,7 +85,9 @@
           <vaadin-text-area label="Label" placeholder="Placeholder" colspan="2">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-area>
-          <vaadin-combo-box label="Label" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]' allow-custom-value></vaadin-combo-box>
+          <vaadin-combo-box label="Label" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]' allow-custom-value>
+            <iron-icon icon="vaadin:clock" slot="prefix"></iron-icon>
+          </vaadin-combo-box>
           <vaadin-form-item style="align-self: flex-start;">
             <label slot="label">Options</label>
             <div>
@@ -119,9 +116,9 @@
         <vaadin-horizontal-layout theme="padding spacing" style="flex: none; box-sizing: border-box;">
           <vaadin-vertical-layout>
             <vaadin-tabs style="align-self: stretch;">
-              <vaadin-tab>Dashboard</vaadin-tab>
-              <vaadin-tab>Reports</vaadin-tab>
-              <vaadin-tab>Settings</vaadin-tab>
+              <vaadin-tab><iron-icon icon="lumo:search"></iron-icon> Dashboard</vaadin-tab>
+              <vaadin-tab><iron-icon icon="vaadin:calendar"></iron-icon> Reports</vaadin-tab>
+              <vaadin-tab><iron-icon icon="lumo:cog"></iron-icon> Settings</vaadin-tab>
             </vaadin-tabs>
             <h5>Header 5</h5>
             <p theme="font-size-s">Small text lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
