@@ -37,7 +37,6 @@
         width: 2rem;
         height: 2rem;
         margin: 0.25rem;
-        background-color: var(--lumo-base-color);
         color: var(--lumo-secondary-text-color);
         background-clip: content-box;
         position: relative;
@@ -219,8 +218,8 @@
 
     <script>
       document.addEventListener('WebComponentsReady', function() {
-        let iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'lumo');
-        let lumoIcons = iconsets[0].getIconNames().map((name) => name.split(':')[1]);
+        const iconsets = new Polymer.IronMeta({type: 'iconset'}).list.filter(i => i.name == 'lumo');
+        const lumoIcons = iconsets[0].getIconNames().map((name) => name.split(':')[1]);
         document.querySelector('#lumo-icons').items = lumoIcons;
       });
     </script>
@@ -268,7 +267,7 @@
           iron-icon.l {
             --iron-icon-width: var(--lumo-icon-size-l);
             --iron-icon-height: var(--lumo-icon-size-l);
-            margin: 0.75em 0.5em 0.75em 0.25em
+            margin: 0.75em 0.5em 0.75em 0.25em;
           }
 
           h4 {
