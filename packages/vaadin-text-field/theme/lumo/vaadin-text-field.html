@@ -15,6 +15,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-tap-highlight-color: transparent;
+        padding: var(--lumo-space-xs) 0;
       }
 
       :host::before {
@@ -22,8 +23,6 @@
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
-        /* input-field margin-top */
-        margin-top: var(--lumo-space-xs);
       }
 
       [part="label"] {
@@ -34,7 +33,7 @@
         margin-left: calc(var(--lumo-border-radius) / 4);
         transition: color 0.2s;
         line-height: 1;
-        height: calc(var(--lumo-font-size-s) + var(--lumo-space-xs));
+        margin-bottom: 0.5em;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -44,12 +43,12 @@
       }
 
       :host([has-label])::before {
-        /* Label height + input-field margin-top */
-        margin-top: calc(var(--lumo-font-size-s) + var(--lumo-space-xs) * 2);
+        /* Label height + margin */
+        margin-top: calc(var(--lumo-font-size-s) * 1.5);
       }
 
       :host([has-label]) {
-        margin-top: var(--lumo-space-m);
+        padding-top: var(--lumo-space-m);
       }
 
       :host([focused]:not([readonly])) [part="label"] {
@@ -121,7 +120,6 @@
       }
 
       [part="input-field"] {
-        margin: var(--lumo-space-xs) 0;
         border-radius: var(--lumo-border-radius);
         background-color: var(--lumo-contrast-10pct);
         padding: 0 calc(0.375em + var(--lumo-border-radius) / 4 - 1px);
@@ -275,10 +273,11 @@
       }
 
       /* Margin that doesn’t reserve space when there’s no error message */
+      [part="error-message"]:not(:empty)::before,
       [part="error-message"]:not(:empty)::after {
         content: "";
         display: block;
-        height: var(--lumo-space-s);
+        height: 0.4em;
       }
 
       :host(:not([invalid])) [part="error-message"] {
@@ -336,11 +335,9 @@
       }
 
       /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
-
       [part="input-field"] ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: calc(var(--lumo-icon-size-m) - 0.5em);
-        height: calc(var(--lumo-icon-size-m) - 0.5em);
         padding: 0.25em;
+        box-sizing: border-box !important;
       }
     </style>
   </template>
