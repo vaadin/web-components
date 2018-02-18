@@ -3,22 +3,33 @@
 <link rel="import" href="../../../vaadin-lumo-styles/style.html">
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 
-<link rel="import" href="../../../vaadin-lumo-styles/mixins/overlay.html">
-
 <dom-module id="lumo-notification-card" theme-for="vaadin-notification-card">
   <template>
-    <style include="lumo-overlay">
+    <style>
       :host {
         position: relative;
         margin: var(--lumo-space-s);
       }
 
       [part="overlay"] {
-        background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+        background-color: var(--lumo-shade-90pct);
+        border-radius: var(--lumo-border-radius);
+        box-shadow: var(--lumo-box-shadow-l);
+        color: var(--lumo-tint-90pct);
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        font-weight: 400;
+        line-height: var(--lumo-line-height-m);
+        letter-spacing: 0;
+        text-transform: none;
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-backdrop-filter: blur(2px);
       }
 
       [part="content"] {
-        padding: var(--lumo-space-wide-m);
+        padding: var(--lumo-space-wide-l);
       }
 
       :host([slot^="middle"]) {
