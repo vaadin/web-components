@@ -42,6 +42,10 @@
         cursor: default;
       }
 
+      [part="input-field"] ::slotted([part="value"]) {
+        display: flex;
+      }
+
       /* ShadyCSS limitation workaround */
       [part="input-field"] ::slotted([part="value"]) [selected]::before {
         display: none;
