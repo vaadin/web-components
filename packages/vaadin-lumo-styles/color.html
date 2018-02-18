@@ -155,8 +155,8 @@
         background-color: var(--lumo-base-color);
       }
 
-      /* Can’t combine with the above selector because that doesn’t work in browsers without native shadow dom */
-      :host {
+      /* Limit setting the background color to certain elements only */
+      [theme~="dark"] {
         color: var(--lumo-body-text-color);
         background-color: var(--lumo-base-color);
       }
@@ -173,17 +173,17 @@
       a {
         color: var(--lumo-primary-text-color);
       }
+    </style>
+  </template>
+</dom-module>
 
-      /* Limit setting the background color to certain elements only */
-      body[theme~="dark"],
-      div[theme~="dark"],
-      section[theme~="dark"],
-      main[theme~="dark"],
-      header[theme~="dark"],
-      footer[theme~="dark"],
-      nav[theme~="dark"] {
-        color: var(--lumo-body-text-color);
-        background-color: var(--lumo-base-color);
+<!-- Only needed for IE11 when you want to use the dark palette inside the light palette -->
+<dom-module id="lumo-color-legacy">
+  <template>
+    <style include="lumo-color">
+      :host {
+        color: var(--lumo-body-text-color) !important;
+        background-color: var(--lumo-base-color) !important;
       }
     </style>
   </template>
