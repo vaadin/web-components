@@ -41,6 +41,7 @@ gulp.task('lint:css', function() {
   return gulp.src([
     '*.html',
     'demo/**/*.html',
+    'mixins/**/*.html',
     'test/**/*.html'
   ])
   .pipe(htmlExtract({
