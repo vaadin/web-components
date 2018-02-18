@@ -106,6 +106,14 @@
 
       :host ::slotted(iron-icon) {
         margin: 0 4px;
+        width: var(--lumo-icon-size-m);
+        height: var(--lumo-icon-size-m);
+      }
+
+      /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
+      :host ::slotted(iron-icon[icon^="vaadin:"]) {
+        padding: 0.25em;
+        box-sizing: border-box !important;
       }
 
       :host ::slotted(iron-icon:first-child) {
