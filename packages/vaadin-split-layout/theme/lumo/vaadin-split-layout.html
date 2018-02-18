@@ -6,35 +6,35 @@
 <dom-module id="lumo-split-layout" theme-for="vaadin-split-layout">
   <template>
     <style>
-      :host {
-        --lumo-split-layout-size: var(--lumo-space-s);
-      }
-
       [part="splitter"] {
-        min-width: var(--lumo-split-layout-size);
-        min-height: var(--lumo-split-layout-size);
+        min-width: var(--lumo-space-s);
+        min-height: var(--lumo-space-s);
         background-color: var(--lumo-contrast-5pct);
         transition: 0.1s background-color;
       }
 
       [part="handle"] {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: var(--lumo-size-m);
+        height: var(--lumo-size-m);
       }
 
       [part="handle"]::after {
         content: "";
-        display: block;
-        width: var(--lumo-space-xs);
-        height: var(--lumo-size-s);
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 45%;
+        right: 45%;
         border-radius: var(--lumo-border-radius);
         background-color: var(--lumo-contrast-30pct);
-        transition: 0.1s background-color;
+        transition: 0.1s all;
       }
 
       :host([orientation="vertical"]) [part="handle"]::after {
-        transform: rotate(90deg);
+        left: 0;
+        right: 0;
+        top: 45%;
+        bottom: 45%;
       }
 
       /* Hover style */
@@ -56,20 +56,40 @@
         background-color: var(--lumo-contrast-50pct);
       }
 
-      /* Small style */
+      /* Small/minimal */
 
-      :host([theme~="small"]) {
-        --lumo-split-layout-size: var(--lumo-space-xs);
+      :host([theme~="small"]) > [part="splitter"] {
+        min-width: 1px;
+        min-height: 1px;
+        background-color: var(--lumo-contrast-10pct);
       }
 
-      :host([theme~="small"]) [part="handle"]::after {
-        width: calc(var(--lumo-space-xs) / 2);
-      }
-
-      /* Subtle style */
-
-      :host([theme~="subtle"]) [part="splitter"] {
+      :host([theme~="minimal"]) > [part="splitter"] {
+        min-width: 0;
+        min-height: 0;
         background-color: transparent;
+      }
+
+      :host([theme~="small"]) > [part="splitter"]::after,
+      :host([theme~="minimal"]) > [part="splitter"]::after {
+        content: "";
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        bottom: -4px;
+        left: -4px;
+      }
+
+      :host([theme~="small"]) > [part="splitter"] > [part="handle"]::after,
+      :host([theme~="minimal"]) > [part="splitter"] > [part="handle"]::after {
+        opacity: 0;
+      }
+
+      :host([theme~="small"]) > [part="splitter"]:hover > [part="handle"]::after,
+      :host([theme~="small"]) > [part="splitter"]:active > [part="handle"]::after,
+      :host([theme~="minimal"]) > [part="splitter"]:hover > [part="handle"]::after,
+      :host([theme~="minimal"]) > [part="splitter"]:active > [part="handle"]::after {
+        opacity: 1;
       }
     </style>
   </template>
