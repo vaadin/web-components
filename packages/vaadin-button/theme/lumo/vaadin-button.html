@@ -246,9 +246,8 @@
 
       /* Vaadin icons are based on a 16x16 grid (unlike Lumo and Material icons with 24x24), so they look too big by default */
       :host ::slotted(iron-icon[icon^="vaadin:"]) {
-        width: calc(var(--lumo-icon-size-m) - 0.5em);
-        height: calc(var(--lumo-icon-size-m) - 0.5em);
         padding: 0.25em;
+        box-sizing: border-box !important;
       }
 
       [part="prefix"] {
