@@ -82,6 +82,7 @@
         content: "";
         /* We rely on the host always being relative */
         position: absolute;
+        z-index: 1;
         top: 0;
         right: 0;
         bottom: 0;
@@ -102,7 +103,7 @@
 
       /* Disable for touch devices */
       @media (pointer: coarse) {
-        :host(:hover)::before {
+        :host(:not([active]):hover)::before {
           opacity: 0;
         }
       }
@@ -193,6 +194,16 @@
 
       :host([theme~="primary"][active])::before {
         background-color: var(--lumo-shade-20pct);
+      }
+
+      @media (pointer: coarse) {
+        :host([theme~="primary"][active])::before {
+          background-color: var(--lumo-shade-60pct);
+        }
+
+        :host([theme~="primary"]:not([active]):hover)::before {
+          opacity: 0;
+        }
       }
 
       :host([theme~="primary"][active])::after {
