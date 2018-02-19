@@ -692,7 +692,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (resetConfiguration || !this._jsonConfigurationBuffer) {
             this._jsonConfigurationBuffer = {};
           }
-          this._jsonConfigurationBuffer = Object.assign(this._jsonConfigurationBuffer, jsonConfiguration);
+          this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, jsonConfiguration);
 
           Polymer.RenderStatus.beforeNextRender(this, () => {
 
@@ -726,6 +726,34 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
             this._jsonConfigurationBuffer = null;
           });
+        }
+
+        __makeConfigurationBuffer(target, source) {
+          const _source = Highcharts.merge(source);
+          const _target = Highcharts.merge(target);
+
+          this.__mergeConfigurationArray(_target, _source, 'series');
+          this.__mergeConfigurationArray(_target, _source, 'xAxis');
+          this.__mergeConfigurationArray(_target, _source, 'yAxis');
+
+          return Highcharts.merge(_target, _source);
+        }
+
+        __mergeConfigurationArray(target, configuration, entry) {
+          if (!configuration || !configuration[entry] || !Array.isArray(configuration[entry])) {
+            return;
+          }
+
+          if (!target[entry]) {
+            target[entry] = Array.from(configuration[entry]);
+            return;
+          }
+
+          const maxLength = Math.max(target[entry].length, configuration[entry].length);
+          for (let i = 0; i < maxLength; i++) {
+            target[entry][i] = Highcharts.merge(target[entry][i], configuration[entry][i]);
+          }
+          delete configuration[entry];
         }
 
         __inflateFunctions(jsonConfiguration) {

@@ -25,7 +25,8 @@
       'js-api-chart-test.html',
       'js-json-api-chart-test.html',
       'js-private-api-chart-test.html',
-      'style-test.html'
+      'style-test.html',
+      'element-json-merge-test.html'
     ].reduce(function(suites, suite) {
       return suites.concat([suite, `${suite}?wc-shadydom=true`]);
     }, []));
