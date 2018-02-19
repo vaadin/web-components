@@ -43,6 +43,20 @@ This program is available under Apache License Version 2.0, available at https:/
         outline: none;
       }
 
+      :host([layout-fit]) {
+        height: auto;
+      }
+
+      :host([layout-fit]) #scroller {
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+      }
+
       /* Avoid jumpy headers on Edge & IE */
       [wheel-scrolling][edge] #table,
       [wheel-scrolling][ie] #table {

@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-grid.html",
         "start": {
-          "line": 638,
+          "line": 654,
           "column": 4
         },
         "end": {
-          "line": 638,
+          "line": 654,
           "column": 44
         }
       },
@@ -190,7 +190,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 137,
+                  "line": 138,
                   "column": 7
                 }
               },
@@ -203,11 +203,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 140,
                   "column": 6
                 },
                 "end": {
-                  "line": 142,
+                  "line": 143,
                   "column": 7
                 }
               },
@@ -227,11 +227,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 145,
                   "column": 6
                 },
                 "end": {
-                  "line": 162,
+                  "line": 163,
                   "column": 7
                 }
               },
@@ -255,7 +255,7 @@
               "column": 4
             },
             "end": {
-              "line": 164,
+              "line": 165,
               "column": 5
             }
           },
@@ -558,11 +558,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 377,
                   "column": 10
                 },
                 "end": {
-                  "line": 379,
+                  "line": 380,
                   "column": 11
                 }
               },
@@ -578,11 +578,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 384,
+                  "line": 385,
                   "column": 10
                 },
                 "end": {
-                  "line": 387,
+                  "line": 388,
                   "column": 11
                 }
               },
@@ -598,11 +598,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 389,
+                  "line": 390,
                   "column": 10
                 },
                 "end": {
-                  "line": 391,
+                  "line": 392,
                   "column": 11
                 }
               },
@@ -617,11 +617,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 393,
+                  "line": 394,
                   "column": 10
                 },
                 "end": {
-                  "line": 393,
+                  "line": 394,
                   "column": 23
                 }
               },
@@ -1105,7 +1105,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 339,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -1132,11 +1132,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 366,
+              "line": 367,
               "column": 4
             },
             "end": {
-              "line": 398,
+              "line": 399,
               "column": 5
             }
           },
@@ -1200,11 +1200,11 @@
               "description": "Width of the cells for this column.",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 377,
                   "column": 10
                 },
                 "end": {
-                  "line": 379,
+                  "line": 380,
                   "column": 11
                 }
               },
@@ -1216,11 +1216,11 @@
               "description": "Flex grow ratio for the cell widths. When set to 0, cell width is fixed.",
               "sourceRange": {
                 "start": {
-                  "line": 384,
+                  "line": 385,
                   "column": 10
                 },
                 "end": {
-                  "line": 387,
+                  "line": 388,
                   "column": 11
                 }
               },
@@ -2108,7 +2108,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 339,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -3088,11 +3088,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-column.html",
                 "start": {
-                  "line": 389,
+                  "line": 390,
                   "column": 10
                 },
                 "end": {
-                  "line": 391,
+                  "line": 392,
                   "column": 11
                 }
               },
@@ -3109,11 +3109,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-column.html",
                 "start": {
-                  "line": 393,
+                  "line": 394,
                   "column": 10
                 },
                 "end": {
-                  "line": 393,
+                  "line": 394,
                   "column": 23
                 }
               },
@@ -3709,7 +3709,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 339,
+                  "line": 340,
                   "column": 5
                 }
               },
@@ -4047,11 +4047,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 105,
+                  "line": 108,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 24
                 }
               },
@@ -4066,11 +4066,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 112,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -4088,11 +4088,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 119,
+                  "line": 122,
                   "column": 12
                 },
                 "end": {
-                  "line": 122,
+                  "line": 125,
                   "column": 13
                 }
               },
@@ -4108,11 +4108,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 124,
+                  "line": 127,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 130,
                   "column": 13
                 }
               },
@@ -4129,11 +4129,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 141,
                   "column": 8
                 },
                 "end": {
-                  "line": 141,
+                  "line": 144,
                   "column": 9
                 }
               },
@@ -4146,11 +4146,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 147,
                   "column": 8
                 },
                 "end": {
-                  "line": 147,
+                  "line": 150,
                   "column": 9
                 }
               },
@@ -4163,11 +4163,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 153,
                   "column": 8
                 },
                 "end": {
-                  "line": 153,
+                  "line": 156,
                   "column": 9
                 }
               },
@@ -4180,11 +4180,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 8
                 },
                 "end": {
-                  "line": 163,
+                  "line": 166,
                   "column": 9
                 }
               },
@@ -4207,11 +4207,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 168,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 170,
                   "column": 9
                 }
               },
@@ -4228,11 +4228,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 169,
+                  "line": 172,
                   "column": 8
                 },
                 "end": {
-                  "line": 184,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -4249,11 +4249,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 186,
+                  "line": 189,
                   "column": 8
                 },
                 "end": {
-                  "line": 200,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -4273,11 +4273,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 95,
+              "line": 98,
               "column": 6
             },
             "end": {
-              "line": 201,
+              "line": 204,
               "column": 7
             }
           },
@@ -4290,11 +4290,11 @@
               "description": "JS Path of the property in the item used for sorting the data.",
               "sourceRange": {
                 "start": {
-                  "line": 105,
+                  "line": 108,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 108,
                   "column": 24
                 }
               },
@@ -4306,11 +4306,11 @@
               "description": "How to sort the data.\nPossible values are `asc` to use an ascending algorithm, `desc` to sort the data in\ndescending direction, or `null` for not sorting the data.",
               "sourceRange": {
                 "start": {
-                  "line": 112,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -4337,11 +4337,11 @@
               "range": {
                 "file": "src/vaadin-grid-sorter.html",
                 "start": {
-                  "line": 54,
+                  "line": 57,
                   "column": 6
                 },
                 "end": {
-                  "line": 54,
+                  "line": 57,
                   "column": 19
                 }
               }
@@ -4361,11 +4361,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 142,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -4383,11 +4383,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 151,
                   "column": 10
                 },
                 "end": {
-                  "line": 152,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -4403,11 +4403,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 157,
+                  "line": 160,
                   "column": 10
                 },
                 "end": {
-                  "line": 162,
+                  "line": 165,
                   "column": 11
                 }
               },
@@ -4426,11 +4426,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 6
                 },
                 "end": {
-                  "line": 170,
+                  "line": 173,
                   "column": 7
                 }
               },
@@ -4443,11 +4443,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 175,
                   "column": 6
                 },
                 "end": {
-                  "line": 179,
+                  "line": 182,
                   "column": 7
                 }
               },
@@ -4464,11 +4464,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 181,
+                  "line": 184,
                   "column": 6
                 },
                 "end": {
-                  "line": 191,
+                  "line": 194,
                   "column": 7
                 }
               },
@@ -4509,11 +4509,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 128,
+              "line": 131,
               "column": 4
             },
             "end": {
-              "line": 192,
+              "line": 195,
               "column": 5
             }
           },
@@ -4526,11 +4526,11 @@
               "description": "Current level of the tree represented with a horizontal offset\nof the toggle button.",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 142,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -4542,11 +4542,11 @@
               "description": "Hides the toggle icon and disables toggling a tree sublevel.",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 151,
                   "column": 10
                 },
                 "end": {
-                  "line": 152,
+                  "line": 155,
                   "column": 11
                 }
               },
@@ -4558,11 +4558,11 @@
               "description": "Sublevel toggle state.",
               "sourceRange": {
                 "start": {
-                  "line": 157,
+                  "line": 160,
                   "column": 10
                 },
                 "end": {
-                  "line": 162,
+                  "line": 165,
                   "column": 11
                 }
               },
@@ -4589,11 +4589,11 @@
               "range": {
                 "file": "src/vaadin-grid-tree-toggle.html",
                 "start": {
-                  "line": 78,
+                  "line": 81,
                   "column": 4
                 },
                 "end": {
-                  "line": 78,
+                  "line": 81,
                   "column": 17
                 }
               }
@@ -4605,7 +4605,7 @@
           ]
         },
         {
-          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-tree-toggle>`](#/elements/vaadin-grid-tree-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n- `{{expanded}}`: True if the item has tree sublevel expanded (can be two-way bound)\n- `[[level]]`: Number of the tree sublevel of the item, first level-items have 0\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__\n\n__Also, note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboard navigation in interaction mode | :host\n`navigating` | Keyboard navigation in navigation mode | :host\n`overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `left`, `right` | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`loading` | Row that is waiting for data from data provider | row\n`odd` | Odd row | row\n`first` | The first body row | row\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-grid>` is a free, high quality data grid / data table Polymer element.\n\n### Quick Start\n\nUse the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.\n\nThen assign an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.\n\n#### Example:\n```html\n<vaadin-grid items='[{\"name\": \"John\", \"surname\": \"Lennon\", \"role\": \"singer\"},\n{\"name\": \"Ringo\", \"surname\": \"Starr\", \"role\": \"drums\"}]'>\n  <vaadin-grid-column>\n    <template class=\"header\">Name</template>\n    <template>[[item.name]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Surname</template>\n    <template>[[item.surname]]</template>\n  </vaadin-grid-column>\n  <vaadin-grid-column>\n    <template class=\"header\">Role</template>\n    <template>[[item.role]]</template>\n  </vaadin-grid-column>\n</vaadin-grid>\n```\n\nThe following helper elements can be used for further customization:\n- [`<vaadin-grid-column-group>`](#/elements/vaadin-grid-column-group)\n- [`<vaadin-grid-filter>`](#/elements/vaadin-grid-filter)\n- [`<vaadin-grid-sorter>`](#/elements/vaadin-grid-sorter)\n- [`<vaadin-grid-selection-column>`](#/elements/vaadin-grid-selection-column)\n- [`<vaadin-grid-tree-toggle>`](#/elements/vaadin-grid-tree-toggle)\n\n__Note that the helper elements must be explicitly imported.__\nIf you want to import everything at once you can use the `all-imports.html` bundle.\n\nA column template can be decorated with one the following class names to specify its purpose\n- `header`: Marks a header template\n- `footer`: Marks a footer template\n- `row-details`: Marks a row details template\n\nThe following built-in template variables can be bound to inside the column templates:\n- `[[index]]`: Number representing the row index\n- `[[item]]` and it's sub-properties: Data object (provided by a data provider / items array)\n- `{{selected}}`: True if the item is selected (can be two-way bound)\n- `{{detailsOpened}}`: True if the item has row details opened (can be two-way bound)\n- `{{expanded}}`: True if the item has tree sublevel expanded (can be two-way bound)\n- `[[level]]`: Number of the tree sublevel of the item, first level-items have 0\n\n### Lazy Loading with Function Data Provider\n\nIn addition to assigning an array to the items property, you can alternatively\nprovide the `<vaadin-grid>` data through the\n[`dataProvider`](#/elements/vaadin-grid#property-dataProvider) function property.\nThe `<vaadin-grid>` calls this function lazily, only when it needs more data\nto be displayed.\n\nSee the [`dataProvider`](#/elements/vaadin-grid#property-dataProvider) in\nthe API reference below for the detailed data provider arguments description,\nand the “Assigning Data” page in the demos.\n\n__Note that expanding the tree grid's item will trigger a call to the `dataProvider`.__\n\n__Also, note that when using function data providers, the total number of items\nneeds to be set manually. The total number of items can be returned\nin the second argument of the data provider callback:__\n\n```javascript\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(\n      response.employees, // requested page of items\n      response.totalSize  // total number of items\n    );\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n__Alternatively, you can use the `size` property to set the total number of items:__\n\n```javascript\ngrid.size = 200; // The total number of items\ngrid.dataProvider = function(params, callback) {\n  var url = 'https://api.example/data' +\n      '?page=' + params.page +        // the requested page index\n      '&per_page=' + params.pageSize; // number of items on the page\n  var xhr = new XMLHttpRequest();\n  xhr.onload = function() {\n    var response = JSON.parse(xhr.responseText);\n    callback(response.employees);\n  };\n  xhr.open('GET', url, true);\n  xhr.send();\n};\n```\n\n### Sizing in Layouts\n\n`<vaadin-grid>` has default height of `400px`.\n\nSet `layout-fit` attribute on `<vaadin-grid>` to enable parent layout\nto override the default height:\n\n```html\n<div style=\"display: flex; height: 300px;\">\n  <vaadin-grid layout-fit ...>\n    <!-- ... -->\n  </vaadin-grid>\n  <div>Sidebar...</div>\n</div>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`row` | Row in the internal table\n`cell` | Cell in the internal table\n`header-cell` | Header cell in the internal table\n`body-cell` | Body cell in the internal table\n`footer-cell` | Footer cell in the internal table\n`details-cell` | Row details cell in the internal table\n`resize-handle` | Handle for resizing the columns\n`reorder-ghost` | Ghost element of the header cell being dragged\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|------------\n`loading` | Set when the grid is loading data from data provider | :host\n`interacting` | Keyboard navigation in interaction mode | :host\n`navigating` | Keyboard navigation in navigation mode | :host\n`overflow` | Set when rows are overflowing the grid viewport. Possible values: `top`, `bottom`, `left`, `right` | :host\n`reordering` | Set when the grid's columns are being reordered | :host\n`reorder-status` | Reflects the status of a cell while columns are being reordered | cell\n`frozen` | Frozen cell | cell\n`last-frozen` | Last frozen cell | cell\n`last-column` | Last visible cell on a row | cell\n`selected` | Selected row | row\n`expanded` | Expanded row | row\n`loading` | Row that is waiting for data from data provider | row\n`odd` | Odd row | row\n`first` | The first body row | row\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-grid.html",
           "properties": [
@@ -5238,11 +5238,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 262,
+                  "line": 278,
                   "column": 10
                 },
                 "end": {
-                  "line": 267,
+                  "line": 283,
                   "column": 11
                 }
               },
@@ -5257,11 +5257,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 285,
                   "column": 10
                 },
                 "end": {
-                  "line": 272,
+                  "line": 288,
                   "column": 11
                 }
               },
@@ -5276,11 +5276,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 290,
                   "column": 10
                 },
                 "end": {
-                  "line": 277,
+                  "line": 293,
                   "column": 11
                 }
               },
@@ -5295,11 +5295,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 279,
+                  "line": 295,
                   "column": 10
                 },
                 "end": {
-                  "line": 282,
+                  "line": 298,
                   "column": 11
                 }
               },
@@ -5314,11 +5314,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 284,
+                  "line": 300,
                   "column": 10
                 },
                 "end": {
-                  "line": 287,
+                  "line": 303,
                   "column": 11
                 }
               },
@@ -5334,11 +5334,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 289,
+                  "line": 305,
                   "column": 10
                 },
                 "end": {
-                  "line": 292,
+                  "line": 308,
                   "column": 11
                 }
               },
@@ -5353,11 +5353,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 294,
+                  "line": 310,
                   "column": 10
                 },
                 "end": {
-                  "line": 297,
+                  "line": 313,
                   "column": 11
                 }
               },
@@ -6066,11 +6066,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 622,
+                  "line": 638,
                   "column": 6
                 },
                 "end": {
-                  "line": 630,
+                  "line": 646,
                   "column": 7
                 }
               },
@@ -6195,7 +6195,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 87,
+                  "line": 86,
                   "column": 5
                 }
               },
@@ -6210,11 +6210,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 89,
+                  "line": 88,
                   "column": 4
                 },
                 "end": {
-                  "line": 106,
+                  "line": 105,
                   "column": 5
                 }
               },
@@ -6236,11 +6236,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 108,
+                  "line": 107,
                   "column": 4
                 },
                 "end": {
-                  "line": 121,
+                  "line": 120,
                   "column": 5
                 }
               },
@@ -6255,11 +6255,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 123,
+                  "line": 122,
                   "column": 4
                 },
                 "end": {
-                  "line": 132,
+                  "line": 131,
                   "column": 5
                 }
               },
@@ -6274,11 +6274,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-dynamic-columns-mixin.html",
                 "start": {
-                  "line": 134,
+                  "line": 133,
                   "column": 4
                 },
                 "end": {
-                  "line": 136,
+                  "line": 135,
                   "column": 5
                 }
               },
@@ -6857,17 +6857,40 @@
               "inheritedFrom": "Vaadin.Grid.SortMixin"
             },
             {
+              "name": "_rowDetailsTemplateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-grid-row-details-mixin.html",
+                "start": {
+                  "line": 43,
+                  "column": 4
+                },
+                "end": {
+                  "line": 60,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "rowDetailsTemplate"
+                }
+              ],
+              "inheritedFrom": "Vaadin.Grid.RowDetailsMixin"
+            },
+            {
               "name": "_detailsOpenedItemsChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 54,
+                  "line": 62,
                   "column": 4
                 },
                 "end": {
-                  "line": 72,
+                  "line": 80,
                   "column": 5
                 }
               },
@@ -6895,11 +6918,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 74,
+                  "line": 82,
                   "column": 4
                 },
                 "end": {
-                  "line": 79,
+                  "line": 87,
                   "column": 5
                 }
               },
@@ -6918,11 +6941,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 81,
+                  "line": 89,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 109,
                   "column": 5
                 }
               },
@@ -6944,11 +6967,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 111,
                   "column": 4
                 },
                 "end": {
-                  "line": 107,
+                  "line": 115,
                   "column": 5
                 }
               },
@@ -6963,11 +6986,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 109,
+                  "line": 117,
                   "column": 4
                 },
                 "end": {
-                  "line": 111,
+                  "line": 119,
                   "column": 5
                 }
               },
@@ -6986,11 +7009,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 116,
+                  "line": 124,
                   "column": 4
                 },
                 "end": {
-                  "line": 120,
+                  "line": 128,
                   "column": 5
                 }
               },
@@ -7009,11 +7032,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 125,
+                  "line": 133,
                   "column": 4
                 },
                 "end": {
-                  "line": 129,
+                  "line": 137,
                   "column": 5
                 }
               },
@@ -7032,11 +7055,11 @@
               "sourceRange": {
                 "file": "vaadin-grid-row-details-mixin.html",
                 "start": {
-                  "line": 131,
+                  "line": 139,
                   "column": 4
                 },
                 "end": {
-                  "line": 140,
+                  "line": 148,
                   "column": 5
                 }
               },
@@ -8048,11 +8071,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 306,
+                  "line": 322,
                   "column": 6
                 },
                 "end": {
-                  "line": 327,
+                  "line": 343,
                   "column": 7
                 }
               },
@@ -8069,11 +8092,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 329,
+                  "line": 345,
                   "column": 6
                 },
                 "end": {
-                  "line": 331,
+                  "line": 347,
                   "column": 7
                 }
               },
@@ -8086,11 +8109,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 333,
+                  "line": 349,
                   "column": 6
                 },
                 "end": {
-                  "line": 378,
+                  "line": 394,
                   "column": 7
                 }
               },
@@ -8107,11 +8130,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 380,
+                  "line": 396,
                   "column": 6
                 },
                 "end": {
-                  "line": 456,
+                  "line": 472,
                   "column": 7
                 }
               },
@@ -8140,11 +8163,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 458,
+                  "line": 474,
                   "column": 6
                 },
                 "end": {
-                  "line": 474,
+                  "line": 490,
                   "column": 7
                 }
               },
@@ -8164,11 +8187,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 476,
+                  "line": 492,
                   "column": 6
                 },
                 "end": {
-                  "line": 511,
+                  "line": 527,
                   "column": 7
                 }
               },
@@ -8188,11 +8211,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 513,
+                  "line": 529,
                   "column": 6
                 },
                 "end": {
-                  "line": 540,
+                  "line": 556,
                   "column": 7
                 }
               },
@@ -8212,11 +8235,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 542,
+                  "line": 558,
                   "column": 6
                 },
                 "end": {
-                  "line": 550,
+                  "line": 566,
                   "column": 7
                 }
               },
@@ -8236,11 +8259,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 552,
+                  "line": 568,
                   "column": 6
                 },
                 "end": {
-                  "line": 561,
+                  "line": 577,
                   "column": 7
                 }
               },
@@ -8260,11 +8283,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 563,
+                  "line": 579,
                   "column": 6
                 },
                 "end": {
-                  "line": 571,
+                  "line": 587,
                   "column": 7
                 }
               },
@@ -8284,11 +8307,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 573,
+                  "line": 589,
                   "column": 6
                 },
                 "end": {
-                  "line": 581,
+                  "line": 597,
                   "column": 7
                 }
               },
@@ -8308,11 +8331,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 583,
+                  "line": 599,
                   "column": 6
                 },
                 "end": {
-                  "line": 587,
+                  "line": 603,
                   "column": 7
                 }
               },
@@ -8325,11 +8348,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 589,
+                  "line": 605,
                   "column": 6
                 },
                 "end": {
-                  "line": 602,
+                  "line": 618,
                   "column": 7
                 }
               },
@@ -8342,11 +8365,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 604,
+                  "line": 620,
                   "column": 6
                 },
                 "end": {
-                  "line": 612,
+                  "line": 628,
                   "column": 7
                 }
               },
@@ -8363,11 +8386,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 614,
+                  "line": 630,
                   "column": 6
                 },
                 "end": {
-                  "line": 620,
+                  "line": 636,
                   "column": 7
                 }
               },
@@ -8419,11 +8442,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 226,
+              "line": 242,
               "column": 4
             },
             "end": {
-              "line": 632,
+              "line": 648,
               "column": 5
             }
           },
@@ -10250,7 +10273,7 @@
               "column": 4
             },
             "end": {
-              "line": 339,
+              "line": 340,
               "column": 5
             }
           },
@@ -10280,7 +10303,7 @@
           "column": 2
         },
         "end": {
-          "line": 341,
+          "line": 342,
           "column": 3
         }
       },
@@ -10473,7 +10496,7 @@
               "column": 4
             },
             "end": {
-              "line": 87,
+              "line": 86,
               "column": 5
             }
           },
@@ -10486,11 +10509,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 89,
+              "line": 88,
               "column": 4
             },
             "end": {
-              "line": 106,
+              "line": 105,
               "column": 5
             }
           },
@@ -10510,11 +10533,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 108,
+              "line": 107,
               "column": 4
             },
             "end": {
-              "line": 121,
+              "line": 120,
               "column": 5
             }
           },
@@ -10527,11 +10550,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 123,
+              "line": 122,
               "column": 4
             },
             "end": {
-              "line": 132,
+              "line": 131,
               "column": 5
             }
           },
@@ -10544,11 +10567,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 134,
+              "line": 133,
               "column": 4
             },
             "end": {
-              "line": 136,
+              "line": 135,
               "column": 5
             }
           },
@@ -10569,7 +10592,7 @@
           "column": 2
         },
         "end": {
-          "line": 137,
+          "line": 136,
           "column": 3
         }
       },
@@ -12541,21 +12564,25 @@
       ],
       "methods": [
         {
-          "name": "ready",
+          "name": "_rowDetailsTemplateChanged",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 42,
+              "line": 43,
               "column": 4
             },
             "end": {
-              "line": 52,
+              "line": 60,
               "column": 5
             }
           },
           "metadata": {},
-          "params": []
+          "params": [
+            {
+              "name": "rowDetailsTemplate"
+            }
+          ]
         },
         {
           "name": "_detailsOpenedItemsChanged",
@@ -12563,11 +12590,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 54,
+              "line": 62,
               "column": 4
             },
             "end": {
-              "line": 72,
+              "line": 80,
               "column": 5
             }
           },
@@ -12593,11 +12620,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 74,
+              "line": 82,
               "column": 4
             },
             "end": {
-              "line": 79,
+              "line": 87,
               "column": 5
             }
           },
@@ -12614,11 +12641,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 81,
+              "line": 89,
               "column": 4
             },
             "end": {
-              "line": 101,
+              "line": 109,
               "column": 5
             }
           },
@@ -12638,11 +12665,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 103,
+              "line": 111,
               "column": 4
             },
             "end": {
-              "line": 107,
+              "line": 115,
               "column": 5
             }
           },
@@ -12655,11 +12682,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 109,
+              "line": 117,
               "column": 4
             },
             "end": {
-              "line": 111,
+              "line": 119,
               "column": 5
             }
           },
@@ -12676,11 +12703,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 116,
+              "line": 124,
               "column": 4
             },
             "end": {
-              "line": 120,
+              "line": 128,
               "column": 5
             }
           },
@@ -12697,11 +12724,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 125,
+              "line": 133,
               "column": 4
             },
             "end": {
-              "line": 129,
+              "line": 137,
               "column": 5
             }
           },
@@ -12718,11 +12745,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 131,
+              "line": 139,
               "column": 4
             },
             "end": {
-              "line": 140,
+              "line": 148,
               "column": 5
             }
           },
@@ -12746,7 +12773,7 @@
           "column": 2
         },
         "end": {
-          "line": 141,
+          "line": 149,
           "column": 3
         }
       },

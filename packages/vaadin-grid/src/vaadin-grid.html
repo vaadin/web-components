@@ -171,6 +171,22 @@ This program is available under Apache License Version 2.0, available at https:/
      * };
      * ```
      *
+     * ### Sizing in Layouts
+     *
+     * `<vaadin-grid>` has default height of `400px`.
+     *
+     * Set `layout-fit` attribute on `<vaadin-grid>` to enable parent layout
+     * to override the default height:
+     *
+     * ```html
+     * <div style="display: flex; height: 300px;">
+     *   <vaadin-grid layout-fit ...>
+     *     <!-- ... -->
+     *   </vaadin-grid>
+     *   <div>Sidebar...</div>
+     * </div>
+     * ```
+     *
      * ### Styling
      *
      * The following shadow DOM parts are available for styling:
