@@ -16,7 +16,8 @@
     "test-fixture": "^3.0.0-rc.1",
     "vaadin-demo-helpers": "^1.2.3",
     "iron-icon": "^2.0.1",
-    "vaadin-lumo-styles": "^1.0.0-beta1"
+    "vaadin-lumo-styles": "^1.0.0-beta1",
+    "iron-component-page": "PolymerElements/iron-component-page#^3.0.1"
   },
   "resolutions": {
     "test-fixture": "^3.0.0-rc.1",
