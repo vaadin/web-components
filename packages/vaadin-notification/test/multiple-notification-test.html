@@ -76,7 +76,7 @@
           expect(notifications[0]._container).to.be.equal(notifications[1]._container);
         });
 
-        it('should close the container when all active notifications dissapear', done => {
+        it('should close the container when all active notifications disappear', done => {
           // Set the same duration to all notifications but one
           notifications.forEach(elm => elm.duration = 2);
           notifications[1].duration = 5;
@@ -152,7 +152,7 @@
           expect(getComputedStyle(container)['pointer-events']).to.equal('none');
         });
 
-        it('notification should respomnd to pointer events', () => {
+        it('notification should respond to pointer events', () => {
           notifications.forEach(e => {
             expect(getComputedStyle(e._card)['pointer-events']).to.be.equal('auto');
           });
@@ -187,7 +187,7 @@
           ].forEach(el => expect(getComputedStyle(el).flexDirection).to.equal('row'));
         });
 
-        it('all region groups should have equal flex streching', () => {
+        it('all region groups should have equal flex stretching', () => {
           [
             container.shadowRoot.querySelector('[region-group="top"]'),
             container.shadowRoot.querySelector('[region-group="bottom"]')
@@ -204,7 +204,7 @@
           });
         });
 
-        it('middle region should not have flex streching', () => {
+        it('middle region should not have flex stretching', () => {
           const middleRegion = container.shadowRoot.querySelector('[region="middle"]');
           expect(getComputedStyle(middleRegion).flexGrow).to.equal('0');
           expect(getComputedStyle(middleRegion).flexBasis).to.equal('auto');

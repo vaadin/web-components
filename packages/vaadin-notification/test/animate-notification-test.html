@@ -35,10 +35,10 @@
 
   <test-fixture id="notification">
     <template>
-      <vaadin-notification position="bottom-center"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification position="bottom-center"><template>Notification</template></vaadin-notification>
 
-      <!-- notificatons in middle are animated -->
-      <vaadin-notification position="middle"><template>Notificaton</template></vaadin-notification>
+      <!-- notifications in middle are animated -->
+      <vaadin-notification position="middle"><template>Notification</template></vaadin-notification>
     </template>
   </test-fixture>
 
@@ -77,7 +77,7 @@
           });
         });
 
-        it('should close the container when all active notifications dissapear', done => {
+        it('should close the container when all active notifications disappear', done => {
           notifications[1]._card.addEventListener('animationend', () => {
             expect(container.opened).to.be.false;
             done();

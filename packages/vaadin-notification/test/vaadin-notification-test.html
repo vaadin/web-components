@@ -18,21 +18,6 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="multiple">
-    <template>
-      <vaadin-notification duration="20" opened>
-        <template>
-          Notificaton 1
-        </template>
-      </vaadin-notification>
-      <vaadin-notification duration="20" opened>
-        <template>
-          Notificaton 2
-        </template>
-      </vaadin-notification>
-    </template>
-  </test-fixture>
-
   <script>
     describe('vaadin-notification', function() {
       var notification;
@@ -118,13 +103,13 @@
       });
 
       describe('methods', () => {
-        it('should close the noticication when close() is executed', () => {
+        it('should close the notification when close() is executed', () => {
           expect(notification.opened).to.be.true;
           notification.close();
           expect(notification.opened).to.be.false;
         });
 
-        it('should open the noticication when open() is executed', () => {
+        it('should open the notification when open() is executed', () => {
           notification.close();
           notification.open();
           expect(notification.opened).to.be.true;
