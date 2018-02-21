@@ -56,6 +56,19 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="style-scope">
+    <template>
+      <vaadin-dropdown-menu value="v1">
+        <template>
+          <vaadin-list-box>
+            <mock-item value="v1">t1</mock-item>
+            <mock-item value="v2">t2</mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
   <test-fixture id="dropdown-in-flexbox">
     <template>
       <div style="display: flex; flex-direction: column; width:500px;">
@@ -128,6 +141,21 @@
       it('should be possible to set value declaratively', () => {
         expect(menu.selected).to.be.equal(1);
         expect(dropdown._valueElement.textContent.trim()).to.be.equal('o2');
+      });
+    });
+
+    describe('vaadin-dropdown-menu style scope', () => {
+      let dropdown, menu;
+
+      beforeEach(done => {
+        dropdown = fixture('style-scope');
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
+      });
+
+      it('should not apply overlay style scope to the clone of selected item', () => {
+        const valueElement = dropdown._valueElement.firstChild;
+        expect(valueElement.classList.contains('vaadin-dropdown-menu-overlay')).to.be.false;
       });
     });
 
