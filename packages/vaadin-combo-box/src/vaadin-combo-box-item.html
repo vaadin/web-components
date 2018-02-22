@@ -17,7 +17,9 @@ This program is available under Apache License Version 2.0, available at https:/
          display: none;
       }
     </style>
-    <span id="content">[[label]]</span>
+    <div part="content">
+      <span id="content">[[label]]</span>
+    </div>
   </template>
 </dom-module>
 
@@ -27,6 +29,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * The default element used for items in the vaadin-combo-box.
      *
      * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ---|---
+     * `content` | The element that wraps the item label or template content
      *
      * The following state attributes are exposed for styling:
      *
@@ -110,8 +118,9 @@ This program is available under Apache License Version 2.0, available at https:/
           comboBox._ensureTemplatized();
           if (comboBox._TemplateClass) {
             this._itemTemplateInstance = new comboBox._TemplateClass({});
-            this.root.removeChild(this.$.content);
-            this.root.appendChild(this._itemTemplateInstance.root);
+            const content = this.shadowRoot.querySelector('[part="content"]');
+            content.removeChild(this.$.content);
+            content.appendChild(this._itemTemplateInstance.root);
           }
         }
       }
