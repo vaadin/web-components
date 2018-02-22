@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-dropdown-menu.html",
         "start": {
-          "line": 557,
+          "line": 583,
           "column": 6
         },
         "end": {
-          "line": 557,
+          "line": 583,
           "column": 62
         }
       },
@@ -708,11 +708,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 43,
+              "line": 44,
               "column": 6
             },
             "end": {
-              "line": 47,
+              "line": 48,
               "column": 7
             }
           },
@@ -1902,11 +1902,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 79,
+              "line": 82,
               "column": 6
             },
             "end": {
-              "line": 105,
+              "line": 108,
               "column": 7
             }
           },
@@ -2371,11 +2371,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 221,
+                  "line": 224,
                   "column": 12
                 },
                 "end": {
-                  "line": 227,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -2394,11 +2394,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 235,
                   "column": 12
                 },
                 "end": {
-                  "line": 235,
+                  "line": 238,
                   "column": 13
                 }
               },
@@ -2414,11 +2414,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 242,
+                  "line": 245,
                   "column": 13
                 }
               },
@@ -2433,11 +2433,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 257,
+                  "line": 260,
                   "column": 12
                 },
                 "end": {
-                  "line": 262,
+                  "line": 265,
                   "column": 13
                 }
               },
@@ -2456,11 +2456,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 270,
                   "column": 12
                 },
                 "end": {
-                  "line": 271,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -2477,11 +2477,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 284,
                   "column": 13
                 }
               },
@@ -2499,11 +2499,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 289,
                   "column": 12
                 },
                 "end": {
-                  "line": 289,
+                  "line": 292,
                   "column": 13
                 }
               },
@@ -2518,11 +2518,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 298,
+                  "line": 301,
                   "column": 12
                 },
                 "end": {
-                  "line": 300,
+                  "line": 303,
                   "column": 13
                 }
               },
@@ -2537,11 +2537,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 305,
+                  "line": 308,
                   "column": 12
                 },
                 "end": {
-                  "line": 309,
+                  "line": 312,
                   "column": 13
                 }
               },
@@ -2557,11 +2557,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 311,
+                  "line": 314,
                   "column": 12
                 },
                 "end": {
-                  "line": 311,
+                  "line": 314,
                   "column": 27
                 }
               },
@@ -2576,11 +2576,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 313,
+                  "line": 316,
                   "column": 12
                 },
                 "end": {
-                  "line": 315,
+                  "line": 318,
                   "column": 13
                 }
               },
@@ -2596,11 +2596,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 317,
+                  "line": 320,
                   "column": 12
                 },
                 "end": {
-                  "line": 317,
+                  "line": 320,
                   "column": 35
                 }
               },
@@ -2615,11 +2615,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 322,
                   "column": 12
                 },
                 "end": {
-                  "line": 319,
+                  "line": 322,
                   "column": 33
                 }
               },
@@ -2634,11 +2634,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 321,
+                  "line": 324,
                   "column": 12
                 },
                 "end": {
-                  "line": 321,
+                  "line": 324,
                   "column": 34
                 }
               },
@@ -2653,11 +2653,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 323,
+                  "line": 326,
                   "column": 12
                 },
                 "end": {
-                  "line": 323,
+                  "line": 326,
                   "column": 26
                 }
               },
@@ -2673,11 +2673,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 346,
+                  "line": 349,
                   "column": 8
                 },
                 "end": {
-                  "line": 371,
+                  "line": 377,
                   "column": 9
                 }
               },
@@ -2690,11 +2690,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 344,
                   "column": 8
                 },
                 "end": {
-                  "line": 344,
+                  "line": 347,
                   "column": 9
                 }
               },
@@ -2707,11 +2707,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 379,
+                  "line": 385,
                   "column": 8
                 },
                 "end": {
-                  "line": 384,
+                  "line": 390,
                   "column": 9
                 }
               },
@@ -2724,11 +2724,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 527,
+                  "line": 553,
                   "column": 8
                 },
                 "end": {
-                  "line": 532,
+                  "line": 558,
                   "column": 9
                 }
               },
@@ -2894,11 +2894,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 387,
+                  "line": 393,
                   "column": 8
                 },
                 "end": {
-                  "line": 394,
+                  "line": 400,
                   "column": 9
                 }
               },
@@ -2911,11 +2911,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 396,
+                  "line": 402,
                   "column": 8
                 },
                 "end": {
-                  "line": 398,
+                  "line": 404,
                   "column": 9
                 }
               },
@@ -2932,11 +2932,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 400,
+                  "line": 406,
                   "column": 8
                 },
                 "end": {
-                  "line": 412,
+                  "line": 418,
                   "column": 9
                 }
               },
@@ -2956,11 +2956,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 414,
+                  "line": 420,
                   "column": 8
                 },
                 "end": {
-                  "line": 419,
+                  "line": 425,
                   "column": 9
                 }
               },
@@ -2977,11 +2977,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 421,
+                  "line": 427,
                   "column": 8
                 },
                 "end": {
-                  "line": 425,
+                  "line": 431,
                   "column": 9
                 }
               },
@@ -2998,11 +2998,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 427,
+                  "line": 433,
                   "column": 8
                 },
                 "end": {
-                  "line": 460,
+                  "line": 463,
                   "column": 9
                 }
               },
@@ -3022,11 +3022,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 462,
+                  "line": 465,
                   "column": 8
                 },
                 "end": {
-                  "line": 476,
+                  "line": 479,
                   "column": 9
                 }
               },
@@ -3034,16 +3034,58 @@
               "params": []
             },
             {
+              "name": "_hasContent",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 481,
+                  "column": 8
+                },
+                "end": {
+                  "line": 490,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selected"
+                }
+              ]
+            },
+            {
+              "name": "_attachSelectedItem",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 492,
+                  "column": 8
+                },
+                "end": {
+                  "line": 508,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selected"
+                }
+              ]
+            },
+            {
               "name": "_updateAriaExpanded",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 478,
+                  "line": 510,
                   "column": 8
                 },
                 "end": {
-                  "line": 480,
+                  "line": 512,
                   "column": 9
                 }
               },
@@ -3063,11 +3105,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 482,
+                  "line": 514,
                   "column": 8
                 },
                 "end": {
-                  "line": 511,
+                  "line": 537,
                   "column": 9
                 }
               },
@@ -3080,11 +3122,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 513,
+                  "line": 539,
                   "column": 8
                 },
                 "end": {
-                  "line": 524,
+                  "line": 550,
                   "column": 9
                 }
               },
@@ -3104,11 +3146,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 534,
+                  "line": 560,
                   "column": 8
                 },
                 "end": {
-                  "line": 540,
+                  "line": 566,
                   "column": 9
                 }
               },
@@ -3121,11 +3163,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 547,
+                  "line": 573,
                   "column": 8
                 },
                 "end": {
-                  "line": 549,
+                  "line": 575,
                   "column": 9
                 }
               },
@@ -3171,11 +3213,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 202,
+              "line": 205,
               "column": 6
             },
             "end": {
-              "line": 550,
+              "line": 576,
               "column": 7
             }
           },
@@ -3224,11 +3266,11 @@
               "description": "Set when the dropdown menu is open",
               "sourceRange": {
                 "start": {
-                  "line": 221,
+                  "line": 224,
                   "column": 12
                 },
                 "end": {
-                  "line": 227,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -3240,11 +3282,11 @@
               "description": "The error message to display when the dropdown menu value is invalid",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 235,
                   "column": 12
                 },
                 "end": {
-                  "line": 235,
+                  "line": 238,
                   "column": 13
                 }
               },
@@ -3256,11 +3298,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 242,
+                  "line": 245,
                   "column": 13
                 }
               },
@@ -3272,11 +3314,11 @@
               "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialization, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.\nHint: If you do not want to select any item by default, you can either set all\nthe values of inner vaadin-items, or set the vaadin-dropdown-menu value to\nan inexistent value in the items list.",
               "sourceRange": {
                 "start": {
-                  "line": 257,
+                  "line": 260,
                   "column": 12
                 },
                 "end": {
-                  "line": 262,
+                  "line": 265,
                   "column": 13
                 }
               },
@@ -3288,11 +3330,11 @@
               "description": "The current required state of the dropdown menu. True if required.",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 270,
                   "column": 12
                 },
                 "end": {
-                  "line": 271,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -3304,11 +3346,11 @@
               "description": "Set to true if the value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 284,
                   "column": 13
                 }
               },
@@ -3320,11 +3362,11 @@
               "description": "The name of this element.",
               "sourceRange": {
                 "start": {
-                  "line": 286,
+                  "line": 289,
                   "column": 12
                 },
                 "end": {
-                  "line": 289,
+                  "line": 292,
                   "column": 13
                 }
               },
@@ -3336,11 +3378,11 @@
               "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be displayed in the case that there\nis no item selected, or the selected item has an empty\nstring label, or the selected item has no label and it's\nDOM content is empty.",
               "sourceRange": {
                 "start": {
-                  "line": 298,
+                  "line": 301,
                   "column": 12
                 },
                 "end": {
-                  "line": 300,
+                  "line": 303,
                   "column": 13
                 }
               },
@@ -3352,11 +3394,11 @@
               "description": "When present, it specifies that the element is read-only.",
               "sourceRange": {
                 "start": {
-                  "line": 305,
+                  "line": 308,
                   "column": 12
                 },
                 "end": {
-                  "line": 309,
+                  "line": 312,
                   "column": 13
                 }
               },
@@ -3395,11 +3437,11 @@
               "range": {
                 "file": "src/vaadin-dropdown-menu.html",
                 "start": {
-                  "line": 144,
+                  "line": 147,
                   "column": 6
                 },
                 "end": {
-                  "line": 144,
+                  "line": 147,
                   "column": 47
                 }
               }
