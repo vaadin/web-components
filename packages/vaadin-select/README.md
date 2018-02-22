@@ -5,12 +5,12 @@
 
 # &lt;vaadin-dropdown-menu&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dropdown-menu/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-dropdown-menu/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-dropdown-menu/)
+[API documentation ↗](https://vaadin.com/elements/vaadin-dropdown-menu/html-api)
 
 
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/elements/-/element/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element similar to a native browser select element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/elements/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element similar to a native browser select element, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
@@ -37,7 +37,7 @@
 </vaadin-dropdown-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/-/element/vaadin-dropdown-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/elements/vaadin-dropdown-menu)
 
 ## Getting Started
 
