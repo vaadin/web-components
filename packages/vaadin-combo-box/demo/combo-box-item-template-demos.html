@@ -13,10 +13,8 @@
       <template preserve-content>
         <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
           <template>
-            <span>
-              <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
-              array index: [[index]]
-            </span>
+            <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+            array index: [[index]]
           </template>
         </vaadin-combo-box>
 
@@ -38,10 +36,8 @@
       <template preserve-content>
         <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon" style="display: block; max-width: 320px;">
           <template>
-            <span>
-              <b>[[item]]</b><br>
-              selected: [[selected]], focused: [[focused]]
-            </span>
+            <b>[[item]]</b><br>
+            selected: [[selected]], focused: [[focused]]
           </template>
         </vaadin-combo-box>
 

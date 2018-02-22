@@ -17,7 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
          display: none;
       }
     </style>
-    <span id="content">[[label]]</span>
+    <div part="content" id="content"></div>
   </template>
 </dom-module>
 
@@ -27,6 +27,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * The default element used for items in the vaadin-combo-box.
      *
      * ### Styling
+     *
+     * The following shadow DOM parts are available for styling:
+     *
+     * Part name | Description
+     * ---|---
+     * `content` | The element that wraps the item label or template content
      *
      * The following state attributes are exposed for styling:
      *
@@ -91,6 +97,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
+          '_updateLabel(label, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("selected", selected, _itemTemplateInstance)',
@@ -110,9 +117,16 @@ This program is available under Apache License Version 2.0, available at https:/
           comboBox._ensureTemplatized();
           if (comboBox._TemplateClass) {
             this._itemTemplateInstance = new comboBox._TemplateClass({});
-            this.root.removeChild(this.$.content);
-            this.root.appendChild(this._itemTemplateInstance.root);
+            this.$.content.textContent = '';
+            this.$.content.appendChild(this._itemTemplateInstance.root);
           }
+        }
+      }
+
+      _updateLabel(label, _itemTemplateInstance) {
+        if (_itemTemplateInstance === undefined && this.$.content) {
+          // Only set label to textContent no template
+          this.$.content.textContent = label;
         }
       }
 
