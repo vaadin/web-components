@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-item.html",
         "start": {
-          "line": 66,
+          "line": 73,
           "column": 6
         },
         "end": {
-          "line": 66,
+          "line": 73,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.\n\n```\n  <vaadin-item>\n    Item content\n  </vaadin-item>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled item | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the item is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host",
+          "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.\n\n```\n  <vaadin-item>\n    Item content\n  </vaadin-item>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`content` | The element that wraps the slot\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled item | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the item is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host",
           "summary": "",
           "path": "src/vaadin-item.html",
           "properties": [
@@ -344,11 +344,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 51,
+              "line": 58,
               "column": 6
             },
             "end": {
-              "line": 59,
+              "line": 66,
               "column": 7
             }
           },
@@ -406,11 +406,11 @@
                 "file": "src/vaadin-item.html",
                 "start": {
                   "line": 22,
-                  "column": 4
+                  "column": 6
                 },
                 "end": {
                   "line": 22,
-                  "column": 17
+                  "column": 19
                 }
               }
             }
