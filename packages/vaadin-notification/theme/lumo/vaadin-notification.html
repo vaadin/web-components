@@ -12,14 +12,13 @@
       }
 
       [part="overlay"] {
-        background-color: var(--lumo-shade-90pct);
+        background: var(--lumo-base-color) linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
         border-radius: var(--lumo-border-radius);
-        box-shadow: var(--lumo-box-shadow-l);
-        color: var(--lumo-tint-90pct);
+        box-shadow: 0 0 0 1px var(--lumo-contrast-10pct), var(--lumo-box-shadow-l);
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size-m);
         font-weight: 400;
-        line-height: var(--lumo-line-height-m);
+        line-height: var(--lumo-line-height-s);
         letter-spacing: 0;
         text-transform: none;
         -webkit-text-size-adjust: 100%;
@@ -30,6 +29,14 @@
 
       [part="content"] {
         padding: var(--lumo-space-wide-l);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      [part="content"] ::slotted(vaadin-button) {
+        flex: none;
+        margin: 0 calc(var(--lumo-space-s) * -1) 0 var(--lumo-space-s);
       }
 
       :host([slot^="middle"]) {
