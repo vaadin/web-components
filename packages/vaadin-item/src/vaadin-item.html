@@ -12,15 +12,16 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: flex;
-        align-items: center;
+        display: inline-block;
       }
 
       :host([hidden]) {
         display: none !important;
       }
     </style>
-    <slot></slot>
+    <div part="content">
+      <slot></slot>
+    </div>
   </template>
   <script>
     (function() {
@@ -34,6 +35,12 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        *
        * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ---|---
+       * `content` | The element that wraps the slot
        *
        * The following state attributes are available for styling:
        *
