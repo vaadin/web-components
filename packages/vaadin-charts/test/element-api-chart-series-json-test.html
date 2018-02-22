@@ -57,7 +57,7 @@
         setTimeout(function() {
           expect(chart.configuration.series.length).to.be.equal(1);
           done();
-        });
+        }, 20);
       });
       
       it('should have 1 series with merged options', function(done) {

@@ -42,6 +42,7 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-board": "^2.0.0"
+    "vaadin-board": "^2.0.0",
+    "vaadin-grid": "4.0.0-beta1"
   }
 }
