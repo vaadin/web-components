@@ -5,12 +5,12 @@
 
 # &lt;vaadin-list-box&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-list-box/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-list-box/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-list-box/)
+[API documentation ↗](https://vaadin.com/elements/vaadin-list-box/html-api)
 
 
-[&lt;vaadin-list-box&gt;](https://vaadin.com/elements/-/element/vaadin-list-box) is a [Polymer 2](http://polymer-project.org) element providing reusable list boxes, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-list-box&gt;](https://vaadin.com/elements/vaadin-list-box) is a [Polymer 2](http://polymer-project.org) element providing reusable list boxes, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
