@@ -4,7 +4,7 @@
 
 # Lumo
 
-*Lumo – enchantment (Finnish) and light (Esperanto)*
+*Lumo – ✨ enchantment (Finnish) and 🔆 light (Esperanto)*
 
 **Lumo is a design system foundation** for modern, beautiful and accessible web applications.
 
