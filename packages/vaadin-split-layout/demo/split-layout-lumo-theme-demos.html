@@ -6,31 +6,8 @@
       }
     </style>
 
-    <h3>Default</h3>
-    <vaadin-demo-snippet id='split-layout-lumo-theme-demos-default'>
-      <template preserve-content>
-        <style>
-          vaadin-split-layout {
-            min-height: 200px;
-            flex: auto;
-          }
-        </style>
-        <div style="display: flex">
-          <vaadin-split-layout>
-            <div></div>
-            <div></div>
-          </vaadin-split-layout>
-
-          <vaadin-split-layout orientation="vertical">
-            <div></div>
-            <div></div>
-          </vaadin-split-layout>
-        </div>
-      </template>
-    </vaadin-demo-snippet>
-
     <h3>Small</h3>
-    <vaadin-demo-snippet id='split-layout-lumo-theme-demos-small'>
+    <vaadin-demo-snippet id="split-layout-lumo-theme-demos-small">
       <template preserve-content>
         <style>
           vaadin-split-layout {
@@ -40,21 +17,21 @@
         </style>
         <div style="display: flex">
           <vaadin-split-layout theme="small">
-            <div></div>
-            <div></div>
+            <div>First content element</div>
+            <div>Second content element</div>
           </vaadin-split-layout>
 
           <vaadin-split-layout orientation="vertical" theme="small">
-            <div></div>
-            <div></div>
+            <div>First content element</div>
+            <div>Second content element</div>
           </vaadin-split-layout>
         </div>
 
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Subtle</h3>
-    <vaadin-demo-snippet id='split-layout-lumo-theme-demos-subtle'>
+    <h3>Minimal</h3>
+    <vaadin-demo-snippet id="split-layout-lumo-theme-demos-minimal">
       <template preserve-content>
         <style>
           vaadin-split-layout {
@@ -63,14 +40,14 @@
           }
         </style>
         <div style="display: flex">
-          <vaadin-split-layout theme="subtle">
-            <div></div>
-            <div></div>
+          <vaadin-split-layout theme="minimal">
+            <div style="background-color: lightgray;">Custom background color</div>
+            <div>Second content element</div>
           </vaadin-split-layout>
 
-          <vaadin-split-layout orientation="vertical" theme="subtle">
-            <div></div>
-            <div></div>
+          <vaadin-split-layout orientation="vertical" theme="minimal">
+            <div style="background-color: lightgray;">Custom background color</div>
+            <div>Second content element</div>
           </vaadin-split-layout>
         </div>
 
