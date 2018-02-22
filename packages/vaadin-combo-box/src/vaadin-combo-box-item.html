@@ -17,9 +17,7 @@ This program is available under Apache License Version 2.0, available at https:/
          display: none;
       }
     </style>
-    <div part="content">
-      <span id="content">[[label]]</span>
-    </div>
+    <div part="content" id="content"></div>
   </template>
 </dom-module>
 
@@ -99,6 +97,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
+          '_updateLabel(label, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("selected", selected, _itemTemplateInstance)',
@@ -118,10 +117,16 @@ This program is available under Apache License Version 2.0, available at https:/
           comboBox._ensureTemplatized();
           if (comboBox._TemplateClass) {
             this._itemTemplateInstance = new comboBox._TemplateClass({});
-            const content = this.shadowRoot.querySelector('[part="content"]');
-            content.removeChild(this.$.content);
-            content.appendChild(this._itemTemplateInstance.root);
+            this.$.content.textContent = '';
+            this.$.content.appendChild(this._itemTemplateInstance.root);
           }
+        }
+      }
+
+      _updateLabel(label, _itemTemplateInstance) {
+        if (_itemTemplateInstance === undefined && this.$.content) {
+          // Only set label to textContent no template
+          this.$.content.textContent = label;
         }
       }
 
