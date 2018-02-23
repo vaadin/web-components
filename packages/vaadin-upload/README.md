@@ -6,8 +6,10 @@
 # &lt;vaadin-upload&gt;
 
 [Live Demo ↗](https://vaadin.com/elements/vaadin-upload/html-examples/upload-basic-demos)
+|
+[API documentation ↗](https://vaadin.com/elements/vaadin-upload/html-api)
 
-[&lt;vaadin-upload&gt;](https://vaadin.com/elements/vaadin-upload) is a  [Polymer](http://polymer-project.org) element for uploading files, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
+[&lt;vaadin-upload&gt;](https://vaadin.com/elements/vaadin-upload) is a [Polymer](http://polymer-project.org) element for uploading files, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
 
 <!---
 ```
