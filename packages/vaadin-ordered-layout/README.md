@@ -5,12 +5,12 @@
 
 # &lt;vaadin-ordered-layout&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-ordered-layout/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-ordered-layout/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-ordered-layout/)
+[API documentation ↗](https://vaadin.com/elements/vaadin-ordered-layout/html-api)
 
 
-[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/elements/-/element/vaadin-ordered-layout) consist of two [Polymer 2](http://polymer-project.org) elements providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/elements/vaadin-ordered-layout) consist of two [Polymer 2](http://polymer-project.org) elements providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
@@ -35,7 +35,7 @@
 </vaadin-vertical-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/elements/-/element/vaadin-ordered-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/elements/vaadin-ordered-layout)
 
 ## Getting Started
 
