@@ -5,12 +5,12 @@
 
 # &lt;vaadin-item&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-item/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-item/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-item/)
+[API documentation ↗](https://vaadin.com/elements/vaadin-item/html-api)
 
 
-[&lt;vaadin-item&gt;](https://vaadin.com/elements/-/element/vaadin-item) is a [Polymer 2](http://polymer-project.org) element providing a container for item elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-item&gt;](https://vaadin.com/elements/vaadin-item) is a [Polymer 2](http://polymer-project.org) element providing a container for item elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
