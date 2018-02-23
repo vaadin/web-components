@@ -59,6 +59,13 @@
         cursor: default;
         pointer-events: none;
       }
+
+      /* Slotted icons */
+
+      :host ::slotted(iron-icon) {
+        width: var(--lumo-icon-size-m);
+        height: var(--lumo-icon-size-m);
+      }
     </style>
   </template>
 </dom-module>
