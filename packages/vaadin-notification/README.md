@@ -5,16 +5,16 @@
 
 # &lt;vaadin-notification&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-notification/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-notification/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-core-elements/master/vaadin-notification/)
+[API documentation ↗](https://vaadin.com/elements/vaadin-notification/html-api)
 
 
-[&lt;vaadin-notification&gt;](https://vaadin.com/elements/-/element/vaadin-notification) is a [Polymer 2](http://polymer-project.org) element providing accessible and customizable notifications (toasts), part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-notification&gt;](https://vaadin.com/elements/vaadin-notification) is a [Polymer 2](http://polymer-project.org) element providing accessible and customizable notifications (toasts), part of the [Vaadin Core Elements](https://vaadin.com/elements).
 
 <!--
 ```
-<custom-element-demo>
+<custom-element-demo height="120">
   <template>
     <script src="../webcomponentsjs/webcomponents-lite.js"></script>
     <link rel="import" href="vaadin-notification.html">
@@ -31,7 +31,7 @@
 </vaadin-notification>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/-/element/vaadin-notification)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-notification/master/screenshot.png" width="336" alt="Screenshot of vaadin-notification">](https://vaadin.com/elements/vaadin-notification)
 
 ## Getting Started
 
