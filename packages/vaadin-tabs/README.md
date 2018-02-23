@@ -5,12 +5,12 @@
 
 # &lt;vaadin-tabs&gt;
 
-[Live Demo ↗](https://cdn.vaadin.com/vaadin-tabs/1.0.0/demo/)
+[Live Demo ↗](https://vaadin.com/elements/vaadin-tabs/html-examples)
 |
-[API documentation ↗](https://cdn.vaadin.com/vaadin-tabs/1.0.0/#/elements/vaadin-tabs)
+[API documentation ↗](https://vaadin.com/elements/vaadin-tabs/html-api)
 
 
-[&lt;vaadin-tabs&gt;](https://vaadin.com/elements/-/element/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin Core Elements](https://vaadin.com/elements). It is designed for menu and tab components.
+[&lt;vaadin-tabs&gt;](https://vaadin.com/elements/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin Core Elements](https://vaadin.com/elements). It is designed for menu and tab components.
 
 <!--
 ```
