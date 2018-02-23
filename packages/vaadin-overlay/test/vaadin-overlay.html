@@ -35,12 +35,12 @@
           <vaadin-overlay>
             <template>
               content
-              <button>native button</button>
-              <button tabindex="-1">button with tabindex="-1"</button>
-              <select tabindex="2"></select>
-              <textarea tabindex="1"></textarea>
-              <input type="text">
-              <vaadin-button>vaadin-button</vaadin-button>
+              <button>tabindex 0</button>
+              <button tabindex="-1">tabindex -1</button>
+              <select tabindex="2"><option>tabindex 2</option></select>
+              <textarea tabindex="1">tabindex 1</textarea>
+              <input type="text" value="tabindex 0">
+              <vaadin-button>tabindex 0</vaadin-button>
             </template>
           </vaadin-overlay>
         </div>
@@ -587,6 +587,23 @@
             MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
           }
           expect(overlay._focusedElement).to.eql(focusableElements[focusableElements.length - 1]);
+          done();
+        });
+        overlay.opened = true;
+      });
+
+      it('should update focus sequence when focusing a random element', (done) => {
+        overlay.focusTrap = true;
+        overlay.addEventListener('vaadin-overlay-open', () => {
+          expect(overlay._focusedElement).to.eql(focusableElements[0]);
+
+          MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
+          expect(overlay._focusedElement).to.eql(focusableElements[1]);
+
+          focusableElements[0].focus();
+          MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
+          expect(overlay._focusedElement).to.eql(focusableElements[1]);
+
           done();
         });
         overlay.opened = true;
