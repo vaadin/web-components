@@ -31,12 +31,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * ```
        *
        * `<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:
-       * 
+       *
        * ```
        *  <vaadin-chart-series values="[10,20,30,40,50]"></vaadin-chart-series>
        * ```
        *
-       * which will add a new line series, where each value will be a data point. 
+       * which will add a new line series, where each value will be a data point.
        * Look for the Properties session to see all available attributes.
        *
        * ### Dynamically adding and removing series
@@ -73,9 +73,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get is() {
           return 'vaadin-chart-series';
         }
- 
+
         get options() {
           return {
+            type: this.type,
             data: this.values
           };
         }
@@ -91,13 +92,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              *
              *  See more in [API Site](https://api.highcharts.com/highcharts/series)
              *
-             * Note that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) 
+             * Note that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)
              * to mutate the values array in order to make the component aware of the
              * change and be able to syncronize it.
              */
             values: {
               type: Array,
               value: () => []
+            },
+
+            /**
+             *  A string with the type of the series.
+             *  Defaults to `'line'`.
+             */
+            type: {
+              type: String,
+              value: 'line',
+              observer: '__typeObserver'
             },
 
             /**
@@ -128,7 +139,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /**
          * Method to attach a series object of type `Highcharts.Series`.
          * @param series Object of type `Highcharts.Series`
-         */ 
+         */
         setSeries(series) {
           if (!(series instanceof Highcharts.Series)) {
             throw new TypeError('series should be Highcharts.Series');
@@ -139,6 +150,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         __valuesObserver() {
           if (this.__hasSeriesConfig()) {
             this._series.setData(this.values);
+          }
+        }
+
+        __typeObserver() {
+          if (this.__hasSeriesConfig()) {
+            this._series.update({
+              type: this.type
+            });
           }
         }
 

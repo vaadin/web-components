@@ -8,32 +8,32 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 993,
+          "line": 994,
           "column": 6
         },
         "end": {
-          "line": 993,
+          "line": 994,
           "column": 48
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.\n\n### Basic use\n\nTo use `<vaadin-chart-series>`, simply add it inside a `<vaadin-chart>` element:\n\n```\n <vaadin-chart>\n   <vaadin-chart-series></vaadin-chart-series>\n </vaadin-chart>\n```\n\n`<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:\n\n```\n <vaadin-chart-series values=\"[10,20,30,40,50]\"></vaadin-chart-series>\n```\n\nwhich will add a new line series, where each value will be a data point. \nLook for the Properties session to see all available attributes.\n\n### Dynamically adding and removing series\n\nYou are also able to add and remove series by using DOM API.\n\nTo create a new series, simply call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const newSeries = document.createElement('vaadin-chart-series');\n newSeries.values = [10,20,30,40,50];\n chart.appendChild(newSeries);\n```\n\nIn order to remove it, you should use the series to be removed as a reference for the `#removeChild()` call:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const seriesToBeRemoved = \\* a <vaadin-chart-series> reference to remove*\\\n chart.removeChild(seriesToBeRemoved);\n```\n\n(There's an issue with `#remove()` method on Firefox, so we advice to remove the element from its parent)",
+          "description": "`<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.\n\n### Basic use\n\nTo use `<vaadin-chart-series>`, simply add it inside a `<vaadin-chart>` element:\n\n```\n <vaadin-chart>\n   <vaadin-chart-series></vaadin-chart-series>\n </vaadin-chart>\n```\n\n`<vaadin-chart-series>` accepts `values` as an array attribute, so you can add it to your element definition:\n\n```\n <vaadin-chart-series values=\"[10,20,30,40,50]\"></vaadin-chart-series>\n```\n\nwhich will add a new line series, where each value will be a data point.\nLook for the Properties session to see all available attributes.\n\n### Dynamically adding and removing series\n\nYou are also able to add and remove series by using DOM API.\n\nTo create a new series, simply call `document.createElement('vaadin-chart-series')` and append it to your `<vaadin-chart>`:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const newSeries = document.createElement('vaadin-chart-series');\n newSeries.values = [10,20,30,40,50];\n chart.appendChild(newSeries);\n```\n\nIn order to remove it, you should use the series to be removed as a reference for the `#removeChild()` call:\n\n```\n const chart = \\* a <vaadin-chart> reference *\\\n const seriesToBeRemoved = \\* a <vaadin-chart-series> reference to remove*\\\n chart.removeChild(seriesToBeRemoved);\n```\n\n(There's an issue with `#remove()` method on Firefox, so we advice to remove the element from its parent)",
           "summary": "",
           "path": "vaadin-chart-series.html",
           "properties": [
             {
               "name": "values",
               "type": "Array",
-              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) \nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
+              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)\nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 97,
+                  "line": 98,
                   "column": 12
                 },
                 "end": {
-                  "line": 100,
+                  "line": 101,
                   "column": 13
                 }
               },
@@ -43,9 +43,9 @@
               "defaultValue": "[]"
             },
             {
-              "name": "options",
-              "type": "Object",
-              "description": "Object with the configured options defined and used to create a series.",
+              "name": "type",
+              "type": "string",
+              "description": "A string with the type of the series.\n Defaults to `'line'`.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -53,7 +53,29 @@
                   "column": 12
                 },
                 "end": {
-                  "line": 109,
+                  "line": 111,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"__typeObserver\""
+                }
+              },
+              "defaultValue": "\"line\""
+            },
+            {
+              "name": "options",
+              "type": "Object",
+              "description": "Object with the configured options defined and used to create a series.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 118,
+                  "column": 12
+                },
+                "end": {
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -69,11 +91,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 120,
+                  "line": 131,
                   "column": 8
                 },
                 "end": {
-                  "line": 125,
+                  "line": 136,
                   "column": 9
                 }
               },
@@ -86,11 +108,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 131,
+                  "line": 142,
                   "column": 8
                 },
                 "end": {
-                  "line": 136,
+                  "line": 147,
                   "column": 9
                 }
               },
@@ -108,11 +130,28 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 149,
                   "column": 8
                 },
                 "end": {
-                  "line": 142,
+                  "line": 153,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__typeObserver",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 155,
+                  "column": 8
+                },
+                "end": {
+                  "line": 161,
                   "column": 9
                 }
               },
@@ -125,11 +164,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 163,
                   "column": 8
                 },
                 "end": {
-                  "line": 146,
+                  "line": 165,
                   "column": 9
                 }
               },
@@ -151,7 +190,7 @@
               "column": 6
             },
             "end": {
-              "line": 148,
+              "line": 167,
               "column": 7
             }
           },
@@ -161,14 +200,14 @@
           "attributes": [
             {
               "name": "values",
-              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation) \nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
+              "description": "An array of data used by the series.\nFormats dependends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)\nto mutate the values array in order to make the component aware of the\nchange and be able to syncronize it.",
               "sourceRange": {
                 "start": {
-                  "line": 97,
+                  "line": 98,
                   "column": 12
                 },
                 "end": {
-                  "line": 100,
+                  "line": 101,
                   "column": 13
                 }
               },
@@ -176,15 +215,31 @@
               "type": "Array"
             },
             {
-              "name": "options",
-              "description": "Object with the configured options defined and used to create a series.",
+              "name": "type",
+              "description": "A string with the type of the series.\n Defaults to `'line'`.",
               "sourceRange": {
                 "start": {
                   "line": 107,
                   "column": 12
                 },
                 "end": {
-                  "line": 109,
+                  "line": 111,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "options",
+              "description": "Object with the configured options defined and used to create a series.",
+              "sourceRange": {
+                "start": {
+                  "line": 118,
+                  "column": 12
+                },
+                "end": {
+                  "line": 120,
                   "column": 13
                 }
               },
@@ -212,11 +267,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 329,
+                  "line": 330,
                   "column": 10
                 },
                 "end": {
-                  "line": 329,
+                  "line": 330,
                   "column": 29
                 }
               },
@@ -233,11 +288,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 260,
                   "column": 12
                 },
                 "end": {
-                  "line": 259,
+                  "line": 260,
                   "column": 34
                 }
               },
@@ -252,11 +307,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 264,
+                  "line": 265,
                   "column": 12
                 },
                 "end": {
-                  "line": 267,
+                  "line": 268,
                   "column": 13
                 }
               },
@@ -271,11 +326,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 272,
+                  "line": 273,
                   "column": 12
                 },
                 "end": {
-                  "line": 276,
+                  "line": 277,
                   "column": 13
                 }
               },
@@ -292,11 +347,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 282,
                   "column": 12
                 },
                 "end": {
-                  "line": 285,
+                  "line": 286,
                   "column": 13
                 }
               },
@@ -314,11 +369,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 335,
+                  "line": 336,
                   "column": 8
                 },
                 "end": {
-                  "line": 345,
+                  "line": 346,
                   "column": 9
                 }
               },
@@ -331,11 +386,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 587,
+                  "line": 588,
                   "column": 8
                 },
                 "end": {
-                  "line": 594,
+                  "line": 595,
                   "column": 9
                 }
               },
@@ -348,11 +403,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 596,
+                  "line": 597,
                   "column": 8
                 },
                 "end": {
-                  "line": 603,
+                  "line": 604,
                   "column": 9
                 }
               },
@@ -365,11 +420,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 605,
+                  "line": 606,
                   "column": 8
                 },
                 "end": {
-                  "line": 611,
+                  "line": 612,
                   "column": 9
                 }
               },
@@ -382,11 +437,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 613,
+                  "line": 614,
                   "column": 8
                 },
                 "end": {
-                  "line": 615,
+                  "line": 616,
                   "column": 9
                 }
               },
@@ -403,11 +458,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 617,
+                  "line": 618,
                   "column": 8
                 },
                 "end": {
-                  "line": 631,
+                  "line": 632,
                   "column": 9
                 }
               },
@@ -424,11 +479,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 633,
+                  "line": 634,
                   "column": 8
                 },
                 "end": {
-                  "line": 635,
+                  "line": 636,
                   "column": 9
                 }
               },
@@ -445,11 +500,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 637,
+                  "line": 638,
                   "column": 8
                 },
                 "end": {
-                  "line": 646,
+                  "line": 647,
                   "column": 9
                 }
               },
@@ -466,11 +521,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 649,
+                  "line": 650,
                   "column": 8
                 },
                 "end": {
-                  "line": 653,
+                  "line": 654,
                   "column": 9
                 }
               },
@@ -483,11 +538,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 690,
+                  "line": 691,
                   "column": 8
                 },
                 "end": {
-                  "line": 728,
+                  "line": 729,
                   "column": 9
                 }
               },
@@ -511,11 +566,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 730,
+                  "line": 731,
                   "column": 8
                 },
                 "end": {
-                  "line": 739,
+                  "line": 740,
                   "column": 9
                 }
               },
@@ -535,11 +590,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 741,
+                  "line": 742,
                   "column": 8
                 },
                 "end": {
-                  "line": 756,
+                  "line": 757,
                   "column": 9
                 }
               },
@@ -562,11 +617,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 758,
+                  "line": 759,
                   "column": 8
                 },
                 "end": {
-                  "line": 774,
+                  "line": 775,
                   "column": 9
                 }
               },
@@ -583,11 +638,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 776,
+                  "line": 777,
                   "column": 8
                 },
                 "end": {
-                  "line": 780,
+                  "line": 781,
                   "column": 9
                 }
               },
@@ -604,11 +659,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 782,
+                  "line": 783,
                   "column": 8
                 },
                 "end": {
-                  "line": 784,
+                  "line": 785,
                   "column": 9
                 }
               },
@@ -625,11 +680,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 786,
+                  "line": 787,
                   "column": 8
                 },
                 "end": {
-                  "line": 788,
+                  "line": 789,
                   "column": 9
                 }
               },
@@ -646,11 +701,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 790,
+                  "line": 791,
                   "column": 8
                 },
                 "end": {
-                  "line": 792,
+                  "line": 793,
                   "column": 9
                 }
               },
@@ -667,11 +722,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 794,
+                  "line": 795,
                   "column": 8
                 },
                 "end": {
-                  "line": 840,
+                  "line": 841,
                   "column": 9
                 }
               },
@@ -697,11 +752,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 842,
+                  "line": 843,
                   "column": 8
                 },
                 "end": {
-                  "line": 852,
+                  "line": 853,
                   "column": 9
                 }
               },
@@ -721,11 +776,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 854,
+                  "line": 855,
                   "column": 8
                 },
                 "end": {
-                  "line": 860,
+                  "line": 861,
                   "column": 9
                 }
               },
@@ -742,11 +797,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 862,
+                  "line": 863,
                   "column": 8
                 },
                 "end": {
-                  "line": 875,
+                  "line": 876,
                   "column": 9
                 }
               },
@@ -766,11 +821,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 877,
+                  "line": 878,
                   "column": 8
                 },
                 "end": {
-                  "line": 885,
+                  "line": 886,
                   "column": 9
                 }
               },
@@ -787,11 +842,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 887,
+                  "line": 888,
                   "column": 8
                 },
                 "end": {
-                  "line": 894,
+                  "line": 895,
                   "column": 9
                 }
               },
@@ -811,11 +866,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 896,
+                  "line": 897,
                   "column": 8
                 },
                 "end": {
-                  "line": 904,
+                  "line": 905,
                   "column": 9
                 }
               },
@@ -832,11 +887,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 906,
+                  "line": 907,
                   "column": 8
                 },
                 "end": {
-                  "line": 918,
+                  "line": 919,
                   "column": 9
                 }
               },
@@ -853,11 +908,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 920,
+                  "line": 921,
                   "column": 8
                 },
                 "end": {
-                  "line": 928,
+                  "line": 929,
                   "column": 9
                 }
               },
@@ -874,11 +929,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 930,
+                  "line": 931,
                   "column": 8
                 },
                 "end": {
-                  "line": 939,
+                  "line": 940,
                   "column": 9
                 }
               },
@@ -898,11 +953,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 941,
+                  "line": 942,
                   "column": 8
                 },
                 "end": {
-                  "line": 974,
+                  "line": 975,
                   "column": 9
                 }
               },
@@ -925,11 +980,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 976,
+                  "line": 977,
                   "column": 8
                 },
                 "end": {
-                  "line": 985,
+                  "line": 986,
                   "column": 9
                 }
               },
@@ -957,11 +1012,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 247,
+              "line": 248,
               "column": 6
             },
             "end": {
-              "line": 986,
+              "line": 987,
               "column": 7
             }
           },
@@ -974,11 +1029,11 @@
               "description": "Specifies whether the chart is a normal chart or a timeline chart.",
               "sourceRange": {
                 "start": {
-                  "line": 264,
+                  "line": 265,
                   "column": 12
                 },
                 "end": {
-                  "line": 267,
+                  "line": 268,
                   "column": 13
                 }
               },
@@ -990,11 +1045,11 @@
               "description": "Represents the title of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 272,
+                  "line": 273,
                   "column": 12
                 },
                 "end": {
-                  "line": 276,
+                  "line": 277,
                   "column": 13
                 }
               },
@@ -1006,11 +1061,11 @@
               "description": "Represents the subtitle of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 282,
                   "column": 12
                 },
                 "end": {
-                  "line": 285,
+                  "line": 286,
                   "column": 13
                 }
               },
@@ -1187,11 +1242,11 @@
               "range": {
                 "file": "vaadin-chart.html",
                 "start": {
-                  "line": 46,
+                  "line": 47,
                   "column": 4
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 27
                 }
               }

@@ -11,7 +11,7 @@
   <dom-module id="chart-series-api-demo">
     <template>
       <vaadin-chart id="mychart">
-        <vaadin-chart-series values="{{values}}"></vaadin-chart-series>
+        <vaadin-chart-series values="{{values}}" type="{{type}}"></vaadin-chart-series>
       </vaadin-chart>
     </template>
 
@@ -27,6 +27,10 @@
               values: {
                 type: Array,
                 value: [10, 20, 10, 30, 50]
+              },
+              type: {
+                type: String,
+                value: 'line'
               }
             };
           }
@@ -41,115 +45,110 @@
       });
     </script>
   </dom-module>
-  <chart-series-api-demo></chart-series-api-demo>
- 
+  <test-fixture id="default">
+    <template>
+      <chart-series-api-demo></chart-series-api-demo>
+    </template>
+  </test-fixture>
+
   <script>
     describe('High-level Charts Series API', function() {
       let chart;
       let chartContainer;
       let element;
 
-      before(function(done) {
+      beforeEach(function(done) {
         HTMLImports.whenReady(() => {
-          element = document.querySelector('chart-series-api-demo');
+          element = fixture('default');
           chart = element.$.mychart;
           chartContainer = chart.$.chart;
-          done();
-        });
-      });
-
-      it('should be defined', function(done) {
-        setTimeout(function() {
-          expect(chart.constructor.is).to.be.equal(chart.localName);
-          done();
-        });
-      });
-
-      it('should have one series', function(done) {
-        setTimeout(function() {
-          expect(chart.configuration.series.length).to.be.equal(1);
-          done();
-        });
-      });
-
-      it('should have one line series with 5 points', function(done) {
-        setTimeout(function() {
-          const series = chartContainer.querySelectorAll('.highcharts-series');
-          expect(series).to.have.lengthOf(1);
-
-          const firstSeries = series[0];
-          // IE11 doesn't support SVGElement.classList 
-          expect(firstSeries.getAttribute('class')).to.include('highcharts-line-series');
-          expect(chart.configuration.series[0].data).to.have.lengthOf(element.values.length);
-
-          done();
-        });
-      });
-
-      it('should have same values as passed', function(done) {
-        setTimeout(function() {
-          const values = chart.configuration.series[0].data.map(data => data.y);
-          expect(values).to.have.lengthOf(element.values.length);
-          expect(values).to.have.members(element.values);
-
-          done();
-        });
-      });
-
-      it('should update values on change', function(done) {
-        setTimeout(function() {
-          element.changeValues();
-          const changedValues = chart.configuration.series[0].data.map(data => data.y);
-          expect(changedValues).to.have.members(element.values);
-
-          done();
-        });
-      });
-
-      it('should disable series visibility toggling only when set', function(done) {
-        setTimeout(function() {
-          const legend = chartContainer.querySelector('.highcharts-legend-item');
-
-          // Series visibility toggling is enabled by default
-          legend.dispatchEvent(new MouseEvent('click'));
-          // IE11 doesn't support SVGElement.classList
-          expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
-
-          legend.dispatchEvent(new MouseEvent('click'));
-          expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
-
-          // Series doesn't hide when toggle is disabled
-          chart['_visibilityTogglingDisabled'] = true;
-          legend.dispatchEvent(new MouseEvent('click'));
-          expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
-
-          chart['_visibilityTogglingDisabled'] = false;
-          legend.dispatchEvent(new MouseEvent('click'));
-
-          // Hidden series doesn't show when toggle is disabled
-          chart['_visibilityTogglingDisabled'] = true;
-          legend.dispatchEvent(new MouseEvent('click'));
-          expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
-
-          done();
-        });
-      });
-
-      it('should remove series if element is removed from the tree', function(done) {
-        setTimeout(function() {
-          const series = chartContainer.querySelectorAll('.highcharts-series');
-          expect(series).to.have.lengthOf(1);
-
-          const seriesElement = chart.querySelector('vaadin-chart-series');
-          chart.removeChild(seriesElement);
-
-          Polymer.RenderStatus.beforeNextRender(this, () => {
-            const seriesEmpty = chartContainer.querySelectorAll('.highcharts-series');
-            expect(seriesEmpty).to.have.lengthOf(0);
-
+          setTimeout(function() {
             done();
-          });
+          }, 55);
         });
+      });
+
+      it('should be defined', function() {
+        expect(chart.constructor.is).to.be.equal(chart.localName);
+      });
+
+      it('should have one series', function() {
+        expect(chart.configuration.series.length).to.be.equal(1);
+      });
+
+      it('should have one line series with 5 points', function() {
+        const series = chartContainer.querySelectorAll('.highcharts-series');
+        expect(series).to.have.lengthOf(1);
+
+        const firstSeries = series[0];
+        // IE11 doesn't support SVGElement.classList
+        expect(firstSeries.getAttribute('class')).to.include('highcharts-line-series');
+        expect(chart.configuration.series[0].data).to.have.lengthOf(element.values.length);
+      });
+
+      it('should have same values as passed', function() {
+        const values = chart.configuration.series[0].data.map(data => data.y);
+        expect(values).to.have.lengthOf(element.values.length);
+        expect(values).to.have.members(element.values);
+      });
+
+      it('should update values on change', function() {
+        element.changeValues();
+        const changedValues = chart.configuration.series[0].data.map(data => data.y);
+        expect(changedValues).to.have.members(element.values);
+      });
+
+      it('should disable series visibility toggling only when set', function() {
+        const legend = chartContainer.querySelector('.highcharts-legend-item');
+
+        // Series visibility toggling is enabled by default
+        legend.dispatchEvent(new MouseEvent('click'));
+        // IE11 doesn't support SVGElement.classList
+        expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
+
+        legend.dispatchEvent(new MouseEvent('click'));
+        expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
+
+        // Series doesn't hide when toggle is disabled
+        chart['_visibilityTogglingDisabled'] = true;
+        legend.dispatchEvent(new MouseEvent('click'));
+        expect(legend.getAttribute('class')).to.not.include('highcharts-legend-item-hidden');
+
+        chart['_visibilityTogglingDisabled'] = false;
+        legend.dispatchEvent(new MouseEvent('click'));
+
+        // Hidden series doesn't show when toggle is disabled
+        chart['_visibilityTogglingDisabled'] = true;
+        legend.dispatchEvent(new MouseEvent('click'));
+        expect(legend.getAttribute('class')).to.include('highcharts-legend-item-hidden');
+      });
+
+      it('should remove series if element is removed from the tree', function() {
+        const series = chartContainer.querySelectorAll('.highcharts-series');
+        expect(series).to.have.lengthOf(1);
+
+        const seriesElement = chart.querySelector('vaadin-chart-series');
+        chart.removeChild(seriesElement);
+
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          const seriesEmpty = chartContainer.querySelectorAll('.highcharts-series');
+          expect(seriesEmpty).to.have.lengthOf(0);
+        });
+      });
+
+      it('should have a custom type', function() {
+        const firstSeries = chart.configuration.series[0];
+        expect(firstSeries.type).to.be.equal('line');
+      });
+
+      it('should update type on property change', function() {
+        const type = 'area';
+        element.setAttribute('type', type);
+
+        setTimeout(function() {
+          const firstSeries = chart.configuration.series[0];
+          expect(firstSeries.type).to.be.equal(type);
+        }, 20);
       });
     });
   </script>
