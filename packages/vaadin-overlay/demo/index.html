@@ -203,6 +203,35 @@
         </script>
       </template>
     </demo-snippet>
+
+    <!-- Needs to be duplicated for polyfilled browsers, doesn’t work from inside demo-snippet -->
+    <dom-module id="overlay-animations" theme-for="vaadin-overlay">
+      <template>
+        <style>
+          :host(.animations[opening]) {
+            animation: vaadin-overlay-enter 0.3s;
+          }
+
+          @keyframes vaadin-overlay-enter {
+            0% {
+              opacity: 0;
+              transform: rotate(180deg);
+            }
+          }
+
+          :host(.animations[closing]) {
+            animation: vaadin-overlay-exit 0.3s;
+          }
+
+          @keyframes vaadin-overlay-exit {
+            100% {
+              opacity: 0;
+              transform: rotate(180deg);
+            }
+          }
+        </style>
+      </template>
+    </dom-module>
   </div>
 </body>
 </html>
