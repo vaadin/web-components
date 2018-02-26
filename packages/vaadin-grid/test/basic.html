@@ -26,7 +26,7 @@
   <test-fixture id="layout">
     <template>
       <div style="display: flex; width: 300px; height: 300px;">
-        <div style="width: 100px; height: 100px;">Layout sibling</div>
+        <div style="width: 100px; height: 100px; flex-shrink: 0;">Layout sibling</div>
       </div>
     </template>
   </test-fixture>
@@ -267,13 +267,13 @@
       describeMissingImportWarning('vaadin-grid-sorter');
       describeMissingImportWarning('vaadin-grid-tree-toggle');
 
-      it('should have flex: auto style', () => {
+      it('should have flex: 1 1 100% style', () => {
         expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-shrink'))).to.equal(1);
         expect(parseInt(window.getComputedStyle(grid).getPropertyValue('flex-grow'))).to.equal(1);
-        expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('auto');
+        expect(window.getComputedStyle(grid).getPropertyValue('flex-basis')).to.equal('100%');
       });
 
-      describe('layout-fit attribute', () => {
+      describe('flex child', () => {
         let layout;
 
         beforeEach(() => {
@@ -289,16 +289,14 @@
         });
 
         describe('in horizontal layout', () => {
-          it('should stretch width with layout-fit', () => {
-            grid.setAttribute('layout-fit', '');
+          it('should stretch width', () => {
             expect(grid.getBoundingClientRect().width).to.be.closeTo(200, 1);
             expect(grid.$.scroller.getBoundingClientRect().width).to.be.closeTo(200 - 2, 1);
           });
 
-          it('should stretch height with layout-fit', () => {
-            grid.setAttribute('layout-fit', '');
-            expect(grid.getBoundingClientRect().height).to.be.closeTo(300, 1);
-            expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(300 - 2, 1);
+          it('should not stretch height', () => {
+            expect(grid.getBoundingClientRect().height).to.be.closeTo(400, 1);
+            expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(400 - 2, 1);
           });
         });
 
@@ -307,14 +305,12 @@
             layout.style.flexDirection = 'column';
           });
 
-          it('should stretch width with layout-fit', () => {
-            grid.setAttribute('layout-fit', '');
+          it('should stretch width', () => {
             expect(grid.getBoundingClientRect().width).to.be.closeTo(300, 1);
             expect(grid.$.scroller.getBoundingClientRect().width).to.be.closeTo(300 - 2, 1);
           });
 
-          it('should stretch height with layout-fit', () => {
-            grid.setAttribute('layout-fit', '');
+          it('should stretch height', () => {
             expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);
             expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
           });
