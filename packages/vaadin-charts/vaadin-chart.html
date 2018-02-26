@@ -258,12 +258,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get properties() {
           return {
             /** @private */
-            _configuration: Object,
+            '_configuration': Object,
 
             /**
              * Specifies whether the chart is a normal chart or a timeline chart.
              */
-            timeline: {
+            'timeline': {
               type: Boolean,
               reflectToAttribute: true
             },
@@ -271,7 +271,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Represents the title of the chart.
              */
-            title: {
+            'title': {
               type: String,
               observer: '__updateTitle',
               reflectToAttribute: true
@@ -280,12 +280,26 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Represents the subtitle of the chart.
              */
-            subtitle: {
+            'subtitle': {
               type: String,
               observer: '__updateSubtitle',
               reflectToAttribute: true
+            },
+
+            /**
+             * Represents additional JSON configuration.
+             */
+            'additional-options': {
+              type: Object,
+              reflectToAttribute: true
             }
           };
+        }
+
+        static get observers() {
+          return [
+            '__updateAdditionalOptions(additional-options.*)'
+          ];
         }
 
         constructor() {
@@ -348,6 +362,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         get options() {
           const options = Object.assign({}, this._baseConfig);
+          this.__deepMerge(options, this['additional-options']);
 
           if (this.title) {
             options.title = {
@@ -917,6 +932,34 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               this.configuration.subtitle.update({text: newValue});
             }
           }
+        }
+
+        __updateAdditionalOptions() {
+          if (this._configuration) {
+            this.update(this['additional-options']);
+          }
+        }
+
+        __isObject(item) {
+          return (item && typeof item === 'object' && !Array.isArray(item));
+        }
+
+        __deepMerge(target, source) {
+          if (this.__isObject(source) && this.__isObject(target)) {
+            for (const key in source) {
+              if (this.__isObject(source[key])) {
+                if (!target[key]) {
+                  Object.assign(target, {[key]: {}});
+                }
+
+                this.__deepMerge(target[key], source[key]);
+              } else {
+                Object.assign(target, {[key]: source[key]});
+              }
+            }
+          }
+
+          return target;
         }
 
         __callChartFunction(functionName) {

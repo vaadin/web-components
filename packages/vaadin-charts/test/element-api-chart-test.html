@@ -10,7 +10,11 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-chart title="My title" subtitle="My subtitle"></vaadin-chart>
+      <vaadin-chart title="My title"
+                    subtitle="My subtitle"
+                    additional-options='{"exporting": {"enabled": true}, "credits": {"enabled": true, "text": "Vaadin Ltd"}, "title": {"text": "Additional title"}}'>
+
+      </vaadin-chart>
     </template>
   </test-fixture>
 
@@ -18,26 +22,53 @@
     describe('High-level API', function() {
       var element;
 
-      beforeEach(function() {
+      beforeEach(done => {
         element = fixture('default');
-      });
-
-      it('should be defined', function() {
-        expect(element.constructor.is).to.be.equal(element.localName);
-      });
-
-      it('should have custom title', done => {
         Polymer.flush();
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
           done();
         }, 100);
       });
 
-      it('should have custom subtitle', function(done) {
-        Polymer.flush();
+      it('should be defined', () => {
+        expect(element.constructor.is).to.be.equal(element.localName);
+      });
+
+      it('should have custom title', () => {
+        expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+      });
+
+      it('should have custom subtitle', () => {
+        expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
+      });
+
+      it('should have additional-options', () => {
+        // Exporting dropdown menu
+        expect(element.$.chart.querySelector('.highcharts-contextbutton')).to.not.be.null;
+      });
+
+      it('additional-options should overwrite conflicting base config properties', () => {
+        expect(element.$.chart.querySelector('.highcharts-credits').textContent).to.be.equal('Vaadin Ltd');
+      });
+
+      it('additional-options should not overwrite top-level element properties', () => {
+        expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+      });
+
+      it('should react to additional-options object change', done => {
+        element['additional-options'] = {title: {text: 'Updated title'}};
+
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
+          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Updated title');
+          done();
+        }, 100);
+      });
+
+      it('should react to additional-options subproperty change', done => {
+        element.set('additional-options.title.text', 'Reindeer statistics');
+
+        setTimeout(() => {
+          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Reindeer statistics');
           done();
         }, 100);
       });
