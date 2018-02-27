@@ -49,6 +49,10 @@ function tap(element) {
   element.dispatchEvent(new CustomEvent('tap', {bubbles: true, detail: {}, composed: true}));
 }
 
+function click(element) {
+  element.dispatchEvent(new CustomEvent('click', {bubbles: true, detail: {}, composed: true}));
+}
+
 function monthsEqual(date1, date2) {
   return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth();
 }

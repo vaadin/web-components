@@ -198,7 +198,7 @@
         it('should clear the value', () => {
           overlay.selectedDate = new Date();
 
-          tap(clearButton);
+          click(clearButton);
 
           expect(overlay.selectedDate).to.equal('');
         });
