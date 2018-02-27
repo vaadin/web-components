@@ -57,16 +57,6 @@ This program is available under Apache License Version 2.0, available at https:/
         text-overflow: ellipsis;
       }
 
-      /* When there is no text label, icons are misaligned on IE11 */
-      ::-ms-backdrop,
-      [part="label"]::before {
-        content: "\2003";
-        display: inline-block;
-        width: 0;
-        /* Compensate the space the character reserves */
-        margin-right: -0.275em;
-      }
-
       #button {
         position: absolute;
         top: 0;
