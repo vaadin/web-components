@@ -280,6 +280,7 @@ This program is available under Apache License Version 2.0, available at https:/
       const path = e.composedPath();
       if (path.indexOf(this._clearElement) !== -1) {
         this._clear();
+        this.focus();
       } else if (path.indexOf(this.inputElement) !== -1) {
         if (path.indexOf(this._toggleElement) > -1 && this.opened) {
           this.close();
