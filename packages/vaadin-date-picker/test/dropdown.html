@@ -159,6 +159,14 @@
         expect(datepicker.$.overlay.opened).to.be.true;
       });
 
+      it('should not open on clear-button down if was not opened initially', () => {
+        datepicker.value = '2001-01-01';
+
+        tap(clearButton);
+
+        expect(datepicker.$.overlay.opened).not.to.be.true;
+      });
+
     });
   </script>
 
