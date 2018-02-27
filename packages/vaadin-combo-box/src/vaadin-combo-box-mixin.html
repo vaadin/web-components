@@ -217,6 +217,15 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('click', this._onClick.bind(this));
 
       this.$.overlay.addEventListener('vaadin-overlay-touch-start', this._onOverlayTouchStart.bind(this));
+
+      this.addEventListener('touchend', e => {
+        if (this._clearElement && e.composedPath()[0] !== this._clearElement) {
+          return;
+        }
+
+        e.preventDefault();
+        this._clear();
+      });
     }
 
     /**
@@ -438,7 +447,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (!this.opened) {
         this._detectAndDispatchChange();
-        this.open();
       }
     }
 
