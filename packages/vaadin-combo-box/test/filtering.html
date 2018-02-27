@@ -49,7 +49,7 @@
         expect(comboBox.opened).to.equal(true);
       });
 
-      it('should open the popup when input field is cleared', () => {
+      it('should open the popup when the value of the input field is set to none', () => {
         comboBox.value = 'foo';
         comboBox.close();
         expect(comboBox.opened).to.equal(false);

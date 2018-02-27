@@ -233,6 +233,15 @@
 
           expect(comboBox.selectedItem).to.be.null;
         });
+
+        it('should not open the overlay after clearing the value', () => {
+          const overlayElement = comboBox.$.overlay.$.dropdown.$.overlay;
+          comboBox.value = 'foo';
+
+          comboBox._clear();
+
+          expect(overlayElement.opened).not.to.be.true;
+        });
       });
 
       describe('focus API', () => {
