@@ -40,6 +40,11 @@
         expect(overlay.getAttribute('role')).to.be.eql('dialog');
       });
 
+      it('overlay should close on dettach', () => {
+        dialog.parentNode.removeChild(dialog);
+        expect(dialog.opened).to.eql(false);
+      });
+
       describe('no-close-on-esc', () => {
         it('should close itself on ESC press by default', () => {
           MockInteractions.pressAndReleaseKeyOn(document.body, 27, [], 'Escape');
