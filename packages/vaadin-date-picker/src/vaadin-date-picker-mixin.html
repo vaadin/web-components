@@ -288,6 +288,8 @@ This program is available under Apache License Version 2.0, available at https:/
           value: true
         },
 
+        _cleared: Boolean,
+
         _focusOverlayOnOpen: Boolean
       };
     }
@@ -340,9 +342,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * Opens the dropdown.
      */
     open() {
-      if (!this.disabled && !this.readonly) {
+      if (!this.disabled && !this.readonly && !this._cleared) {
         this.$.overlay.opened = true;
         this._updateAlignmentAndPosition();
+      } else if (this._cleared) {
+        this._inputElement.focus();
+        this._cleared = false;
       }
     }
 
