@@ -295,6 +295,15 @@ This program is available under Apache License Version 2.0, available at https:/
           _android: {
             type: Boolean,
             value: /android/i.test(navigator.userAgent)
+          },
+
+          /**
+           * If true, the grid's height is defined by the number of its rows.
+           */
+          autoHeight: {
+            type: Boolean,
+            value: false,
+            reflectToAttribute: true
           }
         };
       }
