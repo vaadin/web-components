@@ -119,7 +119,7 @@
 
         it('should align height with number of rows', done => {
           grid.style.height = '';
-          grid.autoHeight = true;
+          grid.heightByRows = true;
           // grid.notifyResize();
           // flushGrid(grid);
           animationFrameFlush(() => {
