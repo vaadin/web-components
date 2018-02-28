@@ -123,7 +123,7 @@
 
     <h3>Dynamic Height</h3>
     <p>
-      Setting <code>auto-height</code> will make <code>&lt;vaadin-grid&gt;</code> grow
+      Setting <code>height-by-rows</code> will make <code>&lt;vaadin-grid&gt;</code> grow
       and shrink in height depending on the number of rows.
     </p>
     <vaadin-demo-snippet id='grid-data-demos-dynamic-height'>
@@ -139,7 +139,7 @@
             <vaadin-button raised on-click="_add">Add Item</vaadin-button>
             <vaadin-button raised on-click="_remove">Remove Item</vaadin-button>
 
-            <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]" auto-height>
+            <vaadin-grid aria-label="Dynamic Data Example" items="[[items]]" height-by-rows>
 
               <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>

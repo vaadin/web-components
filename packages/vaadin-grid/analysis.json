@@ -5366,7 +5366,7 @@
               }
             },
             {
-              "name": "autoHeight",
+              "name": "heightByRows",
               "type": "boolean",
               "description": "If true, the grid's height is defined by the number of its rows.",
               "privacy": "public",
@@ -8673,7 +8673,7 @@
               "inheritedFrom": "Vaadin.Grid.ColumnReorderingMixin"
             },
             {
-              "name": "auto-height",
+              "name": "height-by-rows",
               "description": "If true, the grid's height is defined by the number of its rows.",
               "sourceRange": {
                 "start": {
