@@ -1,0 +1,34 @@
+<link rel="import" href="../vaadin-dialog/src/vaadin-dialog.html">
+<link rel="import" href="mixins/overlay.html">
+
+<dom-module id="material-dialog" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style include="material-overlay">
+      [part="overlay"] {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                    0 1px 5px 0 rgba(0, 0, 0, 0.12),
+                    0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        animation: 0.2s vaadin-dialog-enter cubic-bezier(.215, .61, .355, 1);
+        border-radius: 2px;
+        background-image: none;
+        margin: 24px 40px;
+      }
+      [part="content"] {
+        padding: 24px;
+      }
+
+      [part="content"] .buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: -16px;
+      }
+
+      @keyframes vaadin-dialog-enter {
+        0% {
+          opacity: 0;
+          transform: scale(0.8) translateY(10px);
+        }
+      }
+    </style>
+  </template>
+</dom-module>
