@@ -25,7 +25,7 @@
       :host {
         --lumo-button-size: var(--lumo-size-m);
         min-width: calc(var(--lumo-button-size) * 2);
-        min-height: var(--lumo-button-size);
+        height: var(--lumo-button-size);
         padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
         margin: var(--lumo-space-xs) 0;
         box-sizing: border-box;
@@ -173,7 +173,7 @@
       :host([theme~="tertiary-inline"]) {
         margin: 0;
         min-width: 0;
-        min-height: 0;
+        height: auto;
         padding: 0;
         line-height: inherit;
         font-size: inherit;
@@ -254,7 +254,7 @@
 <dom-module id="lumo-button-icons">
   <template>
     <style>
-      :host ::slotted(iron-icon) {
+      [part] ::slotted(iron-icon) {
         display: inline-block;
         width: var(--lumo-icon-size-m);
         height: var(--lumo-icon-size-m);
