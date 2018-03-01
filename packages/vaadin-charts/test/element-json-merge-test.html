@@ -45,13 +45,15 @@
         element.update({
           series: [
             {
-              name: 'name of the series'
+              name: 'name of the series',
+              type: 'area'
             }
           ]
         });
         setTimeout(() => {
           expect(40).to.be.equal(element.configuration.series[0].options.innerSize);
           expect('name of the series').to.be.equal(element.configuration.series[0].name);
+          expect('area').to.be.equal(element.configuration.series[0].type);
           done();
         }, 70);
       });

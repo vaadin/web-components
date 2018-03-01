@@ -75,10 +75,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         get options() {
-          return {
-            type: this.type,
-            data: this.values
+          const options = {
+            data: this.values,
           };
+
+          if (this.type) {
+            options.type = this.type;
+          }
+
+          if (this.title) {
+            options.name = this.title;
+          }
+
+          return options;
         }
 
         static get properties() {
@@ -107,8 +116,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             type: {
               type: String,
-              value: 'line',
-              observer: '__typeObserver'
+              observer: '__typeObserver',
+              reflectToAttribute: true
+            },
+
+            /**
+             * The name of the series as shown in the legend, tooltip etc.
+             */
+            title: {
+              type: String,
+              observer: '__titleObserver',
+              reflectToAttribute: true
             },
 
             /**
@@ -157,6 +175,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (this.__hasSeriesConfig()) {
             this._series.update({
               type: this.type
+            });
+          }
+        }
+
+        __titleObserver() {
+          if (this.__hasSeriesConfig()) {
+            this._series.update({
+              name: this.title
             });
           }
         }

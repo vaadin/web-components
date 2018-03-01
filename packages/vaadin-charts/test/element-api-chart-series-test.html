@@ -11,7 +11,7 @@
   <dom-module id="chart-series-api-demo">
     <template>
       <vaadin-chart id="mychart">
-        <vaadin-chart-series values="{{values}}" type="{{type}}"></vaadin-chart-series>
+        <vaadin-chart-series values="{{values}}" title="{{title}}" type="{{type}}"></vaadin-chart-series>
       </vaadin-chart>
     </template>
 
@@ -31,6 +31,10 @@
               type: {
                 type: String,
                 value: 'line'
+              },
+              title: {
+                type: String,
+                value: 'series name'
               }
             };
           }
@@ -64,7 +68,7 @@
           chartContainer = chart.$.chart;
           setTimeout(function() {
             done();
-          }, 85);
+          }, 100);
         });
       });
 
@@ -86,10 +90,13 @@
         expect(chart.configuration.series[0].data).to.have.lengthOf(element.values.length);
       });
 
-      it('should have same values as passed', function() {
-        const values = chart.configuration.series[0].data.map(data => data.y);
-        expect(values).to.have.lengthOf(element.values.length);
-        expect(values).to.have.members(element.values);
+      it('should have same values as passed', function(done) {
+        setTimeout(function() {
+          const values = chart.configuration.series[0].data.map(data => data.y);
+          expect(values).to.have.lengthOf(element.values.length);
+          expect(values).to.have.members(element.values);
+          done();
+        });
       });
 
       it('should update values on change', function() {
@@ -141,14 +148,29 @@
         expect(firstSeries.type).to.be.equal('line');
       });
 
-      it('should update type on property change', function() {
+      it('should update type on property change', function(done) {
         const type = 'area';
         element.setAttribute('type', type);
-
         setTimeout(function() {
           const firstSeries = chart.configuration.series[0];
           expect(firstSeries.type).to.be.equal(type);
-        }, 20);
+          done();
+        }, 30);
+      });
+
+      it('should have a custom title', function() {
+        const firstSeries = chart.configuration.series[0];
+        expect(firstSeries.name).to.be.equal(element.title);
+      });
+
+      it('should update title on property change', function(done) {
+        const title = 'new-series-title';
+        element.setAttribute('title', title);
+        setTimeout(function() {
+          const firstSeries = chart.configuration.series[0];
+          expect(firstSeries.name).to.be.equal(title);
+          done();
+        }, 70);
       });
     });
   </script>
