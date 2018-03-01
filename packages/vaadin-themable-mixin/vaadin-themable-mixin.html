@@ -1,10 +1,9 @@
 <link rel="import" href="../polymer/lib/elements/dom-module.html">
 
 <script>
-  if (Polymer && Polymer.version.indexOf('2.') !== 0) {
-    throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-  }
-
+  /**
+   * @namespace Vaadin
+   */
   window.Vaadin = window.Vaadin || {};
 
   /**
@@ -12,42 +11,58 @@
    */
   Vaadin.ThemableMixin = superClass => class VaadinThemableMixin extends superClass {
 
-    static get template() {
-      const modules = Polymer.DomModule.prototype.modules;
+    static finalize() {
+      super.finalize();
 
-      if (super.template && !this.hasOwnProperty('_memoizedThemableMixinTemplate')) {
-        this._memoizedThemableMixinTemplate = super.template.cloneNode(true);
+      const template = this.prototype._template;
 
-        let hasThemes = false;
-        const defaultModuleName = this.is + '-default-theme';
-
-        Object.keys(modules).forEach(moduleName => {
-          if (moduleName !== defaultModuleName) {
-            const themeFor = modules[moduleName].getAttribute('theme-for');
-            if (themeFor) {
-              themeFor.split(' ').forEach(themeForToken => {
-                if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
-                  hasThemes = true;
-                  this._includeStyle(moduleName);
-                }
-              });
-            }
-          }
+      const hasOwnTemplate = this.template && this.template.parentElement && this.template.parentElement.id === this.is;
+      const inheritedTemplate = Object.getPrototypeOf(this.prototype)._template;
+      if (inheritedTemplate && !hasOwnTemplate) {
+        // The element doesn't define its own template -> include the theme modules from the inherited template
+        Array.from(inheritedTemplate.content.querySelectorAll('style[include]')).forEach(s => {
+          this._includeStyle(s.getAttribute('include'), template);
         });
-
-        if (!hasThemes && modules[defaultModuleName]) {
-          // No theme modules found, include the default module if it exists
-          this._includeStyle(defaultModuleName);
-        }
       }
-      return this._memoizedThemableMixinTemplate;
+
+      this._includeMatchingThemes(template);
+    }
+
+    /** @protected */
+    static _includeMatchingThemes(template) {
+      const domModule = Polymer.DomModule;
+      const modules = domModule.prototype.modules;
+
+      let hasThemes = false;
+      const defaultModuleName = this.is + '-default-theme';
+
+      Object.keys(modules).forEach(moduleName => {
+        if (moduleName !== defaultModuleName) {
+          const themeFor = modules[moduleName].getAttribute('theme-for');
+          if (themeFor) {
+            themeFor.split(' ').forEach(themeForToken => {
+              if (new RegExp('^' + themeForToken.split('*').join('.*') + '$').test(this.is)) {
+                hasThemes = true;
+                this._includeStyle(moduleName, template);
+              }
+            });
+          }
+        }
+      });
+
+      if (!hasThemes && modules[defaultModuleName]) {
+        // No theme modules found, include the default module if it exists
+        this._includeStyle(defaultModuleName, template);
+      }
     }
 
     /** @private */
-    static _includeStyle(moduleName) {
-      const styleEl = document.createElement('style');
-      styleEl.setAttribute('include', moduleName);
-      this._memoizedThemableMixinTemplate.content.appendChild(styleEl);
+    static _includeStyle(moduleName, template) {
+      if (template && !template.content.querySelector(`style[include=${moduleName}]`)) {
+        const styleEl = document.createElement('style');
+        styleEl.setAttribute('include', moduleName);
+        template.content.appendChild(styleEl);
+      }
     }
 
   };
