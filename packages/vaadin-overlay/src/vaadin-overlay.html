@@ -48,14 +48,12 @@ This program is available under Apache License Version 2.0, available at https:/
         /* Remove tap highlight on touch devices. */
         -webkit-tap-highlight-color: transparent;
 
-        /* stylelint-disable */
         /* CSS API for host */
-        --vaadin-overlay-viewport-bottom: 0px;
-        /* stylelint-enable */
+        --vaadin-overlay-viewport-bottom: 0;
       }
 
       :host([hidden]),
-      :host(:not([opened])) {
+      :host(:not([opened]):not([closing])) {
         display: none !important;
       }
 
@@ -84,9 +82,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
 
-    <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}">
-
-    </div>
+    <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}"></div>
     <div part="overlay" id="overlay">
       <div part="content" id="content"></div>
     </div>
@@ -108,11 +104,18 @@ This program is available under Apache License Version 2.0, available at https:/
      * `overlay`  | Container for position/sizing/alignment of the content
      * `content`  | Content of the overlay
      *
+     * The following state attributes are available for styling:
+     *
+     * Attribute | Description | Part
+     * ---|---|---
+     * `opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+     * `closing` | Applied just before the overlay is detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`
+     *
      * The following custom CSS properties are available for styling:
      *
      * Custom CSS property | Description | Default value
      * ---|---|---
-     * `--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0px` or detected offset
+     * `--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
      *
      * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
      *
@@ -245,7 +248,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (landscape && clientHeight > innerHeight) {
           this.style.setProperty('--vaadin-overlay-viewport-bottom', clientHeight - innerHeight + 'px');
         } else {
-          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0px');
+          this.style.setProperty('--vaadin-overlay-viewport-bottom', '0');
         }
       }
 
@@ -364,9 +367,7 @@ This program is available under Apache License Version 2.0, available at https:/
        */
       _openedChanged(opened) {
         if (opened) {
-          this._placeholder = document.createComment('vaadin-overlay-placeholder');
-          this.parentNode.insertBefore(this._placeholder, this);
-          document.body.appendChild(this);
+          this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
             if (this.focusTrap) {
@@ -384,13 +385,54 @@ This program is available under Apache License Version 2.0, available at https:/
             this._enterModalState();
           }
         } else {
-          if (this._placeholder) {
-            this._placeholder.parentNode.insertBefore(this, this._placeholder);
-            this._processPendingMutationObserversFor(document.body);
-            this._placeholder.parentNode.removeChild(this._placeholder);
-          }
+          this._animatedClosing();
           this._exitModalState();
         }
+      }
+
+      _animatedOpening() {
+        this._attachOverlay();
+        this.setAttribute('opening', '');
+        const name = getComputedStyle(this).getPropertyValue('animation-name');
+        if (name && name != 'none') {
+          const listener = () => {
+            this.removeEventListener('animationend', listener);
+            this.removeAttribute('opening');
+          };
+          this.addEventListener('animationend', listener);
+        } else {
+          this.removeAttribute('opening');
+        }
+      }
+
+      _attachOverlay() {
+        this._placeholder = document.createComment('vaadin-overlay-placeholder');
+        this.parentNode.insertBefore(this._placeholder, this);
+        document.body.appendChild(this);
+      }
+
+      _animatedClosing() {
+        if (this._placeholder) {
+          this.setAttribute('closing', '');
+          const name = getComputedStyle(this).getPropertyValue('animation-name');
+          if (name && name != 'none') {
+            const listener = () => {
+              this._detachOverlay();
+              this.removeAttribute('closing');
+              this.removeEventListener('animationend', listener);
+            };
+            this.addEventListener('animationend', listener);
+          } else {
+            this._detachOverlay();
+            this.removeAttribute('closing');
+          }
+        }
+      }
+
+      _detachOverlay() {
+        this._placeholder.parentNode.insertBefore(this, this._placeholder);
+        this._processPendingMutationObserversFor(document.body);
+        this._placeholder.parentNode.removeChild(this._placeholder);
       }
 
       /**

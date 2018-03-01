@@ -160,6 +160,78 @@
 
       </template>
     </demo-snippet>
+
+    <h3>Opening and closing animations</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="overlay-animations" theme-for="vaadin-overlay">
+          <template>
+            <style>
+              :host(.animations[opening]) {
+                animation: vaadin-overlay-enter 0.3s;
+              }
+
+              @keyframes vaadin-overlay-enter {
+                0% {
+                  opacity: 0;
+                  transform: rotate(180deg);
+                }
+              }
+
+              :host(.animations[closing]) {
+                animation: vaadin-overlay-exit 0.3s;
+              }
+
+              @keyframes vaadin-overlay-exit {
+                100% {
+                  opacity: 0;
+                  transform: rotate(180deg);
+                }
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-overlay class="animations">
+          <template>I have an opening and closing animation</template>
+        </vaadin-overlay>
+        <vaadin-button id="button-overlay-animations">Show the overlay with animations</vaadin-button>
+        <script>
+          document.getElementById('button-overlay-animations').addEventListener('click', event => {
+            const overlay = event.target.previousElementSibling;
+            overlay.opened = true;
+          });
+        </script>
+      </template>
+    </demo-snippet>
+
+    <!-- Needs to be duplicated for polyfilled browsers, doesn’t work from inside demo-snippet -->
+    <dom-module id="overlay-animations" theme-for="vaadin-overlay">
+      <template>
+        <style>
+          :host(.animations[opening]) {
+            animation: vaadin-overlay-enter 0.3s;
+          }
+
+          @keyframes vaadin-overlay-enter {
+            0% {
+              opacity: 0;
+              transform: rotate(180deg);
+            }
+          }
+
+          :host(.animations[closing]) {
+            animation: vaadin-overlay-exit 0.3s;
+          }
+
+          @keyframes vaadin-overlay-exit {
+            100% {
+              opacity: 0;
+              transform: rotate(180deg);
+            }
+          }
+        </style>
+      </template>
+    </dom-module>
   </div>
 </body>
 </html>

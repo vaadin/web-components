@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-overlay.html",
         "start": {
-          "line": 505,
+          "line": 547,
           "column": 4
         },
         "end": {
-          "line": 505,
+          "line": 547,
           "column": 40
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-overlay>` is a Polymer 2 element for creating overlays.\n\n### Styling\n\nThe following Shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`backdrop` | Backdrop of the overlay\n`overlay`  | Container for position/sizing/alignment of the content\n`content`  | Content of the overlay\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default value\n---|---|---\n`--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0px` or detected offset\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-overlay>` is a Polymer 2 element for creating overlays.\n\n### Styling\n\nThe following Shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`backdrop` | Backdrop of the overlay\n`overlay`  | Container for position/sizing/alignment of the content\n`content`  | Content of the overlay\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part\n---|---|---\n`opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n`closing` | Applied just before the overlay is going to be detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default value\n---|---|---\n`--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-overlay.html",
           "properties": [
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -50,11 +50,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -71,11 +71,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -92,11 +92,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -112,11 +112,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -134,11 +134,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -154,11 +154,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 171,
+                  "line": 174,
                   "column": 10
                 },
                 "end": {
-                  "line": 173,
+                  "line": 176,
                   "column": 11
                 }
               },
@@ -173,11 +173,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 178,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 180,
                   "column": 11
                 }
               },
@@ -192,11 +192,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 182,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 184,
                   "column": 11
                 }
               },
@@ -211,11 +211,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 186,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 188,
                   "column": 11
                 }
               },
@@ -230,11 +230,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 190,
                   "column": 10
                 },
                 "end": {
-                  "line": 189,
+                  "line": 192,
                   "column": 11
                 }
               },
@@ -250,11 +250,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 219,
+                  "line": 222,
                   "column": 6
                 },
                 "end": {
-                  "line": 230,
+                  "line": 233,
                   "column": 7
                 }
               },
@@ -267,11 +267,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 235,
                   "column": 6
                 },
                 "end": {
-                  "line": 249,
+                  "line": 252,
                   "column": 7
                 }
               },
@@ -284,11 +284,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 254,
                   "column": 6
                 },
                 "end": {
-                  "line": 253,
+                  "line": 256,
                   "column": 7
                 }
               },
@@ -305,11 +305,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 262,
                   "column": 6
                 },
                 "end": {
-                  "line": 265,
+                  "line": 268,
                   "column": 7
                 }
               },
@@ -326,11 +326,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 270,
                   "column": 6
                 },
                 "end": {
-                  "line": 278,
+                  "line": 281,
                   "column": 7
                 }
               },
@@ -343,11 +343,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 280,
+                  "line": 283,
                   "column": 6
                 },
                 "end": {
-                  "line": 296,
+                  "line": 299,
                   "column": 7
                 }
               },
@@ -360,11 +360,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 298,
+                  "line": 301,
                   "column": 6
                 },
                 "end": {
-                  "line": 300,
+                  "line": 303,
                   "column": 7
                 }
               },
@@ -381,11 +381,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 302,
+                  "line": 305,
                   "column": 6
                 },
                 "end": {
-                  "line": 304,
+                  "line": 307,
                   "column": 7
                 }
               },
@@ -402,11 +402,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 314,
+                  "line": 317,
                   "column": 6
                 },
                 "end": {
-                  "line": 331,
+                  "line": 334,
                   "column": 7
                 }
               },
@@ -423,11 +423,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 337,
+                  "line": 340,
                   "column": 6
                 },
                 "end": {
-                  "line": 358,
+                  "line": 361,
                   "column": 7
                 }
               },
@@ -444,11 +444,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 364,
+                  "line": 367,
                   "column": 6
                 },
                 "end": {
-                  "line": 393,
+                  "line": 390,
                   "column": 7
                 }
               },
@@ -460,16 +460,84 @@
               ]
             },
             {
+              "name": "_animatedOpening",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 392,
+                  "column": 6
+                },
+                "end": {
+                  "line": 405,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_attachOverlay",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 407,
+                  "column": 6
+                },
+                "end": {
+                  "line": 411,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_animatedClosing",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 413,
+                  "column": 6
+                },
+                "end": {
+                  "line": 429,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "_detachOverlay",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 431,
+                  "column": 6
+                },
+                "end": {
+                  "line": 435,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
               "name": "_modelessChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 402,
+                  "line": 444,
                   "column": 6
                 },
                 "end": {
-                  "line": 410,
+                  "line": 452,
                   "column": 7
                 }
               },
@@ -486,11 +554,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 412,
+                  "line": 454,
                   "column": 6
                 },
                 "end": {
-                  "line": 424,
+                  "line": 466,
                   "column": 7
                 }
               },
@@ -503,11 +571,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 426,
+                  "line": 468,
                   "column": 6
                 },
                 "end": {
-                  "line": 437,
+                  "line": 479,
                   "column": 7
                 }
               },
@@ -520,11 +588,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 439,
+                  "line": 481,
                   "column": 6
                 },
                 "end": {
-                  "line": 450,
+                  "line": 492,
                   "column": 7
                 }
               },
@@ -541,11 +609,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 452,
+                  "line": 494,
                   "column": 6
                 },
                 "end": {
-                  "line": 454,
+                  "line": 496,
                   "column": 7
                 }
               },
@@ -562,11 +630,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 456,
+                  "line": 498,
                   "column": 6
                 },
                 "end": {
-                  "line": 485,
+                  "line": 527,
                   "column": 7
                 }
               },
@@ -586,11 +654,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 487,
+                  "line": 529,
                   "column": 6
                 },
                 "end": {
-                  "line": 491,
+                  "line": 533,
                   "column": 7
                 }
               },
@@ -603,11 +671,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 493,
+                  "line": 535,
                   "column": 6
                 },
                 "end": {
-                  "line": 497,
+                  "line": 539,
                   "column": 7
                 }
               },
@@ -653,11 +721,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 122,
+              "line": 125,
               "column": 4
             },
             "end": {
-              "line": 498,
+              "line": 540,
               "column": 5
             }
           },
@@ -670,11 +738,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -686,11 +754,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -702,11 +770,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -718,11 +786,11 @@
               "description": "",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -734,11 +802,11 @@
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -750,11 +818,11 @@
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
