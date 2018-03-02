@@ -3,7 +3,7 @@
 <link rel="import" href="../vaadin-development-mode-detector/vaadin-development-mode-detector.html">
 
 <script>
-if (Polymer && Polymer.version.indexOf('2.') !== 0) {
+if (window.Polymer && window.Polymer.version && window.Polymer.version.indexOf('2.') !== 0) {
   throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
 }
 
