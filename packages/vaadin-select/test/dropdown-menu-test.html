@@ -21,6 +21,7 @@
             <mock-item>Option 3</mock-item>
             <mock-item></mock-item>
             <mock-item label="">Empty</mock-item>
+            <mock-item value="" disabled>Disabled</mock-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -209,6 +210,13 @@
           expect(valueElement).not.to.be.equal(itemElement);
           expect(valueElement.localName).to.be.equal(itemElement.localName);
           expect(valueElement.textContent).to.be.equal(itemElement.textContent);
+        });
+
+        it('Should preserve the selected attribute when selecting the disabled item', () => {
+          menu.selected = 5;
+          const valueElement = dropdown._valueElement.firstChild;
+          expect(valueElement.selected).to.be.true;
+          expect(valueElement.disabled).to.be.true;
         });
 
         it('Should not update value if the selected item has not a value', () => {

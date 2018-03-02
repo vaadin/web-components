@@ -22,11 +22,25 @@
           type: Boolean,
           value: true
         },
+        disabled: {
+          type: Boolean,
+          value: false,
+          observer: '_disabledChanged'
+        },
         value: {
           type: String,
           value: ''
+        },
+        selected: {
+          type: Boolean
         }
       };
+    }
+
+    _disabledChanged(disabled) {
+      if (disabled) {
+        this.selected = false;
+      }
     }
   }
 
