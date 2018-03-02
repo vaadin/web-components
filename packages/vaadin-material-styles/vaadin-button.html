@@ -1,16 +1,16 @@
 <link rel="import" href="color.html">
+<link rel="import" href="shadow.html">
 <link rel="import" href="typography.html">
 <link rel="import" href="../vaadin-button/src/vaadin-button.html">
 
 <dom-module id="material-button" theme-for="vaadin-button">
   <template>
-    <style>
+    <style include="material-button-sizing material-button-states material-button-types material-button-icons">
       :host {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        box-sizing: border-box;
-        border-radius: 3px;
+        border-radius: 2px;
         color: var(--material-body-text-color);
         font-family: var(--material-font-family);
         text-transform: uppercase;
@@ -18,31 +18,10 @@
         font-weight: 500;
         overflow: hidden;
         transition: background-color 0.3s, box-shadow 0.2s;
-        margin: 4px 8px;
-        min-width: 88px;
-        min-height: 36px;
         -webkit-tap-highlight-color: transparent;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         z-index: 0;
-      }
-
-      [part="button"] {
-        border: 0;
-        margin: 0;
-        padding: 0 8px;
-        background-color: transparent;
-        color: inherit;
-        font: inherit;
-        line-height: normal;
-        text-transform: inherit;
-        outline: none;
-        min-width: inherit;
-        min-height: inherit;
-      }
-
-      [part="button"]::-moz-focus-inner {
-        border: 0;
       }
 
       :host::before,
@@ -73,6 +52,41 @@
         transition: all 0.9s;
       }
 
+      [part="label"] ::slotted(*) {
+        vertical-align: middle;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-button-sizing">
+  <template>
+    <style>
+      :host {
+        font-size: var(--material-body-font-size);
+        margin: 8px;
+        padding: 0 16px;
+        min-width: 88px;
+        min-height: 36px;
+        box-sizing: border-box;
+      }
+
+      /* Dense style */
+      :host([theme~="dense"]) {
+        font-size: var(--material-small-font-size);
+        min-width: 64px;
+        min-height: 32px;
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-button-states">
+  <template>
+    <style>
+      :host(:hover)::before,
       :host([focus-ring])::before {
         opacity: 0.08;
         transition-duration: 0.2s;
@@ -94,28 +108,25 @@
         opacity: 0;
       }
 
-      :host(:not([disabled])) [part="button"] {
-        cursor: pointer;
-      }
-
       :host([disabled]) {
         pointer-events: none;
         color: var(--material-disabled-text-color);
       }
+    </style>
+  </template>
+</dom-module>
 
+<dom-module id="material-button-types">
+  <template>
+    <style>
       /* Raised style */
-
-      :host([theme~="raised"]) [part="button"] {
-        padding: 0 16px;
-      }
-
       :host([theme~="raised"]:not([disabled])) {
         background-color: var(--_material-button-raised-background-color, var(--material-background-color));
-        box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.04);
+        box-shadow: var(--material-shadow-elevation-2dp);
       }
 
       :host([theme~="raised"][active]) {
-        box-shadow: 0 3px 16px 1px rgba(0, 0, 0, 0.13), 0 1px 3px 1px rgba(0, 0, 0, 0.08);
+        box-shadow: var(--material-shadow-elevation-8dp);
       }
 
       :host([theme~="raised"][disabled])::before {
@@ -123,7 +134,6 @@
       }
 
       /* Primary style */
-
       :host([theme~="primary"]:not([disabled])) {
         color: var(--material-primary-text-color);
       }
@@ -134,7 +144,6 @@
       }
 
       /* Raised primary style */
-
       :host([theme~="raised"][theme~="primary"]:not([disabled])) {
         color: var(--material-primary-contrast-color);
         background-color: var(--material-primary-color);
@@ -143,33 +152,40 @@
       :host([theme~="primary"][theme~="raised"][focus-ring])::before {
         opacity: 0.2;
       }
+    </style>
+  </template>
+</dom-module>
 
-      /* Dense style */
-
-      :host([theme~="dense"]) {
-        font-size: var(--material-small-font-size);
-        min-width: 64px;
-        min-height: 32px;
-        padding-left: 16px;
-        padding-right: 16px;
+<dom-module id="material-button-icons">
+  <template>
+    <style>
+      [part] ::slotted(iron-icon) {
+        display: inline-block;
+        vertical-align: middle;
+        width: 24px;
+        height: 24px;
       }
 
-      /* Icon style */
+      [part="prefix"] ::slotted(iron-icon) {
+        margin-right: 4px;
+        margin-left: -4px;
+      }
 
+      [part="suffix"] ::slotted(iron-icon) {
+        margin-left: 4px;
+        margin-right: -4px;
+      }
+
+      /* Icon-only */
       :host([theme~="icon"]) {
-        margin: 4px;
         min-width: 0;
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         min-height: 0;
         border-radius: 50%;
         padding: 8px;
         --iron-icon-width: 100%;
         --iron-icon-height: 100%;
-      }
-
-      :host([theme~="icon"]) [part="button"] {
-        padding: 0;
       }
 
       :host([theme~="icon"])::before {
@@ -184,7 +200,6 @@
       :host([theme~="icon"][active])::before {
         transition-delay: 0s;
       }
-
     </style>
   </template>
 </dom-module>
