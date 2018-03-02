@@ -132,10 +132,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
 
             const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
-              instanceProps: {
-                detail: true,
-                target: true
-              },
               forwardHostProp: function(prop, value) {
                 if (this._instance) {
                   this._instance.forwardHostProp(prop, value);
