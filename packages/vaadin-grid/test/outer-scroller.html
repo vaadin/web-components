@@ -321,9 +321,7 @@
 
         grid = fixture('scrollable-content');
 
-        if (Polymer.Element) {
-          flushColumns(grid);
-        }
+        flushGrid(grid);
 
         grid.dataProvider = infiniteDataProvider;
         Polymer.dom.flush();

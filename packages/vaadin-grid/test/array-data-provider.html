@@ -95,6 +95,7 @@
         grid = fixture('default');
         grid.items = [];
         grid.items = [0];
+        flushGrid(grid);
         expect(getRows(grid.$.items)).to.have.length(1);
       });
 

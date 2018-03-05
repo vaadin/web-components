@@ -83,6 +83,8 @@ This program is available under Apache License Version 2.0, available at https:/
           this._debouncerCheckImports,
           Polymer.Async.timeOut.after(2000),
           this._checkImports.bind(this));
+
+        this._ensureFirstPageLoaded();
       });
     }
 
