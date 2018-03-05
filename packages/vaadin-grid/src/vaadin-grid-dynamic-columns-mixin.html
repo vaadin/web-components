@@ -69,14 +69,14 @@ This program is available under Apache License Version 2.0, available at https:/
     _addNodeObserver() {
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
 
-        if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
-          info.removedNodes.filter(this._isColumnElement).length > 0) {
-          this._updateColumnTree();
-        }
-
         const rowDetailsTemplate = info.addedNodes.filter(n => n.localName === 'template' && n.classList.contains('row-details'))[0];
         if (rowDetailsTemplate && this._rowDetailsTemplate !== rowDetailsTemplate) {
           this._rowDetailsTemplate = rowDetailsTemplate;
+        }
+
+        if (info.addedNodes.filter(this._isColumnElement).length > 0 ||
+          info.removedNodes.filter(this._isColumnElement).length > 0) {
+          this._updateColumnTree();
         }
 
         this._debouncerCheckImports = Polymer.Debouncer.debounce(

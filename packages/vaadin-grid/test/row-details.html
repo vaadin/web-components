@@ -98,6 +98,15 @@
       let grid;
       let bodyRows;
 
+      it('should not increase row update count', () => {
+        grid = fixture('default');
+        const spy = sinon.spy(grid, '_updateRow');
+        grid.size = 1;
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+        expect(spy.callCount).to.be.below(6);
+      });
+
       describe('simple', () => {
 
         function openRowDetails(index) {
