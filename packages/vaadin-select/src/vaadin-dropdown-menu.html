@@ -494,7 +494,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (selected.hasAttribute('label')) {
             labelItem = document.createElement('vaadin-item');
             labelItem.textContent = selected.getAttribute('label');
-            labelItem.selected = true;
           } else {
             labelItem = selected.cloneNode(true);
           }
@@ -502,6 +501,8 @@ This program is available under Apache License Version 2.0, available at https:/
           labelItem.removeAttribute('tabindex');
 
           this._valueElement.appendChild(labelItem);
+
+          labelItem.selected = true;
         }
 
         _updateAriaExpanded(opened, toggleElement) {
