@@ -14,6 +14,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="layout">
+    <template>
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <vaadin-progress-bar></vaadin-progress-bar>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin progress bar', () => {
       var progress;
@@ -108,6 +116,24 @@
         progress.indeterminate = true;
 
         expect(progress.hasAttribute('indeterminate')).to.be.true;
+      });
+    });
+
+    describe('in column flex layout', () => {
+      let layout;
+      let progress;
+
+      beforeEach(() => {
+        layout = fixture('layout');
+        progress = layout.firstElementChild;
+      });
+
+      it('should have width of the parent', () => {
+        expect(progress.offsetWidth).to.equal(layout.offsetWidth);
+      });
+
+      it('should not collapse', () => {
+        expect(progress.offsetWidth).to.be.above(100);
       });
     });
   </script>
