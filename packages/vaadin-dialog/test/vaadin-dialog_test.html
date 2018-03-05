@@ -26,6 +26,39 @@
     </template>
   </test-fixture>
 
+  <dom-module id="x-dialog">
+    <template>
+      <vaadin-dialog id="dialog">
+        <template>
+          <span>[[message]]</span>
+          <input value="{{text::input}}">
+        </template>
+      </vaadin-dialog>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class XDialog extends Polymer.Element {
+          static get is() {
+            return 'x-dialog';
+          }
+          static get properties() {
+            return {
+              message: String,
+              text: String
+            };
+          }
+        }
+        window.customElements.define(XDialog.is, XDialog);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="binding">
+    <template>
+      <x-dialog></x-dialog>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-dialog', () => {
       var dialog, backdrop, overlay;
@@ -79,6 +112,29 @@
       it('should not throw an exception if template is not present', () => {
         const openDialog = () => dialog.opened = true;
         expect(openDialog).to.not.throw();
+      });
+    });
+
+    describe('vaadin-dialog data binding', () => {
+      let container, dialog, overlay;
+
+      beforeEach(() => {
+        container = fixture('binding');
+        dialog = container.$.dialog;
+        overlay = dialog.$.overlay;
+        dialog.opened = true;
+      });
+
+      it('dialog should bind parent property', () => {
+        container.message = 'foo';
+        expect(overlay.shadowRoot.querySelector('span').textContent.trim()).to.equal('foo');
+      });
+
+      it('dialog should support two-way data binding', () => {
+        const input = overlay.shadowRoot.querySelector('input');
+        input.value = 'bar';
+        input.dispatchEvent(new CustomEvent('input'));
+        expect(container.text).to.equal('bar');
       });
     });
   </script>
