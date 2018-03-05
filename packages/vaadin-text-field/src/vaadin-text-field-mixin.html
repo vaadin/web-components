@@ -302,6 +302,10 @@ This program is available under Apache License Version 2.0, available at https:/
       var uniqueId = Vaadin.TextFieldMixin._uniqueId = 1 + Vaadin.TextFieldMixin._uniqueId || 0;
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
+
+      if (navigator.userAgent.match(/Trident/)) {
+        this._addIEListeners();
+      }
     }
 
     /**
@@ -312,6 +316,21 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     validate() {
       return !(this.invalid = !this.checkValidity());
+    }
+
+    _addIEListeners() {
+      // IE11 dispatches `input` event in following cases:
+      // - focus or blur, when placeholder attribute is set
+      // - placeholder attribute value changed
+      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/101220/
+      const prevent = e => {
+        e.stopImmediatePropagation();
+        this.focusElement.removeEventListener('input', prevent);
+      };
+      const shouldPreventInput = () => this.placeholder && this.focusElement.addEventListener('input', prevent);
+      this.focusElement.addEventListener('focusin', shouldPreventInput);
+      this.focusElement.addEventListener('focusout', shouldPreventInput);
+      this._createPropertyObserver('placeholder', shouldPreventInput);
     }
 
     _getActiveErrorId(invalid, errorMessage, errorId) {
