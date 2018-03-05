@@ -77,6 +77,41 @@
     </template>
   </test-fixture>
 
+  <dom-module id="x-dropdown">
+    <template>
+      <vaadin-dropdown-menu id="dropdown">
+        <template>
+          <vaadin-list-box>
+            <mock-item value="v1">[[message]]</mock-item>
+            <mock-item value="v2"><input value="{{text::input}}"></mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class XDropdown extends Polymer.Element {
+          static get is() {
+            return 'x-dropdown';
+          }
+          static get properties() {
+            return {
+              message: String,
+              text: String
+            };
+          }
+        }
+        window.customElements.define(XDropdown.is, XDropdown);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="binding">
+    <template>
+      <x-dropdown></x-dropdown>
+    </template>
+  </test-fixture>
+
   <script>
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
@@ -156,6 +191,29 @@
       it('should not apply overlay style scope to the clone of selected item', () => {
         const valueElement = dropdown._valueElement.firstChild;
         expect(valueElement.classList.contains('vaadin-dropdown-menu-overlay')).to.be.false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu data binding', function() {
+      let container, dropdown, menu;
+
+      beforeEach(done => {
+        container = fixture('binding');
+        dropdown = container.$.dropdown;
+        menu = dropdown._menuElement;
+        Polymer.RenderStatus.afterNextRender(menu, () => setTimeout(done));
+      });
+
+      it('dropdown-menu should bind parent property', () => {
+        container.message = 'foo';
+        expect(menu.items[0].textContent.trim()).to.equal('foo');
+      });
+
+      it('dropdown-menu should support two-way data binding', () => {
+        const input = menu.items[1].querySelector('input');
+        input.value = 'bar';
+        input.dispatchEvent(new CustomEvent('input'));
+        expect(container.text).to.equal('bar');
       });
     });
 
