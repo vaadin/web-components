@@ -1,22 +1,12 @@
 ### Generic
 
 - Inconsistent font styles. `<vaadin-button>` sets material font style over contents, while some others (`<vaadin-checkbox>`, `<vaadin-radio-button>`) use inherited font.
-- Expected to import the Roboto font? Font styles specify `font-family: Roboto, Noto, sans-serif;`, while Roboto can be not imported and not installed on the system.
 - Expected: `<vaadin-checkbox>` and `<vaadin-radio-button>` have the same focus ring size. Actual: `<vaadin-checkbox>` has a smaller focus ring, compared to `<vaadin-radio-button>`.
 
 ### `<vaadin-button>`
 
-- Expected: some horizontal padding inside the button. Actual: no padding inside, the content touches the edges.
 - Expected primary button to have white on primary colors. Actual: primary on white.
   - With a `raised` theme variant, works as expected.
-- Expected a bold font-weight by default. Actual: regular font-weight.
-- Expected: button should have a 2px border-radius. Actual: 3px.
-- Expected: some horizontal spacing between the prefix icon and the content. Actual: no spacing.
-  ```html
-  <vaadin-button>
-    <iron-icon icon="icons:open-in-new"></iron-icon>
-  </vaadin-button>
-  ```
 
 ### `<vaadin-checkbox>`
 
@@ -49,8 +39,6 @@ In the overlay:
 
 ### `<vaadin-dialog>`
 
-- The shadow is too small. Expected a larger one. The guideline specifies elevation level of 24dp for dialogs: https://material.io/guidelines/material-design/elevation-shadows.html#elevation-shadows-shadows
-  - See also `<paper-dialog>` for comparison, it has a lot larger shadow: https://www.webcomponents.org/element/PolymerElements/paper-dialog/demo/demo/index.html
 - There is a `.buttons` class exposed for arbitary users’s template. Should we scope it?
 - Dark theme demo does not make sense at this point. The dark theme does not propagate to the dialog internal overlay anyway. This is a known issue of the dialog: vaadin/vaadin-dialog#37
 
