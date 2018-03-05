@@ -9,25 +9,53 @@
     <h3>Simple Notification</h3>
     <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
       <template preserve-content>
-        <vaadin-notification opened duration="4000">
+        <dom-bind id="bind-elm">
           <template>
-            <div>
-              <b>Notice</b><br>
-              This notification has HTML content
-            </div>
+            <vaadin-button on-click="_openNotification">Open notification</vaadin-button>
+            <vaadin-notification duration="4000" id="notification">
+              <template>
+                <div>
+                  <b>Notice</b><br>
+                  This notification has HTML content
+                </div>
+              </template>
+            </vaadin-notification>
           </template>
-        </vaadin-notification>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#notification-basic-demos-simple-notification', function(document) {
+            const domBind = document.querySelector('#bind-elm');
+            const notification = document.querySelector('#notification');
+            domBind._openNotification = function() {
+              notification.open();
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Position</h3>
-    <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
+    <vaadin-demo-snippet id="notification-basic-demos-position-notification">
       <template preserve-content>
-        <vaadin-notification opened duration="4000" position="top-end">
+        <dom-bind id="bind-elm">
           <template>
-            This notification is shown in the top right corner
+            <vaadin-button on-click="_openNotification">Open notification in the top right corner</vaadin-button>
+            <vaadin-notification duration="4000" position="top-end" id="notification">
+              <template>
+                This notification is shown in the top right corner
+              </template>
+            </vaadin-notification>
           </template>
-        </vaadin-notification>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#notification-basic-demos-position-notification', function(document) {
+            const domBind = document.querySelector('#bind-elm');
+            const notification = document.querySelector('#notification');
+            domBind._openNotification = function() {
+              notification.open();
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
