@@ -23,9 +23,9 @@
   <test-fixture id="multiple">
     <template>
       <vaadin-notification opened position="top-stretch"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-start"><template>Notificaton 1</template></vaadin-notification>
+      <vaadin-notification opened position="top-center"><template>Notificaton 1</template></vaadin-notification>
+      <vaadin-notification opened position="top-end"><template>Notificaton 1</template></vaadin-notification>
       <vaadin-notification opened position="middle"><template>Notificaton</template></vaadin-notification>
       <vaadin-notification opened position="bottom-start"><template>Notificaton</template></vaadin-notification>
       <vaadin-notification opened position="bottom-center"><template>Notificaton</template></vaadin-notification>
@@ -33,9 +33,9 @@
       <vaadin-notification opened position="bottom-stretch"><template>Notificaton</template></vaadin-notification>
 
       <vaadin-notification opened position="top-stretch"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-start"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-center"><template>Notificaton</template></vaadin-notification>
-      <vaadin-notification opened position="top-end"><template>Notificaton</template></vaadin-notification>
+      <vaadin-notification opened position="top-start"><template>Notificaton 2</template></vaadin-notification>
+      <vaadin-notification opened position="top-center"><template>Notificaton 2</template></vaadin-notification>
+      <vaadin-notification opened position="top-end"><template>Notificaton 2</template></vaadin-notification>
       <vaadin-notification opened position="middle"><template>Notificaton</template></vaadin-notification>
       <vaadin-notification opened position="bottom-start"><template>Notificaton</template></vaadin-notification>
       <vaadin-notification opened position="bottom-center"><template>Notificaton</template></vaadin-notification>
@@ -143,6 +143,17 @@
           e.close();
           setTimeout(() => {
             expect(e._card.parentNode).not.to.be.ok;
+          });
+        });
+
+        it('should stack top notifications on top of each other', () => {
+          [
+            'top-start', 'top-center', 'top-end'
+          ].forEach(regionName => {
+            const notifications = Array.from(container.querySelectorAll(`vaadin-notification-card[slot="${regionName}"]`));
+            expect(notifications[0].getBoundingClientRect().y).to.be.below(notifications[1].getBoundingClientRect().y);
+            expect(notifications[0].innerText.trim()).to.be.equal('Notificaton 2');
+            expect(notifications[1].innerText.trim()).to.be.equal('Notificaton 1');
           });
         });
       });

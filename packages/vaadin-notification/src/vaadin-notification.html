@@ -324,7 +324,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this._card.slot = this.position;
-          if (this._container.firstElementChild && /^(top-stretch||top)$/.test(this.position)) {
+          if (this._container.firstElementChild && /top/.test(this.position)) {
             this._container.insertBefore(this._card, this._container.firstElementChild);
           } else {
             this._container.appendChild(this._card);
