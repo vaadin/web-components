@@ -75,25 +75,6 @@
         it('container should be a singleton', () => {
           expect(notifications[0]._container).to.be.equal(notifications[1]._container);
         });
-
-        it('should close the container when all active notifications disappear', done => {
-          // Set the same duration to all notifications but one
-          notifications.forEach(elm => elm.duration = 2);
-          notifications[1].duration = 5;
-
-          expect(container.opened).to.be.true;
-          setTimeout(() => {
-            expect(container.opened).to.be.true;
-            notifications[1]._container.querySelector('[slot="top-start"]').addEventListener('animationend', (e) => {
-              if (e.animationName.indexOf('-exit-') !== -1) {
-                setTimeout(() => {
-                  expect(container.opened).to.be.false;
-                  done();
-                });
-              }
-            });
-          }, 3);
-        });
       });
 
       describe('regions', () => {
