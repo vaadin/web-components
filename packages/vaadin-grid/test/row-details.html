@@ -117,7 +117,7 @@
 
           grid = fixture('default');
           grid.dataProvider = infiniteDataProvider;
-          Polymer.dom.flush();
+          flushGrid(grid);
           bodyRows = getRows(grid.$.items);
           animationFrameFlush(() => done());
         });

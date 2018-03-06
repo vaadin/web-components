@@ -312,7 +312,7 @@
           div = bind.$.div;
           grid = bind.$.grid;
           flushGrid(bind.$.grid);
-          input = grid.querySelector('input');
+          input = getBodyCellContent(grid, 0, 0).querySelector('input');
         });
 
         it('should notify items array path', () => {

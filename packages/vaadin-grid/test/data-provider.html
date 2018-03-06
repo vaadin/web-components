@@ -124,6 +124,13 @@
         flushGrid(grid);
       });
 
+      it('should not render rows before columns are defined', () => {
+        container = fixture('table');
+        grid = container.$.grid;
+        container.dataProvider = sinon.spy(infiniteDataProvider);
+        expect(grid.$.items.childElementCount).to.equal(0);
+      });
+
       it('should call dataprovider for first page', done => {
         container.dataProvider.reset();
         grid.pageSize = 100;

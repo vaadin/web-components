@@ -23,10 +23,6 @@
         <dom-module id="x-pagination">
           <template preserve-content>
             <style>
-              vaadin-grid {
-                height: auto;
-              }
-
               #pages {
                 display: flex;
                 flex-wrap: wrap;
@@ -59,7 +55,7 @@
             </style>
             <x-array-data-provider items="{{items}}"></x-array-data-provider>
 
-            <vaadin-grid id="grid" page-size="10">
+            <vaadin-grid id="grid" page-size="10" height-by-rows>
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>

@@ -71,7 +71,7 @@
 
       it('Should change the opacity of cell content in loading rows from 1 to 0 and back', () => {
         const firstRow = grid.shadowRoot.querySelector('#items [part~="row"]');
-        const cellContent = grid.querySelector('vaadin-grid-cell-content');
+        const cellContent = getBodyCellContent(grid, 0, 0);
 
         expect(window.getComputedStyle(cellContent).opacity).to.eql('1');
 
