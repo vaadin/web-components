@@ -50,6 +50,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       <div part="reorder-ghost"></div>
       <vaadin-grid-outer-scroller id="outerscroller"
+          _touch-device="[[_touchDevice]]"
           scroll-target="[[scrollTarget]]"
           scroll-handler="[[_this]]"
           no-scrollbars="[[!_scrollbarWidth]]">
@@ -224,6 +225,16 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.Grid.ColumnResizingMixin
      * @demo demo/index.html
      */
+
+    const TOUCH_DEVICE = (() => {
+      try {
+        document.createEvent('TouchEvent');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })();
+
     class GridElement extends
       Vaadin.ElementMixin(
         Vaadin.ThemableMixin(
@@ -295,6 +306,11 @@ This program is available under Apache License Version 2.0, available at https:/
           _android: {
             type: Boolean,
             value: /android/i.test(navigator.userAgent)
+          },
+
+          _touchDevice: {
+            type: Boolean,
+            value: TOUCH_DEVICE
           },
 
           /**

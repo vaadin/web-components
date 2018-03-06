@@ -28,17 +28,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _orderBaseScope: {
           type: Number,
           value: 10000000
-        },
-
-        _touchDevice: {
-          value: () => {
-            try {
-              document.createEvent('TouchEvent');
-              return true;
-            } catch (e) {
-              return false;
-            }
-          }
         }
       };
     }
