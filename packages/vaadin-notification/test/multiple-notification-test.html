@@ -15,6 +15,7 @@
         :host {
           width: 200px;
           background: lightgrey;
+          animation: none !important;
         }
       </style>
     </template>
@@ -119,11 +120,12 @@
           window.console.warn = warnOrig;
         });
 
-        it('should remove notification from the region when it is closed', () => {
+        it('should remove notification from the region when it is closed', done => {
           const e = notifications[1];
           e.close();
           setTimeout(() => {
             expect(e._card.parentNode).not.to.be.ok;
+            done();
           });
         });
 
@@ -132,7 +134,7 @@
             'top-start', 'top-center', 'top-end'
           ].forEach(regionName => {
             const notifications = Array.from(container.querySelectorAll(`vaadin-notification-card[slot="${regionName}"]`));
-            expect(notifications[0].getBoundingClientRect().y).to.be.below(notifications[1].getBoundingClientRect().y);
+            expect(notifications[0].offsetTop).to.be.below(notifications[1].offsetTop);
             expect(notifications[0].innerText.trim()).to.be.equal('Notificaton 2');
             expect(notifications[1].innerText.trim()).to.be.equal('Notificaton 1');
           });
