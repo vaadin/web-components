@@ -36,13 +36,9 @@
 
     let comboBox;
 
-    function getInput() {
-      return comboBox.inputElement;
-    }
-
     function filter(value) {
-      comboBox._bindableInput.value = value;
-      getInput().dispatchEvent(new CustomEvent('input'));
+      comboBox.inputElement.value = value;
+      comboBox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 
     function getFocusedIndex() {
@@ -50,7 +46,7 @@
     }
 
     function pushKey(key, cb) {
-      MockInteractions.pressAndReleaseKeyOn(getInput(), key);
+      MockInteractions.pressAndReleaseKeyOn(comboBox.inputElement, key);
       if (cb) {
         setTimeout(cb, 1);
       }
@@ -208,9 +204,9 @@
         comboBox.value = 'foobar';
         filter('bar');
         esc();
-        expect(getInput().value).to.eql('bar');
+        expect(comboBox.inputElement.value).to.eql('bar');
         esc();
-        expect(getInput().value).to.equal('foobar');
+        expect(comboBox.inputElement.value).to.equal('foobar');
       });
 
       it('should revert a non-listed value to the custom value after filtering', () => {
@@ -218,7 +214,7 @@
         comboBox.value = 'foobar';
         filter('barbaz');
         esc();
-        expect(getInput().value).to.equal('foobar');
+        expect(comboBox.inputElement.value).to.equal('foobar');
       });
 
       it('should revert to the custom value after keyboar navigation', () => {
@@ -226,9 +222,9 @@
         comboBox.value = 'foobar';
         arrowDown();
         esc();
-        expect(getInput().value).to.eql('foobar');
+        expect(comboBox.inputElement.value).to.eql('foobar');
         esc();
-        expect(getInput().value).to.equal('foobar');
+        expect(comboBox.inputElement.value).to.equal('foobar');
       });
 
       it('should close the overlay with enter', () => {
@@ -306,12 +302,12 @@
 
       it('should reset the input value synchronously when keyboard navigating', () => {
         arrowDown();
-        expect(getInput().value).to.eql('');
+        expect(comboBox.inputElement.value).to.eql('');
       });
 
       it('should prefill the input field when navigating down', done => {
         arrowDown(() => {
-          expect(getInput().value).to.eql('baz');
+          expect(comboBox.inputElement.value).to.eql('baz');
           done();
         });
       });
@@ -330,7 +326,7 @@
         arrowUp();
 
         setTimeout(() => {
-          expect(getInput().value).to.eql('foo');
+          expect(comboBox.inputElement.value).to.eql('foo');
           done();
         }, 1);
       });
@@ -341,7 +337,7 @@
         arrowDown();
 
         setTimeout(() => {
-          expect(getInput().value).to.eql('invalid filter');
+          expect(comboBox.inputElement.value).to.eql('invalid filter');
           done();
         }, 1);
       });
@@ -362,11 +358,11 @@
         arrowDown();
 
         setTimeout(() => {
-          expect(getInput().value).to.eql('bar');
+          expect(comboBox.inputElement.value).to.eql('bar');
 
           esc();
 
-          expect(getInput().value).to.eql('b');
+          expect(comboBox.inputElement.value).to.eql('b');
           done();
         }, 1);
       });
@@ -376,7 +372,7 @@
         arrowDown();
         esc();
 
-        expect(getInput().selectionStart).to.eql(getInput().selectionEnd);
+        expect(comboBox.inputElement.selectionStart).to.eql(comboBox.inputElement.selectionEnd);
       });
 
       it('should revert back to value if there is no filter', () => {
@@ -384,7 +380,7 @@
 
         esc();
 
-        expect(getInput().value).to.eql('bar');
+        expect(comboBox.inputElement.value).to.eql('bar');
       });
 
       it('should remove selection from the input value selecting value', done => {

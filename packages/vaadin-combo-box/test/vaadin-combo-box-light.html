@@ -98,6 +98,16 @@
         comboBox._toggleElement.dispatchEvent(e);
         expect(spy.called).to.be.true;
       });
+
+      it('should validate the paper-input element on checkValidity', () => {
+        const spy = sinon.spy(comboBox.inputElement, 'validate');
+
+        comboBox.required = true;
+        comboBox.value = 'foo';
+        comboBox.checkValidity();
+
+        expect(spy.called).to.be.true;
+      });
     });
   </script>
 

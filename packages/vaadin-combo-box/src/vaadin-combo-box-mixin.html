@@ -763,8 +763,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * You can override the `checkValidity` method for custom validations.
      */
     checkValidity() {
-      if (this._bindableInput.validate) {
-        return this._bindableInput.validate();
+      if (this.inputElement.validate) {
+        return this.inputElement.validate();
       }
     }
 
