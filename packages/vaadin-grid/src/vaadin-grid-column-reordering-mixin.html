@@ -41,7 +41,7 @@ This program is available under Apache License Version 2.0, available at https:/
     ready() {
       super.ready();
       Polymer.Gestures.addListener(this, 'track', this._onTrackEvent);
-      this._reorderGhost = this.$$('[part="reorder-ghost"]');
+      this._reorderGhost = this.shadowRoot.querySelector('[part="reorder-ghost"]');
 
       this.addEventListener('touchstart', this._onTouchStart.bind(this));
       this.addEventListener('touchmove', this._onTouchMove.bind(this));

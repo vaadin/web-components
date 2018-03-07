@@ -3,6 +3,7 @@
 Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -45,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _getColumnTree() {
-      var rootColumns = this.queryAllEffectiveChildren('*').filter(this._isColumnElement);
+      var rootColumns = Polymer.FlattenedNodesObserver.getFlattenedNodes(this).filter(this._isColumnElement);
       var _columnTree = [];
 
       for (var c = rootColumns; ;) {
