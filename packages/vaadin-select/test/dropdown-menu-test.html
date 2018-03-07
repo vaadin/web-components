@@ -422,6 +422,17 @@
           expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
         });
 
+        it('should store the text-field width in the custom CSS property on overlay opening', () => {
+          input.style.width = '200px';
+          dropdown.opened = true;
+
+          const prop = '--vaadin-dropdown-menu-text-field-width';
+          const value = window.ShadyCSS ?
+            window.ShadyCSS.getComputedStyleValue(dropdown._overlayElement, prop) :
+            getComputedStyle(dropdown._overlayElement).getPropertyValue(prop);
+
+          expect(value).to.be.equal(input.getBoundingClientRect().width + 'px');
+        });
       });
 
       describe('disabled', () => {
