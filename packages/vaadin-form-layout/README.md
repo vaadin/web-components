@@ -5,11 +5,11 @@
 
 # &lt;vaadin-form-layout&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-form-layout/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-form-layout/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-form-layout/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-form-layout/html-api)
 
-[&lt;vaadin-form-layout&gt;](https://vaadin.com/elements/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-form-layout&gt;](https://vaadin.com/components/vaadin-form-layout) is a [Polymer 2](http://polymer-project.org) element providing configurable responsive layout for form elements, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -31,23 +31,23 @@
 </vaadin-form-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/elements/vaadin-form-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-form-layout/master/screenshot.png" width="880" alt="Screenshot of vaadin-form-layout">](https://vaadin.com/components/vaadin-form-layout)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-form-layout.html`
 - `src/vaadin-form-item.html`
 
-  Unstyled elements.
+  Unstyled components.
 
 - `theme/lumo/vaadin-form-layout.html`
 - `theme/lumo/vaadin-form-item.html`
 
-  Elements with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-form-layout.html`
 - `vaadin-form-item.html`
@@ -86,7 +86,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `npm test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
