@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-ordered-layout/issues"
   },
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"

@@ -5,12 +5,12 @@
 
 # &lt;vaadin-ordered-layout&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-ordered-layout/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-ordered-layout/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-ordered-layout/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-ordered-layout/html-api)
 
 
-[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/elements/vaadin-ordered-layout) consist of two [Polymer 2](http://polymer-project.org) elements providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of two [Polymer 2](http://polymer-project.org) elements providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -35,23 +35,23 @@
 </vaadin-vertical-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/elements/vaadin-ordered-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/components/vaadin-ordered-layout)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-horizontal-layout.html`
 - `src/vaadin-vertical-layout.html`
 
-  Unstyled elements.
+  Unstyled components.
 
 - `theme/lumo/vaadin-horizontal-layout.html`
 - `theme/lumo/vaadin-vertical-layout.html`
 
-  Elements with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-horizontal-layout.html`
 - `vaadin-vertical-layout.html`
@@ -90,7 +90,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
