@@ -8,7 +8,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-grid/issues"
   },
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "devDependencies": {
     "bower": "latest",
     "coveralls": "2.11.3",
