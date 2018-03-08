@@ -261,6 +261,17 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             '_configuration': Object,
 
             /**
+             * If categories are present names are used instead of numbers for the category axis.
+             * The format of categories can be an `Array` with a list of categories, such as `['2010', '2011', '2012']`
+             * or a mapping `Object`, like `{0:'1',9:'Target (10)', 15: 'Max'}`.
+             */
+            'categories': {
+              type: Object,
+              reflectToAttribute: true,
+              observer: '__updateCategories'
+            },
+
+            /**
              * Specifies whether the chart is a normal chart or a timeline chart.
              */
             'timeline': {
@@ -380,6 +391,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.subtitle = {
               text: this.subtitle
             };
+          }
+
+          if (this.categories) {
+            options.xAxis = [{
+              categories: this.categories
+            }];
           }
 
           return options;
@@ -914,6 +931,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._configuration.addSeries(seriesOptions);
           }
           return this._configuration.series[position];
+        }
+
+        __updateCategories() {
+          if (!this._configuration) {
+            return;
+          }
+
+          this.__updateOrAddAxes([{
+            categories: this.categories
+          }], true);
         }
 
         __updateTitle(newValue) {
