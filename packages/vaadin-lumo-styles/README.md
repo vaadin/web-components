@@ -24,19 +24,19 @@ For documentation and instructions how to get started, use the “Documentation�
 
 Lumo is maintained as a part of the [Vaadin platform](https://vaadin.com/).
 
-[Vaadin Elements](https://vaadin.com/elements) is a collection of web components that use the Lumo design language as their default theme. The [Vaadin app starters](https://vaadin.com/start) are also based on Lumo.
+[Vaadin components](https://vaadin.com/components) is a collection of web components that use the Lumo design language as their default theme. The [Vaadin app starters](https://vaadin.com/start) are also based on Lumo.
 
 
 ## Roadmap
 
 Currently, Lumo is perhaps just a glorified visual style guide. The intention, however, is to gradually grow it to contain design guidelines and patterns as well, with a focus on enterprise/business application use cases. The vision is that you could use Lumo as a starting point for creating your own design system.
 
-Also, the technical implementation is expected to evolve together with Vaadin Elements and Polymer, with Polymer 3 around the corner.
+Also, the technical implementation is expected to evolve together with Vaadin components and Polymer, with Polymer 3 around the corner.
 
 
 ## Contributing
 
-Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-styles/issues/new) is a great way to help! If you have questions, join the [Vaadin Elements chat](https://gitter.im/vaadin/vaadin-core-elements) – we’re happy to answer Lumo related questions there.
+Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-styles/issues/new) is a great way to help! If you have questions, join the [Vaadin components chat](https://gitter.im/vaadin/vaadin-core-elements) – we’re happy to answer Lumo related questions there.
 
 
 ## Running demos and tests in browser
@@ -63,7 +63,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 
   - Make sure your code is compliant with our code linters: `gulp lint`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## Updating the version number

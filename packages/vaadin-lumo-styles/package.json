@@ -1,7 +1,7 @@
 {
   "name": "vaadin-lumo-styles",
   "version": "1.0.0-beta2",
-  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin Elements",
+  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
   "main": "lumo.html",
   "repository": "vaadin/vaadin-lumo-styles",
   "keywords": [
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
   },
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"

@@ -1,10 +1,10 @@
 {
   "name": "vaadin-lumo-styles",
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin Elements",
+  "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
   "main": "",
   "keywords": [
     "vaadin",
