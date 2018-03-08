@@ -5,11 +5,11 @@
 
 # &lt;vaadin-context-menu&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-context-menu/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-context-menu/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-context-menu/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-context-menu/html-api)
 
-[&lt;vaadin-context-menu&gt;](https://vaadin.com/elements/vaadin-context-menu) is a [Polymer](http://polymer-project.org) element providing a contextual menu, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-context-menu&gt;](https://vaadin.com/components/vaadin-context-menu) is a [Polymer](http://polymer-project.org) element providing a contextual menu, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -48,21 +48,21 @@
 </vaadin-context-menu>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/elements/vaadin-context-menu)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-context-menu/master/screenshot.png" width="493" alt="Screenshot of vaadin-context-menu">](https://vaadin.com/components/vaadin-context-menu)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-context-menu.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-context-menu.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-context-menu.html`
 
@@ -99,7 +99,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License

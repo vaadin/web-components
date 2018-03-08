@@ -1,7 +1,7 @@
 {
   "name": "vaadin-context-menu",
   "description": "Polymer element for showing context dependent items for any element on the page",
-  "homepage": "https://github.com/vaadin/vaadin-context-menu",
+  "homepage": "https://vaadin.com/components",
   "keywords": [
     "web-components",
     "web-component",
