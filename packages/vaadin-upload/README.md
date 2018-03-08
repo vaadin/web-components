@@ -64,6 +64,24 @@
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="670" />](https://vaadin.com/components/vaadin-upload)
 
+## Getting Started
+
+Vaadin components use the Lumo theme by default.
+
+## The file structure for Vaadin components
+
+- `src/vaadin-upload.html`
+
+  Unstyled component.
+
+- `theme/lumo/vaadin-upload.html`
+
+  Component with Lumo theme.
+
+- `vaadin-upload.html`
+
+  Alias for theme/lumo/vaadin-upload.html
+
 ## Running demos and tests in browser
 
 1. Fork the `vaadin-upload` repository and clone it locally.
