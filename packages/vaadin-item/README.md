@@ -5,12 +5,12 @@
 
 # &lt;vaadin-item&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-item/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-item/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-item/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-item/html-api)
 
 
-[&lt;vaadin-item&gt;](https://vaadin.com/elements/vaadin-item) is a [Polymer 2](http://polymer-project.org) element providing a container for item elements, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a [Polymer 2](http://polymer-project.org) element providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -28,21 +28,21 @@
 <vaadin-item disabled>Disabled Item</vaadin-item>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/elements/vaadin-item)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/components/vaadin-item)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-item.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-item.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-item.html`
 
@@ -79,7 +79,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
