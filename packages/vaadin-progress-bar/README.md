@@ -5,11 +5,11 @@
 
 # &lt;vaadin-progress-bar&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-progress-bar/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-progress-bar/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-progress-bar/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-progress-bar/html-api)
 
-[&lt;vaadin-progress-bar&gt;](https://vaadin.com/elements/vaadin-progress-bar) is a [Polymer 2](http://polymer-project.org) progress bar, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-progress-bar&gt;](https://vaadin.com/components/vaadin-progress-bar) is a [Polymer 2](http://polymer-project.org) progress bar, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -29,21 +29,21 @@
 <vaadin-progress-bar indeterminate></vaadin-progress-bar>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/elements/vaadin-progress-bar)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/components/vaadin-progress-bar)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-progress-bar.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-progress-bar.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-progress-bar.html`
 
@@ -80,7 +80,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
