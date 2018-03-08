@@ -5,11 +5,11 @@
 
 # &lt;vaadin-radio-button&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-radio-button/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-radio-button/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-radio-button/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-radio-button/html-api)
 
-[&lt;vaadin-radio-button&gt;](https://vaadin.com/elements/vaadin-radio-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable radio button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-radio-button&gt;](https://vaadin.com/components/vaadin-radio-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable radio button, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -31,23 +31,23 @@
 </vaadin-radio-group>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="237" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/elements/vaadin-radio-button)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="237" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/components/vaadin-radio-button)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-radio-button.html`
 - `src/vaadin-radio-group.html`
 
-  Unstyled elements.
+  Unstyled components.
 
 - `theme/lumo/vaadin-radio-button.html`
 - `theme/lumo/vaadin-radio-group.html`
 
-  Elements with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-radio-button.html`
 - `vaadin-radio-group.html`
@@ -86,7 +86,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
