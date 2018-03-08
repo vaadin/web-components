@@ -121,6 +121,26 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="empty-header-group">
+    <template>
+      <vaadin-grid style="width: 400px; height: 200px;" size="1" column-reordering-allowed>
+        <vaadin-grid-column-group>
+          <vaadin-grid-column>
+            <template class="header">1</template>
+            <template>1</template>
+            <template class="footer">1</template>
+          </vaadin-grid-column>
+        </vaadin-grid-column-group>
+
+        <vaadin-grid-column>
+          <template class="header">2</template>
+          <template>2</template>
+          <template class="footer">2</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <test-fixture id="newColumn">
     <template>
       <vaadin-grid-column>
@@ -577,6 +597,35 @@
       it('should not start reordering inside draggable footer cell content', () => {
         dragStart(visualColumnCellContents[0][2].children[0]);
         expect(grid.hasAttribute('reordering')).to.be.false;
+      });
+
+    });
+
+    describe('group with empty headers', () => {
+
+      let grid;
+
+      beforeEach(done => {
+        grid = fixture('empty-header-group');
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+        done();
+      });
+
+      it('should swap a column and a column of a group with empty header', () => {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 1),
+          getVisualHeaderCellContent(grid, 0, 0)
+        );
+        expectVisualOrder(grid, [2, 1]);
+      });
+
+      it('should swap a column of a group with empty header and a column', () => {
+        dragAndDropOver(
+          getVisualHeaderCellContent(grid, 0, 0),
+          getVisualHeaderCellContent(grid, 0, 1)
+        );
+        expectVisualOrder(grid, [2, 1]);
       });
 
     });
