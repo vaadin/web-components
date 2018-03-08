@@ -6,11 +6,11 @@
 
 # &lt;vaadin-combo-box&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-combo-box/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-combo-box/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-combo-box/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-combo-box/html-api)
 
-[&lt;vaadin-combo-box&gt;](https://vaadin.com/elements/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-combo-box&gt;](https://vaadin.com/components/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -40,23 +40,23 @@
 </dom-bind>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/elements/vaadin-combo-box)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/components/vaadin-combo-box)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-combo-box.html`
 - `src/vaadin-combo-box-light.html`
 
-  Unstyled elements.
+  Unstyled components.
 
 - `theme/lumo/vaadin-combo-box.html`
 - `theme/lumo/vaadin-combo-box-light.html`
 
-  Elements with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-combo-box.html`
 - `vaadin-combo-box-light.html`
@@ -95,7 +95,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
