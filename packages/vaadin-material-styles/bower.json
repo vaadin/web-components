@@ -1,10 +1,10 @@
 {
   "name": "vaadin-material-theme",
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "Material design theme for Vaadin Elements",
+  "description": "Material design theme for Vaadin components",
   "main": "material.html",
   "keywords": [
     "vaadin",

@@ -1,7 +1,7 @@
 {
   "name": "vaadin-material-theme",
   "version": "0.3.0",
-  "description": "Material is a customizable theme for Vaadin Elements",
+  "description": "Material is a customizable theme for Vaadin components",
   "main": "material.html",
   "repository": "vaadin/vaadin-material-theme",
   "keywords": [
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-material-theme/issues"
   },
-  "homepage": "https://vaadin.com/elements",
+  "homepage": "https://vaadin.com/components",
   "scripts": {
     "test": "wct"
   },

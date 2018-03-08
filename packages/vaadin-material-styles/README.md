@@ -2,9 +2,9 @@
 [![Build Status](https://travis-ci.org/vaadin/vaadin-material-theme.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-material-theme)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-# Material Theme for Vaadin Elements
+# Material Theme for Vaadin components
 
-`vaadin-material-theme` is customizable theme for the [Vaadin Core Elements](https://vaadin.com/elements).
+`vaadin-material-theme` is customizable theme for the [Vaadin components](https://vaadin.com/components).
 
 
 ## Running demos and tests in browser
@@ -38,7 +38,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
