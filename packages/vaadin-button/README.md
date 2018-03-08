@@ -5,11 +5,11 @@
 
 # &lt;vaadin-button&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-button/html-examples/)
+[Live Demo ↗](https://vaadin.com/components/vaadin-button/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-button/html-api/)
+[API documentation ↗](https://vaadin.com/components/vaadin-button/html-api)
 
-[&lt;vaadin-button&gt;](https://vaadin.com/elements/vaadin-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-button&gt;](https://vaadin.com/components/vaadin-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -27,21 +27,21 @@
 <vaadin-button disabled>Button Two</vaadin-button>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Lumo theme">](https://vaadin.com/elements/-/element/vaadin-button)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Lumo theme">](https://vaadin.com/components/vaadin-button)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-button.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-button.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-button.html`
 
@@ -78,7 +78,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
