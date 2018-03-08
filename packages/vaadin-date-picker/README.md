@@ -5,11 +5,11 @@
 
 # &lt;vaadin-date-picker&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-date-picker/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-date-picker/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-date-picker/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-date-picker/html-api)
 
-[&lt;vaadin-date-picker&gt;](https://vaadin.com/elements/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin Core Elements](https://vaadin.com/elements).
+[&lt;vaadin-date-picker&gt;](https://vaadin.com/components/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -27,23 +27,23 @@
 </vaadin-date-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/elements/-/element/vaadin-date-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/components/vaadin-date-picker)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-date-picker.html`
 - `src/vaadin-date-picker-light.html`
 
-  Unstyled elements.
+  Unstyled components.
 
 - `theme/lumo/vaadin-date-picker.html`
 - `theme/lumo/vaadin-date-picker-light.html`
 
-  Elements with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-date-picker.html`
 - `vaadin-date-picker-light.html`
@@ -82,7 +82,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
