@@ -5,11 +5,11 @@
 
 # &lt;vaadin-upload&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-upload/html-examples/upload-basic-demos)
+[Live Demo ↗](https://vaadin.com/components/vaadin-upload/html-examples/upload-basic-demos)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-upload/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-upload/html-api)
 
-[&lt;vaadin-upload&gt;](https://vaadin.com/elements/vaadin-upload) is a [Polymer](http://polymer-project.org) element for uploading files, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
+[&lt;vaadin-upload&gt;](https://vaadin.com/components/vaadin-upload) is a [Polymer](http://polymer-project.org) element for uploading files, part of the [Vaadin components](https://vaadin.com/components).
 
 <!---
 ```
@@ -62,7 +62,7 @@
 </vaadin-upload>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="670" />](https://vaadin.com/elements/vaadin-upload)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="670" />](https://vaadin.com/components/vaadin-upload)
 
 ## Running demos and tests in browser
 
@@ -95,7 +95,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
