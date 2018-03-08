@@ -5,12 +5,12 @@
 
 # &lt;vaadin-dialog&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-dialog/html-examples/dialog-basic-demos)
+[Live Demo ↗](https://vaadin.com/components/vaadin-dialog/html-examples/dialog-basic-demos)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-dialog/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-dialog/html-api)
 
 
-[&lt;vaadin-dialog&gt;](https://vaadin.com/elements/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customised modal dialogs.
+[&lt;vaadin-dialog&gt;](https://vaadin.com/components/vaadin-dialog) is a [Polymer 2](http://polymer-project.org) element for customized modal dialogs, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -31,21 +31,21 @@
 </vaadin-dialog>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dialog/master/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/elements/vaadin-dialog)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-dialog/master/screenshot.png" width="264" alt="Screenshot of vaadin-dialog">](https://vaadin.com/components/vaadin-dialog)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-dialog.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-dialog.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-dialog.html`
 
@@ -82,7 +82,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
