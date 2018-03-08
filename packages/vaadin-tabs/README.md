@@ -5,12 +5,12 @@
 
 # &lt;vaadin-tabs&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-tabs/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-tabs/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-tabs/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-tabs/html-api)
 
 
-[&lt;vaadin-tabs&gt;](https://vaadin.com/elements/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin Core Elements](https://vaadin.com/elements). It is designed for menu and tab components.
+[&lt;vaadin-tabs&gt;](https://vaadin.com/components/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin components](https://vaadin.com/components). It is designed for menu and tab components.
 
 <!--
 ```
@@ -32,23 +32,23 @@
 </vaadin-tabs>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Lumo theme">](https://vaadin.com/elements/vaadin-tabs)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Lumo theme">](https://vaadin.com/components/vaadin-tabs)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-tab.html`
 - `src/vaadin-tabs.html`
 
-  Unstyled element.
+  Unstyled components.
 
 - `theme/lumo/vaadin-tab.html`
 - `theme/lumo/vaadin-tabs.html`
 
-  Element with Lumo theme.
+  Components with Lumo theme.
 
 - `vaadin-tab.html`
 - `vaadin-tabs.html`
@@ -87,7 +87,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
