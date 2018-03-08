@@ -23,8 +23,9 @@
 ```
 -->
 ```html
-<vaadin-button>Button One</vaadin-button>
-<vaadin-button disabled>Button Two</vaadin-button>
+<vaadin-button theme="primary">Primary</vaadin-button>
+<vaadin-button theme="secondary">Secondary</vaadin-button>
+<vaadin-button theme="tertiary">Tertiary</vaadin-button>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Lumo theme">](https://vaadin.com/components/vaadin-button)
