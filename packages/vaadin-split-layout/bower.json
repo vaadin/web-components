@@ -1,5 +1,6 @@
 {
   "name": "vaadin-split-layout",
+  "homepage": "https://vaadin.com/components",
   "description": "Polymer element for partitioning a layout into resizeable areas",
   "authors": [
     "Vaadin Ltd"

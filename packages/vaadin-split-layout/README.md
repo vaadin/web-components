@@ -6,11 +6,11 @@
 
 # &lt;vaadin-split-layout&gt;
 
-[Live Demo ↗](https://vaadin.com/elements/vaadin-split-layout/html-examples)
+[Live Demo ↗](https://vaadin.com/components/vaadin-split-layout/html-examples)
 |
-[API documentation ↗](https://vaadin.com/elements/vaadin-split-layout/html-api)
+[API documentation ↗](https://vaadin.com/components/vaadin-split-layout/html-api)
 
-[&lt;vaadin-split-layout&gt;](https://vaadin.com/elements/vaadin-split-layout) is a  [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [vaadin-core-elements](https://vaadin.com/elements) element bundle.
+[&lt;vaadin-split-layout&gt;](https://vaadin.com/components/vaadin-split-layout) is a [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [Vaadin components](https://vaadin.com/components).
 
 <!---
 ```
@@ -47,21 +47,21 @@
 </vaadin-split-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/elements/vaadin-split-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/components/vaadin-split-layout)
 
 ## Getting Started
 
-Vaadin Elements use the Lumo theme by default.
+Vaadin components use the Lumo theme by default.
 
-## The file structure for Vaadin Elements
+## The file structure for Vaadin components
 
 - `src/vaadin-split-layout.html`
 
-  Unstyled element.
+  Unstyled component.
 
 - `theme/lumo/vaadin-split-layout.html`
 
-  Element with Lumo theme.
+  Component with Lumo theme.
 
 - `vaadin-split-layout.html`
 
@@ -107,7 +107,7 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
   - Make sure your code is compliant with our code linters: `gulp lint`
   - Check that tests are passing: `polymer test`
   - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin Elements team members
+  - Wait for response from one of Vaadin components team members
 
 
 ## License
