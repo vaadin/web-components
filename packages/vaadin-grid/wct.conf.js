@@ -4,7 +4,8 @@ module.exports = {
   testTimeout: 180 * 1000,
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'macOS 10.12/iphone@10.3'
+      'macOS 10.12/iphone@11.2',
+      'macOS 9.3.2/iphone@9.3'
     ];
 
     const saucelabsPlatformsPolyfilled = [
