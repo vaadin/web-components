@@ -1,78 +1,135 @@
-<link rel="import" href="../color.html">
 <link rel="import" href="../spacing.html">
+<link rel="import" href="../style.html">
 <link rel="import" href="overlay.html">
 
-<dom-module id="lumo-menu-overlay">
+<!-- Split as a separate module because combo box can only use the "fullscreen" styles -->
+<dom-module id="lumo-menu-overlay-core">
   <template>
-    <style include="lumo-overlay">
+    <style>
+      :host([opening]),
+      :host([closing]) {
+        animation: 0.14s lumo-overlay-dummy-animation;
+      }
+
       [part="overlay"] {
-        animation: 0.2s vaadin-menu-overlay-enter;
         will-change: opacity, transform;
       }
 
-      @keyframes vaadin-menu-overlay-enter {
+      :host([opening]) [part="overlay"] {
+        animation: 0.1s lumo-menu-overlay-enter ease-out both;
+      }
+
+      @keyframes lumo-menu-overlay-enter {
         0% {
           opacity: 0;
           transform: translateY(-4px);
         }
       }
 
-      /* Small viewport styles */
-
-      :host([phone][phone]) {
-        /* Remove padding around the viewport */
-        padding: 0;
+      :host([closing]) [part="overlay"] {
+        animation: 0.1s lumo-menu-overlay-exit both;
       }
 
-      :host([phone]) [part="overlay"] {
-        animation: 0.15s vaadin-mobile-menu-overlay-enter cubic-bezier(.215, .61, .355, 1);
-        border-radius: 0;
-        box-shadow: 0 6px 56px 0 var(--lumo-shade-80pct);
-        overflow: visible;
-        padding: 0;
-        position: relative;
+      @keyframes lumo-menu-overlay-exit {
+        100% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-menu-overlay">
+  <template>
+    <style include="lumo-overlay lumo-menu-overlay-core">
+      /* Small viewport (bottom sheet) styles */
+      /* Use direct media queries instead of the state attributes (phone or fullscreen) provided by the elements */
+      @media (max-width: 420px), (max-height: 420px) {
+        :host {
+          top: 0 !important;
+          right: 0 !important;
+          bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
+          left: 0 !important;
+          align-items: stretch !important;
+          justify-content: flex-end !important;
+        }
+
+        [part="overlay"] {
+          max-height: 50vh;
+          width: 100vw;
+          border-radius: 0;
+          box-shadow: var(--lumo-box-shadow-xl);
+        }
+
+        [part="content"] {
+          padding: 30px var(--lumo-space-m);
+        }
+
+        [part="backdrop"] {
+          display: block;
+        }
+
+        /* Gradient fade-out at the top and bottom edges (should only apply to dropdown-menu and context-menu) */
+        @supports (mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000)) {
+          [part="overlay"]::after {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: inherit;
+            background-image: inherit;
+            --_lumo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
+            -webkit-mask-image: var(--_lumo-menu-overlay-mask-image);
+          }
+        }
+
+        /*
+          TODO: CSS custom property in `mask-image` causes crash in Edge
+          see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
+        */
+        @-moz-document url-prefix() {
+          :host([phone]) [part="overlay"]::after {
+            mask-image: var(--_lumo-menu-overlay-mask-image);
+          }
+        }
+
+        /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
+        [part="content"] {
+          max-height: inherit;
+          box-sizing: border-box;
+          -webkit-overflow-scrolling: touch;
+          overflow: auto;
+        }
+
+        /* Animations */
+
+        :host([opening]) [part="overlay"] {
+          animation: 0.2s lumo-mobile-menu-overlay-enter cubic-bezier(.215, .61, .355, 1) both;
+        }
+
+        :host([closing]),
+        :host([closing]) [part="backdrop"] {
+          animation-delay: 0.14s;
+        }
+
+        :host([closing]) [part="overlay"] {
+          animation: 0.14s 0.14s lumo-mobile-menu-overlay-exit cubic-bezier(.550, .055, .675, .19) both;
+        }
       }
 
-      @keyframes vaadin-mobile-menu-overlay-enter {
+      @keyframes lumo-mobile-menu-overlay-enter {
         0% {
           transform: translateY(150%);
         }
       }
 
-      @supports (mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000)) {
-        /* Gradient fade-out at the top and bottom edges */
-        :host([phone]) [part="overlay"]::after {
-          content: "";
-          pointer-events: none;
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          background-color: inherit;
-          background-image: inherit;
-          --_lumo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
-          -webkit-mask-image: var(--_lumo-menu-overlay-mask-image);
+      @keyframes lumo-mobile-menu-overlay-exit {
+        100% {
+          transform: translateY(150%);
         }
-      }
-
-      /*
-        TODO: CSS custom property in `mask-image` causes crash in Edge
-        see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
-      */
-      @-moz-document url-prefix() {
-        :host([phone]) [part="overlay"]::after {
-          mask-image: var(--_lumo-menu-overlay-mask-image);
-        }
-      }
-
-      /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
-      :host([phone][phone]) [part="content"] {
-        max-height: 50vh;
-        padding: 30px var(--lumo-space-m);
-        box-sizing: border-box;
-        -webkit-overflow-scrolling: touch;
-        overflow: auto;
       }
     </style>
   </template>
