@@ -106,7 +106,7 @@
 
       expect(combobox.selectedItem).to.equal('foo');
       expect(combobox.$.overlay._selectedItem).to.equal('foo');
-      expect(combobox._bindableInput.value).to.equal('foo');
+      expect(combobox.inputElement.value).to.equal('foo');
     });
 
     it('should close the dropdown on selection', () => {
@@ -304,12 +304,8 @@
   describe('selecting a custom value', () => {
     let combobox;
 
-    function getInput() {
-      return combobox._bindableInput;
-    }
-
     function filter(value) {
-      getInput().value = value;
+      combobox.inputElement.value = value;
       combobox.inputElement.dispatchEvent(new CustomEvent('input'));
     }
 

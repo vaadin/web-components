@@ -23,10 +23,6 @@
     describe('using object values', () => {
       let combobox;
 
-      function inputValue() {
-        return combobox._bindableInput.value;
-      }
-
       beforeEach(() => {
         combobox = fixture('combobox');
 
@@ -79,7 +75,7 @@
       it('should use the default label property on input field', () => {
         selectItem(0);
 
-        expect(inputValue()).to.eql('foo');
+        expect(combobox.inputElement.value).to.eql('foo');
       });
 
       it('should use the default label property in overlay items', done => {
@@ -95,7 +91,7 @@
 
         combobox.value = 'bar';
 
-        expect(inputValue()).to.eql('bazs');
+        expect(combobox.inputElement.value).to.eql('bazs');
       });
 
       it('should use the default value property', () => {
@@ -121,7 +117,7 @@
 
         selectItem(0);
 
-        expect(combobox._bindableInput.value).to.eql('default');
+        expect(combobox.inputElement.value).to.eql('default');
         expect(combobox.value).to.eql('default');
       });
 
@@ -131,7 +127,7 @@
 
         selectItem(0);
 
-        expect(combobox._bindableInput.value).to.eql('default');
+        expect(combobox.inputElement.value).to.eql('default');
         expect(combobox.value).to.eql('default');
       });
 
@@ -139,7 +135,7 @@
         combobox.value = 'bar';
 
         expect(combobox.selectedItem).to.eql(combobox.items[0]);
-        expect(combobox._bindableInput.value).to.eql('foo');
+        expect(combobox.inputElement.value).to.eql('foo');
       });
 
       it('should set the selected item when closed', () => {
@@ -148,52 +144,52 @@
         combobox.value = 'bar';
 
         expect(combobox.selectedItem).to.eql(combobox.items[0]);
-        expect(combobox._bindableInput.value).to.eql('foo');
+        expect(combobox.inputElement.value).to.eql('foo');
       });
 
       it('should set the value', () => {
         selectItem(0);
 
-        expect(combobox._bindableInput.value).to.eql('foo');
+        expect(combobox.inputElement.value).to.eql('foo');
         expect(combobox.value).to.eql('bar');
       });
 
       it('should set the value even if the value is zero (number)', () => {
         selectItem(2);
 
-        expect(combobox._bindableInput.value).to.eql('zero');
+        expect(combobox.inputElement.value).to.eql('zero');
         expect(combobox.value).to.eql(0);
       });
 
       it('should set the value even if the value is false (boolean)', () => {
         selectItem(3);
 
-        expect(combobox._bindableInput.value).to.eql('false');
+        expect(combobox.inputElement.value).to.eql('false');
         expect(combobox.value).to.eql(false);
       });
 
       it('should set the value even if the value is an empty string', () => {
         selectItem(4);
 
-        expect(combobox._bindableInput.value).to.eql('empty string');
+        expect(combobox.inputElement.value).to.eql('empty string');
         expect(combobox.value).to.eql('');
         expect(combobox.hasAttribute('has-value')).to.be.true;
       });
 
       it('should distinguish between 0 (number) and "0" (string) values', () => {
         selectItem(2);
-        expect(combobox._bindableInput.value).to.eql('zero');
+        expect(combobox.inputElement.value).to.eql('zero');
         expect(combobox.value).to.eql(0);
 
         selectItem(5);
-        expect(combobox._bindableInput.value).to.eql('zero as a string');
+        expect(combobox.inputElement.value).to.eql('zero as a string');
         expect(combobox.value).to.eql('0');
       });
 
       it('should set the input value from item label if item is found', () => {
         combobox.value = 'bar';
 
-        expect(combobox._bindableInput.value).to.eql('foo');
+        expect(combobox.inputElement.value).to.eql('foo');
       });
 
       it('should select first of duplicate values', () => {
@@ -210,7 +206,7 @@
 
         expect(combobox.selectedItem).to.eql(combobox.items[7]);
         expect(combobox.value).to.eql('duplicate');
-        expect(combobox._bindableInput.value).to.eql('duplicate value 2');
+        expect(combobox.inputElement.value).to.eql('duplicate value 2');
         expect(spy.callCount).to.eql(1);
       });
 
@@ -222,7 +218,7 @@
 
         expect(combobox.selectedItem).to.eql(combobox.items[9]);
         expect(combobox.value).to.eql(combobox.items[9].toString());
-        expect(combobox._bindableInput.value).to.eql('missing value 2');
+        expect(combobox.inputElement.value).to.eql('missing value 2');
         expect(spy.callCount).to.eql(1);
       });
 
@@ -235,7 +231,7 @@
 
           combobox.value = 'not found';
 
-          expect(combobox._bindableInput.value).to.empty;
+          expect(combobox.inputElement.value).to.empty;
         });
       });
 
@@ -246,7 +242,7 @@
         it('should set the value as bind value if item is not found', () => {
           combobox.value = 'not found';
 
-          expect(combobox._bindableInput.value).to.eql('not found');
+          expect(combobox.inputElement.value).to.eql('not found');
         });
       });
     });
