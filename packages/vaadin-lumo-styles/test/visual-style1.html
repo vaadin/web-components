@@ -1,0 +1,103 @@
+<custom-style>
+  <style>
+    html {
+      --lumo-shade-5pct: rgba(0, 0, 0, 0.05);
+      --lumo-shade-10pct: rgba(0, 0, 0, 0.1);
+      --lumo-shade-20pct: rgba(0, 0, 0, 0.2);
+      --lumo-shade-30pct: rgba(0, 0, 0, 0.3);
+      --lumo-shade-40pct: rgba(0, 0, 0, 0.4);
+      --lumo-shade-50pct: rgba(0, 0, 0, 0.5);
+      --lumo-shade-60pct: rgba(0, 0, 0, 0.6);
+      --lumo-shade-70pct: rgba(0, 0, 0, 0.7);
+      --lumo-shade-80pct: rgba(0, 0, 0, 0.8);
+      --lumo-shade-90pct: rgba(0, 0, 0, 0.9);
+      --lumo-shade: rgba(0, 0, 0, 1);
+
+      --lumo-primary-color: hsl(23, 90%, 52%);
+      --lumo-primary-color-50pct: hsla(23, 90%, 52%, 0.5);
+      --lumo-primary-color-10pct: hsla(23, 90%, 52%, 0.1);
+      --lumo-primary-text-color: hsl(23, 93%, 46%);
+
+      --lumo-error-color: hsl(340, 81%, 52%);
+      --lumo-error-color-50pct: hsla(340, 81%, 52%, 0.5);
+      --lumo-error-color-10pct: hsla(340, 81%, 52%, 0.1);
+      --lumo-error-text-color: hsl(3, 92%, 53%);
+
+      --lumo-success-color: hsl(150,93%,39%);
+      --lumo-success-color-50pct: hsla(145, 76%, 44%, 0.55);
+      --lumo-success-color-10pct: hsla(145, 76%, 44%, 0.12);
+      --lumo-success-text-color: hsl(145, 100%, 32%);
+
+      --lumo-border-radius: 1px;
+
+      --lumo-font-family: "Source Sans Pro", sans-serif;
+    }
+
+    iron-icon {
+      color: var(--lumo-primary-text-color);
+    }
+
+    vaadin-button iron-icon {
+      color: inherit;
+    }
+  </style>
+</custom-style>
+
+<dom-module id="button-theme" theme-for="vaadin-button">
+  <template>
+    <style>
+      :host {
+        --lumo-border-radius: 20px;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="text-field-theme" theme-for="vaadin-text-field vaadin-text-area">
+  <template>
+    <style>
+      [part="label"] {
+        font-weight: 600;
+      }
+
+      [part="input-field"] {
+        background-color: var(--lumo-base-color) !important;
+        border: 1px solid var(--lumo-contrast-30pct);
+        box-sizing: border-box;
+      }
+
+      :host([focus-ring]) [part="input-field"] {
+        border-color: var(--lumo-primary-color);
+      }
+
+      :host([invalid]) [part="input-field"] {
+        background-color: var(--lumo-base-color);
+        border-color: var(--lumo-error-color);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="menu-overlay-theme" theme-for="vaadin-dropdown-menu-overlay vaadin-context-menu-overlay">
+  <template>
+    <style>
+      [part="content"] {
+        padding: var(--lumo-space-s) 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="combo-box-overlay-theme" theme-for="vaadin-combo-box-overlay">
+  <template>
+    <style>
+      /* This doesn't work for some reason, it only removes the border/visual padding */
+      iron-list {
+        --iron-list-items-container: {
+          border-top: var(--lumo-space-s) solid transparent;
+          border-bottom: var(--lumo-space-s) solid transparent;
+        }
+      }
+    </style>
+  </template>
+</dom-module>
