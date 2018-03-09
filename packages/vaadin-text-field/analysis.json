@@ -525,7 +525,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 304,
+                  "line": 308,
                   "column": 5
                 }
               },
@@ -867,11 +867,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 312,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 314,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -884,17 +884,36 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_addIEListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 320,
+                  "column": 4
+                },
+                "end": {
+                  "line": 333,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "_getActiveErrorId",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 316,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 318,
+                  "line": 337,
                   "column": 5
                 }
               },
@@ -919,11 +938,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 320,
+                  "line": 339,
                   "column": 4
                 },
                 "end": {
-                  "line": 322,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -945,11 +964,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 324,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 326,
+                  "line": 345,
                   "column": 5
                 }
               },
@@ -974,11 +993,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 331,
+                  "line": 350,
                   "column": 4
                 },
                 "end": {
-                  "line": 349,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -1939,11 +1958,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 86,
+                  "line": 89,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 92,
                   "column": 13
                 }
               },
@@ -1959,11 +1978,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 94,
+                  "line": 97,
                   "column": 12
                 },
                 "end": {
-                  "line": 100,
+                  "line": 103,
                   "column": 13
                 }
               },
@@ -1983,11 +2002,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 126,
                   "column": 8
                 },
                 "end": {
-                  "line": 131,
+                  "line": 134,
                   "column": 9
                 }
               },
@@ -2328,11 +2347,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 312,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 314,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -2345,17 +2364,36 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_addIEListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 320,
+                  "column": 4
+                },
+                "end": {
+                  "line": 333,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "_getActiveErrorId",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 316,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 318,
+                  "line": 337,
                   "column": 5
                 }
               },
@@ -2380,11 +2418,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 320,
+                  "line": 339,
                   "column": 4
                 },
                 "end": {
-                  "line": 322,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -2406,11 +2444,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 324,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 326,
+                  "line": 345,
                   "column": 5
                 }
               },
@@ -2435,11 +2473,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 331,
+                  "line": 350,
                   "column": 4
                 },
                 "end": {
-                  "line": 349,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -2463,11 +2501,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 136,
                   "column": 8
                 },
                 "end": {
-                  "line": 137,
+                  "line": 140,
                   "column": 9
                 }
               },
@@ -2484,11 +2522,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 142,
                   "column": 8
                 },
                 "end": {
-                  "line": 141,
+                  "line": 144,
                   "column": 9
                 }
               },
@@ -2501,11 +2539,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 143,
+                  "line": 146,
                   "column": 8
                 },
                 "end": {
-                  "line": 145,
+                  "line": 148,
                   "column": 9
                 }
               },
@@ -2551,11 +2589,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 72,
+              "line": 75,
               "column": 6
             },
             "end": {
-              "line": 146,
+              "line": 149,
               "column": 7
             }
           },
@@ -2910,11 +2948,11 @@
               "description": "Set to true to hide the eye icon which toggles the password visibility.",
               "sourceRange": {
                 "start": {
-                  "line": 86,
+                  "line": 89,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 92,
                   "column": 13
                 }
               },
@@ -2926,11 +2964,11 @@
               "description": "True if the password is visible ([type=text]).",
               "sourceRange": {
                 "start": {
-                  "line": 94,
+                  "line": 97,
                   "column": 12
                 },
                 "end": {
-                  "line": 100,
+                  "line": 103,
                   "column": 13
                 }
               },
@@ -3745,11 +3783,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 312,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 314,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -3762,17 +3800,36 @@
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
+              "name": "_addIEListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "vaadin-text-field-mixin.html",
+                "start": {
+                  "line": 320,
+                  "column": 4
+                },
+                "end": {
+                  "line": 333,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.TextFieldMixin"
+            },
+            {
               "name": "_getActiveErrorId",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 316,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 318,
+                  "line": 337,
                   "column": 5
                 }
               },
@@ -3797,11 +3854,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 320,
+                  "line": 339,
                   "column": 4
                 },
                 "end": {
-                  "line": 322,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -3823,11 +3880,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 324,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 326,
+                  "line": 345,
                   "column": 5
                 }
               },
@@ -3852,11 +3909,11 @@
               "sourceRange": {
                 "file": "vaadin-text-field-mixin.html",
                 "start": {
-                  "line": 331,
+                  "line": 350,
                   "column": 4
                 },
                 "end": {
-                  "line": 349,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -4719,7 +4776,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 304,
+                  "line": 308,
                   "column": 5
                 }
               },
@@ -5049,11 +5106,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 312,
+                  "line": 316,
                   "column": 4
                 },
                 "end": {
-                  "line": 314,
+                  "line": 318,
                   "column": 5
                 }
               },
@@ -5065,16 +5122,33 @@
               }
             },
             {
+              "name": "_addIEListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 320,
+                  "column": 4
+                },
+                "end": {
+                  "line": 333,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
               "name": "_getActiveErrorId",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 316,
+                  "line": 335,
                   "column": 4
                 },
                 "end": {
-                  "line": 318,
+                  "line": 337,
                   "column": 5
                 }
               },
@@ -5097,11 +5171,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 320,
+                  "line": 339,
                   "column": 4
                 },
                 "end": {
-                  "line": 322,
+                  "line": 341,
                   "column": 5
                 }
               },
@@ -5121,11 +5195,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 324,
+                  "line": 343,
                   "column": 4
                 },
                 "end": {
-                  "line": 326,
+                  "line": 345,
                   "column": 5
                 }
               },
@@ -5148,11 +5222,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 331,
+                  "line": 350,
                   "column": 4
                 },
                 "end": {
-                  "line": 349,
+                  "line": 368,
                   "column": 5
                 }
               },
@@ -5179,7 +5253,7 @@
               "column": 2
             },
             "end": {
-              "line": 356,
+              "line": 375,
               "column": 3
             }
           },
