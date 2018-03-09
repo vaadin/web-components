@@ -156,31 +156,34 @@
           outerScroller.scrollLeft = 100;
         });
 
-        it('should scroll the outer scroller', () => {
-          wheel(grid, 100, 0);
-          expect(outerScroller.scrollLeft).to.equal(100);
-        });
+        // Outer scroller never needs to be synced on iOS since it's always the one that gets scrolled.
+        if (!ios) {
+          it('should scroll the outer scroller', () => {
+            wheel(grid, 100, 0);
+            expect(outerScroller.scrollLeft).to.equal(100);
+          });
 
-        it('should only sync outer scroller when wheel scrolling host or passthrough', () => {
-          const spy = sinon.spy(outerScroller, 'syncOuterScroller');
+          it('should only sync outer scroller when wheel scrolling host or passthrough', () => {
+            const spy = sinon.spy(outerScroller, 'syncOuterScroller');
 
-          // Not wheelscrolling nor passthrough
-          outerScroller.passthrough = false;
-          grid._scrollHandler();
-          expect(spy.called).to.be.false;
+            // Not wheelscrolling nor passthrough
+            outerScroller.passthrough = false;
+            grid._scrollHandler();
+            expect(spy.called).to.be.false;
 
-          // Wheel scrolling only
-          grid._wheelScrolling = true;
-          grid._scrollHandler();
-          expect(spy.called).to.be.true;
+            // Wheel scrolling only
+            grid._wheelScrolling = true;
+            grid._scrollHandler();
+            expect(spy.called).to.be.true;
 
-          // Passthrough only
-          spy.reset();
-          grid._wheelScrolling = false;
-          outerScroller.passthrough = true;
-          grid._scrollHandler();
-          expect(spy.called).to.be.true;
-        });
+            // Passthrough only
+            spy.reset();
+            grid._wheelScrolling = false;
+            outerScroller.passthrough = true;
+            grid._scrollHandler();
+            expect(spy.called).to.be.true;
+          });
+        }
 
         it('should not invoke afterScroll on scroll event while outer scrolling', () => {
           const spy = sinon.spy(grid, '_afterScroll');
