@@ -24,7 +24,7 @@ before_script:
     fi
 
 env:
-  # - TEST_SUITE=mobile #iOS tests on SauceLabs are constantly timing out due to the large number of tests. Disabled for now.
+  - TEST_SUITE=mobile
   - TEST_SUITE=polyfilled
   - TEST_SUITE=desktop
 
