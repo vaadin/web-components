@@ -177,18 +177,20 @@ This program is available under Apache License Version 2.0, available at https:/
               if (!viewportCovered) {
                 this._accessIronListAPI(() => super._increasePoolIfNeeded(count));
 
-                const childNodes = Array.from(this.$.items.childNodes);
-                // Ensure the rows are in order after increasing pool
-                const rowsInOrder = !!childNodes.reduce((inOrder, current, currentIndex, array) => {
-                  if (currentIndex === 0 || array[currentIndex - 1].index === current.index - 1) {
-                    return inOrder;
-                  }
-                }, true);
+                if (count) {
+                  const childNodes = Array.from(this.$.items.childNodes);
+                  // Ensure the rows are in order after increasing pool
+                  const rowsInOrder = !!childNodes.reduce((inOrder, current, currentIndex, array) => {
+                    if (currentIndex === 0 || array[currentIndex - 1].index === current.index - 1) {
+                      return inOrder;
+                    }
+                  }, true);
 
-                if (!rowsInOrder) {
-                  childNodes.sort((row1, row2) => {
-                    return row1.index - row2.index;
-                  }).forEach(row => this.$.items.appendChild(row));
+                  if (!rowsInOrder) {
+                    childNodes.sort((row1, row2) => {
+                      return row1.index - row2.index;
+                    }).forEach(row => this.$.items.appendChild(row));
+                  }
                 }
               }
             });
