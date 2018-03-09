@@ -22,8 +22,8 @@
       /* Month scroller */
 
       [part="months"] {
-        /* TODO this property should support calc or measure the height from the DOM. At the moment it doesn't take --lumo-size/space into account */
-        --vaadin-infinite-scroller-item-height: 19rem;
+        --vaadin-infinite-scroller-item-height: calc((var(--lumo-size-s) + var(--lumo-space-s)) * 6 + var(--lumo-font-size-l) + var(--lumo-space-m) + var(--lumo-font-size-xs) + var(--lumo-space-s) + var(--lumo-space-s));
+        --vaadin-infinite-scroller-buffer-offset: 20%;
         -webkit-mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
         mask-image: linear-gradient(transparent, #000 10%, #000 85%, transparent);
         position: relative;

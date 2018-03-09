@@ -17,12 +17,6 @@
         color: var(--lumo-body-text-color);
         text-align: center;
         padding: 0 var(--lumo-space-xs);
-        /* Make the currently focused month be roughly in the center of the overlay */
-        /* TODO this doesn’t work nicely with the infinite scroller buffers, as sometimes one buffer
-         * will overlap the other, and the user can’t click on a date to select it. Using smaller
-         * offset for now, and compensating it in the scroll item height */
-        /* transform: translateY(calc(var(--lumo-size-m) * 2)); */
-        transform: translateY(var(--lumo-size-s));
       }
 
       /* Month header */
@@ -123,7 +117,7 @@
       }
 
       @media (pointer: coarse) {
-        [part="date"]:hover::before,
+        [part="date"]:hover:not([selected])::before,
         [part="date"][focused]:not([selected])::before {
           display: none;
         }
