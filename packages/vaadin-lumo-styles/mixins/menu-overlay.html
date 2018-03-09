@@ -61,47 +61,19 @@
           box-shadow: var(--lumo-box-shadow-xl);
         }
 
-        [part="content"] {
-          padding: 30px var(--lumo-space-m);
-        }
-
-        [part="backdrop"] {
-          display: block;
-        }
-
-        /* Gradient fade-out at the top and bottom edges (should only apply to dropdown-menu and context-menu) */
-        @supports (mask-image: linear-gradient(#000, #000)) or (-webkit-mask-image: linear-gradient(#000, #000)) {
-          [part="overlay"]::after {
-            content: "";
-            pointer-events: none;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background-color: inherit;
-            background-image: inherit;
-            --_lumo-menu-overlay-mask-image: linear-gradient(#000, transparent 40px, transparent calc(100% - 40px), #000);
-            -webkit-mask-image: var(--_lumo-menu-overlay-mask-image);
-          }
-        }
-
-        /*
-          TODO: CSS custom property in `mask-image` causes crash in Edge
-          see https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15415089/
-        */
-        @-moz-document url-prefix() {
-          :host([phone]) [part="overlay"]::after {
-            mask-image: var(--_lumo-menu-overlay-mask-image);
-          }
-        }
-
         /* The content part scrolls instead of the overlay part, because of the gradient fade-out */
         [part="content"] {
+          padding: 30px var(--lumo-space-m);
           max-height: inherit;
           box-sizing: border-box;
           -webkit-overflow-scrolling: touch;
           overflow: auto;
+          -webkit-mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
+          mask-image: linear-gradient(transparent, #000 40px, #000 calc(100% - 40px), transparent);
+        }
+
+        [part="backdrop"] {
+          display: block;
         }
 
         /* Animations */
