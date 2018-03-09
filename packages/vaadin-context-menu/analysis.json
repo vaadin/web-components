@@ -800,7 +800,7 @@
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
-              "name": "_cycleTab",
+              "name": "_isFocused",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -810,7 +810,30 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 485,
+                  "line": 458,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "element"
+                }
+              ],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_cycleTab",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 460,
+                  "column": 6
+                },
+                "end": {
+                  "line": 496,
                   "column": 7
                 }
               },
@@ -832,11 +855,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 487,
+                  "line": 498,
                   "column": 6
                 },
                 "end": {
-                  "line": 491,
+                  "line": 502,
                   "column": 7
                 }
               },
@@ -851,11 +874,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 493,
+                  "line": 504,
                   "column": 6
                 },
                 "end": {
-                  "line": 497,
+                  "line": 508,
                   "column": 7
                 }
               },
