@@ -173,6 +173,56 @@
 
         input.dispatchEvent(changeEvent);
       });
+
+      // IE11 placeholder bug
+      const IE = navigator.userAgent.match(/Trident/);
+
+      (IE ? it : it.skip)('should not dispatch input event in IE on focus, when placeholder is set', done => {
+        const spy = sinon.spy();
+        textField.placeholder = 'foo';
+
+        textField.addEventListener('input', spy);
+
+        textField.focus();
+
+        setTimeout(() => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+      });
+
+      (IE ? it : it.skip)('should not dispatch input event in IE on blur, when placeholder is set', done => {
+        const spy = sinon.spy();
+        textField.placeholder = 'foo';
+
+        textField.addEventListener('input', spy);
+
+        textField.focus();
+
+        // needs timeout to reproduce
+        setTimeout(() => {
+          textField.blur();
+
+          setTimeout(() => {
+            expect(spy.called).to.be.false;
+            done();
+          });
+        });
+      });
+
+      (IE ? it : it.skip)('should not dispatch input event in IE on placeholder value change', done => {
+        const spy = sinon.spy();
+        textField.placeholder = 'foo';
+
+        textField.addEventListener('input', spy);
+
+        textField.placeholder = 'bar';
+
+        setTimeout(() => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+      });
     });
   </script>
 </body>
