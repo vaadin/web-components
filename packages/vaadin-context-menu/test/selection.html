@@ -69,7 +69,7 @@
 
           it('should focus the child element', done => {
             listenOnce(menu, 'opened-changed', () => {
-              Polymer.Async.microTask.run(() => {
+              Polymer.Async.timeOut.run(() => {
                 const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
                 expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
                 done();
@@ -81,7 +81,7 @@
 
           it('should focus the child element on `contextmenu` event', done => {
             listenOnce(menu, 'opened-changed', () => {
-              Polymer.Async.microTask.run(() => {
+              Polymer.Async.timeOut.run(() => {
                 const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
                 expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
                 done();
