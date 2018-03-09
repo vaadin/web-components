@@ -11,6 +11,8 @@
         right: var(--lumo-space-m);
         bottom: var(--lumo-space-m);
         left: var(--lumo-space-m);
+        /* Workaround for Edge issue (only on Surface), where an overflowing vaadin-list-box inside vaadin-dropdown-menu-overlay makes the overlay transparent */
+        outline: 1px solid transparent;
       }
 
       [part="overlay"] {
@@ -35,14 +37,33 @@
       }
 
       [part="backdrop"] {
-        background-color: var(--lumo-shade-40pct);
-        animation: 0.2s vaadin-overlay-backdrop-enter;
+        background-color: var(--lumo-shade-20pct);
+        animation: 0.2s lumo-overlay-backdrop-enter both;
         will-change: opacity;
       }
 
-      @keyframes vaadin-overlay-backdrop-enter {
+      @keyframes lumo-overlay-backdrop-enter {
         0% {
           opacity: 0;
+        }
+      }
+
+      :host([closing]) [part="backdrop"] {
+        animation: 0.2s lumo-overlay-backdrop-exit both;
+      }
+
+      @keyframes lumo-overlay-backdrop-exit {
+        100% {
+          opacity: 0;
+        }
+      }
+
+      @keyframes lumo-overlay-dummy-animation {
+        0% {
+          opacity: 1;
+        }
+        100% {
+          opacity: 1;
         }
       }
     </style>
