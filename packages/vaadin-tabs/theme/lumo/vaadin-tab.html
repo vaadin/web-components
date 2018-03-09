@@ -27,10 +27,13 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         overflow: hidden;
+        min-width: var(--lumo-size-m);
       }
 
       :host([orientation="vertical"]) {
         transform-origin: 0% 50%;
+        min-height: var(--lumo-size-m);
+        min-width: 0;
       }
 
       :host(:hover),
@@ -55,10 +58,8 @@
         display: var(--_lumo-tab-marker-display, block);
         bottom: 0;
         left: 50%;
-        width: 2.5em;
-        max-width: 80%;
+        width: var(--lumo-size-s);
         height: 2px;
-        max-height: 80%;
         background-color: var(--lumo-contrast-60pct);
         border-radius: var(--lumo-border-radius) var(--lumo-border-radius) 0 0;
         transform: translateX(-50%) scale(0);
@@ -78,7 +79,7 @@
         bottom: 50%;
         transform: translateY(50%) scale(0);
         width: 2px;
-        height: 3em;
+        height: var(--lumo-size-xs);
         border-radius: 0 var(--lumo-border-radius) var(--lumo-border-radius) 0;
         transform-origin: 100% 50%;
       }
