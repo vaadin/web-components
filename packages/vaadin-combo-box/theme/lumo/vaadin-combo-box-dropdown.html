@@ -6,12 +6,7 @@
 
 <dom-module id="lumo-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
   <template>
-    <style include="lumo-menu-overlay">
-      [part="overlay"] {
-        overflow: hidden;
-        border-radius: var(--lumo-border-radius);
-      }
-
+    <style include="lumo-overlay lumo-menu-overlay-core">
       [part="content"] {
         padding: 0;
       }
