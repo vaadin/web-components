@@ -163,15 +163,35 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
 
-        if (this._physicalCount === 0) {
-          this._updateMetrics();
+        if (!this._initialPoolCreated) {
+          this._initialPoolCreated = true;
           super._increasePoolIfNeeded(25);
         } else {
-          const viewportCovered = this._physicalCount * this._physicalAverage >= this._viewportHeight * 3;
-          // Don't increase the pool if there's enough rows. This is to avoid an eternal loop.
-          if (!viewportCovered) {
-            this._accessIronListAPI(() => super._increasePoolIfNeeded(count));
-          }
+          this._debounceIncreasePool = Polymer.Debouncer.debounce(
+            this._debounceIncreasePool,
+            Polymer.Async.animationFrame,
+            () => {
+              this._updateMetrics();
+              const viewportCovered = this._physicalCount * this._physicalAverage >= this._viewportHeight * 3;
+              // Don't increase the pool if there's enough rows. This is to avoid an eternal loop.
+              if (!viewportCovered) {
+                this._accessIronListAPI(() => super._increasePoolIfNeeded(count));
+
+                const childNodes = Array.from(this.$.items.childNodes);
+                // Ensure the rows are in order after increasing pool
+                const rowsInOrder = !!childNodes.reduce((inOrder, current, currentIndex, array) => {
+                  if (currentIndex === 0 || array[currentIndex - 1].index === current.index - 1) {
+                    return inOrder;
+                  }
+                }, true);
+
+                if (!rowsInOrder) {
+                  childNodes.sort((row1, row2) => {
+                    return row1.index - row2.index;
+                  }).forEach(row => this.$.items.appendChild(row));
+                }
+              }
+            });
         }
       }
 

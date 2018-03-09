@@ -27,6 +27,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     if (grid._debounceOverflow) {
       grid._debounceOverflow.flush();
     }
+    while (grid._debounceIncreasePool) {
+      grid._debounceIncreasePool.flush();
+      grid._debounceIncreasePool = null;
+      Polymer.flush();
+    }
   }
 
   function getCell(grid, index) {
