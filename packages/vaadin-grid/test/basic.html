@@ -31,6 +31,17 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="empty-grid">
+    <template>
+      <vaadin-grid style="width: 200px;">
+        <vaadin-grid-column>
+          <template class="header">#</template>
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('basic features', () => {
       let grid;
@@ -314,6 +325,22 @@
             expect(grid.getBoundingClientRect().height).to.be.closeTo(200, 1);
             expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
           });
+        });
+      });
+    });
+
+    describe('empty grid', () => {
+      let emptyGrid;
+
+      beforeEach(() => {
+        emptyGrid = fixture('empty-grid');
+        flushGrid(emptyGrid);
+      });
+
+      it('should not have vertical scroll bars', done => {
+        Polymer.RenderStatus.afterNextRender(emptyGrid, () => {
+          expect(emptyGrid.clientHeight).to.be.above(emptyGrid.$.header.clientHeight + emptyGrid.$.items.clientHeight);
+          done();
         });
       });
     });

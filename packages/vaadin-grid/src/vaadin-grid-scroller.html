@@ -136,6 +136,11 @@ This program is available under Apache License Version 2.0, available at https:/
           });
         }
         this._assignModels();
+
+        // Forces updating the scroller size when items length is 0
+        if (this.items.length === 0) {
+          Polymer.RenderStatus.afterNextRender(this, () => this._accessIronListAPI(super._updateScrollerSize));
+        }
       }
 
       _positionItems() {
