@@ -48,6 +48,11 @@
         <vaadin-grid-column>
           <template>[[item.value]]</template>
         </vaadin-grid-column>
+        <vaadin-grid-column>
+          <slot name="grid-column-header-template"></slot>
+          <slot name="grid-column-template"></slot>
+          <slot name="grid-column-footer-template"></slot>
+        </vaadin-grid-column>
       </vaadin-grid>
     </template>
     <script>
@@ -92,6 +97,36 @@
     </script>
   </dom-module>
 
+  <dom-module id="slotted-grid">
+    <template>
+      <x-grid id="xgrid">
+        <template class="header" slot="grid-column-header-template">header-[[foo]]</template>
+        <slot name="grid-column-template" slot="grid-column-template"></slot>
+        <template class="footer" slot="grid-column-footer-template">[[_getFooter(bar)]]</template>
+      </x-grid>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class SlottedGrid extends Polymer.Element {
+          static get is() {
+            return 'slotted-grid';
+          }
+          static get properties() {
+            return {
+              foo: String,
+              bar: String
+            };
+          }
+
+          _getFooter(bar) {
+            return `footer-${bar}`;
+          }
+        }
+        window.customElements.define(SlottedGrid.is, SlottedGrid);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="formatting">
     <template>
       <x-grid></x-grid>
@@ -116,6 +151,14 @@
     </dom-bind>
   </test-fixture>
 
+  <test-fixture id="slotted-templates">
+    <template>
+      <slotted-grid>
+        <template slot="grid-column-template">body-[[index]]</template>
+      </slotted-grid>
+    </template>
+  </test-fixture>
+
   <script>
     function getHeaderCell(grid, index) {
       return grid.$.header.querySelectorAll('[part~="cell"]')[index];
@@ -128,178 +171,181 @@
     describe('templating', () => {
       let container, grid;
 
-      beforeEach(() => {
-        container = fixture('formatting');
-        grid = container.$.grid;
-        flushGrid(grid);
-      });
+      describe('formatting', () => {
 
-      it('should fire an event when a non-focusable element is clicked', done => {
-        grid.addEventListener('cell-activate', e => {
-          expect(e.detail.model.index).to.eql(0);
-          done();
-        });
-
-        getCell(grid, 0)._content.click();
-      });
-
-      it('should not fire an event when a focusable element is clicked', done => {
-        grid.addEventListener('cell-activate', e => done('Should not come here!'));
-
-        const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
-        input.focus();
-        input.click();
-
-        grid.async(done, 100);
-      });
-
-      it('should not restamp header templates on attach', () => {
-        const parent = grid.parentNode;
-        parent.removeChild(grid);
-
-        parent.appendChild(grid);
-        flushGrid(grid);
-
-        expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
-        expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
-      });
-
-      it('should not restamp footer templates on attach', () => {
-        const parent = grid.parentNode;
-        parent.removeChild(grid);
-
-        parent.appendChild(grid);
-        flushGrid(grid);
-
-        expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
-        expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
-      });
-
-      describe('using functions inside templates', () => {
-        it('should work inside cell templates', () => {
-          expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
-        });
-
-        it('should work inside header templates', () => {
-          expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('fooheader1');
-        });
-
-        it('should not invoke computed functions with null item', () => {
-          const spy = sinon.spy(container, '_formatItem');
-          grid.size = 1000;
-          grid._scrollToIndex(100);
-          spy.getCalls().forEach(call => {
-            expect(call.args[0]).not.to.be.null;
-          });
-        });
-
-        it('should not invoke computed functions with empty item', () => {
-          const spy = sinon.spy(container, '_formatItem');
-          grid.size = 1000;
-          grid._scrollToIndex(100);
-          spy.getCalls().forEach(call => {
-            expect(call.args[0]).not.to.be.empty;
-          });
-        });
-      });
-
-      describe('using parent properties inside templates', () => {
-        beforeEach(() => container.parentProp = 'foobar');
-
-        it('should bind inside cell templates', () => {
-          expect(getCellContent(getCell(grid, 0)).textContent).to.contain('foobar');
-          expect(getCellContent(getCell(grid, 5)).textContent).to.contain('foobar');
-        });
-
-        it('should two-way bind parent properties inside cell templates', () => {
-          const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
-          expect(input.value).to.eql('foobar');
-
-          input.value = 'value';
-
-          expect(container.parentProp).to.eql('value');
-        });
-
-        it('should bind inside header templates', () => {
-          expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('foobar');
-        });
-
-        it('should two-way bind parent properties inside header templates', () => {
-          const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
-          expect(input.value).to.eql('foobar');
-
-          input.value = 'value';
-
-          expect(container.parentProp).to.eql('value');
-        });
-      });
-
-      describe('using event handlers inside templates', () => {
-        it('should add event listeners inside cell templates', () => {
-          const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
-
-          input.value = 'foo';
-
-          expect(container.valueChanged).to.eql(true);
-        });
-
-        it('should add event listeners inside header templates', () => {
-          const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
-
-          input.invalid = 'foo';
-
-          expect(container.invalidChanged).to.eql(true);
-        });
-      });
-
-      describe('using parent paths inside templates', () => {
-        beforeEach(() => container.set('parentPath.foo', 'bar'));
-
-        it('should bind inside cell templates', () => {
-          expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
-          expect(getCellContent(getCell(grid, 7)).querySelector('paper-input').value).to.contain('bar');
-        });
-
-        it('should two-way bind parent path inside cell templates', () => {
-          const input = getCellContent(getCell(grid, 2)).querySelector('paper-input');
-          expect(input.value).to.eql('bar');
-
-          input.value = 'value';
-
-          expect(container.parentPath.foo).to.eql('value');
-        });
-
-        it('should bind inside header templates', () => {
-          expect(getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
-        });
-
-        it('should two-way bind parent path inside header templates', () => {
-          const input = getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input');
-          expect(input.value).to.eql('bar');
-
-          input.value = 'value';
-
-          expect(container.parentPath.foo).to.eql('value');
-        });
-      });
-
-      describe('using instance paths inside templates', () => {
-        let input;
         beforeEach(() => {
-          input = getCellContent(getCell(grid, 3)).querySelector('paper-input');
-          expect(input.value).to.eql('foo0');
+          container = fixture('formatting');
+          grid = container.$.grid;
+          flushGrid(grid);
         });
 
-        it('should two-way bind instance path inside cell templates', () => {
-          input.value = 'bar0';
+        it('should fire an event when a non-focusable element is clicked', done => {
+          grid.addEventListener('cell-activate', e => {
+            expect(e.detail.model.index).to.eql(0);
+            done();
+          });
 
-          expect(getCell(grid, 3)._instance.item.value).to.eql('bar0');
+          getCell(grid, 0)._content.click();
         });
 
-        it('should notify other cell templates for instance path changes', () => {
-          input.value = 'bar0';
+        it('should not fire an event when a focusable element is clicked', done => {
+          grid.addEventListener('cell-activate', e => done('Should not come here!'));
 
-          expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
+          const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+          input.focus();
+          input.click();
+
+          grid.async(done, 100);
+        });
+
+        it('should not restamp header templates on attach', () => {
+          const parent = grid.parentNode;
+          parent.removeChild(grid);
+
+          parent.appendChild(grid);
+          flushGrid(grid);
+
+          expect(grid.$.header.children[0].children[0].children.length).to.eql(1); // with a header template
+          expect(grid.$.header.children[0].children[3].children.length).to.eql(1); // without a header template
+        });
+
+        it('should not restamp footer templates on attach', () => {
+          const parent = grid.parentNode;
+          parent.removeChild(grid);
+
+          parent.appendChild(grid);
+          flushGrid(grid);
+
+          expect(grid.$.footer.children[0].children[0].children.length).to.eql(1); // with a footer template
+          expect(grid.$.footer.children[0].children[3].children.length).to.eql(1); // without footer template
+        });
+
+        describe('using functions inside templates', () => {
+          it('should work inside cell templates', () => {
+            expect(getCellContent(getFirstCell(grid)).textContent).to.contain('foo0');
+          });
+
+          it('should work inside header templates', () => {
+            expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('fooheader1');
+          });
+
+          it('should not invoke computed functions with null item', () => {
+            const spy = sinon.spy(container, '_formatItem');
+            grid.size = 1000;
+            grid._scrollToIndex(100);
+            spy.getCalls().forEach(call => {
+              expect(call.args[0]).not.to.be.null;
+            });
+          });
+
+          it('should not invoke computed functions with empty item', () => {
+            const spy = sinon.spy(container, '_formatItem');
+            grid.size = 1000;
+            grid._scrollToIndex(100);
+            spy.getCalls().forEach(call => {
+              expect(call.args[0]).not.to.be.empty;
+            });
+          });
+        });
+
+        describe('using parent properties inside templates', () => {
+          beforeEach(() => container.parentProp = 'foobar');
+
+          it('should bind inside cell templates', () => {
+            expect(getCellContent(getCell(grid, 0)).textContent).to.contain('foobar');
+            expect(getCellContent(getCell(grid, 6)).textContent).to.contain('foobar');
+          });
+
+          it('should two-way bind parent properties inside cell templates', () => {
+            const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+            expect(input.value).to.eql('foobar');
+
+            input.value = 'value';
+
+            expect(container.parentProp).to.eql('value');
+          });
+
+          it('should bind inside header templates', () => {
+            expect(getCellContent(getFirstHeaderCell(grid)).textContent).to.contain('foobar');
+          });
+
+          it('should two-way bind parent properties inside header templates', () => {
+            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
+            expect(input.value).to.eql('foobar');
+
+            input.value = 'value';
+
+            expect(container.parentProp).to.eql('value');
+          });
+        });
+
+        describe('using event handlers inside templates', () => {
+          it('should add event listeners inside cell templates', () => {
+            const input = getCellContent(getCell(grid, 1)).querySelector('paper-input');
+
+            input.value = 'foo';
+
+            expect(container.valueChanged).to.eql(true);
+          });
+
+          it('should add event listeners inside header templates', () => {
+            const input = getCellContent(getHeaderCell(grid, 1)).querySelector('paper-input');
+
+            input.invalid = 'foo';
+
+            expect(container.invalidChanged).to.eql(true);
+          });
+        });
+
+        describe('using parent paths inside templates', () => {
+          beforeEach(() => container.set('parentPath.foo', 'bar'));
+
+          it('should bind inside cell templates', () => {
+            expect(getCellContent(getCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
+            expect(getCellContent(getCell(grid, 8)).querySelector('paper-input').value).to.contain('bar');
+          });
+
+          it('should two-way bind parent path inside cell templates', () => {
+            const input = getCellContent(getCell(grid, 2)).querySelector('paper-input');
+            expect(input.value).to.eql('bar');
+
+            input.value = 'value';
+
+            expect(container.parentPath.foo).to.eql('value');
+          });
+
+          it('should bind inside header templates', () => {
+            expect(getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input').value).to.contain('bar');
+          });
+
+          it('should two-way bind parent path inside header templates', () => {
+            const input = getCellContent(getHeaderCell(grid, 2)).querySelector('paper-input');
+            expect(input.value).to.eql('bar');
+
+            input.value = 'value';
+
+            expect(container.parentPath.foo).to.eql('value');
+          });
+        });
+
+        describe('using instance paths inside templates', () => {
+          let input;
+          beforeEach(() => {
+            input = getCellContent(getCell(grid, 3)).querySelector('paper-input');
+            expect(input.value).to.eql('foo0');
+          });
+
+          it('should two-way bind instance path inside cell templates', () => {
+            input.value = 'bar0';
+
+            expect(getCell(grid, 3)._instance.item.value).to.eql('bar0');
+          });
+
+          it('should notify other cell templates for instance path changes', () => {
+            input.value = 'bar0';
+
+            expect(getCellContent(getCell(grid, 4)).textContent).to.contain('bar0');
+          });
         });
       });
 
@@ -332,6 +378,30 @@
             expect(call.args[0]).to.not.contain('items');
           });
         });
+      });
+
+      describe('slotted templates', () => {
+        let slotted, grid;
+
+        beforeEach(() => {
+          slotted = fixture('slotted-templates');
+          const xgrid = slotted.$.xgrid;
+          grid = xgrid.$.grid;
+          flushGrid(grid);
+        });
+
+        it('should slot column template', () => {
+          expect(getContainerCellContent(grid.$.items, 0, 5).textContent).to.equal('body-0');
+        });
+
+        it('should support data-binding in slotted templates', () => {
+          slotted.foo = 'foo';
+          expect(getContainerCellContent(grid.$.header, 0, 5).textContent).to.equal('header-foo');
+
+          slotted.bar = 'bar';
+          expect(getContainerCellContent(grid.$.footer, 0, 5).textContent).to.equal('footer-bar');
+        });
+
       });
     });
   </script>

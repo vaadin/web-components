@@ -108,7 +108,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _prepareHeaderTemplate() {
-        const headerTemplate = this._prepareTemplatizer(this._findTemplate('template.header') || this.$.defaultHeaderTemplate);
+        const headerTemplate = this._prepareTemplatizer(this._findTemplate(true) || this.$.defaultHeaderTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         headerTemplate.templatizer.dataHost = headerTemplate === this.$.defaultHeaderTemplate ? this : this.dataHost;
 
@@ -116,7 +116,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _prepareBodyTemplate() {
-        const template = this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)') || this.$.defaultBodyTemplate);
+        const template = this._prepareTemplatizer(this._findTemplate() || this.$.defaultBodyTemplate);
         // needed to override the dataHost correctly in case internal template is used.
         template.templatizer.dataHost = template === this.$.defaultBodyTemplate ? this : this.dataHost;
 
