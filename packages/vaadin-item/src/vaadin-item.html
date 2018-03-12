@@ -34,6 +34,14 @@ This program is available under Apache License Version 2.0, available at https:/
        *   </vaadin-item>
        * ```
        *
+       * ### Selectable
+       *
+       * `<vaadin-item>` has the `selected` property and the corresponding state attribute.
+       * Currently, the component sets the `selected` to false, when `disabled` property is set to true.
+       * But other than that, the `<vaadin-item>` does not switch selection by itself.
+       * In general, it is the wrapper component, like `<vaadin-list-box>`, which should update
+       * the `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.
+       *
        * ### Styling
        *
        * The following shadow DOM parts are available for styling:
