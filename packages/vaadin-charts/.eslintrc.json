@@ -11,6 +11,7 @@
   "globals": {
     "Polymer": false,
     "Vaadin": false,
-    "Highcharts": false
+    "Highcharts": false,
+    "ChartLabelsMapper": false
   }
 }
