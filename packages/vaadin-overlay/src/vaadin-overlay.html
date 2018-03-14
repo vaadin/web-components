@@ -510,7 +510,7 @@ This program is available under Apache License Version 2.0, available at https:/
           index = focusableElements.indexOf(this._focusedElement);
           if (!this._isFocused(this._focusedElement)) {
             this._focusedElement = focusableElements.reduce((prev, e) => {
-              return !prev && e.getRootNode().activeElement === e ? e : prev;
+              return !prev && this._isFocused(e) ? e : prev;
             }, undefined);
           }
           index = this._focusedElement ? focusableElements.indexOf(this._focusedElement) : index;
