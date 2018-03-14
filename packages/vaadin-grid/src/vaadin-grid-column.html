@@ -4,7 +4,8 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="vaadin-grid-templatizer.html">
 
 <script>
@@ -170,15 +171,15 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _prepareHeaderTemplate() {
-      return this._prepareTemplatizer(this._findTemplate('template.header') || null, {});
+      return this._prepareTemplatizer(this._findTemplate(true) || null, {});
     }
 
     _prepareFooterTemplate() {
-      return this._prepareTemplatizer(this._findTemplate('template.footer') || null, {});
+      return this._prepareTemplatizer(this._findTemplate(false, true) || null, {});
     }
 
     _prepareBodyTemplate() {
-      return this._prepareTemplatizer(this._findTemplate('template:not(.header):not(.footer)' || null, {}));
+      return this._prepareTemplatizer(this._findTemplate() || null);
     }
 
     _prepareTemplatizer(template, instanceProps) {
@@ -236,14 +237,17 @@ This program is available under Apache License Version 2.0, available at https:/
       footerCell.parentElement.hidden = false;
     }
 
-    _selectFirstTemplate(selector) {
-      return Array.prototype.filter.call(Polymer.dom(this).querySelectorAll(selector), el => {
-        return Polymer.dom(el).parentNode === this;
-      })[0];
+    _selectFirstTemplate(header = false, footer = false) {
+      return Polymer.FlattenedNodesObserver.getFlattenedNodes(this)
+        .filter(node => 
+          node.localName === 'template'
+          && node.classList.contains('header') === header
+          && node.classList.contains('footer') === footer
+        )[0];
     }
 
-    _findTemplate(selector) {
-      const template = this._selectFirstTemplate(selector);
+    _findTemplate(header, footer) {
+      const template = this._selectFirstTemplate(header, footer);
       if (template) {
         if (this.dataHost) {
           // set dataHost to the context where template has been defined
