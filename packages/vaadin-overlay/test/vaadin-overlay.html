@@ -609,6 +609,21 @@
         overlay.opened = true;
       });
 
+      it('should not throw using Shift Tab on elements with shadow root', (done) => {
+        overlay.focusTrap = true;
+        overlay.addEventListener('vaadin-overlay-open', () => {
+          const button = overlay.$.content.querySelector('vaadin-button');
+
+          button.focus();
+          button.blur();
+
+          MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
+
+          done();
+        });
+        overlay.opened = true;
+      });
+
       describe('empty content', function() {
         beforeEach(function() {
           parent = fixture('empty').children[0];
