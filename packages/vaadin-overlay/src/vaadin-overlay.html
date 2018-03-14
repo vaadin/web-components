@@ -506,13 +506,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
         const focusableElements = this._getFocusableElements();
 
-        if (!this._isFocused(this._focusedElement)) {
-          this._focusedElement = focusableElements.reduce((prev, e) => {
-            return !prev && e.getRootNode().activeElement === e ? e : prev;
-          }, undefined);
+        if (index === undefined) {
+          index = focusableElements.indexOf(this._focusedElement);
+          if (!this._isFocused(this._focusedElement)) {
+            this._focusedElement = focusableElements.reduce((prev, e) => {
+              return !prev && e.getRootNode().activeElement === e ? e : prev;
+            }, undefined);
+          }
+          index = this._focusedElement ? focusableElements.indexOf(this._focusedElement) : index;
         }
-
-        index = index || focusableElements.indexOf(this._focusedElement);
 
         // search for visible elements and select the next possible match
         for (let i = 0; i < focusableElements.length; i++) {
@@ -528,9 +530,10 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           // determine if element is visible
-          const el = focusableElements[index];
-          this._focusedElement = el;
-          return el.focus();
+          this._focusedElement = focusableElements[index];
+          if (this._focusedElement) {
+            return this._focusedElement.focus();
+          }
         }
 
         // fallback if there are no focusable elements
