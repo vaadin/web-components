@@ -39,11 +39,6 @@
                 return monthName + ' ' + fullYear;
               },
               parseDate: function(dateString) {
-                var matches = datepicker.i18n.monthNames.filter(function(monthName) {
-                  return monthName.toLowerCase().startsWith(dateString.trim().toLowerCase());
-                });
-                dateString = matches.length === 1 ? matches[0] : dateString;
-                // Parse the date
                 const date = Sugar.Date.create(dateString);
                 return {
                   day: date.getDate(),
