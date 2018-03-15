@@ -1,6 +1,6 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-control-state-mixin.svg)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-control-state-mixin.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-control-state-mixin)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/vaadin-core-elements?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # vaadin-control-state-mixin
 A mixin which adds `focused` and `focus-ring` states to an element.
