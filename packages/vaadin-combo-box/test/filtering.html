@@ -18,6 +18,12 @@
   </template>
 </test-fixture>
 
+<test-fixture id='configured'>
+  <template>
+    <vaadin-combo-box filtered-items='["a", "b", "c"]' value='b'></vaadin-combo-box>
+  </template>
+</test-fixture>
+
 <script>
   describe('filtering items', () => {
     let comboBox;
@@ -232,8 +238,10 @@
 
     describe('external filtering', () => {
       beforeEach(() => {
-        comboBox.items = undefined;
-        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+        comboBox.setProperties({
+          filteredItems: ['foo', 'bar', 'baz'],
+          items: undefined
+        });
       });
 
       it('should set items to filteredItems', () => {
@@ -329,6 +337,11 @@
         comboBox.loading = false;
         expect(comboBox.hasAttribute('loading')).to.be.false;
         expect(comboBox.$.overlay.$.dropdown.$.overlay.hasAttribute('loading')).to.be.false;
+      });
+
+      it('should not throw when passing filteredItems and value as attributes', () => {
+        comboBox = fixture('configured');
+        expect(comboBox._focusedIndex).to.eql(1);
       });
     });
   });

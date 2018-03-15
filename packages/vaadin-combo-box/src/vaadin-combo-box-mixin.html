@@ -560,7 +560,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // With certain use cases (e. g., external filtering), `items` are
         // undefined. Filtering is unnecessary per se, but the filteredItems
         // observer should still be invoked to update focused item.
-        this._filteredItemsChanged({path: 'filteredItems'}, itemValuePath, itemLabelPath);
+        this._filteredItemsChanged({path: 'filteredItems', value: this.filteredItems}, itemValuePath, itemLabelPath);
       }
     }
 
@@ -621,7 +621,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       this.$.overlay._selectedItem = selectedItem;
-      if (this.filteredItems) {
+      if (this.filteredItems && this.$.overlay._items) {
         this._focusedIndex = this.filteredItems.indexOf(selectedItem);
       }
     }
@@ -660,7 +660,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _itemsChanged(e, itemValuePath, itemLabelPath) {
-      if (e === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+      if (e.value === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
         return;
       }
       if (e.path === 'items' || e.path === 'items.splices') {
@@ -677,7 +677,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _filteredItemsChanged(e, itemValuePath, itemLabelPath) {
-      if (e === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
+      if (e.value === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
         return;
       }
       if (e.path === 'filteredItems' || e.path === 'filteredItems.splices') {
