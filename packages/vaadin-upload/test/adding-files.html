@@ -57,6 +57,16 @@
             expect(clickSpy).to.be.calledOnce;
           });
 
+          it('should open file dialog by touchend', () => {
+            const clickSpy = sinon.spy();
+            upload.$.fileInput.addEventListener('click', clickSpy);
+
+            const e = new CustomEvent('touchend', {cancelable: true});
+            upload.$.addFiles.dispatchEvent(e);
+            expect(clickSpy).to.be.calledOnce;
+            expect(e.defaultPrevented).to.be.true;
+          });
+
           it('should reset input.value before dialog', () => {
             const input = upload.$.fileInput;
             // jshint ignore:start

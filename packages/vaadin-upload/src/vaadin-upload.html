@@ -30,7 +30,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <div part="primary-buttons">
-      <div id="addFiles" on-click="_onAddFilesClick">
+      <div id="addFiles" on-touchend="_onAddFilesTouchEnd" on-click="_onAddFilesClick">
         <slot name="add-button">
           <vaadin-button part="upload-button" id="addButton" disabled="[[maxFilesReached]]">
             [[_i18nPlural(maxFiles, i18n.addFiles, i18n.addFiles.*)]]
@@ -729,6 +729,12 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         _removeFile(file) {
           this.splice('files', this.files.indexOf(file), 1);
+        }
+
+        _onAddFilesTouchEnd(e) {
+          // Cancel the event to avoid the following click event
+          e.preventDefault();
+          this._onAddFilesClick();
         }
 
         _onAddFilesClick() {
