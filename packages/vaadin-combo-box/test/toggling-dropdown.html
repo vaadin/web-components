@@ -9,6 +9,7 @@
   <link rel="import" href="common.html">
   <script src="common.js"></script>
   <link rel="import" href="../../iron-input/iron-input.html">
+  <link rel="import" href="../../polymer/lib/elements/dom-if.html">
 </head>
 
 <body>
@@ -26,6 +27,18 @@
         <input>
       </iron-input>
     </vaadin-combo-box-light>
+  </template>
+</test-fixture>
+
+<test-fixture id="combobox-if">
+  <template>
+    <div>
+      <dom-if if="">
+        <template>
+          <vaadin-combo-box label="Label" items="[1, 2]"></vaadin-combo-box>
+        </template>
+      </dom-if>
+    </div>
   </template>
 </test-fixture>
 
@@ -131,6 +144,21 @@
           expect(overlay().classList.contains('style-scope')).to.be.false;
           expect(overlay().classList.contains('vaadin-combo-box')).to.be.false;
         }
+      });
+
+      it('should extract the iron-list border mixin into custom CSS properties', () => {
+        const elem = fixture('combobox-if');
+
+        // render dom-if template
+        Polymer.flush();
+
+        combobox = elem.querySelector('vaadin-combo-box');
+        combobox.open();
+
+        const selector = combobox.$.overlay._selector;
+        ['border-width', 'border-style', 'border-color'].forEach(prop => {
+          expect(getCustomPropertyValue(selector, `--iron-list-items-container_-_${prop}`)).to.be.ok;
+        });
       });
 
       describe('after opening', () => {

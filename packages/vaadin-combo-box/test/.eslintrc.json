@@ -20,6 +20,7 @@
     "fixture": false,
     "fire": false,
     "fireMousedownMouseupClick": false,
+    "getCustomPropertyValue": false,
     "System": false,
     "HTMLImports": false,
     "MockInteractions": false,

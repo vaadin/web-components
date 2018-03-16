@@ -16,10 +16,19 @@
         padding: 0;
       }
 
+      /* TODO: workaround ShadyCSS issue when using inside of the dom-if */
+      :host([opened]) {
+        --iron-list-items-container_-_border-width: var(--lumo-space-xs);
+        --iron-list-items-container_-_border-style: solid;
+        --iron-list-items-container_-_border-color: transparent;
+      }
+
       iron-list {
-        /* TODO using a legacy mixin (unsupported) */
+        /* TODO: using a legacy mixin (unsupported) */
         --iron-list-items-container: {
-          border: var(--lumo-space-xs) solid transparent;
+          border-width: var(--lumo-space-xs);
+          border-style: solid;
+          border-color: transparent;
         }
       }
     </style>

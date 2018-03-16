@@ -12,6 +12,12 @@ const touchDevice = (() => {
   }
 })();
 
+const getCustomPropertyValue = (el, prop) => {
+  return window.ShadyCSS ?
+    window.ShadyCSS.getComputedStyleValue(el, prop) :
+    getComputedStyle(el).getPropertyValue(prop);
+};
+
 const fire = (type, node, detail) => {
   const evt = new CustomEvent(type, {detail: detail, bubbles: true, cancelable: true, composed: true});
   node.dispatchEvent(evt);
