@@ -40,6 +40,14 @@
     <dom-module id="test-no-theme">
       <template></template>
     </dom-module>
+
+    <dom-module id="test-own-template">
+      <template>
+        <div part="text" id="text">text</div>
+      </template>
+    </dom-module>
+
+
   </div>
 
   <script>
@@ -71,6 +79,24 @@
       }
     }
     customElements.define(TestQux.is, TestQux);
+
+    class TestOwnTemplate extends TestFoo {
+      static get is() {
+        return 'test-own-template';
+      }
+    }
+    customElements.define(TestOwnTemplate.is, TestOwnTemplate);
+
+    class TestNoTemplate extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'test-no-template';
+      }
+      static get template() {
+        // I don't want your template! Or anyone's template! Leave me alone!
+        return null;
+      }
+    }
+    customElements.define(TestNoTemplate.is, TestNoTemplate);
   });
   </script>
 
@@ -93,6 +119,7 @@
         <style>
           [part="text"] {
             color: rgb(0, 0, 0) !important;
+            background-color: rgb(255, 0, 0);
           }
         </style>
       </template>
@@ -149,6 +176,8 @@
       <test-bar></test-bar>
       <test-baz></test-baz>
       <test-qux></test-qux>
+      <test-own-template></test-own-template>
+      <test-no-template></test-no-template>
     </template>
   </test-fixture>
 
@@ -208,6 +237,10 @@
         spy.restore();
 
         expect(spy.called).to.be.false;
+      });
+
+      it('should not inherit parent themes to own custom template', function() {
+        expect(window.getComputedStyle(components[4].$.text).backgroundColor).not.to.equal('rgb(255, 0, 0)');
       });
 
     });

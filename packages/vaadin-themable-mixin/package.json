@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-themable-mixin",
+  "name": "@vaadin/vaadin-themable-mixin",
   "version": "1.1.5",
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.html",
@@ -29,6 +29,7 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^7.0.0",
     "polymer-cli": "^1.6.0",
+    "polymer-modulizer": "git://github.com/polymer/polymer-modulizer.git#master",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.0.0",
