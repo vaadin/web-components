@@ -40,13 +40,15 @@
   <script>
     describe('Dropdown', () => {
       var datepicker;
-      var dropdown;
+      var overlay;
+      var input;
       var toggleButton;
       var overlayContent;
 
       beforeEach(() => {
         datepicker = fixture('datepicker');
-        dropdown = datepicker.$.dropdown;
+        overlay = datepicker.$.overlay;
+        input = datepicker.$.input;
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
         overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
@@ -63,6 +65,12 @@
           done();
         });
         datepicker.open();
+      });
+
+      it('should update position of the overlay after changing opened property', () => {
+        datepicker.opened = true;
+
+        expect(input.getBoundingClientRect().bottom).to.equal(overlay.getBoundingClientRect().top);
       });
 
       if (document.createElement('div').style.webkitOverflowScrolling === '') {
