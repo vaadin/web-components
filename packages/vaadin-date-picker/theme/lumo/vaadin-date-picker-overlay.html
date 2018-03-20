@@ -6,7 +6,16 @@
   <template>
     <style include="lumo-menu-overlay">
       [part="overlay"] {
-        width: calc(var(--lumo-size-s) * 7 + var(--lumo-space-s) * 7 + var(--lumo-space-xs) * 2 + 57px);
+        /*
+        Width:
+            date cell widths
+          + month calendar side padding
+          + year scroller width
+        */
+        width: calc(
+            var(--lumo-size-m) * 7
+          + var(--lumo-space-xs) * 2
+          + 57px);
         height: 100%;
         max-height: calc(var(--lumo-size-m) * 14);
         overflow: hidden;
