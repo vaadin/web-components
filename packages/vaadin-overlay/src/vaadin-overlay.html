@@ -83,7 +83,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}"></div>
-    <div part="overlay" id="overlay">
+    <div part="overlay" id="overlay" tabindex="0">
       <div part="content" id="content"></div>
     </div>
   </template>
@@ -371,10 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           Polymer.RenderStatus.afterNextRender(this, () => {
             if (this.focusTrap) {
-              // Focus
-              //  - the overlay content by default
-              //  - or the first focusable element if focusTrap is true
-              this._cycleTab(1, -1);
+              this._cycleTab(0, 0);
             }
 
             const evt = new CustomEvent('vaadin-overlay-open', {bubbles: true});
@@ -501,9 +498,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _cycleTab(increment, index) {
-        if (!this.focusTrap) {
-          return;
-        }
         const focusableElements = this._getFocusableElements();
 
         if (index === undefined) {
@@ -543,7 +537,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _getFocusableElements() {
         // collect all focusable elements
-        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.content).
+        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.overlay).
           filter(element => !element.shadowRoot || Polymer.IronFocusablesHelper.getTabbableNodes(element).length === 0);
       }
 
