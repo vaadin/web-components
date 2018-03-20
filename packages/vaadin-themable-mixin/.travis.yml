@@ -9,7 +9,7 @@ cache:
 
 addons:
   firefox: latest
-  google-chrome: latest
+  chrome: stable
 
 install:
   - npm install
