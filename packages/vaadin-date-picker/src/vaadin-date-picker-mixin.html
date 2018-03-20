@@ -78,7 +78,8 @@ This program is available under Apache License Version 2.0, available at https:/
         opened: {
           type: Boolean,
           reflectToAttribute: true,
-          notify: true
+          notify: true,
+          observer: '_openedChanged'
         },
 
         /**
@@ -342,7 +343,6 @@ This program is available under Apache License Version 2.0, available at https:/
     open() {
       if (!this.disabled && !this.readonly) {
         this.$.overlay.opened = true;
-        this._updateAlignmentAndPosition();
       }
     }
 
@@ -397,6 +397,14 @@ This program is available under Apache License Version 2.0, available at https:/
       return date instanceof Date ?
         (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
         '';
+    }
+
+    _openedChanged(opened) {
+      if (!opened) {
+        return;
+      }
+
+      this._updateAlignmentAndPosition();
     }
 
     _selectedDateChanged(selectedDate, formatDate) {
