@@ -1,0 +1,90 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-notification/vaadin-notification.html">
+<link rel="import" href="../../vaadin-button/vaadin-button.html">
+
+<link rel="stylesheet" type="text/css" href="../../cookieconsent/build/cookieconsent.min.css" />
+<script src="../../cookieconsent/build/cookieconsent.min.js"></script>
+<dom-module id="vaadin-cookie-consent">
+  <template>
+    <style>
+      :host {
+        display: none;
+      }
+    </style>
+
+  </template>
+
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-cookie-consent>` is a Polymer 2 element.
+       *
+       * ```
+       * <vaadin-cookie-consent></vaadin-cookie-consent>
+       * ```
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class VaadinCookieConsentElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-cookie-consent';
+        }
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+      
+          };
+        }
+
+        ready() {
+          super.ready();
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          window.cookieconsent.initialise({
+            "palette": {
+              "popup": {
+                "background": "#000"
+              },
+              "button": {
+                "background": "#f1d600"
+              }
+            },
+            "content": {
+              "message": "//MESSAGE_IN_CURRENT_LANG",
+              "dismiss": "//DISMISS_BUTTON_IN_CURRENT_LANG"
+            },
+            "position": "top"
+          });
+        }
+        disconnectedCallback() {
+          super.disconnectedCallback();
+        }
+      }
+
+      customElements.define(VaadinCookieConsentElement.is, VaadinCookieConsentElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.VaadinCookieConsentElement = VaadinCookieConsentElement;
+      if (window.Vaadin.runIfDevelopmentMode) {
+        window.Vaadin.runIfDevelopmentMode('vaadin-cookie-consent', VaadinCookieConsentElement);
+      }
+    })();
+  </script>
+</dom-module>
