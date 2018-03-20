@@ -1,7 +1,7 @@
 sudo: true
 dist: trusty
 language: node_js
-node_js: stable
+node_js: 8.9
 
 cache:
   directories:
@@ -9,7 +9,7 @@ cache:
 
 addons:
   firefox: latest
-  google-chrome: latest
+  chrome: stable
 
 install:
   - npm install
