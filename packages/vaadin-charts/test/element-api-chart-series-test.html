@@ -191,7 +191,7 @@
           expect(firstSeries.data.map(e => e.name)).to.deep.equal(
             firstSeries.data.map(e => labelsAsObject[e.y] || e.y));
           done();
-        }, 50);
+        }, 70);
       });
 
       it('should accept labels as mapping object string', function(done) {
@@ -215,7 +215,7 @@
           expect(firstSeries.data.map(e => e.name)).to.deep.equal(
             firstSeries.data.map(e => e.y + 'AAA'));
           done();
-        }, 50);
+        }, 70);
       });
 
       it('should accept labels as function string', function(done) {
@@ -236,7 +236,7 @@
           const firstSeries = chart.configuration.series[0];
           expect(firstSeries.data.map(e => e.name)).to.deep.equal(labelsAsArray);
           done();
-        }, 50);
+        }, 70);
       });
 
       it('should accept labels as array string', function(done) {
