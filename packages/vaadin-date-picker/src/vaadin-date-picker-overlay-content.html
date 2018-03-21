@@ -526,7 +526,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           var duration = animate ? 300 : 0;
           var start = 0;
-          var initialPosition = this.$.monthScroller.position;
+          var initialPosition = Math.round(this.$.monthScroller.position);
 
           var smoothScroll = timestamp => {
             start = start || timestamp;
