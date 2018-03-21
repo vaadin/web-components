@@ -45,9 +45,8 @@
 
       beforeEach(function(done) {
         fixture('default');
-        window.HTMLImports.whenReady(() => {
-          done();
-        });
+        // wait for usage statistics to load
+        setTimeout(done, 100);
       });
 
       it('should define window.Vaadin', function() {
