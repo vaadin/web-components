@@ -113,11 +113,6 @@ This program is available under Apache License Version 2.0, available at https:/
       // IE names for arrows do not include the Arrow prefix
       const key = event.key.replace(/^Arrow/, '');
 
-      if (/^( |SpaceBar|Enter)$/.test(key)) {
-        this._filterItems(event.composedPath())[0].click();
-        return;
-      }
-
       const currentIdx = this.items.indexOf(this.focused);
       let condition = item => !item.disabled;
       let idx, increment;
