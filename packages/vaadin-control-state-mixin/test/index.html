@@ -7,32 +7,12 @@
   <title>vaadin-control-state-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="test-suites.js"></script>
-  <script src="../../vaadin-button/test/test-suites.js"></script>
-  <script src="../../vaadin-checkbox/test/test-suites.js"></script>
-  <script src="../../vaadin-combo-box/test/test-suites.js"></script>
-  <script src="../../vaadin-date-picker/test/test-suites.js"></script>
-  <script src="../../vaadin-dropdown-menu/test/test-suites.js"></script>
-  <script src="../../vaadin-radio-button/test/test-suites.js"></script>
-  <script src="../../vaadin-text-field/test/test-suites.js"></script>
 </head>
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
-    WCT._config.environmentScripts.push('vaadin-combo-box/test/mock-touch-interactions.js');
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
-
     WCT.loadSuites(
       window.VaadinControlStateMixinSuites
-        .concat(
-          window.VaadinButtonSuites.map(suite => `../../vaadin-button/test/${suite}`),
-          window.VaadinCheckboxSuites.map(suite => `../../vaadin-checkbox/test/${suite}`),
-          window.VaadinComboBoxSuites.map(suite => `../../vaadin-combo-box/test/${suite}`),
-          window.VaadinDatePickerSuites.map(suite => `../../vaadin-date-picker/test/${suite}`),
-          window.VaadinDropdownMenuSuites.map(suite => `../../vaadin-dropdown-menu/test/${suite}`),
-          window.VaadinRadioButtonSuites.map(suite => `../../vaadin-radio-button/test/${suite}`),
-          window.VaadinTextFieldSuites.map(suite => `../../vaadin-text-field/test/${suite}`)
-        )
     );
   </script>
 </body>
