@@ -25,13 +25,13 @@ script:
         polymer test --env saucelabs;
       fi;
       if [[ "$POLYMER" = "polymer3" ]]; then
-        npm install -g bower json polymer-cli yarn;
+        npm install -g bower json web-component-tester@next yarn;
         (cd .. && git clone git://github.com/polymer/polymer-modulizer.git && cd polymer-modulizer && npm link);
         json -I -f package.json -e 'this.devDependencies = {}';
         bower i;
         modulizer --out . --force;
         yarn install --flat;
-        polymer test --npm --env saucelabs-p3;
+        wct --module-resolution=node --npm --env saucelabs-p3;
       fi;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
