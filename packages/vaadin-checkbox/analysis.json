@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox.html",
         "start": {
-          "line": 269,
+          "line": 271,
           "column": 6
         },
         "end": {
-          "line": 269,
+          "line": 271,
           "column": 54
         }
       },
@@ -262,7 +262,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 139,
+                  "line": 133,
                   "column": 5
                 }
               },
@@ -277,11 +277,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 141,
+                  "line": 135,
                   "column": 4
                 },
                 "end": {
-                  "line": 155,
+                  "line": 149,
                   "column": 5
                 }
               },
@@ -300,11 +300,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 157,
+                  "line": 151,
                   "column": 4
                 },
                 "end": {
-                  "line": 159,
+                  "line": 153,
                   "column": 5
                 }
               },
@@ -323,11 +323,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 161,
+                  "line": 155,
                   "column": 4
                 },
                 "end": {
-                  "line": 163,
+                  "line": 157,
                   "column": 5
                 }
               },
@@ -342,11 +342,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 174,
+                  "line": 168,
                   "column": 4
                 },
                 "end": {
-                  "line": 181,
+                  "line": 175,
                   "column": 5
                 }
               },
@@ -365,11 +365,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 187,
+                  "line": 181,
                   "column": 4
                 },
                 "end": {
-                  "line": 194,
+                  "line": 188,
                   "column": 5
                 }
               },
@@ -384,11 +384,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 201,
+                  "line": 195,
                   "column": 4
                 },
                 "end": {
-                  "line": 204,
+                  "line": 198,
                   "column": 5
                 }
               },
@@ -403,11 +403,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 206,
+                  "line": 200,
                   "column": 4
                 },
                 "end": {
-                  "line": 219,
+                  "line": 213,
                   "column": 5
                 }
               },
@@ -426,11 +426,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 221,
+                  "line": 215,
                   "column": 4
                 },
                 "end": {
-                  "line": 237,
+                  "line": 231,
                   "column": 5
                 }
               },
@@ -444,78 +444,60 @@
             },
             {
               "name": "_addEventListenerToNode",
-              "description": "Add the event listener to the node if it is a gestures event.",
+              "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
-                  "line": 55,
+                  "line": 47,
                   "column": 6
                 },
                 "end": {
-                  "line": 59,
+                  "line": 51,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "node",
-                  "type": "!Node",
-                  "description": "Node to add event listener to"
+                  "name": "node"
                 },
                 {
-                  "name": "eventName",
-                  "type": "string",
-                  "description": "Name of event"
+                  "name": "eventName"
                 },
                 {
-                  "name": "handler",
-                  "type": "function (!Event): void",
-                  "description": "Listener function to add"
+                  "name": "handler"
                 }
               ],
-              "return": {
-                "type": "void"
-              },
               "inheritedFrom": "Polymer.GestureEventListeners"
             },
             {
               "name": "_removeEventListenerFromNode",
-              "description": "Remove the event listener to the node if it is a gestures event.",
+              "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
-                  "line": 69,
+                  "line": 53,
                   "column": 6
                 },
                 "end": {
-                  "line": 73,
+                  "line": 57,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "node",
-                  "type": "!Node",
-                  "description": "Node to remove event listener from"
+                  "name": "node"
                 },
                 {
-                  "name": "eventName",
-                  "type": "string",
-                  "description": "Name of event"
+                  "name": "eventName"
                 },
                 {
-                  "name": "handler",
-                  "type": "function (!Event): void",
-                  "description": "Listener function to remove"
+                  "name": "handler"
                 }
               ],
-              "return": {
-                "type": "void"
-              },
               "inheritedFrom": "Polymer.GestureEventListeners"
             },
             {
@@ -587,7 +569,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 257,
+                  "line": 259,
                   "column": 9
                 }
               },
@@ -604,11 +586,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 259,
+                  "line": 261,
                   "column": 8
                 },
                 "end": {
-                  "line": 261,
+                  "line": 263,
                   "column": 9
                 }
               },
@@ -654,7 +636,7 @@
               "column": 6
             },
             "end": {
-              "line": 262,
+              "line": 264,
               "column": 7
             }
           },
