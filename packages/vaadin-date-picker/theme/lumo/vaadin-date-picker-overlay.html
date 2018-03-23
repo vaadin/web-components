@@ -1,61 +1,43 @@
 <link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
 <link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
-<link rel="import" href="../../../vaadin-lumo-styles/mixins/overlay.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
 
 <dom-module id="lumo-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
   <template>
-    <style include="lumo-overlay">
+    <style include="lumo-menu-overlay">
       [part="overlay"] {
-        width: calc(var(--lumo-size-s) * 7 + var(--lumo-space-s) * 7 + 57px);
+        /*
+        Width:
+            date cell widths
+          + month calendar side padding
+          + year scroller width
+        */
+        width:
+          calc(
+              var(--lumo-size-m) * 7
+            + var(--lumo-space-xs) * 2
+            + 57px
+          );
+        height: 100%;
         max-height: calc(var(--lumo-size-m) * 14);
         overflow: hidden;
-        animation: 0.2s vaadin-menu-overlay-enter;
-        height: 100%;
         -webkit-tap-highlight-color: transparent;
-      }
-
-      @keyframes vaadin-menu-overlay-enter {
-        0% {
-          opacity: 0;
-          transform: translateY(-4px);
-        }
-      }
-
-      :host([show-week-numbers]) [part="overlay"]:not([fullscreen]) {
-        width: calc(var(--lumo-size-m) * 11);
       }
 
       [part="content"] {
         padding: 0;
         height: 100%;
+        overflow: hidden;
+        -webkit-mask-image: none;
+        mask-image: none;
       }
 
-      :host([fullscreen]) {
-        top: 0 !important;
-        right: 0 !important;
-        bottom: var(--vaadin-overlay-viewport-bottom, 0) !important;
-        left: 0 !important;
-        align-items: stretch;
-        justify-content: flex-end;
-      }
-
-      :host([fullscreen]) [part~="overlay"] {
-        max-height: initial;
-        width: 100vw;
-        height: 70vh;
-        flex: none;
-        animation: 0.15s vaadin-date-picker-mobile-overlay-enter cubic-bezier(.215, .61, .355, 1);
-        border-radius: 0;
-      }
-
-      @keyframes vaadin-date-picker-mobile-overlay-enter {
-        0% {
-          transform: translateY(150%);
+      @media (max-width: 420px), (max-height: 420px) {
+        [part="overlay"] {
+          width: 100vw;
+          height: 70vh;
+          max-height: 70vh;
         }
-      }
-
-      :host([fullscreen]) [part~="backdrop"] {
-        display: block;
       }
     </style>
   </template>
