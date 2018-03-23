@@ -18,7 +18,6 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
     </style>
-
   </template>
 
   <script>
@@ -44,37 +43,84 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-      
+            /**
+             * The message to show in the popup.
+             */
+            message: {
+              type: String,
+              value: 'This website uses cookies to ensure you get the best experience.'
+            },
+            dismiss: {
+              type: String,
+              value: 'Got it!'
+            },
+            learnMore: {
+              type: String,
+              value: 'Learn more'
+            },
+            learnMoreLink: {
+              type: String,
+              value: ''
+            },
+            showLearnMore: {
+              type: Boolean,
+              computed: 'showLink(learnMoreLink)'
+            },
+            position: {
+              type: String,
+              value: 'top'
+            },
+            cookieName: {
+              type: String,
+              value: 'cookieconsent_status'
+            }
           };
         }
-
-        ready() {
-          super.ready();
+        showLink(learnMoreLink) {
+          return !!learnMoreLink;
         }
-
         connectedCallback() {
           super.connectedCallback();
           window.cookieconsent.initialise({
-            "palette": {
-              "popup": {
-                "background": "#000"
+            palette: {
+              popup: {
+                background: "#000"
               },
-              "button": {
-                "background": "#f1d600"
+              button: {
+                background: "#0090C0"
               }
             },
-            "content": {
-              "message": "//MESSAGE_IN_CURRENT_LANG",
-              "dismiss": "//DISMISS_BUTTON_IN_CURRENT_LANG"
+            showLink: this.showLearnMore,
+            content: {
+              message: this.message,
+              dismiss: this.dismiss,
+              link: this.learnMore,
+              href: this.learnMoreLink
             },
-            "position": "top"
+            cookie: {
+              name: this.cookieName
+            },
+            position: this.position
           });
         }
         disconnectedCallback() {
           super.disconnectedCallback();
+          var popup = this._getPopup();
+          if (popup) {
+            popup.remove();
+          }
+        }
+        _getPopup() {
+          return document.querySelector("[aria-label='cookieconsent']");
+        }
+        _show() {
+          var popup = this._getPopup();
+          if (popup) {
+            popup.classList.remove("cc-invisible")
+            popup.style.display='';
+          }
         }
       }
-
       customElements.define(VaadinCookieConsentElement.is, VaadinCookieConsentElement);
 
       /**

@@ -10,24 +10,25 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-cookie-consent></vaadin-cookie-consent>
+      <vaadin-cookie-consent cookie-name='basictestcookie'></vaadin-cookie-consent>
     </template>
   </test-fixture>
 
   <script>
     describe('sample test', function() {
-      var element;
+      var element, ccWindow;
 
       beforeEach(function() {
         element = fixture('default');
+        ccWindow = document.querySelector(".cc-window");
       });
 
-      it('should pass', function() {
-        expect(element.localName).to.be.equal('vaadin-cookie-consent');
+      it('should be in the DOM by default', function() {
+        expect(ccWindow).to.be.defined;
       });
 
-      it('should not expose class name globally', function() {
-        expect(window.VaadinCookieConsent).not.to.be.ok;
+      it('should be visible by default', function() {
+        expect(getComputedStyle(ccWindow).display).to.be.equal("flex");
       });
 
     });

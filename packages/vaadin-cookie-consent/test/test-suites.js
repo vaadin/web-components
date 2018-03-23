@@ -1,3 +1,4 @@
 window.VaadinCookieConsentSuites = [
-  'sample-test.html'
+  'change-texts-test.html',
+  'basic-test.html'
 ];

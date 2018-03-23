@@ -38,17 +38,17 @@ Vaadin components use the Lumo theme by default.
 
 ## The file structure for Vaadin components
 
-- `src/component-name.html`
+- `src/vaadin-cookie-consent.html`
 
   Unstyled component.
 
-- `theme/lumo/component-name.html`
+- `theme/lumo/vaadin-cookie-consent.html`
 
   Component with Lumo theme.
 
-- `component-name.html`
+- `vaadin-cookie-consent.html`
 
-  Alias for theme/lumo/component-name.html
+  Alias for theme/lumo/vaadin-cookie-consent.html
 
 
 ## Running demos and tests in browser
