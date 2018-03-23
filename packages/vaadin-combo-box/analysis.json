@@ -30,11 +30,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -53,11 +53,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -76,11 +76,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -99,11 +99,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -121,11 +121,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -145,11 +145,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -167,11 +167,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 171,
+                  "line": 174,
                   "column": 10
                 },
                 "end": {
-                  "line": 173,
+                  "line": 176,
                   "column": 11
                 }
               },
@@ -188,11 +188,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 175,
+                  "line": 178,
                   "column": 10
                 },
                 "end": {
-                  "line": 177,
+                  "line": 180,
                   "column": 11
                 }
               },
@@ -209,11 +209,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 179,
+                  "line": 182,
                   "column": 10
                 },
                 "end": {
-                  "line": 181,
+                  "line": 184,
                   "column": 11
                 }
               },
@@ -230,11 +230,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 183,
+                  "line": 186,
                   "column": 10
                 },
                 "end": {
-                  "line": 185,
+                  "line": 188,
                   "column": 11
                 }
               },
@@ -251,11 +251,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 187,
+                  "line": 190,
                   "column": 10
                 },
                 "end": {
-                  "line": 189,
+                  "line": 192,
                   "column": 11
                 }
               },
@@ -273,11 +273,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 219,
+                  "line": 222,
                   "column": 6
                 },
                 "end": {
-                  "line": 230,
+                  "line": 233,
                   "column": 7
                 }
               },
@@ -292,11 +292,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 232,
+                  "line": 235,
                   "column": 6
                 },
                 "end": {
-                  "line": 249,
+                  "line": 252,
                   "column": 7
                 }
               },
@@ -311,11 +311,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 251,
+                  "line": 254,
                   "column": 6
                 },
                 "end": {
-                  "line": 253,
+                  "line": 256,
                   "column": 7
                 }
               },
@@ -334,11 +334,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 259,
+                  "line": 262,
                   "column": 6
                 },
                 "end": {
-                  "line": 265,
+                  "line": 268,
                   "column": 7
                 }
               },
@@ -357,11 +357,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 267,
+                  "line": 270,
                   "column": 6
                 },
                 "end": {
-                  "line": 278,
+                  "line": 281,
                   "column": 7
                 }
               },
@@ -376,11 +376,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 280,
+                  "line": 283,
                   "column": 6
                 },
                 "end": {
-                  "line": 296,
+                  "line": 299,
                   "column": 7
                 }
               },
@@ -395,11 +395,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 298,
+                  "line": 301,
                   "column": 6
                 },
                 "end": {
-                  "line": 300,
+                  "line": 303,
                   "column": 7
                 }
               },
@@ -418,11 +418,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 302,
+                  "line": 305,
                   "column": 6
                 },
                 "end": {
-                  "line": 304,
+                  "line": 307,
                   "column": 7
                 }
               },
@@ -441,11 +441,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 314,
+                  "line": 317,
                   "column": 6
                 },
                 "end": {
-                  "line": 331,
+                  "line": 334,
                   "column": 7
                 }
               },
@@ -464,11 +464,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 337,
+                  "line": 340,
                   "column": 6
                 },
                 "end": {
-                  "line": 358,
+                  "line": 361,
                   "column": 7
                 }
               },
@@ -487,11 +487,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 364,
+                  "line": 367,
                   "column": 6
                 },
                 "end": {
-                  "line": 393,
+                  "line": 387,
                   "column": 7
                 }
               },
@@ -504,17 +504,93 @@
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
+              "name": "_animatedOpening",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 389,
+                  "column": 6
+                },
+                "end": {
+                  "line": 402,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_attachOverlay",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 404,
+                  "column": 6
+                },
+                "end": {
+                  "line": 408,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_animatedClosing",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 410,
+                  "column": 6
+                },
+                "end": {
+                  "line": 426,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_detachOverlay",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 428,
+                  "column": 6
+                },
+                "end": {
+                  "line": 432,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
               "name": "_modelessChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 402,
+                  "line": 441,
                   "column": 6
                 },
                 "end": {
-                  "line": 410,
+                  "line": 449,
                   "column": 7
                 }
               },
@@ -533,11 +609,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 412,
+                  "line": 451,
                   "column": 6
                 },
                 "end": {
-                  "line": 424,
+                  "line": 463,
                   "column": 7
                 }
               },
@@ -552,11 +628,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 426,
+                  "line": 465,
                   "column": 6
                 },
                 "end": {
-                  "line": 437,
+                  "line": 476,
                   "column": 7
                 }
               },
@@ -571,11 +647,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 439,
+                  "line": 478,
                   "column": 6
                 },
                 "end": {
-                  "line": 450,
+                  "line": 489,
                   "column": 7
                 }
               },
@@ -594,11 +670,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 452,
+                  "line": 491,
                   "column": 6
                 },
                 "end": {
-                  "line": 454,
+                  "line": 493,
                   "column": 7
                 }
               },
@@ -617,11 +693,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 456,
+                  "line": 495,
                   "column": 6
                 },
                 "end": {
-                  "line": 458,
+                  "line": 497,
                   "column": 7
                 }
               },
@@ -640,11 +716,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 460,
+                  "line": 499,
                   "column": 6
                 },
                 "end": {
-                  "line": 496,
+                  "line": 535,
                   "column": 7
                 }
               },
@@ -666,11 +742,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 498,
+                  "line": 537,
                   "column": 6
                 },
                 "end": {
-                  "line": 502,
+                  "line": 541,
                   "column": 7
                 }
               },
@@ -685,11 +761,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 504,
+                  "line": 543,
                   "column": 6
                 },
                 "end": {
-                  "line": 508,
+                  "line": 547,
                   "column": 7
                 }
               },
@@ -749,11 +825,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 129,
+                  "line": 132,
                   "column": 10
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 11
                 }
               },
@@ -767,11 +843,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 135,
+                  "line": 138,
                   "column": 10
                 },
                 "end": {
-                  "line": 138,
+                  "line": 141,
                   "column": 11
                 }
               },
@@ -785,11 +861,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 140,
+                  "line": 143,
                   "column": 10
                 },
                 "end": {
-                  "line": 143,
+                  "line": 146,
                   "column": 11
                 }
               },
@@ -803,11 +879,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 145,
+                  "line": 148,
                   "column": 10
                 },
                 "end": {
-                  "line": 149,
+                  "line": 152,
                   "column": 11
                 }
               },
@@ -821,11 +897,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 155,
+                  "line": 158,
                   "column": 10
                 },
                 "end": {
-                  "line": 160,
+                  "line": 163,
                   "column": 11
                 }
               },
@@ -839,11 +915,11 @@
               "sourceRange": {
                 "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 166,
+                  "line": 169,
                   "column": 10
                 },
                 "end": {
-                  "line": 169,
+                  "line": 172,
                   "column": 11
                 }
               },
@@ -8598,11 +8674,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1139,
+              "line": 1147,
               "column": 8
             },
             "end": {
-              "line": 1139,
+              "line": 1147,
               "column": 32
             }
           },
@@ -8617,11 +8693,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1141,
+              "line": 1149,
               "column": 8
             },
             "end": {
-              "line": 1141,
+              "line": 1149,
               "column": 34
             }
           },
@@ -8636,11 +8712,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1143,
+              "line": 1151,
               "column": 8
             },
             "end": {
-              "line": 1143,
+              "line": 1151,
               "column": 28
             }
           },
@@ -8655,11 +8731,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1145,
+              "line": 1153,
               "column": 8
             },
             "end": {
-              "line": 1145,
+              "line": 1153,
               "column": 31
             }
           },
@@ -8674,11 +8750,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1147,
+              "line": 1155,
               "column": 8
             },
             "end": {
-              "line": 1147,
+              "line": 1155,
               "column": 28
             }
           },
@@ -8693,11 +8769,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1149,
+              "line": 1157,
               "column": 8
             },
             "end": {
-              "line": 1149,
+              "line": 1157,
               "column": 35
             }
           },
@@ -8712,11 +8788,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1151,
+              "line": 1159,
               "column": 8
             },
             "end": {
-              "line": 1151,
+              "line": 1159,
               "column": 24
             }
           },
@@ -8731,11 +8807,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1153,
+              "line": 1161,
               "column": 8
             },
             "end": {
-              "line": 1153,
+              "line": 1161,
               "column": 24
             }
           },
@@ -8750,11 +8826,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1155,
+              "line": 1163,
               "column": 8
             },
             "end": {
-              "line": 1155,
+              "line": 1163,
               "column": 38
             }
           },
@@ -8769,11 +8845,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1157,
+              "line": 1165,
               "column": 8
             },
             "end": {
-              "line": 1157,
+              "line": 1165,
               "column": 20
             }
           },
@@ -8788,11 +8864,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1159,
+              "line": 1167,
               "column": 8
             },
             "end": {
-              "line": 1159,
+              "line": 1167,
               "column": 27
             }
           },
@@ -8807,11 +8883,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1161,
+              "line": 1169,
               "column": 8
             },
             "end": {
-              "line": 1161,
+              "line": 1169,
               "column": 23
             }
           },
@@ -8826,11 +8902,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1163,
+              "line": 1171,
               "column": 8
             },
             "end": {
-              "line": 1163,
+              "line": 1171,
               "column": 30
             }
           },
@@ -8845,11 +8921,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1165,
+              "line": 1173,
               "column": 8
             },
             "end": {
-              "line": 1165,
+              "line": 1173,
               "column": 30
             }
           },
@@ -8864,11 +8940,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1167,
+              "line": 1175,
               "column": 8
             },
             "end": {
-              "line": 1167,
+              "line": 1175,
               "column": 29
             }
           },
@@ -8883,11 +8959,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1169,
+              "line": 1177,
               "column": 8
             },
             "end": {
-              "line": 1169,
+              "line": 1177,
               "column": 32
             }
           },
@@ -8902,11 +8978,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1171,
+              "line": 1179,
               "column": 8
             },
             "end": {
-              "line": 1171,
+              "line": 1179,
               "column": 30
             }
           },
@@ -8921,11 +8997,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1173,
+              "line": 1181,
               "column": 8
             },
             "end": {
-              "line": 1173,
+              "line": 1181,
               "column": 24
             }
           },
@@ -8940,11 +9016,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1175,
+              "line": 1183,
               "column": 8
             },
             "end": {
-              "line": 1175,
+              "line": 1183,
               "column": 28
             }
           },
@@ -9074,11 +9150,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2415,
+              "line": 2423,
               "column": 6
             },
             "end": {
-              "line": 2440,
+              "line": 2448,
               "column": 7
             }
           },
@@ -9535,7 +9611,7 @@
               "column": 8
             },
             "end": {
-              "line": 339,
+              "line": 342,
               "column": 9
             }
           },
@@ -9547,17 +9623,56 @@
           "inheritedFrom": "Polymer.PropertiesChanged"
         },
         {
+          "name": "_shouldPropertiesChange",
+          "description": "Called in `_flushProperties` to determine if `_propertiesChanged`\nshould be called. The default implementation returns true if\nproperties are pending. Override to customize when\n`_propertiesChanged` is called.",
+          "privacy": "protected",
+          "sourceRange": {
+            "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
+            "start": {
+              "line": 356,
+              "column": 8
+            },
+            "end": {
+              "line": 358,
+              "column": 9
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "currentProps",
+              "type": "!Object",
+              "description": "Bag of all current accessor values"
+            },
+            {
+              "name": "changedProps",
+              "type": "!Object",
+              "description": "Bag of properties changed since the last\n  call to `_propertiesChanged`"
+            },
+            {
+              "name": "oldProps",
+              "type": "!Object",
+              "description": "Bag of previous values for each property\n  in `changedProps`"
+            }
+          ],
+          "return": {
+            "type": "boolean",
+            "desc": "true if changedProps is truthy"
+          },
+          "inheritedFrom": "Polymer.PropertiesChanged"
+        },
+        {
           "name": "_propertiesChanged",
           "description": "Callback called when any properties with accessors created via\n`_createPropertyAccessor` have been set.",
           "privacy": "protected",
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 353,
+              "line": 372,
               "column": 8
             },
             "end": {
-              "line": 354,
+              "line": 373,
               "column": 9
             }
           },
@@ -9591,11 +9706,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 374,
+              "line": 393,
               "column": 8
             },
             "end": {
-              "line": 381,
+              "line": 400,
               "column": 9
             }
           },
@@ -9630,11 +9745,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 393,
+              "line": 412,
               "column": 8
             },
             "end": {
-              "line": 400,
+              "line": 419,
               "column": 9
             }
           },
@@ -9668,11 +9783,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 414,
+              "line": 433,
               "column": 8
             },
             "end": {
-              "line": 421,
+              "line": 440,
               "column": 9
             }
           },
@@ -9706,11 +9821,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 433,
+              "line": 452,
               "column": 8
             },
             "end": {
-              "line": 439,
+              "line": 458,
               "column": 9
             }
           },
@@ -9744,11 +9859,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 454,
+              "line": 473,
               "column": 8
             },
             "end": {
-              "line": 461,
+              "line": 480,
               "column": 9
             }
           },
@@ -9782,11 +9897,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 474,
+              "line": 493,
               "column": 8
             },
             "end": {
-              "line": 481,
+              "line": 500,
               "column": 9
             }
           },
@@ -9811,11 +9926,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/properties-changed.html",
             "start": {
-              "line": 495,
+              "line": 514,
               "column": 8
             },
             "end": {
-              "line": 504,
+              "line": 523,
               "column": 9
             }
           },
@@ -9845,11 +9960,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1209,
+              "line": 1217,
               "column": 6
             },
             "end": {
-              "line": 1213,
+              "line": 1221,
               "column": 7
             }
           },
@@ -9964,11 +10079,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1247,
+              "line": 1255,
               "column": 6
             },
             "end": {
-              "line": 1255,
+              "line": 1263,
               "column": 7
             }
           },
@@ -10002,11 +10117,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1265,
+              "line": 1273,
               "column": 6
             },
             "end": {
-              "line": 1271,
+              "line": 1279,
               "column": 7
             }
           },
@@ -10040,11 +10155,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1282,
+              "line": 1290,
               "column": 6
             },
             "end": {
-              "line": 1285,
+              "line": 1293,
               "column": 7
             }
           },
@@ -10074,11 +10189,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1295,
+              "line": 1303,
               "column": 6
             },
             "end": {
-              "line": 1297,
+              "line": 1305,
               "column": 7
             }
           },
@@ -10103,11 +10218,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1307,
+              "line": 1315,
               "column": 6
             },
             "end": {
-              "line": 1309,
+              "line": 1317,
               "column": 7
             }
           },
@@ -10132,11 +10247,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1319,
+              "line": 1327,
               "column": 6
             },
             "end": {
-              "line": 1321,
+              "line": 1329,
               "column": 7
             }
           },
@@ -10161,11 +10276,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1331,
+              "line": 1339,
               "column": 6
             },
             "end": {
-              "line": 1333,
+              "line": 1341,
               "column": 7
             }
           },
@@ -10190,11 +10305,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1365,
+              "line": 1373,
               "column": 6
             },
             "end": {
-              "line": 1397,
+              "line": 1405,
               "column": 7
             }
           },
@@ -10234,11 +10349,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1420,
+              "line": 1428,
               "column": 6
             },
             "end": {
-              "line": 1428,
+              "line": 1436,
               "column": 7
             }
           },
@@ -10272,11 +10387,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1535,
+              "line": 1543,
               "column": 6
             },
             "end": {
-              "line": 1540,
+              "line": 1548,
               "column": 7
             }
           },
@@ -10300,11 +10415,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1561,
+              "line": 1569,
               "column": 6
             },
             "end": {
-              "line": 1572,
+              "line": 1580,
               "column": 7
             }
           },
@@ -10322,11 +10437,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1586,
+              "line": 1594,
               "column": 6
             },
             "end": {
-              "line": 1599,
+              "line": 1607,
               "column": 7
             }
           },
@@ -10363,11 +10478,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1628,
+              "line": 1636,
               "column": 6
             },
             "end": {
-              "line": 1639,
+              "line": 1647,
               "column": 7
             }
           },
@@ -10396,11 +10511,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1726,
+              "line": 1734,
               "column": 6
             },
             "end": {
-              "line": 1736,
+              "line": 1744,
               "column": 7
             }
           },
@@ -10434,11 +10549,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1747,
+              "line": 1755,
               "column": 6
             },
             "end": {
-              "line": 1752,
+              "line": 1760,
               "column": 7
             }
           },
@@ -10467,11 +10582,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1764,
+              "line": 1772,
               "column": 6
             },
             "end": {
-              "line": 1769,
+              "line": 1777,
               "column": 7
             }
           },
@@ -10495,11 +10610,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1801,
+              "line": 1809,
               "column": 6
             },
             "end": {
-              "line": 1805,
+              "line": 1813,
               "column": 7
             }
           },
@@ -10528,11 +10643,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1826,
+              "line": 1834,
               "column": 6
             },
             "end": {
-              "line": 1828,
+              "line": 1836,
               "column": 7
             }
           },
@@ -10562,11 +10677,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1851,
+              "line": 1859,
               "column": 6
             },
             "end": {
-              "line": 1861,
+              "line": 1869,
               "column": 7
             }
           },
@@ -10600,11 +10715,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1877,
+              "line": 1885,
               "column": 6
             },
             "end": {
-              "line": 1886,
+              "line": 1894,
               "column": 7
             }
           },
@@ -10635,11 +10750,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1901,
+              "line": 1909,
               "column": 6
             },
             "end": {
-              "line": 1910,
+              "line": 1918,
               "column": 7
             }
           },
@@ -10664,11 +10779,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1929,
+              "line": 1937,
               "column": 6
             },
             "end": {
-              "line": 1966,
+              "line": 1974,
               "column": 7
             }
           },
@@ -10709,11 +10824,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 1981,
+              "line": 1989,
               "column": 6
             },
             "end": {
-              "line": 1990,
+              "line": 1998,
               "column": 7
             }
           },
@@ -10738,11 +10853,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2006,
+              "line": 2014,
               "column": 6
             },
             "end": {
-              "line": 2014,
+              "line": 2022,
               "column": 7
             }
           },
@@ -10773,11 +10888,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2029,
+              "line": 2037,
               "column": 6
             },
             "end": {
-              "line": 2046,
+              "line": 2054,
               "column": 7
             }
           },
@@ -10806,11 +10921,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2059,
+              "line": 2067,
               "column": 6
             },
             "end": {
-              "line": 2066,
+              "line": 2074,
               "column": 7
             }
           },
@@ -10839,11 +10954,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2080,
+              "line": 2088,
               "column": 6
             },
             "end": {
-              "line": 2090,
+              "line": 2098,
               "column": 7
             }
           },
@@ -10877,11 +10992,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2103,
+              "line": 2111,
               "column": 6
             },
             "end": {
-              "line": 2109,
+              "line": 2117,
               "column": 7
             }
           },
@@ -10910,11 +11025,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2120,
+              "line": 2128,
               "column": 6
             },
             "end": {
-              "line": 2128,
+              "line": 2136,
               "column": 7
             }
           },
@@ -10938,11 +11053,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2139,
+              "line": 2147,
               "column": 6
             },
             "end": {
-              "line": 2152,
+              "line": 2160,
               "column": 7
             }
           },
@@ -10966,11 +11081,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2166,
+              "line": 2174,
               "column": 6
             },
             "end": {
-              "line": 2172,
+              "line": 2180,
               "column": 7
             }
           },
@@ -11004,11 +11119,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2349,
+              "line": 2357,
               "column": 6
             },
             "end": {
-              "line": 2372,
+              "line": 2380,
               "column": 7
             }
           },
@@ -11038,11 +11153,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2451,
+              "line": 2459,
               "column": 6
             },
             "end": {
-              "line": 2472,
+              "line": 2480,
               "column": 7
             }
           },
@@ -11134,16 +11249,16 @@
         },
         {
           "name": "updateStyles",
-          "description": "When using the ShadyCSS scoping and custom property shim, causes all\nshimmed styles in this element (and its subtree) to be updated\nbased on current custom property values.\n\nThe optional parameter overrides inline custom property styles with an\nobject of properties where the keys are CSS properties, and the values\nare strings.\n\nExample: `this.updateStyles({'--color': 'blue'})`\n\nThese properties are retained unless a value of `null` is set.",
+          "description": "When using the ShadyCSS scoping and custom property shim, causes all\nshimmed styles in this element (and its subtree) to be updated\nbased on current custom property values.\n\nThe optional parameter overrides inline custom property styles with an\nobject of properties where the keys are CSS properties, and the values\nare strings.\n\nExample: `this.updateStyles({'--color': 'blue'})`\n\nThese properties are retained unless a value of `null` is set.\n\nNote: This function does not support updating CSS mixins.\nYou can not dynamically change the value of an `@apply`.",
           "privacy": "public",
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
             "start": {
-              "line": 617,
+              "line": 620,
               "column": 6
             },
             "end": {
-              "line": 621,
+              "line": 624,
               "column": 7
             }
           },
@@ -11167,11 +11282,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
             "start": {
-              "line": 638,
+              "line": 641,
               "column": 6
             },
             "end": {
-              "line": 643,
+              "line": 646,
               "column": 7
             }
           },
@@ -11237,11 +11352,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/element-mixin.html",
             "start": {
-              "line": 654,
+              "line": 657,
               "column": 6
             },
             "end": {
-              "line": 657,
+              "line": 660,
               "column": 7
             }
           },
@@ -11266,11 +11381,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2491,
+              "line": 2499,
               "column": 6
             },
             "end": {
-              "line": 2505,
+              "line": 2513,
               "column": 7
             }
           },
@@ -11343,11 +11458,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2578,
+              "line": 2591,
               "column": 6
             },
             "end": {
-              "line": 2588,
+              "line": 2601,
               "column": 7
             }
           },
@@ -11421,11 +11536,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2526,
+              "line": 2534,
               "column": 6
             },
             "end": {
-              "line": 2562,
+              "line": 2575,
               "column": 7
             }
           },
@@ -11605,11 +11720,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2212,
+              "line": 2220,
               "column": 6
             },
             "end": {
-              "line": 2214,
+              "line": 2222,
               "column": 7
             }
           },
@@ -11643,11 +11758,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2226,
+              "line": 2234,
               "column": 6
             },
             "end": {
-              "line": 2228,
+              "line": 2236,
               "column": 7
             }
           },
@@ -11681,11 +11796,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2243,
+              "line": 2251,
               "column": 6
             },
             "end": {
-              "line": 2245,
+              "line": 2253,
               "column": 7
             }
           },
@@ -11715,11 +11830,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2255,
+              "line": 2263,
               "column": 6
             },
             "end": {
-              "line": 2257,
+              "line": 2265,
               "column": 7
             }
           },
@@ -11743,11 +11858,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2275,
+              "line": 2283,
               "column": 6
             },
             "end": {
-              "line": 2277,
+              "line": 2285,
               "column": 7
             }
           },
@@ -11776,11 +11891,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2287,
+              "line": 2295,
               "column": 6
             },
             "end": {
-              "line": 2289,
+              "line": 2297,
               "column": 7
             }
           },
@@ -11804,11 +11919,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2305,
+              "line": 2313,
               "column": 6
             },
             "end": {
-              "line": 2307,
+              "line": 2315,
               "column": 7
             }
           },
@@ -11842,11 +11957,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2321,
+              "line": 2329,
               "column": 6
             },
             "end": {
-              "line": 2323,
+              "line": 2331,
               "column": 7
             }
           },
@@ -11871,11 +11986,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2387,
+              "line": 2395,
               "column": 6
             },
             "end": {
-              "line": 2393,
+              "line": 2401,
               "column": 7
             }
           },
@@ -11909,11 +12024,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2623,
+              "line": 2636,
               "column": 6
             },
             "end": {
-              "line": 2688,
+              "line": 2701,
               "column": 7
             }
           },
@@ -11943,11 +12058,11 @@
           "sourceRange": {
             "file": "../bower_components/polymer/lib/mixins/property-effects.html",
             "start": {
-              "line": 2704,
+              "line": 2717,
               "column": 6
             },
             "end": {
-              "line": 2721,
+              "line": 2734,
               "column": 7
             }
           },
