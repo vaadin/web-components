@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-overlay.html",
         "start": {
-          "line": 547,
+          "line": 555,
           "column": 4
         },
         "end": {
-          "line": 547,
+          "line": 555,
           "column": 40
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-overlay>` is a Polymer 2 element for creating overlays.\n\n### Styling\n\nThe following Shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`backdrop` | Backdrop of the overlay\n`overlay`  | Container for position/sizing/alignment of the content\n`content`  | Content of the overlay\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part\n---|---|---\n`opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n`closing` | Applied just before the overlay is going to be detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default value\n---|---|---\n`--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-overlay>` is a Polymer 2 element for creating overlays.\n\n### Styling\n\nThe following Shadow DOM parts are available for styling:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`backdrop` | Backdrop of the overlay\n`overlay`  | Container for position/sizing/alignment of the content\n`content`  | Content of the overlay\n\nThe following state attributes are available for styling:\n\nAttribute | Description | Part\n---|---|---\n`opening` | Applied just after the overlay is attached to the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n`closing` | Applied just before the overlay is detached from the DOM. You can apply a CSS @keyframe animation for this state. | `:host`\n\nThe following custom CSS properties are available for styling:\n\nCustom CSS property | Description | Default value\n---|---|---\n`--vaadin-overlay-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-overlay.html",
           "properties": [
@@ -448,7 +448,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 390,
+                  "line": 387,
                   "column": 7
                 }
               },
@@ -465,11 +465,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 392,
+                  "line": 389,
                   "column": 6
                 },
                 "end": {
-                  "line": 405,
+                  "line": 402,
                   "column": 7
                 }
               },
@@ -482,11 +482,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 407,
+                  "line": 404,
                   "column": 6
                 },
                 "end": {
-                  "line": 411,
+                  "line": 408,
                   "column": 7
                 }
               },
@@ -499,11 +499,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 413,
+                  "line": 410,
                   "column": 6
                 },
                 "end": {
-                  "line": 429,
+                  "line": 426,
                   "column": 7
                 }
               },
@@ -516,11 +516,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 431,
+                  "line": 428,
                   "column": 6
                 },
                 "end": {
-                  "line": 435,
+                  "line": 432,
                   "column": 7
                 }
               },
@@ -533,11 +533,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 444,
+                  "line": 441,
                   "column": 6
                 },
                 "end": {
-                  "line": 452,
+                  "line": 449,
                   "column": 7
                 }
               },
@@ -554,11 +554,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 454,
+                  "line": 451,
                   "column": 6
                 },
                 "end": {
-                  "line": 466,
+                  "line": 463,
                   "column": 7
                 }
               },
@@ -571,11 +571,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 468,
+                  "line": 465,
                   "column": 6
                 },
                 "end": {
-                  "line": 479,
+                  "line": 476,
                   "column": 7
                 }
               },
@@ -588,11 +588,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 481,
+                  "line": 478,
                   "column": 6
                 },
                 "end": {
-                  "line": 492,
+                  "line": 489,
                   "column": 7
                 }
               },
@@ -609,11 +609,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 494,
+                  "line": 491,
                   "column": 6
                 },
                 "end": {
-                  "line": 496,
+                  "line": 493,
                   "column": 7
                 }
               },
@@ -625,16 +625,37 @@
               ]
             },
             {
+              "name": "_isFocused",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 495,
+                  "column": 6
+                },
+                "end": {
+                  "line": 497,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "element"
+                }
+              ]
+            },
+            {
               "name": "_cycleTab",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 498,
+                  "line": 499,
                   "column": 6
                 },
                 "end": {
-                  "line": 527,
+                  "line": 535,
                   "column": 7
                 }
               },
@@ -654,11 +675,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 529,
+                  "line": 537,
                   "column": 6
                 },
                 "end": {
-                  "line": 533,
+                  "line": 541,
                   "column": 7
                 }
               },
@@ -671,11 +692,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 535,
+                  "line": 543,
                   "column": 6
                 },
                 "end": {
-                  "line": 539,
+                  "line": 547,
                   "column": 7
                 }
               },
@@ -725,7 +746,7 @@
               "column": 4
             },
             "end": {
-              "line": 540,
+              "line": 548,
               "column": 5
             }
           },
