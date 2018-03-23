@@ -253,6 +253,8 @@ This program is available under Apache License Version 2.0, available at https:/
                * See issue here: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7344418/
                */
               this.indeterminate = false;
+              e.preventDefault();
+              this._toggleChecked();
             }
           }
         }
