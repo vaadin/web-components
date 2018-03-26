@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-element-mixin",
+  "name": "@vaadin/vaadin-element-mixin",
   "version": "1.0.2",
   "description": "vaadin-element-mixin",
   "main": "vaadin-element-mixin.html",
@@ -28,10 +28,8 @@
     "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^4.0.0",
-    "polymer-cli": "^1.2.0",
     "stylelint": "^8.0.0",
     "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.0.0",
-    "yargs": "latest"
+    "web-component-tester": "^6.0.0"
   }
 }
