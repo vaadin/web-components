@@ -11,8 +11,11 @@
     <dom-module id="chart-events">
       <template>
         <vaadin-chart id="mychart" on-chart-load="__chartLoad" on-series-show="__seriesShow" on-point-update="__pointUpdate">
-            <vaadin-chart-series values="[10, 20]" id="series"></vaadin-chart-series>
-          </template>
+          <vaadin-chart-series values="[10, 20]" id="series"></vaadin-chart-series>
+        </vaadin-chart>
+        <vaadin-chart id="timeline" timeline>
+          <vaadin-chart-series type="candlestick" values="[10,20]"></vaadin-chart-series>
+        </vaadin-chart>
       </template>
 
       <script>
@@ -53,12 +56,14 @@
   <script>
     describe('Element events', function() {
       let chart;
+      let timelineChart;
       let element;
 
       before(function(done) {
         HTMLImports.whenReady(() => {
           element = document.querySelector('chart-events');
           chart = element.$.mychart;
+          timelineChart = element.$.timeline;
           done();
         });
       });
@@ -127,6 +132,20 @@
             }
           });
         });
+      });
+
+      it('should trigger setExtremes event', done => {
+        const minExtreme = 10;
+        const maxExtreme = 20;
+        function setExtremesListener(e) {
+          const {min, max} = e.detail.originalEvent;
+          expect(min).to.be.equal(minExtreme);
+          expect(max).to.be.equal(maxExtreme);
+          done();
+        }
+
+        timelineChart.addEventListener('axis-extremes', setExtremesListener);
+        timelineChart.configuration.xAxis[0].setExtremes(minExtreme, maxExtreme);
       });
     });
   </script>

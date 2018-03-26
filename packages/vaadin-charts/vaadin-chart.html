@@ -328,6 +328,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
             title: {
               text: null
+            },
+            xAxis: {
+
             }
           };
 
@@ -624,6 +627,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           };
         }
 
+        get __axisEventNames() {
+          return {
+            /**
+             *
+             * @event axis-extremes  Fired when when the minimum and maximum is set for the axis
+             * @param {Object} detail.originalEvent object with details about the event sent
+             * @param {Object} axis Point object where the event was sent from
+             */
+            setExtremes: 'axis-extremes',
+          };
+        }
+
         __reflow() {
           if (!this.configuration) {
             return;
@@ -817,6 +832,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__initChartEventsListeners(configuration);
           this.__initSeriesEventsListeners(configuration);
           this.__initPointsEventsListeners(configuration);
+          this.__initXAxisEventsListeners(configuration);
         }
 
         __initChartEventsListeners(configuration) {
@@ -829,6 +845,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __initPointsEventsListeners(configuration) {
           this.__createEventListeners(this.__pointEventNames, configuration, 'plotOptions.series.point.events', 'point');
+        }
+
+        __initXAxisEventsListeners(configuration) {
+          if (Array.isArray(configuration.xAxis)) {
+            configuration.xAxis.forEach(axis => this.__createEventListeners(this.__axisEventNames, axis, 'events', 'axis'));
+          } else {
+            this.__createEventListeners(this.__axisEventNames, configuration.xAxis, 'events', 'axis');
+          }
         }
 
         __createEventListeners(eventList, configuration, pathToAdd, eventType) {
