@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <script src="../../cookieconsent/build/cookieconsent.min.js"></script>
 <dom-module id="vaadin-cookie-consent">
@@ -30,7 +31,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinCookieConsentElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class VaadinCookieConsentElement extends 
+        Vaadin.ElementMixin(
+          Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-cookie-consent';
         }
@@ -132,7 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
       window.Vaadin = window.Vaadin || {};
       Vaadin.VaadinCookieConsentElement = VaadinCookieConsentElement;
       if (window.Vaadin.runIfDevelopmentMode) {
-        window.Vaadin.runIfDevelopmentMode('vaadin-cookie-consent', VaadinCookieConsentElement);
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', VaadinCookieConsentElement);
       }
     })();
   </script>

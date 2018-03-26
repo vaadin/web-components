@@ -87,4 +87,4 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 
 ## License
 
-Apache License 2.0
+Commercial Vaadin Add-on License version 3 (CVALv3). For license terms, see LICENSE.
