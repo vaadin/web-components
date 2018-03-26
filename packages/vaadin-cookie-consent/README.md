@@ -29,7 +29,7 @@
 </vaadin-cookie-consent>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/screenshot.png" width="200" alt="Screenshot of vaadin-cookie-consent">](https://vaadin.com/components/vaadin-cookie-consent)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/screenshot.png" width="100%" alt="Screenshot of vaadin-cookie-consent">](https://vaadin.com/components/vaadin-cookie-consent)
 
 
 ## Getting Started
