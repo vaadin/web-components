@@ -1,0 +1,6 @@
+bower_components
+test
+.eslintrc.json
+.stylelintrc
+.travis.yml
+wct.conf.js
