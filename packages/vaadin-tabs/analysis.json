@@ -24,18 +24,18 @@
           "properties": [
             {
               "name": "value",
-              "type": "string",
-              "description": "Submittable string value. The default value is the trimmed text content of the element.",
+              "type": "?",
+              "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
-                  "line": 59,
-                  "column": 6
+                  "line": 62,
+                  "column": 4
                 },
                 "end": {
-                  "line": 59,
-                  "column": 17
+                  "line": 64,
+                  "column": 5
                 }
               },
               "metadata": {
@@ -51,7 +51,7 @@
               "description": "Used for mixin detection because `instanceof` does not work with mixins.\ne.g. in VaadinListMixin it filters items by using the\n`element._hasVaadinItemMixin` condition.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 24,
                   "column": 8
@@ -69,11 +69,11 @@
             },
             {
               "name": "disabled",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 31,
                   "column": 8
@@ -85,7 +85,8 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_disabledChanged\""
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -93,11 +94,11 @@
             },
             {
               "name": "selected",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 41,
                   "column": 8
@@ -109,7 +110,8 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_selectedChanged\""
+                  "observer": "\"_selectedChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -117,11 +119,11 @@
             },
             {
               "name": "_value",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 48,
                   "column": 8
@@ -132,7 +134,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.ItemMixin"
             }
@@ -153,14 +157,17 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "disconnectedCallback",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 95,
                   "column": 4
@@ -172,6 +179,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -179,7 +189,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 106,
                   "column": 4
@@ -195,6 +205,9 @@
                   "name": "selected"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -202,7 +215,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 110,
                   "column": 4
@@ -218,6 +231,9 @@
                   "name": "disabled"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -225,7 +241,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 120,
                   "column": 4
@@ -241,6 +257,9 @@
                   "name": "focused"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -248,7 +267,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 133,
                   "column": 4
@@ -264,6 +283,9 @@
                   "name": "active"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -271,7 +293,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 141,
                   "column": 4
@@ -287,6 +309,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -294,7 +319,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 148,
                   "column": 4
@@ -310,6 +335,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
@@ -319,7 +347,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -335,6 +363,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -358,7 +389,7 @@
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 31,
                   "column": 8
@@ -369,14 +400,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
               "name": "selected",
               "description": "If true, the item is in selected state.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-item/src/vaadin-item-mixin.html",
+                "file": "../../vaadin-item/src/vaadin-item-mixin.html",
                 "start": {
                   "line": 41,
                   "column": 8
@@ -387,7 +418,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
@@ -401,7 +432,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-tab.html",
                 "start": {
                   "line": 13,
                   "column": 4
@@ -426,12 +456,79 @@
           "path": "src/vaadin-tabs.html",
           "properties": [
             {
+              "name": "focused",
+              "type": "?",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
+                "start": {
+                  "line": 87,
+                  "column": 4
+                },
+                "end": {
+                  "line": 89,
+                  "column": 5
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.ListMixin"
+            },
+            {
+              "name": "_scrollerElement",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 195,
+                  "column": 8
+                },
+                "end": {
+                  "line": 197,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
+              "name": "_vertical",
+              "type": "?",
+              "description": " ",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
+                "start": {
+                  "line": 210,
+                  "column": 4
+                },
+                "end": {
+                  "line": 212,
+                  "column": 5
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.ListMixin"
+            },
+            {
               "name": "_hasVaadinListMixin",
               "type": "?",
               "description": "Used for mixin detection because `instanceof` does not work with mixins.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 20,
                   "column": 8
@@ -449,7 +546,7 @@
             },
             {
               "name": "selected",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "The index of the selected tab.",
               "privacy": "public",
               "sourceRange": {
@@ -463,13 +560,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "defaultValue": "0"
             },
             {
               "name": "orientation",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Set tabs disposition. Possible values are `horizontal|vertical`",
               "privacy": "public",
               "sourceRange": {
@@ -483,17 +582,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"horizontal\""
             },
             {
               "name": "items",
-              "type": "Array",
+              "type": "Array | null | undefined",
               "description": "The array of list items",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 45,
                   "column": 8
@@ -506,10 +607,32 @@
               "metadata": {
                 "polymer": {
                   "notify": true,
-                  "readOnly": true
+                  "readOnly": true,
+                  "attributeType": "Array"
                 }
               },
               "inheritedFrom": "Vaadin.ListMixin"
+            },
+            {
+              "name": "_scrollOffset",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 191,
+                  "column": 8
+                },
+                "end": {
+                  "line": 193,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
             }
           ],
           "methods": [
@@ -528,14 +651,17 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_enhanceItems",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 70,
                   "column": 4
@@ -557,6 +683,9 @@
                   "name": "selected"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -564,7 +693,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 91,
                   "column": 4
@@ -587,13 +716,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 95,
                   "column": 4
                 },
                 "end": {
-                  "line": 101,
+                  "line": 105,
                   "column": 5
                 }
               },
@@ -603,6 +732,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -610,13 +742,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 103,
+                  "line": 107,
                   "column": 4
                 },
                 "end": {
-                  "line": 144,
+                  "line": 143,
                   "column": 5
                 }
               },
@@ -626,6 +758,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -633,13 +768,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 146,
+                  "line": 145,
                   "column": 4
                 },
                 "end": {
-                  "line": 161,
+                  "line": 160,
                   "column": 5
                 }
               },
@@ -662,13 +797,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 163,
+                  "line": 162,
                   "column": 4
                 },
                 "end": {
-                  "line": 167,
+                  "line": 166,
                   "column": 5
                 }
               },
@@ -678,6 +813,9 @@
                   "name": "idx"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -685,13 +823,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 169,
+                  "line": 168,
                   "column": 4
                 },
                 "end": {
-                  "line": 175,
+                  "line": 174,
                   "column": 5
                 }
               },
@@ -701,6 +839,9 @@
                   "name": "idx"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -708,18 +849,21 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 177,
+                  "line": 176,
                   "column": 4
                 },
                 "end": {
-                  "line": 181,
+                  "line": 180,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -727,13 +871,13 @@
               "description": "Scroll the container to have the next item by the edge of the viewport",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 189,
+                  "line": 188,
                   "column": 4
                 },
                 "end": {
-                  "line": 208,
+                  "line": 207,
                   "column": 5
                 }
               },
@@ -743,6 +887,9 @@
                   "name": "idx"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -750,13 +897,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
-                  "line": 215,
+                  "line": 214,
                   "column": 4
                 },
                 "end": {
-                  "line": 217,
+                  "line": 216,
                   "column": 5
                 }
               },
@@ -766,6 +913,9 @@
                   "name": "pixels"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ListMixin"
             },
             {
@@ -783,7 +933,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_scrollBack",
@@ -800,7 +953,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_updateOverflow",
@@ -817,7 +973,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_repaintShadowNodesHack",
@@ -834,7 +993,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [
@@ -843,7 +1005,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -859,6 +1021,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -897,7 +1062,7 @@
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "orientation",
@@ -913,13 +1078,13 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "items",
               "description": "The array of list items",
               "sourceRange": {
-                "file": "../bower_components/vaadin-list-mixin/vaadin-list-mixin.html",
+                "file": "../../vaadin-list-mixin/vaadin-list-mixin.html",
                 "start": {
                   "line": 45,
                   "column": 8
@@ -930,7 +1095,7 @@
                 }
               },
               "metadata": {},
-              "type": "Array",
+              "type": "Array | null | undefined",
               "inheritedFrom": "Vaadin.ListMixin"
             }
           ],
@@ -944,7 +1109,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-tabs.html",
                 "start": {
                   "line": 86,
                   "column": 6
