@@ -22,10 +22,13 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-cookie-consent>` is a Polymer 2 element.
+       * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first time a user visits the application.
+       * 
+       * By default, the banner is shown attached to the top of the screen and with a predefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.
        *
+       * The texts, link and position can be configured using attributes/properties, e.g.
        * ```
-       * <vaadin-cookie-consent></vaadin-cookie-consent>
+       * <vaadin-cookie-consent learn-more-link='https://mysite.com/cookies.html'></vaadin-cookie-consent>
        * ```
        *
        * @memberof Vaadin
@@ -50,33 +53,53 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: 'This website uses cookies to ensure you get the best experience.'
             },
+            /**
+             * The text to show on the dismiss/consent button.
+             */
             dismiss: {
               type: String,
               value: 'Got it!'
             },
+            /**
+             * The text to show on the "learn more" link.
+             */
             learnMore: {
               type: String,
               value: 'Learn more'
             },
+            /**
+             * The URL the "learn more" link should open.            
+             */
             learnMoreLink: {
               type: String,
               value: 'https://cookiesandyou.com/'
             },
-            showLearnMore: {
+            _showLearnMore: {
               type: Boolean,
-              computed: 'showLink(learnMoreLink)'
+              computed: '_showLink(learnMoreLink)'
             },
+            /**
+             * Determines the position of the banner.
+             * 
+             * Possible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`
+             * For `top` and `bottom`, the banner is shown with full width. For the corner positions, it is shown as a smaller popup.
+             */
             position: {
               type: String,
               value: 'top'
             },
+            /** 
+             * The name of the cookie to set to remember that the user has consented.
+             *
+             * This rarely needs to be changed.
+             */
             cookieName: {
               type: String,
               value: 'cookieconsent_status'
             }
           };
         }
-        showLink(learnMoreLink) {
+        _showLink(learnMoreLink) {
           return !!learnMoreLink;
         }
         connectedCallback() {
@@ -96,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 background: "#0090C0"
               }
             },
-            showLink: this.showLearnMore,
+            showLink: this._showLearnMore,
             content: {
               message: this.message,
               dismiss: this.dismiss,
@@ -119,6 +142,9 @@ This program is available under Apache License Version 2.0, available at https:/
         _getPopup() {
           return document.querySelector("[aria-label='cookieconsent']");
         }
+        /*
+         * Shows the popup even if the user has seen it before.
+         */
         _show() {
           var popup = this._getPopup();
           if (popup) {

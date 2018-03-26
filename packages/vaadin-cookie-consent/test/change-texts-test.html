@@ -45,9 +45,10 @@
         const ccDismiss = ccWindow.querySelector(".cc-dismiss");
         const ccLink = ccWindow.querySelector('.cc-link');
 
-        expect(ccMessage.innerText).to.be.equal('This website uses cookies to ensure you get the best experience.');
+        expect(ccMessage.innerText).to.be.equal('This website uses cookies to ensure you get the best experience. Learn more');
         expect(ccDismiss.innerText).to.be.equal('Got it!');
-        expect(ccLink).to.be.null;
+        expect(ccLink.innerText).to.be.equal('Learn more');
+        expect(ccLink.href).to.be.equal('https://cookiesandyou.com/');
       });
 
     });
