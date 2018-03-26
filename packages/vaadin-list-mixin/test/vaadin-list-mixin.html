@@ -139,16 +139,6 @@
       MockInteractions.keyDownOn(target, letter.charCodeAt(0), modifier, letter);
     }
 
-    function space(target) {
-      MockInteractions.keyDownOn(target, 32, [], ' ');
-      MockInteractions.keyUpOn(target, 32, [], ' ');
-    }
-
-    function enter(target) {
-      MockInteractions.keyDownOn(target, 13, [], 'Enter');
-      MockInteractions.keyUpOn(target, 13, [], 'Enter');
-    }
-
     describe('vaadin-list-mixin', () => {
       let list;
 
@@ -194,17 +184,6 @@
           list.items[3].firstElementChild.click();
           expect(list.selected).to.be.equal(3);
         });
-
-        it('should be selectable with Enter key', () => {
-          enter(list.items[3]);
-          expect(list.selected).to.be.equal(3);
-        });
-
-        it('should be selectable with Space key', () => {
-          space(list.items[3]);
-          expect(list.selected).to.be.equal(3);
-        });
-
 
       });
 
