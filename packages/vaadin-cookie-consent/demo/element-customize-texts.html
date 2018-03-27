@@ -1,6 +1,6 @@
-<dom-module id="element-customize-texts">
+<dom-module id='element-customize-texts'>
   <template>
-    <style include="vaadin-component-demo-shared-styles">
+    <style include='vaadin-component-demo-shared-styles'>
       :host {
         display: block;
       }
@@ -10,9 +10,9 @@
   <h3>Customize texts</h3>
   All the texts in the dialog can be customized and localized.
   <p>
-      <button id="showPopup">Show consent popup</button>
+      <button id='showPopup'>Show consent popup</button>
   </p>
-  <vaadin-demo-snippet id="cookie-consent-demo-customizing-texts">
+  <vaadin-demo-snippet id='cookie-consent-demo-customizing-texts'>
     <template preserve-content>
       <vaadin-cookie-consent 
         message='We are using cookies to make your visit here awesome!' 
@@ -32,7 +32,7 @@
       connectedCallback() {
         super.connectedCallback();
         this.$.showPopup.addEventListener('click', e => {
-          this.$["cookie-consent-demo-customizing-texts"].shadowRoot.querySelector("vaadin-cookie-consent")._show();
+          this.$['cookie-consent-demo-customizing-texts'].shadowRoot.querySelector('vaadin-cookie-consent')._show();
         });
       }
     }

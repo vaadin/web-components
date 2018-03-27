@@ -1,6 +1,6 @@
-<dom-module id="element-basic-demos">
+<dom-module id='element-basic-demos'>
   <template>
-    <style include="vaadin-component-demo-shared-styles">
+    <style include='vaadin-component-demo-shared-styles'>
       :host {
         display: block;
       }
@@ -10,9 +10,9 @@
     <h3>Basic Usage</h3>
     The popup will be shown once to every user and use a standard text.
     <p>
-        <button id="showPopup">Show consent popup</button>
+        <button id='showPopup'>Show consent popup</button>
     </p>
-    <vaadin-demo-snippet id="cookie-consent-demo-basic-usage">
+    <vaadin-demo-snippet id='cookie-consent-demo-basic-usage'>
       <template preserve-content>
         <vaadin-cookie-consent></vaadin-cookie-consent>
       </template>
@@ -26,7 +26,7 @@
       connectedCallback() {
         super.connectedCallback();
         this.$.showPopup.addEventListener('click', e => {
-          this.$["cookie-consent-demo-basic-usage"].shadowRoot.querySelector("vaadin-cookie-consent")._show();
+          this.$['cookie-consent-demo-basic-usage'].shadowRoot.querySelector('vaadin-cookie-consent')._show();
         });
       }
     }
