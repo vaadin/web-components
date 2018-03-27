@@ -5,7 +5,20 @@
     "Vaadin Ltd"
   ],
   "description": "Lumo is a design system foundation for modern web applications, used by Vaadin components",
-  "main": "",
+  "main": [
+    "mixins/field-button.html",
+    "mixins/menu-overlay.html",
+    "mixins/overlay.html",
+    "badge.html",
+    "color.html",
+    "font-icons.html",
+    "icons.html",
+    "sizing.html",
+    "spacing.html",
+    "style.html",
+    "typography.html",
+    "version.html"
+  ],
   "keywords": [
     "vaadin",
     "lumo",
