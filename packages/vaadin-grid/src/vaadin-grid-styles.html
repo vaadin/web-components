@@ -56,18 +56,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       th {
-        text-align: initial;
-      }
-
-      @supports (-ms-ime-align: auto) {
-        th {
-          text-align: inherit;
-        }
-      }
-
-      ::-ms-backdrop,
-      th {
         text-align: inherit;
+      }
+
+      /* Safari doesn't work with `inherit` */
+      [safari] th {
+        text-align: initial;
       }
 
       #footer {
