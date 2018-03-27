@@ -177,9 +177,12 @@
         }, 70);
       });
 
-      it('should have values as labels by default', function() {
+      it('should have values as labels by default', function(done) {
         const firstSeries = chart.configuration.series[0];
-        firstSeries.data.forEach(e => expect(e.name).to.be.equal(e.y));
+        setTimeout(() => {
+          firstSeries.data.forEach(e => expect(e.name).to.be.equal(e.y));
+          done();
+        }, 50);
       });
 
       it('should accept labels as mapping object', function(done) {

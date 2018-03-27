@@ -11,6 +11,7 @@
   <dom-module id="js-json-api-demo">
     <template>
       <vaadin-chart id="mychart"></vaadin-chart>
+      <vaadin-chart id="htmlChart" subtitle="My subtitle"></vaadin-chart>
     </template>
 
     <script>
@@ -37,6 +38,14 @@
               }]
             });
           }
+
+          appendChildElement(parent, child) {
+            if (parent.append) {
+              parent.append(child);
+            } else {
+              parent.appendChild(child);
+            }
+          }
         }
 
         customElements.define(JSJSONApiDemoElement.is, JSJSONApiDemoElement);
@@ -47,13 +56,14 @@
 
   <script>
     describe('Basic JS API chart', function() {
+      var testContainer;
       var chart;
       var chartContainer;
 
       before(function(done) {
         HTMLImports.whenReady(() => {
-          const el = document.querySelector('js-json-api-demo');
-          chart = el.$.mychart;
+          testContainer = document.querySelector('js-json-api-demo');
+          chart = testContainer.$.mychart;
           chartContainer = chart.$.chart;
           done();
         });
@@ -68,14 +78,14 @@
 
       it('should have custom title', function(done) {
         setTimeout(function() {
-          expect(chart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('The chart title');
+          expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('The chart title');
           done();
         });
       });
 
       it('should not have credits by default', function(done) {
         setTimeout(function() {
-          expect(chart.$.chart.querySelector('.highcharts-credits')).to.be.null;
+          expect(chartContainer.querySelector('.highcharts-credits')).to.be.null;
           done();
         });
       });
@@ -107,9 +117,66 @@
         Polymer.flush();
 
         setTimeout(function() {
-          expect(chart.$.chart.querySelector('.highcharts-title')).to.be.null;
+          expect(chartContainer.querySelector('.highcharts-title')).to.be.null;
           done();
         }, 150);
+      });
+
+      it('should work if configured before connect', function(done) {
+        const unattachedChart = document.createElement('vaadin-chart');
+        unattachedChart.update({title: {text: 'Awesome chart'}});
+        setTimeout(() => {
+
+          testContainer.appendChildElement(testContainer, unattachedChart);
+
+          setTimeout(() => {
+            expect(unattachedChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
+            testContainer.removeChild(unattachedChart);
+            done();
+          }, 80);
+        }, 20);
+      });
+
+      it('should not reset chart configured with html', function(done) {
+        const htmlChart = testContainer.$.htmlChart;
+        htmlChart.update({title: {text: 'Awesome chart'}});
+        setTimeout(() => {
+          expect(htmlChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
+          expect(htmlChart.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('My subtitle');
+          done();
+        }, 70);
+      });
+
+      it('should not reset configuration when attached to a new parent', function(done) {
+        const div1 = document.createElement('div');
+        testContainer.appendChildElement(testContainer, div1);
+
+        const div2 = document.createElement('div');
+        testContainer.appendChildElement(testContainer, div2);
+
+        const floatingChart = document.createElement('vaadin-chart');
+        floatingChart.update({title: {text: 'Awesome title'}, credits: {enabled: false}});
+
+        setTimeout(() => {
+          testContainer.appendChildElement(div1, floatingChart);
+
+          setTimeout(() => {
+            expect(floatingChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome title');
+            expect(floatingChart.$.chart.querySelector('.highcharts-credits')).to.be.null;
+
+            div1.removeChild(floatingChart);
+            floatingChart.update({subtitle: {text: 'Awesome subtitle'}, credits: {enabled: true, text: 'Vaadin'}});
+            testContainer.appendChildElement(div2, floatingChart);
+
+            setTimeout(() => {
+              expect(floatingChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome title');
+              expect(floatingChart.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('Awesome subtitle');
+              expect(floatingChart.$.chart.querySelector('.highcharts-credits').textContent).to.equal('Vaadin');
+              div2.removeChild(floatingChart);
+              done();
+            }, 100);
+          }, 100);
+        }, 20);
       });
 
       it('should inflate whole function strings', function(done) {
@@ -119,7 +186,7 @@
           expect(config.tooltip.formatter).to.be.a('function');
           expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
-        }, 20);
+        }, 50);
       });
 
       it('should inflate function body strings', function(done) {
@@ -129,7 +196,7 @@
           expect(config.tooltip.formatter).to.be.a('function');
           expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
-        });
+        }, 50);
       });
 
       it('should inflate empty function strings', function(done) {
@@ -139,7 +206,7 @@
           expect(config.tooltip.formatter).to.be.a('function');
           expect(config.tooltip).to.not.have.property('_fn_formatter');
           done();
-        });
+        }, 50);
       });
     });
   </script>

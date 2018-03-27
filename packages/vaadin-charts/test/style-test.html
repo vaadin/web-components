@@ -74,7 +74,7 @@
           // Safari for iOS is returning the color in hexa format, so we need to test for both values
           expect(['#ff0000', 'rgb(255, 0, 0)']).to.include(window.getComputedStyle(rects[0]).stroke);
           done();
-        });
+        }, 50);
       });
     });
   </script>

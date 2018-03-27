@@ -257,8 +257,29 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get properties() {
           return {
-            /** @private */
-            '_configuration': Object,
+            /**
+             * Configuration object that exposes the JS Api to configure the chart.
+             *
+             * Most important methods are:
+             * - `addSeries (Object options, [Boolean redraw], [Mixed animation])`
+             * - `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`
+             * - `setTitle (Object title, object subtitle, Boolean redraw)`
+             *
+             * Most important properties are:
+             * - `configuration.series`: An array of the chart's series. Detailed API for Series object is
+             *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Series)
+             * - `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is
+             *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
+             * - `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is
+             *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
+             * - `configuration.title`: The chart title.
+             *
+             * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
+             * @readonly
+             * @public
+             * @type {Object}
+             */
+            'configuration': Object,
 
             /**
              * If categories are present names are used instead of numbers for the category axis.
@@ -334,30 +355,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
           };
 
-          /**
-           * Configuration object that exposes the JS Api to configure the chart.
-           *
-           * Most important methods are:
-           * - `addSeries (Object options, [Boolean redraw], [Mixed animation])`
-           * - `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`
-           * - `setTitle (Object title, object subtitle, Boolean redraw)`
-           *
-           * Most important properties are:
-           * - `configuration.series`: An array of the chart's series. Detailed API for Series object is
-           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Series)
-           * - `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is
-           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
-           * - `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is
-           *     available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)
-           * - `configuration.title`: The chart title.
-           *
-           * For detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)
-           * @readonly
-           * @public
-           * @type {Object}
-           */
-          this.configuration;
-
           this.__mutationCallback = this.__mutationCallback.bind(this);
         }
 
@@ -368,11 +365,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           Polymer.RenderStatus.beforeNextRender(this, () => {
             // Detect if the chart had already been initialized. This might happen in
             // environments where the chart is lazily attached (e.g Grid).
-            if (this._configuration) {
+            if (this.configuration) {
               this.__reflow();
               return;
             }
-            const options = Object.assign({}, this.options);
+
+            const options = Object.assign({}, this.options, this._jsonConfigurationBuffer);
+            this._jsonConfigurationBuffer = null;
             this.__initChart(options);
             const config = {attributes: true, characterData: true};
             this.__mutationObserver = new MutationObserver(this.__mutationCallback);
@@ -403,19 +402,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           return options;
-        }
-
-        get configuration() {
-          if (this._accessed) {
-            this._dirty = true;
-          }
-          this._accessed = true;
-          return this._configuration;
-        }
-
-        set configuration(value) {
-          this._dirty = true;
-          this._configuration = value;
         }
 
         /**
@@ -694,9 +680,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           // Workaround for https://github.com/highcharts/highcharts/issues/7523
           this.__ensureObjectPath(options, 'drilldown.activeDataLabelStyle');
           if (this.timeline) {
-            this._configuration = Highcharts.stockChart(this.$.chart, options);
+            this.configuration = Highcharts.stockChart(this.$.chart, options);
           } else {
-            this._configuration = Highcharts.chart(this.$.chart, options);
+            this.configuration = Highcharts.chart(this.$.chart, options);
           }
         }
 
@@ -746,21 +732,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (resetConfiguration || !this._jsonConfigurationBuffer) {
             this._jsonConfigurationBuffer = {};
           }
-          this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, jsonConfiguration);
+          const configCopy = this.__deepMerge({}, jsonConfiguration);
+          this.__inflateFunctions(configCopy);
+          this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
           Polymer.RenderStatus.beforeNextRender(this, () => {
-
-            if (!this._jsonConfigurationBuffer) {
+            if (!this.configuration || !this._jsonConfigurationBuffer) {
               return;
             }
 
-            this.__inflateFunctions(this._jsonConfigurationBuffer);
-            if (!this._dirty || resetConfiguration) {
+            if (resetConfiguration) {
               const initialOptions = Object.assign({}, this.options, this._jsonConfigurationBuffer);
 
               this.__initChart(initialOptions);
 
-              this._dirty = true;
               this._jsonConfigurationBuffer = null;
               return;
             }
@@ -916,10 +901,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateOrAddCredits(credits) {
-          if (this._configuration.credits) {
-            this._configuration.credits.update(credits);
+          if (this.configuration.credits) {
+            this.configuration.credits.update(credits);
           } else {
-            this._configuration.addCredits(credits);
+            this.configuration.addCredits(credits);
           }
         }
 
@@ -927,13 +912,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (!Array.isArray(axes)) {
             axes = [axes];
           }
-          var confAxes = isX ? this._configuration.xAxis : this._configuration.yAxis;
+          var confAxes = isX ? this.configuration.xAxis : this.configuration.yAxis;
           for (var i = 0; i < axes.length; i++) {
             var axis = axes[i];
             if (confAxes[i]) {
               confAxes[i].update(axis);
             } else {
-              this._configuration.addAxis(axis, isX);
+              this.configuration.addAxis(axis, isX);
             }
           }
         }
@@ -949,16 +934,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateOrAddSeriesInstance(seriesOptions, position) {
-          if (this._configuration.series[position]) {
-            this._configuration.series[position].update(seriesOptions);
+          if (this.configuration.series[position]) {
+            this.configuration.series[position].update(seriesOptions);
           } else {
-            this._configuration.addSeries(seriesOptions);
+            this.configuration.addSeries(seriesOptions);
           }
-          return this._configuration.series[position];
+          return this.configuration.series[position];
         }
 
         __updateCategories() {
-          if (!this._configuration) {
+          if (!this.configuration) {
             return;
           }
 
@@ -968,7 +953,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateTitle(newValue) {
-          if (!this._configuration) {
+          if (!this.configuration) {
             return;
           }
 
@@ -978,7 +963,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateSubtitle(newValue) {
-          if (!this._configuration) {
+          if (!this.configuration) {
             return;
           }
 
@@ -992,7 +977,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __updateAdditionalOptions() {
-          if (this._configuration) {
+          if (this.configuration) {
             this.update(this['additional-options']);
           }
         }
@@ -1020,18 +1005,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __callChartFunction(functionName) {
-          if (this._configuration) {
-            const functionToCall = this._configuration[functionName];
+          if (this.configuration) {
+            const functionToCall = this.configuration[functionName];
             const argumentsForCall = Array.prototype.splice.call(arguments, 1);
             if (functionToCall && typeof functionToCall === 'function') {
-              functionToCall.apply(this._configuration, argumentsForCall);
+              functionToCall.apply(this.configuration, argumentsForCall);
             }
           }
         }
 
         __callSeriesFunction(functionName, seriesIndex) {
-          if (this._configuration && this._configuration.series[seriesIndex]) {
-            const series = this._configuration.series[seriesIndex];
+          if (this.configuration && this.configuration.series[seriesIndex]) {
+            const series = this.configuration.series[seriesIndex];
             const functionToCall = series[functionName];
             const argumentsForCall = Array.prototype.splice.call(arguments, 2);
             if (functionToCall && typeof functionToCall === 'function') {
@@ -1048,20 +1033,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
            * 2 - zAxis
            * 3 - colorAxis
            */
-          if (this._configuration) {
+          if (this.configuration) {
             let axes;
             switch (axisCategory) {
               case 0:
-                axes = this._configuration.xAxis;
+                axes = this.configuration.xAxis;
                 break;
               case 1:
-                axes = this._configuration.yAxis;
+                axes = this.configuration.yAxis;
                 break;
               case 2:
-                axes = this._configuration.zAxis;
+                axes = this.configuration.zAxis;
                 break;
               case 3:
-                axes = this._configuration.colorAxis;
+                axes = this.configuration.colorAxis;
                 break;
             }
             if (axes && axes[axisIndex]) {
@@ -1076,8 +1061,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __callPointFunction(functionName, seriesIndex, pointIndex) {
-          if (this._configuration && this._configuration.series[seriesIndex] && this._configuration.series[seriesIndex].data[pointIndex]) {
-            const point = this._configuration.series[seriesIndex].data[pointIndex];
+          if (this.configuration && this.configuration.series[seriesIndex] && this.configuration.series[seriesIndex].data[pointIndex]) {
+            const point = this.configuration.series[seriesIndex].data[pointIndex];
             const functionToCall = point[functionName];
             const argumentsForCall = Array.prototype.splice.call(arguments, 3);
             if (functionToCall && typeof functionToCall === 'function') {

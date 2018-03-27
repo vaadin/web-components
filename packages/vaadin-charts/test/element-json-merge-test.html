@@ -55,7 +55,7 @@
           expect('name of the series').to.be.equal(element.configuration.series[0].name);
           expect('area').to.be.equal(element.configuration.series[0].type);
           done();
-        }, 70);
+        }, 100);
       });
 
       it('should handle merging multiple series', function(done) {
@@ -79,7 +79,7 @@
           expect(100).to.be.equal(secondSeries.options.innerSize);
           expect('series 2').to.be.equal(secondSeries.name);
           done();
-        }, 70);
+        }, 100);
       });
     });
   </script>
