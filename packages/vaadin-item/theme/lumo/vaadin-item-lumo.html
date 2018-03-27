@@ -1,0 +1,71 @@
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<dom-module id="lumo-item" theme-for="vaadin-item">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-xs);
+        padding: 0.5em 1em;
+        min-height: var(--lumo-size-m);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Selectable items have a checkmark icon */
+      :host([tabindex])::before {
+        display: var(--_lumo-item-selected-icon-display, none);
+        content: var(--lumo-icons-checkmark);
+        font-family: lumo-icons;
+        font-size: var(--lumo-icon-size-m);
+        line-height: 1;
+        font-weight: normal;
+        width: 1em;
+        height: 1em;
+        margin: calc((1 - var(--lumo-line-height-xs)) * var(--lumo-font-size-m) / 2) 0;
+        color: var(--lumo-primary-text-color);
+        flex: none;
+        opacity: 0;
+        transition: transform 0.2s cubic-bezier(.12, .32, .54, 2), opacity 0.1s;
+      }
+
+      :host([selected])::before {
+        opacity: 1;
+      }
+
+      :host([active]:not([selected]))::before {
+        transform: scale(0.8);
+        opacity: 0;
+        transition-duration: 0s;
+      }
+
+      [part="content"] {
+        flex: auto;
+      }
+
+      /* Disabled item */
+
+      :host([disabled]) {
+        color: var(--lumo-disabled-text-color);
+        cursor: default;
+        pointer-events: none;
+      }
+
+      /* Slotted icons */
+
+      :host ::slotted(iron-icon) {
+        width: var(--lumo-icon-size-m);
+        height: var(--lumo-icon-size-m);
+      }
+    </style>
+  </template>
+</dom-module>
