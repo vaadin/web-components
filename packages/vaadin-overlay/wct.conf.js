@@ -57,9 +57,5 @@ module.exports = {
         );
         break;
     }
-  },
-
-  plugins: {
-    'random-output': true
   }
 };
