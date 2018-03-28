@@ -134,7 +134,7 @@
         });
       });
 
-      it('should trigger setExtremes event', done => {
+      it('should trigger setExtremes event for xAxis', done => {
         const minExtreme = 10;
         const maxExtreme = 20;
         function setExtremesListener(e) {
@@ -144,8 +144,22 @@
           done();
         }
 
-        timelineChart.addEventListener('axis-extremes', setExtremesListener);
+        timelineChart.addEventListener('xaxes-extremes-set', setExtremesListener);
         timelineChart.configuration.xAxis[0].setExtremes(minExtreme, maxExtreme);
+      });
+
+      it('should trigger setExtremes event for yAxis', done => {
+        const minExtreme = 10;
+        const maxExtreme = 20;
+        function setExtremesListener(e) {
+          const {min, max} = e.detail.originalEvent;
+          expect(min).to.be.equal(minExtreme);
+          expect(max).to.be.equal(maxExtreme);
+          done();
+        }
+
+        timelineChart.addEventListener('yaxes-extremes-set', setExtremesListener);
+        timelineChart.configuration.yAxis[0].setExtremes(minExtreme, maxExtreme);
       });
     });
   </script>
