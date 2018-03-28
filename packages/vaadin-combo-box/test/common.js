@@ -1,9 +1,12 @@
-const ua = navigator.userAgent;
-const ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
-const edge = /Edge/i.test(ua);
-const linux = /Linux/i.test(ua);
+// Note: var is used in this file, otherwise with const there are errors
+// in Safari when running tests after modulizer (Polymer 3)
 
-const touchDevice = (() => {
+var ua = navigator.userAgent;
+var ios = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+var edge = /Edge/i.test(ua);
+var linux = /Linux/i.test(ua);
+
+var touchDevice = (() => {
   try {
     document.createEvent('TouchEvent');
     return true;
@@ -12,26 +15,26 @@ const touchDevice = (() => {
   }
 })();
 
-const getCustomPropertyValue = (el, prop) => {
+var getCustomPropertyValue = (el, prop) => {
   return window.ShadyCSS ?
     window.ShadyCSS.getComputedStyleValue(el, prop) :
     getComputedStyle(el).getPropertyValue(prop);
 };
 
-const fire = (type, node, detail) => {
-  const evt = new CustomEvent(type, {detail: detail, bubbles: true, cancelable: true, composed: true});
+var fire = (type, node, detail) => {
+  var evt = new CustomEvent(type, {detail: detail, bubbles: true, cancelable: true, composed: true});
   node.dispatchEvent(evt);
 
   return evt;
 };
 
-const fireMousedownMouseupClick = (node) => {
+var fireMousedownMouseupClick = (node) => {
   fire('mousedown', node);
   fire('mouseup', node);
   fire('click', node);
 };
 
-const describeSkipIf = (bool, title, callback) => {
+var describeSkipIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   if (bool) {
     describe.skip(title, callback);
@@ -40,12 +43,12 @@ const describeSkipIf = (bool, title, callback) => {
   }
 };
 
-const describeIf = (bool, title, callback) => {
+var describeIf = (bool, title, callback) => {
   bool = typeof bool == 'function' ? bool() : bool;
   describeSkipIf(!bool, title, callback);
 };
 
-const getItemArray = length => {
+var getItemArray = length => {
   return new Array(length).join().split(',')
     .map((item, index) => 'item ' + index);
 };

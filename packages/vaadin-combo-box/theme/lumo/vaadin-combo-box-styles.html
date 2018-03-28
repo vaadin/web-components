@@ -1,0 +1,22 @@
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/field-button.html">
+
+<link rel="import" href="../../../vaadin-text-field/theme/lumo/vaadin-text-field.html">
+
+<dom-module id="lumo-combo-box" theme-for="vaadin-combo-box">
+  <template>
+    <style include="lumo-field-button">
+      :host {
+        outline: none;
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--lumo-icons-dropdown);
+      }
+
+      [part="clear-button"]::before {
+        content: var(--lumo-icons-cross);
+      }
+    </style>
+  </template>
+</dom-module>

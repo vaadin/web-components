@@ -1,0 +1,17 @@
+<link rel="import" href="../../test-fixture/test-fixture.html">
+<link rel="import" href="../../iron-test-helpers/test-helpers.html">
+<link rel="import" href="../vaadin-combo-box.html">
+<link rel="import" href="../vaadin-combo-box-light.html">
+
+<dom-module id="not-animated-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+  <template>
+    <style include="lumo-combo-box-overlay">
+      :host([opening]),
+      :host([closing]),
+      :host([opening]) [part="overlay"],
+      :host([closing]) [part="overlay"] {
+        animation: none !important;
+      }
+    </style>
+  </template>
+</dom-module>
