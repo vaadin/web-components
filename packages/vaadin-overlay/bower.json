@@ -29,7 +29,7 @@
     "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#^2.2.1"
   },
   "devDependencies": {
-    "elements-demo-resources": "^2.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
