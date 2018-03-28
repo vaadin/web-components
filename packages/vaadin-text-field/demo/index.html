@@ -6,26 +6,18 @@
   <title>Vaadin Text Field Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <custom-style>
-    <style include="vaadin-component-demo-shared-styles"></style>
-  </custom-style>
-</head>
-
-<body>
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
+  <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
 
-  <link rel="import" href="text-field-demo.html">
+  <script src="./text-field-demo.js"></script>
 
   <link rel="import" href="../vaadin-text-field.html">
   <link rel="import" href="../vaadin-password-field.html">
   <link rel="import" href="../vaadin-text-area.html">
   <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../../vaadin-lumo-styles/icons.html">
-
-  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 
   <!-- Used in the styling examples, keep in sync -->
   <dom-module id="my-text-field-styles" theme-for="vaadin-text-field vaadin-text-area">
@@ -42,5 +34,13 @@
       </style>
     </template>
   </dom-module>
+
+  <custom-style>
+    <style include="vaadin-component-demo-shared-styles"></style>
+  </custom-style>
+</head>
+
+<body>
+  <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

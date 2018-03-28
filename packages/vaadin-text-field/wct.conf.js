@@ -1,4 +1,5 @@
-var argv = require('yargs').argv;
+var envIndex = process.argv.indexOf('--env') + 1;
+var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
   registerHooks: function(context) {
@@ -16,11 +17,23 @@ module.exports = {
       'Windows 10/firefox@54'
     ];
 
-    if (argv.env === 'saucelabs') {
-      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+    var saucelabsPlatformsP3 = [
+      'macOS 10.12/iphone@11.2',
+      'macOS 10.12/ipad@11.2',
+      'Windows 10/chrome@65',
+      'macOS 10.12/safari@11.0'
+    ];
 
-    } else if (argv.env === 'saucelabs-cron') {
-      context.options.plugins.sauce.browsers = cronPlatforms;
+    switch (env) {
+      case 'saucelabs':
+        context.options.plugins.sauce.browsers = saucelabsPlatforms;
+        break;
+      case 'saucelabs-cron':
+        context.options.plugins.sauce.browsers = cronPlatforms;
+        break;
+      case 'saucelabs-p3':
+        context.options.plugins.sauce.browsers = saucelabsPlatformsP3;
+        break;
     }
   }
 };

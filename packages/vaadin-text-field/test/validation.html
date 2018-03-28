@@ -40,13 +40,10 @@
       describe(`${el}: validate`, function() {
         let iform, tf, input;
 
-        beforeEach(function(done) {
+        beforeEach(function() {
           iform = fixture(`${el}-default`);
           tf = iform.querySelector(el);
           input = tf.focusElement;
-          animationFrameFlush(() => {
-            HTMLImports.whenReady(done);
-          });
         });
 
         it('should call validate', function(done) {
