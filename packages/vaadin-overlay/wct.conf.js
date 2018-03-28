@@ -1,4 +1,5 @@
-var argv = require('yargs').argv;
+var envIndex = process.argv.indexOf('--env') + 1;
+var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
   testTimeout: 180 * 1000,
@@ -24,7 +25,15 @@ module.exports = {
       'Windows 10/firefox@54'
     ];
 
-    switch (argv.env) {
+    var saucelabsPlatformsP3 = [
+      'macOS 10.12/iphone@11.2',
+      'macOS 10.12/ipad@11.2',
+      'Windows 10/chrome@65',
+      'macOS 10.12/safari@11.0'
+    ];
+
+
+    switch (env) {
       case 'saucelabs:mobile':
         context.options.plugins.sauce.browsers = saucelabsPlatformsMobile;
         break;
@@ -36,6 +45,9 @@ module.exports = {
         break;
       case 'saucelabs-cron':
         context.options.plugins.sauce.browsers = cronPlatforms;
+        break;
+      case 'saucelabs-p3':
+        context.options.plugins.sauce.browsers = saucelabsPlatformsP3;
         break;
       case 'saucelabs':
         context.options.plugins.sauce.browsers = cronPlatforms.concat(
