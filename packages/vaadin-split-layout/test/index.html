@@ -11,11 +11,6 @@
 
 <body>
   <script>
-    // non-lite polyfill #v1 cause problems
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
-    // Needs to be loaded after the polyfill
-    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
-
     WCT.loadSuites(
       window.VaadinSplitLayoutSuites
         .reduce(function(suites, suite) {

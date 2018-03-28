@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-split-layout",
+  "name": "@vaadin/vaadin-split-layout",
   "version": "4.0.0-beta2",
   "description": "Polymer element for partitioning a layout into resizeable areas",
   "main": "vaadin-split-layout.html",
@@ -18,7 +18,6 @@
   },
   "homepage": "https://vaadin.com/components",
   "devDependencies": {
-    "bower": "latest",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
@@ -32,11 +31,9 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.1.5",
-    "yargs": "^8.0.0"
+    "web-component-tester": "^6.1.5"
   },
   "scripts": {
     "test": "wct",
