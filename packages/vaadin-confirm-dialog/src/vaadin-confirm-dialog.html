@@ -1,0 +1,63 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-confirm-dialog">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-confirm-dialog>` is a Polymer 2 element.
+       *
+       * ```
+       * <vaadin-confirm-dialog></vaadin-confirm-dialog>
+       * ```
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class VaadinConfirmDialog extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-confirm-dialog';
+        }
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+          };
+        }
+      }
+
+      customElements.define(VaadinConfirmDialog.is, VaadinConfirmDialog);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.VaadinConfirmDialog = VaadinConfirmDialog;
+      if (window.Vaadin.runIfDevelopmentMode) {
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', VaadinConfirmDialog);
+      }
+    })();
+  </script>
+</dom-module>
