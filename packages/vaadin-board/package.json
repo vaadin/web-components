@@ -32,6 +32,6 @@
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update",
-    "analyze": "polymer analyze > analysis.json"
+    "analyze": "polymer analyze vaadin-board.html > analysis.json"
   }
 }
