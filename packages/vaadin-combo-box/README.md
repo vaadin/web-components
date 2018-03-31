@@ -1,4 +1,5 @@
 ![Bower version](https://img.shields.io/bower/v/vaadin-combo-box.svg)
+[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-combo-box.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-combo-box)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-combo-box)
 ![Polymer 2 supported](https://img.shields.io/badge/Polymer2-supported-blue.svg)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-combo-box.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-combo-box)
