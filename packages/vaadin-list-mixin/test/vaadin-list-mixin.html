@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>vaadin-list-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-list-mixin.html">
@@ -78,12 +79,6 @@
           }
         }
         customElements.define('test-item-element', TestElement);
-
-        /**
-         * @namespace Vaadin
-         */
-        window.Vaadin = window.Vaadin || {};
-        Vaadin.TabElement = TestElement;
       });
     </script>
   </dom-module>

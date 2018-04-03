@@ -7,20 +7,12 @@
   <title>vaadin-list-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="test-suites.js"></script>
-  <script src="../../vaadin-tabs/test/test-suites.js"></script>
-  <script src="../../vaadin-list-box/test/test-suites.js"></script>
 </head>
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
-
     WCT.loadSuites(
       window.VaadinListMixinSuites
-        .concat(
-          window.VaadinTabsSuites.map(suite => `../../vaadin-tabs/test/${suite}`),
-          window.VaadinListBoxSuites.map(suite => `../../vaadin-list-box/test/${suite}`)
-        )
         .reduce(function(suites, suite) {
           return suites.concat([suite, `${suite}?wc-shadydom=true`]);
         }, [])
