@@ -1,7 +1,18 @@
 <script>
-window.Vaadin = window.Vaadin || {};
-/**
- * @namespace Vaadin
- */
-window.Vaadin.Lumo = {version: '1.0.0-pre.1'};
+  (function() {
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+
+    class Lumo extends HTMLElement {
+      static get version() {
+        return '1.0.0-pre.1';
+      }
+    }
+
+    customElements.define('vaadin-lumo-styles', Lumo);
+
+    window.Vaadin.Lumo = Lumo;
+  })();
 </script>
