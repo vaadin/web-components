@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-ordered-layout",
+  "name": "@vaadin/vaadin-ordered-layout",
   "version": "1.0.0-beta1",
   "description": "vaadin-ordered-layout",
   "main": "vaadin-ordered-layout.html",
@@ -22,7 +22,6 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "bower": "latest",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
@@ -36,10 +35,8 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.1.5",
-    "yargs": "latest"
+    "web-component-tester": "^6.1.5"
   }
 }
