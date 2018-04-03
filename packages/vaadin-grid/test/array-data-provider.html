@@ -225,14 +225,20 @@
       describe('invalid filters paths', () => {
         let filter;
 
-        beforeEach(() => filter = Polymer.dom(grid).querySelector('vaadin-grid-filter'));
+        beforeEach(done => {
+          filter = Polymer.dom(grid).querySelector('vaadin-grid-filter');
+          listenOnce(grid, 'filter-changed', e => {
+            done();
+          });
+          filter.path = '';
+        });
 
         it('should warn about invalid path with undefined parent property', done => {
           const _warn = console.warn;
           const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.true;
               done();
@@ -247,7 +253,7 @@
           const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;
               done();
@@ -262,7 +268,7 @@
           const spy = console.warn = sinon.spy();
 
           filter.addEventListener('filter-changed', e => {
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               console.warn = _warn;
               expect(spy.called).to.be.false;
               done();
