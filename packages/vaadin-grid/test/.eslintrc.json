@@ -41,7 +41,6 @@
     "isFullOfItems": false,
     "isVisible": false,
     "defaultCellWidth": false,
-    "firefox": false,
     "listenOnce": false,
     "MockInteractions": false,
     "afterEach": false,
@@ -53,6 +52,7 @@
     "flushColumns": false,
     "flushGrid": false,
     "fire": false,
+    "isV2": false,
     "getContainerCell": false,
     "footerTrap": false,
     "wheel": false

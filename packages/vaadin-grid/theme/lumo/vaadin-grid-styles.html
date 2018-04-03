@@ -1,0 +1,243 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-lumo-styles/sizing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
+
+<link rel="import" href="../../../vaadin-checkbox/theme/lumo/vaadin-checkbox.html">
+
+<dom-module id="lumo-grid" theme-for="vaadin-grid">
+  <template>
+    <style>
+      :host {
+        font-family: var(--lumo-font-family);
+        font-size: var(--lumo-font-size-m);
+        line-height: var(--lumo-line-height-s);
+        color: var(--lumo-body-text-color);
+        background-color: var(--lumo-base-color);
+        box-sizing: border-box;
+        -webkit-text-size-adjust: 100%;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+
+        /* For internal use only */
+        --_lumo-grid-border-color: var(--lumo-contrast-20pct);
+        --_lumo-grid-secondary-border-color: var(--lumo-contrast-10pct);
+        --_lumo-grid-border-width: 1px;
+        --_lumo-grid-selected-row-color: var(--lumo-primary-color-10pct);
+      }
+
+      /* No (outer) border */
+
+      :host(:not([theme~="no-border"])) {
+        border: var(--_lumo-grid-border-width) solid var(--_lumo-grid-border-color);
+      }
+
+      /* Cell styles */
+
+      [part~="cell"] {
+        min-height: var(--lumo-size-m);
+        background-color: var(--lumo-base-color);
+      }
+
+      [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        cursor: default;
+        padding: var(--lumo-space-xs) var(--lumo-space-m);
+      }
+
+      /* Apply row borders by default and introduce the "no-row-borders" variant */
+      :host(:not([theme~="no-row-borders"])) [part~="cell"]:not([part~="details-cell"]) {
+        border-top: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
+      }
+
+      /* Hide first body row top border */
+      :host(:not([theme~="no-row-borders"])) [part="row"][first] [part~="cell"]:not([part~="details-cell"]) {
+        border-top: 0;
+        min-height: calc(var(--lumo-size-m) - var(--_lumo-grid-border-width));
+      }
+
+      /* Focus-ring */
+
+      [part~="cell"]:focus {
+        outline: none;
+      }
+
+      :host([navigating]) [part~="cell"]:focus::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        pointer-events: none;
+        box-shadow: inset 0 0 0 2px var(--lumo-primary-color-50pct);
+      }
+
+      /* Headers and footers */
+
+      [part~="header-cell"] ::slotted(vaadin-grid-cell-content),
+      [part~="footer-cell"] ::slotted(vaadin-grid-cell-content),
+      [part~="reorder-ghost"] {
+        font-size: var(--lumo-font-size-s);
+        font-weight: 500;
+      }
+
+      [part~="footer-cell"] ::slotted(vaadin-grid-cell-content) {
+        font-weight: 400;
+      }
+
+      [part="row"]:only-child [part~="header-cell"] {
+        min-height: var(--lumo-size-xl);
+      }
+
+      /* Header borders */
+
+      /* Hide first header row top border */
+      :host(:not([theme~="no-row-borders"])) [part="row"]:first-child [part~="header-cell"] {
+        border-top: 0;
+      }
+
+      [part="row"]:last-child [part~="header-cell"] {
+        border-bottom: var(--_lumo-grid-border-width) solid transparent;
+      }
+
+      :host(:not([theme~="no-row-borders"])) [part="row"]:last-child [part~="header-cell"] {
+        border-bottom-color: var(--_lumo-grid-secondary-border-color);
+      }
+
+      /* Overflow uses a stronger border color */
+      :host([overflow~="top"]) [part="row"]:last-child [part~="header-cell"] {
+        border-bottom-color: var(--_lumo-grid-border-color);
+      }
+
+      /* Footer borders */
+
+      [part="row"]:first-child [part~="footer-cell"] {
+        border-top: var(--_lumo-grid-border-width) solid transparent;
+      }
+
+      :host(:not([theme~="no-row-borders"])) [part="row"]:first-child [part~="footer-cell"] {
+        border-top-color: var(--_lumo-grid-secondary-border-color);
+      }
+
+      /* Overflow uses a stronger border color */
+      :host([overflow~="bottom"]) [part="row"]:first-child [part~="footer-cell"] {
+        border-top-color: var(--_lumo-grid-border-color);
+      }
+
+      /* Column reordering */
+
+      :host([reordering]) [part~="cell"] {
+        background: linear-gradient(var(--lumo-shade-20pct), var(--lumo-shade-20pct)) var(--lumo-base-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: var(--lumo-base-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct)) var(--lumo-base-color);
+      }
+
+      [part~="reorder-ghost"] {
+        opacity: 0.85;
+        box-shadow: var(--lumo-box-shadow-s);
+        /* TODO Use the same styles as for the cell element (reorder-ghost copies styles from the cell element) */
+        padding: var(--lumo-space-s) var(--lumo-space-m) !important;
+      }
+
+      /* Column resizing */
+
+      [part="resize-handle"] {
+        width: 3px;
+        background-color: var(--lumo-primary-color-50pct);
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+
+      :host(:not([reordering])) *:not([column-resizing]) [part~="cell"]:hover [part="resize-handle"],
+      [part="resize-handle"]:active {
+        opacity: 1;
+        transition-delay: 0.15s;
+      }
+
+      /* Column borders */
+
+      :host([theme~="column-borders"]) [part~="cell"]:not([last-column]):not([part~="details-cell"]) {
+        border-right: var(--_lumo-grid-border-width) solid var(--_lumo-grid-secondary-border-color);
+      }
+
+      /* Frozen columns */
+
+      [last-frozen] {
+        border-right: var(--_lumo-grid-border-width) solid transparent;
+        overflow: hidden;
+      }
+
+      :host([overflow~="left"]) [part~="cell"][last-frozen]:not([part~="details-cell"]) {
+        border-right-color: var(--_lumo-grid-border-color);
+      }
+
+      /* Row stripes */
+
+      :host([theme~="row-stripes"]) [part~="row"]:not([odd]) [part~="body-cell"],
+      :host([theme~="row-stripes"]) [part~="row"]:not([odd]) [part~="details-cell"] {
+        background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
+        background-repeat: repeat-x;
+      }
+
+      /* Selected row */
+
+      /* Raise the selected rows above unselected rows (so that box-shadow can cover unselected rows) */
+      :host(:not([reordering])) [part~="row"][selected] {
+        z-index: 1;
+      }
+
+      :host(:not([reordering])) [part~="row"][selected] [part~="body-cell"]:not([part~="details-cell"]) {
+        background-image: linear-gradient(var(--_lumo-grid-selected-row-color), var(--_lumo-grid-selected-row-color));
+        background-repeat: repeat;
+      }
+
+      /* Cover the border of an unselected row */
+      :host(:not([theme~="no-row-borders"])) [part~="row"][selected] [part~="cell"]:not([part~="details-cell"]) {
+        box-shadow: 0 var(--_lumo-grid-border-width) 0 0 var(--_lumo-grid-selected-row-color);
+      }
+
+      /* Compact */
+
+      :host([theme~="compact"]) [part="row"]:only-child [part~="header-cell"] {
+        min-height: var(--lumo-size-m);
+      }
+
+      :host([theme~="compact"]) [part~="cell"] {
+        min-height: var(--lumo-size-s);
+      }
+
+      :host([theme~="compact"]) [part="row"][first] [part~="cell"]:not([part~="details-cell"]) {
+        min-height: calc(var(--lumo-size-s) - var(--_lumo-grid-border-width));
+      }
+
+      :host([theme~="compact"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        padding: var(--lumo-space-xs) var(--lumo-space-s);
+      }
+
+      /* Wrap cell contents */
+
+      :host([theme~="wrap-cell-content"]) [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        white-space: normal;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module theme-for="vaadin-checkbox" id="vaadin-grid-select-all-checkbox-lumo">
+  <template>
+    <style>
+      :host(.vaadin-grid-select-all-checkbox) {
+        font-size: var(--lumo-font-size-m);
+      }
+   </style>
+  </template>
+</dom-module>

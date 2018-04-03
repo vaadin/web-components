@@ -19,6 +19,7 @@ To update:
 1. Get the most recent code from https://github.com/PolymerElements/iron-list/
 2. Remove the  <dom-module id="iron-list"> to avoid collisions with actual <iron-list>
 3. Change "Polymer({" to "window.PolymerIronList = Polymer.Class({" to expose the class
+3.1. Add @namespace
 4. Optional: Remove all properties and functions not needed by <vaadin-grid>
 5. Profit!
 
@@ -33,6 +34,9 @@ To update:
   var IDLE_TIME = Polymer.Async.idlePeriod;
   var MICRO_TASK = Polymer.Async.microTask;
 
+  /**
+   * @namespace
+   */
   window.PolymerIronList = Polymer.Class({
 
     behaviors: [

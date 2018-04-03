@@ -46,7 +46,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // before child <vaadin-grid-sorter>'s upgrade and fire the events. The following
       // makes sure that 'sorter-changed' is fired for all <vaadin-grid-sorter> elements
       // after this (<vaadin-grid>) is ready (and the listeners are active).
-      if (!Polymer.Settings.useNativeShadow) {
+      if (window.ShadyDOM) {
         Polymer.Async.microTask.run(() => {
           const sorters = this.querySelectorAll('vaadin-grid-sorter');
           Array.from(sorters).forEach((sorter) => {

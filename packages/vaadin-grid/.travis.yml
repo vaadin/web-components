@@ -6,37 +6,47 @@ node_js: 8.9
 cache:
   directories:
     - node_modules
-    - bower_components
 
 addons:
   firefox: latest
   chrome: stable
 
-install:
-  - npm install
-  - polymer install
-
 before_script:
-  - gulp lint version:check
-  #- polymer lint --rules polymer-2 --input *.html
-  - if [[ "$TEST_SUITE" = "desktop" ]]; then
-      xvfb-run -s '-screen 0 1024x768x24' wct;
-    fi
+  - npm install -g bower
+  - bower install
 
 env:
-  - TEST_SUITE=mobile
-  - TEST_SUITE=polyfilled
-  - TEST_SUITE=desktop
+  - TEST_SUITE=mobile POLYMER=2
+  - TEST_SUITE=polyfilled POLYMER=2
+  - TEST_SUITE=desktop POLYMER=2
+  - TEST_SUITE=saucelabs-p3 POLYMER=3
 
 script:
-  - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-      wct --env saucelabs:$TEST_SUITE --expanded --verbose;
-    fi
-  - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
-      if [[ "$TEST_SUITE" = "desktop" ]]; then
-        wct --env saucelabs-cron;
+  - if [[ "$POLYMER" = "2" ]]; then
+      npm install -g polymer-cli &&
+      npm install &&
+      gulp lint version:check &&
+      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
+        xvfb-run -s '-screen 0 1024x768x24' polymer test;
+      else
+        polymer test --env saucelabs:$TEST_SUITE;
       fi;
     fi
 
-after_success:
-  # - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"
+  - if [[ "$POLYMER" = "3" ]]; then
+      npm install -g yarn magi-cli polymer-cli@next &&
+      (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
+      rm -rf node_modules &&
+      magi p3-convert --out . &&
+      yarn install --flat &&
+      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
+        xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm -l chrome;
+      else
+        polymer test --module-resolution=node --npm --env saucelabs-p3;
+      fi;
+    fi
+
+  - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
+      npm install &&
+      polymer test --env saucelabs-cron;
+    fi
