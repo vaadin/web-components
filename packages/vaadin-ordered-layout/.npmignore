@@ -10,4 +10,5 @@ analysis.json
 bower.json
 gulpfile.js
 index.html
+imports.html
 screenshot.png
