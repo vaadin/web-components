@@ -698,32 +698,40 @@ To update:
 
     _forwardItemPath: function(path, value) {
       path = path.slice(6); // 'items.'.length == 6
-      var dot = path.indexOf('.') + 1;
-      if (dot === 0) {
+      var dot = path.indexOf('.');
+      if (dot === -1) {
         dot = path.length;
       }
-      var vidx = IS_V2
-          ? parseInt(path.substring(0, dot), 10)
-          // Extract `#` from `path`.
-          : parseInt(path.substring(1, dot), 10);
-      var offscreenItem = this._offscreenFocusedItem;
-      var isIndexRendered = this._isIndexRendered(vidx);
-      var inst;
+      var isIndexRendered;
       var pidx;
-
-      if (isIndexRendered) {
-        pidx = this._getPhysicalIndex(vidx);
-        inst = this.modelForElement(this._physicalItems[pidx]);
-      } else if (offscreenItem) {
-        inst = this.modelForElement(offscreenItem);
-      }
-      if (!inst || inst[this.indexAs] !== vidx) {
-        // NOTE: consider valid instance if it has correct __key__ (Polymer 1.x).
-        if (!inst || inst.__key__ !== '#' + vidx) {
+      var inst;
+      var offscreenInstance = this.modelForElement(this._offscreenFocusedItem);
+      if (IS_V2) {
+        var vidx = parseInt(path.substring(0, dot), 10);
+        isIndexRendered = this._isIndexRendered(vidx);
+        if (isIndexRendered) {
+          pidx = this._getPhysicalIndex(vidx);
+          inst = this.modelForElement(this._physicalItems[pidx]);
+        } else if (offscreenInstance) {
+          inst = offscreenInstance;
+        }
+        if (!inst || inst[this.indexAs] !== vidx) {
           return;
         }
+      } else {
+        // Polymer 1.x - get physical instance by key (`#1`), not index.
+        var key = path.substring(0, dot);
+        if (offscreenInstance && offscreenInstance.__key__ === key) {
+          inst = offscreenInstance;
+        } else {
+          pidx = this._physicalIndexForKey[key];
+          inst = this.modelForElement(this._physicalItems[pidx]);
+          if (!inst || inst.__key__ !== key) {
+            return;
+          }
+        }
       }
-      path = path.substring(dot);
+      path = path.substring(dot + 1);
       path = this.as + (path ? '.' + path : '');
       IS_V2
         ? inst._setPendingPropertyOrPath(path, value, false, true)
