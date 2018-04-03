@@ -11,19 +11,32 @@ addons:
   firefox: latest
   chrome: stable
 
-install:
-  - npm install
+before_script:
+  - npm install bower polymer-cli@next -g
   - bower install
 
-before_script:
-  - gulp lint version:check
-  - polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html
-  - xvfb-run -s '-screen 0 1024x768x24' wct
+env:
+  - POLYMER=2
+  - POLYMER=3
 
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      wct --env saucelabs;
+      if [[ "$POLYMER" = "2" ]]; then
+        npm install;
+        gulp lint;
+        polymer lint --rules polymer-2 --input *.html;
+        polymer test --env saucelabs;
+      fi;
+      if [[ "$POLYMER" = "3" ]]; then
+        npm install -g yarn magi-cli;
+        (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link);
+        rm -rf node_modules;
+        magi p3-convert --out .;
+        yarn install --flat;
+        polymer test --module-resolution=node --npm --env saucelabs-p3;
+      fi;
     fi
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      wct --env saucelabs-cron;
+  - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
+      npm install;
+      polymer test --env saucelabs-cron;
     fi
