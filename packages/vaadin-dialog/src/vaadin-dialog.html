@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/templatize.html">
 <link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
@@ -24,6 +25,10 @@ This program is available under Apache License Version 2.0, available at https:/
   </template>
   <script>
     (function() {
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
 
       /**
        * The overlay element.
@@ -156,9 +161,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       customElements.define(DialogElement.is, DialogElement);
-      /**
-       * @namespace Vaadin
-       */
+
       window.Vaadin.DialogElement = DialogElement;
     })();
   </script>
