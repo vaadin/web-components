@@ -10,7 +10,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../../iron-scroll-target-behavior/iron-scroll-target-behavior.html">
 
 <!--
@@ -30,51 +29,15 @@ To update:
   var IOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
   var IOS_TOUCH_SCROLLING = IOS && IOS[1] >= 8;
   var DEFAULT_PHYSICAL_COUNT = 3;
-  var IS_V2 = Polymer.flush != null;
-  var ANIMATION_FRAME = IS_V2 ? Polymer.Async.animationFrame : 0;
-  var IDLE_TIME = IS_V2 ? Polymer.Async.idlePeriod : 1;
-  var MICRO_TASK = IS_V2 ? Polymer.Async.microTask : 2;
+  var ANIMATION_FRAME = Polymer.Async.animationFrame;
+  var IDLE_TIME = Polymer.Async.idlePeriod;
+  var MICRO_TASK = Polymer.Async.microTask;
 
   window.PolymerIronList = Polymer.Class({
 
-    is: 'iron-list',
-
-    properties: {
-
-      /**
-       * An array containing items determining how many instances of the template
-       * to stamp and that that each template instance should bind to.
-       */
-      items: {
-        type: Array
-      },
-
-
-      /**
-       * The offset top from the scrolling element to the iron-list element.
-       * This value can be computed using the position returned by `getBoundingClientRect()`
-       * although it's preferred to use a constant value when possible.
-       *
-       * This property is useful when an external scrolling element is used and there's
-       * some offset between the scrolling element and the list.
-       * For example: a header is placed above the list.
-       */
-      scrollOffset: {
-        type: Number,
-        value: 0
-      }
-    },
-
-    observers: [
-      '_itemsChanged(items.*)',
-      '_setOverflow(scrollTarget, scrollOffset)'
-    ],
-
     behaviors: [
-      Polymer.Templatizer,
       Polymer.IronResizableBehavior,
-      Polymer.IronScrollTargetBehavior,
-      Polymer.OptionalMutableDataBehavior
+      Polymer.IronScrollTargetBehavior
     ],
 
     /**
@@ -177,41 +140,14 @@ To update:
     _maxPages: 2,
 
     /**
-     * The currently focused physical item.
-     */
-    _focusedItem: null,
-
-    /**
      * The virtual index of the focused item.
      */
     _focusedVirtualIndex: -1,
 
     /**
-     * The physical index of the focused item.
-     */
-    _focusedPhysicalIndex: -1,
-
-    /**
-     * The the item that is focused if it is moved offscreen.
-     * @private {?TemplatizerNode}
-     */
-    _offscreenFocusedItem: null,
-
-    /**
-     * The item that backfills the `_offscreenFocusedItem` in the physical items
-     * list when that item is moved offscreen.
-     */
-    _focusBackfillItem: null,
-
-    /**
      * The maximum items per row
      */
     _itemsPerRow: 1,
-
-    /**
-     * The width of each grid item
-     */
-    _itemWidth: 0,
 
     /**
      * The height of the row in grid layout.
@@ -222,12 +158,6 @@ To update:
      * The cost of stamping a template in ms.
      */
     _templateCost: 0,
-
-    /**
-     * Needed to pass event.model property to declarative event handlers -
-     * see polymer/polymer#4339.
-     */
-    _parentModel: true,
 
     /**
      * The bottom of the physical content.
@@ -256,13 +186,6 @@ To update:
     get _hiddenContentSize() {
       var size = this.grid ? this._physicalRows * this._rowHeight : this._physicalSize;
       return size - this._viewportHeight;
-    },
-
-    /**
-     * The parent node for the _userTemplate.
-     */
-    get _itemsParent() {
-      return Polymer.dom(Polymer.dom(this._userTemplate).parentNode);
     },
 
     /**
@@ -394,24 +317,8 @@ To update:
       return idx;
     },
 
-    get _defaultScrollTarget() {
-      return this;
-    },
-
-    get _virtualRowCount() {
-      return Math.ceil(this._virtualCount / this._itemsPerRow);
-    },
-
-    get _estRowsInView() {
-      return Math.ceil(this._viewportHeight / this._rowHeight);
-    },
-
-    get _physicalRows() {
-      return Math.ceil(this._physicalCount / this._itemsPerRow);
-    },
-
     get _scrollOffset() {
-      return this._scrollerPaddingTop + this.scrollOffset;
+      return this._scrollerPaddingTop;
     },
 
     attached: function() {
@@ -423,18 +330,6 @@ To update:
 
     detached: function() {
       this.unlisten(this, 'iron-resize', '_resizeHandler');
-    },
-
-    /**
-     * Set the overflow property if this element has its own scrolling region
-     */
-    _setOverflow: function(scrollTarget) {
-      this.style.webkitOverflowScrolling = scrollTarget === this ? 'touch' : '';
-      this.style.overflowY = scrollTarget === this ? 'auto' : '';
-      // Clear cache.
-      this._lastVisibleIndexVal = null;
-      this._firstVisibleIndexVal = null;
-      this._debounce('_render', this._render, ANIMATION_FRAME);
     },
 
     /**
@@ -680,96 +575,6 @@ To update:
         }
         this._removeFocusedItem();
         this._debounce('_render', this._render, ANIMATION_FRAME);
-      } else if (change.path === 'items.splices') {
-        this._adjustVirtualIndex(change.value.indexSplices);
-        this._virtualCount = this.items ? this.items.length : 0;
-        // Render only if the affected index is rendered.
-        var affectedIndexRendered = change.value.indexSplices.some(function(splice) {
-          return splice.index + splice.addedCount >= this._virtualStart &&
-              splice.index <= this._virtualEnd;
-        }, this);
-        if (!this._isClientFull() || affectedIndexRendered) {
-          this._debounce('_render', this._render, ANIMATION_FRAME);
-        }
-      } else if (change.path !== 'items.length') {
-        this._forwardItemPath(change.path, change.value);
-      }
-    },
-
-    _forwardItemPath: function(path, value) {
-      path = path.slice(6); // 'items.'.length == 6
-      var dot = path.indexOf('.');
-      if (dot === -1) {
-        dot = path.length;
-      }
-      var isIndexRendered;
-      var pidx;
-      var inst;
-      var offscreenInstance = this.modelForElement(this._offscreenFocusedItem);
-      if (IS_V2) {
-        var vidx = parseInt(path.substring(0, dot), 10);
-        isIndexRendered = this._isIndexRendered(vidx);
-        if (isIndexRendered) {
-          pidx = this._getPhysicalIndex(vidx);
-          inst = this.modelForElement(this._physicalItems[pidx]);
-        } else if (offscreenInstance) {
-          inst = offscreenInstance;
-        }
-        if (!inst || inst[this.indexAs] !== vidx) {
-          return;
-        }
-      } else {
-        // Polymer 1.x - get physical instance by key (`#1`), not index.
-        var key = path.substring(0, dot);
-        if (offscreenInstance && offscreenInstance.__key__ === key) {
-          inst = offscreenInstance;
-        } else {
-          pidx = this._physicalIndexForKey[key];
-          inst = this.modelForElement(this._physicalItems[pidx]);
-          if (!inst || inst.__key__ !== key) {
-            return;
-          }
-        }
-      }
-      path = path.substring(dot + 1);
-      path = this.as + (path ? '.' + path : '');
-      IS_V2
-        ? inst._setPendingPropertyOrPath(path, value, false, true)
-        : inst.notifyPath(path, value, true);
-      inst._flushProperties && inst._flushProperties(true);
-      // TODO(blasten): V1 doesn't do this and it's a bug
-      if (isIndexRendered) {
-        this._updateMetrics([pidx]);
-        this._positionItems();
-        this._updateScrollerSize();
-      }
-    },
-
-    /**
-     * @param {!Array<!PolymerSplice>} splices
-     */
-    _adjustVirtualIndex: function(splices) {
-      splices.forEach(function(splice) {
-        // deselect removed items
-        splice.removed.forEach(this._removeItem, this);
-        // We only need to care about changes happening above the current position
-        if (splice.index < this._virtualStart) {
-          var delta = Math.max(
-              splice.addedCount - splice.removed.length,
-              splice.index - this._virtualStart);
-          this._virtualStart = this._virtualStart + delta;
-          if (this._focusedVirtualIndex >= 0) {
-            this._focusedVirtualIndex = this._focusedVirtualIndex + delta;
-          }
-        }
-      }, this);
-    },
-
-    _removeItem: function(item) {
-      this.$.selector.deselect(item);
-      // remove the current focused item
-      if (this._focusedItem && this.modelForElement(this._focusedItem)[this.as] === item) {
-        this._removeFocusedItem();
       }
     },
 
@@ -821,30 +626,6 @@ To update:
     },
 
     /**
-     * Assigns the data models to a given set of items.
-     * @param {!Array<number>=} itemSet
-     */
-    _assignModels: function(itemSet) {
-      this._iterateItems(function(pidx, vidx) {
-        var el = this._physicalItems[pidx];
-        var item = this.items && this.items[vidx];
-        if (item != null) {
-          var inst = this.modelForElement(el);
-          inst.__key__ = this._collection ? this._collection.getKey(item) : null;
-          this._forwardProperty(inst, this.as, item);
-          this._forwardProperty(inst, this.selectedAs, this.$.selector.isSelected(item));
-          this._forwardProperty(inst, this.indexAs, vidx);
-          this._forwardProperty(inst, 'tabIndex', this._focusedVirtualIndex === vidx ? 0 : -1);
-          this._physicalIndexForKey[inst.__key__] = pidx;
-          inst._flushProperties && inst._flushProperties(true);
-          el.removeAttribute('hidden');
-        } else {
-          el.setAttribute('hidden', '');
-        }
-      }, itemSet);
-    },
-
-    /**
      * Updates the height for a given set of items.
      *
      * @param {!Array<number>=} itemSet
@@ -890,27 +671,10 @@ To update:
 
       var y = this._physicalTop;
 
-      if (this.grid) {
-        var totalItemWidth = this._itemsPerRow * this._itemWidth;
-        var rowOffset = (this._viewportWidth - totalItemWidth) / 2;
-
-        this._iterateItems(function(pidx, vidx) {
-          var modulus = vidx % this._itemsPerRow;
-          var x = Math.floor((modulus * this._itemWidth) + rowOffset);
-          if (this._isRTL) {
-            x = x * -1;
-          }
-          this.translate3d(x + 'px', y + 'px', 0, this._physicalItems[pidx]);
-          if (this._shouldRenderNextRow(vidx)) {
-            y += this._rowHeight;
-          }
-        });
-      } else {
-        this._iterateItems(function(pidx, vidx) {
-          this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
-          y += this._physicalSizes[pidx];
-        });
-      }
+      this._iterateItems(function(pidx, vidx) {
+        this.translate3d(0, y + 'px', 0, this._physicalItems[pidx]);
+        y += this._physicalSizes[pidx];
+      });
     },
 
     _getPhysicalSizeIncrement: function(pidx) {
@@ -921,18 +685,6 @@ To update:
         return 0;
       }
       return this._rowHeight;
-    },
-
-    /**
-     * Returns, based on the current index,
-     * whether or not the next index will need
-     * to be rendered on a new row.
-     *
-     * @param {number} vidx Virtual index
-     * @return {boolean}
-     */
-    _shouldRenderNextRow: function(vidx) {
-      return vidx % this._itemsPerRow === this._itemsPerRow - 1;
     },
 
     /**
@@ -1076,10 +828,6 @@ To update:
       return idx >= this._virtualStart && idx <= this._virtualEnd;
     },
 
-    _isIndexVisible: function(idx) {
-      return idx >= this.firstVisibleIndex && idx <= this.lastVisibleIndex;
-    },
-
     _getPhysicalIndex: function(vidx) {
       return (this._physicalStart + (vidx - this._virtualStart)) % this._physicalCount;
     },
@@ -1089,45 +837,12 @@ To update:
     },
 
     _debounce: function(name, cb, asyncModule) {
-      if (IS_V2) {
-        this._debouncers = this._debouncers || {};
-        this._debouncers[name] = Polymer.Debouncer.debounce(
-          this._debouncers[name],
-          asyncModule,
-          cb.bind(this));
-        Polymer.enqueueDebouncer(this._debouncers[name]);
-      } else {
-        Polymer.dom.addDebouncer(this.debounce(name, cb));
-      }
-    },
-
-    _forwardProperty: function(inst, name, value) {
-      if (IS_V2) {
-        inst._setPendingProperty(name, value);
-      } else {
-        inst[name] = value;
-      }
-    },
-
-    /* Templatizer bindings for v2 */
-    _forwardHostPropV2: function(prop, value) {
-      (this._physicalItems || [])
-        .concat([this._offscreenFocusedItem, this._focusBackfillItem])
-        .forEach(function(item) {
-          if (item) {
-            this.modelForElement(item).forwardHostProp(prop, value);
-          }
-        }, this);
-    },
-
-    _notifyInstancePropV2: function(inst, prop, value) {
-     if (Polymer.Path.matches(this.as, prop)) {
-        var idx = inst[this.indexAs];
-        if (prop == this.as) {
-          this.items[idx] = value;
-        }
-        this.notifyPath(Polymer.Path.translate(this.as, 'items.' + idx, prop), value);
-      }
+      this._debouncers = this._debouncers || {};
+      this._debouncers[name] = Polymer.Debouncer.debounce(
+        this._debouncers[name],
+        asyncModule,
+        cb.bind(this));
+      Polymer.enqueueDebouncer(this._debouncers[name]);
     }
 
   });

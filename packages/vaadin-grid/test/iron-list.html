@@ -39,7 +39,7 @@
       });
 
       it('should work with another iron-list on the page', () => {
-        expect(grid.is && ironList.is).to.equal('iron-list');
+        expect(grid.$ && ironList.is).to.equal('iron-list');
       });
 
       it('should warn when using iron-list APIs trough grid', () => {
