@@ -6,27 +6,32 @@
   <title>vaadin-tabs Examples</title>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <custom-style>
-    <style include="vaadin-component-demo-shared-styles"></style>
-  </custom-style>
-</head>
-
-<body>
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
   <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-snippet.html">
-  <link rel="import" href="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.html">
+  <script src="../../vaadin-demo-helpers/vaadin-demo-ready-event-emitter.js"></script>
 
-  <link rel="import" href="tabs-demo.html">
+  <script src="tabs-demo.js"></script>
 
   <link rel="import" href="../../iron-pages/iron-pages.html">
   <link rel="import" href="../../iron-icon/iron-icon.html">
-  <link rel="import" href="../../vaadin-icons/vaadin-icons.html">
+
+  <!--
+    FIXME(web-padawan) 03-04-2018: restore after converting vaadin-icons
+    https://github.com/vaadin/vaadin-icons/issues/54
+  -->
+  <!-- <link rel="import" href="../../vaadin-icons/vaadin-icons.html"> -->
   <link rel="import" href="../../vaadin-lumo-styles/icons.html">
 
   <link rel="import" href="../vaadin-tabs.html">
   <link rel="import" href="../vaadin-tab.html">
   <link rel="import" href="../demo/my-custom-item.html">
 
+  <custom-style>
+    <style include="vaadin-component-demo-shared-styles"></style>
+  </custom-style>
+</head>
+
+<body>
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>
