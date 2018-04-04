@@ -23,6 +23,10 @@
     describe('Late upgrade', () => {
       var datepicker;
 
+      if (!(window['Polymer'] && window['Polymer'].importHref)) {
+        return; // TODO: With Polymer 3 we don’t have the HTML to import
+      }
+
       beforeEach(() => datepicker = fixture('datepicker'));
 
       it('should have preset value from property', (done) => {

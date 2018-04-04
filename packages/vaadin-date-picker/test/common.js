@@ -85,43 +85,32 @@ function describeSkipIf(bool, title, callback) {
   }
 }
 
-function waitUntilScrolledTo(overlay, date, callback) {
-  if (overlay.$.monthScroller.position) {
-    overlay._onMonthScroll();
-  }
-  var monthIndex = overlay._differenceInMonths(date, new Date());
-  if (overlay.$.monthScroller.position === monthIndex) {
-    Polymer.RenderStatus.afterNextRender(overlay, callback);
-  } else {
-    setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
-  }
-}
-
 // IE11 throws errors when the fixture is removed from the DOM and the focus remains in the native control.
 // Also, FF and Chrome are unable to focus input/button when tests are run in the headless window manager used in Travis
 function monkeyPatchNativeFocus() {
-  if (window.Vaadin && Vaadin.TextFieldElement) {
-    Vaadin.TextFieldElement.prototype.focus = function() {
+  customElements.whenDefined('vaadin-text-field').then(() => {
+    const TextFieldElement = customElements.get('vaadin-text-field');
+    TextFieldElement.prototype.focus = function() {
       this._setFocused(true);
     };
-    Vaadin.TextFieldElement.prototype.blur = function() {
+    TextFieldElement.prototype.blur = function() {
       this._setFocused(false);
     };
-  }
-  if (window.Vaadin && Vaadin.ButtonElement) {
-    Vaadin.ButtonElement.prototype.focus = function() {
+  });
+
+  customElements.whenDefined('vaadin-button').then(() => {
+    const ButtonElement = customElements.get('vaadin-button');
+    ButtonElement.prototype.focus = function() {
       this._setFocused(true);
     };
-  }
-  if (window.Vaadin && Vaadin.DatePickerElement) {
-    Vaadin.DatePickerElement.prototype.blur = function() {
+  });
+
+  customElements.whenDefined('vaadin-date-picker').then(() => {
+    const DatePickerElement = customElements.get('vaadin-date-picker');
+    DatePickerElement.prototype.blur = function() {
       this._inputElement._setFocused(false);
     };
-  }
+  });
 }
 
-if (window.Polymer) { // Chrome
-  setTimeout(monkeyPatchNativeFocus, 1);
-} else { // Polyfill
-  window.addEventListener('WebComponentsReady', monkeyPatchNativeFocus);
-}
+window.addEventListener('WebComponentsReady', monkeyPatchNativeFocus);

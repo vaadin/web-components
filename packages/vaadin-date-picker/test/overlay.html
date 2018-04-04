@@ -21,6 +21,18 @@
   </test-fixture>
 
   <script>
+    function waitUntilScrolledTo(overlay, date, callback) {
+      if (overlay.$.monthScroller.position) {
+        overlay._onMonthScroll();
+      }
+      var monthIndex = overlay._differenceInMonths(date, new Date());
+      if (overlay.$.monthScroller.position === monthIndex) {
+        Polymer.RenderStatus.afterNextRender(overlay, callback);
+      } else {
+        setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
+      }
+    }
+
     describe('vaadin-date-picker-overlay', () => {
       var overlay;
 
