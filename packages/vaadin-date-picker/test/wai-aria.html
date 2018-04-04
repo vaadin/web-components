@@ -52,7 +52,7 @@
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+          const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
           overlayContent.$.monthScroller.bufferSize = 0;
           overlayContent.$.yearScroller.bufferSize = 0;
           clearButton = datepicker.root.querySelector('[part="clear-button"]');
@@ -209,6 +209,7 @@
       });
 
       describe('month calendar contents', () => {
+        let monthCalendar;
 
         beforeEach(done => {
           monthCalendar = fixture('month-calendar');
@@ -323,7 +324,7 @@
 
         beforeEach(() => {
           datepicker = fixture('datepicker');
-          overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+          const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
           overlayContent.$.monthScroller.bufferSize = 0;
           overlayContent.$.yearScroller.bufferSize = 0;
         });

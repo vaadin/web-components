@@ -50,7 +50,7 @@
         datepicker = fixture('datepicker');
         overlay = datepicker.$.overlay;
         input = datepicker.$.input;
-        toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
         overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
@@ -120,11 +120,11 @@
     });
 
     describe('Dropdown-wrapped', () => {
-      var datepicker, overlayContent, clearButton;
+      var datepicker, overlayContent, clearButton, toggleButton;
 
       beforeEach(() => {
         datepicker = fixture('datepicker-wrapped').$.datepicker;
-        toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
+        toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
         clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
         overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;

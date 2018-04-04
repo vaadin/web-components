@@ -20,6 +20,7 @@
   <script>
     describe('vaadin-month-calendar', () => {
       var monthCalendar;
+      var valueChangedSpy;
 
       beforeEach(done => {
         monthCalendar = fixture('default');
@@ -92,7 +93,7 @@
       });
 
       it('should fire date-tap on tap', () => {
-        tapSpy = sinon.spy();
+        const tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
         var dateElements = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)');
         tap(dateElements[10]);
@@ -121,7 +122,7 @@
       });
 
       it('should not react if the tap takes more than 300ms', done => {
-        tapSpy = sinon.spy();
+        const tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
         var dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
 
@@ -134,7 +135,7 @@
       });
 
       it('should not react if ignoreTaps is on', () => {
-        tapSpy = sinon.spy();
+        const tapSpy = sinon.spy();
         monthCalendar.addEventListener('date-tap', tapSpy);
         monthCalendar.ignoreTaps = true;
         var dateElement = monthCalendar.$.days.querySelectorAll('[part="date"]:not(:empty)')[10];
