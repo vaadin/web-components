@@ -5,6 +5,8 @@ module.exports = {
   verbose: true,
   registerHooks: function(context) {
     var saucelabsPlatforms = [
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@59',
       'macOS 10.12/iphone@10.3',
       'macOS 10.12/ipad@11.0',
       'Windows 10/microsoftedge@15',
