@@ -98,7 +98,7 @@
         if (!(linux && window.chrome)) { // FIXME: randomly fails on Chrome + Travis
           expect(getComputedStyle(document.body).pointerEvents).to.be.equal('none');
           expect(getComputedStyle(combobox).pointerEvents).to.be.equal('auto');
-          expect(getComputedStyle(combobox.$.overlay).pointerEvents).to.be.equal('auto');
+          expect(getComputedStyle(combobox.$.overlay.$.dropdown.$.overlay).pointerEvents).to.be.equal('auto');
         }
         combobox.close();
         expect(getComputedStyle(document.body).pointerEvents).to.be.equal('painted');
