@@ -9,6 +9,7 @@
   <script src="common.js"></script>
 
   <link rel="import" href="../src/vaadin-date-picker-overlay-content.html">
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
 </head>
 
 <body>
@@ -32,7 +33,6 @@
         overlay.initialPosition = new Date();
         Polymer.RenderStatus.afterNextRender(overlay.$.monthScroller,
           () => waitUntilScrolledTo(overlay, new Date(), done));
-
       });
 
       it('should stop tap events from bubbling outside the overlay', () => {
