@@ -24,17 +24,6 @@
 
       beforeEach(() => combobox = fixture('combobox'));
 
-      describeIf(touchDevice, 'touch devices', () => {
-        it('should blur input on scroll', () => {
-          combobox.open();
-
-          fire('down', combobox.$.overlay);
-          const focusedInput = combobox.root.querySelector('input:focus');
-
-          expect(focusedInput).not.to.equal(combobox.inputElement);
-        });
-      });
-
       describeIf(ios, 'iOS', () => {
         it('should have momentum scrolling enabled', () => {
           combobox.open();
