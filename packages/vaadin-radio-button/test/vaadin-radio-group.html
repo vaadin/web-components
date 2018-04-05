@@ -69,6 +69,14 @@
         expect(vaadinRadioButtonList[0].hasAttribute('disabled')).to.be.true;
       });
 
+      it('should set disabled property to dynamically added radio-buttons', () => {
+        vaadinRadioButtonGroup.disabled = true;
+        const radio = document.createElement('vaadin-radio-button');
+        vaadinRadioButtonGroup.appendChild(radio);
+        vaadinRadioButtonGroup._observer.flush();
+        expect(radio.disabled).to.be.true;
+      });
+
       it('should have roving tabindex', () => {
         vaadinRadioButtonList[1].checked = true;
 
