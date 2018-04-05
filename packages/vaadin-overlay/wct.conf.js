@@ -2,30 +2,33 @@ var envIndex = process.argv.indexOf('--env') + 1;
 var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
+  verbose: true,
   testTimeout: 180 * 1000,
-
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'macOS 10.12/iphone@11.0',
-      'macOS 10.12/ipad@11.0',
+      'macOS 10.12/iphone@10.3',
+      'macOS 10.12/ipad@11.2',
+      'macOS 9.3.2/iphone@9.3'
     ];
 
     const saucelabsPlatformsPolyfilled = [
       'Windows 10/microsoftedge@15',
-      'Windows 10/internet explorer@11',
+      'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.12/safari@11.0'
+      'macOS 10.12/safari@11.0',
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@59'
     ];
 
     const cronPlatforms = [
       'Android/chrome',
-      'Windows 10/chrome@60',
-      'Windows 10/firefox@54'
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@59'
     ];
 
-    var saucelabsPlatformsP3 = [
+    const saucelabsPlatformsP3 = [
       'macOS 10.12/iphone@11.2',
       'macOS 10.12/ipad@11.2',
       'Windows 10/chrome@65',
