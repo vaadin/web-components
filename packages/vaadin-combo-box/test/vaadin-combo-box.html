@@ -263,6 +263,32 @@
             expect(comboBox.hasAttribute('focused')).to.be.false;
           });
         });
+
+        describe('touch-devices', () => {
+          it('should blur the input on touchend', () => {
+            comboBox.focus();
+
+            const spy = sinon.spy(comboBox.inputElement, 'blur');
+            comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchend'));
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should blur the input on touchmove', () => {
+            comboBox.focus();
+
+            const spy = sinon.spy(comboBox.inputElement, 'blur');
+            comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchmove'));
+            expect(spy.callCount).to.eql(1);
+          });
+
+          it('should not blur the input on touchstart', () => {
+            comboBox.focus();
+
+            const spy = sinon.spy(comboBox.inputElement, 'blur');
+            comboBox.$.overlay.$.dropdown.$.overlay.dispatchEvent(new CustomEvent('touchstart'));
+            expect(spy.callCount).to.eql(0);
+          });
+        });
       });
 
       describe('Slots', () => {
