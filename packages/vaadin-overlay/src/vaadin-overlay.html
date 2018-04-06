@@ -443,9 +443,28 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _captureStyleScope() {
         this._isScoped = this.getRootNode() !== document;
+        this._scopeStyles = [];
+        if (this._isScoped) {
+          let scope = this.getRootNode();
+          while (scope instanceof ShadowRoot) {
+            this._scopeStyles = this._scopeStyles.concat(Array.from(scope.querySelectorAll('style')));
+            scope = scope.host.getRootNode();
+          }
+        }
       }
 
       _applyStyleScope() {
+        if (this._appliedScopeStyles) {
+          this._appliedScopeStyles.forEach(style =>
+            style.parentNode && style.parentNode.removeChild(style)
+          );
+        }
+
+        this._appliedScopeStyles = this._scopeStyles.map(style => {
+          style = style.cloneNode(true);
+          this.$.content.appendChild(style);
+          return style;
+        });
       }
 
       /**
@@ -493,8 +512,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(template, _isScoped) {
-        console.log(template, _isScoped);
-
         if (this._contentNodes && this._contentNodes.length) {
           this._contentNodes.forEach(node => node.parentNode && node.parentNode.removeChild(node));
         }
