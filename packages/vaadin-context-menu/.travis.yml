@@ -33,7 +33,7 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli polymer-cli@next &&
+      npm install -g yarn magi-cli polymer-cli@1.7.0-pre.3 &&
       (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
       magi p3-convert --out . &&
