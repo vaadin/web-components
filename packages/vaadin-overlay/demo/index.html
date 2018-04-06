@@ -242,6 +242,48 @@
         </style>
       </template>
     </dom-module>
+
+    <h3>Style scope</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="my-view">
+          <template>
+            <style>
+              .my-view__overlay {
+                font: italic 24pt;
+                background: #fff;
+                color: #000;
+                padding: 1em;
+              }
+            </style>
+            <vaadin-overlay opened="{{_overlayOpened}}" with-backdrop>
+              <template>
+                <div class="my-view__overlay">
+                  I keep my style scope
+                </div>
+              </template>
+            </vaadin-overlay>
+            <label>
+              <input type="checkbox" checked="{{_overlayOpened::change}}">
+              Show the overlay
+            </label>
+          </template>
+        </dom-module>
+        <script>
+          Polymer({
+            is: 'my-view',
+            properties: {
+              _overlayOpened: {
+                type: Boolean,
+                value: false
+              }
+            }
+          });
+        </script>
+
+        <my-view></my-view>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>

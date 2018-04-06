@@ -84,7 +84,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}"></div>
     <div part="overlay" id="overlay" tabindex="0">
-      <div part="content" id="content"></div>
+      <div part="content" id="content">
+        <slot></slot>
+      </div>
     </div>
   </template>
 </dom-module>
@@ -190,12 +192,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _boundIronOverlayCanceledListener: {
             type: Object
-          }
+          },
+
+          _isScoped: Boolean
         };
       }
 
       static get observers() {
-        return ['_openedChanged(opened)', '_templateChanged(template)', '_contentChanged(content)'];
+        return [
+          '_openedChanged(opened)',
+          '_templateChanged(template, _isScoped)'
+        ];
       }
 
       constructor() {
@@ -403,9 +410,11 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _attachOverlay() {
+        this._captureStyleScope();
         this._placeholder = document.createComment('vaadin-overlay-placeholder');
         this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
+        this._applyStyleScope();
       }
 
       _animatedClosing() {
@@ -430,6 +439,13 @@ This program is available under Apache License Version 2.0, available at https:/
         this._placeholder.parentNode.insertBefore(this, this._placeholder);
         this._processPendingMutationObserversFor(document.body);
         this._placeholder.parentNode.removeChild(this._placeholder);
+      }
+
+      _captureStyleScope() {
+        this._isScoped = this.getRootNode() !== document;
+      }
+
+      _applyStyleScope() {
       }
 
       /**
@@ -476,21 +492,28 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _templateChanged(template) {
-        const Templatizer = Polymer.Templatize.templatize(template, this, {
-          forwardHostProp: function(prop, value) {
-            if (this._instance) {
-              this._instance.forwardHostProp(prop, value);
+      _templateChanged(template, _isScoped) {
+        console.log(template, _isScoped);
+
+        if (this._contentNodes && this._contentNodes.length) {
+          this._contentNodes.forEach(node => node.parentNode && node.parentNode.removeChild(node));
+        }
+
+        if (!template._Templatizer) {
+          template._Templatizer = Polymer.Templatize.templatize(template, this, {
+            forwardHostProp: function(prop, value) {
+              if (this._instance) {
+                this._instance.forwardHostProp(prop, value);
+              }
             }
-          }
-        });
+          });
 
-        this._instance = new Templatizer({});
-        this.content = this._instance.root;
-      }
+          this._instance = new template._Templatizer({});
+          this._contentNodes = Array.from(this._instance.root.childNodes);
+        }
 
-      _contentChanged(content) {
-        this.$.content.appendChild(content);
+        this.content = this._isScoped ? this.$.content : this;
+        this._contentNodes.forEach(node => this.content.appendChild(node));
       }
 
       _isFocused(element) {
