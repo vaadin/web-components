@@ -61,10 +61,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this.addEventListener('click', e => this._onClick(e));
 
       this._observer = new Polymer.FlattenedNodesObserver(this, info => {
-        const items = (this.items || [])
-          .filter(e => info.removedNodes.indexOf(e) < 0)
-          .concat(this._filterItems(info.addedNodes));
-        this._setItems(items);
+        this._setItems(this._filterItems(Array.from(this.children)));
       });
     }
 
