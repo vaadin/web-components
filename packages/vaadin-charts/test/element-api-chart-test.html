@@ -13,7 +13,7 @@
       <vaadin-chart title="My title"
                     subtitle="My subtitle"
                     categories="[2010,2011,2012,2013]"
-                    additional-options='{"exporting": {"enabled": true}, "credits": {"enabled": true, "text": "Vaadin Ltd"}, "title": {"text": "Additional title"}}'>
+                    additional-options='{"legend": {"title": {"text": "Legend title"}}, "exporting": {"enabled": true}, "credits": {"enabled": true, "text": "Vaadin Ltd"}, "title": {"text": "Additional title"}}'>
         <vaadin-chart-series values="[1,2,3,4]"></vaadin-chart-series>
       </vaadin-chart>
     </template>
@@ -89,6 +89,24 @@
           const textNodes = element.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
           const text = Array.from(textNodes).map(node => node.textContent);
           expect(text).to.be.deep.equal(['Jan', 'Fev', 'Mar', 'Abr']);
+          done();
+        }, 50);
+      });
+
+      it('should hide legend', done => {
+        expect(element.$.chart.querySelector('.highcharts-legend')).to.not.be.null;
+        element.setAttribute('no-legend', true);
+        setTimeout(() => {
+          expect(element.$.chart.querySelector('.highcharts-legend')).to.be.null;
+          done();
+        }, 50);
+      });
+
+      it('should apply legend config via additional-options', done => {
+        element.removeAttribute('no-legend');
+        setTimeout(() => {
+          const legendTitle = element.$.chart.querySelector('.highcharts-legend-title > text').textContent;
+          expect(legendTitle).to.be.equal('Legend title');
           done();
         }, 50);
       });

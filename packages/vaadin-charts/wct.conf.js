@@ -8,7 +8,7 @@ module.exports = {
       'macOS 10.12/safari@11.0',
       'Windows 10/firefox@58',
       'Windows 10/internet explorer@11',
-      'Windows 10/microsoftedge@15'
+      'Windows 10/microsoftedge@16'
     ];
 
     var cronPlatforms = [
