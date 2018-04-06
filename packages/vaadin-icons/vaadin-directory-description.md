@@ -1,33 +1,15 @@
 
 # Vaadin Icons
 
-[<img src="https://raw.github.com/vaadin/vaadin-icons/master/screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
-
+[![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-icons.svg)](https://vaadin.com/directory/component/vaadinvaadin-icons)
 
 [Vaadin Icons](https://vaadin.com/icons) is a set of 600+ icons designed for web applications. Free to use, anywhere!
 
-Visit **https://vaadin.com/icons** for more information and instructions how to get started using them.
+[<img src="https://raw.github.com/vaadin/vaadin-icons/master/screenshot.png" width="611" alt="Screenshot of some icons in the Vaadin Icons collection" />](https://vaadin.com/icons)
 
 
-## Running demos in browser
+## Example Usage
+```html
+<iron-icon icon="vaadin:check-square"></iron-icon>
+```
 
-1. Install [polymer-cli](https://www.npmjs.com/package/polymer-cli): `npm install -g polymer-cli`
-
-1. When in the `vaadin-icons` directory, run `polymer install --variants` to install Bower dependencies
-
-1. Run `polymer serve`, after that you will be able to access:
-
-  - Polymer1-compatible version: http://127.0.0.1:8000/components/vaadin-icons/demo/
-  - Polymer2-compatible version: http://127.0.0.1:8001/components/vaadin-icons/demo/
-
-Note that ports `8000` and `8001` could be different in your environment.
-
-
-## License
-
-The icon files (SVG, PNG, fonts) are licensed under Creative Commons [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/) license.
-
-The source code in this repository is licensed under Apache License 2.0.
-
-All brand icons are trademarks of their respective owners.
-The use of these trademarks does not indicate endorsement of the trademark holder by Vaadin Icons, nor vice versa.
