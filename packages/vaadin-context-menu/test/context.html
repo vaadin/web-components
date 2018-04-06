@@ -22,7 +22,7 @@
         </div>
       </template>
       <script>
-        listenOnce(document, 'WebComponentsReady', () => {
+        customElements.whenDefined('vaadin-context-menu').then(() => {
           class Xfoo extends Polymer.Element {
             static get is() {
               return 'x-foo';

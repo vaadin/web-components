@@ -17,7 +17,7 @@
 
 <body>
   <script>
-    listenOnce(document, 'WebComponentsReady', () => {
+    customElements.whenDefined('vaadin-context-menu').then(() => {
       class TestWrapper extends Polymer.Element {
         static get template() {
           return `
