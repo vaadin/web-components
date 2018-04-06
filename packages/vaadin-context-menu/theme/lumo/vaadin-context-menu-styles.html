@@ -1,0 +1,32 @@
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-lumo-styles/style.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/menu-overlay.html">
+
+<dom-module id="lumo-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
+  <template>
+    <style include="lumo-menu-overlay">
+      :host([phone]) {
+        top: 0 !important;
+        right: 0 !important;
+        bottom: var(--vaadin-overlay-viewport-bottom) !important;
+        left: 0 !important;
+        align-items: stretch;
+        justify-content: flex-end;
+      }
+
+      :host([phone]) [part="content"] {
+        /* Ideally should be 100vh but iOS phone addr-bar covers view port */
+        max-height: 80vh;
+      }
+
+    /* TODO These style overrides should not be needed.
+       We should instead offer a way to have non-selectable items inside the context menu. */
+
+      :host {
+        --_lumo-list-box-item-selected-icon-display: none;
+        --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
+      }
+    </style>
+  </template>
+</dom-module>
+
