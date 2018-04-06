@@ -1,8 +1,8 @@
 bower_components
+demo
 .eslintrc.json
 .stylelintrc
 .travis.yml
-.gemini.yml
 wct.conf.js
 analysis.json
 bower.json
