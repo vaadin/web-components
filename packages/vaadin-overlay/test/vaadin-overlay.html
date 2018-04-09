@@ -61,7 +61,7 @@
     </template>
   </test-fixture>
 
-  <test-fixture id="focus-trap">
+  <test-fixture id="shadow">
     <template>
       <vaadin-overlay>
         <template>
@@ -529,10 +529,10 @@
       }
     });
 
-    describe('focus trap', function() {
+    describe('focus-trap', function() {
       var overlay, parent, overlayPart, focusableElements;
 
-      beforeEach(function() {
+      beforeEach(() => {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
         overlayPart = overlay.$.overlay;
@@ -558,17 +558,6 @@
         expect(focusableElements[3]).to.eql(overlay.$.content.querySelector('button'));
         expect(focusableElements[4]).to.eql(overlay.$.content.querySelector('input'));
         expect(focusableElements[5]).to.eql(overlay.$.content.querySelector('vaadin-button').shadowRoot.querySelector('button'));
-      });
-
-      it('should properly detect multiple focusables in web component shadowRoots', () => {
-        const overlay = fixture('focus-trap');
-        overlay.focusTrap = true;
-
-        const focusableElements = overlay._getFocusableElements();
-
-        expect(focusableElements.length).to.eql(4);
-        expect(focusableElements[1]).to.eql(
-          overlay.$.content.querySelector('container-with-shadow').$.text);
       });
 
       it('should focus focusable elements inside the content when focusTrap = true', (done) => {
@@ -623,6 +612,52 @@
           done();
         });
         overlay.opened = true;
+      });
+
+      describe('shadow content', () => {
+        beforeEach(() => {
+          overlay = fixture('shadow');
+          overlay.focusTrap = true;
+          focusableElements = overlay._getFocusableElements();
+        });
+
+        it('should properly detect multiple focusables in web component shadowRoots', () => {
+          expect(focusableElements.length).to.eql(4);
+          expect(focusableElements[1]).to.eql(
+            overlay.$.content.querySelector('container-with-shadow').$.text);
+        });
+
+        it('should focus the overlay part on open', (done) => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overlay._focusedElement).to.eql(overlay.$.overlay);
+            done();
+          });
+
+          overlay.opened = true;
+        });
+
+        it('should not focus the overlay part if the content is already focused', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overlay._focusedElement).not.to.eql(overlay.$.overlay);
+            done();
+          });
+
+          overlay.opened = true;
+          // Needs to happen after opened and before focus-trap loop is executed
+          focusableElements[1].focus();
+        });
+
+        it('should focus first element with focustab', done => {
+          overlay.addEventListener('vaadin-overlay-open', () => {
+            expect(overlay._focusedElement.tabIndex).to.eql(1);
+            done();
+          });
+
+          // It's an arguable behabiour, probably overlay should be focused instead
+          focusableElements[1].tabIndex = 1;
+          overlay.opened = true;
+        });
+
       });
 
       describe('empty content', function() {
