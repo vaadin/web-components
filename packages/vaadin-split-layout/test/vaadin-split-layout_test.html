@@ -114,11 +114,13 @@
           first.style.pointerEvents = 'visible';
           second.style.pointerEvents = 'visible';
 
-          Polymer.Base.fire('down', {}, {node: splitLayout.$.splitter});
+          const splitter = splitLayout.$.splitter;
+
+          splitter.dispatchEvent(new Event('down', {bubbles: true}));
           expect(getComputedStyle(first).pointerEvents).to.equal('none');
           expect(getComputedStyle(second).pointerEvents).to.equal('none');
 
-          Polymer.Base.fire('up', {}, {node: splitLayout.$.splitter});
+          splitter.dispatchEvent(new Event('up', {bubbles: true}));
           expect(getComputedStyle(first).pointerEvents).to.equal('visible');
           expect(getComputedStyle(second).pointerEvents).to.equal('visible');
         });
