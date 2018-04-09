@@ -93,37 +93,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <script>
   (function() {
-    let overlayContentCounter = 0;
-
-    const createOverlayContent = (content, cssText) => {
-      overlayContentCounter++;
-      const is = `vaadin-overlay-content-${overlayContentCounter}`;
-
-      const styledTemplate = document.createElement('template');
-      styledTemplate.content.appendChild(document.importNode(content, true));
-      const style = document.createElement('style');
-      style.textContent = cssText;
-      styledTemplate.content.appendChild(style);
-
-      if (window.ShadyCSS) {
-        window.ShadyCSS.prepareTemplate(styledTemplate, is);
-      }
-
-      const klass = class OverlayContent extends HTMLElement {
-        connectedCallback() {
-          if (window.ShadyCSS) {
-            window.ShadyCSS.styleElement(this);
-          }
-
-          this.attachShadow({mode: 'open'});
-          this.shadowRoot.appendChild(document.importNode(styledTemplate.content, true));
-        }
-      };
-      customElements.define(is, klass);
-
-      return document.createElement(is);
-    };
-
     /**
      * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
      *
@@ -444,6 +413,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this._placeholder = document.createComment('vaadin-overlay-placeholder');
         this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
+        if (this._shadyStyleScope) {
+          Array.from(this.$.content.shadowRoot.querySelectorAll('*')).forEach(el => {
+            el.classList.add('style-scope', this._shadyStyleScope);
+          });
+        }
       }
 
       _animatedClosing() {
@@ -514,13 +488,29 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      _removeOldContent() {
+        if (!this.content) {
+          return;
+        }
+
+        while (this.content.firstChild) {
+          this.content.removeChild(this.content.firstChild);
+        }
+        this.content = undefined;
+      }
+
       _templateChanged(template) {
+        this._removeOldContent();
+
+        if (!template) {
+          return;
+        }
+
         if (!template._Templatizer) {
           template._Templatizer = Polymer.Templatize.templatize(template, this, {
             forwardHostProp: function(prop, value) {
               if (this._instance) {
-                // this._instance.forwardHostProp(prop, value);
-                this._instance[prop] = value;
+                this._instance.forwardHostProp(prop, value);
               }
             }
           });
@@ -528,28 +518,33 @@ This program is available under Apache License Version 2.0, available at https:/
           this._instance = new template._Templatizer({});
         }
 
-        this._isScoped = template.getRootNode() !== document;
+        const templateRoot = template.getRootNode();
+        this._isScoped = templateRoot !== document;
+        this._shadyStyleScope = '';
         if (this._isScoped) {
-          let scopeCssText = ''
-          let scope = this.getRootNode();
-          Array.from(scope.querySelectorAll('style')).forEach(style => {
+          let scopeCssText = '';
+          Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
             scopeCssText += style.textContent;
           });
           if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-            scopeCssText += window.ShadyCSS.ScopingShim
-              ._styleInfoForNode(scope.host)
-              ._getStyleRules()
-              .parsedCssText;
-            scopeCssText += '}';
+            this._shadyStyleScope = templateRoot.host.localName;
+            if (this._shadyStyleScope.indexOf('-') === -1) {
+              this._shadyStyleScope = templateRoot.host.getAttribute('is');
+            }
           }
 
           scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
 
-          this.content = createOverlayContent(this._instance.root, scopeCssText);
-          this.content.id = 'content';
-          this.content.setAttribute('part', 'content');
-          this.$.content.parentNode.replaceChild(this.content, this.$.content);
-          this.$.content = this.content;
+          if (!this.$.content.shadowRoot) {
+            this.$.content.attachShadow({mode: 'open'});
+            this.$.content.shadowRoot.appendChild(this._instance.root);
+            if (scopeCssText) {
+              const style = document.createElement('style');
+              style.textContent = scopeCssText;
+              this.$.content.shadowRoot.appendChild(style);
+            }
+          }
+          this.content = this.$.content.shadowRoot;
         } else {
           this.appendChild(this._instance.root);
           this.content = this;

@@ -250,10 +250,16 @@
           <template>
             <style>
               .my-view__overlay {
-                font: italic 24pt;
+                font: italic 24pt serif;
                 background: #fff;
                 color: #000;
                 padding: 1em;
+              }
+
+              @media screen {
+                .my-view__overlay {
+                  border: .25em solid #000;
+                }
               }
             </style>
             <vaadin-overlay opened="{{_overlayOpened}}" with-backdrop>
