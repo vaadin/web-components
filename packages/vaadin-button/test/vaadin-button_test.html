@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>vaadin-button tests</title>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../polymer/polymer.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
   <link rel="import" href="../vaadin-button.html">
 </head>
 
@@ -35,7 +35,7 @@
       });
 
       it('should define button label using light DOM', () => {
-        var children = Polymer.dom(label).getEffectiveChildNodes();
+        const children = Polymer.FlattenedNodesObserver.getFlattenedNodes(label);
         expect(children[1].textContent).to.be.equal('Vaadin ');
         expect(children[2].outerHTML).to.be.equal('<i>Button</i>');
       });
