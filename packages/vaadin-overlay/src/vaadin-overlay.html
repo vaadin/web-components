@@ -370,7 +370,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
-            if (this.focusTrap) {
+            if (this.focusTrap && !(this._focusedElement = this.shadowRoot.activeElement)) {
               this._cycleTab(0, 0);
             }
 
@@ -557,4 +557,3 @@ This program is available under Apache License Version 2.0, available at https:/
     Vaadin.OverlayElement = OverlayElement;
   })();
 </script>
-
