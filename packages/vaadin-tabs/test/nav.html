@@ -35,7 +35,7 @@
 
   <test-fixture id="flex-equal-width-tabs">
     <template>
-      <div style="display: flex; justify-content: center;">
+      <div style="display: flex; justify-content: center; width: 400px">
         <vaadin-tabs theme="equal-width-tabs">
           <vaadin-tab>Tab one</vaadin-tab>
           <vaadin-tab>Tab two with a longer title</vaadin-tab>
@@ -178,11 +178,12 @@
     });
 
     describe('flex-equal-width-tabs', () => {
-      let nav;
+      let nav, tabs;
 
       beforeEach(done => {
         const wrapper = fixture('flex-equal-width-tabs');
         nav = wrapper.querySelector('vaadin-tabs');
+        tabs = wrapper.querySelectorAll('vaadin-tab');
         Polymer.RenderStatus.afterNextRender(nav, () => {
           nav._observer.flush();
           done();
@@ -190,7 +191,8 @@
       });
 
       it('should not cut content', () => {
-        expect(nav.offsetWidth).to.be.above(380);
+        expect(tabs[1].offsetWidth).to.be.above(130);
+        expect(nav.offsetWidth).to.be.eql(400);
       });
     });
 
