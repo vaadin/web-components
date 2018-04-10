@@ -367,10 +367,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this.focusElement.addEventListener('click', e => this.opened = !this.readonly);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
 
-          this._instance = this._createTemplateInstance();
-          if (this._instance) {
-            this._overlayElement.content = this._instance.root;
-            this._menuElement = this._overlayElement.$.content.firstElementChild;
+          const template = this.querySelector('template');
+          this._overlayElement.template = template;
+          if (this._overlayElement.content) {
+            this._menuElement = this._overlayElement.content.firstElementChild;
 
             if (this._menuElement) {
               this._menuElement.addEventListener('items-changed', e => {
@@ -466,18 +466,6 @@ This program is available under Apache License Version 2.0, available at https:/
             }
             this.validate();
             window.removeEventListener('scroll', this._boundSetPosition, true);
-          }
-        }
-
-        _createTemplateInstance() {
-          const template = this.querySelector('template');
-          if (template) {
-            const Templatizer = Polymer.Templatize.templatize(template, this, {
-              forwardHostProp: function(prop, value) {
-                this._instance && this._instance.forwardHostProp(prop, value);
-              }
-            });
-            return new Templatizer({});
           }
         }
 
