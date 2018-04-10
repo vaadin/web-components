@@ -91,7 +91,6 @@
         border-radius: inherit;
         opacity: 0;
         transition: opacity 0.2s;
-        will-change: opacity;
         pointer-events: none;
       }
 
@@ -112,7 +111,6 @@
 
       :host::after {
         transition: opacity 1.4s, transform 0.1s;
-        will-change: opacity, transform;
         filter: blur(8px);
       }
 
