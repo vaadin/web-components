@@ -43,6 +43,7 @@
     "vaadin-date-picker": "master",
     "vaadin-dropdown-menu": "master",
     "vaadin-item": "master",
+    "vaadin-form-layout": "^2.0.0",
     "vaadin-list-box": "master",
     "web-component-tester": "^6.0.0"
   },

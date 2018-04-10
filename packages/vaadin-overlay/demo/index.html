@@ -10,6 +10,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+  <link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
   <link rel="import" href="common.html">
 </head>
 
@@ -54,7 +55,7 @@
       <template>
         <vaadin-overlay with-backdrop focus-trap id="overlay2">
           <template>
-            <div style="display: flex; flex-direction: column">
+            <vaadin-form-layout style="width: 400px">
               <h3>Focus is trapped inside the content block</h3>
               <button>native button</button>
               <button tabindex="-1">button with tabindex="-1"</button>
@@ -62,9 +63,9 @@
               <button tabindex="2">button with tabindex="2"</button>
               <button tabindex="0">button with tabindex="0"</button>
               <button tabindex="1">button with tabindex="1"</button>
-              <input type="text" placeholder="native input">
+              <input type="text" placeholder="native input"></input>
               <vaadin-button>vaadin-button</vaadin-button>
-            </div>
+            </vaadin-form-layout>
           </template>
         </vaadin-overlay>
 
