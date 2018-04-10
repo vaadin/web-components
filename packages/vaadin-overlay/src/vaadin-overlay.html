@@ -143,6 +143,10 @@ This program is available under Apache License Version 2.0, available at https:/
             notify: true
           },
 
+          instanceProps: {
+            type: Object
+          },
+
           content: {
             type: Object,
             notify: true
@@ -508,13 +512,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (!template._Templatizer) {
           template._Templatizer = Polymer.Templatize.templatize(template, this, {
+            instanceProps: this.instanceProps,
             forwardHostProp: function(prop, value) {
               if (this._instance) {
                 this._instance.forwardHostProp(prop, value);
               }
             }
           });
-
           this._instance = new template._Templatizer({});
         }
 
