@@ -126,20 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _openedChanged(opened) {
           if (opened && !this._instance) {
             this._contentTemplate = this.querySelector('template');
-
-            if (!this._contentTemplate) {
-              return;
-            }
-
-            const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
-              forwardHostProp: function(prop, value) {
-                if (this._instance) {
-                  this._instance.forwardHostProp(prop, value);
-                }
-              }
-            });
-            this._instance = new Templatizer({});
-            this.$.overlay.content = this._instance.root;
+            this.$.overlay.template = this._contentTemplate;
           }
           this.$.overlay.opened = opened;
         }
