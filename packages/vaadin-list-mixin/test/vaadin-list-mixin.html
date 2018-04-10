@@ -159,6 +159,34 @@
         expect(list.items.length).to.be.equal(6);
       });
 
+      describe('dom', () => {
+
+        beforeEach(() => list._observer.flush());
+
+        it('should update items list when removing nodes', () => {
+          expect(list.items.length).to.be.equal(6);
+
+          list.removeChild(list.items[3]);
+          list._observer.flush();
+          expect(list.items.length).to.be.equal(5);
+        });
+
+        it('should update items list when adding nodes', () => {
+          list.appendChild(document.createElement('test-item-element'));
+          list._observer.flush();
+          expect(list.items.length).to.be.equal(7);
+        });
+
+        it('should update items list when moving nodes', () => {
+          const [e2, e4] = [list.items[2], list.items[4]];
+
+          list.insertBefore(e4, e2);
+          list._observer.flush();
+          expect(list.items[2]).to.be.equal(e4);
+          expect(list.items[3]).to.be.equal(e2);
+        });
+      });
+
       describe('selection', () => {
         it('should not select any item by default', () => {
           list.items.forEach(e => expect(!!list.items[0].selected).to.be.false);
