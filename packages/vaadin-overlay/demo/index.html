@@ -10,7 +10,6 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
-  <link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
   <link rel="import" href="common.html">
 </head>
 
@@ -53,19 +52,18 @@
     <h3>Show and Hide Overlay with backdrop and focus trap</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay with-backdrop focus-trap id="overlay2">
+        <vaadin-overlay with-backdrop focus-trap id="overlay2" style="max-width: 300px">
           <template>
-            <vaadin-form-layout style="width: 400px">
               <h3>Focus is trapped inside the content block</h3>
               <button>native button</button>
               <button tabindex="-1">button with tabindex="-1"</button>
-              <vaadin-text-field placeholder="vaadin-text-field programatically focused"></vaadin-text-field>
+              <button disabled>disabled button</button>
+              <vaadin-text-field placeholder="programatically focused"></vaadin-text-field>
               <button tabindex="2">button with tabindex="2"</button>
               <button tabindex="0">button with tabindex="0"</button>
               <button tabindex="1">button with tabindex="1"</button>
               <input type="text" placeholder="native input"></input>
               <vaadin-button>vaadin-button</vaadin-button>
-            </vaadin-form-layout>
           </template>
         </vaadin-overlay>
 
@@ -75,7 +73,7 @@
         <script>
           document.getElementById('button-focus-trap').addEventListener('click', event => {
             const overlay = event.target.previousElementSibling;
-            const field = overlay.$.content.querySelectorAll('vaadin-text-field')[0];
+            const field = overlay.$.content.querySelector('vaadin-text-field');
 
             overlay.opened = true;
             field.focus();
