@@ -499,8 +499,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _focusedIndex(elements) {
         elements = elements || this._getFocusableElements();
-        return elements.reduce((prev, e) => {
-          return prev < 0 && this._isFocused(e) ? elements.indexOf(e) : prev;
+        return elements.reduce((prev, e, idx) => {
+          return prev < 0 && this._isFocused(e) ? idx : prev;
         }, -1);
       }
 
