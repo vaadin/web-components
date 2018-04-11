@@ -543,7 +543,7 @@
 
       it('should not focus the overlay when focusTrap = false', (done) => {
         overlay.addEventListener('vaadin-overlay-open', () => {
-          expect(overlay._focusedElement()).to.be.undefined;
+          expect(overlay._focusedIndex()).to.be.eql(-1);
           done();
         });
         overlay.opened = true;
@@ -565,18 +565,18 @@
         overlay.addEventListener('vaadin-overlay-open', () => {
           // TAB
           for (let i = 0; i < focusableElements.length; i++) {
-            expect(overlay._focusedElement()).to.eql(focusableElements[i]);
+            expect(overlay._focusedIndex()).to.eql(i);
             MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
           }
-          expect(overlay._focusedElement()).to.eql(focusableElements[0]);
+          expect(overlay._focusedIndex()).to.eql(0);
 
           // SHIFT+TAB
           MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
           for (let i = focusableElements.length - 1; i >= 0; i--) {
-            expect(overlay._focusedElement()).to.eql(focusableElements[i]);
+            expect(overlay._focusedIndex()).to.eql(i);
             MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
           }
-          expect(overlay._focusedElement()).to.eql(focusableElements[focusableElements.length - 1]);
+          expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
           done();
         });
         overlay.opened = true;
@@ -585,14 +585,14 @@
       it('should update focus sequence when focusing a random element', (done) => {
         overlay.focusTrap = true;
         overlay.addEventListener('vaadin-overlay-open', () => {
-          expect(overlay._focusedElement()).to.eql(focusableElements[0]);
+          expect(overlay._focusedIndex()).to.eql(0);
 
           MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
-          expect(overlay._focusedElement()).to.eql(focusableElements[1]);
+          expect(overlay._focusedIndex()).to.eql(1);
 
           focusableElements[0].focus();
           MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
-          expect(overlay._focusedElement()).to.eql(focusableElements[1]);
+          expect(overlay._focusedIndex()).to.eql(1);
 
           done();
         });
@@ -629,7 +629,7 @@
 
         it('should focus the overlay part on open', (done) => {
           overlay.addEventListener('vaadin-overlay-open', () => {
-            expect(overlay._focusedElement()).to.eql(overlay.$.overlay);
+            expect(overlay._focusedIndex()).to.eql(0);
             done();
           });
 
@@ -638,7 +638,7 @@
 
         it('should not focus the overlay part if the content is already focused', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
-            expect(overlay._focusedElement()).not.to.eql(overlay.$.overlay);
+            expect(overlay._focusedIndex()).not.to.eql(0);
             done();
           });
 
@@ -647,9 +647,10 @@
           focusableElements[1].focus();
         });
 
-        it('should focus first element with focustab', done => {
+        it('should focus first element with tabIndex=1', done => {
           overlay.addEventListener('vaadin-overlay-open', () => {
-            expect(overlay._focusedElement().tabIndex).to.eql(1);
+            const i = overlay._focusedIndex();
+            expect(overlay._getFocusableElements()[i].tabIndex).to.eql(1);
             done();
           });
 
@@ -662,18 +663,18 @@
           overlay.addEventListener('vaadin-overlay-open', () => {
             // TAB
             for (let i = 0; i < focusableElements.length; i++) {
-              expect(overlay._focusedElement()).to.eql(focusableElements[i]);
+              expect(overlay._focusedIndex()).to.eql(i);
               MockInteractions.pressAndReleaseKeyOn(document.body, 9, [], 'Tab');
             }
-            expect(overlay._focusedElement()).to.eql(focusableElements[0]);
+            expect(overlay._focusedIndex()).to.eql(0);
 
             // SHIFT+TAB
             MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
             for (let i = focusableElements.length - 1; i >= 0; i--) {
-              expect(overlay._focusedElement()).to.eql(focusableElements[i]);
+              expect(overlay._focusedIndex()).to.eql(i);
               MockInteractions.pressAndReleaseKeyOn(document.body, 9, 'shift', 'Tab');
             }
-            expect(overlay._focusedElement()).to.eql(focusableElements[focusableElements.length - 1]);
+            expect(overlay._focusedIndex()).to.eql(focusableElements.length - 1);
             done();
           });
 

@@ -497,20 +497,21 @@ This program is available under Apache License Version 2.0, available at https:/
         return element && element.getRootNode().activeElement === element;
       }
 
-      _focusedElement(elements) {
-        return (elements || this._getFocusableElements()).reduce((prev, e) => {
-          return !prev && this._isFocused(e) ? e : prev;
-        }, undefined);
+      _focusedIndex(elements) {
+        elements = elements || this._getFocusableElements();
+        return elements.reduce((prev, e) => {
+          return prev < 0 && this._isFocused(e) ? elements.indexOf(e) : prev;
+        }, -1);
       }
 
       _cycleTab(increment, index) {
         const focusableElements = this._getFocusableElements();
 
         if (index === undefined) {
-          index = focusableElements.indexOf(this._focusedElement(focusableElements));
+          index = this._focusedIndex(focusableElements);
         }
 
-        index = index + increment;
+        index += increment;
 
         // rollover to first item
         if (index >= focusableElements.length) {
