@@ -121,6 +121,12 @@
         window.ShadyDOM && window.ShadyDOM.flush();
         expect(vaadinButton.hasAttribute('active')).to.be.false;
       });
+
+      it('should not have active attribute after blur', () => {
+        MockInteractions.keyDownOn(vaadinButton, 32);
+        vaadinButton.dispatchEvent(new CustomEvent('blur'));
+        expect(vaadinButton.hasAttribute('active')).to.be.false;
+      });
     });
   </script>
 </body>
