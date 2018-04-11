@@ -370,7 +370,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
-            if (this.focusTrap) {
+            if (this.focusTrap && !this.shadowRoot.activeElement) {
               this._cycleTab(0, 0);
             }
 
@@ -497,42 +497,31 @@ This program is available under Apache License Version 2.0, available at https:/
         return element && element.getRootNode().activeElement === element;
       }
 
+      _focusedIndex(elements) {
+        elements = elements || this._getFocusableElements();
+        return elements.reduce((prev, e, idx) => {
+          return prev < 0 && this._isFocused(e) ? idx : prev;
+        }, -1);
+      }
+
       _cycleTab(increment, index) {
         const focusableElements = this._getFocusableElements();
 
         if (index === undefined) {
-          index = focusableElements.indexOf(this._focusedElement);
-          if (!this._isFocused(this._focusedElement)) {
-            this._focusedElement = focusableElements.reduce((prev, e) => {
-              return !prev && this._isFocused(e) ? e : prev;
-            }, undefined);
-          }
-          index = this._focusedElement ? focusableElements.indexOf(this._focusedElement) : index;
+          index = this._focusedIndex(focusableElements);
         }
 
-        // search for visible elements and select the next possible match
-        for (let i = 0; i < focusableElements.length; i++) {
-          index = index + increment;
+        index += increment;
 
-          // rollover to first item
-          if (index === focusableElements.length) {
-            index = 0;
-
-          // go to last item
-          } else if (index === -1) {
-            index = focusableElements.length - 1;
-          }
-
-          // determine if element is visible
-          this._focusedElement = focusableElements[index];
-          if (this._focusedElement) {
-            return this._focusedElement.focus();
-          }
+        // rollover to first item
+        if (index >= focusableElements.length) {
+          index = 0;
+        // go to last item
+        } else if (index < 0) {
+          index = focusableElements.length - 1;
         }
 
-        // fallback if there are no focusable elements
-        this._focusedElement = this.$.overlay;
-        this.$.overlay.focus();
+        focusableElements[index].focus();
       }
 
       _getFocusableElements() {
@@ -557,4 +546,3 @@ This program is available under Apache License Version 2.0, available at https:/
     Vaadin.OverlayElement = OverlayElement;
   })();
 </script>
-

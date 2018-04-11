@@ -9,10 +9,12 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
+  <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
   <link rel="import" href="common.html">
 </head>
 
 <body unresolved>
+
   <div class="vertical-section-container centered">
 
     <demo-navigation></demo-navigation>
@@ -50,22 +52,33 @@
     <h3>Show and Hide Overlay with backdrop and focus trap</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay with-backdrop focus-trap id="overlay2">
+        <vaadin-overlay with-backdrop focus-trap style="max-width: 300px">
           <template>
-            Focus is trapped inside the content block
-            <button>native button</button>
-            <button tabindex="-1">button with tabindex="-1"</button>
-            <button tabindex="2">button with tabindex="2"</button>
-            <button tabindex="0">button with tabindex="0"</button>
-            <button tabindex="1">button with tabindex="1"</button>
-            <input type="text">
-            <vaadin-button>vaadin-button</vaadin-button>
+              <h3>Focus is trapped inside the content block</h3>
+              <button>native button</button>
+              <button tabindex="-1">button with tabindex="-1"</button>
+              <button disabled>disabled button</button>
+              <vaadin-text-field placeholder="programatically focused"></vaadin-text-field>
+              <button tabindex="2">button with tabindex="2"</button>
+              <button tabindex="0">button with tabindex="0"</button>
+              <button tabindex="1">button with tabindex="1"</button>
+              <input type="text" placeholder="native input"></input>
+              <vaadin-button>vaadin-button</vaadin-button>
           </template>
         </vaadin-overlay>
 
-        <vaadin-button onclick="document.querySelector('#overlay2').opened = true">
-          Show overlay with backdrop
+        <vaadin-button id="button-focus-trap">
+          Show overlay with backdrop and focus-trap
         </vaadin-button>
+        <script>
+          document.getElementById('button-focus-trap').addEventListener('click', event => {
+            const overlay = event.target.previousElementSibling;
+            const field = overlay.$.content.querySelector('vaadin-text-field');
+
+            overlay.opened = true;
+            field.focus();
+          });
+        </script>
       </template>
     </demo-snippet>
 
@@ -73,10 +86,7 @@
     <demo-snippet>
       <template>
         <vaadin-overlay id="overlay-scrollable"
-            style="
-              max-width: 300px;
-              max-height: 300px;
-            ">
+            style="max-width: 300px; max-height: 300px;">
           <template>
             <p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos totam nulla consequuntur? Iste!</p>
             <p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo accusamus corrupti atque dolore corrupti?</p>
