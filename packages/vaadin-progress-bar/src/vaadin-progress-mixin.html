@@ -5,9 +5,14 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <script>
+  /**
+   * @namespace Vaadin
+   */
   window.Vaadin = window.Vaadin || {};
+
   /**
    * @polymerMixin
+   * @memberof Vaadin
    */
   Vaadin.ProgressMixin = superClass =>
     class VaadinProgressMixin extends superClass {
@@ -38,7 +43,7 @@ This program is available under Apache License Version 2.0, available at https:/
           },
           /**
            * Indeterminate state of the progress bar.
-           * This property takes precedence over other state properties (min, max, value). 
+           * This property takes precedence over other state properties (min, max, value).
            */
           indeterminate: {
             type: Boolean,
