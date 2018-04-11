@@ -163,6 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
           Polymer.Gestures.addListener(this, 'up', () => this.removeAttribute('active'));
           this.addEventListener('keydown', e => !this.disabled && [13, 32].indexOf(e.keyCode) >= 0 && this.setAttribute('active', ''));
           this.addEventListener('keyup', () => this.removeAttribute('active'));
+          this.addEventListener('blur', () => this.removeAttribute('active'));
         }
 
         get focusElement() {
