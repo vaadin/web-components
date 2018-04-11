@@ -45,6 +45,7 @@ This program is available under Apache License Version 2.0, available at https:/
    * Polymer.IronControlState is not a proper 2.0 class, also, its tabindex
    * implementation fails in the shadow dom, so we have this for vaadin elements.
    * @polymerMixin
+   * @memberof Vaadin
    */
   Vaadin.ControlStateMixin = superClass => class VaadinControlStateMixin extends TabIndexMixin(superClass) {
     static get properties() {
