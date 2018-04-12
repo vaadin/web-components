@@ -198,14 +198,16 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Object
           },
 
-          _isScoped: Boolean
+          _isScoped: Boolean,
+
+          _contentNodes: Array
         };
       }
 
       static get observers() {
         return [
           '_openedChanged(opened)',
-          '_templateChanged(template, _isScoped)'
+          '_templateChanged(template)'
         ];
       }
 
@@ -493,13 +495,21 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _removeOldContent() {
-        if (!this.content) {
+        if (!this.content || !this._contentNodes) {
           return;
         }
 
-        while (this.content.firstChild) {
-          this.content.removeChild(this.content.firstChild);
-        }
+        this._observer.disconnect();
+
+        this._contentNodes.forEach(node => {
+          if (node.parentNode === this.content) {
+            this.content.removeChild(node);
+          }
+        });
+
+        this._observer.connect();
+
+        this._contentNodes = undefined;
         this.content = undefined;
       }
 
@@ -519,8 +529,10 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             }
           });
-          this._instance = new template._Templatizer({});
         }
+
+        this._instance = new template._Templatizer({});
+        this._contentNodes = Array.from(this._instance.root.childNodes);
 
         const templateRoot = template.getRootNode();
         this._isScoped = templateRoot !== document;
@@ -531,8 +543,8 @@ This program is available under Apache License Version 2.0, available at https:/
             scopeCssText += style.textContent;
           });
           if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-            this._shadyStyleScope = templateRoot.host.localName;
-            if (this._shadyStyleScope.indexOf('-') === -1) {
+            this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+            if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
               this._shadyStyleScope = templateRoot.host.getAttribute('is');
             }
           }
@@ -541,12 +553,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (!this.$.content.shadowRoot) {
             this.$.content.attachShadow({mode: 'open'});
-            this.$.content.shadowRoot.appendChild(this._instance.root);
-            if (scopeCssText) {
-              const style = document.createElement('style');
-              style.textContent = scopeCssText;
-              this.$.content.shadowRoot.appendChild(style);
-            }
+          }
+          this.$.content.shadowRoot.appendChild(this._instance.root);
+          if (scopeCssText) {
+            const style = document.createElement('style');
+            style.textContent = scopeCssText;
+            this.$.content.shadowRoot.appendChild(style);
           }
           this.content = this.$.content.shadowRoot;
         } else {

@@ -34,7 +34,7 @@
         <div id="parent">
           <vaadin-overlay>
             <template>
-              content
+              overlay-content
               <button>tabindex 0</button>
               <button tabindex="-1">tabindex -1</button>
               <select tabindex="2"><option>tabindex 2</option></select>
@@ -82,13 +82,12 @@
     const mouseup = (el) => fire('mouseup', el);
 
     describe('overlay', function() {
-      var overlay, parent, overlayPart, content, backdrop;
+      var overlay, parent, overlayPart, backdrop;
 
       beforeEach(function() {
         parent = fixture('default').children[0];
         overlay = parent.children[0];
         overlayPart = overlay.$.overlay;
-        content = overlay.$.content;
         backdrop = overlay.$.backdrop;
         overlay._observer.flush();
         overlay.opened = true;
@@ -121,10 +120,6 @@
         overlay.opened = false;
 
         expect(overlay.parentElement).to.eql(parent);
-      });
-
-      it('should stamp contents inside shadow root', () => {
-        expect(overlay.root.textContent).to.contain('content');
       });
 
       describe('multiple overlays', function() {
@@ -459,7 +454,7 @@
         });
 
         it('should fit in viewport when huge content is used', () => {
-          content.lastElementChild.style = 'display: block; width: 2000px; height: 2000px;';
+          overlay.content.lastElementChild.style = 'display: block; width: 2000px; height: 2000px;';
 
           const rect = overlay.getBoundingClientRect();
           expect(rect.left).to.be.gte(0);
@@ -480,7 +475,7 @@
 
         it('should center overlayPart in overlay with flex by default', () => {
           // The “default” fixture content is too large to test this
-          content.textContent = 'foo';
+          overlay.content.textContent = 'foo';
 
           const overlayRect = overlay.getBoundingClientRect();
           const overlayPartRect = overlayPart.getBoundingClientRect();

@@ -1,0 +1,282 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-overlay templating tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-overlay.html">
+  <link rel="import" href="../../polymer/polymer-element.html">
+</head>
+
+<body>
+
+  <dom-module id="my-overlay-view">
+    <template>
+      <vaadin-overlay id="overlay" opened="{{opened}}">
+        <template>
+          my-overlay-view content
+        </template>
+      </vaadin-overlay>
+    </template>
+  </dom-module>
+  <script>
+    addEventListener('WebComponentsReady', () => {
+      customElements.define('my-overlay-view', class extends Polymer.Element {
+        static get is() {
+          return 'my-overlay-view';
+        }
+
+        static get properties() {
+          return {
+            opened: Boolean
+          };
+        }
+      });
+    });
+  </script>
+
+  <test-fixture id="myOverlayView">
+    <template>
+      <my-overlay-view></my-overlay-view>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="plainOverlay">
+    <template>
+      <vaadin-overlay>
+        <template>plain overlay content</template>
+      </vaadin-overlay>
+    </template>
+  </test-fixture>
+
+  <script>
+    function createTemplate(html) {
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      return template;
+    }
+
+    describe('overlay templating', () => {
+      let overlay;
+      let externalTemplate;
+
+      // FIXME(platosha): spy on templatize and test for instanceProps
+      // and forwardHostProp
+
+      describe('in component scope', () => {
+        beforeEach(() => {
+          const myOverlayView = fixture('myOverlayView');
+          overlay = myOverlayView.$.overlay;
+          externalTemplate = createTemplate('external template content');
+        });
+
+        describe('child template', () => {
+          beforeEach(() => overlay.opened = true);
+          afterEach(() => overlay.opened = false);
+
+          it('should use child template by default', () => {
+            const childTemplate = overlay.querySelector('template');
+            expect(childTemplate).to.be.ok;
+            expect(overlay.template).to.equal(childTemplate);
+          });
+
+          it('should use content part shadowRoot for contents', () => {
+            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('my-overlay-view content');
+          });
+        });
+
+        describe('external template disconnected', () => {
+          const instanceProps = {foo: true};
+
+          beforeEach(() => {
+            overlay.instanceProps = instanceProps;
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => overlay.opened = false);
+
+          it('should use content part shadowRoot for contents', () => {
+            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
+          });
+        });
+
+        describe('external template connected in component scope', () => {
+          beforeEach(() => {
+            overlay.getRootNode().appendChild(externalTemplate);
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => {
+            overlay.opened = false;
+            overlay.getRootNode().removeChild(externalTemplate);
+          });
+
+          it('should use content part shadowRoot for contents', () => {
+            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
+          });
+        });
+
+        describe('external template connected in document scope', () => {
+          beforeEach(() => {
+            document.body.appendChild(externalTemplate);
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => {
+            overlay.opened = false;
+            document.body.removeChild(externalTemplate);
+          });
+
+          it('should use overlay host for contents, slot in content part', () => {
+            expect(overlay.content).to.equal(overlay);
+            const contentSlot = overlay.$.content.querySelector('slot');
+            expect(contentSlot).to.be.ok;
+            expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
+          });
+        });
+      });
+
+      describe('in document scope', () => {
+        beforeEach(() => {
+          overlay = fixture('plainOverlay');
+          externalTemplate = createTemplate('external template content');
+        });
+
+        describe('child template', () => {
+          beforeEach(() => overlay.opened = true);
+          afterEach(() => overlay.opened = false);
+
+          it('should use child template by default', () => {
+            const childTemplate = overlay.querySelector('template');
+            expect(childTemplate).to.be.ok;
+            expect(overlay.template).to.equal(childTemplate);
+          });
+
+          it('should use overlay host for contents, slot in content part', () => {
+            expect(overlay.content).to.equal(overlay);
+            const contentSlot = overlay.$.content.querySelector('slot');
+            expect(contentSlot).to.be.ok;
+            expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('plain overlay content');
+          });
+        });
+
+        describe('external template disconnected', () => {
+          beforeEach(() => {
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => overlay.opened = false);
+
+          it('should use content part shadowRoot for contents', () => {
+            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('plain overlay content');
+          });
+        });
+
+        describe('external template connected in component scope', () => {
+          beforeEach(() => {
+            const myOverlayView = fixture('myOverlayView');
+            myOverlayView.shadowRoot.appendChild(externalTemplate);
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => {
+            overlay.opened = false;
+          });
+
+          it('should use content part shadowRoot for contents', () => {
+            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('plain overlay content');
+          });
+        });
+
+        describe('external template connected in document scope', () => {
+          beforeEach(() => {
+            document.body.appendChild(externalTemplate);
+            overlay.template = externalTemplate;
+            overlay.opened = true;
+          });
+
+          afterEach(() => {
+            overlay.opened = false;
+            document.body.removeChild(externalTemplate);
+          });
+
+          it('should use overlay host for contents, slot in content part', () => {
+            expect(overlay.content).to.equal(overlay);
+            const contentSlot = overlay.$.content.querySelector('slot');
+            expect(contentSlot).to.be.ok;
+            expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
+          });
+
+          it('should stamp contents', () => {
+            expect(overlay.content).to.be.ok;
+            expect(overlay.content.textContent).to.contain('external template content');
+          });
+
+          it('should not use default child template', () => {
+            expect(overlay.content.textContent).to.not.contain('plain overlay content');
+          });
+        });
+      });
+    });
+  </script>
+</body>
