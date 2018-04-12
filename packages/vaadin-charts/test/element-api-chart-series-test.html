@@ -13,6 +13,9 @@
       <vaadin-chart id="mychart">
         <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" value-labels="{{labels}}"></vaadin-chart-series>
       </vaadin-chart>
+      <vaadin-chart id="additionalchart" additional-options='{"plotOptions": {"series": {"marker": {"enabled": false}}}}'>
+        <vaadin-chart-series id="additional-series" values="{{values}}" title="{{title}}" type="{{type}}" value-labels="{{labels}}"></vaadin-chart-series>
+      </vaadin-chart>
     </template>
 
     <script>
@@ -44,6 +47,10 @@
 
           changeValues() {
             this.values = [10, 30, 50, 10, 20];
+          }
+
+          changeValuesDense() {
+            this.values = Array.apply(null, Array(200)).map(Number.prototype.valueOf, 10);
           }
         }
 
@@ -251,6 +258,54 @@
           expect(firstSeries.data.map(e => e.name)).to.deep.equal(labelsAsArray);
           done();
         }, 70);
+      });
+
+      function markersVisible(container) {
+        // Markers are visible only if there's a child in highcharts-markers with visibility other than 'hidden'
+        return Array.from(container.querySelectorAll('.highcharts-markers'))
+          .map(e => !!e.firstChild && (!e.firstChild.attributes.hasOwnProperty('visibility')
+              || e.firstChild.attributes.visibility.value !== 'hidden'))
+          .reduce((e1, e2) => e1 && e2);
+      }
+
+      it('should have markers by default for widespread data', function(done) {
+        setTimeout(function() {
+          expect(markersVisible(chartContainer)).to.be.true;
+          done();
+        }, 100);
+      });
+
+      it('should not override chart plot options by default', function(done) {
+        const additionalChartContainer = element.$.additionalchart.$.chart;
+        setTimeout(function() {
+          expect(markersVisible(additionalChartContainer)).to.be.false;
+          done();
+        }, 100);
+      });
+
+      it('should not have markers by default for dense data', function(done) {
+        element.changeValuesDense();
+
+        setTimeout(function() {
+          expect(markersVisible(chartContainer)).to.be.false;
+          done();
+        }, 100);
+      });
+
+      it('should have markers when enabled', function(done) {
+        series.markers = 'shown';
+        setTimeout(function() {
+          expect(markersVisible(chartContainer)).to.be.true;
+          done();
+        }, 100);
+      });
+
+      it('should not have markers when disabled', function(done) {
+        series.markers = 'hidden';
+        setTimeout(function() {
+          expect(markersVisible(chartContainer)).to.be.false;
+          done();
+        }, 100);
       });
     });
   </script>

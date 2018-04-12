@@ -90,6 +90,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.data = this.__computeData(this.values, this.__labelsMapper);
           }
 
+          if (this.markers) {
+            if (!this.__isMarkersValid()) {
+              this.markers = 'auto';
+            }
+            options.marker = this.__markersConfiguration;
+          }
+
           return options;
         }
 
@@ -152,6 +159,19 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             'title': {
               type: String,
               observer: '__titleObserver',
+              reflectToAttribute: true
+            },
+
+            /**
+             * Shows/hides data-point markers for line-like series.
+             * Acceptable input are:
+             *  - `shown`: markers are always visible
+             *  - `hidden`: markers are always hidden
+             *  - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*
+             */
+            'markers': {
+              type: String,
+              observer: '__markersObserver',
               reflectToAttribute: true
             },
 
@@ -252,6 +272,43 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return this._series instanceof Highcharts.Series;
         }
 
+        __isMarkersValid() {
+          if (['shown', 'hidden', 'auto'].indexOf(this.markers) === -1) {
+            console.warn('<vaadin-chart-series> Acceptable values for "markers" are "shown", "hidden" or "auto"');
+            return false;
+          }
+          return true;
+        }
+
+        __markersObserver() {
+          if (!this.__isMarkersValid()) {
+            this.markers = 'auto';
+            return;
+          }
+          if (this.__hasSeriesConfig()) {
+            this._series.update({
+              marker: this.__markersConfiguration
+            });
+          }
+        }
+
+        get __markersConfiguration() {
+          const config = {};
+          switch (this.markers) {
+            case 'shown':
+              config.enabled = true;
+              break;
+            case 'hidden':
+              config.enabled = false;
+              break;
+            case 'auto':
+            default:
+              config.enabled = null;
+              break;
+          }
+
+          return config;
+        }
       }
 
       customElements.define(ChartSeriesElement.is, ChartSeriesElement);
