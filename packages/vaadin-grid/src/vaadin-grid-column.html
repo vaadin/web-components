@@ -126,7 +126,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.disconnectedCallback();
 
       requestAnimationFrame(() => {
-        if (!this.parentNode) {
+        if (!this._findHostGrid()) {
           this._allCells.forEach(cell => {
             if (cell._content.parentNode) {
               cell._content.parentNode.removeChild(cell._content);
@@ -138,15 +138,17 @@ This program is available under Apache License Version 2.0, available at https:/
       this._gridValue = undefined;
     }
 
+    _findHostGrid() {
+      let el = this;
+      while (el && el.localName !== 'vaadin-grid') {
+        el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
+      }
+      return el || undefined;
+    }
+
     get _grid() {
       if (!this._gridValue) {
-
-        // Find <vaadin-grid>
-        var el = this;
-        while (el && el.localName !== 'vaadin-grid') {
-          el = el.assignedSlot ? el.assignedSlot.parentNode : el.parentNode;
-        }
-        this._gridValue = el || undefined;
+        this._gridValue = this._findHostGrid();
       }
       return this._gridValue;
     }
@@ -239,7 +241,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _selectFirstTemplate(header = false, footer = false) {
       return Polymer.FlattenedNodesObserver.getFlattenedNodes(this)
-        .filter(node => 
+        .filter(node =>
           node.localName === 'template'
           && node.classList.contains('header') === header
           && node.classList.contains('footer') === footer
