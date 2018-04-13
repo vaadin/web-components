@@ -91,6 +91,10 @@ This program is available under Apache License Version 2.0, available at https:/
           if (path === undefined || value === undefined || !connected) {
             return;
           }
+          if (this._previousValue === undefined && value === '') {
+            return;
+          }
+          this._previousValue = value;
 
           this._debouncerFilterChanged = Polymer.Debouncer.debounce(
             this._debouncerFilterChanged,

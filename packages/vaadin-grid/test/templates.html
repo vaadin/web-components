@@ -11,6 +11,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../vaadin-grid-filter.html">
   <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
@@ -134,6 +135,9 @@
           [[index]]
         </template>
         <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-filter path="index"></vaadin-grid-filter>
+          </template>
           <template>[[index]] [[_count(item)]]</template>
         </vaadin-grid-column>
       </vaadin-grid>
@@ -446,8 +450,11 @@
           flushGrid(observed.$.grid);
         });
 
-        it('should invoke once', (d) => {
-          expect(observed.count).to.equal(1);
+        it('should invoke once', (done) => {
+          setTimeout(() => {
+            expect(observed.count).to.equal(1);
+            done();
+          }, 300); // Filter's debounce time is 200ms
         });
 
       });
