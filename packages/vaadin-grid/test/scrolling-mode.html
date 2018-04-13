@@ -221,7 +221,22 @@
         });
 
       });
+    });
 
+    describe('empty grid', () => {
+      let grid;
+
+      beforeEach(() => {
+        grid = fixture('default');
+        flushGrid(grid);
+      });
+
+      it('should not have vertical scroll bars', done => {
+        Polymer.RenderStatus.afterNextRender(grid, () => {
+          expect(grid.clientHeight).to.be.above(grid.$.header.clientHeight + grid.$.items.clientHeight);
+          done();
+        });
+      });
     });
   </script>
 
