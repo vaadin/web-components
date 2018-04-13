@@ -98,6 +98,16 @@
       let grid;
       let bodyRows;
 
+      function click(element) {
+        const event = new CustomEvent('click', {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
+        element.dispatchEvent(event);
+        return event;
+      }
+
       it('should not increase row update count', () => {
         grid = fixture('default');
         const spy = sinon.spy(grid, '_updateRow');
@@ -125,6 +135,21 @@
         function closeRowDetails(index) {
           grid.closeItemDetails(grid._cache.items[index]);
         }
+
+        it('should not activate on click', () => {
+          openRowDetails(0);
+          const detailsCellContent = getBodyCellContent(grid, 0, 1);
+          click(detailsCellContent);
+          expect(grid.activeItem).not.to.be.ok;
+        });
+
+        it('should not deactivate on click', () => {
+          openRowDetails(0);
+          click(getBodyCellContent(grid, 0, 0));
+          const detailsCellContent = getBodyCellContent(grid, 0, 1);
+          click(detailsCellContent);
+          expect(grid.activeItem).to.be.ok;
+        });
 
         it('should open details row', () => {
           const cells = getRowCells(bodyRows[1]);
