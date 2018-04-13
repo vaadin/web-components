@@ -127,6 +127,34 @@
     </script>
   </dom-module>
 
+  <dom-module id="observed-grid">
+    <template>
+      <vaadin-grid items='["foo"]' id="grid">
+        <template class="row-details">
+          [[index]]
+        </template>
+        <vaadin-grid-column>
+          <template>[[index]] [[_count(item)]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class ObservedGrid extends Polymer.Element {
+          static get is() {
+            return 'observed-grid';
+          }
+
+          _count(item) {
+            this.count = this.count || 0;
+            this.count++;
+          }
+        }
+        window.customElements.define(ObservedGrid.is, ObservedGrid);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="formatting">
     <template>
       <x-grid></x-grid>
@@ -156,6 +184,12 @@
       <slotted-grid>
         <template slot="grid-column-template">body-[[index]]</template>
       </slotted-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="observed">
+    <template>
+      <observed-grid></observed-grid>
     </template>
   </test-fixture>
 
@@ -400,6 +434,20 @@
 
           slotted.bar = 'bar';
           expect(getContainerCellContent(grid.$.footer, 0, 5).textContent).to.equal('footer-bar');
+        });
+
+      });
+
+      describe('observed', () => {
+        let observed;
+
+        beforeEach(() => {
+          observed = fixture('observed');
+          flushGrid(observed.$.grid);
+        });
+
+        it('should invoke once', (d) => {
+          expect(observed.count).to.equal(1);
         });
 
       });

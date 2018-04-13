@@ -327,6 +327,12 @@ This program is available under Apache License Version 2.0, available at https:/
      */
     clearCache() {
       this._cache = new Vaadin.Grid.ItemCache(this);
+      Array.from(this.$.items.children).forEach(row => {
+        Array.from(row.children).forEach(cell => {
+          // Force data system to pick up subproperty changes
+          cell._instance && cell._instance._setPendingProperty('item', {}, false);
+        });
+      });
       this._cache.size = this.size;
       this._cache.updateSize();
       this._hasData = false;
