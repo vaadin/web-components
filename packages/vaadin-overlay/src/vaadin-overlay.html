@@ -426,7 +426,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
-            if (this.focusTrap && !this.shadowRoot.activeElement) {
+            if (this.focusTrap && !this.contains(document._activeElement || document.activeElement)) {
               this._cycleTab(0, 0);
             }
 
@@ -597,6 +597,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (!this.$.content.shadowRoot) {
             this.$.content.attachShadow({mode: 'open'});
+            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
+            this.$.content.root = this.$.content.shadowRoot;
           }
           if (scopeCssText) {
             const style = document.createElement('style');
