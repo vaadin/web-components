@@ -15,6 +15,8 @@
       <vaadin-overlay id="overlay" opened="{{opened}}">
         <template>
           my-overlay-view content
+          hostProp: {{hostProp}}
+          hostPath.subPath: {{hostPath.subPath}}
         </template>
       </vaadin-overlay>
     </template>
@@ -28,7 +30,17 @@
 
         static get properties() {
           return {
-            opened: Boolean
+            opened: Boolean,
+            hostProp: {
+              type: String,
+              value: 'foo'
+            },
+            hostPath: {
+              type: Object,
+              value: () => {
+                return {subPath: 'foo'};
+              }
+            }
           };
         }
       });
@@ -60,12 +72,11 @@
       let overlay;
       let externalTemplate;
 
-      // FIXME(platosha): spy on templatize and test for instanceProps
-      // and forwardHostProp
-
       describe('in component scope', () => {
+        let myOverlayView;
+
         beforeEach(() => {
-          const myOverlayView = fixture('myOverlayView');
+          myOverlayView = fixture('myOverlayView');
           overlay = myOverlayView.$.overlay;
           externalTemplate = createTemplate('external template content');
         });
@@ -88,13 +99,22 @@
             expect(overlay.content).to.be.ok;
             expect(overlay.content.textContent).to.contain('my-overlay-view content');
           });
+
+          it('should forwardHostProp for props', () => {
+            expect(overlay.content.textContent).to.contain('hostProp: foo');
+            myOverlayView.hostProp = 'bar';
+            expect(overlay.content.textContent).to.contain('hostProp: bar');
+          });
+
+          it('should forwardHostProp for paths', () => {
+            expect(overlay.content.textContent).to.contain('hostPath.subPath: foo');
+            myOverlayView.set('hostPath.subPath', 'bar');
+            expect(overlay.content.textContent).to.contain('hostPath.subPath: bar');
+          });
         });
 
         describe('external template disconnected', () => {
-          const instanceProps = {foo: true};
-
           beforeEach(() => {
-            overlay.instanceProps = instanceProps;
             overlay.template = externalTemplate;
             overlay.opened = true;
           });
@@ -116,8 +136,12 @@
         });
 
         describe('external template connected in component scope', () => {
+          const instanceProps = {foo: true};
+
           beforeEach(() => {
             overlay.getRootNode().appendChild(externalTemplate);
+            sinon.spy(Polymer.Templatize, 'templatize');
+            overlay.instanceProps = instanceProps;
             overlay.template = externalTemplate;
             overlay.opened = true;
           });
@@ -125,6 +149,7 @@
           afterEach(() => {
             overlay.opened = false;
             overlay.getRootNode().removeChild(externalTemplate);
+            Polymer.Templatize.templatize.restore();
           });
 
           it('should use content part shadowRoot for contents', () => {
@@ -138,6 +163,13 @@
 
           it('should not use default child template', () => {
             expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
+          });
+
+          it('should use instanceProps when templatize', () => {
+            const call = Polymer.Templatize.templatize.lastCall;
+            expect(call.args[0]).to.equal(externalTemplate);
+            expect(call.args[1]).to.equal(overlay);
+            expect(call.args[2].instanceProps).to.equal(instanceProps);
           });
         });
 
@@ -249,8 +281,12 @@
         });
 
         describe('external template connected in document scope', () => {
+          const instanceProps = {foo: true};
+
           beforeEach(() => {
             document.body.appendChild(externalTemplate);
+            sinon.spy(Polymer.Templatize, 'templatize');
+            overlay.instanceProps = instanceProps;
             overlay.template = externalTemplate;
             overlay.opened = true;
           });
@@ -258,6 +294,7 @@
           afterEach(() => {
             overlay.opened = false;
             document.body.removeChild(externalTemplate);
+            Polymer.Templatize.templatize.restore();
           });
 
           it('should use overlay host for contents, slot in content part', () => {
@@ -274,6 +311,13 @@
 
           it('should not use default child template', () => {
             expect(overlay.content.textContent).to.not.contain('plain overlay content');
+          });
+
+          it('should use instanceProps when templatize', () => {
+            const call = Polymer.Templatize.templatize.lastCall;
+            expect(call.args[0]).to.equal(externalTemplate);
+            expect(call.args[1]).to.equal(overlay);
+            expect(call.args[2].instanceProps).to.equal(instanceProps);
           });
         });
       });
