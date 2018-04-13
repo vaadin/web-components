@@ -97,6 +97,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.marker = this.__markersConfiguration;
           }
 
+          if (this.unit) {
+            options.yAxis = this.unit;
+          }
+
           return options;
         }
 
@@ -172,6 +176,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             'markers': {
               type: String,
               observer: '__markersObserver',
+              reflectToAttribute: true
+            },
+
+            /** Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.
+             * Displayed as a title for the axis.
+             * If no unit is defined, then series will be connected to the first axis.
+             */
+            'unit': {
+              type: 'String',
+              observer: '__unitObserver',
               reflectToAttribute: true
             },
 
@@ -265,6 +279,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._series.update({
               name: this.title
             });
+          }
+        }
+
+        __unitObserver() {
+          if (this.__hasSeriesConfig()) {
+            const parent = this.parentNode instanceof Vaadin.ChartElement && this.parentNode;
+            if (parent && parent instanceof Vaadin.ChartElement) {
+
+              if (this.unit && !parent.__getAxis(this.unit)) {
+                const title = {title: {text: this.unit}};
+                parent.__addAxis(Object.assign({id: this.unit, axisGenerated: true}, title));
+              }
+              this._series.update({yAxis: this.unit || 0});
+              parent.__removeAxisIfEmpty();
+            }
           }
         }
 

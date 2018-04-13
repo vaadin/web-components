@@ -27,11 +27,14 @@
         }, 150);
       });
 
-      it('should be possible to modify a chart', function() {
-        const series = chart.configuration.series;
-        expect(series).to.have.lengthOf(1);
-        chart.__callChartFunction('addSeries', {data: [30, 1, 3, 5, 2]});
-        expect(series).to.have.lengthOf(2);
+      it('should be possible to modify a chart', function(done) {
+        setTimeout(function() {
+          const series = chart.configuration.series;
+          expect(series).to.have.lengthOf(1);
+          chart.__callChartFunction('addSeries', {data: [30, 1, 3, 5, 2]});
+          expect(series).to.have.lengthOf(2);
+          done();
+        }, 20);
       });
 
       it('should be possible to modify a series', function() {
