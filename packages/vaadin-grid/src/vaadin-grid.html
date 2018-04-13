@@ -462,11 +462,6 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
 
-        Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.index = index;
-          }
-        });
         this._toggleAttribute('first', index === 0, row);
         this._toggleAttribute('odd', index % 2, row);
         this._a11yUpdateRowRowindex(row, index);
@@ -514,8 +509,10 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         Array.from(row.children).forEach(cell => {
           if (cell._instance) {
-            cell._instance.item = item;
-            cell._instance.index = row.index;
+            cell._instance.setProperties({
+              item,
+              index: row.index
+            });
           }
         });
         this._toggleRowSelected(row, this._isSelected(item));

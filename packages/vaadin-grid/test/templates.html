@@ -138,7 +138,7 @@
           <template class="header">
             <vaadin-grid-filter path="index"></vaadin-grid-filter>
           </template>
-          <template>[[index]] [[_count(item)]]</template>
+          <template>[[index]] [[_count(item, index)]]</template>
         </vaadin-grid-column>
       </vaadin-grid>
     </template>
@@ -149,7 +149,7 @@
             return 'observed-grid';
           }
 
-          _count(item) {
+          _count(item, index) {
             this.count = this.count || 0;
             this.count++;
           }
