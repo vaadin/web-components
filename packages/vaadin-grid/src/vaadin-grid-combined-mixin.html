@@ -92,7 +92,6 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_a11yUpdateGridSize(size, _columnTree, _columnTree.*)',
-        '_activeItemChanged(activeItem)',
         '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _rowDetailsTemplate, _physicalCountVal)',
         '_itemsChanged(items, items.*, isAttached)',
         '_rowDetailsTemplateChanged(_rowDetailsTemplate)',
@@ -247,12 +246,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
       if (clickedItem) {
         this.activeItem = !this._itemsEqual(this.activeItem, clickedItem) ? clickedItem : null;
-      }
-    }
-
-    _activeItemChanged() {
-      if (this.$.scroller._physicalItems) {
-        this.$.scroller._physicalItems.forEach(row => this._updateItem(row, row.item));
       }
     }
 

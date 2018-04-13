@@ -11,6 +11,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
+  <link rel="import" href="../vaadin-grid-filter.html">
   <link rel="import" href="../../paper-input/paper-input.html">
 </head>
 
@@ -127,6 +128,37 @@
     </script>
   </dom-module>
 
+  <dom-module id="observed-grid">
+    <template>
+      <vaadin-grid items='["foo"]' id="grid">
+        <template class="row-details">
+          [[index]]
+        </template>
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-filter path="index"></vaadin-grid-filter>
+          </template>
+          <template>[[index]] [[_count(item, index)]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      window.addEventListener('WebComponentsReady', function() {
+        class ObservedGrid extends Polymer.Element {
+          static get is() {
+            return 'observed-grid';
+          }
+
+          _count(item, index) {
+            this.count = this.count || 0;
+            this.count++;
+          }
+        }
+        window.customElements.define(ObservedGrid.is, ObservedGrid);
+      });
+    </script>
+  </dom-module>
+
   <test-fixture id="formatting">
     <template>
       <x-grid></x-grid>
@@ -156,6 +188,12 @@
       <slotted-grid>
         <template slot="grid-column-template">body-[[index]]</template>
       </slotted-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="observed">
+    <template>
+      <observed-grid></observed-grid>
     </template>
   </test-fixture>
 
@@ -400,6 +438,23 @@
 
           slotted.bar = 'bar';
           expect(getContainerCellContent(grid.$.footer, 0, 5).textContent).to.equal('footer-bar');
+        });
+
+      });
+
+      describe('observed', () => {
+        let observed;
+
+        beforeEach(() => {
+          observed = fixture('observed');
+          flushGrid(observed.$.grid);
+        });
+
+        it('should invoke once', (done) => {
+          setTimeout(() => {
+            expect(observed.count).to.equal(1);
+            done();
+          }, 300); // Filter's debounce time is 200ms
         });
 
       });
