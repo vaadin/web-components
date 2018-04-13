@@ -375,7 +375,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       const path = e.composedPath();
       const cell = path[path.indexOf(this.$.table) - 3];
-      if (!cell) {
+      if (!cell || cell.getAttribute('part').indexOf('details-cell') > -1) {
         return;
       }
       const cellContent = cell._content;
