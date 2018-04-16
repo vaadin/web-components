@@ -121,6 +121,33 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom styling of the content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
+      <template preserve-content>
+        <style>
+          vaadin-item[selected] {
+            font-style: italic;
+            border-bottom: .25em solid var(--lumo-success-color-50pct);
+            background: var(--lumo-success-color-10pct);
+          }
+        </style>
+        <vaadin-dropdown-menu placeholder="Language" value="ES">
+          <template>
+            <style>
+              vaadin-item[selected]::before {
+                color: var(--lumo-success-color);
+              }
+            </style>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Custom Content</h3>
     <vaadin-demo-snippet id="dropdown-menu-list-box-custom-content">
       <template preserve-content>
