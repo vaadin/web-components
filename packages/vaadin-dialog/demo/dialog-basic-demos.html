@@ -32,6 +32,39 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Dialog with custom styling of the content</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-styled-dialog">
+      <template preserve-content>
+        <style>
+          .dialog-message {
+            font: italic 24pt serif;
+            background: #fff;
+            color: #000;
+            padding: 1em;
+            border: .25em solid #000;
+          }
+        </style>
+        <dom-bind id="styled-dialog-example">
+          <template>
+            <vaadin-dialog id="styleddialog">
+              <template>
+                <div class="dialog-message">I am styled from the parent scope and can be closed by pressing the Esc key,
+                or by a mouse click anywhere outside the dialog area</div>
+              </template>
+            </vaadin-dialog>
+            <vaadin-button on-click="showStyledDialog">Show dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-styled-dialog', function(document) {
+            var styledDialogExample = document.querySelector('#styled-dialog-example');
+            styledDialogExample.showStyledDialog = function() {
+              styledDialogExample.$.styleddialog.opened = true;
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
 
     <h3>A Dialog That Can Only Be Closed with Buttons Inside It</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-a-dialog-that-can-only-be-closed-with-buttons-inside-it">
