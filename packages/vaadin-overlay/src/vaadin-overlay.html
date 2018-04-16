@@ -84,7 +84,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <div id="backdrop" part="backdrop" hidden$="{{!withBackdrop}}"></div>
     <div part="overlay" id="overlay" tabindex="0">
-      <div part="content" id="content"></div>
+      <div part="content" id="content">
+        <slot></slot>
+      </div>
     </div>
   </template>
 </dom-module>
@@ -94,9 +96,41 @@ This program is available under Apache License Version 2.0, available at https:/
     /**
      * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
      *
+     * ```html
+     * <vaadin-overlay>
+     *   <template>Overlay content</template>
+     * </vaadin-overlay>
+     * ```
+     *
+     * ### Templating
+     *
+     * By default, the overlay finds the child template and uses that.
+     * You can also set a custom template using the `template` property.
+     *
+     * After the content from the template is stamped, the `content` property
+     * points to the content container.
+     *
+     * The overlay provides `forwardHostProp` when calling
+     * `Polymer.Templatize.templatize` for the template, so that the bindings
+     * from the parent scope propagate to the content.  You can also pass
+     * custom `instanceProps` object using the `instanceProps` property.
+     *
+     * Note when using `instanceProps`: because of the Polymer limitation,
+     * every template can only be templatized once, so it is important
+     * to set `instanceProps` before the `template` is assigned to the overlay.
+     *
      * ### Styling
      *
-     * The following Shadow DOM parts are available for styling:
+     * To style the overlay content, use styles in the parent scope:
+     *
+     * - If the overlay is used in a component, then the component styles
+     *   apply the overlay content.
+     * - If the overlay is used in the global DOM scope, then global styles
+     *   apply to the overlay content.
+     *
+     * See examples for styling the overlay content in the live demos.
+     *
+     * The following Shadow DOM parts are available for styling the overlay component itself:
      *
      * Part name  | Description
      * -----------|---------------------------------------------------------|
@@ -136,11 +170,24 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true
           },
 
+          /**
+           * The template of the overlay content.
+           */
           template: {
             type: Object,
             notify: true
           },
 
+          /**
+           * Optional argument for `Polymer.Templatize.templatize`.
+           */
+          instanceProps: {
+            type: Object
+          },
+
+          /**
+           * References the content container after the template is stamped.
+           */
           content: {
             type: Object,
             notify: true
@@ -190,12 +237,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _boundIronOverlayCanceledListener: {
             type: Object
-          }
+          },
+
+          _isScoped: Boolean,
+
+          _shadyStyleScope: String,
+
+          _contentNodes: Array
         };
       }
 
       static get observers() {
-        return ['_openedChanged(opened)', '_templateChanged(template)', '_contentChanged(content)'];
+        return [
+          '_openedChanged(opened)',
+          '_templateChanged(template)'
+        ];
       }
 
       constructor() {
@@ -370,7 +426,7 @@ This program is available under Apache License Version 2.0, available at https:/
           this._animatedOpening();
 
           Polymer.RenderStatus.afterNextRender(this, () => {
-            if (this.focusTrap && !this.shadowRoot.activeElement) {
+            if (this.focusTrap && !this.contains(document._activeElement || document.activeElement)) {
               this._cycleTab(0, 0);
             }
 
@@ -406,6 +462,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this._placeholder = document.createComment('vaadin-overlay-placeholder');
         this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
+        if (this._shadyStyleScope) {
+          Array.from(this.$.content.shadowRoot.querySelectorAll('*')).forEach(el => {
+            el.classList.add('style-scope', this._shadyStyleScope);
+          });
+        }
       }
 
       _animatedClosing() {
@@ -476,21 +537,80 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _templateChanged(template) {
-        const Templatizer = Polymer.Templatize.templatize(template, this, {
-          forwardHostProp: function(prop, value) {
-            if (this._instance) {
-              this._instance.forwardHostProp(prop, value);
-            }
+      _removeOldContent() {
+        if (!this.content || !this._contentNodes) {
+          return;
+        }
+
+        this._observer.disconnect();
+
+        this._contentNodes.forEach(node => {
+          if (node.parentNode === this.content) {
+            this.content.removeChild(node);
           }
         });
 
-        this._instance = new Templatizer({});
-        this.content = this._instance.root;
+        this._observer.connect();
+
+        this._contentNodes = undefined;
+        this.content = undefined;
       }
 
-      _contentChanged(content) {
-        this.$.content.appendChild(content);
+      _templateChanged(template) {
+        this._removeOldContent();
+
+        if (!template) {
+          return;
+        }
+
+        if (!template._Templatizer) {
+          template._Templatizer = Polymer.Templatize.templatize(template, this, {
+            instanceProps: this.instanceProps,
+            forwardHostProp: function(prop, value) {
+              if (this._instance) {
+                this._instance.forwardHostProp(prop, value);
+              }
+            }
+          });
+        }
+
+        this._instance = new template._Templatizer({});
+        this._contentNodes = Array.from(this._instance.root.childNodes);
+
+        const templateRoot = template.getRootNode();
+        this._isScoped = templateRoot !== document;
+        this._shadyStyleScope = '';
+        if (this._isScoped) {
+          let scopeCssText = '';
+          Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
+            scopeCssText += style.textContent;
+          });
+          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+            this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+            if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
+              this._shadyStyleScope = templateRoot.host.getAttribute('is');
+            }
+          }
+
+          // The overlay root’s :host styles should not apply inside the overlay
+          scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
+
+          if (!this.$.content.shadowRoot) {
+            this.$.content.attachShadow({mode: 'open'});
+            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
+            this.$.content.root = this.$.content.shadowRoot;
+          }
+          if (scopeCssText) {
+            const style = document.createElement('style');
+            style.textContent = scopeCssText;
+            this.$.content.shadowRoot.appendChild(style);
+          }
+          this.$.content.shadowRoot.appendChild(this._instance.root);
+          this.content = this.$.content.shadowRoot;
+        } else {
+          this.appendChild(this._instance.root);
+          this.content = this;
+        }
       }
 
       _isFocused(element) {

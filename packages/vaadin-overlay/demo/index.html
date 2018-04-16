@@ -49,7 +49,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Show and Hide Overlay with backdrop and focus trap</h3>
+    <h3>Backdrop and Focus Trap</h3>
     <demo-snippet>
       <template>
         <vaadin-overlay with-backdrop focus-trap style="max-width: 300px">
@@ -73,7 +73,7 @@
         <script>
           document.getElementById('button-focus-trap').addEventListener('click', event => {
             const overlay = event.target.previousElementSibling;
-            const field = overlay.$.content.querySelector('vaadin-text-field');
+            const field = overlay.content.querySelector('vaadin-text-field');
 
             overlay.opened = true;
             field.focus();
@@ -171,7 +171,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Opening and closing animations</h3>
+    <h3>Opening and Closing Animations</h3>
     <demo-snippet>
       <template>
         <dom-module id="overlay-animations" theme-for="vaadin-overlay">
@@ -242,6 +242,93 @@
         </style>
       </template>
     </dom-module>
+
+    <h3>Styling the Content from the Parent Component Scope</h3>
+    <p>
+      If the overlay is used inside a component, use the component styles
+      for styling the overlay content.
+    </p>
+    <demo-snippet>
+      <template>
+        <dom-module id="my-view">
+          <template>
+            <style>
+              :host::before {
+                display: block;
+                background: #fff;
+                content: "Content from the :host style, the overlay shouldn’t show it.";
+              }
+
+              .my-view__overlay {
+                font: italic 24pt serif;
+                background: #fff;
+                color: #000;
+                padding: 1em;
+                border: .25em solid #000;
+              }
+            </style>
+            <vaadin-overlay opened="{{_overlayOpened}}" with-backdrop>
+              <template>
+                <div class="my-view__overlay">
+                  I am styled from the parent scope.
+                </div>
+              </template>
+            </vaadin-overlay>
+            <label>
+              <input type="checkbox" checked="{{_overlayOpened::click}}">
+              Show the overlay
+            </label>
+          </template>
+        </dom-module>
+        <script>
+          Polymer({
+            is: 'my-view',
+            properties: {
+              _overlayOpened: {
+                type: Boolean,
+                value: false
+              }
+            }
+          });
+        </script>
+
+        <my-view></my-view>
+      </template>
+    </demo-snippet>
+
+    <h3>Styling the Content from the Global Scope</h3>
+    <p>
+      If the overlay is used in the global scope, then global styles can
+      target the overlay content.
+    </p>
+    <demo-snippet>
+      <template>
+        <style>
+          .global-overlay {
+            font: italic 24pt serif;
+            background: #fff;
+            color: #000;
+            padding: 1em;
+            border: .25em solid #000;
+          }
+        </style>
+        <dom-bind>
+          <template>
+            <vaadin-overlay opened="{{_overlayOpened}}" with-backdrop>
+              <template>
+                <div class="global-overlay">
+                  I am styled from the global scope.
+                </div>
+              </template>
+            </vaadin-overlay>
+            <label>
+              <input type="checkbox" checked="{{_overlayOpened::click}}">
+              Show the overlay
+            </label>
+          </template>
+        </dom-bind>
+      </template>
+    </demo-snippet>
   </div>
 </body>
 </html>
