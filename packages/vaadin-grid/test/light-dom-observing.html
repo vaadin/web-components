@@ -629,6 +629,18 @@
             done();
           });
         });
+
+        it('should remove cell content', done => {
+          const contentCount = grid.querySelectorAll('vaadin-grid-cell-content').length;
+          repeater.shift('items');
+          repeater.render();
+
+          flushGrid(grid);
+          flush(() => {
+            expect(grid.querySelectorAll('vaadin-grid-cell-content').length).to.be.below(contentCount);
+            done();
+          });
+        });
       }
 
       describe('dom-repeat', () => {
