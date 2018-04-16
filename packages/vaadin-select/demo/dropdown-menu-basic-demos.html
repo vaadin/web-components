@@ -130,14 +130,13 @@
             border-bottom: .25em solid var(--lumo-success-color-50pct);
             background: var(--lumo-success-color-10pct);
           }
+
+          vaadin-item[selected]::before {
+            color: var(--lumo-success-color);
+          }
         </style>
-        <vaadin-dropdown-menu placeholder="Language" value="ES">
+        <vaadin-dropdown-menu label="Name">
           <template>
-            <style>
-              vaadin-item[selected]::before {
-                color: var(--lumo-success-color);
-              }
-            </style>
             <vaadin-list-box>
               <vaadin-item>Jose</vaadin-item>
               <vaadin-item>Manolo</vaadin-item>
