@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-upload.html",
         "start": {
-          "line": 897,
+          "line": 903,
           "column": 6
         },
         "end": {
-          "line": 897,
+          "line": 903,
           "column": 50
         }
       },
@@ -535,17 +535,36 @@
               "defaultValue": "false"
             },
             {
+              "name": "capture",
+              "type": "string",
+              "description": "Pass-through to input's capture attribute. Allows user to trigger device inputs\nsuch as camera or microphone immediately.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 287,
+                  "column": 12
+                },
+                "end": {
+                  "line": 287,
+                  "column": 27
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            },
+            {
               "name": "i18n",
               "type": "Object",
               "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              dropFiles: {\n              one: 'Drop file here\n              many: 'Drop files here\n              },\n              addFiles: {\n              one: 'Select File...',\n              many: 'Upload Files...'\n              },\n              cancel: 'Cancel',\n              error: {\n              tooManyFiles: 'Too Many Files.',\n              fileIsTooBig: 'File is Too Big.',\n              incorrectFileType: 'Incorrect File Type.'\n              },\n              uploading: {\n              status: {\n                connecting: 'Connecting...',\n                stalled: 'Stalled.',\n                processing: 'Processing File...',\n                held: 'Queued'\n              },\n              remainingTime: {\n                prefix: 'remaining time: ',\n                unknown: 'unknown remaining time'\n              },\n              error: {\n                serverUnavailable: 'Server Unavailable',\n                unexpectedServerError: 'Unexpected Server Error',\n                forbidden: 'Forbidden'\n              }\n              },\n              units: {\n              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n              },\n              formatSize: function(bytes) {\n              // returns the size followed by the best suitable unit\n              },\n              formatTime: function(seconds, [secs, mins, hours]) {\n              // returns a 'HH:MM:SS' string\n              }\n            }",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 336,
+                  "line": 342,
                   "column": 12
                 },
                 "end": {
-                  "line": 376,
+                  "line": 382,
                   "column": 13
                 }
               },
@@ -561,11 +580,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 380,
+                  "line": 386,
                   "column": 8
                 },
                 "end": {
-                  "line": 389,
+                  "line": 395,
                   "column": 9
                 }
               },
@@ -578,11 +597,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 391,
+                  "line": 397,
                   "column": 8
                 },
                 "end": {
-                  "line": 402,
+                  "line": 408,
                   "column": 9
                 }
               },
@@ -599,11 +618,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 404,
+                  "line": 410,
                   "column": 8
                 },
                 "end": {
-                  "line": 414,
+                  "line": 420,
                   "column": 9
                 }
               },
@@ -620,11 +639,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 416,
+                  "line": 422,
                   "column": 8
                 },
                 "end": {
-                  "line": 432,
+                  "line": 438,
                   "column": 9
                 }
               },
@@ -644,11 +663,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 434,
+                  "line": 440,
                   "column": 8
                 },
                 "end": {
-                  "line": 441,
+                  "line": 447,
                   "column": 9
                 }
               },
@@ -665,11 +684,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 443,
+                  "line": 449,
                   "column": 8
                 },
                 "end": {
-                  "line": 445,
+                  "line": 451,
                   "column": 9
                 }
               },
@@ -689,11 +708,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 447,
+                  "line": 453,
                   "column": 8
                 },
                 "end": {
-                  "line": 454,
+                  "line": 460,
                   "column": 9
                 }
               },
@@ -710,11 +729,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 456,
+                  "line": 462,
                   "column": 8
                 },
                 "end": {
-                  "line": 461,
+                  "line": 467,
                   "column": 9
                 }
               },
@@ -731,11 +750,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 463,
+                  "line": 469,
                   "column": 8
                 },
                 "end": {
-                  "line": 469,
+                  "line": 475,
                   "column": 9
                 }
               },
@@ -752,11 +771,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 472,
+                  "line": 478,
                   "column": 8
                 },
                 "end": {
-                  "line": 474,
+                  "line": 480,
                   "column": 9
                 }
               },
@@ -769,11 +788,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 476,
+                  "line": 482,
                   "column": 8
                 },
                 "end": {
-                  "line": 491,
+                  "line": 497,
                   "column": 9
                 }
               },
@@ -790,11 +809,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 493,
+                  "line": 499,
                   "column": 8
                 },
                 "end": {
-                  "line": 502,
+                  "line": 508,
                   "column": 9
                 }
               },
@@ -820,11 +839,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 509,
+                  "line": 515,
                   "column": 8
                 },
                 "end": {
-                  "line": 513,
+                  "line": 519,
                   "column": 9
                 }
               },
@@ -841,11 +860,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 515,
+                  "line": 521,
                   "column": 8
                 },
                 "end": {
-                  "line": 640,
+                  "line": 646,
                   "column": 9
                 }
               },
@@ -862,11 +881,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 642,
+                  "line": 648,
                   "column": 8
                 },
                 "end": {
-                  "line": 652,
+                  "line": 658,
                   "column": 9
                 }
               },
@@ -883,11 +902,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 654,
+                  "line": 660,
                   "column": 8
                 },
                 "end": {
-                  "line": 668,
+                  "line": 674,
                   "column": 9
                 }
               },
@@ -904,11 +923,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 670,
+                  "line": 676,
                   "column": 8
                 },
                 "end": {
-                  "line": 677,
+                  "line": 683,
                   "column": 9
                 }
               },
@@ -925,11 +944,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 679,
+                  "line": 685,
                   "column": 8
                 },
                 "end": {
-                  "line": 681,
+                  "line": 687,
                   "column": 9
                 }
               },
@@ -946,11 +965,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 688,
+                  "line": 694,
                   "column": 8
                 },
                 "end": {
-                  "line": 723,
+                  "line": 729,
                   "column": 9
                 }
               },
@@ -969,11 +988,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 729,
+                  "line": 735,
                   "column": 8
                 },
                 "end": {
-                  "line": 731,
+                  "line": 737,
                   "column": 9
                 }
               },
@@ -992,11 +1011,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 733,
+                  "line": 739,
                   "column": 8
                 },
                 "end": {
-                  "line": 737,
+                  "line": 743,
                   "column": 9
                 }
               },
@@ -1013,11 +1032,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 739,
+                  "line": 745,
                   "column": 8
                 },
                 "end": {
-                  "line": 746,
+                  "line": 752,
                   "column": 9
                 }
               },
@@ -1030,11 +1049,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 748,
+                  "line": 754,
                   "column": 8
                 },
                 "end": {
-                  "line": 750,
+                  "line": 756,
                   "column": 9
                 }
               },
@@ -1051,11 +1070,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 752,
+                  "line": 758,
                   "column": 8
                 },
                 "end": {
-                  "line": 754,
+                  "line": 760,
                   "column": 9
                 }
               },
@@ -1072,11 +1091,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 756,
+                  "line": 762,
                   "column": 8
                 },
                 "end": {
-                  "line": 758,
+                  "line": 764,
                   "column": 9
                 }
               },
@@ -1093,11 +1112,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 760,
+                  "line": 766,
                   "column": 8
                 },
                 "end": {
-                  "line": 762,
+                  "line": 768,
                   "column": 9
                 }
               },
@@ -1114,11 +1133,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 764,
+                  "line": 770,
                   "column": 8
                 },
                 "end": {
-                  "line": 767,
+                  "line": 773,
                   "column": 9
                 }
               },
@@ -1135,11 +1154,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 769,
+                  "line": 775,
                   "column": 8
                 },
                 "end": {
-                  "line": 771,
+                  "line": 777,
                   "column": 9
                 }
               },
@@ -1156,11 +1175,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 773,
+                  "line": 779,
                   "column": 8
                 },
                 "end": {
-                  "line": 775,
+                  "line": 781,
                   "column": 9
                 }
               },
@@ -1177,11 +1196,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 777,
+                  "line": 783,
                   "column": 8
                 },
                 "end": {
-                  "line": 779,
+                  "line": 785,
                   "column": 9
                 }
               },
@@ -1201,11 +1220,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 781,
+                  "line": 787,
                   "column": 8
                 },
                 "end": {
-                  "line": 783,
+                  "line": 789,
                   "column": 9
                 }
               },
@@ -1251,7 +1270,7 @@
               "column": 6
             },
             "end": {
-              "line": 890,
+              "line": 896,
               "column": 7
             }
           },
@@ -1468,15 +1487,31 @@
               "type": "boolean"
             },
             {
+              "name": "capture",
+              "description": "Pass-through to input's capture attribute. Allows user to trigger device inputs\nsuch as camera or microphone immediately.",
+              "sourceRange": {
+                "start": {
+                  "line": 287,
+                  "column": 12
+                },
+                "end": {
+                  "line": 287,
+                  "column": 27
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
               "name": "i18n",
               "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              dropFiles: {\n              one: 'Drop file here\n              many: 'Drop files here\n              },\n              addFiles: {\n              one: 'Select File...',\n              many: 'Upload Files...'\n              },\n              cancel: 'Cancel',\n              error: {\n              tooManyFiles: 'Too Many Files.',\n              fileIsTooBig: 'File is Too Big.',\n              incorrectFileType: 'Incorrect File Type.'\n              },\n              uploading: {\n              status: {\n                connecting: 'Connecting...',\n                stalled: 'Stalled.',\n                processing: 'Processing File...',\n                held: 'Queued'\n              },\n              remainingTime: {\n                prefix: 'remaining time: ',\n                unknown: 'unknown remaining time'\n              },\n              error: {\n                serverUnavailable: 'Server Unavailable',\n                unexpectedServerError: 'Unexpected Server Error',\n                forbidden: 'Forbidden'\n              }\n              },\n              units: {\n              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n              },\n              formatSize: function(bytes) {\n              // returns the size followed by the best suitable unit\n              },\n              formatTime: function(seconds, [secs, mins, hours]) {\n              // returns a 'HH:MM:SS' string\n              }\n            }",
               "sourceRange": {
                 "start": {
-                  "line": 336,
+                  "line": 342,
                   "column": 12
                 },
                 "end": {
-                  "line": 376,
+                  "line": 382,
                   "column": 13
                 }
               },

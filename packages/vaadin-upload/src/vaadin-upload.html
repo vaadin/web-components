@@ -54,7 +54,7 @@ This program is available under Apache License Version 2.0, available at https:/
       </div>
     </slot>
     <slot></slot>
-    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]">
+    <input type="file" id="fileInput" on-change="_onFileInputChange" hidden accept$="{{accept}}" multiple$="[[_isMultiple(maxFiles)]]" capture$="[[capture]]">
   </template>
 
   <script>
@@ -280,6 +280,12 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               value: false
             },
+
+            /**
+             * Pass-through to input's capture attribute. Allows user to trigger device inputs
+             * such as camera or microphone immediately.
+             */
+            capture: String,
 
             /**
              * The object used to localize this component.

@@ -252,6 +252,13 @@
           upload._uploadFile(file);
         });
 
+        it('should apply the capture attribute to the input', function() {
+          var input = upload.$.fileInput;
+          var captureType = 'camera';
+          upload.capture = captureType;
+          expect(input.getAttribute('capture')).to.equal(captureType);
+        });
+
         describe('Response Status', () => {
           function expectResponseErrorForStatus(error, status, done) {
             upload._createXhr = xhrCreator({
