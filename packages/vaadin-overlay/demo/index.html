@@ -49,7 +49,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Show and Hide Overlay with backdrop and focus trap</h3>
+    <h3>Backdrop and Focus Trap</h3>
     <demo-snippet>
       <template>
         <vaadin-overlay with-backdrop focus-trap style="max-width: 300px">
@@ -73,7 +73,7 @@
         <script>
           document.getElementById('button-focus-trap').addEventListener('click', event => {
             const overlay = event.target.previousElementSibling;
-            const field = overlay.$.content.querySelector('vaadin-text-field');
+            const field = overlay.content.querySelector('vaadin-text-field');
 
             overlay.opened = true;
             field.focus();
@@ -171,7 +171,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Opening and closing animations</h3>
+    <h3>Opening and Closing Animations</h3>
     <demo-snippet>
       <template>
         <dom-module id="overlay-animations" theme-for="vaadin-overlay">
