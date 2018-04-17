@@ -125,10 +125,12 @@
     <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
       <template preserve-content>
         <style>
-          vaadin-item[selected] {
+          vaadin-item:hover {
             font-style: italic;
-            border-bottom: .25em solid var(--lumo-success-color-50pct);
             background: var(--lumo-success-color-10pct);
+            box-shadow: inset 0 -3px 0 0 var(--lumo-success-color-50pct);
+            -webkit-box-shadow: inset 0 -3px 0 0 var(--lumo-success-color-50pct);
+            -moz-box-shadow: inset 0 -3px 0 0 var(--lumo-success-color-50pct);
           }
 
           vaadin-item[selected]::before {
