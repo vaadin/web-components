@@ -605,10 +605,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _toggleAttribute(name, bool, node) {
-        if (bool) {
-          node.setAttribute(name, '');
-        } else {
-          node.removeAttribute(name);
+        if (node.hasAttribute(name) === !bool) {
+          if (bool) {
+            node.setAttribute(name, '');
+          } else {
+            node.removeAttribute(name);
+          }
         }
       }
 

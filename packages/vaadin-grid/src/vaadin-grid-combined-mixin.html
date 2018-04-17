@@ -407,7 +407,7 @@ This program is available under Apache License Version 2.0, available at https:/
         const cell = handle.parentElement;
         let column = cell._column;
 
-        this.$.scroller.setAttribute('column-resizing', '');
+        this._toggleAttribute('column-resizing', true, this.$.scroller);
 
         // Get the target column to resize
         if (column.localName === 'vaadin-grid-column-group') {
@@ -444,7 +444,7 @@ This program is available under Apache License Version 2.0, available at https:/
           });
 
         if (e.detail.state === 'end') {
-          this.$.scroller.removeAttribute('column-resizing');
+          this._toggleAttribute('column-resizing', false, this.$.scroller);
         }
 
         // Notify resize
@@ -639,7 +639,7 @@ This program is available under Apache License Version 2.0, available at https:/
       cell.setAttribute('part', 'cell details-cell');
       // Freeze the details cell, so that it does not scroll horizontally
       // with the normal cells. This way it looks less weird.
-      cell.setAttribute('frozen', '');
+      this._toggleAttribute('frozen', true, cell);
     }
 
     _toggleDetailsCell(row, item) {
