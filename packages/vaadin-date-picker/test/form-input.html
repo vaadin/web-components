@@ -58,7 +58,7 @@
 
       beforeEach(done => {
         datepicker = fixture('datepicker');
-        const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
         // Needed so as iron-input has time to look for it's inputElement
@@ -205,7 +205,7 @@
       beforeEach(done => {
         ironForm = fixture('datepicker-in-form');
         datepicker = ironForm.querySelector('vaadin-date-picker');
-        const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        const overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
         setTimeout(done);

@@ -88,7 +88,7 @@
 
           beforeEach(() => {
             datepicker = fixture('datepicker');
-            overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+            overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
             overlayContent.$.monthScroller.bufferSize = 0;
             overlayContent.$.yearScroller.bufferSize = 0;
             overlay = datepicker.$.overlay;

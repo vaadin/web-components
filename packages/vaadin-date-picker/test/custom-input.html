@@ -30,7 +30,7 @@
 
       beforeEach(done => {
         datepicker = fixture('custom-input-datepicker');
-        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
         setTimeout(done);

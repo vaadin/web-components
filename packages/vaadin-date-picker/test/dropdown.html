@@ -51,7 +51,7 @@
         overlay = datepicker.$.overlay;
         input = datepicker.$.input;
         toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
-        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
       });
@@ -126,7 +126,7 @@
         datepicker = fixture('datepicker-wrapped').$.datepicker;
         toggleButton = datepicker.shadowRoot.querySelector('[part="toggle-button"]');
         clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
-        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
       });
