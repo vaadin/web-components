@@ -235,8 +235,6 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Object
           },
 
-          _isScoped: Boolean,
-
           _shadyStyleScope: String,
 
           _contentNodes: Array
@@ -458,11 +456,6 @@ This program is available under Apache License Version 2.0, available at https:/
         this._placeholder = document.createComment('vaadin-overlay-placeholder');
         this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
-        if (this._shadyStyleScope) {
-          Array.from(this.$.content.shadowRoot.querySelectorAll('*')).forEach(el => {
-            el.classList.add('style-scope', this._shadyStyleScope);
-          });
-        }
       }
 
       _animatedClosing() {
@@ -546,6 +539,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
 
+        if (this._shadyStyleScope) {
+          // NOTE(platosha): Remove the style scope related to old content.
+          this.$.content.removeAttribute('is');
+        }
+
         this._observer.connect();
 
         this._contentNodes = undefined;
@@ -574,9 +572,9 @@ This program is available under Apache License Version 2.0, available at https:/
         this._contentNodes = Array.from(this._instance.root.childNodes);
 
         const templateRoot = template.getRootNode();
-        this._isScoped = templateRoot !== document;
+        const _isScoped = templateRoot !== document;
         this._shadyStyleScope = '';
-        if (this._isScoped) {
+        if (_isScoped) {
           let scopeCssText = '';
           Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
             scopeCssText += style.textContent;
@@ -600,6 +598,15 @@ This program is available under Apache License Version 2.0, available at https:/
             const style = document.createElement('style');
             style.textContent = scopeCssText;
             this.$.content.shadowRoot.appendChild(style);
+          }
+          if (this._shadyStyleScope) {
+            // NOTE(platosha): here we trick ShadyCSS to think that the scope is
+            // what `this._shadyStyleScope` says. What we actually need is to add
+            // `style-scope ${this._shadyStyleScope}` classes to every element
+            // inside this.$.content.shadowRoot. But if we do that manually,
+            // these classes might get removed by ShadyCSS later (for example,
+            // after next flush).
+            this.$.content.setAttribute('is', this._shadyStyleScope);
           }
           this.$.content.shadowRoot.appendChild(this._instance.root);
           this.content = this.$.content.shadowRoot;

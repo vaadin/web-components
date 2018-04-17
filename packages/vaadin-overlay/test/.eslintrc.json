@@ -9,6 +9,7 @@
     "expect": false,
     "gemini": false,
     "sinon": false,
-    "MockInteractions": false
+    "MockInteractions": false,
+    "flush": false
   }
 }
