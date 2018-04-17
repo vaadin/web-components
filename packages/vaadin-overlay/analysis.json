@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-overlay.html",
         "start": {
-          "line": 657,
+          "line": 664,
           "column": 4
         },
         "end": {
-          "line": 657,
+          "line": 664,
           "column": 40
         }
       },
@@ -23,29 +23,8 @@
           "path": "src/vaadin-overlay.html",
           "properties": [
             {
-              "name": "_last",
-              "type": "?",
-              "description": "returns true if this is the last one in the opened overlays stack\n       ",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 494,
-                  "column": 6
-                },
-                "end": {
-                  "line": 496,
-                  "column": 7
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              }
-            },
-            {
               "name": "opened",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "",
               "privacy": "public",
               "sourceRange": {
@@ -60,14 +39,13 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true,
-                  "attributeType": "Boolean"
+                  "notify": true
                 }
               }
             },
             {
               "name": "template",
-              "type": "Object | null | undefined",
+              "type": "Object",
               "description": "The template of the overlay content.",
               "privacy": "public",
               "sourceRange": {
@@ -82,14 +60,13 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true,
-                  "attributeType": "Object"
+                  "notify": true
                 }
               }
             },
             {
               "name": "instanceProps",
-              "type": "Object | null | undefined",
+              "type": "Object",
               "description": "Optional argument for `Polymer.Templatize.templatize`.",
               "privacy": "public",
               "sourceRange": {
@@ -103,14 +80,12 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Object"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "content",
-              "type": "Object | null | undefined",
+              "type": "Object",
               "description": "References the content container after the template is stamped.",
               "privacy": "public",
               "sourceRange": {
@@ -125,14 +100,13 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true,
-                  "attributeType": "Object"
+                  "notify": true
                 }
               }
             },
             {
               "name": "withBackdrop",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "",
               "privacy": "public",
               "sourceRange": {
@@ -146,15 +120,13 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
+                "polymer": {}
               },
               "defaultValue": "false"
             },
             {
               "name": "modeless",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "privacy": "public",
               "sourceRange": {
@@ -169,15 +141,14 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_modelessChanged\"",
-                  "attributeType": "Boolean"
+                  "observer": "\"_modelessChanged\""
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "focusTrap",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "privacy": "public",
               "sourceRange": {
@@ -191,15 +162,13 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
+                "polymer": {}
               },
               "defaultValue": "false"
             },
             {
               "name": "_mouseDownInside",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -213,14 +182,12 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "_mouseUpInside",
-              "type": "boolean | null | undefined",
+              "type": "boolean",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -234,14 +201,12 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "_instance",
-              "type": "Object | null | undefined",
+              "type": "Object",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -255,14 +220,12 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Object"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "_boundIronOverlayCanceledListener",
-              "type": "Object | null | undefined",
+              "type": "Object",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -276,72 +239,45 @@
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Object"
-                }
-              }
-            },
-            {
-              "name": "_isScoped",
-              "type": "boolean | null | undefined",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 237,
-                  "column": 10
-                },
-                "end": {
-                  "line": 237,
-                  "column": 28
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "_shadyStyleScope",
-              "type": "string | null | undefined",
+              "type": "string",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 239,
+                  "line": 237,
                   "column": 10
                 },
                 "end": {
-                  "line": 239,
+                  "line": 237,
                   "column": 34
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "String"
-                }
+                "polymer": {}
               }
             },
             {
               "name": "_contentNodes",
-              "type": "Array | null | undefined",
+              "type": "Array",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 241,
+                  "line": 239,
                   "column": 10
                 },
                 "end": {
-                  "line": 241,
+                  "line": 239,
                   "column": 30
                 }
               },
               "metadata": {
-                "polymer": {
-                  "attributeType": "Array"
-                }
+                "polymer": {}
               }
             }
           ],
@@ -352,19 +288,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 272,
                   "column": 6
                 },
                 "end": {
-                  "line": 285,
+                  "line": 283,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_detectIosNavbar",
@@ -372,19 +305,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 287,
+                  "line": 285,
                   "column": 6
                 },
                 "end": {
-                  "line": 304,
+                  "line": 302,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_setTemplateFromNodes",
@@ -392,11 +322,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 306,
+                  "line": 304,
                   "column": 6
                 },
                 "end": {
-                  "line": 308,
+                  "line": 306,
                   "column": 7
                 }
               },
@@ -405,10 +335,7 @@
                 {
                   "name": "nodes"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "close",
@@ -416,11 +343,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 314,
+                  "line": 312,
                   "column": 6
                 },
                 "end": {
-                  "line": 320,
+                  "line": 318,
                   "column": 7
                 }
               },
@@ -429,10 +356,7 @@
                 {
                   "name": "sourceEvent"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "connectedCallback",
@@ -440,19 +364,16 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 322,
+                  "line": 320,
                   "column": 6
                 },
                 "end": {
-                  "line": 333,
+                  "line": 331,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "disconnectedCallback",
@@ -460,19 +381,16 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 335,
+                  "line": 333,
                   "column": 6
                 },
                 "end": {
-                  "line": 351,
+                  "line": 349,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_mouseDownListener",
@@ -480,11 +398,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 353,
+                  "line": 351,
                   "column": 6
                 },
                 "end": {
-                  "line": 355,
+                  "line": 353,
                   "column": 7
                 }
               },
@@ -493,10 +411,7 @@
                 {
                   "name": "event"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_mouseUpListener",
@@ -504,11 +419,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 357,
+                  "line": 355,
                   "column": 6
                 },
                 "end": {
-                  "line": 359,
+                  "line": 357,
                   "column": 7
                 }
               },
@@ -517,10 +432,7 @@
                 {
                   "name": "event"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_outsideClickListener",
@@ -528,11 +440,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 369,
+                  "line": 367,
                   "column": 6
                 },
                 "end": {
-                  "line": 386,
+                  "line": 384,
                   "column": 7
                 }
               },
@@ -541,10 +453,7 @@
                 {
                   "name": "event"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_keydownListener",
@@ -552,11 +461,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 392,
+                  "line": 390,
                   "column": 6
                 },
                 "end": {
-                  "line": 413,
+                  "line": 411,
                   "column": 7
                 }
               },
@@ -565,10 +474,7 @@
                 {
                   "name": "event"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_openedChanged",
@@ -576,11 +482,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 419,
+                  "line": 417,
                   "column": 6
                 },
                 "end": {
-                  "line": 439,
+                  "line": 437,
                   "column": 7
                 }
               },
@@ -589,10 +495,7 @@
                 {
                   "name": "opened"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_animatedOpening",
@@ -600,19 +503,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 441,
+                  "line": 439,
                   "column": 6
                 },
                 "end": {
-                  "line": 454,
+                  "line": 452,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_attachOverlay",
@@ -620,19 +520,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 456,
+                  "line": 454,
                   "column": 6
                 },
                 "end": {
-                  "line": 465,
+                  "line": 458,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_animatedClosing",
@@ -640,19 +537,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 467,
+                  "line": 460,
                   "column": 6
                 },
                 "end": {
-                  "line": 483,
+                  "line": 476,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_detachOverlay",
@@ -660,19 +554,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 485,
+                  "line": 478,
                   "column": 6
                 },
                 "end": {
-                  "line": 489,
+                  "line": 482,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_modelessChanged",
@@ -680,11 +571,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 498,
+                  "line": 491,
                   "column": 6
                 },
                 "end": {
-                  "line": 506,
+                  "line": 499,
                   "column": 7
                 }
               },
@@ -693,10 +584,7 @@
                 {
                   "name": "modeless"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_enterModalState",
@@ -704,19 +592,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 508,
+                  "line": 501,
                   "column": 6
                 },
                 "end": {
-                  "line": 520,
+                  "line": 513,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_exitModalState",
@@ -724,19 +609,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 522,
+                  "line": 515,
                   "column": 6
                 },
                 "end": {
-                  "line": 533,
+                  "line": 526,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_removeOldContent",
@@ -744,19 +626,16 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 535,
+                  "line": 528,
                   "column": 6
                 },
                 "end": {
-                  "line": 552,
+                  "line": 550,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": [],
-              "return": {
-                "type": "void"
-              }
+              "params": []
             },
             {
               "name": "_templateChanged",
@@ -764,11 +643,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 554,
+                  "line": 552,
                   "column": 6
                 },
                 "end": {
-                  "line": 609,
+                  "line": 616,
                   "column": 7
                 }
               },
@@ -777,10 +656,7 @@
                 {
                   "name": "template"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_isFocused",
@@ -788,11 +664,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 611,
+                  "line": 618,
                   "column": 6
                 },
                 "end": {
-                  "line": 613,
+                  "line": 620,
                   "column": 7
                 }
               },
@@ -809,11 +685,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 615,
+                  "line": 622,
                   "column": 6
                 },
                 "end": {
-                  "line": 618,
+                  "line": 625,
                   "column": 7
                 }
               },
@@ -830,11 +706,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 620,
+                  "line": 627,
                   "column": 6
                 },
                 "end": {
-                  "line": 638,
+                  "line": 645,
                   "column": 7
                 }
               },
@@ -846,10 +722,7 @@
                 {
                   "name": "index"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             },
             {
               "name": "_getFocusableElements",
@@ -857,11 +730,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 640,
+                  "line": 647,
                   "column": 6
                 },
                 "end": {
-                  "line": 643,
+                  "line": 650,
                   "column": 7
                 }
               },
@@ -874,11 +747,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 645,
+                  "line": 652,
                   "column": 6
                 },
                 "end": {
-                  "line": 649,
+                  "line": 656,
                   "column": 7
                 }
               },
@@ -887,10 +760,7 @@
                 {
                   "name": "node"
                 }
-              ],
-              "return": {
-                "type": "void"
-              }
+              ]
             }
           ],
           "staticMethods": [
@@ -899,7 +769,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -915,9 +785,6 @@
                   "name": "moduleName"
                 }
               ],
-              "return": {
-                "type": "void"
-              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -934,7 +801,7 @@
               "column": 4
             },
             "end": {
-              "line": 650,
+              "line": 657,
               "column": 5
             }
           },
@@ -956,7 +823,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean | null | undefined"
+              "type": "boolean"
             },
             {
               "name": "template",
@@ -972,7 +839,7 @@
                 }
               },
               "metadata": {},
-              "type": "Object | null | undefined"
+              "type": "Object"
             },
             {
               "name": "instance-props",
@@ -988,7 +855,7 @@
                 }
               },
               "metadata": {},
-              "type": "Object | null | undefined"
+              "type": "Object"
             },
             {
               "name": "content",
@@ -1004,7 +871,7 @@
                 }
               },
               "metadata": {},
-              "type": "Object | null | undefined"
+              "type": "Object"
             },
             {
               "name": "with-backdrop",
@@ -1020,7 +887,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean | null | undefined"
+              "type": "boolean"
             },
             {
               "name": "modeless",
@@ -1036,7 +903,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean | null | undefined"
+              "type": "boolean"
             },
             {
               "name": "focus-trap",
@@ -1052,7 +919,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean | null | undefined"
+              "type": "boolean"
             }
           ],
           "events": [
@@ -1077,7 +944,7 @@
             {
               "type": "CustomEvent",
               "name": "vaadin-overlay-outside-click",
-              "description": "We need to listen on 'click' / 'tap' event and capture it and close the overlay before\npropagating the event to the listener in the button. Otherwise, if the clicked button would call\nopen(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4",
+              "description": "vaadin-overlay-outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
               "metadata": {}
             },
             {
@@ -1108,6 +975,7 @@
               "description": "",
               "name": "",
               "range": {
+                "file": "src/vaadin-overlay.html",
                 "start": {
                   "line": 87,
                   "column": 8

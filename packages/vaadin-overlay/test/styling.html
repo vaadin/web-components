@@ -85,10 +85,13 @@
       let overlay;
 
       describe('local styles', () => {
-        beforeEach(() => {
+        beforeEach(done => {
           const localStyles = fixture('localStyles');
           overlay = localStyles.$.overlay;
           overlay.opened = true;
+          // NOTE(platosha): It’s important that nothing breaks after a flush.
+          // Not having a flush here might produce false positive results.
+          flush(done);
         });
 
         afterEach(() => {
