@@ -219,10 +219,6 @@ This program is available under Apache License Version 2.0, available at https:/
             value: false
           },
 
-          _focusedElement: {
-            type: Object
-          },
-
           _mouseDownInside: {
             type: Boolean
           },
@@ -619,9 +615,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _focusedIndex(elements) {
         elements = elements || this._getFocusableElements();
-        return elements.reduce((prev, e, idx) => {
-          return prev < 0 && this._isFocused(e) ? idx : prev;
-        }, -1);
+        return elements.indexOf(elements.filter(this._isFocused).pop());
       }
 
       _cycleTab(increment, index) {
@@ -646,8 +640,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _getFocusableElements() {
         // collect all focusable elements
-        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.overlay).
-          filter(element => !element.shadowRoot || Polymer.IronFocusablesHelper.getTabbableNodes(element).length === 0);
+        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.overlay);
       }
 
       _processPendingMutationObserversFor(node) {
