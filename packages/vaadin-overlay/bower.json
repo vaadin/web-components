@@ -42,6 +42,7 @@
     "vaadin-combo-box": "master",
     "vaadin-context-menu": "master",
     "vaadin-date-picker": "master",
+    "vaadin-dialog": "master",
     "vaadin-dropdown-menu": "master",
     "vaadin-item": "master",
     "vaadin-list-box": "master",

@@ -9,6 +9,7 @@
   <script src="../../vaadin-combo-box/test/test-suites.js"></script>
   <script src="../../vaadin-context-menu/test/test-suites.js"></script>
   <script src="../../vaadin-date-picker/test/test-suites.js"></script>
+  <script src="../../vaadin-dialog/test/test-suites.js"></script>
   <script src="../../vaadin-dropdown-menu/test/test-suites.js"></script>
   <script src="test-suites.js"></script>
 </head>
@@ -21,13 +22,13 @@
 
     WCT.loadSuites(
       window.VaadinOverlaySuites
-      // TODO(platosha): enable depending component tests once the components are fixed
-      //   .concat(
-      //     window.VaadinComboBoxSuites.map(suite => `../../vaadin-combo-box/test/${suite}`),
-      //     window.VaadinContextMenuSuites.map(suite => `../../vaadin-context-menu/test/${suite}`),
-      //     window.VaadinDatePickerSuites.map(suite => `../../vaadin-date-picker/test/${suite}`),
-      //     window.VaadinDropdownMenuSuites.map(suite => `../../vaadin-dropdown-menu/test/${suite}`)
-      //   )
+        .concat(
+          window.VaadinComboBoxSuites.map(suite => `../../vaadin-combo-box/test/${suite}`),
+          window.VaadinContextMenuSuites.map(suite => `../../vaadin-context-menu/test/${suite}`),
+          window.VaadinDatePickerSuites.map(suite => `../../vaadin-date-picker/test/${suite}`),
+          window.VaadinDialogSuites.map(suite => `../../vaadin-dialog/test/${suite}`),
+          window.VaadinDropdownMenuSuites.map(suite => `../../vaadin-dropdown-menu/test/${suite}`)
+        )
     );
   </script>
 </body>
