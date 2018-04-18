@@ -51,6 +51,11 @@
         c2 = element.querySelector('#c2');
       });
 
+      it('should be a border box', () => {
+        // This is merely to ease the use with Flow
+        expect(window.getComputedStyle(element).boxSizing).to.equal('border-box');
+      });
+
       it('items are next to each other', () => {
         expect(getCoords(element)).to.include({top: 0, right: 300, bottom: 200, left: 0});
         expect(getCoords(c1)).to.include({top: 0, left: 0});
