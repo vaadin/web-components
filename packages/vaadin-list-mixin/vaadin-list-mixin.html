@@ -42,7 +42,17 @@ This program is available under Apache License Version 2.0, available at https:/
           value: ''
         },
 
-        /* The array of list items */
+        /**
+         * The list of items from which a selection can be made.
+         * Is is populated from the elements passed to the light DOM,
+         * and updated dynamically when adding or removing items.
+         *
+         * The item elements must implement `Vaadin.ItemMixin`.
+         *
+         * Note: unlike `<vaadin-combo-box>`, this property is read-only,
+         * so if you want to provide items by iterating array of data,
+         * you have to use `dom-repeat` and place it to the light DOM.
+         */
         items: {
           type: Array,
           readOnly: true,
