@@ -440,6 +440,37 @@
           expect(getContainerCellContent(grid.$.footer, 0, 5).textContent).to.equal('footer-bar');
         });
 
+        ['header', 'footer'].forEach((container) => {
+          it(`should change the ${container} template`, () => {
+            const newTemplate = document.createElement('template');
+            newTemplate.classList.add(container);
+            newTemplate.setAttribute('slot', `grid-column-${container}-template`);
+            newTemplate.innerHTML = `${container}-bar`;
+
+            slotted.$.xgrid.removeChild(slotted.$.xgrid.querySelector(`template.${container}`));
+            slotted.$.xgrid.appendChild(newTemplate);
+            flushGrid(grid);
+            const column = newTemplate.assignedSlot.parentElement;
+            column._templateObserver.flush();
+
+            expect(getContainerCellContent(grid.$[container], 0, 5).textContent).to.equal(`${container}-bar`);
+          });
+        });
+
+        it(`should change the body template`, () => {
+          const newTemplate = document.createElement('template');
+          newTemplate.setAttribute('slot', `grid-column-template`);
+          newTemplate.innerHTML = `bar-[[index]]`;
+
+          slotted.removeChild(slotted.querySelector(`template`));
+          slotted.appendChild(newTemplate);
+          flushGrid(grid);
+          const column = newTemplate.assignedSlot.assignedSlot.parentElement;
+          column._templateObserver.flush();
+
+          expect(getContainerCellContent(grid.$.items, 0, 5).textContent).to.equal('bar-0');
+        });
+
       });
 
       describe('observed', () => {
