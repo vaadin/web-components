@@ -78,12 +78,20 @@
     <h3>Interacting with Content</h3>
     <vaadin-demo-snippet id="notification-basic-demos-interaction">
       <template preserve-content>
+        <style>
+          .customized {
+            color: red;
+            font-style: italic;
+          }
+        </style>
         <dom-bind id="bind-elm">
           <template>
             <vaadin-button on-click="_open">Open Notification</button>
             <vaadin-notification id="noti-elm" duration="0" position="bottom-end">
               <template>
-                This notification remains opened until the button inside is clicked.
+                <p class="customized">
+                  This notification remains opened until the button inside is clicked.
+                </p>
                 <vaadin-button on-click="_close">Close</vaadin-button>
               </template>
             </vaadin-notification>

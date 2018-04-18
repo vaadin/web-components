@@ -287,16 +287,53 @@ This program is available under Apache License Version 2.0, available at https:/
             this._container.opened = true;
             if (!this._instance) {
               const template = this.querySelector('template');
-              const Templatizer = Polymer.Templatize.templatize(template, this, {
-                forwardHostProp: function(prop, value) {
-                  if (this._instance) {
-                    this._instance.forwardHostProp(prop, value);
+              if (!template._Templatizer) {
+                template._Templatizer = Polymer.Templatize.templatize(template, this, {
+                  instanceProps: this.instanceProps,
+                  forwardHostProp: function(prop, value) {
+                    if (this._instance) {
+                      this._instance.forwardHostProp(prop, value);
+                    }
+                  }
+                });
+              }
+              this._instance = new template._Templatizer({});
+              this._contentNodes = Array.from(this._instance.root.childNodes);
+
+              const templateRoot = template.getRootNode();
+              this._isScoped = templateRoot !== document;
+              this._shadyStyleScope = '';
+              this._card = this.$['vaadin-notification-card'];
+              if (this._isScoped) {
+                let scopeCssText = '';
+                Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
+                  scopeCssText += style.textContent;
+                });
+                if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+                  this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+                  if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
+                    this._shadyStyleScope = templateRoot.host.getAttribute('is');
                   }
                 }
-              });
-              this._instance = new Templatizer({});
-              this._card = this.$['vaadin-notification-card'];
-              this._card.appendChild(this._instance.root);
+
+                // The overlay root’s :host styles should not apply inside the overlay
+                scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
+
+                if (!this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot) {
+                  this._card.shadowRoot.querySelector('[part~="content"]').attachShadow({mode: 'open'});
+                  // FIXME(platosha): IronFocusablesHelper does only use legacy .root
+                  this._card.shadowRoot.querySelector('[part~="content"]').root = this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot;
+                }
+                if (scopeCssText) {
+                  const style = document.createElement('style');
+                  style.textContent = scopeCssText;
+                  this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.appendChild(style);
+                }
+                this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.appendChild(this._instance.root);
+              } else {
+                this._card.appendChild(this._instance.root);
+              }
+
               this._card.setAttribute('aria-label', this._card.textContent.trim());
             }
 
