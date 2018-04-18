@@ -29,6 +29,51 @@
       </template>
     </demo-snippet>
 
+    <h3>Gauge chart</h3>
+    <demo-snippet>
+      <template>
+        <dom-module id="speedometer" theme-for="vaadin-chart">
+          <template>
+            <style include="vaadin-chart-default-theme">
+              :host(.speedometer) .highcharts-minor-tick {
+                stroke: #339;
+                stroke-width: 1;
+              }
+
+              :host(.speedometer) .highcharts-tick,
+              :host(.speedometer) .highcharts-axis-line {
+                stroke: #339;
+                stroke-width: 2;
+              }
+
+              :host(.speedometer) .highcharts-label {
+                fill: #339;
+              }
+
+              :host(.speedometer) .highcharts-grid-line,
+              :host(.speedometer) .highcharts-minor-grid-line {
+                stroke: none;
+              }
+
+              :host(.speedometer) .highcharts-color-0 .highcharts-pivot {
+                fill: #000;
+                stroke: #000;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-chart class="speedometer" title="Speedometer" type="gauge" additional-options='{"yAxis": {
+              "min": 0,
+              "max": 220,
+              "minorTickLength": 5,
+              "offset": -10,
+              "tickLength": 5
+            }, "pane": {"startAngle": -150, "endAngle": 150}}'>
+          <vaadin-chart-series title="Speed" values="[89]"></vaadin-chart-series>
+        </vaadin-chart>
+      </template>
+    </demo-snippet>
+
     <h3>Using the DOM API</h3>
     <demo-snippet>
       <template>

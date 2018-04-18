@@ -91,8 +91,26 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *
        * Now that we covered the basic steps to create an empty chart, let us show how you can configure it.
        *
-       * There are two ways of configuring your `<vaadin-chart>` element: **JS API** and **JSON API**.
-       * Note that you can make use of both APIs in your element.
+       * There are two ways of configuring your `<vaadin-chart>` element: **HTML API**, **JS API** and **JSON API**.
+       * Note that you can make use of all APIs in your element.
+       *
+       * #### Configuring your chart using HTML API
+       *
+       * `vaadin-chart` has a set of attributes to make it easier for you to customize your chart.
+       * Using as a base the project created with in Quick Start:
+       *
+       * ```html
+       *  <vaadin-chart title="The chart title" subtitle="The chart subtitle">
+       *    <vaadin-chart-series
+       *          type="column"
+       *          title="The series title"
+       *          values="[10,20,30]">
+       *    </vaadin-chart-series>
+       *  </vaadin-chart>
+       * ```
+       *
+       * > Note that while you can set type for each series individually, for some types, such as `'bar'`, `'gauge'` and `'solidgauge'`, you
+       * > have to set it as the default series type on `<vaadin-chart>` in order to work properly.
        *
        * #### Configuring your chart using JS API
        *
@@ -320,6 +338,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Sets the default series type of the chart.
+             * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type.
+             */
+            'type': {
+              type: String,
+              observer: '__updateType',
+              reflectToAttribute: true
+            },
+
+            /**
              * Represents the subtitle of the chart.
              */
             'subtitle': {
@@ -396,6 +424,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           const options = Object.assign({}, this._baseConfig);
           this.__deepMerge(options, this['additional-options']);
 
+          if (this.type) {
+            options.chart = options.chart || {};
+            options.chart.type = this.type;
+          }
+
           if (this.title) {
             options.title = {
               text: this.title
@@ -419,7 +452,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               enabled: false
             };
           }
-
           return options;
         }
 
@@ -1078,6 +1110,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           if (newValue && newValue.length > 0) {
             this.configuration.title.update({text: newValue});
+          }
+        }
+
+        __updateType(newValue) {
+          if (!this.configuration) {
+            return;
+          }
+
+          if (newValue && newValue.length > 0) {
+            this.configuration.update({
+              chart: {
+                type: newValue
+              }
+            });
           }
         }
 

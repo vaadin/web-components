@@ -149,7 +149,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             /**
              *  A string with the type of the series.
-             *  Defaults to `'line'`.
+             *  Defaults to `'line'` in case no type is set for the chart.
+             * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type on `<vaadin-chart>`.
              */
             'type': {
               type: String,
