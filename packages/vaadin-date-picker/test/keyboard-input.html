@@ -78,7 +78,7 @@
           datepicker = fixture('datepicker');
           overlay = datepicker.$.overlay;
           target = datepicker._inputElement;
-          overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+          overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
           overlayContent.$.monthScroller.bufferSize = 0;
           overlayContent.$.yearScroller.bufferSize = 0;
           setTimeout(done, 1);
@@ -363,7 +363,7 @@
               inputText('1/2/2000 ');
               arrowDown();
               arrowDown();
-              const overlayContent = datepicker.$.overlay.shadowRoot.querySelector('vaadin-date-picker-overlay-content').$.monthScroller;
+              const overlayContent = datepicker.$.overlay.content.querySelector('vaadin-date-picker-overlay-content').$.monthScroller;
               target = overlayContent;
               esc();
               expect(datepicker.opened).to.be.false;
@@ -476,7 +476,7 @@
 
           var today;
 
-          beforeEach(() => overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content'));
+          beforeEach(() => overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content'));
 
           it('should be tabbable', () => {
             expect(parseInt(overlayContent.getAttribute('tabindex'), 10)).to.equal(0);

@@ -51,7 +51,7 @@
         datepicker = fixture('datepicker');
         clearButton = datepicker.root.querySelector('[part="clear-button"]');
         toggleButton = datepicker.root.querySelector('[part="toggle-button"]');
-        overlayContent = datepicker.$.overlay.shadowRoot.querySelector('#overlay-content');
+        overlayContent = datepicker.$.overlay.content.querySelector('#overlay-content');
         overlayContent.$.monthScroller.bufferSize = 0;
         overlayContent.$.yearScroller.bufferSize = 0;
       });
