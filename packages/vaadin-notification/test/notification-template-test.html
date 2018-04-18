@@ -61,11 +61,11 @@
       describe('data-binding', () => {
         it('notification should bind parent property', () => {
           container.message = 'foo';
-          expect(notification._card.textContent.trim()).to.equal('foo');
+          expect(notification._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.textContent.trim()).to.equal('foo');
         });
 
         it('notification should support two-way data binding', () => {
-          const input = notification._card.querySelector('input');
+          const input = notification._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.querySelector('input');
           input.value = 'bar';
           input.dispatchEvent(new CustomEvent('input'));
           expect(container.text).to.equal('bar');

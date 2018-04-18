@@ -304,6 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
               this._isScoped = templateRoot !== document;
               this._shadyStyleScope = '';
               this._card = this.$['vaadin-notification-card'];
+              this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
               if (this._isScoped) {
                 let scopeCssText = '';
                 Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
@@ -319,18 +320,18 @@ This program is available under Apache License Version 2.0, available at https:/
                 // The overlay root’s :host styles should not apply inside the overlay
                 scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
 
-                if (!this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot) {
-                  this._card.shadowRoot.querySelector('[part~="content"]').attachShadow({mode: 'open'});
+                if (!this._cardContent.shadowRoot) {
+                  this._cardContent.attachShadow({mode: 'open'});
                   // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-                  this._card.shadowRoot.querySelector('[part~="content"]').root = this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot;
+                  this._cardContent.root = this._cardContent.shadowRoot;
                 }
                 if (scopeCssText) {
                   const style = document.createElement('style');
                   style.textContent = scopeCssText;
-                  this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.appendChild(style);
+                  this._cardContent.shadowRoot.appendChild(style);
                 }
-                this._card.shadowRoot.querySelector('[part~="content"]').shadowRoot.appendChild(this._instance.root);
-              } else {
+                this._cardContent.shadowRoot.appendChild(this._instance.root);
+              } else {  
                 this._card.appendChild(this._instance.root);
               }
 
