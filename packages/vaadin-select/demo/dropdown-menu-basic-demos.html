@@ -105,7 +105,7 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>The value property</h3>
+    <h3>The Value Property</h3>
     <vaadin-demo-snippet id="dropdown-menu-list-box-custom-value">
       <template preserve-content>
         <vaadin-dropdown-menu placeholder="Language" value="ES">
@@ -115,6 +115,32 @@
               <vaadin-item value="ES" label="Spanish">Spanish (default)</vaadin-item>
               <vaadin-item value="FI" label="Finnish">Finnish</vaadin-item>
               <vaadin-item value="EN" label="English">English</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Styling of the Content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
+      <template preserve-content>
+        <style>
+          vaadin-item:hover {
+            font-style: italic;
+            background: var(--lumo-success-color-10pct);
+            box-shadow: inset 0 -3px 0 0 var(--lumo-success-color-50pct);
+          }
+
+          vaadin-item[selected]::before {
+            color: var(--lumo-success-color);
+          }
+        </style>
+        <vaadin-dropdown-menu label="Name">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
             </vaadin-list-box>
           </template>
         </vaadin-dropdown-menu>

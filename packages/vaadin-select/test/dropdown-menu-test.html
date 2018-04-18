@@ -58,6 +58,20 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="menu-element">
+    <template>
+      <vaadin-dropdown-menu>
+        <template>
+          <style>
+            /* Custom styling */
+          </style>
+          <vaadin-list-box>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
   <test-fixture id="style-scope">
     <template>
       <vaadin-dropdown-menu value="v1">
@@ -143,6 +157,16 @@
         dropdown.opened = true;
         dropdown.value = 'foo';
         dropdown.opened = false;
+      });
+    });
+
+    describe('vaadin-dropdown-menu menu-element', () => {
+      let dropdown;
+
+      beforeEach(() => dropdown = fixture('menu-element'));
+
+      it('should correctly detect the first menu element', () => {
+        expect(dropdown._menuElement.localName).to.be.eql('vaadin-list-box');
       });
     });
 
