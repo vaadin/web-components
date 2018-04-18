@@ -104,62 +104,13 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Styling the Content from the Parent Component Scope</h3>
-    <p>
-      If the notification is used inside a component, use the component styles
-      for styling the notification card content.
-    </p>
-    <vaadin-demo-snippet id='notification-basic-parent-scope-styling'>
-      <template preserve-content>
-        <parent-scope-example></parent-scope-example>
-        <dom-module id="parent-scope-example">
-          <template preserve-content>
-            <style>
-              :host::before {
-                display: block;
-                background: #fff;
-                content: "Content from the :host style, the notification card shouldn’t show it.";
-              }
-
-              .parent-scope-notification {
-                font: italic 24pt serif;
-                background: #fff;
-                color: #000;
-                padding: 1em;
-                border: .25em solid #000;
-              }
-            </style>
-            <vaadin-checkbox checked="{{notificationOpened}}">Show notification</vaadin-checkbox>
-            <vaadin-notification opened="{{notificationOpened}}">
-              <template>
-                <div class="parent-scope-notification">
-                  I am styled from the parent scope.
-                </div>
-              </template>
-            </vaadin-notification>
-          </template>
-          <script>
-            window.addDemoReadyListener('#notification-basic-parent-scope-styling', function(document) {
-              Polymer({
-                is: 'parent-scope-example'
-              });
-            });
-          </script>
-        </dom-module>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Styling the Content from the Global Scope</h3>
-    <p>
-      If the notification is used in the global scope, then global styles can
-      target the notification card content.
-    </p>
+    <h3>Custom Styling of the Content</h3>
     <vaadin-demo-snippet id="notification-basic-global-scope-styling">
       <template preserve-content>
         <dom-bind>
           <template>
             <style>
-              .global-notification {
+              .notification {
                 font: italic 24pt serif;
                 background: #fff;
                 color: #000;
@@ -170,8 +121,8 @@
             <vaadin-checkbox checked="{{notificationOpened}}">Show notification</vaadin-checkbox>
             <vaadin-notification opened="{{notificationOpened}}">
               <template>
-                <div class="global-notification">
-                  I am styled from the global scope.
+                <div class="notification">
+                  I am styled with notification class.
                 </div>
               </template>
             </vaadin-notification>
