@@ -13,6 +13,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
+    <style>
+      #scroller {
+        overflow: auto;
+
+        /* Fixes item background from getting on top of scrollbars on Safari */
+        transform: translate3d(0, 0, 0);
+
+        /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
+        -webkit-overflow-scrolling: touch;
+
+        /* Fixes scrollbar disappearing when "Show scroll bars: Always" enabled in Safari */
+        box-shadow: 0 0 0 white;
+      }
+    </style>
     <vaadin-combo-box-dropdown id="dropdown"
         opened="{{opened}}"
         hidden="[[_hidden(_items.*, loading)]]"
@@ -20,25 +34,6 @@ This program is available under Apache License Version 2.0, available at https:/
         on-template-changed="_templateChanged"
         on-position-changed="_setOverlayHeight">
       <template>
-        <style>
-          :host([opened][loading]) {
-            display: block !important;
-            height: 58px;
-          }
-
-          #scroller {
-            overflow: auto;
-
-            /* Fixes item background from getting on top of scrollbars on Safari */
-            transform: translate3d(0, 0, 0);
-
-            /* Enable momentum scrolling on iOS (iron-list v1.2+ no longer does it for us) */
-            -webkit-overflow-scrolling: touch;
-
-            /* Fixes scrollbar disappearing when "Show scroll bars: Always" enabled in Safari */
-            box-shadow: 0 0 0 white;
-          }
-        </style>
         <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
           <iron-list id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
             <template>
@@ -173,8 +168,8 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(e) {
-        this._selector = this.$.dropdown.$.overlay.$.content.querySelector('#selector');
-        this._scroller = this.$.dropdown.$.overlay.$.content.querySelector('#scroller');
+        this._selector = this.$.dropdown.$.overlay.content.querySelector('#selector');
+        this._scroller = this.$.dropdown.$.overlay.content.querySelector('#scroller');
       }
 
       _loadingChanged(loading) {

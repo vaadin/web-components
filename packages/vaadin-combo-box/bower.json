@@ -33,7 +33,7 @@
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
     "vaadin-control-state-mixin": "^2.0.0",
-    "vaadin-overlay": "^2.0.0",
+    "vaadin-overlay": "^3.0.0",
     "vaadin-text-field": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
