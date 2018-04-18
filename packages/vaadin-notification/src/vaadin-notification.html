@@ -330,8 +330,11 @@ This program is available under Apache License Version 2.0, available at https:/
                   style.textContent = scopeCssText;
                   this._cardContent.shadowRoot.appendChild(style);
                 }
+                if (this._shadyStyleScope) {
+                  this._cardContent.setAttribute('is', this._shadyStyleScope);
+                }
                 this._cardContent.shadowRoot.appendChild(this._instance.root);
-              } else {  
+              } else {
                 this._card.appendChild(this._instance.root);
               }
 
