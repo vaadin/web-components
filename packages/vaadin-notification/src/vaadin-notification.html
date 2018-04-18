@@ -250,7 +250,11 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: 'bottom-start',
               observer: '_positionChanged'
-            }
+            },
+
+            _isScoped: Boolean,
+
+            _shadyStyleScope: String
           };
         }
 
@@ -289,7 +293,6 @@ This program is available under Apache License Version 2.0, available at https:/
               const template = this.querySelector('template');
               if (!template._Templatizer) {
                 template._Templatizer = Polymer.Templatize.templatize(template, this, {
-                  instanceProps: this.instanceProps,
                   forwardHostProp: function(prop, value) {
                     if (this._instance) {
                       this._instance.forwardHostProp(prop, value);
@@ -298,7 +301,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 });
               }
               this._instance = new template._Templatizer({});
-              this._contentNodes = Array.from(this._instance.root.childNodes);
 
               const templateRoot = template.getRootNode();
               this._isScoped = templateRoot !== document;
@@ -322,8 +324,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
                 if (!this._cardContent.shadowRoot) {
                   this._cardContent.attachShadow({mode: 'open'});
-                  // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-                  this._cardContent.root = this._cardContent.shadowRoot;
                 }
                 if (scopeCssText) {
                   const style = document.createElement('style');
