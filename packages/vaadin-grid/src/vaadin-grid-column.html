@@ -89,7 +89,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_stampBodyTemplate(_bodyTemplate, _cells.*)',
+        '_stampBodyTemplate(_bodyTemplate, _cells, _cells.*)',
         '_stampHeaderTemplate(_headerTemplate, _headerCell)',
         '_stampFooterTemplate(_footerTemplate, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
@@ -197,12 +197,8 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
-    _stampBodyTemplate(template, cells) {
-      if (!template || !this._cells) {
-        return;
-      }
-
-      this._cells.forEach(cell => {
+    __stampColumnTemplate(template, cells) {
+      cells.forEach(cell => {
         if (cell._template !== template) {
           cell._template = template;
 
@@ -217,26 +213,24 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    _stampHeaderTemplate(headerTemplate, headerCell) {
-      if (!headerTemplate || !headerCell || headerCell._instance) {
-        return;
+    _stampBodyTemplate(template, cells, splices) {
+      if (template && cells) {
+        this.__stampColumnTemplate(template, cells);
       }
+    }
 
-      const inst = headerTemplate.templatizer.createInstance();
-      headerCell._content.appendChild(inst.root);
-      headerCell._instance = inst;
-      headerCell.parentElement.hidden = false;
+    _stampHeaderTemplate(headerTemplate, headerCell) {
+      if (headerTemplate && headerCell) {
+        this.__stampColumnTemplate(headerTemplate, [headerCell]);
+        headerCell.parentElement.hidden = false;
+      }
     }
 
     _stampFooterTemplate(footerTemplate, footerCell) {
-      if (!footerTemplate || !footerCell || footerCell._instance) {
-        return;
+      if (footerTemplate && footerCell) {
+        this.__stampColumnTemplate(footerTemplate, [footerCell]);
+        footerCell.parentElement.hidden = false;
       }
-
-      const inst = footerTemplate.templatizer.createInstance();
-      footerCell._content.appendChild(inst.root);
-      footerCell._instance = inst;
-      footerCell.parentElement.hidden = false;
     }
 
     _selectFirstTemplate(header = false, footer = false) {
