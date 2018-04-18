@@ -46,6 +46,20 @@ This program is available under Apache License Version 2.0, available at https:/
         static get is() {
           return 'vaadin-context-menu-overlay';
         }
+
+        static get properties() {
+          return {
+            instanceProps: {
+              type: Object,
+              value: () => {
+                return {
+                  detail: true,
+                  target: true
+                };
+              }
+            }
+          };
+        }
       }
 
       customElements.define(ContextMenuOverlayElement.is, ContextMenuOverlayElement);
@@ -261,8 +275,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _context: Object,
 
-            _contentTemplate: Object,
-
             _boundClose: Object,
 
             _boundOpen: Object,
@@ -292,7 +304,7 @@ This program is available under Apache License Version 2.0, available at https:/
             // to allow overlay to position itself correctly first.
             // Otherwise, the browser window will jump scroll.
             Polymer.Async.timeOut.run(() => {
-              const child = this.$.overlay.root.querySelector('#content :not(style):not(slot)');
+              const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
               if (child) {
                 child.focus();
               }
@@ -351,26 +363,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _openedChanged(opened) {
-          if (opened && !this._instance) {
-            this._contentTemplate = this.querySelector('template');
-
-            const Templatizer = Polymer.Templatize.templatize(this._contentTemplate, this, {
-              instanceProps: {
-                detail: true,
-                target: true
-              },
-              forwardHostProp: function(prop, value) {
-                if (this._instance) {
-                  this._instance.forwardHostProp(prop, value);
-                }
-              }
-            });
-
-            this._instance = new Templatizer({});
-            this.$.overlay.content = this._instance.root;
-          }
-
           if (opened) {
+            if (!this._instance) {
+              this.$.overlay.template = this.querySelector('template');
+              this._instance = this.$.overlay._instance;
+            }
             document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           } else {
             document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);

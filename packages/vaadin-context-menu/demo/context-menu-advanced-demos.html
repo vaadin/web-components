@@ -105,28 +105,23 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Basic HTML Menu</h3>
+    <h3>Basic HTML Menu with Custom Styling</h3>
     <vaadin-demo-snippet id='context-menu-advanced-demos-basic-html-menu'>
       <template preserve-content>
+        <style>
+          .my-menu-item {
+            display: block;
+            padding: var(--lumo-space-xs) var(--lumo-space-m);
+            text-decoration: none;
+            color: var(--lumo-success-text-color);
+          }
+
+          .my-menu-item:hover {
+            background: var(--lumo-shade-10pct);
+          }
+        </style>
         <vaadin-context-menu>
           <template>
-            <style>
-              .my-menu {
-                padding: 8px 0;
-                background: #fff;
-              }
-
-              .my-menu-item {
-                display: block;
-                padding: 8px 24px;
-                text-decoration: none;
-                color: #000;
-              }
-
-              .my-menu-item:hover {
-                background: #eee;
-              }
-            </style>
             <div class="my-menu">
               <a href="#" class="my-menu-item">First menu item</a>
               <a href="#" class="my-menu-item">Second menu item</a>

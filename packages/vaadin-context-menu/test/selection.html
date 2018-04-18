@@ -42,7 +42,7 @@
 
           it('should close on item tap', done => {
             listenOnce(menu, 'opened-changed', () => {
-              const listBox = menu.$.overlay.shadowRoot.querySelector('#menu');
+              const listBox = menu.$.overlay.content.querySelector('#menu');
               Polymer.RenderStatus.afterNextRender(listBox, () => {
                 MockInteractions.tap(listBox.items[0]);
                 expect(menu.opened).to.eql(false);
@@ -60,7 +60,7 @@
                   done();
                 });
 
-                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
+                const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
                 MockInteractions.pressAndReleaseKeyOn(item, 13, [], 'Enter');
               }, 10);
             });
@@ -71,8 +71,8 @@
           it('should focus the child element', done => {
             listenOnce(menu, 'opened-changed', () => {
               Polymer.Async.timeOut.run(() => {
-                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
-                expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
+                const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
+                expect(document.activeElement).to.eql(item);
                 done();
               });
             });
@@ -83,8 +83,8 @@
           it('should focus the child element on `contextmenu` event', done => {
             listenOnce(menu, 'opened-changed', () => {
               Polymer.Async.timeOut.run(() => {
-                const item = menu.$.overlay.shadowRoot.querySelector('#menu vaadin-item');
-                expect(menu.$.overlay.shadowRoot.activeElement).to.eql(item);
+                const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
+                expect(document.activeElement).to.eql(item);
                 done();
               });
             });
