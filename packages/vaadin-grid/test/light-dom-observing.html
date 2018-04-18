@@ -13,6 +13,7 @@
   <link rel="import" href="../vaadin-grid.html">
   <link rel="import" href="../vaadin-grid-selection-column.html">
   <link rel="import" href="../vaadin-grid-column-group.html">
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
 
   <style>
     vaadin-grid {
@@ -637,8 +638,10 @@
 
           flushGrid(grid);
           flush(() => {
-            expect(grid.querySelectorAll('vaadin-grid-cell-content').length).to.be.below(contentCount);
-            done();
+            Polymer.RenderStatus.afterNextRender(grid, () => {
+              expect(grid.querySelectorAll('vaadin-grid-cell-content').length).to.be.below(contentCount);
+              done();
+            });
           });
         });
       }
