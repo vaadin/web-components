@@ -119,7 +119,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * to mutate the values array in order to make the component aware of the
              * change and be able to synchronize it.
              */
-            'values': {
+            values: {
               type: Array,
               value: () => []
             },
@@ -133,16 +133,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Any data point not covered (e.g value not present in the mapping object
              * or mapping array shorter than the list of values), results in the actual value being used as the label.
              */
-            'value-labels': {
+            valueLabels: {
               type: ChartLabelsMapper,
               reflectToAttribute: true
             },
 
             /*
-             * Internal value-labels representation so that the original property/attribute set
-             * on value-labels can be preserved.
+             * Internal valueLabels representation so that the original property/attribute set
+             * on valueLabels can be preserved.
              */
-            '__labelsMapper': {
+            __labelsMapper: {
               type: ChartLabelsMapper,
               value: () => new ChartLabelsMapper([])
             },
@@ -152,7 +152,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              *  Defaults to `'line'` in case no type is set for the chart.
              * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type on `<vaadin-chart>`.
              */
-            'type': {
+            type: {
               type: String,
               observer: '__typeObserver',
               reflectToAttribute: true
@@ -161,7 +161,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * The name of the series as shown in the legend, tooltip etc.
              */
-            'title': {
+            title: {
               type: String,
               observer: '__titleObserver',
               reflectToAttribute: true
@@ -174,7 +174,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              *  - `hidden`: markers are always hidden
              *  - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*
              */
-            'markers': {
+            markers: {
               type: String,
               observer: '__markersObserver',
               reflectToAttribute: true
@@ -184,7 +184,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Displayed as a title for the axis.
              * If no unit is defined, then series will be connected to the first axis.
              */
-            'unit': {
+            unit: {
               type: 'String',
               observer: '__unitObserver',
               reflectToAttribute: true
@@ -195,7 +195,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              *
              * @readonly
              */
-            'options': {
+            options: {
               type: Object
             }
           };
@@ -204,7 +204,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get observers() {
           return [
             '__valuesObserver(values.splices)',
-            '__labelsObserver(value-labels.*, values)'
+            '__labelsObserver(valueLabels.*, values)'
           ];
         }
 
@@ -251,7 +251,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __labelsObserver(changeRecord, values) {
-          const currentLabels = this['value-labels'] || [];
+          const currentLabels = this.valueLabels || [];
           if (currentLabels instanceof ChartLabelsMapper) {
             this.__labelsMapper = currentLabels;
           } else {

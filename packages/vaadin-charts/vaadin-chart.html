@@ -297,14 +297,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * @public
              * @type {Object}
              */
-            'configuration': Object,
+            configuration: Object,
 
             /**
              * If categories are present names are used instead of numbers for the category axis.
              * The format of categories can be an `Array` with a list of categories, such as `['2010', '2011', '2012']`
              * or a mapping `Object`, like `{0:'1',9:'Target (10)', 15: 'Max'}`.
              */
-            'categories': {
+            categories: {
               type: Object,
               reflectToAttribute: true,
               observer: '__updateCategories'
@@ -312,9 +312,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             /**
              * Specifies whether to hide legend or show.
-             * Legend configuration can be set up via additional-options property
+             * Legend configuration can be set up via additionalOptions property
              */
-            'no-legend': {
+            noLegend: {
               type: Boolean,
               observer: '__hideLegend',
               reflectToAttribute: true
@@ -323,7 +323,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Specifies whether the chart is a normal chart or a timeline chart.
              */
-            'timeline': {
+            timeline: {
               type: Boolean,
               reflectToAttribute: true
             },
@@ -331,7 +331,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Represents the title of the chart.
              */
-            'title': {
+            title: {
               type: String,
               observer: '__updateTitle',
               reflectToAttribute: true
@@ -341,7 +341,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Sets the default series type of the chart.
              * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type.
              */
-            'type': {
+            type: {
               type: String,
               observer: '__updateType',
               reflectToAttribute: true
@@ -350,7 +350,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Represents the subtitle of the chart.
              */
-            'subtitle': {
+            subtitle: {
               type: String,
               observer: '__updateSubtitle',
               reflectToAttribute: true
@@ -359,7 +359,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             /**
              * Represents additional JSON configuration.
              */
-            'additional-options': {
+            additionalOptions: {
               type: Object,
               reflectToAttribute: true
             }
@@ -368,7 +368,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get observers() {
           return [
-            '__updateAdditionalOptions(additional-options.*)'
+            '__updateAdditionalOptions(additionalOptions.*)'
           ];
         }
 
@@ -422,7 +422,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         get options() {
           const options = Object.assign({}, this._baseConfig);
-          this.__deepMerge(options, this['additional-options']);
+          this.__deepMerge(options, this.additionalOptions);
 
           if (this.type) {
             options.chart = options.chart || {};
@@ -447,7 +447,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }];
           }
 
-          if (this['no-legend']) {
+          if (this.noLegend) {
             options.legend = {
               enabled: false
             };
@@ -1143,7 +1143,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __updateAdditionalOptions() {
           if (this.configuration) {
-            this.update(this['additional-options']);
+            this.update(this.additionalOptions);
           }
         }
 

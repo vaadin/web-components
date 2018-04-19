@@ -56,8 +56,8 @@
         expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
       });
 
-      it('should react to additional-options object change', done => {
-        element['additional-options'] = {title: {text: 'Updated title'}};
+      it('should react to additionalOptions object change', done => {
+        element.additionalOptions = {title: {text: 'Updated title'}};
 
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Updated title');
@@ -65,8 +65,8 @@
         }, 100);
       });
 
-      it('should react to additional-options subproperty change', done => {
-        element.set('additional-options.title.text', 'Reindeer statistics');
+      it('should react to additionalOptions subproperty change', done => {
+        element.set('additionalOptions.title.text', 'Reindeer statistics');
 
         setTimeout(() => {
           expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Reindeer statistics');

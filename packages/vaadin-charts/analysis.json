@@ -43,7 +43,7 @@
               "defaultValue": "[]"
             },
             {
-              "name": "value-labels",
+              "name": "valueLabels",
               "type": "ChartLabelsMapper",
               "description": "Labels for the series values. Acceptable input are:\n- An array e.g `'[\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\"]'`. This maps to corresponding values by position.\n- A mapping object e.g `'{10: \"Mon\", 20: \"Tue\", 30: \"Wed\"}'`. This maps to specific values.\n- A function e.g `'e => e + \"km\"'`. This is evaluated against every value to generate its label.\n\nAny data point not covered (e.g value not present in the mapping object\nor mapping array shorter than the list of values), results in the actual value being used as the label.",
               "privacy": "public",
@@ -64,7 +64,7 @@
             {
               "name": "__labelsMapper",
               "type": "ChartLabelsMapper",
-              "description": "Internal value-labels representation so that the original property/attribute set\non value-labels can be preserved.",
+              "description": "Internal valueLabels representation so that the original property/attribute set\non valueLabels can be preserved.",
               "privacy": "private",
               "sourceRange": {
                 "start": {
@@ -594,7 +594,7 @@
                 },
                 "end": {
                   "line": 299,
-                  "column": 35
+                  "column": 33
                 }
               },
               "metadata": {
@@ -623,9 +623,9 @@
               }
             },
             {
-              "name": "no-legend",
+              "name": "noLegend",
               "type": "boolean",
-              "description": "Specifies whether to hide legend or show.\nLegend configuration can be set up via additional-options property",
+              "description": "Specifies whether to hide legend or show.\nLegend configuration can be set up via additionalOptions property",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -726,7 +726,7 @@
               }
             },
             {
-              "name": "additional-options",
+              "name": "additionalOptions",
               "type": "Object",
               "description": "Represents additional JSON configuration.",
               "privacy": "public",
@@ -1662,7 +1662,7 @@
                 },
                 "end": {
                   "line": 299,
-                  "column": 35
+                  "column": 33
                 }
               },
               "metadata": {},
@@ -1686,7 +1686,7 @@
             },
             {
               "name": "no-legend",
-              "description": "Specifies whether to hide legend or show.\nLegend configuration can be set up via additional-options property",
+              "description": "Specifies whether to hide legend or show.\nLegend configuration can be set up via additionalOptions property",
               "sourceRange": {
                 "start": {
                   "line": 316,
