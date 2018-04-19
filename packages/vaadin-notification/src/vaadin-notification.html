@@ -287,16 +287,55 @@ This program is available under Apache License Version 2.0, available at https:/
             this._container.opened = true;
             if (!this._instance) {
               const template = this.querySelector('template');
-              const Templatizer = Polymer.Templatize.templatize(template, this, {
-                forwardHostProp: function(prop, value) {
-                  if (this._instance) {
-                    this._instance.forwardHostProp(prop, value);
+              if (!template._Templatizer) {
+                template._Templatizer = Polymer.Templatize.templatize(template, this, {
+                  forwardHostProp: function(prop, value) {
+                    if (this._instance) {
+                      this._instance.forwardHostProp(prop, value);
+                    }
+                  }
+                });
+              }
+              this._instance = new template._Templatizer({});
+
+              const templateRoot = template.getRootNode();
+              const isScoped = templateRoot !== document;
+              this._card = this.$['vaadin-notification-card'];
+              this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
+              if (isScoped) {
+
+                if (!this._cardContent.shadowRoot) {
+                  this._cardContent.attachShadow({mode: 'open'});
+                }
+                if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+                  // Shady DOM
+                  var shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+                  if (shadyStyleScope && shadyStyleScope.indexOf('-') === -1) {
+                    shadyStyleScope = templateRoot.host.getAttribute('is');
+                  }
+
+                  if (shadyStyleScope) {
+                    this._cardContent.setAttribute('is', shadyStyleScope);
+                  }
+                } else {
+                  // Shadow DOM
+                  const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+                    .reduce((result, style) => result + style.textContent, '')
+                    // The overlay root’s :host styles should not apply inside the overlay
+                    .replace(/:host/g, ':host-nomatch');
+
+                  if (scopeCssText) {
+                    const style = document.createElement('style');
+                    style.textContent = scopeCssText;
+                    this._cardContent.shadowRoot.appendChild(style);
                   }
                 }
-              });
-              this._instance = new Templatizer({});
-              this._card = this.$['vaadin-notification-card'];
-              this._card.appendChild(this._instance.root);
+
+                this._cardContent.shadowRoot.appendChild(this._instance.root);
+              } else {
+                this._card.appendChild(this._instance.root);
+              }
+
               this._card.setAttribute('aria-label', this._card.textContent.trim());
             }
 
