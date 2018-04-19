@@ -299,23 +299,23 @@ This program is available under Apache License Version 2.0, available at https:/
               this._instance = new template._Templatizer({});
 
               const templateRoot = template.getRootNode();
-              const _isScoped = templateRoot !== document;
+              const isScoped = templateRoot !== document;
               this._card = this.$['vaadin-notification-card'];
               this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
-              if (_isScoped) {
+              if (isScoped) {
 
                 if (!this._cardContent.shadowRoot) {
                   this._cardContent.attachShadow({mode: 'open'});
                 }
                 if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
                   // Shady DOM
-                  var _shadyStyleScope = templateRoot.host && templateRoot.host.localName;
-                  if (_shadyStyleScope && _shadyStyleScope.indexOf('-') === -1) {
-                    _shadyStyleScope = templateRoot.host.getAttribute('is');
+                  var shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+                  if (shadyStyleScope && shadyStyleScope.indexOf('-') === -1) {
+                    shadyStyleScope = templateRoot.host.getAttribute('is');
                   }
 
-                  if (_shadyStyleScope) {
-                    this._cardContent.setAttribute('is', _shadyStyleScope);
+                  if (shadyStyleScope) {
+                    this._cardContent.setAttribute('is', shadyStyleScope);
                   }
                 } else {
                   // Shadow DOM
