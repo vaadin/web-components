@@ -250,11 +250,7 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: 'bottom-start',
               observer: '_positionChanged'
-            },
-
-            _isScoped: Boolean,
-
-            _shadyStyleScope: String
+            }
           };
         }
 
@@ -303,36 +299,36 @@ This program is available under Apache License Version 2.0, available at https:/
               this._instance = new template._Templatizer({});
 
               const templateRoot = template.getRootNode();
-              this._isScoped = templateRoot !== document;
-              this._shadyStyleScope = '';
+              const _isScoped = templateRoot !== document;
               this._card = this.$['vaadin-notification-card'];
               this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
-              if (this._isScoped) {
-                let scopeCssText = '';
-                Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
-                  scopeCssText += style.textContent;
-                });
-                if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-                  this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
-                  if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
-                    this._shadyStyleScope = templateRoot.host.getAttribute('is');
-                  }
-                }
-
-                // The overlay root’s :host styles should not apply inside the overlay
-                scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
+              if (_isScoped) {
 
                 if (!this._cardContent.shadowRoot) {
                   this._cardContent.attachShadow({mode: 'open'});
                 }
-                if (scopeCssText) {
-                  const style = document.createElement('style');
-                  style.textContent = scopeCssText;
-                  this._cardContent.shadowRoot.appendChild(style);
+                if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+                  // Shady DOM
+                  var _shadyStyleScope = templateRoot.host
+                    && (templateRoot.host.getAttribute('is') || templateRoot.host.localName);
+
+                  if (_shadyStyleScope) {
+                    this._cardContent.setAttribute('is', _shadyStyleScope);
+                  }
+                } else {
+                  // Shadow DOM
+                  const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+                    .reduce((result, style) => result + style.textContent, '')
+                    // The overlay root’s :host styles should not apply inside the overlay
+                    .replace(/:host/g, ':host-nomatch');
+
+                  if (scopeCssText) {
+                    const style = document.createElement('style');
+                    style.textContent = scopeCssText;
+                    this._cardContent.shadowRoot.appendChild(style);
+                  }
                 }
-                if (this._shadyStyleScope) {
-                  this._cardContent.setAttribute('is', this._shadyStyleScope);
-                }
+
                 this._cardContent.shadowRoot.appendChild(this._instance.root);
               } else {
                 this._card.appendChild(this._instance.root);
