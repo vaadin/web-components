@@ -309,8 +309,10 @@ This program is available under Apache License Version 2.0, available at https:/
                 }
                 if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
                   // Shady DOM
-                  var _shadyStyleScope = templateRoot.host
-                    && (templateRoot.host.getAttribute('is') || templateRoot.host.localName);
+                  var _shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+                  if (_shadyStyleScope && _shadyStyleScope.indexOf('-') === -1) {
+                    _shadyStyleScope = templateRoot.host.getAttribute('is');
+                  }
 
                   if (_shadyStyleScope) {
                     this._cardContent.setAttribute('is', _shadyStyleScope);
