@@ -573,41 +573,41 @@ This program is available under Apache License Version 2.0, available at https:/
 
         const templateRoot = template.getRootNode();
         const _isScoped = templateRoot !== document;
-        this._shadyStyleScope = '';
+
         if (_isScoped) {
-          let scopeCssText = '';
-          Array.from(templateRoot.querySelectorAll('style')).forEach(style => {
-            scopeCssText += style.textContent;
-          });
-          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-            this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
-            if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
-              this._shadyStyleScope = templateRoot.host.getAttribute('is');
-            }
-          }
-
-          // The overlay root’s :host styles should not apply inside the overlay
-          scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
-
           if (!this.$.content.shadowRoot) {
             this.$.content.attachShadow({mode: 'open'});
             // FIXME(platosha): IronFocusablesHelper does only use legacy .root
             this.$.content.root = this.$.content.shadowRoot;
           }
-          if (scopeCssText) {
-            const style = document.createElement('style');
-            style.textContent = scopeCssText;
-            this.$.content.shadowRoot.appendChild(style);
+
+          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+            // Shady DOM
+            this._shadyStyleScope = templateRoot.host
+              && (templateRoot.host.getAttribute('is') || templateRoot.host.localName);
+            if (this._shadyStyleScope) {
+              // NOTE(platosha): here we trick ShadyCSS to think that the scope is
+              // what `this._shadyStyleScope` says. What we actually need is to add
+              // `style-scope ${this._shadyStyleScope}` classes to every element
+              // inside this.$.content.shadowRoot. But if we do that manually,
+              // these classes might get removed by ShadyCSS later (for example,
+              // after next flush).
+              this.$.content.setAttribute('is', this._shadyStyleScope);
+            }
+          } else {
+            // Shadow DOM
+            const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+              .reduce((result, style) => result + style.textContent, '')
+              // The overlay root’s :host styles should not apply inside the overlay
+              .replace(/:host/g, ':host-nomatch');
+
+            if (scopeCssText) {
+              const style = document.createElement('style');
+              style.textContent = scopeCssText;
+              this.$.content.shadowRoot.appendChild(style);
+            }
           }
-          if (this._shadyStyleScope) {
-            // NOTE(platosha): here we trick ShadyCSS to think that the scope is
-            // what `this._shadyStyleScope` says. What we actually need is to add
-            // `style-scope ${this._shadyStyleScope}` classes to every element
-            // inside this.$.content.shadowRoot. But if we do that manually,
-            // these classes might get removed by ShadyCSS later (for example,
-            // after next flush).
-            this.$.content.setAttribute('is', this._shadyStyleScope);
-          }
+
           this.$.content.shadowRoot.appendChild(this._instance.root);
           this.content = this.$.content.shadowRoot;
         } else {
