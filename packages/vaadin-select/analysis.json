@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-dropdown-menu.html",
         "start": {
-          "line": 588,
+          "line": 576,
           "column": 6
         },
         "end": {
-          "line": 588,
+          "line": 576,
           "column": 62
         }
       },
@@ -23,115 +23,167 @@
           "path": "src/vaadin-dropdown-menu.html",
           "properties": [
             {
+              "name": "_last",
+              "type": "?",
+              "description": "returns true if this is the last one in the opened overlays stack\n       ",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 487,
+                  "column": 6
+                },
+                "end": {
+                  "line": 489,
+                  "column": 7
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
               "name": "opened",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 132,
+                  "line": 166,
                   "column": 10
                 },
                 "end": {
-                  "line": 136,
+                  "line": 170,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Boolean"
                 }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "template",
-              "type": "Object",
-              "description": "",
+              "type": "Object | null | undefined",
+              "description": "The template of the overlay content.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 138,
+                  "line": 175,
                   "column": 10
                 },
                 "end": {
-                  "line": 141,
+                  "line": 178,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Object"
+                }
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "instanceProps",
+              "type": "Object | null | undefined",
+              "description": "Optional argument for `Polymer.Templatize.templatize`.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 183,
+                  "column": 10
+                },
+                "end": {
+                  "line": 185,
+                  "column": 11
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Object"
                 }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "content",
-              "type": "Object",
-              "description": "",
+              "type": "Object | null | undefined",
+              "description": "References the content container after the template is stamped.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 143,
+                  "line": 190,
                   "column": 10
                 },
                 "end": {
-                  "line": 146,
+                  "line": 193,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Object"
                 }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "withBackdrop",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 148,
+                  "line": 195,
                   "column": 10
                 },
                 "end": {
-                  "line": 152,
+                  "line": 199,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "modeless",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 158,
+                  "line": 205,
                   "column": 10
                 },
                 "end": {
-                  "line": 163,
+                  "line": 210,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_modelessChanged\""
+                  "observer": "\"_modelessChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -139,128 +191,163 @@
             },
             {
               "name": "focusTrap",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 169,
+                  "line": 216,
                   "column": 10
                 },
                 "end": {
-                  "line": 172,
+                  "line": 219,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
-              "name": "_focusedElement",
-              "type": "Object",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 174,
-                  "column": 10
-                },
-                "end": {
-                  "line": 176,
-                  "column": 11
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
               "name": "_mouseDownInside",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 178,
+                  "line": 221,
                   "column": 10
                 },
                 "end": {
-                  "line": 180,
+                  "line": 223,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "_mouseUpInside",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 182,
+                  "line": 225,
                   "column": 10
                 },
                 "end": {
-                  "line": 184,
+                  "line": 227,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "_instance",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 186,
+                  "line": 229,
                   "column": 10
                 },
                 "end": {
-                  "line": 188,
+                  "line": 231,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "_boundIronOverlayCanceledListener",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 190,
+                  "line": 233,
                   "column": 10
                 },
                 "end": {
-                  "line": 192,
+                  "line": 235,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_shadyStyleScope",
+              "type": "string | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 237,
+                  "column": 10
+                },
+                "end": {
+                  "line": 237,
+                  "column": 34
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_contentNodes",
+              "type": "Array | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 239,
+                  "column": 10
+                },
+                "end": {
+                  "line": 239,
+                  "column": 30
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Array"
+                }
               },
               "inheritedFrom": "Vaadin.OverlayElement"
             }
@@ -271,18 +358,21 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 222,
+                  "line": 272,
                   "column": 6
                 },
                 "end": {
-                  "line": 233,
+                  "line": 283,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -290,18 +380,21 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 235,
+                  "line": 285,
                   "column": 6
                 },
                 "end": {
-                  "line": 252,
+                  "line": 302,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -309,13 +402,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 254,
+                  "line": 304,
                   "column": 6
                 },
                 "end": {
-                  "line": 256,
+                  "line": 306,
                   "column": 7
                 }
               },
@@ -325,6 +418,9 @@
                   "name": "nodes"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -332,13 +428,13 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 262,
+                  "line": 312,
                   "column": 6
                 },
                 "end": {
-                  "line": 268,
+                  "line": 318,
                   "column": 7
                 }
               },
@@ -348,6 +444,9 @@
                   "name": "sourceEvent"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -355,18 +454,21 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 270,
+                  "line": 320,
                   "column": 6
                 },
                 "end": {
-                  "line": 281,
+                  "line": 331,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -374,18 +476,21 @@
               "description": "",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 283,
+                  "line": 333,
                   "column": 6
                 },
                 "end": {
-                  "line": 299,
+                  "line": 349,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -393,13 +498,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 301,
+                  "line": 351,
                   "column": 6
                 },
                 "end": {
-                  "line": 303,
+                  "line": 353,
                   "column": 7
                 }
               },
@@ -409,6 +514,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -416,13 +524,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 305,
+                  "line": 355,
                   "column": 6
                 },
                 "end": {
-                  "line": 307,
+                  "line": 357,
                   "column": 7
                 }
               },
@@ -432,6 +540,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -439,13 +550,13 @@
               "description": "We need to listen on 'click' / 'tap' event and capture it and close the overlay before\npropagating the event to the listener in the button. Otherwise, if the clicked button would call\nopen(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 317,
+                  "line": 367,
                   "column": 6
                 },
                 "end": {
-                  "line": 334,
+                  "line": 384,
                   "column": 7
                 }
               },
@@ -455,6 +566,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -462,13 +576,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 340,
+                  "line": 390,
                   "column": 6
                 },
                 "end": {
-                  "line": 361,
+                  "line": 411,
                   "column": 7
                 }
               },
@@ -478,6 +592,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -485,13 +602,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 367,
+                  "line": 417,
                   "column": 6
                 },
                 "end": {
-                  "line": 387,
+                  "line": 437,
                   "column": 7
                 }
               },
@@ -501,6 +618,9 @@
                   "name": "opened"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -508,18 +628,21 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 389,
+                  "line": 439,
                   "column": 6
                 },
                 "end": {
-                  "line": 402,
+                  "line": 452,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -527,18 +650,21 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 404,
+                  "line": 454,
                   "column": 6
                 },
                 "end": {
-                  "line": 408,
+                  "line": 458,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -546,89 +672,9 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 410,
-                  "column": 6
-                },
-                "end": {
-                  "line": 426,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_detachOverlay",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 428,
-                  "column": 6
-                },
-                "end": {
-                  "line": 432,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_modelessChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 441,
-                  "column": 6
-                },
-                "end": {
-                  "line": 449,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "modeless"
-                }
-              ],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_enterModalState",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 451,
-                  "column": 6
-                },
-                "end": {
-                  "line": 463,
-                  "column": 7
-                }
-              },
-              "metadata": {},
-              "params": [],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_exitModalState",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 465,
+                  "line": 460,
                   "column": 6
                 },
                 "end": {
@@ -638,6 +684,123 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_detachOverlay",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 478,
+                  "column": 6
+                },
+                "end": {
+                  "line": 482,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_modelessChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 491,
+                  "column": 6
+                },
+                "end": {
+                  "line": 499,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "modeless"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_enterModalState",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 501,
+                  "column": 6
+                },
+                "end": {
+                  "line": 513,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_exitModalState",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 515,
+                  "column": 6
+                },
+                "end": {
+                  "line": 526,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "_removeOldContent",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 528,
+                  "column": 6
+                },
+                "end": {
+                  "line": 550,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -645,13 +808,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 478,
+                  "line": 552,
                   "column": 6
                 },
                 "end": {
-                  "line": 489,
+                  "line": 616,
                   "column": 7
                 }
               },
@@ -661,29 +824,9 @@
                   "name": "template"
                 }
               ],
-              "inheritedFrom": "Vaadin.OverlayElement"
-            },
-            {
-              "name": "_contentChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
-                "start": {
-                  "line": 491,
-                  "column": 6
-                },
-                "end": {
-                  "line": 493,
-                  "column": 7
-                }
+              "return": {
+                "type": "void"
               },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "content"
-                }
-              ],
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -691,13 +834,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 495,
+                  "line": 618,
                   "column": 6
                 },
                 "end": {
-                  "line": 497,
+                  "line": 620,
                   "column": 7
                 }
               },
@@ -710,17 +853,40 @@
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
+              "name": "_focusedIndex",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 622,
+                  "column": 6
+                },
+                "end": {
+                  "line": 625,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "elements"
+                }
+              ],
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
               "name": "_cycleTab",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 499,
+                  "line": 627,
                   "column": 6
                 },
                 "end": {
-                  "line": 535,
+                  "line": 645,
                   "column": 7
                 }
               },
@@ -733,6 +899,9 @@
                   "name": "index"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
@@ -740,13 +909,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 537,
+                  "line": 647,
                   "column": 6
                 },
                 "end": {
-                  "line": 541,
+                  "line": 650,
                   "column": 7
                 }
               },
@@ -759,13 +928,13 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 543,
+                  "line": 652,
                   "column": 6
                 },
                 "end": {
-                  "line": 547,
+                  "line": 656,
                   "column": 7
                 }
               },
@@ -775,6 +944,9 @@
                   "name": "node"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.OverlayElement"
             }
           ],
@@ -784,7 +956,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -800,6 +972,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -823,108 +998,126 @@
               "name": "opened",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 132,
+                  "line": 166,
                   "column": 10
                 },
                 "end": {
-                  "line": 136,
+                  "line": 170,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "template",
-              "description": "",
+              "description": "The template of the overlay content.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 138,
+                  "line": 175,
                   "column": 10
                 },
                 "end": {
-                  "line": 141,
+                  "line": 178,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "Object",
+              "type": "Object | null | undefined",
+              "inheritedFrom": "Vaadin.OverlayElement"
+            },
+            {
+              "name": "instance-props",
+              "description": "Optional argument for `Polymer.Templatize.templatize`.",
+              "sourceRange": {
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
+                "start": {
+                  "line": 183,
+                  "column": 10
+                },
+                "end": {
+                  "line": 185,
+                  "column": 11
+                }
+              },
+              "metadata": {},
+              "type": "Object | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "content",
-              "description": "",
+              "description": "References the content container after the template is stamped.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 143,
+                  "line": 190,
                   "column": 10
                 },
                 "end": {
-                  "line": 146,
+                  "line": 193,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "Object",
+              "type": "Object | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "with-backdrop",
               "description": "",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 148,
+                  "line": 195,
                   "column": 10
                 },
                 "end": {
-                  "line": 152,
+                  "line": 199,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "modeless",
               "description": "When true the overlay won't disable the main content, showing\nit doesn’t change the functionality of the user interface.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 158,
+                  "line": 205,
                   "column": 10
                 },
                 "end": {
-                  "line": 163,
+                  "line": 210,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             },
             {
               "name": "focus-trap",
               "description": "When true move focus to the first focusable element in the overlay,\nor to the overlay if there are no focusable elements.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-overlay/src/vaadin-overlay.html",
+                "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 169,
+                  "line": 216,
                   "column": 10
                 },
                 "end": {
-                  "line": 172,
+                  "line": 219,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.OverlayElement"
             }
           ],
@@ -953,7 +1146,7 @@
             {
               "type": "CustomEvent",
               "name": "vaadin-overlay-outside-click",
-              "description": "vaadin-overlay-outside-click\nfired before the `vaadin-overlay` will be closed on outside click. If canceled the closing of the overlay is canceled as well.",
+              "description": "We need to listen on 'click' / 'tap' event and capture it and close the overlay before\npropagating the event to the listener in the button. Otherwise, if the clicked button would call\nopen(), this would happen: https://www.youtube.com/watch?v=Z86V_ICUCD4",
               "metadata": {},
               "inheritedFrom": "Vaadin.OverlayElement"
             },
@@ -992,12 +1185,33 @@
           "path": "src/vaadin-dropdown-menu.html",
           "properties": [
             {
+              "name": "focusElement",
+              "type": "?",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 105,
+                  "column": 8
+                },
+                "end": {
+                  "line": 107,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
               "name": "autofocus",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Specify that this control should have input focus when the page loads.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 50,
                   "column": 8
@@ -1008,17 +1222,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_previousTabIndex",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Stores the previous value of tabindex attribute of the disabled element",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 57,
                   "column": 8
@@ -1029,17 +1245,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disabled",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 64,
                   "column": 8
@@ -1051,18 +1269,19 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_disabledChanged\""
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_isShiftTabbing",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 70,
                   "column": 8
@@ -1073,17 +1292,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "autocomplete",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 104,
                   "column": 8
@@ -1094,17 +1315,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "autocorrect",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 115,
                   "column": 8
@@ -1115,17 +1338,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "autocapitalize",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 128,
                   "column": 8
@@ -1136,17 +1361,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "errorMessage",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Error to show when the input value is invalid.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 135,
                   "column": 8
@@ -1157,18 +1384,20 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"\"",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "label",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "String used for the label element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 143,
                   "column": 8
@@ -1180,7 +1409,8 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_labelChanged\""
+                  "observer": "\"_labelChanged\"",
+                  "attributeType": "String"
                 }
               },
               "defaultValue": "\"\"",
@@ -1188,11 +1418,11 @@
             },
             {
               "name": "maxlength",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Maximum number of characters (in Unicode code points) that the user can enter.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 152,
                   "column": 8
@@ -1203,17 +1433,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "minlength",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Minimum number of characters (in Unicode code points) that the user can enter.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 159,
                   "column": 8
@@ -1224,17 +1456,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "name",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The name of the control, which is submitted with the form data.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 166,
                   "column": 8
@@ -1245,17 +1479,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "placeholder",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "A hint to the user of what can be entered in the control.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 173,
                   "column": 8
@@ -1266,17 +1502,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "readonly",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 180,
                   "column": 8
@@ -1287,17 +1525,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "required",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Specifies that the user must fill in a value.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 188,
                   "column": 8
@@ -1308,17 +1548,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "value",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 198,
                   "column": 8
@@ -1331,7 +1573,8 @@
               "metadata": {
                 "polymer": {
                   "notify": true,
-                  "observer": "\"_valueChanged\""
+                  "observer": "\"_valueChanged\"",
+                  "attributeType": "String"
                 }
               },
               "defaultValue": "\"\"",
@@ -1339,11 +1582,11 @@
             },
             {
               "name": "invalid",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "This property is set to true when the control value is invalid.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 208,
                   "column": 8
@@ -1355,7 +1598,8 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -1363,11 +1607,11 @@
             },
             {
               "name": "preventInvalidInput",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 219,
                   "column": 8
@@ -1378,17 +1622,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "_labelId",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 223,
                   "column": 8
@@ -1399,17 +1645,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "_errorId",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 227,
                   "column": 8
@@ -1420,17 +1668,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "list",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 122,
                   "column": 12
@@ -1441,17 +1691,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldElement"
             },
             {
               "name": "pattern",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 130,
                   "column": 12
@@ -1462,17 +1714,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldElement"
             },
             {
               "name": "title",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Message to show to the user when validation fails.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 137,
                   "column": 12
@@ -1483,7 +1737,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.TextFieldElement"
             }
@@ -1494,7 +1750,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 295,
                   "column": 4
@@ -1506,6 +1762,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1513,7 +1772,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 118,
                   "column": 4
@@ -1525,6 +1784,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1532,7 +1794,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 128,
                   "column": 4
@@ -1544,6 +1806,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1551,7 +1816,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 141,
                   "column": 4
@@ -1567,6 +1832,9 @@
                   "name": "focused"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1574,7 +1842,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 157,
                   "column": 4
@@ -1590,6 +1858,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1597,7 +1868,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 161,
                   "column": 4
@@ -1609,6 +1880,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1616,7 +1890,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 174,
                   "column": 4
@@ -1632,6 +1906,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1639,7 +1916,7 @@
               "description": "Moving the focus from the host element causes firing of the blur event what leads to problems in IE.",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 187,
                   "column": 4
@@ -1651,6 +1928,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1658,7 +1938,7 @@
               "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 201,
                   "column": 4
@@ -1670,6 +1950,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1677,7 +1960,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 206,
                   "column": 4
@@ -1693,6 +1976,9 @@
                   "name": "disabled"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1700,7 +1986,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 221,
                   "column": 4
@@ -1716,6 +2002,9 @@
                   "name": "tabindex"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -1723,7 +2012,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 237,
                   "column": 4
@@ -1739,6 +2028,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1746,7 +2038,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 246,
                   "column": 4
@@ -1762,6 +2054,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1769,7 +2064,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 259,
                   "column": 4
@@ -1788,6 +2083,9 @@
                   "name": "oldVal"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1795,7 +2093,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 274,
                   "column": 4
@@ -1811,6 +2109,9 @@
                   "name": "label"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1818,7 +2119,7 @@
               "description": "Returns true if the current input value satisfies all constraints (if any)",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 286,
                   "column": 4
@@ -1840,7 +2141,7 @@
               "description": "Returns true if `value` is valid.\n`<iron-form>` uses this to check the validity or all its elements.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 316,
                   "column": 4
@@ -1863,7 +2164,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 320,
                   "column": 4
@@ -1875,6 +2176,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
@@ -1882,7 +2186,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 335,
                   "column": 4
@@ -1911,7 +2215,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 339,
                   "column": 4
@@ -1937,7 +2241,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 343,
                   "column": 4
@@ -1966,7 +2270,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 350,
                   "column": 4
@@ -1988,6 +2292,9 @@
                   "name": "newVal"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.TextFieldMixin"
             }
           ],
@@ -1997,7 +2304,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -2013,6 +2320,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -2036,7 +2346,7 @@
               "name": "autofocus",
               "description": "Specify that this control should have input focus when the page loads.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 50,
                   "column": 8
@@ -2047,14 +2357,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 64,
                   "column": 8
@@ -2065,14 +2375,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "autocomplete",
               "description": "Whether the value of the control can be automatically completed by the browser.\nList of available options at:\nhttps://developer.mozilla.org/en/docs/Web/HTML/Element/input#attr-autocomplete",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 104,
                   "column": 8
@@ -2083,14 +2393,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "autocorrect",
               "description": "This is a property supported by Safari that is used to control whether\nautocorrection should be enabled when the user is entering/editing the text.\nPossible values are:\non: Enable autocorrection.\noff: Disable autocorrection.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 115,
                   "column": 8
@@ -2101,14 +2411,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "autocapitalize",
               "description": "This is a property supported by Safari and Chrome that is used to control whether\nautocapitalization should be enabled when the user is entering/editing the text.\nPossible values are:\ncharacters: Characters capitalization.\nwords: Words capitalization.\nsentences: Sentences capitalization.\nnone: No capitalization.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 128,
                   "column": 8
@@ -2119,14 +2429,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "error-message",
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 135,
                   "column": 8
@@ -2137,14 +2447,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "label",
               "description": "String used for the label element.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 143,
                   "column": 8
@@ -2155,14 +2465,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "maxlength",
               "description": "Maximum number of characters (in Unicode code points) that the user can enter.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 152,
                   "column": 8
@@ -2173,14 +2483,14 @@
                 }
               },
               "metadata": {},
-              "type": "number",
+              "type": "number | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "minlength",
               "description": "Minimum number of characters (in Unicode code points) that the user can enter.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 159,
                   "column": 8
@@ -2191,14 +2501,14 @@
                 }
               },
               "metadata": {},
-              "type": "number",
+              "type": "number | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "name",
               "description": "The name of the control, which is submitted with the form data.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 166,
                   "column": 8
@@ -2209,14 +2519,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "placeholder",
               "description": "A hint to the user of what can be entered in the control.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 173,
                   "column": 8
@@ -2227,14 +2537,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "readonly",
               "description": "This attribute indicates that the user cannot modify the value of the control.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 180,
                   "column": 8
@@ -2245,14 +2555,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "required",
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 188,
                   "column": 8
@@ -2263,14 +2573,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "value",
               "description": "The initial value of the control.\nIt can be used for two-way data binding.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 198,
                   "column": 8
@@ -2281,14 +2591,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "invalid",
               "description": "This property is set to true when the control value is invalid.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 208,
                   "column": 8
@@ -2299,14 +2609,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "prevent-invalid-input",
               "description": "When set to true, user is prevented from typing a value that\nconflicts with the given `pattern`.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field-mixin.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field-mixin.html",
                 "start": {
                   "line": 219,
                   "column": 8
@@ -2317,14 +2627,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldMixin"
             },
             {
               "name": "list",
               "description": "Identifies a list of pre-defined options to suggest to the user.\nThe value must be the id of a <datalist> element in the same document.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 122,
                   "column": 12
@@ -2335,14 +2645,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldElement"
             },
             {
               "name": "pattern",
               "description": "A regular expression that the value is checked against.\nThe pattern must match the entire value, not just some subset.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 130,
                   "column": 12
@@ -2353,14 +2663,14 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldElement"
             },
             {
               "name": "title",
               "description": "Message to show to the user when validation fails.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-text-field/src/vaadin-text-field.html",
+                "file": "../../vaadin-text-field/src/vaadin-text-field.html",
                 "start": {
                   "line": 137,
                   "column": 12
@@ -2371,7 +2681,7 @@
                 }
               },
               "metadata": {},
-              "type": "string",
+              "type": "string | null | undefined",
               "inheritedFrom": "Vaadin.TextFieldElement"
             }
           ],
@@ -2379,7 +2689,7 @@
             {
               "type": "CustomEvent",
               "name": "change",
-              "description": "change",
+              "description": "Fired when the user commits a value change.",
               "metadata": {},
               "inheritedFrom": "Vaadin.TextFieldMixin"
             }
@@ -2397,12 +2707,33 @@
           "path": "src/vaadin-dropdown-menu.html",
           "properties": [
             {
+              "name": "focusElement",
+              "type": "?",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 385,
+                  "column": 8
+                },
+                "end": {
+                  "line": 388,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
               "name": "autofocus",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Specify that this control should have input focus when the page loads.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 50,
                   "column": 8
@@ -2413,17 +2744,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_previousTabIndex",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Stores the previous value of tabindex attribute of the disabled element",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 57,
                   "column": 8
@@ -2434,17 +2767,19 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disabled",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 64,
                   "column": 8
@@ -2456,18 +2791,19 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_disabledChanged\""
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "_isShiftTabbing",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 70,
                   "column": 8
@@ -2478,13 +2814,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "opened",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Set when the dropdown menu is open",
               "privacy": "public",
               "sourceRange": {
@@ -2500,14 +2838,15 @@
               "metadata": {
                 "polymer": {
                   "notify": true,
-                  "observer": "\"_openedChanged\""
+                  "observer": "\"_openedChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "errorMessage",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The error message to display when the dropdown menu value is invalid",
               "privacy": "public",
               "sourceRange": {
@@ -2521,13 +2860,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"\""
             },
             {
               "name": "label",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "String used for the label element.",
               "privacy": "public",
               "sourceRange": {
@@ -2541,12 +2882,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             },
             {
               "name": "value",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "It stores the the `value` property of the selected item, providing the\nvalue for iron-form.\nWhen there’s an item selected, it's the value of that item, otherwise\nit's an empty string.\nOn change or initialization, the component finds the item which matches the\nvalue and displays it.\nIf no value is provided to the component, it selects the first item without\nvalue or empty value.\nHint: If you do not want to select any item by default, you can either set all\nthe values of inner vaadin-items, or set the vaadin-dropdown-menu value to\nan inexistent value in the items list.",
               "privacy": "public",
               "sourceRange": {
@@ -2562,14 +2905,15 @@
               "metadata": {
                 "polymer": {
                   "notify": true,
-                  "observer": "\"_valueChanged\""
+                  "observer": "\"_valueChanged\"",
+                  "attributeType": "String"
                 }
               },
               "defaultValue": "\"\""
             },
             {
               "name": "required",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "The current required state of the dropdown menu. True if required.",
               "privacy": "public",
               "sourceRange": {
@@ -2584,13 +2928,14 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_requiredChanged\""
+                  "observer": "\"_requiredChanged\"",
+                  "attributeType": "Boolean"
                 }
               }
             },
             {
               "name": "invalid",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Set to true if the value is invalid.",
               "privacy": "public",
               "sourceRange": {
@@ -2605,14 +2950,15 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "name",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The name of this element.",
               "privacy": "public",
               "sourceRange": {
@@ -2626,12 +2972,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             },
             {
               "name": "placeholder",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "A hint to the user of what can be entered in the control.\nThe placeholder will be displayed in the case that there\nis no item selected, or the selected item has an empty\nstring label, or the selected item has no label and it's\nDOM content is empty.",
               "privacy": "public",
               "sourceRange": {
@@ -2645,12 +2993,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             },
             {
               "name": "readonly",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "When present, it specifies that the element is read-only.",
               "privacy": "public",
               "sourceRange": {
@@ -2664,13 +3014,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false"
             },
             {
               "name": "_phone",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2684,7 +3036,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               }
             },
             {
@@ -2709,7 +3063,7 @@
             },
             {
               "name": "_overlayElement",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2723,12 +3077,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               }
             },
             {
               "name": "_inputElement",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2742,12 +3098,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               }
             },
             {
               "name": "_toggleElement",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2761,12 +3119,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               }
             },
             {
               "name": "_items",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -2780,7 +3140,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               }
             }
           ],
@@ -2800,7 +3162,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "connectedCallback",
@@ -2817,7 +3182,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "disconnectedCallback",
@@ -2834,7 +3202,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setFocused",
@@ -2842,11 +3213,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 556,
+                  "line": 544,
                   "column": 8
                 },
                 "end": {
-                  "line": 561,
+                  "line": 549,
                   "column": 9
                 }
               },
@@ -2855,14 +3226,17 @@
                 {
                   "name": "focused"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_bodyKeydownListener",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 157,
                   "column": 4
@@ -2878,6 +3252,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2885,7 +3262,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 161,
                   "column": 4
@@ -2897,6 +3274,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2904,7 +3284,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 174,
                   "column": 4
@@ -2920,6 +3300,9 @@
                   "name": "e"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2927,7 +3310,7 @@
               "description": "Moving the focus from the host element causes firing of the blur event what leads to problems in IE.",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 187,
                   "column": 4
@@ -2939,6 +3322,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2946,7 +3332,7 @@
               "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 201,
                   "column": 4
@@ -2958,6 +3344,9 @@
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2965,7 +3354,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 206,
                   "column": 4
@@ -2981,6 +3370,9 @@
                   "name": "disabled"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -2988,7 +3380,7 @@
               "description": "",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 221,
                   "column": 4
@@ -3004,6 +3396,9 @@
                   "name": "tabindex"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -3021,7 +3416,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_requiredChanged",
@@ -3042,7 +3440,10 @@
                 {
                   "name": "required"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_valueChanged",
@@ -3066,7 +3467,10 @@
                 {
                   "name": "oldValue"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onKeyDown",
@@ -3087,7 +3491,10 @@
                 {
                   "name": "e"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onKeyDownInside",
@@ -3108,7 +3515,10 @@
                 {
                   "name": "e"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_openedChanged",
@@ -3132,10 +3542,13 @@
                 {
                   "name": "wasOpened"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
-              "name": "_createTemplateInstance",
+              "name": "_hasContent",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -3144,24 +3557,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 481,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_hasContent",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 483,
-                  "column": 8
-                },
-                "end": {
-                  "line": 492,
+                  "line": 480,
                   "column": 9
                 }
               },
@@ -3178,11 +3574,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 494,
+                  "line": 482,
                   "column": 8
                 },
                 "end": {
-                  "line": 511,
+                  "line": 499,
                   "column": 9
                 }
               },
@@ -3191,7 +3587,10 @@
                 {
                   "name": "selected"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_updateAriaExpanded",
@@ -3199,11 +3598,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 513,
+                  "line": 501,
                   "column": 8
                 },
                 "end": {
-                  "line": 515,
+                  "line": 503,
                   "column": 9
                 }
               },
@@ -3215,7 +3614,10 @@
                 {
                   "name": "toggleElement"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_updateValueSlot",
@@ -3223,16 +3625,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 517,
+                  "line": 505,
                   "column": 8
                 },
                 "end": {
-                  "line": 540,
+                  "line": 528,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_updateSelectedItem",
@@ -3240,11 +3645,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 542,
+                  "line": 530,
                   "column": 8
                 },
                 "end": {
-                  "line": 553,
+                  "line": 541,
                   "column": 9
                 }
               },
@@ -3256,7 +3661,10 @@
                 {
                   "name": "items"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setPosition",
@@ -3264,16 +3672,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 563,
+                  "line": 551,
                   "column": 8
                 },
                 "end": {
-                  "line": 571,
+                  "line": 559,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "validate",
@@ -3281,11 +3692,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 578,
+                  "line": 566,
                   "column": 8
                 },
                 "end": {
-                  "line": 580,
+                  "line": 568,
                   "column": 9
                 }
               },
@@ -3303,7 +3714,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -3319,6 +3730,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -3335,7 +3749,7 @@
               "column": 6
             },
             "end": {
-              "line": 581,
+              "line": 569,
               "column": 7
             }
           },
@@ -3347,7 +3761,7 @@
               "name": "autofocus",
               "description": "Specify that this control should have input focus when the page loads.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 50,
                   "column": 8
@@ -3358,14 +3772,14 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
               "name": "disabled",
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
-                "file": "../bower_components/vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
                   "line": 64,
                   "column": 8
@@ -3376,7 +3790,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
@@ -3393,7 +3807,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "error-message",
@@ -3409,7 +3823,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "label",
@@ -3425,7 +3839,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "value",
@@ -3441,7 +3855,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "required",
@@ -3457,7 +3871,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "invalid",
@@ -3473,7 +3887,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "name",
@@ -3489,7 +3903,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "placeholder",
@@ -3505,7 +3919,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "readonly",
@@ -3521,7 +3935,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             }
           ],
           "events": [
@@ -3553,7 +3967,6 @@
               "description": "",
               "name": "prefix",
               "range": {
-                "file": "src/vaadin-dropdown-menu.html",
                 "start": {
                   "line": 147,
                   "column": 6
