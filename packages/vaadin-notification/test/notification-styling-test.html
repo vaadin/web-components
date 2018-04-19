@@ -103,6 +103,7 @@
 
     describe('notification content styling', () => {
       let notification, notificationCard, notificationCardContent;
+
       describe('local styles', () => {
         beforeEach(() => {
           const localStyles = fixture('localStyles');
@@ -111,6 +112,7 @@
           notificationCardContent = notificationCard.shadowRoot.querySelector('[part~="content"]');
           notification.open();
         });
+
         afterEach(() => {
           // Close everything to stop all pending timers.
           notification.close();
@@ -118,31 +120,38 @@
           // delete singleton reference, so as it's created in next test
           delete notification.constructor._container;
         });
+
         it('should stamp content into a shadowRoot', () => {
           expect(notificationCardContent.shadowRoot).to.be.instanceof(ShadowRoot);
         });
+
         it('should not slot the content', () => {
           expect(notificationCardContent.firstElementChild.assignedSlot).to.be.null;
         });
+
         it('should apply local styles to notification overlay content', () => {
           expect(getComputedStyleSource(
             notificationCardContent.shadowRoot.querySelector('.local-styles-content')
           )).to.equal('.local-styles-content');
         });
+
         it('should not apply global styles to notification overlay content', () => {
           expect(getComputedStyleSource(
             notificationCardContent.shadowRoot.querySelector('.global-styles-content')
           )).to.not.equal('.global-styles-content');
         });
+
         it('should not apply host styles to notification overlay content', () => {
           expect(getComputedStyleSource(notificationCardContent.shadowRoot.host)).to.not.equal(':host');
         });
+
         it('should not apply local part styles to notification overlay', () => {
           expect(getComputedStyleSource(
             notificationCard.shadowRoot.querySelector('[part="overlay"]')
           )).to.not.equal('[part="overlay"]');
         });
       });
+
       describe('global styles', () => {
         beforeEach(() => {
           notification = fixture('globalStyles');
@@ -150,6 +159,7 @@
           notificationCardContent = notificationCard.shadowRoot.querySelector('[part~="content"]');
           notification.open();
         });
+
         afterEach(() => {
           // Close everything to stop all pending timers.
           notification.close();
@@ -157,39 +167,48 @@
           // delete singleton reference, so as it's created in next test
           delete notification.constructor._container;
         });
+
         it('should stamp content into notification overlay host', () => {
           notificationCard, notificationCardContent;
           expect(notificationCardContent.shadowRoot).not.to.be.instanceof(ShadowRoot);
           expect(notificationCard.childElementCount).to.be.eql(2);
         });
+
         it('should slot content into content part', () => {
           const slot = notificationCardContent.firstElementChild;
           expect(notificationCard.children[0].assignedSlot).to.equal(slot);
           expect(notificationCard.children[1].assignedSlot).to.equal(slot);
         });
+
         it('should apply global styles to notification overlay content', () => {
           expect(getComputedStyleSource(
             notificationCard.querySelector('.global-styles-content')
           )).to.equal('.global-styles-content');
         });
+
         it('should not apply local styles to notification overlay content', () => {
           expect(getComputedStyleSource(
             notificationCard.querySelector('.local-styles-content')
           )).to.not.equal('.local-styles-content');
         });
       });
+
       if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
         describe('ShadyCSS scoping with is attribute', () => {
           function getStyleScope(notificationCard) {
             return notificationCard.getAttribute('is');
           }
+
           it('should use is value for builtin elements', () => {
+            const template = document.createElement('template');
+            template.innerHTML = 'is-builtin-element';
+            const notification = document.createElement('vaadin-notification');
+            notification.appendChild(template);
             const owner = document.createElement('div');
-            document.body.appendChild(owner);
             owner.setAttribute('is', 'is-builtin-element');
             owner.attachShadow({mode: 'open'});
-            owner.shadowRoot.innerHTML = '<vaadin-notification><template>is-builtin-element</template></vaadin-notification>';
-            const notification = owner.shadowRoot.querySelector('vaadin-notification');
+            owner.shadowRoot.appendChild(notification);
+            document.body.appendChild(owner);
             const notificationCard = notification.shadowRoot.querySelector('vaadin-notification-card');
             const notificationCardContent = notificationCard.shadowRoot.querySelector('[part~="content"]');
             notification.open();
@@ -198,6 +217,7 @@
             notification._removeNotificationCard();
             document.body.removeChild(owner);
           });
+
           it('should not use is value for custom elements', () => {
             const owner = fixture('isCustomElement');
             const notification = owner.shadowRoot.querySelector('vaadin-notification');
