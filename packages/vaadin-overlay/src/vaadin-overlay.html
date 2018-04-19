@@ -583,8 +583,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
             // Shady DOM
-            this._shadyStyleScope = templateRoot.host
-              && (templateRoot.host.getAttribute('is') || templateRoot.host.localName);
+            this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+            if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
+              this._shadyStyleScope = templateRoot.host.getAttribute('is');
+            }
             if (this._shadyStyleScope) {
               // NOTE(platosha): here we trick ShadyCSS to think that the scope is
               // what `this._shadyStyleScope` says. What we actually need is to add
