@@ -1,6 +1,6 @@
 {
-  "name": "@vaadin/vaadin-ordered-layout",
-  "version": "1.0.0-pre.1",
+  "name": "vaadin-ordered-layout",
+  "version": "1.0.1",
   "description": "vaadin-ordered-layout",
   "main": "vaadin-ordered-layout.html",
   "repository": "vaadin/vaadin-ordered-layout",
