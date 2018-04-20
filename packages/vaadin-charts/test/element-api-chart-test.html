@@ -18,13 +18,21 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="tooltip">
+    <template>
+      <vaadin-chart additional-options='{"tooltip": {"pointFormat": "custom"}}'>
+        <vaadin-chart-series values="[1,2,3,4]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
-      var element;
+      var chart, chartContainer;
 
       beforeEach(done => {
-        element = fixture('default');
+        chart = fixture('default');
+        chartContainer = chart.$.chart;
         Polymer.flush();
         setTimeout(() => {
           done();
@@ -32,51 +40,51 @@
       });
 
       it('should be defined', () => {
-        expect(element.constructor.is).to.be.equal(element.localName);
+        expect(chart.constructor.is).to.be.equal(chart.localName);
       });
 
       it('should have custom title', () => {
-        expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+        expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
       });
 
       it('should have custom subtitle', () => {
-        expect(element.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
+        expect(chartContainer.querySelector('.highcharts-subtitle > tspan').textContent).to.be.equal('My subtitle');
       });
 
       it('should have additional-options', () => {
         // Exporting dropdown menu
-        expect(element.$.chart.querySelector('.highcharts-contextbutton')).to.not.be.null;
+        expect(chartContainer.querySelector('.highcharts-contextbutton')).to.not.be.null;
       });
 
       it('additional-options should overwrite conflicting base config properties', () => {
-        expect(element.$.chart.querySelector('.highcharts-credits').textContent).to.be.equal('Vaadin Ltd');
+        expect(chartContainer.querySelector('.highcharts-credits').textContent).to.be.equal('Vaadin Ltd');
       });
 
       it('additional-options should not overwrite top-level element properties', () => {
-        expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
+        expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('My title');
       });
 
       it('should react to additionalOptions object change', done => {
-        element.additionalOptions = {title: {text: 'Updated title'}};
+        chart.additionalOptions = {title: {text: 'Updated title'}};
 
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Updated title');
+          expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Updated title');
           done();
         }, 100);
       });
 
       it('should react to additionalOptions subproperty change', done => {
-        element.set('additionalOptions.title.text', 'Reindeer statistics');
+        chart.set('additionalOptions.title.text', 'Reindeer statistics');
 
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Reindeer statistics');
+          expect(chartContainer.querySelector('.highcharts-title > tspan').textContent).to.be.equal('Reindeer statistics');
           done();
         }, 150);
       });
 
       it('should have categories set', done => {
         setTimeout(() => {
-          const textNodes = element.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
+          const textNodes = chartContainer.querySelectorAll('.highcharts-xaxis-labels > text');
           const text = Array.from(textNodes).map(node => node.textContent);
           expect(text).to.be.deep.equal(['2010', '2011', '2012', '2013']);
           done();
@@ -84,9 +92,9 @@
       });
 
       it('should react to categories change', done => {
-        element.setAttribute('categories', '["Jan", "Fev", "Mar", "Abr"]');
+        chart.setAttribute('categories', '["Jan", "Fev", "Mar", "Abr"]');
         setTimeout(() => {
-          const textNodes = element.$.chart.querySelectorAll('.highcharts-xaxis-labels > text');
+          const textNodes = chartContainer.querySelectorAll('.highcharts-xaxis-labels > text');
           const text = Array.from(textNodes).map(node => node.textContent);
           expect(text).to.be.deep.equal(['Jan', 'Fev', 'Mar', 'Abr']);
           done();
@@ -94,22 +102,46 @@
       });
 
       it('should hide legend', done => {
-        expect(element.$.chart.querySelector('.highcharts-legend')).to.not.be.null;
-        element.setAttribute('no-legend', true);
+        expect(chartContainer.querySelector('.highcharts-legend')).to.not.be.null;
+        chart.setAttribute('no-legend', true);
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-legend')).to.be.null;
+          expect(chartContainer.querySelector('.highcharts-legend')).to.be.null;
           done();
         }, 50);
       });
 
       it('should apply legend config via additional-options', done => {
-        element.removeAttribute('no-legend');
+        chart.removeAttribute('no-legend');
         setTimeout(() => {
-          const legendTitle = element.$.chart.querySelector('.highcharts-legend-title > text').textContent;
+          const legendTitle = chartContainer.querySelector('.highcharts-legend-title > text').textContent;
           expect(legendTitle).to.be.equal('Legend title');
           done();
         }, 50);
       });
+
+      it('should not have tooltips by default', function(done) {
+        setTimeout(function() {
+          expect(chart.configuration.tooltip.options.enabled).to.be.false;
+          done();
+        }, 100);
+      });
+
+      it('should have tooltips when enabled', function(done) {
+        chart.tooltip = true;
+        setTimeout(function() {
+          expect(chart.configuration.tooltip.options.enabled).to.be.true;
+          done();
+        }, 100);
+      });
+
+      it('should have tooltips when tooltip is configured in additional options', function(done) {
+        chart = fixture('tooltip');
+        setTimeout(function() {
+          expect(chart.configuration.tooltip.options.enabled).to.be.true;
+          done();
+        }, 150);
+      });
+
     });
   </script>
 </body>

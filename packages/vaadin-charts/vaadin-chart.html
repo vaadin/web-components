@@ -338,6 +338,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Whether or not to show tooltip when hovering data points.
+             */
+            tooltip: {
+              type: Boolean,
+              observer: '__tooltipObserver',
+              reflectToAttribute: true
+            },
+
+            /**
              * Sets the default series type of the chart.
              * Note that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type.
              */
@@ -377,10 +386,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this._baseConfig = {
             credits: {
               enabled: false
-            },
-            // Workaround for highcharts#7398 to make updating tooltip works
-            tooltip: {
-
             },
             exporting: {
               enabled: false
@@ -433,6 +438,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.title = {
               text: this.title
             };
+          }
+
+          if (!options.tooltip) {
+            // Workaround for highcharts#7398 to make updating tooltip works
+            options.tooltip = {};
+            if (!this.tooltip) {
+              options.tooltip.enabled = false;
+            }
           }
 
           if (this.subtitle) {
@@ -1111,6 +1124,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (newValue && newValue.length > 0) {
             this.configuration.title.update({text: newValue});
           }
+        }
+
+        __tooltipObserver(newValue) {
+          if (!this.configuration) {
+            return;
+          }
+
+          this.configuration.tooltip.update({enabled: this.tooltip});
         }
 
         __updateType(newValue) {
