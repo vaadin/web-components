@@ -239,19 +239,23 @@ This program is available under Apache License Version 2.0, available at https:/
 
     // correct order needed for preserving correct tab order between cell contents.
     _reorderRows() {
-      var body = this.$.items;
-      var items = body.querySelectorAll('tr');
+      const body = this.$.items;
+      const items = body.querySelectorAll('tr');
       if (!items.length) {
         return;
       }
 
-      var _adjustedVirtualStart = this._virtualStart + this._vidxOffset;
+      const adjustedVirtualStart = this._virtualStart + this._vidxOffset;
 
       // Which row to use as a target?
-      const targetRow = this._rowWithFocusedElement || items[0];
+      const targetRow = this._rowWithFocusedElement || Array.from(items).filter(row => !row.hidden)[0];
+      if (!targetRow) {
+        // All rows are hidden, don't reorder
+        return;
+      }
 
       // Where the target row should be?
-      const targetPhysicalIndex = targetRow.index - _adjustedVirtualStart;
+      const targetPhysicalIndex = targetRow.index - adjustedVirtualStart;
 
       // Reodrer the DOM elements to keep the target row at the target physical index
       const delta = Array.from(items).indexOf(targetRow) - targetPhysicalIndex;

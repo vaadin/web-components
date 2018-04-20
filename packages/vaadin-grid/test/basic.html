@@ -215,6 +215,15 @@
         });
       });
 
+      it('should not throw after setting size to 0', () => {
+        grid.size = 1000;
+        scrollToEnd(grid);
+        expect(() => {
+          grid.size = 0;
+          flushGrid(grid);
+        }).not.to.throw();
+      });
+
       // The following could not be tested if window is not focused.
       if (!window.document.hasFocus()) {
         // Try to get window focus.
