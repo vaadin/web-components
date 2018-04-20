@@ -2,11 +2,11 @@
   "name": "Vaadin Dialog",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "dialog-basic-demos",
     "src": "dialog-basic-demos.html",
     "meta": {
-      "title": "vaadin-dialog Basic Examples",
+      "title": "vaadin-dialog Basics",
       "description": "",
       "image": ""
      }
