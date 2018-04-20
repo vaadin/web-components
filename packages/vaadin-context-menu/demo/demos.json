@@ -2,11 +2,11 @@
   "name": "Vaadin Context Menu",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "context-menu-basic-demos",
     "src": "context-menu-basic-demos.html",
     "meta": {
-      "title": "vaadin-context-menu Basic Examples",
+      "title": "vaadin-context-menu Basics",
       "description": "",
       "image": ""
      }
@@ -17,7 +17,7 @@
     "url": "context-menu-advanced-demos",
     "src": "context-menu-advanced-demos.html",
     "meta": {
-      "title": "vaadin-context-menu Basic Examples",
+      "title": "vaadin-context-menu Advanced Usage",
       "description": "",
       "image": ""
      }
