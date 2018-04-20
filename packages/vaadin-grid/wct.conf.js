@@ -26,11 +26,12 @@ module.exports = {
       'Windows 10/firefox@59'
     ];
 
-    const saucelabsPlatformsP3 = [
-      'macOS 10.12/iphone@11.2',
-      'macOS 10.12/ipad@11.2',
-      'Windows 10/chrome@65',
-      'macOS 10.12/safari@11.0'
+    const saucelabsPlatformsPolyfilledP3 = [
+      'Windows 10/microsoftedge@16'
+    ];
+
+    const saucelabsPlatformsMobileP3 = [
+      'macOS 10.12/iphone@11.2'
     ];
 
     if (env === 'saucelabs:mobile') {
@@ -46,8 +47,10 @@ module.exports = {
       context.options.plugins.sauce.browsers = cronPlatforms.concat(saucelabsPlatformsDesktop)
         .concat(saucelabsPlatformsMobile).concat(saucelabsPlatformsPolyfilled);
 
-    } else if (env === 'saucelabs-p3') {
-      context.options.plugins.sauce.browsers = saucelabsPlatformsP3;
+    } else if (env === 'saucelabs:polyfilled-p3') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsPolyfilledP3;
+    } else if (env === 'saucelabs:mobile-p3') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsMobileP3;
     } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
 
