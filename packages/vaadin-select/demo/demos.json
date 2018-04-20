@@ -2,11 +2,11 @@
   "name": "Vaadin Element",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "dropdown-menu-basic-demos",
     "src": "dropdown-menu-basic-demos.html",
     "meta": {
-      "title": "vaadin-dropdown-menu Basic Examples",
+      "title": "vaadin-dropdown-menu Basics",
       "description": "",
       "image": ""
      }
