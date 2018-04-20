@@ -36,7 +36,7 @@ script:
       npm install -g yarn magi-cli polymer-cli@next &&
       (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
-      magi p3-convert --out . &&
+      magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm -l chrome;
