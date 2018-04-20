@@ -241,11 +241,20 @@
         expect(grid.loading).to.be.true;
       });
 
-      it('should be in loading state when fetching new data', () => {
+      it('should be in loading state when fetching new data', (done) => {
+        let raf;
+
         container.dataProvider = (params, callback) => {
           expect(grid.loading).to.be.true;
           callback(Array(params.pageSize));
           expect(grid.loading).not.to.be.true;
+
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(() => {
+            // Cleanup
+            grid.dataProvider = null;
+            done();
+          });
         };
         scrollToEnd(grid);
       });
