@@ -22,17 +22,9 @@
     /* TODO These style overrides should not be needed.
        We should instead offer a way to have non-selectable items inside the context menu. */
 
-      :host vaadin-list-box {
-        --_lumo-item-selected-icon-display: none;
-      }
-
-      /* ShadyCSS workaround (to hide the selected item checkmark) */
-      :host vaadin-list-box vaadin-item::before {
-        display: none;
-      }
-
-      :host vaadin-list-box vaadin-item {
-        padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
+      :host {
+        --_lumo-list-box-item-selected-icon-display: none;
+        --_lumo-list-box-item-padding-left: calc(var(--lumo-space-m) + var(--lumo-border-radius) / 4);
       }
     </style>
   </template>
