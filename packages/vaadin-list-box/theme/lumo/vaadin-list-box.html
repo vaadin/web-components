@@ -7,12 +7,6 @@
     <style>
       :host {
         -webkit-tap-highlight-color: transparent;
-        --_lumo-item-selected-icon-display: block;
-      }
-
-      /* ShadyCSS workaround (to show the selected item checkmark) */
-      [part="items"] ::slotted(vaadin-item)::before {
-        display: block;
       }
 
       /* IE11 flexbox issue workaround (vaadin-items are flex containers with min-height) */
@@ -35,7 +29,7 @@
       [part="items"] ::slotted(vaadin-item) {
         outline: none;
         border-radius: var(--lumo-border-radius);
-        padding-left: calc(var(--lumo-border-radius) / 4);
+        padding-left: var(--_lumo-list-box-item-padding-left, calc(var(--lumo-border-radius) / 4));
         padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
       }
 
