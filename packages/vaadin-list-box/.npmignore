@@ -3,9 +3,12 @@ bower_components
 .stylelintrc
 .travis.yml
 .gemini.yml
+.gemini-ie.yml
+.gemini-edge.yml
 wct.conf.js
 analysis.json
 bower.json
 gulpfile.js
 index.html
 screenshot.png
+vaadin-directory-description.md
