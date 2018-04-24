@@ -311,6 +311,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Category-axis minimum value. Defaults to `undefined`.
+             */
+            categoryMin: {
+              type: Number,
+              observer: '__updateCategoryMin',
+              reflectToAttribute: true,
+            },
+
+            /**
              * Specifies whether to hide legend or show.
              * Legend configuration can be set up via additionalOptions property
              */
@@ -455,9 +464,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           if (this.categories) {
-            options.xAxis = [{
-              categories: this.categories
-            }];
+            options.xAxis = options.xAxis || {};
+            if (Array.isArray(options.xAxis)) {
+              // Set categories on first x axis
+              options.xAxis[0].categories = this.categories;
+            } else {
+              options.xAxis.categories = this.categories;
+            }
+          }
+
+          if (isFinite(this.categoryMin)) {
+            options.xAxis = options.xAxis || {};
+            if (Array.isArray(options.xAxis)) {
+              // Set category-min on first x axis
+              options.xAxis[0].min = this.categoryMin;
+            } else {
+              options.xAxis.min = this.categoryMin;
+            }
           }
 
           if (this.noLegend) {
@@ -1101,6 +1124,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           this.__updateOrAddAxes([{
             categories: this.categories
+          }], true);
+        }
+
+        __updateCategoryMin() {
+          if (!this.configuration || !isFinite(this.categoryMin)) {
+            return;
+          }
+
+          this.__updateOrAddAxes([{
+            min: this.categoryMin
           }], true);
         }
 

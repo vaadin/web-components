@@ -321,7 +321,7 @@
           const additionalChartContainer = additionalchart.$.chart;
           expect(markersVisible(additionalChartContainer)).to.be.false;
           done();
-        }, 100);
+        }, 120);
       });
 
       it('should not have markers by default for dense data', function(done) {
@@ -418,7 +418,7 @@
           expect(firstAxis.series).to.have.length(1);
           expect(secondAxis.series).to.have.length(0);
           done();
-        }, 80);
+        }, 100);
       });
     });
   </script>

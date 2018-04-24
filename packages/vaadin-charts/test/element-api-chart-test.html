@@ -25,6 +25,13 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="category">
+    <template>
+      <vaadin-chart categories="[10,20,30]" category-min="1">
+        <vaadin-chart-series values="[1,2,3]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
@@ -142,6 +149,33 @@
         }, 150);
       });
 
+      it('should have category minimum set to first category by default', (done) => {
+        setTimeout(() => {
+          const [xAxis] = chart.configuration.xAxis;
+          expect(xAxis.min).to.be.equal(0);
+          done();
+        }, 30);
+      });
+
+      it('should be able to set category minimum', (done) => {
+        chart = fixture('category');
+        setTimeout(() => {
+          const [xAxis] = chart.configuration.xAxis;
+          expect(xAxis.min).to.be.equal(1);
+          done();
+        }, 110);
+      });
+
+      it('should change category minimum value', done => {
+        const newCategoryMin = 2;
+        function extremesListener(event) {
+          expect(event.detail.originalEvent.min).to.be.equal(newCategoryMin);
+          chart.removeEventListener('xaxes-extremes-set', extremesListener);
+          done();
+        }
+        chart.addEventListener('xaxes-extremes-set', extremesListener);
+        chart.setAttribute('category-min', newCategoryMin);
+      });
     });
   </script>
 </body>
