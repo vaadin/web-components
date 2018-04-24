@@ -453,33 +453,37 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _attachOverlay() {
-        this._placeholder = document.createComment('vaadin-overlay-placeholder');
-        this.parentNode.insertBefore(this._placeholder, this);
         document.body.appendChild(this);
       }
 
       _animatedClosing() {
-        if (this._placeholder) {
-          this.setAttribute('closing', '');
-          const name = getComputedStyle(this).getPropertyValue('animation-name');
-          if (name && name != 'none') {
-            const listener = () => {
-              this._detachOverlay();
-              this.removeAttribute('closing');
-              this.removeEventListener('animationend', listener);
-            };
-            this.addEventListener('animationend', listener);
-          } else {
+        this.setAttribute('closing', '');
+        const name = getComputedStyle(this).getPropertyValue('animation-name');
+        if (name && name != 'none') {
+          const listener = () => {
             this._detachOverlay();
             this.removeAttribute('closing');
-          }
+            this.removeEventListener('animationend', listener);
+          };
+          this.addEventListener('animationend', listener);
+        } else {
+          this._detachOverlay();
+          this.removeAttribute('closing');
         }
       }
 
       _detachOverlay() {
-        this._placeholder.parentNode.insertBefore(this, this._placeholder);
-        this._processPendingMutationObserversFor(document.body);
-        this._placeholder.parentNode.removeChild(this._placeholder);
+        // The detaching overlay is happening after closing animation is finished.
+        // If in the meantime of closing animation user quickly clicked
+        // the element to show the same ovelay, `opened` will be true
+        // and no need to detach the overlay
+        if (this.opened) {
+          return;
+        }
+
+        if (this.parentNode === document.body) {
+          document.body.removeChild(this);
+        }
       }
 
       /**
