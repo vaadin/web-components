@@ -11,7 +11,7 @@
   <dom-module id="chart-series-api-demo">
     <template>
       <vaadin-chart id="mychart">
-        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}" value-labels="{{labels}}"></vaadin-chart-series>
+        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}"></vaadin-chart-series>
       </vaadin-chart>
     </template>
 
@@ -27,9 +27,6 @@
               values: {
                 type: Array,
                 value: [10, 20, 10, 30, 50]
-              },
-              labels: {
-                type: Array
               },
               type: {
                 type: String,
@@ -220,82 +217,6 @@
         setTimeout(function() {
           const firstSeries = chart.configuration.series[0];
           expect(firstSeries.name).to.be.equal(title);
-          done();
-        }, 70);
-      });
-
-      it('should have values as labels by default', function(done) {
-        setTimeout(() => {
-          const firstSeries = chart.configuration.series[0];
-          firstSeries.data.forEach(e => expect(e.name).to.be.equal(e.y));
-          done();
-        }, 50);
-      });
-
-      it('should accept labels as mapping object', function(done) {
-        const labelsAsObject = {10: 'Mon', 20: 'Tue', 30: 'Wed', 50: 'Thur'};
-        element.labels = labelsAsObject;
-
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(
-            firstSeries.data.map(e => labelsAsObject[e.y] || e.y));
-          done();
-        }, 70);
-      });
-
-      it('should accept labels as mapping object string', function(done) {
-        const labelsAsObject = {10: 'Mon', 20: 'Tue', 30: 'Wed', 50: 'Thur'};
-        const labelsAsObjectString = JSON.stringify(labelsAsObject);
-        series.setAttribute('value-labels', labelsAsObjectString);
-
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(
-            firstSeries.data.map(e => labelsAsObject[e.y] || e.y));
-          done();
-        }, 70);
-      });
-
-      it('should accept labels as function', function(done) {
-        const labelsAsFunction = e => e + 'AAA';
-        element.labels = labelsAsFunction;
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(
-            firstSeries.data.map(e => e.y + 'AAA'));
-          done();
-        }, 70);
-      });
-
-      it('should accept labels as function string', function(done) {
-        const labelsAsFunctionString = 'function(e) { return e + "BBB"; }';
-        series.setAttribute('value-labels', labelsAsFunctionString);
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(
-            firstSeries.data.map(e => e.y + 'BBB'));
-          done();
-        }, 70);
-      });
-
-      it('should accept labels as array', function(done) {
-        const labelsAsArray = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'];
-        element.labels = labelsAsArray;
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(labelsAsArray);
-          done();
-        }, 70);
-      });
-
-      it('should accept labels as array string', function(done) {
-        const labelsAsArray = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri'];
-        const labelsAsArrayString = JSON.stringify(labelsAsArray);
-        series.setAttribute('value-labels', labelsAsArrayString);
-        setTimeout(function() {
-          const firstSeries = chart.configuration.series[0];
-          expect(firstSeries.data.map(e => e.name)).to.deep.equal(labelsAsArray);
           done();
         }, 70);
       });

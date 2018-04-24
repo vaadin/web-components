@@ -25,6 +25,10 @@ class ChartLabelsMapper {
     return value && {}.toString.call(value) === '[object Function]';
   }
 
+  __isObject(item) {
+    return !Array.isArray(item) && typeof item === 'object';
+  }
+
   __tryPassFunction(value) {
     const result = eval('(' + value + ')');
     if (!this.__isFunction(result)) {
@@ -53,10 +57,27 @@ class ChartLabelsMapper {
 
   map(values) {
     if (values) {
-      return values.map((e, index) => {
-        const result = {};
-        result.y = e;
-        result.name = this.type === 'function' ? this.mapper(e) : this.mapper[this.type === 'array' ? index : e] || e;
+      return values.map((item, index) => {
+        const result = this.__isObject(item) ? Object.assign({}, item) : {};
+
+        if (Array.isArray(item)) {
+          [result.x, result.y] = item;
+        } else if (!this.__isObject(item)) {
+          result.y = item;
+        }
+
+        if (this.type === 'function') {
+          result.name = this.mapper(result.y);
+        } else if (this.type === 'object' && !!this.mapper[result.y]) {
+          result.name = this.mapper[result.y];
+        } else if (this.type === 'array' && this.mapper.length > index) {
+          result.name = this.mapper[index];
+        }
+
+        if (!result.name) {
+          result.name = result.y;
+        }
+
         return result;
       });
     }
