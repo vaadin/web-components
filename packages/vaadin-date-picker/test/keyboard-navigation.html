@@ -214,7 +214,7 @@
 
           it('should scroll to focused month', done => {
             overlay.addEventListener('scroll-animation-finished', e => {
-              expect(e.detail.position).to.eql(e.detail.oldPosition - 1);
+              expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 1, 1);
               done();
             });
 
@@ -290,7 +290,7 @@
 
           it('should scroll up when focus goes invisible', done => {
             overlay.addEventListener('scroll-animation-finished', e => {
-              expect(e.detail.position).to.eql(e.detail.oldPosition - 12);
+              expect(e.detail.position).to.be.closeTo(e.detail.oldPosition - 12, 1);
               done();
             });
 
