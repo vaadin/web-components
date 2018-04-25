@@ -768,11 +768,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           for (let i = 0, len = series.length; i < len; i++) {
             const seriesElement = series[i];
-            const {yAxis: unit} = seriesElement.options;
+            const {yAxis: unit, yAxisValueMin: valueMin} = seriesElement.options;
 
             const idxOnChildList = seriesNodes.indexOf(seriesElement);
             if (unit && !yAxes[unit]) {
               yAxes[unit] = this.__addAxis({id: unit, title: {text: unit}, axisGenerated: true});
+            }
+            if (isFinite(valueMin)) {
+              this.__setYAxisProps(yAxes, unit, {min: valueMin});
             }
 
             const seriesConfiguration = this.__updateOrAddSeriesInstance(seriesElement.options, idxOnChildList);
@@ -780,6 +783,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             seriesElement.setSeries(seriesConfiguration);
           }
           this.__removeAxisIfEmpty();
+        }
+
+        __setYAxisProps(yAxes, yAxisId, props) {
+          if (yAxisId) {
+            yAxes[yAxisId].update(props);
+          } else {
+            this.configuration.yAxis[0].update(props);
+          }
         }
 
         __isSeriesEmpty(series) {
