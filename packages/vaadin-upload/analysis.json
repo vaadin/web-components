@@ -24,7 +24,7 @@
           "properties": [
             {
               "name": "file",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "",
               "privacy": "public",
               "sourceRange": {
@@ -38,7 +38,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               }
             }
           ],
@@ -62,7 +64,10 @@
                 {
                   "name": "abort"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_remove",
@@ -79,7 +84,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_formatProgressValue",
@@ -130,7 +138,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -146,6 +154,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -184,32 +195,32 @@
                 }
               },
               "metadata": {},
-              "type": "Object"
+              "type": "Object | null | undefined"
             }
           ],
           "events": [
             {
               "type": "CustomEvent",
               "name": "file-abort",
-              "description": "file-abort",
+              "description": "Fired when abort button is pressed. It is listened by `vaadin-upload` which\nwill abort the upload in progress, but will not remove the file from the list\nto allow the animation to hide the element to be run.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "file-remove",
-              "description": "file-remove",
+              "description": "Fired after the animation to hide the element has finished. It is listened\nby `vaadin-upload` which will actually remove the file from the upload\nfile list.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "file-retry",
-              "description": "file-retry",
+              "description": "Fired when the retry button is pressed. It is listened by `vaadin-upload`\nwhich will start a new upload process of this file.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "file-start",
-              "description": "file-start",
+              "description": "Fired when the start button is pressed. It is listened by `vaadin-upload`\nwhich will start a new upload process of this file.",
               "metadata": {}
             }
           ],
@@ -230,7 +241,7 @@
           "properties": [
             {
               "name": "nodrop",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Define whether the element supports dropping files on it for uploading.\nBy default it's enabled in desktop and disabled in touch devices\nbecause mobile devices do not support drag events in general. Setting\nit false means that drop is enabled even in touch-devices, and true\ndisables drop in all devices.",
               "privacy": "public",
               "sourceRange": {
@@ -244,12 +255,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               }
             },
             {
               "name": "target",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The server URL. The default value is an empty string, which means that\n_window.location_ will be used.",
               "privacy": "public",
               "sourceRange": {
@@ -263,13 +276,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"\""
             },
             {
               "name": "method",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "HTTP Method used to send the files. Only POST and PUT are allowed.",
               "privacy": "public",
               "sourceRange": {
@@ -283,13 +298,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"POST\""
             },
             {
               "name": "headers",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "Key-Value map to send to the server. If you set this property as an\nattribute, use a valid JSON string, for example:\n```\n<vaadin-upload headers='{\"X-Foo\": \"Bar\"}'></vaadin-upload>\n```",
               "privacy": "public",
               "sourceRange": {
@@ -303,13 +320,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Object"
+                }
               },
               "defaultValue": "{}"
             },
             {
               "name": "timeout",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Max time in milliseconds for the entire upload process, if exceeded the\nrequest will be aborted. Zero means that there is no timeout.",
               "privacy": "public",
               "sourceRange": {
@@ -323,13 +342,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               },
               "defaultValue": "0"
             },
             {
               "name": "_dragover",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -344,14 +365,15 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_dragoverChanged\""
+                  "observer": "\"_dragoverChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "files",
-              "type": "Array",
+              "type": "Array | null | undefined",
               "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while transferring data to the server.",
               "privacy": "public",
               "sourceRange": {
@@ -366,14 +388,15 @@
               },
               "metadata": {
                 "polymer": {
-                  "notify": true
+                  "notify": true,
+                  "attributeType": "Array"
                 }
               },
               "defaultValue": "[]"
             },
             {
               "name": "maxFiles",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Limit of files to upload, by default it is unlimited. If the value is\nset to one, native file browser will prevent selecting multiple files.",
               "privacy": "public",
               "sourceRange": {
@@ -387,12 +410,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               }
             },
             {
               "name": "maxFilesReached",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Specifies if the maximum number of files have been uploaded",
               "privacy": "public",
               "sourceRange": {
@@ -408,14 +433,15 @@
               "metadata": {
                 "polymer": {
                   "notify": true,
-                  "readOnly": true
+                  "readOnly": true,
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "accept",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Specifies the types of files that the server accepts.\nSyntax: a comma-separated list of MIME type patterns (wildcards are\nallowed) or file extensions.\nNotice that MIME types are widely supported, while file extensions\nare only implemented in certain browsers, so avoid using it.\nExample: accept=\"video/*,image/tiff\" or accept=\".pdf,audio/mp3\"",
               "privacy": "public",
               "sourceRange": {
@@ -429,13 +455,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"\""
             },
             {
               "name": "maxFileSize",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Specifies the maximum file size in bytes allowed to upload.\nNotice that it is a client-side constraint, which will be checked before\nsending the request. Obviously you need to do the same validation in\nthe server-side and be sure that they are aligned.",
               "privacy": "public",
               "sourceRange": {
@@ -449,12 +477,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               }
             },
             {
               "name": "_dragoverValid",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Specifies if the dragover is validated with maxFiles and\naccept properties.",
               "privacy": "protected",
               "sourceRange": {
@@ -469,14 +499,15 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_dragoverValidChanged\""
+                  "observer": "\"_dragoverValidChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "formDataName",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Specifies the 'name' property at Content-Disposition",
               "privacy": "public",
               "sourceRange": {
@@ -490,13 +521,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"file\""
             },
             {
               "name": "noAuto",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Prevents upload(s) from immediately uploading upon adding file(s).\nWhen set, you must manually trigger uploads using the `uploadFiles` method",
               "privacy": "public",
               "sourceRange": {
@@ -510,13 +543,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false"
             },
             {
               "name": "withCredentials",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Set the withCredentials flag on the request.",
               "privacy": "public",
               "sourceRange": {
@@ -530,13 +565,15 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false"
             },
             {
               "name": "capture",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "Pass-through to input's capture attribute. Allows user to trigger device inputs\nsuch as camera or microphone immediately.",
               "privacy": "public",
               "sourceRange": {
@@ -550,12 +587,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             },
             {
               "name": "i18n",
-              "type": "Object",
+              "type": "Object | null | undefined",
               "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              dropFiles: {\n              one: 'Drop file here\n              many: 'Drop files here\n              },\n              addFiles: {\n              one: 'Select File...',\n              many: 'Upload Files...'\n              },\n              cancel: 'Cancel',\n              error: {\n              tooManyFiles: 'Too Many Files.',\n              fileIsTooBig: 'File is Too Big.',\n              incorrectFileType: 'Incorrect File Type.'\n              },\n              uploading: {\n              status: {\n                connecting: 'Connecting...',\n                stalled: 'Stalled.',\n                processing: 'Processing File...',\n                held: 'Queued'\n              },\n              remainingTime: {\n                prefix: 'remaining time: ',\n                unknown: 'unknown remaining time'\n              },\n              error: {\n                serverUnavailable: 'Server Unavailable',\n                unexpectedServerError: 'Unexpected Server Error',\n                forbidden: 'Forbidden'\n              }\n              },\n              units: {\n              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n              },\n              formatSize: function(bytes) {\n              // returns the size followed by the best suitable unit\n              },\n              formatTime: function(seconds, [secs, mins, hours]) {\n              // returns a 'HH:MM:SS' string\n              }\n            }",
               "privacy": "public",
               "sourceRange": {
@@ -569,8 +608,11 @@
                 }
               },
               "metadata": {
-                "polymer": {}
-              }
+                "polymer": {
+                  "attributeType": "Object"
+                }
+              },
+              "defaultValue": "{\"dropFiles\":{\"one\":\"Drop file here\",\"many\":\"Drop files here\"},\"addFiles\":{\"one\":\"Select File...\",\"many\":\"Upload Files...\"},\"cancel\":\"Cancel\",\"error\":{\"tooManyFiles\":\"Too Many Files.\",\"fileIsTooBig\":\"File is Too Big.\",\"incorrectFileType\":\"Incorrect File Type.\"},\"uploading\":{\"status\":{\"connecting\":\"Connecting...\",\"stalled\":\"Stalled.\",\"processing\":\"Processing File...\",\"held\":\"Queued\"},\"remainingTime\":{\"prefix\":\"remaining time: \",\"unknown\":\"unknown remaining time\"},\"error\":{\"serverUnavailable\":\"Server Unavailable\",\"unexpectedServerError\":\"Unexpected Server Error\",\"forbidden\":\"Forbidden\"}},\"units\":{\"size\":[\"B\",\"kB\",\"MB\",\"GB\",\"TB\",\"PB\",\"EB\",\"ZB\",\"YB\"]}}"
             }
           ],
           "methods": [
@@ -589,7 +631,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_formatSize",
@@ -721,7 +766,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onDragleave",
@@ -742,7 +790,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onDrop",
@@ -763,7 +814,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_createXhr",
@@ -801,7 +855,10 @@
                 {
                   "name": "xhr"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setStatus",
@@ -831,7 +888,10 @@
                 {
                   "name": "elapsed"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "uploadFiles",
@@ -852,7 +912,10 @@
                 {
                   "name": "files"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_uploadFile",
@@ -873,7 +936,10 @@
                 {
                   "name": "file"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_retryFileUpload",
@@ -894,7 +960,10 @@
                 {
                   "name": "file"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_abortFileUpload",
@@ -915,7 +984,10 @@
                 {
                   "name": "file"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_notifyFileChanges",
@@ -936,7 +1008,10 @@
                 {
                   "name": "file"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_addFiles",
@@ -957,7 +1032,10 @@
                 {
                   "name": "files"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_addFile",
@@ -980,7 +1058,10 @@
                   "type": "File",
                   "description": "File being added"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_removeFile",
@@ -1003,7 +1084,10 @@
                   "type": "File",
                   "description": "File to remove"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onAddFilesTouchEnd",
@@ -1024,7 +1108,10 @@
                 {
                   "name": "e"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onAddFilesClick",
@@ -1041,7 +1128,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onFileInputChange",
@@ -1062,7 +1152,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onFileStart",
@@ -1083,7 +1176,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onFileRetry",
@@ -1104,7 +1200,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onFileAbort",
@@ -1125,7 +1224,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onFileRemove",
@@ -1146,7 +1248,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_dragoverChanged",
@@ -1167,7 +1272,10 @@
                 {
                   "name": "dragover"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_dragoverValidChanged",
@@ -1188,7 +1296,10 @@
                 {
                   "name": "dragoverValid"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_i18nPlural",
@@ -1238,7 +1349,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -1254,6 +1365,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -1292,7 +1406,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "target",
@@ -1308,7 +1422,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "method",
@@ -1324,7 +1438,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "headers",
@@ -1340,7 +1454,7 @@
                 }
               },
               "metadata": {},
-              "type": "Object"
+              "type": "Object | null | undefined"
             },
             {
               "name": "timeout",
@@ -1356,7 +1470,7 @@
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "files",
@@ -1372,7 +1486,7 @@
                 }
               },
               "metadata": {},
-              "type": "Array"
+              "type": "Array | null | undefined"
             },
             {
               "name": "max-files",
@@ -1388,7 +1502,7 @@
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "max-files-reached",
@@ -1404,7 +1518,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "accept",
@@ -1420,7 +1534,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "max-file-size",
@@ -1436,7 +1550,7 @@
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "form-data-name",
@@ -1452,7 +1566,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "no-auto",
@@ -1468,7 +1582,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "with-credentials",
@@ -1484,7 +1598,7 @@
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "capture",
@@ -1500,7 +1614,7 @@
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "i18n",
@@ -1516,68 +1630,68 @@
                 }
               },
               "metadata": {},
-              "type": "Object"
+              "type": "Object | null | undefined"
             }
           ],
           "events": [
             {
               "type": "CustomEvent",
               "name": "file-reject",
-              "description": "file-reject",
+              "description": "Fired when a file cannot be added to the queue due to a constrain:\n file-size, file-type or maxFiles",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-abort",
-              "description": "upload-abort",
+              "description": "Fired when retry abort is requested. If the default is prevented, then the\nfile upload would not be aborted.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-before",
-              "description": "upload-before",
+              "description": "Fired before the XHR is opened. Could be used for changing the request\nURL. If the default is prevented, then XHR would not be opened.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-error",
-              "description": "upload-error",
+              "description": "Fired in case the upload process failed.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-progress",
-              "description": "upload-progress",
+              "description": "Fired as many times as the progress is updated.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-request",
-              "description": "upload-request",
+              "description": "Fired when the XHR has been opened but not sent yet. Useful for appending\ndata keys to the FormData object, for changing some parameters like\nheaders, etc. If the event is defaultPrevented, `vaadin-upload` will not\nsend the request allowing the user to do something on his own.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-response",
-              "description": "upload-response",
+              "description": "Fired when we have the actual server response, and before the component\nanalyses it. It's useful for developers to make the upload fail depending\non the server response. If the event is defaultPrevented the vaadin-upload\nwill return allowing the user to do something on his own like retry the\nupload, etc. since he has full access to the `xhr` and `file` objects.\nOtherwise, if the event is not prevented default `vaadin-upload` continues\nwith the normal workflow checking the `xhr.status` and `file.error`\nwhich also might be modified by the user to force a customized response.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-retry",
-              "description": "upload-retry",
+              "description": "Fired when retry upload is requested. If the default is prevented, then\nretry would not be performed.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-start",
-              "description": "upload-start",
+              "description": "Fired when the XHR is sent.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "upload-success",
-              "description": "upload-success",
+              "description": "Fired in case the upload process succeed.",
               "metadata": {}
             },
             {
@@ -1602,7 +1716,6 @@
               "description": "",
               "name": "add-button",
               "range": {
-                "file": "src/vaadin-upload.html",
                 "start": {
                   "line": 33,
                   "column": 8
@@ -1617,7 +1730,6 @@
               "description": "",
               "name": "drop-label-icon",
               "range": {
-                "file": "src/vaadin-upload.html",
                 "start": {
                   "line": 40,
                   "column": 8
@@ -1632,7 +1744,6 @@
               "description": "",
               "name": "drop-label",
               "range": {
-                "file": "src/vaadin-upload.html",
                 "start": {
                   "line": 43,
                   "column": 8
@@ -1647,7 +1758,6 @@
               "description": "",
               "name": "file-list",
               "range": {
-                "file": "src/vaadin-upload.html",
                 "start": {
                   "line": 48,
                   "column": 4
@@ -1662,7 +1772,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-upload.html",
                 "start": {
                   "line": 55,
                   "column": 4
