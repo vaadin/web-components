@@ -1,6 +1,6 @@
 {
   "name": "vaadin-tabs",
-  "version": "2.0.0-beta3",
+  "version": "2.0.0",
   "description": "vaadin-tabs",
   "main": "vaadin-tabs.html",
   "repository": "vaadin/vaadin-tabs",
