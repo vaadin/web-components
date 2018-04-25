@@ -29,7 +29,7 @@ script:
       npm install -g yarn magi-cli polymer-cli@next &&
       (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
-      magi p3-convert --out . &&
+      magi p3-convert --out . --import-style=name &&
       yarn install --flat;
     fi
     # TODO: Visual tests are excluded because gemini-polyserve doesn't support Polymer 3
