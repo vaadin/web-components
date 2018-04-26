@@ -10,6 +10,7 @@
   <link rel="import" href="../../iron-input/iron-input.html">
   <link rel="import" href="../../paper-input/paper-input.html">
   <link rel="import" href="../../paper-button/paper-button.html">
+  <link rel="import" href="../../polymer/lib/utils/gestures.html">
 </head>
 
 <body>
@@ -73,6 +74,39 @@
         const spy = sinon.spy(e, 'preventDefault');
         ironInput.dispatchEvent(e);
         expect(spy.called).to.be.false;
+      });
+
+      describe('toggling', () => {
+        // NOTE(platosha): because we use emulate touch events in these
+        // tests, we need to reset mouseCanceller in Gestures. Otherwise
+        // it might interfere and cancel clicks in totally unrelated tests.
+        afterEach(() => Polymer.Gestures.resetMouseCanceller());
+
+        it('should toggle overlay on input click', () => {
+          ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(comboBox.opened).to.be.true;
+        });
+
+        it('should toggle on input click on touch devices', done => {
+          MockInteractions.downAndUp(ironInput, () => {
+            expect(comboBox.opened).to.be.true;
+            done();
+          }, {emulateTouch: true});
+        });
+
+        it('should not clear on input click', () => {
+          comboBox.value = 'foo';
+          ironInput.dispatchEvent(new CustomEvent('click', {bubbles: true}));
+          expect(comboBox.value).to.equal('foo');
+        });
+
+        it('should not clear on input click on touch devices', done => {
+          comboBox.value = 'foo';
+          MockInteractions.downAndUp(ironInput, () => {
+            expect(comboBox.value).to.equal('foo');
+            done();
+          }, {emulateTouch: true});
+        });
       });
     });
 
