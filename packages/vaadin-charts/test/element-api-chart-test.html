@@ -27,8 +27,8 @@
   </test-fixture>
   <test-fixture id="category">
     <template>
-      <vaadin-chart categories="[10,20,30]" category-min="1">
-        <vaadin-chart-series values="[1,2,3]"></vaadin-chart-series>
+      <vaadin-chart categories="[10,20,30,40,50]" category-min="1" category-max="2">
+        <vaadin-chart-series values="[1,2,3,4,5]"></vaadin-chart-series>
       </vaadin-chart>
     </template>
   </test-fixture>
@@ -163,7 +163,7 @@
           const [xAxis] = chart.configuration.xAxis;
           expect(xAxis.min).to.be.equal(1);
           done();
-        }, 110);
+        }, 120);
       });
 
       it('should change category minimum value', done => {
@@ -175,6 +175,26 @@
         }
         chart.addEventListener('xaxes-extremes-set', extremesListener);
         chart.setAttribute('category-min', newCategoryMin);
+      });
+
+      it('should be able to set category maximum', (done) => {
+        chart = fixture('category');
+        setTimeout(() => {
+          const [xAxis] = chart.configuration.xAxis;
+          expect(xAxis.max).to.be.equal(2);
+          done();
+        }, 120);
+      });
+
+      it('should change category maximum value', done => {
+        const newCategoryMax = 5;
+        function extremesListener(event) {
+          expect(event.detail.originalEvent.max).to.be.equal(newCategoryMax);
+          chart.removeEventListener('xaxes-extremes-set', extremesListener);
+          done();
+        }
+        chart.addEventListener('xaxes-extremes-set', extremesListener);
+        chart.setAttribute('category-max', newCategoryMax);
       });
     });
   </script>

@@ -311,12 +311,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Category-axis maximum value. Defaults to `undefined`.
+             */
+            categoryMax: {
+              type: Number,
+              observer: '__updateCategoryMax',
+              reflectToAttribute: true
+            },
+
+            /**
              * Category-axis minimum value. Defaults to `undefined`.
              */
             categoryMin: {
               type: Number,
               observer: '__updateCategoryMin',
-              reflectToAttribute: true,
+              reflectToAttribute: true
             },
 
             /**
@@ -480,6 +489,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               options.xAxis[0].min = this.categoryMin;
             } else {
               options.xAxis.min = this.categoryMin;
+            }
+          }
+
+          if (isFinite(this.categoryMax)) {
+            options.xAxis = options.xAxis || {};
+            if (Array.isArray(options.xAxis)) {
+              // Set category-max on first x axis
+              options.xAxis[0].max = this.categoryMax;
+            } else {
+              options.xAxis.max = this.categoryMax;
             }
           }
 
@@ -1138,8 +1157,28 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }], true);
         }
 
+        __updateCategoryMax() {
+          if (!this.configuration) {
+            return;
+          }
+
+          if (!isFinite(this.categoryMax)) {
+            console.warn('<vaadin-chart> Acceptable value for "category-max" are Numbers or null');
+            return;
+          }
+
+          this.__updateOrAddAxes([{
+            max: this.categoryMax
+          }], true);
+        }
+
         __updateCategoryMin() {
-          if (!this.configuration || !isFinite(this.categoryMin)) {
+          if (!this.configuration) {
+            return;
+          }
+
+          if (!isFinite(this.categoryMin)) {
+            console.warn('<vaadin-chart> Acceptable value for "category-min" are Numbers or null');
             return;
           }
 

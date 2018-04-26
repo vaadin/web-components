@@ -95,7 +95,7 @@
           const series = chartContainer.querySelectorAll('.highcharts-series');
           expect(series).to.have.lengthOf(1);
           const firstSeries = series[0];
-          // IE11 doesn't support SVGElement.classList 
+          // IE11 doesn't support SVGElement.classList
           expect(firstSeries.getAttribute('class')).to.include('highcharts-column-series');
           expect(firstSeries.querySelectorAll('.highcharts-point')).to.have.lengthOf(12);
           done();
@@ -144,7 +144,7 @@
           expect(htmlChart.$.chart.querySelector('.highcharts-title > tspan').textContent).to.equal('Awesome chart');
           expect(htmlChart.$.chart.querySelector('.highcharts-subtitle > tspan').textContent).to.equal('My subtitle');
           done();
-        }, 70);
+        }, 80);
       });
 
       it('should not reset configuration when attached to a new parent', function(done) {
