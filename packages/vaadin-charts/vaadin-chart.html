@@ -787,7 +787,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           for (let i = 0, len = series.length; i < len; i++) {
             const seriesElement = series[i];
-            const {yAxis: unit, yAxisValueMin: valueMin} = seriesElement.options;
+            const {yAxis: unit, yAxisValueMin: valueMin, yAxisValueMax: valueMax} = seriesElement.options;
 
             const idxOnChildList = seriesNodes.indexOf(seriesElement);
             if (unit && !yAxes[unit]) {
@@ -795,6 +795,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             }
             if (isFinite(valueMin)) {
               this.__setYAxisProps(yAxes, unit, {min: valueMin});
+            }
+            if (isFinite(valueMax)) {
+              this.__setYAxisProps(yAxes, unit, {max: valueMax});
             }
 
             const seriesConfiguration = this.__updateOrAddSeriesInstance(seriesElement.options, idxOnChildList);

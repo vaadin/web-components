@@ -83,7 +83,7 @@
     <template>
       <vaadin-chart tooltip>
         <vaadin-chart-series title="First" values="[1,2,8,4]" unit="first"></vaadin-chart-series>
-        <vaadin-chart-series title="Second" values="[-4,0,2,16]" unit="second"></vaadin-chart-series>
+        <vaadin-chart-series title="Second" values="[-4,0,2,16]" unit="second" value-max="40"></vaadin-chart-series>
         <vaadin-chart-series title="Third" values="[0,-1,2,-16]" unit="first" value-min="0"></vaadin-chart-series>
       </vaadin-chart>
     </template>
@@ -364,12 +364,33 @@
       it('should be available to change value-min', function(done) {
         const yAxisValuesChart = fixture('y-axis-values');
         const seriesWithValue = yAxisValuesChart.children[2];
-        expect(seriesWithValue.valueMin).to.be.closeTo(0, 5);
-        seriesWithValue.setAttribute('value-min', -20);
+        seriesWithValue.valueMin = -20;
         setTimeout(function() {
           expect(yAxisValuesChart.configuration.yAxis).to.have.length(2);
           const firstAxis = yAxisValuesChart.configuration.yAxis[0];
           expect(firstAxis.paddedTicks[0]).to.be.closeTo(-20, 5);
+          done();
+        }, 150);
+      });
+
+      it('should be available initially to set value-max', function(done) {
+        const yAxisValuesChart = fixture('y-axis-values');
+        setTimeout(function() {
+          expect(yAxisValuesChart.configuration.yAxis).to.have.length(2);
+          const secondAxis = yAxisValuesChart.configuration.yAxis[1];
+          expect(secondAxis.paddedTicks.slice(-1)[0]).to.be.closeTo(40, 5);
+          done();
+        }, 150);
+      });
+
+      it('should be available to change value-max', function(done) {
+        const yAxisValuesChart = fixture('y-axis-values');
+        const seriesWithValue = yAxisValuesChart.children[1];
+        seriesWithValue.valueMax = 10;
+        setTimeout(function() {
+          expect(yAxisValuesChart.configuration.yAxis).to.have.length(2);
+          const secondAxis = yAxisValuesChart.configuration.yAxis[1];
+          expect(secondAxis.paddedTicks.slice(-1)[0]).to.be.closeTo(10, 5);
           done();
         }, 150);
       });

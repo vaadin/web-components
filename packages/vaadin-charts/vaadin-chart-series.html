@@ -105,6 +105,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.yAxisValueMin = this.valueMin;
           }
 
+          if (isFinite(this.valueMax)) {
+            options.yAxisValueMax = this.valueMax;
+          }
+
+
           return options;
         }
 
@@ -160,6 +165,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             valueMin: {
               type: Number,
               observer: '__valueMinObserver',
+              reflectToAttribute: true
+            },
+
+            /**
+             *  Value-axis maximum-value.
+             *  See the 'valueMin'
+             */
+            valueMax: {
+              type: Number,
+              observer: '__valueMaxObserver',
               reflectToAttribute: true
             },
 
@@ -300,6 +315,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           } 
         }
 
+        __valueMaxObserver() {
+          if (!this.__hasSeriesConfig()) {
+            return;
+          }
+
+          if (!isFinite(this.valueMax)) {
+            console.warn('<vaadin-chart-series> Acceptable values for "value-max" are Numbers or null');
+            return;
+          }
+
+          if (this._series.yAxis) {
+            this._series.yAxis.update({
+              max: this.valueMax
+            });
+          } 
+        }
+
         __typeObserver() {
           if (this.__hasSeriesConfig()) {
             this._series.update({
@@ -327,6 +359,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
               this._series.update({yAxis: this.unit || 0});
               this.__valueMinObserver();
+              this.__valueMaxObserver();
               parent.__removeAxisIfEmpty();
             }
           }
