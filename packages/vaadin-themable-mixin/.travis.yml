@@ -1,7 +1,7 @@
 sudo: true
 dist: trusty
 language: node_js
-node_js: 8.9
+node_js: 8.11
 
 cache:
   directories:
@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 before_script:
-  - npm install -g bower
+  - npm install -g bower polymer-cli@next
   - bower install
 
 env:
@@ -21,7 +21,6 @@ env:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm install -g polymer-cli &&
       npm install &&
       gulp lint &&
       polymer lint --rules polymer-2 --input *.html &&
@@ -33,15 +32,15 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli polymer-cli@next &&
+      npm install -g yarn magi-cli &&
       (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm -l chrome;
+        xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm;
       else
-        polymer test --module-resolution=node --npm --env saucelabs-p3;
+        polymer test --module-resolution=node --npm --env saucelabs;
       fi;
     fi
 
