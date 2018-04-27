@@ -111,6 +111,7 @@ This program is available under Apache License Version 2.0, available at https:/
       constructor() {
         super();
         this._boundSetPosition = this._setPosition.bind(this);
+        this._boundOutsideClickListener = this._outsideClickListener.bind(this);
       }
 
       connectedCallback() {
@@ -162,11 +163,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._setPosition();
 
           window.addEventListener('scroll', this._boundSetPosition, true);
-          document.addEventListener('click', this._outsideClickListener.bind(this), true);
+          document.addEventListener('click', this._boundOutsideClickListener, true);
           this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-opened', {bubbles: true, composed: true}));
         } else {
           window.removeEventListener('scroll', this._boundSetPosition, true);
-          document.removeEventListener('click', this._outsideClickListener.bind(this), true);
+          document.removeEventListener('click', this._boundOutsideClickListener, true);
           this.dispatchEvent(new CustomEvent('vaadin-combo-box-dropdown-closed', {bubbles: true, composed: true}));
         }
       }
