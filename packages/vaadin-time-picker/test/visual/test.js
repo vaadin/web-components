@@ -1,4 +1,4 @@
-gemini.suite('vaadin-element', function(rootSuite) {
+gemini.suite('vaadin-time-picker', function(rootSuite) {
   function wait(actions, find) {
     actions.wait(5000);
   }

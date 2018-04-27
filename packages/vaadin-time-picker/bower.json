@@ -1,14 +1,14 @@
 {
-  "name": "vaadin-element",
+  "name": "vaadin-time-picker",
   "homepage": "https://vaadin.com/components",
   "authors": [
     "Vaadin Ltd"
   ],
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
+  "description": "vaadin-time-picker",
+  "main": "vaadin-time-picker.html",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-time-picker",
     "web-components",
     "web-component",
     "polymer"

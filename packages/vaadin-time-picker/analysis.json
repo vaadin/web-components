@@ -2,9 +2,9 @@
   "schema_version": "1.0.0",
   "elements": [
     {
-      "description": "`<vaadin-element>` is a Polymer 2 element.\n\n```html\n<vaadin-element>\n</vaadin-element>\n```",
+      "description": "`<vaadin-time-picker>` is a Polymer 2 element.\n\n```html\n<vaadin-time-picker>\n</vaadin-time-picker>\n```",
       "summary": "",
-      "path": "vaadin-element.html",
+      "path": "vaadin-time-picker.html",
       "properties": [],
       "methods": [
         {
@@ -2604,7 +2604,7 @@
       },
       "privacy": "public",
       "superclass": "HTMLElement",
-      "name": "VaadinElement",
+      "name": "TimePickerElement",
       "attributes": [],
       "events": [],
       "styling": {
@@ -2616,7 +2616,7 @@
           "description": "",
           "name": "",
           "range": {
-            "file": "vaadin-element.html",
+            "file": "vaadin-time-picker.html",
             "start": {
               "line": 27,
               "column": 4
@@ -2628,7 +2628,7 @@
           }
         }
       ],
-      "tagname": "vaadin-element"
+      "tagname": "vaadin-time-picker"
     }
   ]
 }

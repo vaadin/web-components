@@ -1,12 +1,12 @@
 {
-  "name": "@vaadin/vaadin-element",
+  "name": "@vaadin/vaadin-time-picker",
   "version": "0.1.0",
-  "description": "vaadin-element",
-  "main": "vaadin-element.html",
-  "repository": "vaadin/vaadin-element",
+  "description": "vaadin-time-picker",
+  "main": "vaadin-time-picker.html",
+  "repository": "vaadin/vaadin-time-picker",
   "keywords": [
     "Vaadin",
-    "vaadin-element",
+    "vaadin-time-picker",
     "web-components",
     "web-component",
     "polymer"
@@ -14,7 +14,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-element/issues"
+    "url": "https://github.com/vaadin/vaadin-time-picker/issues"
   },
   "homepage": "https://vaadin.com/components",
   "scripts": {

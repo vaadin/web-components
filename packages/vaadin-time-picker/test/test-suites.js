@@ -1,3 +1,3 @@
-window.VaadinElementSuites = [
+window.TimePickerElementSuites = [
   'sample-test.html'
 ];

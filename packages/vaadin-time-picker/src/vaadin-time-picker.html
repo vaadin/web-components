@@ -7,7 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 
-<dom-module id="vaadin-element">
+<dom-module id="vaadin-time-picker">
   <template>
     <style>
       :host {
@@ -25,18 +25,18 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-element>` is a Polymer 2 element.
+       * `<vaadin-time-picker>` is a Polymer 2 element.
        *
        * ```
-       * <vaadin-element></vaadin-element>
+       * <vaadin-time-picker></vaadin-time-picker>
        * ```
        *
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      class TimePickerElement extends Vaadin.ThemableMixin(Polymer.Element) {
         static get is() {
-          return 'vaadin-element';
+          return 'vaadin-time-picker';
         }
         static get version() {
           return '0.1.0';
@@ -48,13 +48,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      customElements.define(VaadinElement.is, VaadinElement);
+      customElements.define(TimePickerElement.is, TimePickerElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinElement = VaadinElement;
+      Vaadin.TimePickerElement = TimePickerElement;
     })();
   </script>
 </dom-module>
