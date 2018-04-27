@@ -58,6 +58,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <script>
   (function() {
+
+    const TOUCH_DEVICE = (() => {
+      try {
+        document.createEvent('TouchEvent');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })();
+
     /**
      * `<vaadin-grid>` is a free, high quality data grid / data table Polymer element.
      *
@@ -208,16 +218,6 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.Grid.ColumnReorderingMixin
      * @demo demo/index.html
      */
-
-    const TOUCH_DEVICE = (() => {
-      try {
-        document.createEvent('TouchEvent');
-        return true;
-      } catch (e) {
-        return false;
-      }
-    })();
-
     class GridElement extends
       Vaadin.ElementMixin(
         Vaadin.ThemableMixin(
