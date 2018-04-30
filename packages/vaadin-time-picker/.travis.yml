@@ -41,7 +41,7 @@ script:
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm -l chrome;
       else
-        polymer test --module-resolution=node --npm --env saucelabs-p3;
+        polymer test --module-resolution=node --npm --env saucelabs;
       fi;
     fi
 
