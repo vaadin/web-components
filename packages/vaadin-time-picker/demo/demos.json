@@ -1,10 +1,10 @@
 {
-  "name": "Vaadin Element",
+  "name": "Vaadin Time Picker",
   "pages": [
   {
     "name": "Basic Examples",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+    "url": "time-picker-basic-demos",
+    "src": "time-picker-basic-demos.html",
     "meta": {
       "title": "vaadin-time-picker Basic Examples",
       "description": "",
@@ -14,8 +14,8 @@
   ,
   {
     "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
+    "url": "time-picker-advanced-demos",
+    "src": "time-picker-advanced-demos.html",
     "meta": {
       "title": "vaadin-time-picker Advanced Examples",
       "description": "",
