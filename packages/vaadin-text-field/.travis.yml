@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 before_script:
-  - npm install -g bower polymer-cli@next
+  - npm install -g bower
   - bower install
 
 env:
@@ -21,6 +21,7 @@ env:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
+      npm install -g polymer-cli &&
       npm install &&
       gulp lint version:check &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
@@ -32,7 +33,7 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli &&
+      npm install -g yarn magi-cli polymer-cli@next &&
       (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
