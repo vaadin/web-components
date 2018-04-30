@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-combo-box",
-  "version": "4.0.1",
+  "version": "4.0.1-pre.1",
   "description": "Polymer element for displaying a list of items with filtering",
   "main": "vaadin-combo-box.html",
   "repository": "vaadin/vaadin-combo-box",
