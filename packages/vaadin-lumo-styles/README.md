@@ -54,6 +54,17 @@ Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-sty
   - http://127.0.0.1:8080/components/vaadin-lumo-styles/demo
 
 
+## Adding or updating icons
+
+1. Open `icons/lumo-icons.sketch` using [Sketch](https://sketchapp.com)
+
+1. Modify an icon, or create a new artboard (the name of the artboard is used as the icon name) for a new icon – make sure to simplify and flatten the shape when you’re done (and save the file).
+
+1. Run `npm install` to install dependencies
+
+1. Run `gulp icons` to generate new versions of `icons.html` and `font-icons.html`
+
+
 ## Following the coding style
 
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files. CSS inside `.html` files is also linted at the same time.

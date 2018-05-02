@@ -9,6 +9,8 @@
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <link rel="import" href="common.html">
+  <link rel="import" href="../../vaadin-radio-button/vaadin-radio-button.html">
+  <link rel="import" href="../../vaadin-radio-button/vaadin-radio-group.html">
 
   <style>
     [unresolved] {
@@ -63,14 +65,29 @@
 
     <h2 demo-section>Available icons</h2>
 
-    <p theme="font-size-s">Click/focus an icon to view details.</p>
-    <div class="lumo-icons">
-      <dom-repeat id="lumo-icons">
-        <template>
-          <lumo-icon name="[[item]]"></lumo-icon>
-        </template>
-      </dom-repeat>
-    </div>
+    <dom-bind>
+      <template>
+        <p theme="font-size-s">
+          <vaadin-radio-group value="{{format}}">
+            <vaadin-radio-button value="svg">SVG</vaadin-radio-button>
+            <vaadin-radio-button value="font">Font</vaadin-radio-button>
+          </vaadin-radio-group>
+        (Click/focus an icon to view details)</p>
+
+        <div class="lumo-icons">
+          <dom-repeat id="lumo-icons">
+            <template>
+              <lumo-icon name="[[item]]" format$="{{format}}"></lumo-icon>
+            </template>
+          </dom-repeat>
+        </div>
+      </template>
+    </dom-bind>
+    <script>
+      const bind = document.querySelector('dom-bind');
+      console.log(bind);
+      bind.format = 'svg';
+    </script>
 
 
     <h2 demo-section>Usage instructions</h2>
@@ -247,7 +264,7 @@
             cursor: default;
           }
 
-          .samples {
+          .samples > div {
             display: flex;
             align-items: center;
           }
@@ -255,19 +272,44 @@
           iron-icon.s {
             --iron-icon-width: var(--lumo-icon-size-s);
             --iron-icon-height: var(--lumo-icon-size-s);
-            margin: calc((var(--lumo-icon-size-l) - var(--lumo-icon-size-s)) / 2);
+            margin: 8px;
           }
 
           iron-icon.m {
             --iron-icon-width: var(--lumo-icon-size-m);
             --iron-icon-height: var(--lumo-icon-size-m);
-            margin: calc((var(--lumo-icon-size-l) - var(--lumo-icon-size-m)) / 2);
+            margin: 6px;
           }
 
           iron-icon.l {
             --iron-icon-width: var(--lumo-icon-size-l);
             --iron-icon-height: var(--lumo-icon-size-l);
-            margin: 0.75em 0.5em 0.75em 0.25em;
+            margin: 4px;
+          }
+
+          .samples > .font-icon span {
+            font-family: lumo-icons;
+            line-height: 1;
+          }
+
+          span.s {
+            font-size: var(--lumo-icon-size-s);
+            margin: 8px;
+          }
+
+          span.m {
+            font-size: var(--lumo-icon-size-m);
+            margin: 6px;
+          }
+
+          span.l {
+            font-size: var(--lumo-icon-size-l);
+            margin: 4px;
+          }
+
+          :host([format="font"]) .svg,
+          :host([format="svg"]) .font-icon {
+            display: none;
           }
 
           h4 {
@@ -278,48 +320,49 @@
             color: var(--lumo-secondary-text-color);
           }
 
-          dl {
+          .code {
             font-size: var(--lumo-font-size-xs);
             line-height: var(--lumo-line-height-xs);
             position: absolute;
+            left: 0;
             top: 100%;
             opacity: 0;
             background-color: var(--lumo-base-color);
             background-image: linear-gradient(var(--lumo-contrast-5pct), var(--lumo-contrast-5pct));
             pointer-events: none;
             border-radius: var(--lumo-border-radius);
-            padding: 0.75em 0.75em 0;
-            width: 100%;
+            padding: 0.5em 0.75em;
+            margin: 0.4em 0;
+            min-width: 100%;
             box-sizing: border-box;
             box-shadow: var(--lumo-box-shadow-s);
             transition: opacity 120ms;
           }
 
-          :host(:focus) dl {
+          :host(:focus) .code {
             opacity: 1;
             pointer-events: auto;
           }
-
-          dt {
-            font-weight: 500;
-          }
-
-          dd {
-            color: var(--lumo-secondary-text-color);
-            margin: 0;
-            margin-bottom: 0.75em;
-          }
         </style>
         <div class="samples">
-          <iron-icon icon="lumo:[[name]]" class="l"></iron-icon>
-          <iron-icon icon="lumo:[[name]]" class="m"></iron-icon>
-          <iron-icon icon="lumo:[[name]]" class="s"></iron-icon>
+          <div class="svg">
+            <iron-icon icon="lumo:[[name]]" class="l"></iron-icon>
+            <iron-icon icon="lumo:[[name]]" class="m"></iron-icon>
+            <iron-icon icon="lumo:[[name]]" class="s"></iron-icon>
+            <div class="code">
+              &lt;iron-icon icon="<b>lumo:[[name]]</b>"&gt;&lt;/iron-icon&gt;
+            </div>
+          </div>
+          <div class="font-icon">
+            <span class$="[[name]] l"></span>
+            <span class$="[[name]] m"></span>
+            <span class$="[[name]] s"></span>
+            <div class="code">
+              content: <b>var(--lumo-icons-[[name]])</b>;
+            </div>
+          </div>
         </div>
         <h4>[[formatName(name)]]</h4>
-        <dl>
-          <dt>SVG sprite</dt><dd>[[name]]</dd>
-          <dt>Font icon property</dt><dd>--lumo-icons-[[name]]</dd>
-        </dl>
       </template>
       <script>
         document.addEventListener('WebComponentsReady', function() {
@@ -335,6 +378,9 @@
             ready() {
               super.ready();
               this.setAttribute('tabindex', 0);
+              const style = document.createElement('style');
+              style.innerHTML = `.${this.name}::before {content: var(--lumo-icons-${this.name})}`;
+              this.shadowRoot.appendChild(style);
             }
             formatName(name) {
               return name.replace('-', ' ');
