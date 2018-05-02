@@ -81,6 +81,12 @@
         expect(document.body.style.pointerEvents).to.eql('');
       });
 
+      it('should move back to original place after closing', () => {
+        overlay.opened = false;
+
+        expect(overlay.parentElement).to.eql(parent);
+      });
+
       describe('multiple overlays', function() {
         let overlay1, overlay2;
 

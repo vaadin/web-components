@@ -148,6 +148,7 @@
 
           afterEach(() => {
             overlay.opened = false;
+            overlay.getRootNode().removeChild(externalTemplate);
             Polymer.Templatize.templatize.restore();
           });
 
