@@ -1,0 +1,82 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-dropdown-menu animation tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="mock-item.html">
+  <link rel="import" href="../vaadin-dropdown-menu.html">
+</head>
+
+<body>
+  <test-fixture id="dropdown">
+    <template>
+      <vaadin-dropdown-menu placeholder="placeholder">
+        <template>
+          <vaadin-list-box>
+            <mock-item>Option 1</mock-item>
+            <mock-item>Option 2</mock-item>
+            <mock-item>Option 3</mock-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
+  <script>
+    function getFirstMenuItem(menu) {
+      return menu._overlayElement.content.querySelector('mock-item');
+    }
+
+    function Space(target) {
+      MockInteractions.keyDownOn(target, 32, [], ' ');
+    }
+
+    function afterAnimation(el, callback) {
+      const name = getComputedStyle(el).getPropertyValue('animation-name');
+      if (name && name != 'none') {
+        const listener = () => {
+          this.removeEventListener('animationend', listener);
+          callback();
+        };
+        this.addEventListener('animationend', listener);
+      } else {
+        callback();
+      }
+    }
+
+    describe('dropdown with animations', () => {
+      let dropdown, input;
+
+      beforeEach(() => {
+        dropdown = fixture('dropdown');
+        input = dropdown._inputElement;
+      });
+
+      it('should not fail when quick toggling with mouse because of animations', (done) => {
+        input.click();
+        getFirstMenuItem(dropdown).click();
+        input.click();
+        getFirstMenuItem(dropdown).click();
+
+        afterAnimation(dropdown._overlayElement, () => {
+          expect(dropdown._overlayElement.opened).to.be.false;
+          done();
+        });
+      });
+
+      it('should not fail when quick toggling with keyboard because of animations', (done) => {
+        Space(input);
+        Space(getFirstMenuItem(dropdown));
+        Space(input);
+
+        afterAnimation(dropdown._overlayElement, () => {
+          expect(document._activeElement || document.activeElement).to.equal(getFirstMenuItem(dropdown));
+          done();
+        });
+      });
+    });
+  </script>
+</body>
