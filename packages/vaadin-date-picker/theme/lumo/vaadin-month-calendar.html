@@ -116,6 +116,10 @@
         background-color: var(--lumo-primary-color);
       }
 
+      [part="date"][disabled] {
+        color: var(--lumo-disabled-text-color);
+      }
+
       @media (pointer: coarse) {
         [part="date"]:hover:not([selected])::before,
         [part="date"][focused]:not([selected])::before {
