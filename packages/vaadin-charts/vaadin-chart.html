@@ -1066,6 +1066,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                   }
                 };
 
+                if (event.type === 'afterSetExtremes') {
+                  if (event.min == null || event.max == null) {
+                    return;
+                  }
+                }
                 // Workaround for vaadin-charts-flow because of https://github.com/vaadin/flow/issues/3102
                 if (event.type === 'selection') {
                   if (event.xAxis && event.xAxis[0]) {

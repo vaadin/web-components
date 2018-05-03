@@ -161,6 +161,18 @@
         timelineChart.addEventListener('yaxes-extremes-set', setExtremesListener);
         timelineChart.configuration.yAxis[0].setExtremes(minExtreme, maxExtreme);
       });
+
+      it('should not trigger axis event if axis is hidden by action', done => {
+        const axisResizeSpy = sinon.spy(); 
+        chart.addEventListener('yaxes-extremes-set', axisResizeSpy);
+        chart.configuration.series[0].setVisible(false);
+        setTimeout(() => {
+          expect(axisResizeSpy.called).to.be.false;
+          chart.removeEventListener('chart-redraw', axisResizeSpy);
+          chart.configuration.series[0].setVisible(true);
+          done();
+        });
+      });
     });
   </script>
 </body>
