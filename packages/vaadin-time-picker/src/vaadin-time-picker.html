@@ -185,6 +185,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._dropdownItems = this._generateDropdownList();
           this._setValue(this.value);
+          this.dropdownItems = this._generateDropdownList();
+          // Need to update selected item after regenerating of the list
+          this._dropdownElement.selectedItem = this.dropdownItems.filter(item => item.value === this.value)[0];
         }
 
         get _inputElement() {
