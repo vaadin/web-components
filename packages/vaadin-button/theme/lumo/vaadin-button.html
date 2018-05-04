@@ -8,50 +8,16 @@
 
 <dom-module id="lumo-button" theme-for="vaadin-button">
   <template>
-    <style include="lumo-button-sizing lumo-button-style lumo-button-states lumo-button-types lumo-button-colors lumo-button-icons">
-      /* This needs to be the last selector for it to take priority */
-      :host([disabled][disabled]) {
-        pointer-events: none;
-        color: var(--lumo-disabled-text-color);
-        background-color: var(--lumo-contrast-5pct);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="lumo-button-sizing">
-  <template>
     <style>
       :host {
+        /* Sizing */
         --lumo-button-size: var(--lumo-size-m);
         min-width: calc(var(--lumo-button-size) * 2);
         height: var(--lumo-button-size);
         padding: 0 calc(var(--lumo-button-size) / 3 + var(--lumo-border-radius) / 2);
         margin: var(--lumo-space-xs) 0;
         box-sizing: border-box;
-      }
-
-      [part="label"] {
-        padding: calc(var(--lumo-button-size) / 6) 0;
-      }
-
-      :host([theme~="small"]) {
-        font-size: var(--lumo-font-size-s);
-        --lumo-button-size: var(--lumo-size-s);
-      }
-
-      :host([theme~="large"]) {
-        font-size: var(--lumo-font-size-l);
-        --lumo-button-size: var(--lumo-size-l);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="lumo-button-style">
-  <template>
-    <style>
-      :host {
+        /* Style */
         font-family: var(--lumo-font-family);
         font-size: var(--lumo-font-size-m);
         font-weight: 500;
@@ -70,13 +36,29 @@
       [part="suffix"] {
         line-height: var(--lumo-line-height-xs);
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="lumo-button-states">
-  <template>
-    <style>
+      [part="label"] {
+        padding: calc(var(--lumo-button-size) / 6) 0;
+      }
+
+      :host([theme~="small"]) {
+        font-size: var(--lumo-font-size-s);
+        --lumo-button-size: var(--lumo-size-s);
+      }
+
+      :host([theme~="large"]) {
+        font-size: var(--lumo-font-size-l);
+        --lumo-button-size: var(--lumo-size-l);
+      }
+
+      /* This needs to be the last selector for it to take priority */
+      :host([disabled][disabled]) {
+        pointer-events: none;
+        color: var(--lumo-disabled-text-color);
+        background-color: var(--lumo-contrast-5pct);
+      }
+
+      /* For interaction states */
       :host::before,
       :host::after {
         content: "";
@@ -100,7 +82,7 @@
         opacity: 0.05;
       }
 
-      /* Disable for touch devices */
+      /* Disable hover for touch devices */
       @media (pointer: coarse) {
         :host(:not([active]):hover)::before {
           opacity: 0;
@@ -130,14 +112,8 @@
       :host([focus-ring]) {
         box-shadow: 0 0 0 2px var(--lumo-primary-color-50pct);
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="lumo-button-types">
-  <template>
-    <style>
-      /* Tertiary */
+      /* Types (primary, tertiary, tertiary-inline */
 
       :host([theme~="tertiary"]),
       :host([theme~="tertiary-inline"]) {
@@ -167,8 +143,6 @@
         transition-duration: 0s;
       }
 
-      /* Tertiary inline ("text button") */
-
       :host([theme~="tertiary-inline"]) {
         margin: 0;
         height: auto;
@@ -181,8 +155,6 @@
         padding: 0;
         line-height: inherit;
       }
-
-      /* Primary */
 
       :host([theme~="primary"]) {
         background-color: var(--lumo-primary-color);
@@ -212,13 +184,9 @@
       :host([theme~="primary"][active])::after {
         opacity: 0.2;
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="lumo-button-colors">
-  <template>
-    <style>
+      /* Colors (success, error, contrast) */
+
       :host([theme~="success"]) {
         color: var(--lumo-success-text-color);
       }
@@ -245,13 +213,9 @@
         background-color: var(--lumo-contrast);
         color: var(--lumo-base-color);
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="lumo-button-icons">
-  <template>
-    <style>
+      /* Icons */
+
       [part] ::slotted(iron-icon) {
         display: inline-block;
         width: var(--lumo-icon-size-m);
