@@ -38,6 +38,7 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "mock-http-request": "abuinitski/MockHttpRequest#npm_fix",
+    "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
     "iron-icons": "^2.0.1"
