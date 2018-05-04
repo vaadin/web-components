@@ -36,6 +36,7 @@
     "iron-form": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#p3-preview",
+    "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview"
   }
