@@ -378,6 +378,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _closeNotificationCard() {
           this._durationTimeoutId && clearTimeout(this._durationTimeoutId);
+          this._animatedRemoveNotificationCard();
+        }
+
+        _animatedRemoveNotificationCard() {
           this._card.setAttribute('closing', '');
           const name = getComputedStyle(this._card).getPropertyValue('animation-name');
           if (name && name != 'none') {
