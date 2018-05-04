@@ -10,7 +10,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-button/html-api)
 
-[&lt;vaadin-button&gt;](https://vaadin.com/components/vaadin-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable button, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-button&gt;](https://vaadin.com/components/vaadin-button) is a Web Component providing an accessible and customizable button, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -30,6 +30,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-button/master/screenshot.png" alt="Screenshot of vaadin-button, using the default Lumo theme">](https://vaadin.com/components/vaadin-button)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports compatible version
+
+Install `vaadin-button`:
+
+```sh
+bower i vaadin/vaadin-button --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-button/vaadin-button.html">
+```
+### Polymer 3 and ES Modules compatible version
+
+Install `vaadin-button`:
+
+```sh
+npm i @vaadin/vaadin-button --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-button/vaadin-button.js';
+```
 
 ## Getting Started
 
