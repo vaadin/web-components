@@ -12,7 +12,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-notification duration="20" opened>
+      <vaadin-notification duration="20">
         <template>
           Your work has been <strong>saved</strong>
         </template>
@@ -24,11 +24,19 @@
     describe('vaadin-notification', function() {
       var notification;
 
-      beforeEach(() => notification = fixture('default'));
+      beforeEach(() => {
+        notification = fixture('default');
+
+        // Force sync card attaching and removal instead of waiting for the animation
+        sinon.stub(notification, '_animatedAppendNotificationCard', () => notification._appendNotificationCard());
+        sinon.stub(notification, '_animatedRemoveNotificationCard', () => notification._removeNotificationCard());
+
+        notification.open();
+      });
+
       afterEach(() => {
         // Close to stop all pending timers.
         notification.close();
-        notification._removeNotificationCard(); // Force sync card removal instead of waiting for the animation
         // delete singleton reference, so as it's created in next test
         delete notification.constructor._container;
       });
