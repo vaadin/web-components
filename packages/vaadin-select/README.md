@@ -4,6 +4,9 @@
 [![Build Status](https://travis-ci.org/vaadin/vaadin-dropdown-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dropdown-menu)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-dropdown-menu.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
+
 # &lt;vaadin-dropdown-menu&gt;
 
 [Live Demo ↗](https://vaadin.com/components/vaadin-dropdown-menu/html-examples)
