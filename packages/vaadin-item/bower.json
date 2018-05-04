@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-item",
-  "main": "vaadin-item.html",
+  "main": [
+    "vaadin-item.html",
+    "src/vaadin-item-mixin.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-item",
