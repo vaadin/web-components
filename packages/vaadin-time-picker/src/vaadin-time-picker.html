@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="vaadin-time-picker-text-field.html">
 
 <dom-module id="vaadin-time-picker">
   <template>
@@ -19,7 +20,8 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none !important;
       }
     </style>
-    <slot></slot>
+    <vaadin-time-picker-text-field>
+    </vaadin-time-picker-text-field>
   </template>
 
   <script>
@@ -45,7 +47,67 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The value for this element.
+             *
+             * Supported time formats:
+             * - ISO 8601 `"hh:mm"` (default)
+             *
+             * @type {String}
+             */
+            value: {
+              type: String,
+              observer: '_valueChanged',
+              notify: true,
+              value: ''
+            },
+
+            _previousValue: {
+              type: String,
+              value: ''
+            }
           };
+        }
+
+        ready() {
+          super.ready();
+          this._boundOnChange = this._onChange.bind(this);
+          this._bindListeners();
+        }
+
+        _bindListeners() {
+          this._inputElement.addEventListener('change', this._boundOnChange);
+        }
+
+        _valueChanged(value, oldValue) {
+          this._setValue(value);
+        }
+
+        _onChange(e) {
+          this._setValue(this._inputElement.value);
+        }
+
+        _setValue(checkedValue) {
+          const newValue = this._parseTime(checkedValue);
+          if (newValue) {
+            this.value = this._inputElement.value = this._previousValue = newValue;
+          } else {
+            this.value = this._inputElement.value = this._previousValue;
+          }
+        }
+
+        _parseTime(str) {
+          // Parsing with RegExp to ensure correct format
+          const parts = /^(\d{2})(?::(\d{2}))?(?::(\d{2}))?(?:\.(\d{3}))?$/.exec(str);
+          if (!parts) {
+            return;
+          }
+
+          return [parts[1], parts[2]].join(':');
+        }
+
+        get _inputElement() {
+          return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
         }
       }
 

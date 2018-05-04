@@ -1,0 +1,87 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-time-picker tests</title>
+  <script src='../../web-component-tester/browser.js'></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../src/vaadin-time-picker.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-time-picker></vaadin-time-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('input test', function() {
+      let timePicker;
+
+      beforeEach(function() {
+        timePicker = fixture('default');
+      });
+
+      it('vaadin-time-picker-text-field should exist', function() {
+        expect(timePicker._inputElement.localName).to.be.equal('vaadin-time-picker-text-field');
+      });
+
+      it('value property should be empty by default', function() {
+        expect(timePicker.value).to.be.equal('');
+      });
+
+      it('should not set value if the format is invalid', function() {
+        timePicker._inputElement.value = 'invalid';
+        timePicker._inputElement.dispatchEvent(new CustomEvent('change'));
+        expect(timePicker.value).to.be.equal('');
+      });
+
+      it('should not allow setting invalid value programmatically', function() {
+        timePicker.value = 'invalid';
+        expect(timePicker.value).to.be.equal('');
+      });
+
+      it('should set values of inputElement and time-picker if the format is valid', function() {
+        timePicker._inputElement.value = '12:00';
+        timePicker._inputElement.dispatchEvent(new CustomEvent('change'));
+        expect(timePicker.value).to.be.equal('12:00');
+        expect(timePicker._inputElement.value).to.be.equal('12:00');
+      });
+
+      it('should propagate value to the inputElement', function() {
+        timePicker.value = '12:00';
+        expect(timePicker._inputElement.value).to.be.equal('12:00');
+      });
+
+      it('should restore the previous value if the format is invalid', function() {
+        timePicker.value = '12:00';
+        timePicker._inputElement.value = 'invalid';
+        timePicker._inputElement.dispatchEvent(new CustomEvent('change'));
+        expect(timePicker.value).to.be.equal('12:00');
+      });
+
+      it('should dispatch value-changed when value changes', function() {
+        const spy = sinon.spy();
+        timePicker.addEventListener('value-changed', spy);
+        timePicker.value = '12:00';
+        expect(spy.calledOnce).to.be.true;
+      });
+
+      it('should not call value-changed on keystroke input', function() {
+        const spy = sinon.spy();
+        timePicker.addEventListener('value-changed', spy);
+        timePicker._inputElement.value = '12:00';
+        expect(spy.called).to.be.false;
+      });
+
+      it('should be possible to update value', function() {
+        timePicker.value = '12:00';
+        expect(timePicker.value).to.be.equal('12:00');
+        timePicker.value = '13:00';
+        expect(timePicker.value).to.be.equal('13:00');
+      });
+    });
+  </script>
+</body>
