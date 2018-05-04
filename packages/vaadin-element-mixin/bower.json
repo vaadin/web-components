@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "iron-test-helpers": "#2.0-preview",
+    "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.0.0"
   }
 }
