@@ -4,11 +4,15 @@
 <dom-module id="lumo-dialog" theme-for="vaadin-dialog-overlay">
   <template>
     <style include="lumo-overlay">
+      :host {
+        /* Optical centering */
+        --_lumo-dialog-transform: translateY(calc((-100vh + 100%) / 20));
+      }
+
       [part="overlay"] {
         box-shadow: 0 0 0 1px var(--lumo-shade-5pct), var(--lumo-box-shadow-xl);
         background-image: none;
         outline: none;
-        --_lumo-dialog-transform: translateY(calc((-100vh + 100%) / 20));
         transform: var(--_lumo-dialog-transform);
       }
 
