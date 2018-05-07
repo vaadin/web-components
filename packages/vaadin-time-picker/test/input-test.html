@@ -48,41 +48,41 @@
       });
 
       it('should set values of inputElement and time-picker if the format is valid', function() {
-        changeInputValue(timePicker._inputElement, '12:00:00');
-        expect(timePicker.value).to.be.equal('12:00:00');
-        expect(timePicker._inputElement.value).to.be.equal('12:00:00');
+        changeInputValue(timePicker._inputElement, '12:00');
+        expect(timePicker.value).to.be.equal('12:00');
+        expect(timePicker._inputElement.value).to.be.equal('12:00');
       });
 
       it('should propagate value to the inputElement', function() {
-        timePicker.value = '12:00:00';
-        expect(timePicker._inputElement.value).to.be.equal('12:00:00');
+        timePicker.value = '12:00';
+        expect(timePicker._inputElement.value).to.be.equal('12:00');
       });
 
       it('should restore the previous value if the format is invalid', function() {
-        timePicker.value = '12:00:00';
+        timePicker.value = '12:00';
         changeInputValue(timePicker._inputElement, 'invalid');
-        expect(timePicker.value).to.be.equal('12:00:00');
+        expect(timePicker.value).to.be.equal('12:00');
       });
 
       it('should dispatch value-changed when value changes', function() {
         const spy = sinon.spy();
         timePicker.addEventListener('value-changed', spy);
-        timePicker.value = '12:00:00';
+        timePicker.value = '12:00';
         expect(spy.calledOnce).to.be.true;
       });
 
       it('should not call value-changed on keystroke input', function() {
         const spy = sinon.spy();
         timePicker.addEventListener('value-changed', spy);
-        timePicker._inputElement.value = '12:00:00';
+        timePicker._inputElement.value = '12:00';
         expect(spy.called).to.be.false;
       });
 
       it('should be possible to update value', function() {
-        timePicker.value = '12:00:00';
-        expect(timePicker.value).to.be.equal('12:00:00');
-        timePicker.value = '13:00:00';
-        expect(timePicker.value).to.be.equal('13:00:00');
+        timePicker.value = '12:00';
+        expect(timePicker.value).to.be.equal('12:00');
+        timePicker.value = '13:00';
+        expect(timePicker.value).to.be.equal('13:00');
       });
     });
   </script>

@@ -24,8 +24,8 @@
         timePicker = fixture('default');
       });
 
-      it('step property should be 1 by default', function() {
-        expect(timePicker.step).to.be.equal(1);
+      it('step property should be undefined by default', function() {
+        expect(timePicker.step).to.be.equal(undefined);
       });
 
       it('should not allow setting invalid step property value', function() {
@@ -46,14 +46,14 @@
 
       it('should expand the resolution and value on step change to smaller value', function() {
         timePicker.value = '12:00:00';
-        expect(timePicker.value).to.be.equal('12:00:00');
+        expect(timePicker.value).to.be.equal('12:00');
         timePicker.step = 0.5;
         expect(timePicker.value).to.be.equal('12:00:00.000');
       });
 
       it('should shrink the resolution and value on step change to bigger value', function() {
         timePicker.value = '12:00:00';
-        expect(timePicker.value).to.be.equal('12:00:00');
+        expect(timePicker.value).to.be.equal('12:00');
         timePicker.step = 3600;
         expect(timePicker.value).to.be.equal('12');
       });
