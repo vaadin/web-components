@@ -11,7 +11,7 @@ module.exports = {
       'macOS 9.3.2/iphone@9.3'
     ];
 
-    const saucelabsPlatformsPolyfilled = [
+    const saucelabsPlatformsMicrosoft = [
       'Windows 10/microsoftedge@16',
       'Windows 10/internet explorer@11'
     ];
@@ -24,7 +24,7 @@ module.exports = {
 
     const saucelabsPlatforms = [
       ...saucelabsPlatformsMobile,
-      ...saucelabsPlatformsPolyfilled,
+      ...saucelabsPlatformsMicrosoft,
       ...saucelabsPlatformsDesktop
     ];
 
