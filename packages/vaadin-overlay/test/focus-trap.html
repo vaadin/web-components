@@ -356,9 +356,10 @@
         if (
           navigator.platform === 'iPhone' &&
           navigator.userAgent.indexOf('Safari') > -1 &&
-          parseFloat((/Version\/([0-9.]+)/.exec(navigator.userAgent) || [])[1]) === 10) {
+          parseFloat((/Version\/([0-9.]+)/.exec(navigator.userAgent) || [])[1]) < 11) {
           // NOTE(yuriy): focus-trap is incorrectly moving the focus
           // in Safari v10.3, skipping the test.
+          // NOTE(web-padawan): appears to be flaky in 9.3 and Polymer 3 as well
           return;
         } else {
           it('should focus focusable elements inside the content when focusTrap = true', (done) => {
