@@ -13,7 +13,10 @@
     "date",
     "picker"
   ],
-  "main": "vaadin-date-picker.html",
+  "main": [
+    "vaadin-date-picker.html",
+    "vaadin-date-picker-light.html"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/vaadin/vaadin-date-picker"
