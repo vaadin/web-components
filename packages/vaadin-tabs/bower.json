@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-tabs",
-  "main": "vaadin-tabs.html",
+  "main": [
+    "vaadin-tabs.html",
+    "vaadin-tab.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-tabs",
