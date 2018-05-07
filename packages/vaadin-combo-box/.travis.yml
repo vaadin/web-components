@@ -16,8 +16,12 @@ before_script:
   - bower install
 
 env:
-  - POLYMER=2
-  - POLYMER=3
+  - TEST_SUITE=mobile POLYMER=2
+  - TEST_SUITE=microsoft POLYMER=2
+  - TEST_SUITE=desktop POLYMER=2
+  - TEST_SUITE=mobile POLYMER=3
+  - TEST_SUITE=microsoft POLYMER=3
+  - TEST_SUITE=desktop POLYMER=3
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
@@ -27,7 +31,7 @@ script:
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' polymer test;
       else
-        polymer test --env saucelabs;
+        polymer test --env saucelabs:$TEST_SUITE;
       fi;
     fi
 
@@ -40,7 +44,7 @@ script:
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm;
       else
-        polymer test --module-resolution=node --npm --env saucelabs;
+        polymer test --module-resolution=node --npm --env saucelabs:$TEST_SUITE;
       fi;
     fi
 
