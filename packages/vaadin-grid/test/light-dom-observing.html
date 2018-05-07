@@ -43,14 +43,14 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => Polymer({is: 'grid-wrapper'}));
+      customElements.whenDefined('vaadin-grid').then(() => Polymer({is: 'grid-wrapper'}));
     </script>
   </dom-module>
 
   <dom-module id="x-boolean-toggle">
     <template>[[value]]</template>
     <script>
-      HTMLImports.whenReady(function() {
+      customElements.whenDefined('vaadin-grid').then(() => {
         class XBooleanToggle extends Polymer.Element {
           static get is() {
             return 'x-boolean-toggle';

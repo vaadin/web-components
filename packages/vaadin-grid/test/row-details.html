@@ -37,7 +37,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
+      customElements.whenDefined('vaadin-grid').then(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -61,7 +61,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
+      customElements.whenDefined('vaadin-grid').then(() => {
         Polymer({
           is: 'slotted-grid'
         });

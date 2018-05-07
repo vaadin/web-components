@@ -35,7 +35,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
+      customElements.whenDefined('vaadin-grid-column-group').then(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -54,7 +54,7 @@
     describe('column', () => {
       let container, column, grid;
 
-      before(done => HTMLImports.whenReady(done));
+      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
 
       beforeEach(() => {
         container = fixture('grid');
