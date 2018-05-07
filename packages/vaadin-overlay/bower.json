@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-overlay",
-  "main": "vaadin-overlay.html",
+  "main": [
+    "vaadin-overlay.html",
+    "src/vaadin-overlay.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-overlay",
