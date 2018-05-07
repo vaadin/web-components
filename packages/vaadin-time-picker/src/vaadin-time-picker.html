@@ -118,8 +118,6 @@ This program is available under Apache License Version 2.0, available at https:/
           } else if (1 % this.step === 0) {
             // Accept milliseconds
             return 4;
-          } else {
-            return;
           }
         }
 
@@ -130,23 +128,14 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          switch (this._stepSegment) {
-            case 1:
-              return parts.slice(1, 2);
-            case 2:
-              return parts.slice(1, 3);
-            case 3:
-              return parts.slice(1, 4);
-            case 4:
-              return parts.slice(1, 5);
-            default:
-              return;
+          if (this._stepSegment) {
+            return parts.slice(1, this._stepSegment + 1);
           }
         }
 
         _formatTime(time) {
           if (!time) {
-            return '';
+            return;
           }
 
           const [hours, minutes, seconds, milliseconds] = time;
@@ -160,8 +149,6 @@ This program is available under Apache License Version 2.0, available at https:/
               return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}`;
             case 4:
               return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}.${milliseconds ? milliseconds : '000'}`;
-            default:
-              return;
           }
         }
 
