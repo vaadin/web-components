@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-form-layout",
-  "main": "vaadin-form-layout.html",
+  "main": [
+    "vaadin-form-layout.html",
+    "vaadin-form-item.html"
+  ],
   "keywords": [
     "Vaadin",
     "form-layout",
