@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-radio-button",
-  "main": "vaadin-radio-button.html",
+  "main": [
+    "vaadin-radio-button.html",
+    "vaadin-radio-group.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-radio-button",
