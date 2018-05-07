@@ -12,7 +12,7 @@ module.exports = {
     ];
 
     const saucelabsPlatformsMicrosoft = [
-      'Windows 10/microsoftedge@16',
+      'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
     ];
 
