@@ -8,7 +8,7 @@ cache:
     - node_modules
 
 before_script:
-  - npm install -g bower
+  - npm install -g bower polymer-cli@next
   - bower install
 
 env:
@@ -17,7 +17,6 @@ env:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm install -g polymer-cli &&
       npm install &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         npm i --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve;
@@ -26,8 +25,8 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli polymer-cli@next &&
-      (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
+      npm install -g yarn magi-cli &&
+      (cd .. && git clone --depth 1 -b vaadin-components-next git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat;
