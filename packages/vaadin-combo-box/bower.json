@@ -12,7 +12,10 @@
     "Vaadin",
     "combo-box"
   ],
-  "main": "vaadin-combo-box.html",
+  "main": [
+    "vaadin-combo-box.html",
+    "vaadin-combo-box-light.html"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/Vaadin/vaadin-combo-box"
