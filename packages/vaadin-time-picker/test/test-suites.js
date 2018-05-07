@@ -1,3 +1,4 @@
 window.TimePickerElementSuites = [
-  'time-picker-test.html'
+  'input-test.html',
+  'step-test.html'
 ];

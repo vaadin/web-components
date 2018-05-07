@@ -52,6 +52,8 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * Supported time formats:
              * - ISO 8601 `"hh:mm"` (default)
+             * - ISO 8601 `"hh:mm:ss"`
+             * - ISO 8601 `"hh:mm:ss.fff"`
              *
              * @type {String}
              */
@@ -65,6 +67,11 @@ This program is available under Apache License Version 2.0, available at https:/
             _previousValue: {
               type: String,
               value: ''
+            },
+
+            step: {
+              type: Number,
+              observer: '_stepChanged'
             }
           };
         }
@@ -88,11 +95,27 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setValue(checkedValue) {
-          const newValue = this._parseTime(checkedValue);
+          const newValue = this._formatTime(this._parseTime(checkedValue));
           if (newValue) {
             this.value = this._inputElement.value = this._previousValue = newValue;
           } else {
             this.value = this._inputElement.value = this._previousValue;
+          }
+        }
+
+        get _stepSegment() {
+          if (this.step % 3600 === 0) {
+            // Accept hours
+            return 1;
+          } else if (this.step % 60 === 0 || !this.step) {
+            // Accept minutes
+            return 2;
+          } else if (this.step % 1 === 0) {
+            // Accept seconds
+            return 3;
+          } else if (1 % this.step === 0) {
+            // Accept milliseconds
+            return 4;
           }
         }
 
@@ -103,7 +126,36 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          return [parts[1], parts[2]].join(':');
+          if (this._stepSegment) {
+            return parts.slice(1, this._stepSegment + 1);
+          }
+        }
+
+        _formatTime(time) {
+          if (!time) {
+            return;
+          }
+
+          const [hours, minutes, seconds, milliseconds] = time;
+
+          switch (this._stepSegment) {
+            case 1:
+              return `${hours}`;
+            case 2:
+              return `${hours}:${minutes ? minutes : '00'}`;
+            case 3:
+              return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}`;
+            case 4:
+              return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}.${milliseconds ? milliseconds : '000'}`;
+          }
+        }
+
+        _stepChanged(step, oldStep) {
+          if (!this._stepSegment) {
+            this.step = oldStep;
+          }
+
+          this._setValue(this.value);
         }
 
         get _inputElement() {
