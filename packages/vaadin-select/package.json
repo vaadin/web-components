@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-dropdown-menu",
-  "version": "1.0.0-pre.2",
+  "version": "1.0.0-pre.3",
   "description": "vaadin-dropdown-menu",
   "main": "vaadin-dropdown-menu.html",
   "repository": "vaadin/vaadin-dropdown-menu",
