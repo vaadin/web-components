@@ -5,7 +5,11 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-text-field",
-  "main": "vaadin-text-field.html",
+  "main": [
+    "vaadin-text-field.html",
+    "vaadin-password-field.html",
+    "vaadin-text-area.html"
+  ],
   "keywords": [
     "Vaadin",
     "input",
