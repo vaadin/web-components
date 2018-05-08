@@ -10,7 +10,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
 
 
-[&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Polymer 2](http://polymer-project.org) element providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -24,12 +24,10 @@
 ```
 -->
 ```html
-<vaadin-time-picker>
-  ...
-</vaadin-time-picker>
+<vaadin-time-picker></vaadin-time-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-time-picker/master/screenshot.png" width="200" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/components/vaadin-time-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-time-picker/master/screenshot.gif" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/components/vaadin-time-picker)
 
 
 ## Getting Started
