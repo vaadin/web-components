@@ -32,7 +32,7 @@
         expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
         // With default step 1, value should be set to `hh:00`
         for (var i = 0; i < 24; i ++) {
-          const expected = timePicker._pad(i) + ':00'
+          const expected = timePicker._pad(i) + ':00';
           expect(timePicker._dropdownElement.filteredItems[i].label).to.be.equal(expected);
           expect(timePicker._dropdownElement.filteredItems[i].value).to.be.equal(expected);
         }
