@@ -81,6 +81,18 @@ This program is available under Apache License Version 2.0, available at https:/
               value: ''
             },
 
+            /**
+             * Specifies the number of valid intervals in a day or an hour used for
+             * configuring the items displayed in the selection box.
+             *
+             * It also configures the precission of the value string. By default
+             * the component formats values as `HH:MM` but setting a step value
+             * lower than one minute or one second, format resolution changes to
+             * `HH:mm:ss` and `HH:mm:ss.SSS` respectively.
+             *
+             * Unit should be set in seconds. For correctly configuring intervals
+             * in the dropdown, it need to evenly divide day and hour.
+             */
             step: {
               type: Number,
               observer: '_stepChanged'
@@ -104,11 +116,25 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _generateDropdownList() {
+          const pad = n => n < 10 ? '0' + n : n;
           const generatedlist = [];
-          for (var i = 0; i < 24; i++) {
-            const checkedValue = (i < 10) ? `0${i}` : `${i}`;
-            const newItem = {label: checkedValue, value: this._formatTime(this._parseTime(checkedValue))};
-            generatedlist.push(newItem);
+
+          // Default step is 1 hour
+          const step = this.step || 3600;
+
+          let hourIncr = step / 3600;
+          // disallow non evenly hour increments
+          hourIncr = hourIncr < 1 || 24 % hourIncr != 0 ? 1 : hourIncr;
+          for (var hour = 0; hour < 24; hour += hourIncr) {
+
+            var minIncr = hourIncr == 1 ? step / 60 : 60;
+            // disallow non evenly minute increments, and set smallest increment to 15 min
+            minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
+            for (var min = 0; min < 60; min += minIncr) {
+              const value = pad(hour) + (step / 3600 < 1 ? ':' + pad(min) : '');
+              const newItem = {label: value, value: this._formatTime(this._parseTime(value))};
+              generatedlist.push(newItem);
+            }
           }
 
           return generatedlist;

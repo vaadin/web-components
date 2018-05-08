@@ -17,18 +17,18 @@
   </test-fixture>
 
   <script>
-    describe('dropdown test', function() {
+    describe('dropdown test', () => {
       let timePicker;
 
-      beforeEach(function() {
+      beforeEach(() => {
         timePicker = fixture('default');
       });
 
-      it('vaadin-combo-box-light should exist', function() {
+      it('vaadin-combo-box-light should exist', () => {
         expect(timePicker._dropdownElement instanceof Vaadin.ComboBoxLightElement).to.be.true;
       });
 
-      it('vaadin-combo-box-light should have an hour array as filteredItems by default', function() {
+      it('vaadin-combo-box-light should have an hour array as filteredItems by default', () => {
         expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
         // With default step 1, value should be set to `hh:00`
         for (var i = 0; i < 24; i ++) {
@@ -38,20 +38,57 @@
         }
       });
 
-      it('should be possible to select value via combo-box-light', function() {
+      it('should be possible to select value via combo-box-light', () => {
         timePicker._dropdownElement.selectedItem = timePicker._dropdownElement.filteredItems[1];
         expect(timePicker.value).to.be.equal('01:00');
       });
 
-      it('on step change the resolution should be changed, but selectedItem should remain the same', function() {
+      it('undefined step divides dropdown on one hour increments', () => {
+        timePicker._dropdownElement.step = undefined;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
+        expect(timePicker._dropdownElement.filteredItems[0].label).to.be.equal('00');
+        expect(timePicker._dropdownElement.filteredItems[0].value).to.be.equal('00:00');
+        expect(timePicker._dropdownElement.filteredItems[23].label).to.be.equal('23');
+        expect(timePicker._dropdownElement.filteredItems[23].value).to.be.equal('23:00');
+      });
+
+      it('should be possible to divide the day in exact fragments', () => {
+        timePicker.step = 60 * 60 * 3;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(8);
+        expect(timePicker._dropdownElement.filteredItems[7].value).to.be.equal('21');
+      });
+
+      it('should not be possible to divide the day in inexact fragments', () => {
+        timePicker.step = 60 * 60 * 7;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
+      });
+
+      it('should be possible to divide one hour in exact fragments', () => {
+        timePicker.step = 60 * 20;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(72);
+        expect(timePicker._dropdownElement.filteredItems[71].value).to.be.equal('23:40');
+      });
+
+      it('should not be possible to divide one hour in inexact fragments', () => {
+        timePicker.step = 60 * 18;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
+      });
+
+      it('should default to 15 minutes interval when step is lower than 15', () => {
+        timePicker.step = 60 * 2;
+        expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(96);
+        expect(timePicker._dropdownElement.filteredItems[95].value).to.be.equal('23:45');
+      });
+
+      it('on step change the resolution should be changed, but selectedItem should remain the same', () => {
         timePicker._dropdownElement.selectedItem = timePicker._dropdownElement.filteredItems[1];
         expect(timePicker.value).to.be.equal('01:00');
         timePicker.step = 0.5;
         expect(timePicker.value).to.be.equal('01:00:00.000');
-        expect(timePicker._dropdownElement.selectedItem).to.be.equal(timePicker._dropdownElement.filteredItems[1]);
+        expect(timePicker._dropdownElement.selectedItem).to.be.equal(timePicker._dropdownElement.filteredItems[4]);
         timePicker.step = 60;
         expect(timePicker.value).to.be.equal('01:00');
-        expect(timePicker._dropdownElement.selectedItem).to.be.equal(timePicker._dropdownElement.filteredItems[1]);
+        expect(timePicker._dropdownElement.selectedItem).to.be.equal(timePicker._dropdownElement.filteredItems[4]);
       });
     });
   </script>
