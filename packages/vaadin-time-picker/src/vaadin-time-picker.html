@@ -7,6 +7,8 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-combo-box/src/vaadin-combo-box-light.html">
+<link rel="import" href="../../vaadin-lumo-styles/icons.html">
 <link rel="import" href="vaadin-time-picker-text-field.html">
 
 <dom-module id="vaadin-time-picker">
@@ -19,9 +21,19 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
+
+      [part~="toggle-button"] {
+        cursor: pointer;
+      }
     </style>
-    <vaadin-time-picker-text-field>
-    </vaadin-time-picker-text-field>
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" value="{{value}}" filtered-items="[[_dropdownItems]]">
+      <template>
+        [[item.label]]
+      </template>
+      <vaadin-time-picker-text-field class="input">
+        <iron-icon slot="suffix" role="button" icon="lumo:clock" part="toggle-button" class="toggle-button"></iron-icon>
+      </vaadin-time-picker-text-field>
+    </vaadin-combo-box-light>
   </template>
 
   <script>
@@ -72,6 +84,10 @@ This program is available under Apache License Version 2.0, available at https:/
             step: {
               type: Number,
               observer: '_stepChanged'
+            },
+
+            _dropdownItems: {
+              type: Array
             }
           };
         }
@@ -80,10 +96,22 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
           this._boundOnChange = this._onChange.bind(this);
           this._bindListeners();
+          this._dropdownItems = this._generateDropdownList();
         }
 
         _bindListeners() {
           this._inputElement.addEventListener('change', this._boundOnChange);
+        }
+
+        _generateDropdownList() {
+          const generatedlist = [];
+          for (var i = 0; i < 24; i++) {
+            const checkedValue = (i < 10) ? `0${i}` : `${i}`;
+            const newItem = {label: checkedValue, value: this._formatTime(this._parseTime(checkedValue))};
+            generatedlist.push(newItem);
+          }
+
+          return generatedlist;
         }
 
         _valueChanged(value, oldValue) {
@@ -155,11 +183,16 @@ This program is available under Apache License Version 2.0, available at https:/
             this.step = oldStep;
           }
 
+          this._dropdownItems = this._generateDropdownList();
           this._setValue(this.value);
         }
 
         get _inputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
+        }
+
+        get _dropdownElement() {
+          return this.shadowRoot.querySelector('vaadin-combo-box-light');
         }
       }
 
