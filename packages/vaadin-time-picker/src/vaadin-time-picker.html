@@ -167,7 +167,7 @@ This program is available under Apache License Version 2.0, available at https:/
           } else if (this.step % 1 === 0) {
             // Accept seconds
             return 3;
-          } else if (1 % this.step === 0) {
+          } else if (this.step < 1) {
             // Accept milliseconds
             return 4;
           }
@@ -205,10 +205,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _stepChanged(step, oldStep) {
-          if (!this._stepSegment) {
-            this.step = oldStep;
-          }
-
           this._dropdownItems = this._generateDropdownList();
           this._setValue(this.value);
         }
