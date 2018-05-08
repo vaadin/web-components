@@ -116,24 +116,28 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _generateDropdownList() {
-          const pad = n => n < 10 ? '0' + n : n;
           const generatedlist = [];
 
-          // Default step is 1 hour
+          // Default step in overlay items is 1 hour
           const step = this.step || 3600;
 
           let hourIncr = step / 3600;
           // disallow non evenly hour increments
           hourIncr = hourIncr < 1 || 24 % hourIncr != 0 ? 1 : hourIncr;
-          for (var hour = 0; hour < 24; hour += hourIncr) {
 
-            var minIncr = hourIncr == 1 ? step / 60 : 60;
+          for (let hour = 0; hour < 24; hour += hourIncr) {
+
+            let minIncr = hourIncr == 1 ? step / 60 : 60;
             // disallow non evenly minute increments, and set smallest increment to 15 min
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
-            for (var min = 0; min < 60; min += minIncr) {
-              const value = pad(hour) + (step / 3600 < 1 ? ':' + pad(min) : '');
-              const newItem = {label: value, value: this._formatTime(this._parseTime(value))};
-              generatedlist.push(newItem);
+
+            for (let min = 0; min < 60; min += minIncr) {
+              generatedlist.push({
+                // we only pick items with minute resolution
+                label: `${this._pad(hour)}:${this._pad(min)}`,
+                // but we set value with step defined resolution
+                value: this._formatTime([hour, min])
+              });
             }
           }
 
@@ -175,32 +179,28 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _parseTime(str) {
           // Parsing with RegExp to ensure correct format
-          const parts = /^(\d{2})(?::(\d{2}))?(?::(\d{2}))?(?:\.(\d{3}))?$/.exec(str);
-          if (!parts) {
-            return;
-          }
-
-          if (this._stepSegment) {
-            return parts.slice(1, this._stepSegment + 1);
+          const parts = /^(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?(?:\.(\d{1,3}))?$/.exec(str);
+          if (parts) {
+            if (this._stepSegment) {
+              return parts.slice(1, this._stepSegment + 1);
+            }
           }
         }
 
+        // pad a number with leading zeros
+        _pad(num = 0, fmt = '00') {
+          return (fmt + num).substr((fmt + num).length - fmt.length);
+        }
+
         _formatTime(time) {
-          if (!time) {
-            return;
-          }
-
-          const [hours, minutes, seconds, milliseconds] = time;
-
-          switch (this._stepSegment) {
-            case 1:
-              return `${hours}`;
-            case 2:
-              return `${hours}:${minutes ? minutes : '00'}`;
-            case 3:
-              return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}`;
-            case 4:
-              return `${hours}:${minutes ? minutes : '00'}:${seconds ? seconds : '00'}.${milliseconds ? milliseconds : '000'}`;
+          if (time) {
+            const [hour, min, sec, ms] = time;
+            // Always display hour and minute
+            let ret = `${this._pad(hour)}:${this._pad(min)}`;
+            // Adding second and millisecond depends on resolution
+            this._stepSegment >= 3 && (ret += `:${this._pad(sec)}`);
+            this._stepSegment == 4 && (ret += `.${this._pad(ms, '000')}`);
+            return ret;
           }
         }
 

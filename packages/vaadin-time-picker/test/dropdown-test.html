@@ -32,9 +32,9 @@
         expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
         // With default step 1, value should be set to `hh:00`
         for (var i = 0; i < 24; i ++) {
-          const expectedLabel = (i < 10) ? `0${i}` : `${i}`;
-          expect(timePicker._dropdownElement.filteredItems[i].label).to.be.equal(expectedLabel);
-          expect(timePicker._dropdownElement.filteredItems[i].value).to.be.equal(`${expectedLabel}:00`);
+          const expected = timePicker._pad(i) + ':00'
+          expect(timePicker._dropdownElement.filteredItems[i].label).to.be.equal(expected);
+          expect(timePicker._dropdownElement.filteredItems[i].value).to.be.equal(expected);
         }
       });
 
@@ -46,16 +46,16 @@
       it('undefined step divides dropdown on one hour increments', () => {
         timePicker._dropdownElement.step = undefined;
         expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(24);
-        expect(timePicker._dropdownElement.filteredItems[0].label).to.be.equal('00');
+        expect(timePicker._dropdownElement.filteredItems[0].label).to.be.equal('00:00');
         expect(timePicker._dropdownElement.filteredItems[0].value).to.be.equal('00:00');
-        expect(timePicker._dropdownElement.filteredItems[23].label).to.be.equal('23');
+        expect(timePicker._dropdownElement.filteredItems[23].label).to.be.equal('23:00');
         expect(timePicker._dropdownElement.filteredItems[23].value).to.be.equal('23:00');
       });
 
       it('should be possible to divide the day in exact fragments', () => {
         timePicker.step = 60 * 60 * 3;
         expect(timePicker._dropdownElement.filteredItems.length).to.be.equal(8);
-        expect(timePicker._dropdownElement.filteredItems[7].value).to.be.equal('21');
+        expect(timePicker._dropdownElement.filteredItems[7].value).to.be.equal('21:00');
       });
 
       it('should not be possible to divide the day in inexact fragments', () => {

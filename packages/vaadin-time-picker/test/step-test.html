@@ -49,14 +49,14 @@
         timePicker.value = '12:00:00';
         expect(timePicker.value).to.be.equal('12:00');
         timePicker.step = 3600;
-        expect(timePicker.value).to.be.equal('12');
+        expect(timePicker.value).to.be.equal('12:00');
       });
 
       it('should be possible to set hours, minutes, seconds and milliseconds with according step', function() {
         // Hours
         timePicker.step = 3600;
         timePicker.value = '12';
-        expect(timePicker.value).to.be.equal('12');
+        expect(timePicker.value).to.be.equal('12:00');
 
         // Minutes
         timePicker.step = 60;
