@@ -7,7 +7,8 @@
   "description": "vaadin-ordered-layout",
   "main": [
     "vaadin-horizontal-layout.html",
-    "vaadin-vertical-layout.html"
+    "vaadin-vertical-layout.html",
+    "imports.html"
   ],
   "keywords": [
     "Vaadin",
