@@ -1,0 +1,53 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-time-picker tests</title>
+  <script src='../../web-component-tester/browser.js'></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../src/vaadin-time-picker.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-time-picker></vaadin-time-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('dropdown test', function() {
+      let timePicker;
+
+      beforeEach(function() {
+        timePicker = fixture('default');
+      });
+
+      it('should use custom parser and formatter if those exist', function() {
+        timePicker.formatTime = time => {
+          const [hours, minutes, period] = time;
+          return `${hours}:${minutes ? minutes : '00'} ${period}`;
+        };
+
+        timePicker.parseTime = text => {
+          const parts = /^(\d{2})(?::(\d{2}))?(?:\s(\w{2}))?$/.exec(text);
+          if (!parts) {
+            return;
+          }
+
+          let period;
+          if (!parts[3]) {
+            period = (parseInt(parts[1]) > 12) ? 'PM' : 'AM';
+          } else {
+            period = parts[3];
+          }
+          return [parts[1], parts[2], period];
+        };
+
+        timePicker.value = '12';
+        expect(timePicker.value).to.be.equal('12:00 AM');
+      });
+    });
+  </script>
+</body>

@@ -86,10 +86,10 @@
         expect(timePicker.value).to.be.equal('01:00');
         timePicker.step = 0.5;
         expect(timePicker.value).to.be.equal('01:00:00.000');
-        expect(dropdownElement.selectedItem).to.be.equal(dropdownElement.filteredItems[4]);
+        expect(timePicker._dropdownElement.selectedItem).to.deep.equal(timePicker._dropdownElement.filteredItems[4]);
         timePicker.step = 60;
         expect(timePicker.value).to.be.equal('01:00');
-        expect(dropdownElement.selectedItem).to.be.equal(dropdownElement.filteredItems[4]);
+        expect(timePicker._dropdownElement.selectedItem).to.deep.equal(timePicker._dropdownElement.filteredItems[4]);
       });
     });
   </script>
