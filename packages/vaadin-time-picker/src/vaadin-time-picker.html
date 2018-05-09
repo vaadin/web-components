@@ -102,15 +102,34 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Array
             },
 
-            formatTime: Object,
+            /**
+             * The object used to create custom parser and formatter for this component.
+             * To change the default functions, replace the entire
+             * _i18n_ object or just the function you want to modify.
+             *
+             * The object has the following JSON structure:
 
-            parseTime: Object
+                {
+                  // A function to format given time
+                  formatTime: t => {
+                    // returns a string representation of the given time string
+                  },
+
+                  // A function to parse the given text to a format recognizable by `formatTime`.
+                  // Must properly parse (at least) text
+                  // formatted by `formatTime`.
+                  parseTime: text => {
+                    // Parses a string in object/string that can be formatted by`formatTime`.
+                  }
+                }
+              */
+            i18n: Object
           };
         }
 
         static get observers() {
           return [
-            '_updateDropdownItems(formatTime, parseTime)'
+            '_updateDropdownItems(i18n.*)'
           ];
         }
 
@@ -122,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _updateDropdownItems() {
-          this.dropdownItems = this._generateDropdownList();
+          this._dropdownItems = this._generateDropdownList();
         }
 
         __generateDropdownList() {
@@ -187,7 +206,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        __parseTime(str) {
+        _parseTime(str) {
+          if (this.i18n && this.i18n.parseTime) {
+            return this.i18n.parseTime(str);
+          }
+
           // Parsing with RegExp to ensure correct format
           const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
           const MATCH_MINUTES = '(\\d|[0-5]\\d)';
@@ -207,7 +230,11 @@ This program is available under Apache License Version 2.0, available at https:/
           return (fmt + num).substr((fmt + num).length - fmt.length);
         }
 
-        __formatTime(time) {
+        _formatTime(time) {
+          if (this.i18n && this.i18n.formatTime) {
+            return this.i18n.formatTime(time);
+          }
+
           if (time) {
             const [hour, min, sec, ms] = time;
             // Always display hour and minute

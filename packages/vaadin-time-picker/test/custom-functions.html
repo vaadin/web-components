@@ -25,24 +25,28 @@
       });
 
       it('should use custom parser and formatter if those exist', function() {
-        timePicker.formatTime = time => {
-          const [hours, minutes, period] = time;
-          return `${hours}:${minutes ? minutes : '00'} ${period}`;
-        };
+        timePicker.i18n = {
+          formatTime: function(time) {
+            let [hours, minutes, period] = time;
+            if (!period) {
+              period = (hours > 12) ? 'PM' : 'AM';
+            }
+            return `${hours}:${minutes ? minutes : '00'} ${period}`;
+          },
+          parseTime: function(text) {
+            const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(text);
+            if (!parts) {
+              return;
+            }
 
-        timePicker.parseTime = text => {
-          const parts = /^(\d{2})(?::(\d{2}))?(?:\s(\w{2}))?$/.exec(text);
-          if (!parts) {
-            return;
+            let period;
+            if (!parts[3]) {
+              period = (parseInt(parts[1]) > 12) ? 'PM' : 'AM';
+            } else {
+              period = parts[3];
+            }
+            return [parts[1], parts[2], period];
           }
-
-          let period;
-          if (!parts[3]) {
-            period = (parseInt(parts[1]) > 12) ? 'PM' : 'AM';
-          } else {
-            period = parts[3];
-          }
-          return [parts[1], parts[2], period];
         };
 
         timePicker.value = '12';
