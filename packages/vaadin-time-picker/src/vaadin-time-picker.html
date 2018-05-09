@@ -100,8 +100,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
             __dropdownItems: {
               type: Array
-            }
+            },
+
+            formatTime: Object,
+
+            parseTime: Object
           };
+        }
+
+        static get observers() {
+          return [
+            '_updateDropdownItems(formatTime, parseTime)'
+          ];
         }
 
         ready() {
@@ -109,6 +119,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundOnChange = this.__onChange.bind(this);
           this.__inputElement.addEventListener('change', this._boundOnChange);
           this.__dropdownItems = this.__generateDropdownList();
+        }
+
+        _updateDropdownItems() {
+          this.dropdownItems = this._generateDropdownList();
         }
 
         __generateDropdownList() {
