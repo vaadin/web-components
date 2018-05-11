@@ -9,7 +9,7 @@
       :host {
         display: inline-block;
         -webkit-user-select: none;
-        color: var(--material-body-text-color);
+        outline: none;
       }
 
       [part="wrapper"] {
@@ -67,32 +67,34 @@
         height: 100%;
         border-radius: inherit;
         background-color: var(--material-primary-color);
-        transform: scale(3);
+        transform: scale(2.5);
         opacity: 0;
         transition: transform 0.1s, opacity 0.8s;
-        will-change: transform, opacity;
       }
 
-      :host([indeterminate]) [part="radio"],
       :host([checked]) [part="radio"] {
         border-color: var(--material-primary-color);
       }
 
-      :host([checked]) [part="radio"]::after {
+      /* Used for the selection dot */
+      [part="radio"]::after {
         content: "";
-        width: 0;
-        height: 0;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        border: 5px solid var(--material-primary-color);
+        background-color: var(--material-primary-color);
         position: absolute;
         top: 50%;
         left: 50%;
-        will-change: transform;
-        background-clip: content-box;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.2s;
+      }
+
+      :host([checked]) [part="radio"]::after {
         transform: translate(-50%, -50%) scale(1);
       }
 
-      :host(:not([checked]):not([indeterminate]):not([disabled])) [part="radio"] {
+      :host(:not([checked]):not([disabled])) [part="radio"] {
         border-color: var(--material-secondary-text-color);
       }
 
@@ -100,13 +102,13 @@
       :host([active]:not([checked])) [part="radio"]::before {
         transition-duration: 0.01s, 0.01s;
         transform: scale(0);
-        opacity: 0.4;
+        opacity: 0.2;
       }
 
-      :host([focus-ring]) [part="radio"] {
-        background-color: var(--material-divider-color);
-        box-shadow: 0 0 0 15px var(--material-divider-color);
-        transition: background-color 0.1s, box-shadow 0.2s;
+      :host([focus-ring]) [part="radio"]::before {
+        transform: scale(2.5);
+        transition-duration: 0s;
+        opacity: 0.15;
       }
 
       :host([disabled]) {
@@ -118,16 +120,12 @@
         color: inherit;
       }
 
-      :host([disabled]:not([checked])) [part="radio"] {
-        border-color: var(--material-disabled-text-color);
+      :host([disabled]) [part="radio"] {
+        border-color: var(--material-disabled-color);
       }
 
-      :host([disabled][checked]) [part="radio"] {
-        border-color: var(--material-disabled-text-color);
-      }
-
-      :host([disabled][checked]) [part="radio"]::after {
-        border-color: var(--material-disabled-text-color);
+      :host([disabled]) [part="radio"]::after {
+        background-color: var(--material-disabled-color);
       }
     </style>
   </template>
