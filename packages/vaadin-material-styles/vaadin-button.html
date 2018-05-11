@@ -10,12 +10,13 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        border-radius: 2px;
+        border-radius: 4px;
         color: var(--material-body-text-color);
         font-family: var(--material-font-family);
         text-transform: uppercase;
         font-size: var(--material-body-font-size);
         font-weight: 500;
+        letter-spacing: 0.05em;
         overflow: hidden;
         transition: background-color 0.3s, box-shadow 0.2s;
         -webkit-tap-highlight-color: transparent;
@@ -66,7 +67,7 @@
         font-size: var(--material-body-font-size);
         margin: 8px;
         padding: 0 16px;
-        min-width: 88px;
+        min-width: 64px;
         min-height: 36px;
         box-sizing: border-box;
       }
@@ -74,10 +75,7 @@
       /* Dense style */
       :host([theme~="dense"]) {
         font-size: var(--material-small-font-size);
-        min-width: 64px;
         min-height: 32px;
-        padding-left: 16px;
-        padding-right: 16px;
       }
     </style>
   </template>
@@ -125,6 +123,10 @@
         box-shadow: var(--material-shadow-elevation-2dp);
       }
 
+      :host([theme~="raised"]:hover) {
+        box-shadow: var(--material-shadow-elevation-4dp);
+      }
+
       :host([theme~="raised"][active]) {
         box-shadow: var(--material-shadow-elevation-8dp);
       }
@@ -160,19 +162,18 @@
   <template>
     <style>
       [part] ::slotted(iron-icon) {
-        display: inline-block;
-        vertical-align: middle;
-        width: 24px;
-        height: 24px;
+        display: block;
+        width: 18px;
+        height: 18px;
       }
 
       [part="prefix"] ::slotted(iron-icon) {
-        margin-right: 4px;
+        margin-right: 8px;
         margin-left: -4px;
       }
 
       [part="suffix"] ::slotted(iron-icon) {
-        margin-left: 4px;
+        margin-left: 8px;
         margin-right: -4px;
       }
 
