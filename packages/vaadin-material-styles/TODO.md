@@ -9,13 +9,9 @@
 - Expected primary button to have white on primary colors. Actual: primary on white.
   - With a `raised` theme variant, works as expected.
 
-### `<vaadin-checkbox>`
-
-OK, apart from the generic issues.
-
 ### `<vaadin-combo-box>`
 
-- Expected icon: triange pointing down. Actual icon: angle pointing down.
+- The label floating transition happens on first render (apparently [has-value] is applied after first render)
 
 ### `<vaadin-context-menu>`
 
