@@ -29,6 +29,7 @@
 <!-- Import theme custom properties and common style modules -->
 <link rel="import" href="../color.html">
 <link rel="import" href="../typography.html">
+<link rel="import" href="../shadow.html">
 
 <!-- Import Roboto from Google Fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" crossorigin="anonymous">
@@ -44,13 +45,34 @@
     }
 
     demo-navigation {
-      --demo-navigation-font-size: 1em;
+      --demo-navigation-font-size: var(--material-small-font-size);
       --demo-navigation-selected-item-color: var(--material-primary-text-color);
     }
 
     demo-navigation [slot="header"] {
       display: flex;
       align-items: center;
+    }
+
+    #theme-select {
+      font-size: var(--material-body-font-size);
+      margin-left: 1em;
+      display: inline-block;
+      vertical-align: baseline;
+      flex: 1;
+      text-align: right;
+    }
+
+    #theme-select select {
+      border: 0;
+      background: transparent;
+      font: inherit;
+      color: inherit;
+      pointer-events: auto;
+    }
+
+    [theme~="dark"] #theme-select select {
+      background-color: var(--material-background-color);
     }
 
     code {
@@ -99,11 +121,6 @@
       margin-right: 0.2em;
     }
 
-    nice-demo-snippet div[theme="dark"] {
-      margin: -1em;
-      padding: 1em;
-    }
-
     .theme-source-code {
       display: inline-block;
       font-size: var(--material-body-font-size);
@@ -124,6 +141,54 @@
       margin-right: 0.5em;
       opacity: 0.8;
     }
+
+    nice-demo-snippet {
+      border-radius: 4px;
+      --nice-demo-snippet-code-font-family: Roboto Mono, Menlo, Consolas, monospace;
+      --nice-demo-snippet-code-background-color: var(--material-secondary-background-color);
+      --nice-demo-snippet-border-color: var(--material-divider-color);
+      --nice-demo-snippet-view-source-color: var(--material-secondary-text-color);
+      --nice-demo-snippet-view-source-background-color: var(--material-secondary-background-color);
+      --nice-demo-snippet-view-source-checked-background-color: var(--material-primary-color);
+      --nice-demo-snippet-view-source-checked-color: var(--material-primary-contrast-color);
+      --nice-demo-snippet-view-source-focus-box-shadow: 0 0 0 3px var(--material-primary-color);
+    }
+
+    h2 + nice-demo-snippet,
+    h3 + nice-demo-snippet,
+    h4 + nice-demo-snippet {
+      margin-top: 0;
+    }
+
+    [theme="dark"] nice-demo-snippet {
+      --nice-demo-snippet-code-background-color: #FFF;
+      --nice-demo-snippet-code-color: #000;
+    }
+
+    nice-demo-snippet h5:first-child {
+      margin-top: 0;
+    }
+
+    demo-navigation {
+      --demo-navigation-sidebar-background-color: var(--material-secondary-background-color);
+      --demo-navigation-current-section-border: 1px solid var(--material-divider-color);
+      --demo-navigation-selected-item-color: var(--material-primary-text-color);
+      --demo-navigation-item-color: var(--material-secondary-text-color);
+      --demo-navigation-item-opacity: 1;
+      --demo-navigation-header-background: var(--material-secondary-background-color);
+      --demo-navigation-header-box-shadow: var(--material-shadow-elevation-2dp);
+      --demo-navigation-drawer-background-color: var(--material-background-color);
+      --demo-navigation-drawer-curtain-background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .note {
+      background-color: var(--material-secondary-background-color);
+      border-color: var(--material-primary-color);
+    }
+
+    [theme~="dark"] .note.warn {
+      border-color: var(--material-error-color);
+    }
   </style>
 </custom-style>
 
@@ -141,4 +206,28 @@
       }
     });
   });
+
+  // Insert light/dark theme selector
+  var themeSelect = document.createElement('div');
+  themeSelect.id = 'theme-select';
+  themeSelect.innerHTML = '<select tooltip="Choose color palette"><option>Light</option><option>Dark</option></select>';
+  document.querySelector('demo-navigation').firstElementChild.appendChild(themeSelect);
+
+  themeSelect.addEventListener('change', function(e) {
+    const theme = e.target.value.toLowerCase();
+    document.documentElement.setAttribute('theme', theme);
+
+    if (window.localStorage) {
+      window.localStorage.setItem('theme', theme);
+    }
+  });
+
+  if (window.localStorage) {
+    const theme = window.localStorage.getItem('theme');
+    document.documentElement.setAttribute('theme', theme);
+    if (theme == 'dark') {
+      themeSelect.firstChild.childNodes[1].setAttribute('selected', '');
+    }
+  }
+
 </script>
