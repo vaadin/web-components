@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 before_script:
-  - npm install -g bower
+  - npm install -g bower polymer-cli
   - bower install
 
 env:
@@ -20,11 +20,11 @@ env:
   - POLYMER=3
 
 script:
+  # FIXME(web-padawan): lint disabled because of https://github.com/Polymer/tools/issues/272
+  # polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
   - if [[ "$POLYMER" = "2" ]]; then
-      npm install -g polymer-cli &&
       npm install &&
       gulp lint version:check &&
-      polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
       if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
         xvfb-run -s '-screen 0 1024x768x24' polymer test;
       else
@@ -33,7 +33,7 @@ script:
     fi
 
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli polymer-cli@next &&
+      npm install -g yarn magi-cli &&
       (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
