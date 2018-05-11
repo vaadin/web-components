@@ -38,7 +38,7 @@
 
     <h1>Combo box</h1>
 
-    <p>In addition, see the documentation for <a href="text-fields.html#custom-properties">Text field</a>.</p>
+    <p>In addition, see the documentation for <a href="text-fields.html">Text field</a>.</p>
 
     <h3 demo-section>Label, placeholder and value</h3>
 
@@ -84,77 +84,6 @@
         </vaadin-combo-box>
       </template>
     </nice-demo-snippet>
-
-    <h3 demo-section>Dark theme label, placeholder and value</h3>
-
-    <div theme="dark">
-      <nice-demo-snippet>
-        <template slot="source">
-          <vaadin-combo-box label="Label" placeholder="Placeholder"></vaadin-combo-box>
-          <vaadin-combo-box label="Label" value="Option 1"></vaadin-combo-box>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
-    <h3 demo-section>Dark theme states</h3>
-
-    <div theme="dark">
-      <nice-demo-snippet>
-        <template slot="source">
-          <vaadin-combo-box label="Enabled" value="Option 1"></vaadin-combo-box>
-          <vaadin-combo-box label="Disabled" value="Option 1" disabled></vaadin-combo-box>
-          <vaadin-combo-box label="Read only" value="Option 1" readonly></vaadin-combo-box>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
-    <h3 demo-section>Dark theme validation</h3>
-
-    <div theme="dark">
-      <nice-demo-snippet>
-        <template slot="source">
-          <vaadin-combo-box required label="Required" placeholder="Choose an option" error-message="Please select an option"></vaadin-combo-box>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
-    <h3 demo-section>Dark theme dropdown item template</h3>
-
-    <div theme="dark">
-      <nice-demo-snippet>
-        <!-- TODO make the overlay adapt to the width of the items -->
-        <template slot="source">
-          <vaadin-combo-box label="Person" item-label-path="name" placeholder="Choose a person" class="item-template" style="width: 360px; max-width: 100%;">
-            <template>
-              <style>
-              person-item {
-                --person-item-email-display: block;
-              }
-              </style>
-              <person-item email="[[item.email]]">[[item.name]]</person-item>
-            </template>
-          </vaadin-combo-box>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
-    <hr>
-
-
-    <h2 demo-section>Styling API</h2>
-
-    <div class="note warn">
-      <p>Read the <b><a href="customization.html">customization instructions</a></b> to learn how to customize the component styles.</p>
-    </div>
-
-    <!-- <h3>Custom properties</h3>
-
-    <dl class="custom-properties">
-    </dl> -->
-
-    <h3>Shadow parts and states</h3>
-
-    <p>See the <a href="https://vaadin.com/components/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement">API documentation for vaadin-combo-box</a></p>
 
     <!-- This needs to be last on the page, otherwise the demo-sections are not parsed correctly -->
     <script type="text/javascript">

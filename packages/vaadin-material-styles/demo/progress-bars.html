@@ -64,47 +64,15 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Dark theme value</h3>
-    <div theme="dark">
-      <nice-demo-snippet>
-        <template slot="source">
-            <h6>Static</h6>
-            <vaadin-progress-bar value="0.7"></vaadin-progress-bar>
-
-            <h6>Live</h6>
-            <!-- Value updated with a background script -->
-            <vaadin-progress-bar id="dark-dynamic"></vaadin-progress-bar>
-
-            <h6>Indeterminate</h6>
-            <vaadin-progress-bar indeterminate></vaadin-progress-bar>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
-    <h3 demo-section>Dark theme colors</h3>
-    <div theme="dark">
-      <nice-demo-snippet>
-        <template slot="source">
-            <h5>Error</h5>
-            <vaadin-progress-bar theme="error" value="0.7"></vaadin-progress-bar>
-            <h6>Indeterminate</h6>
-            <vaadin-progress-bar theme="error" indeterminate></vaadin-progress-bar>
-        </template>
-      </nice-demo-snippet>
-    </div>
-
     <script>
       document.addEventListener('WebComponentsReady', function() {
         const progress = document.querySelector('vaadin-progress-bar#dynamic');
-        const darkprogress = document.querySelector('vaadin-progress-bar#dark-dynamic');
         progress.value = 0;
-        darkprogress.value = 0;
         setInterval(() => {
           if (progress.value >= 1) {
             progress.value = 0;
           }
           progress.value += Math.random() * 0.2;
-          darkprogress.value = progress.value;
         }, 1000);
       });
     </script>
