@@ -1,10 +1,12 @@
 ### Generic
 
+[Won’t fix: this works the same in Lumo at the moment]
 - Inconsistent font styles. `<vaadin-button>` sets material font style over contents, while some others (`<vaadin-checkbox>`, `<vaadin-radio-button>`) use inherited font.
 - Expected: `<vaadin-checkbox>` and `<vaadin-radio-button>` have the same focus ring size. Actual: `<vaadin-checkbox>` has a smaller focus ring, compared to `<vaadin-radio-button>`.
 
 ### `<vaadin-button>`
 
+[Won’t fix: this was actually by design like this, so that you can have a colored text button – let’s revise these when we update to the new specs]
 - Expected primary button to have white on primary colors. Actual: primary on white.
   - With a `raised` theme variant, works as expected.
 
@@ -101,10 +103,4 @@ Let us just remove this demo for now to avoid confusion.
 
 ### `<vaadin-text-field>` and the derived elements
 
-- When floating, the label goes underneath the prefix. Expected: label stays always on top when prefix is in use, same way as with the value and with the placeholder.
-- Expected: the underline width does not increase on hover. Actual: the underline width grows on hover.
-- Expected: the underline clearly ripples on focus, does not ripple on blur. Actual:
-  - Different ripple effects in `<vaadin-text-field>` itself and derived components.
-  - Different effects in different browsers.
-  - Different ripple efffect depending on mouse or keyboard focus.
-  - On some cases, ripple on blur is more prominent that ripple on focus.
+- [Won’t fix: requires a structurlal change.] When floating, the label goes underneath the prefix. Expected: label stays always on top when prefix is in use, same way as with the value and with the placeholder.
