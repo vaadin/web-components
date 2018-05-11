@@ -1,10 +1,12 @@
 ### Generic
 
+[Won’t fix: this works the same in Lumo at the moment]
 - Inconsistent font styles. `<vaadin-button>` sets material font style over contents, while some others (`<vaadin-checkbox>`, `<vaadin-radio-button>`) use inherited font.
 - Expected: `<vaadin-checkbox>` and `<vaadin-radio-button>` have the same focus ring size. Actual: `<vaadin-checkbox>` has a smaller focus ring, compared to `<vaadin-radio-button>`.
 
 ### `<vaadin-button>`
 
+[Won’t fix: this was actually by design like this, so that you can have a colored text button – let’s revise these when we update to the new specs]
 - Expected primary button to have white on primary colors. Actual: primary on white.
   - With a `raised` theme variant, works as expected.
 
