@@ -10,12 +10,12 @@
         width: 160px;
         padding-top: 16px;
         margin-bottom: 8px;
+        outline: none;
         color: var(--material-body-text-color);
         font-size: var(--material-subhead-font-size);
         font-family: var(--material-font-family);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-
         /* Fix Chrome’s dancing labels */
         contain: content;
       }
@@ -46,29 +46,17 @@
         position: relative;
         height: 32px;
         padding-left: 0;
-        padding-bottom: 2px;
         background-color: transparent;
         margin: 0;
-      }
-
-      @media (hover: hover) {
-        :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="label"] {
-          color: var(--material-body-text-color);
-        }
-
-        :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"] {
-          background-color: transparent;
-        }
       }
 
       [part="input-field"]::before,
       [part="input-field"]::after {
         content: "";
         position: absolute;
-        bottom: 1px;
+        bottom: 0;
         left: 0;
         right: 0;
-        transition: all 0.25s;
         height: 1px;
         transform-origin: 50% 0%;
         background-color: var(--_material-text-field-input-line-background-color, #000);
@@ -77,51 +65,23 @@
 
       [part="input-field"]::after {
         background-color: var(--material-primary-color);
-        opacity: 1;
+        opacity: 0;
         height: 2px;
         bottom: 0;
         transform: scaleX(0);
+        transition: opacity 0.175s;
       }
 
       /* Hover */
 
-      :host(:hover:not([readonly]):not([focused])) [part="label"] {
-        color: var(--material-body-text-color);
-      }
 
-      /* Focus-ring */
-
-      :host([required][focus-ring]) [part="input-field"],
-      :host([focus-ring]) [part="input-field"] {
-        box-shadow: none;
-      }
-
-      :host([required][focus-ring]) [part="input-field"]::after,
-      :host([focus-ring]) [part="input-field"]::after,
-      :host([readonly]) [part="input-field"]::after,
-      :host([required]) [part="input-field"]::after {
-        height: 0;
-      }
-
-      :host([readonly]) [part="input-field"],
-      :host([disabled]) [part="input-field"] {
-        background-color: transparent;
-      }
+      /* Focus */
 
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
       :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
         color: var(--material-disabled-text-color);
         -webkit-text-fill-color: var(--material-disabled-text-color);
-      }
-
-      :host([focused]:not([readonly])) [part="input-field"] {
-        background-color: transparent;
-      }
-
-      :host([focused]) [part="input-field"]::before {
-        background-color: var(--material-primary-color);
-        transform: none;
       }
 
       [part="value"],
@@ -216,34 +176,27 @@
         }
       }
 
-      :host(:not([focused]):not([invalid]):hover) [part="input-field"]::before,
-      :host([focused]) [part="input-field"]::before {
-        /* Use a slightly reduced value so that there’s less visible blurriness during the
-           transition in Safari. The end result is still acceptable on all browsers. */
-        transform: scaleY(1.7);
+      :host(:hover:not([readonly]):not([invalid]):not([focused])) [part="input-field"]::before {
         opacity: var(--_material-text-field-input-line-hover-opacity, 0.87);
       }
 
       :host([focused]:not([invalid])) [part="label"] {
         color: var(--material-primary-color);
-        opacity: var(--_material-text-field-focused-label-opacity, 0.87);
       }
 
-      :host([focused]) [part="input-field"]::after {
+      :host([focused]) [part="input-field"]::after,
+      :host([invalid]) [part="input-field"]::after {
+        opacity: 1;
         transform: none;
+        transition: transform 0.175s, opacity 0.175s;
       }
 
       :host([invalid]) [part="label"] {
         color: var(--material-error-text-color);
       }
 
-      :host([invalid]) [part="input-field"] {
-        background-color: transparent;
-      }
-
       :host([invalid]) [part="input-field"]::after {
         background-color: var(--material-error-color);
-        transform: none;
       }
 
       :host([disabled]) {
@@ -252,7 +205,6 @@
 
       :host([disabled]) [part="input-field"] {
         color: var(--material-disabled-text-color);
-        background-color: transparent;
       }
 
       :host([disabled]) [part="input-field"]::before {
@@ -273,16 +225,19 @@
       }
 
       [part="error-message"] {
-        font-size: 0.7em;
-        line-height: 1.1;
+        font-size: .75em;
+        line-height: 1;
         color: var(--material-error-text-color);
         margin-top: 8px;
-        animation: reveal 0.2s;
       }
 
       :host(:not([invalid])) [part="error-message"] {
         max-height: 0;
         overflow: hidden;
+      }
+
+      :host([invalid]) [part="error-message"] {
+        animation: reveal 0.2s;
       }
 
       @keyframes reveal {
