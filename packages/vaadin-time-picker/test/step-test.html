@@ -17,52 +17,46 @@
   </test-fixture>
 
   <script>
-    describe('step test', function() {
+    describe('step test', () => {
       let timePicker;
 
-      beforeEach(function() {
+      beforeEach(() => {
         timePicker = fixture('default');
       });
 
-      it('step property should be undefined by default', function() {
+      it('step property should be undefined by default', () => {
         expect(timePicker.step).to.be.equal(undefined);
       });
 
-      it('should not allow setting invalid step property value', function() {
-        // Invalid in this case means values that can not divide a unit evenly
-        timePicker.step = 0.075;
-        expect(timePicker.step).not.to.be.equal(0.075);
-      });
-
-      it('should allow setting valid step property value', function() {
+      it('should allow setting valid step property value', () => {
         timePicker.step = 0.5;
         expect(timePicker.step).to.be.equal(0.5);
       });
 
-      it('should allow setting valid step value via attribute', function() {
+      it('should allow setting valid step value via attribute', () => {
         timePicker.setAttribute('step', '0.5');
         expect(timePicker.step).to.be.equal(0.5);
       });
 
-      it('should expand the resolution and value on step change to smaller value', function() {
+      it('should expand the resolution and value on step change to smaller value', () => {
         timePicker.value = '12:00:00';
         expect(timePicker.value).to.be.equal('12:00');
         timePicker.step = 0.5;
         expect(timePicker.value).to.be.equal('12:00:00.000');
       });
 
-      it('should shrink the resolution and value on step change to bigger value', function() {
+      it('should shrink the resolution and value on step change to bigger value', () => {
         timePicker.value = '12:00:00';
         expect(timePicker.value).to.be.equal('12:00');
         timePicker.step = 3600;
-        expect(timePicker.value).to.be.equal('12');
+        expect(timePicker.value).to.be.equal('12:00');
       });
 
-      it('should be possible to set hours, minutes, seconds and milliseconds with according step', function() {
+      it('should be possible to set hours, minutes, seconds and milliseconds with according step', () => {
         // Hours
         timePicker.step = 3600;
         timePicker.value = '12';
-        expect(timePicker.value).to.be.equal('12');
+        expect(timePicker.value).to.be.equal('12:00');
 
         // Minutes
         timePicker.step = 60;
