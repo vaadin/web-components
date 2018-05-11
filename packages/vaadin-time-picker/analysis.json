@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-time-picker.html",
         "start": {
-          "line": 221,
+          "line": 217,
           "column": 6
         },
         "end": {
-          "line": 221,
+          "line": 217,
           "column": 58
         }
       },
@@ -1640,27 +1640,6 @@
               }
             },
             {
-              "name": "__dropdownElement",
-              "type": "?",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 211,
-                  "column": 8
-                },
-                "end": {
-                  "line": 213,
-                  "column": 9
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "readOnly": true
-                }
-              }
-            },
-            {
               "name": "value",
               "type": "String",
               "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `HH:mm` (default)\n- `HH:mm:ss`\n- `HH:mm:ss.SSS`",
@@ -1951,7 +1930,7 @@
               "column": 6
             },
             "end": {
-              "line": 214,
+              "line": 210,
               "column": 7
             }
           },
