@@ -1,3 +1,5 @@
+const isPolymer2 = document.querySelector('script[src*="wct-browser-legacy"]') === null;
+
 window.VaadinComboBoxSuites = [
   'vaadin-combo-box.html',
   'toggling-dropdown.html',
@@ -10,8 +12,11 @@ window.VaadinComboBoxSuites = [
   'aria.html',
   'using-object-values.html',
   'data-binding.html',
-  'late-upgrade.html',
   'vaadin-combo-box-light.html',
   'item-template.html',
   'vaadin-combo-box-dropdown.html'
 ];
+
+if (isPolymer2) {
+  window.VaadinComboBoxSuites.push('late-upgrade.html');
+}
