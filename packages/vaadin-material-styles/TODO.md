@@ -42,9 +42,6 @@ In the overlay:
 ### `<vaadin-dialog>`
 
 - There is a `.buttons` class exposed for arbitary users’s template. Should we scope it?
-- Dark theme demo does not make sense at this point. The dark theme does not propagate to the dialog internal overlay anyway. This is a known issue of the dialog: vaadin/vaadin-dialog#37
-
-Let us just remove this demo for now to avoid confusion.
 
 ### `<vaadin-dropdown-menu>`
 
@@ -89,10 +86,6 @@ Let us just remove this demo for now to avoid confusion.
 ### `<vaadin-password-field>`
 
 - Expected: material `visibility`/`visibility-off` icon is used to toggle reveal. Actual: no reveal icon is used.
-
-### `<vaadin-split-layout>`
-
-- Expected: with `orientaion="vertical"`, the handle is horizontal. Actual: handle is vertical with both orientations. Note: there is `[vertical]` attribute style in the theme, should be changed to `[orientation="vertical"]`.
 
 ### `<vaadin-tab>`
 
