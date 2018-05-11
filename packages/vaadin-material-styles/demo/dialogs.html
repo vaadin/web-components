@@ -19,10 +19,9 @@
     }
   </style>
   <script>
-    openDialog = function(id) {
+    window.openDialog = function(id) {
       var dialog = document.querySelector(id);
       dialog.opened = true;
-      console.log("onclick");
     };
   </script>
 </head>
@@ -47,7 +46,7 @@
           </template>
         </vaadin-dialog>
 
-        <vaadin-button onclick=openDialog('#simpleDialog')>Show simple dialog</vaadin-button>
+        <vaadin-button onclick="openDialog('#simpleDialog')">Show simple dialog</vaadin-button>
 
       </template>
     </nice-demo-snippet>
@@ -64,7 +63,7 @@
             </div>
           </template>
         </vaadin-dialog>
-        <vaadin-button onclick=openDialog('#buttondialog')>Show dialog</vaadin-button>
+        <vaadin-button onclick="openDialog('#buttondialog')">Show dialog</vaadin-button>
       </template>
     </nice-demo-snippet>
 
@@ -80,7 +79,7 @@
               <div> or by a mouse click anywhere outside the dialog area</div>
             </template>
           </vaadin-dialog>
-          <vaadin-button onclick=openDialog('#simpledarkdialog')>Show dialog</vaadin-button>
+          <vaadin-button onclick="openDialog('#simpledarkdialog')">Show dialog</vaadin-button>
         </div>
       </template>
     </nice-demo-snippet>

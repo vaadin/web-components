@@ -24,11 +24,12 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^v2.0.0"
+    "polymer": "Polymer/polymer#^v2.0.0",
+    "font-roboto": "PolymerElements/font-roboto#^1.0.3"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0",
-    "vaadin-core": "vaadin/vaadin-core#v10.0.0-alpha17",
+    "vaadin-core": "vaadin/vaadin-core#v10.0.0-alpha23",
     "iron-ajax": "PolymerElements/iron-ajax#^2.0.2",
     "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles",
     "TinyColor": "bgrins/TinyColor#^1.4.1",

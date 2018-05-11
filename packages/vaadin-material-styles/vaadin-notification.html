@@ -25,6 +25,7 @@
         justify-content: stretch;
         width: 100%;
       }
+
       [part="content"] {
         color: var(--material-primary-contrast-color);
         font-family: var(--material-font-family);
@@ -38,41 +39,51 @@
         justify-content: space-between;
         align-items: center;
       }
+
       :host {
-        background-color: var(---material-notification-background-color);
+        background-color: var(--_material-notification-background-color);
         min-height: 48px;
         max-height: 80px;
         margin: 0;
         display: flex;
         align-items: center;
       }
+
       @media (min-width: 420px) {
         :host {
           border-radius: 2px;
           min-width: 288px;
           max-width: 568px;
         }
+
         :host([slot="bottom-start"]) {
           margin: 0 0 24px 24px;
         }
+
         :host([slot="bottom-center"]) {
           margin: 0 auto;
         }
+
         :host([slot="bottom-end"]) {
           margin: 0 24px 24px 0;
         }
+
         :host([slot="top-start"]) {
           margin: 24px 0 0 24px;
         }
+
         :host([slot="top-center"]) {
           margin: 0 auto;
         }
+
         :host([slot="top-end"]) {
           margin: 24px 24px 0 0;
         }
+
         :host([slot^="middle"]) {
           margin: auto;
         }
+
         :host([slot$="stretch"]) {
           margin: 0;
           border-radius: 0;
@@ -80,6 +91,7 @@
           width: auto;
         }
       }
+
       @keyframes material-notification-exit-fade-out {
         100% {
           opacity: 0;
@@ -90,6 +102,7 @@
         0% {
           opacity: 0;
         }
+
         100% {
           opacity: 1;
         }
@@ -142,6 +155,7 @@
       :host([slot^="bottom"][opening]) {
         animation: material-notification-enter-slide-up 300ms;
       }
+
       :host([slot^="bottom"][closing]) {
         animation: material-notification-exit-slide-down 300ms;
       }
