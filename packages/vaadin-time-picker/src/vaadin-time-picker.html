@@ -107,7 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this._boundOnChange = this.__onChange.bind(this);
-          this._inputElement.addEventListener('change', this._boundOnChange);
+          this.__inputElement.addEventListener('change', this._boundOnChange);
           this.__dropdownItems = this.__generateDropdownList();
         }
 
@@ -145,15 +145,15 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onChange(e) {
-          this.__setValue(this._inputElement.value);
+          this.__setValue(this.__inputElement.value);
         }
 
         __setValue(checkedValue) {
           const newValue = this.__formatTime(this.__parseTime(checkedValue));
           if (newValue) {
-            this.value = this._inputElement.value = this.__previousValue = newValue;
+            this.value = this.__inputElement.value = this.__previousValue = newValue;
           } else {
-            this.value = this._inputElement.value = this.__previousValue || '';
+            this.value = this.__inputElement.value = this.__previousValue || '';
           }
         }
 
@@ -205,14 +205,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__setValue(this.value);
         }
 
-
-        /** The internal text-field element */
-        get _inputElement() {
+        get __inputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
         }
 
-        /** The internal combo-box element */
-        get _dropdownElement() {
+        get __dropdownElement() {
           return this.shadowRoot.querySelector('vaadin-combo-box-light');
         }
       }

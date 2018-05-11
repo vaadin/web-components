@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-time-picker.html",
         "start": {
-          "line": 224,
+          "line": 221,
           "column": 6
         },
         "end": {
-          "line": 224,
+          "line": 221,
           "column": 58
         }
       },
@@ -1619,17 +1619,17 @@
               }
             },
             {
-              "name": "_inputElement",
+              "name": "__inputElement",
               "type": "?",
-              "description": "The internal text-field element",
-              "privacy": "protected",
+              "description": "",
+              "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 209,
+                  "line": 207,
                   "column": 8
                 },
                 "end": {
-                  "line": 211,
+                  "line": 209,
                   "column": 9
                 }
               },
@@ -1640,17 +1640,17 @@
               }
             },
             {
-              "name": "_dropdownElement",
+              "name": "__dropdownElement",
               "type": "?",
-              "description": "The internal combo-box element",
-              "privacy": "protected",
+              "description": "",
+              "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 214,
+                  "line": 211,
                   "column": 8
                 },
                 "end": {
-                  "line": 216,
+                  "line": 213,
                   "column": 9
                 }
               },
@@ -1951,7 +1951,7 @@
               "column": 6
             },
             "end": {
-              "line": 217,
+              "line": 214,
               "column": 7
             }
           },
