@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-combo-box.html" rel="import">
+  <dom-module id="text-field-styles" theme-for="vaadin-text-field">
+    <template>
+      <style>
+        :host [part="value"] {
+          font-size: 0;
+          height: 24px;
+        }
+      </style>
+    </template>
+  </dom-module>
+</head>
+
+<body>
+
+  <div id="dropdown-tests" style="padding: 10px; min-height: 300px;">
+    Plain template
+    <vaadin-combo-box id="plain" item-label-path="name" item-value-path="symbol"></vaadin-combo-box>
+
+    <br> Item template
+    <vaadin-combo-box id="template" item-label-path="name" item-value-path="symbol">
+      <template>
+        <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+        array index: [[index]]
+      </template>
+    </vaadin-combo-box>
+  </div>
+
+  <script>
+    var elementsJson = [
+      {name: 'Hydrogen', symbol: 'H', number: 1},
+      {name: 'Helium', symbol: 'He', number: 2},
+      {name: 'Lithium', symbol: 'Li', number: 3}
+    ];
+
+    var comboBoxes = document.querySelectorAll('vaadin-combo-box');
+
+    [].forEach.call(comboBoxes, function(combo) {
+      // do whatever
+      combo.items = elementsJson;
+    });
+  </script>
+
+</body>
