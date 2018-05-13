@@ -1,28 +1,6 @@
 <link rel="import" href="../color.html">
 <link rel="import" href="../typography.html">
-
-<custom-style>
-  <style>
-    html {
-      --material-overlay-box-shadow:  0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                                      0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                                      0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-      --material-raised-overlay-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                                            0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                                            0 3px 1px -2px rgba(0, 0, 0, 0.2);
-    }
-
-    [theme~="dark"] {
-      --material-overlay-box-shadow:  0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                                      0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                                      0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      --material-raised-overlay-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                                            0 1px 5px 0 rgba(0, 0, 0, 0.12),
-                                            0 3px 1px -2px rgba(0, 0, 0, 0.2);
-    }
-  </style>
-</custom-style>
+<link rel="import" href="../shadow.html">
 
 <dom-module id="material-overlay">
   <template>
@@ -30,14 +8,11 @@
       [part="overlay"] {
         background-color: var(--material-background-color);
         border-radius: 4px;
-        box-shadow: var(--material-overlay-box-shadow);
+        box-shadow: var(--material-shadow-elevation-4dp);
         color: var(--material-body-text-color);
         font-family: var(--material-font-family);
-        font-size: var(--material-subhead-font-size);
+        font-size: var(--material-body-font-size);
         font-weight: 400;
-        line-height: 24px;
-        letter-spacing: 0;
-        text-transform: none;
       }
 
       [part="content"] {
@@ -45,7 +20,6 @@
       }
 
       [part="backdrop"] {
-        /* background-color: transparent; */
         opacity: 0.2;
         animation: 0.2s vaadin-overlay-backdrop-enter;
         will-change: opacity;

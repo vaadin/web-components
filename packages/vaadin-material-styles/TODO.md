@@ -11,14 +11,17 @@
 
 ### `<vaadin-combo-box>`
 
-- The label floating transition happens on first render (apparently [has-value] is applied after first render)
+- The label floating transition happens on first render (apparently [has-value] is applied after first render). Happens with vaadin-date-picker as well, but not with vaadin-dropdown-menu.
 
 ### `<vaadin-context-menu>`
 
-- Expected: mouse hover is not confused with focused item. Actual:
-  - hover and focused items have the same appearance,
-  - mouse hover on the menu makes the focused item to appear as regular item,
-  - keyboard navigation appears broken when mouse is over the menu, and works fine if mouse is outside.
+- Last activated item is marked as selected
+
+[Real solution is to implement focus-follows-mouse option for list-box]
+- ~~Expected: mouse hover is not confused with focused item. Actual:~~
+  - ~~hover and focused items have the same appearance,~~
+  - ~~mouse hover on the menu makes the focused item to appear as regular item,
+  - ~~keyboard navigation appears broken when mouse is over the menu, and works fine if mouse is outside.~~
 
 Note: see `<vaadin-list-box>`, `<vaadin-item>`.
 
@@ -40,11 +43,11 @@ In the overlay:
 
 ### `<vaadin-dropdown-menu>`
 
-- Expected icon: triange pointing down. Actual icon: angle pointing down.
-- Expected: mouse hover is not confused with focused item. Actual:
-  - hover and focused items have the same appearance,
-  - mouse hover on the menu makes the focused item to appear as regular item,
-  - keyboard navigation appears broken when mouse is over the menu, and works fine if mouse is outside.
+[Real solution is to implement focus-follows-mouse option for list-box]
+- ~~Expected: mouse hover is not confused with focused item. Actual:~~
+  - ~~hover and focused items have the same appearance,~~
+  - ~~mouse hover on the menu makes the focused item to appear as regular item,~~
+  - ~~keyboard navigation appears broken when mouse is over the menu, and works fine if mouse is outside.~~
 
 ### `<vaadin-form-layout>`
 
@@ -59,10 +62,6 @@ In the overlay:
   - Similar issue in all browsers when material `<vaadin-checkbox>` is used in a template content.
 - Expected: material icons in `<vaadin-grid-tree-toggle>`. Actual: triangles from builtin styles, could be confusing with dropdown menu toggle icon.
 - Expected: frozen column’s left and right edges are seamless (as in regular columns), or drops a shadow on the regular column when it is floating above. Actual: frozen column always has a border on the right edge.
-
-### `<vaadin-list-box>`
-
-- Expected: horizontal divider `<hr>` touches the edges. Actual: has margin of `2px` from both sides.
 
 ### `<vaadin-notification>`
 

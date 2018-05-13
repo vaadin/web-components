@@ -7,13 +7,12 @@
 <dom-module id="material-combo-box-item" theme-for="vaadin-combo-box-item">
   <template>
     <style include="material-item">
-      /* TODO duplicated from vaadin-list-box styles. Should find a way to make it DRY */
-
       :host {
         cursor: pointer;
-        padding: 4px 8px 4px 2px;
-        -webkit-tap-highlight-color: var(--material-primary-color);
+        -webkit-tap-highlight-color: transparent;
+        padding: 4px 10px;
         min-height: 36px;
+        --_material-item-selected-icon-display: block;
       }
 
       /* ShadyCSS workaround */
@@ -21,44 +20,18 @@
         display: block;
       }
 
-      /* IE11 flexbox workaround */
-      ::-ms-backdrop,
-      :host {
-        height: 36px;
-      }
-
-      /* Only apply for this particular item, not nested items */
-      :host > * {
-        --_valo-item-selected-icon-display: none;
-      }
-
       :host(:hover) {
+        background-color: var(--material-secondary-background-color);
+      }
+
+      :host([focused]) {
         background-color: var(--material-divider-color);
       }
 
       @media (pointer: coarse) {
+        :host(:hover),
         :host([focused]) {
           background-color: transparent;
-        }
-      }
-
-      :host([selected]) {
-        font-weight: 500;
-        background-color: transparent;
-      }
-
-      :host([selected]:hover) {
-        background-color: var(--material-divider-color);
-      }
-
-      ::-ms-backdrop,
-      :host([selected]) {
-        font-weight: 600;
-      }
-
-      @supports (-ms-ime-align: auto) {
-        [part="items"] ::slotted([selected]) {
-          font-weight: 600;
         }
       }
     </style>

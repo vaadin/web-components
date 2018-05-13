@@ -5,28 +5,22 @@
   <template>
     <style include="material-menu-overlay">
       :host {
-        -ms-overflow-style: none;
-      }
-
-      [part="content"] {
-        padding: 0;
-      }
-
-      [part="content"] vaadin-combo-box-item[focused] {
-        background-color: var(--material-divider-color);
-      }
-
-      [part="content"]:hover vaadin-combo-box-item[focused] {
-        background-color: transparent;
-      }
-
-      iron-list {
         /* TODO using a legacy mixin (unsupported) */
         --iron-list-items-container: {
           border-width: 8px 0;
           border-style: solid;
           border-color: transparent;
         }
+      }
+
+      [part="overlay"] {
+        margin-top: -6px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      [part="content"] {
+        padding: 0;
       }
     </style>
   </template>

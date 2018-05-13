@@ -9,28 +9,6 @@
 <dom-module id="material-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
   <template>
     <style include="material-menu-overlay">
-      vaadin-list-box [tabindex][selected] {
-        font-weight: 400;
-        background-color: transparent;
-      }
-
-      [part="content"] vaadin-item[focused],
-      [part="content"] vaadin-item:hover {
-        background-color: var(--material-divider-color);
-      }
-
-      [part="content"]:hover vaadin-item[focused] {
-        background-color: transparent;
-      }
-
-      [part="content"] vaadin-item[focused]:hover {
-        background-color: var(--material-divider-color);
-      }
-
-      [part="content"] vaadin-item {
-        background-color: transparent;
-      }
-
     </style>
   </template>
 </dom-module>

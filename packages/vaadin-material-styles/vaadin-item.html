@@ -10,8 +10,6 @@
         display: flex;
         align-items: center;
         box-sizing: border-box;
-        line-height: 24px;
-        border-radius: 0;
         overflow: hidden;
       }
 
@@ -23,24 +21,21 @@
       /* Selected item has an icon */
 
       :host::before {
-        display: var(--_valo-item-selected-icon-display, none);
+        display: var(--_material-item-selected-icon-display, none);
         content: "";
-        font-family: valo-icons;
+        font-family: material-icons;
         font-size: 24px;
         line-height: 1;
         font-weight: 400;
         width: 24px;
-        margin-right: 4px;
-        color: var(--material-primary-text-color);
+        text-align: center;
+        margin-right: 10px;
+        color: var(--material-secondary-text-color);
         flex: none;
       }
 
       :host([selected])::before {
-        content: "\e902";
-      }
-
-      :host(:hover) {
-        background-color: transparent;
+        content: var(--material-icons-check);
       }
 
       /* Disabled item */

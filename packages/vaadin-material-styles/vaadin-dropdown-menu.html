@@ -10,15 +10,6 @@
 <dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
     <style>
-      :host {
-        width: 180px;
-      }
-
-      [selected] {
-        padding-left: 0;
-        padding-right: 0;
-      }
-
       [part$="button"] {
         flex: none;
         width: 24px;
@@ -26,9 +17,12 @@
         line-height: 24px;
         font-size: 24px;
         text-align: center;
-        color: var(--material-disabled-text-color);
-        transition: 0.2s color;
-        cursor: default;
+        color: var(--material-secondary-text-color);
+        transition: 0.2s color, 0.2s transform;
+      }
+
+      [part$="button"]:hover {
+        color: var(--material-text-color);
       }
 
       [part$="button"]::before {
@@ -36,7 +30,11 @@
       }
 
       [part="toggle-button"]::before {
-        content: "\e5cf";
+        content: var(--material-icons-dropdown);
+      }
+
+      :host([opened]) [part="toggle-button"] {
+        transform: rotate(180deg);
       }
 
       /* Disabled */
@@ -63,16 +61,14 @@
       [part="input-field"],
       [part="value"] {
         cursor: default;
-        background-color: transparent;
-      }
-
-      /* IE11 flexbox fix (https://github.com/philipwalton/flexbugs#3-min-height-on-a-flex-container-wont-apply-to-its-flex-items) */
-      [part="input-field"] ::slotted([part="value"]) {
-        display: flex;
       }
 
       [part="input-field"]:focus {
         outline: none;
+      }
+
+      ::slotted([part="value"]) {
+        display: flex;
       }
     </style>
   </template>
@@ -81,25 +77,8 @@
 <dom-module id="material-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
   <template>
     <style include="material-menu-overlay">
-      [part="content"] vaadin-item::before {
-        content: "";
-      }
-
-      [part="content"] vaadin-item:hover,
-      [part="content"] vaadin-item[focused] {
-        background-color: var(--material-divider-color);
-      }
-
-      [part="content"]:hover vaadin-item[focused] {
-        background-color: transparent;
-      }
-
-      [part="content"] vaadin-item[focused]:hover {
-        background-color: var(--material-divider-color);
-      }
-
-      [part="content"] vaadin-item {
-        background-color: transparent;
+      [part="overlay"] {
+        min-width: var(--vaadin-dropdown-menu-text-field-width);
       }
     </style>
   </template>
