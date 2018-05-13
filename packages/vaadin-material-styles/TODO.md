@@ -80,7 +80,7 @@ In the overlay:
 
 ### `<vaadin-password-field>`
 
-- Expected: material `visibility`/`visibility-off` icon is used to toggle reveal. Actual: no reveal icon is used.
+- eye-disabled icon is visually larger than the normal eye icon
 
 ### `<vaadin-tab>`
 
