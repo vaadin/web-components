@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 before_script:
-  - npm install -g bower polymer-cli@next
+  - npm install -g bower polymer-cli
   - bower install
 
 env:
