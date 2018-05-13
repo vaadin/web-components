@@ -8,14 +8,16 @@
       --material-font-family: 'Roboto', 'Noto', sans-serif;
 
       /* Font sizes */
-      --material-display2-font-size: 45px;
-      --material-display1-font-size: 34px;
-      --material-headline-font-size: 24px;
-      --material-title-font-size: 20px;
-      --material-subhead-font-size: 16px;
-      --material-body-font-size: 14px;
-      --material-small-font-size: 13px;
-      --material-caption-font-size: 12px;
+      --material-h1-font-size: 6rem;
+      --material-h2-font-size: 3.75rem;
+      --material-h3-font-size: 3rem;
+      --material-h4-font-size: 2.125rem;
+      --material-h5-font-size: 1.5rem;
+      --material-h6-font-size: 1.25rem;
+      --material-body-font-size: 1rem;
+      --material-small-font-size: 0.875rem;
+      --material-button-font-size: 0.75rem;
+      --material-caption-font-size: 0.75rem;
 
       /* Icon size */
       --material-icon-font-size: 24px;
@@ -29,7 +31,7 @@
       body {
         font-family: var(--material-font-family);
         font-size: var(--material-body-font-size);
-        line-height: calc(24 / 14);
+        line-height: 1.4;
         -webkit-text-size-adjust: 100%;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -42,45 +44,41 @@
       h5,
       h6 {
         color: inherit;
+        line-height: 1.1;
       }
 
       h1 {
-        font-size: var(--material-display2-font-size);
-        font-weight: 400;
-        letter-spacing: -.018em;
-        line-height: 48px;
+        font-size: var(--material-h3-font-size);
+        font-weight: 300;
+        letter-spacing: -0.015em;
       }
 
       h2 {
-        font-size: var(--material-display1-font-size);
-        font-weight: 400;
-        letter-spacing: -.01em;
-        line-height: 40px;
+        font-size: var(--material-h4-font-size);
+        font-weight: 300;
+        letter-spacing: -0.01em;
       }
 
       h3 {
-        font-size: var(--material-headline-font-size);
+        font-size: var(--material-h5-font-size);
         font-weight: 400;
-        letter-spacing: -.012em;
-        line-height: 32px;
       }
 
       h4 {
-        font-size: var(--material-title-font-size);
-        font-weight: 500;
-        line-height: 28px;
+        font-size: var(--material-h6-font-size);
+        font-weight: 400;
+        letter-spacing: 0.01em;
       }
 
       h5 {
-        font-size: var(--material-subhead-font-size);
-        font-weight: 400;
-        line-height: 24px;
+        font-size: var(--material-body-font-size);
+        font-weight: 500;
       }
 
       h6 {
-        font-size: var(--material-body-font-size);
+        font-size: var(--material-small-font-size);
         font-weight: 500;
-        line-height: 24px;
+        letter-spacing: 0.01em;
       }
 
       b,
