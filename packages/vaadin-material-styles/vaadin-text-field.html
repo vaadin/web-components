@@ -7,12 +7,9 @@
     <style>
       :host {
         position: relative;
-        width: 160px;
-        padding-top: 16px;
-        margin-bottom: 8px;
         outline: none;
         color: var(--material-body-text-color);
-        font-size: var(--material-subhead-font-size);
+        font-size: var(--material-body-font-size);
         font-family: var(--material-font-family);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -25,7 +22,7 @@
 
       :host([has-label]) {
         vertical-align: 22px;
-        margin-top: 16px;
+        padding-top: 16px;
       }
 
       [part="label"]:empty {
@@ -72,11 +69,6 @@
         transition: opacity 0.175s;
       }
 
-      /* Hover */
-
-
-      /* Focus */
-
       :host([disabled]) [part="label"],
       :host([disabled]) [part="value"],
       :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
@@ -98,7 +90,6 @@
         font-size: 1em;
         color: inherit;
         background-color: transparent;
-
         /* Disable default invalid style in Firefox */
         box-shadow: none;
       }
@@ -228,7 +219,7 @@
         font-size: .75em;
         line-height: 1;
         color: var(--material-error-text-color);
-        margin-top: 8px;
+        margin-top: 6px;
       }
 
       :host(:not([invalid])) [part="error-message"] {
@@ -280,7 +271,7 @@
 
       /* Slotted content */
 
-      [part="input-field"] ::slotted(*) {
+      [part="input-field"] ::slotted(*:not([part="value"])) {
         color: var(--material-secondary-text-color);
       }
 
