@@ -1,4 +1,5 @@
 <link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
 <link rel="import" href="typography.html">
 
 <link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker.html">
@@ -17,25 +18,37 @@
       [part="toggle-button"] {
         width: 24px;
         height: 24px;
-        box-sizing: border-box;
-        margin-left: 4px;
-        margin-bottom: 2px;
-        color: var(--material-disabled-text-color);
+        padding: 4px;
+        color: var(--material-secondary-text-color);
+        font-family: "material-icons";
         font-size: var(--material-icon-font-size);
         line-height: 24px;
         text-align: center;
         cursor: pointer;
       }
 
+      /* TODO(platosha): align icon sizes with other elements */
+
+      :host([disabled]) [part="toggle-button"],
+      :host([readonly]) [part="toggle-button"] {
+        color: var(--material-disabled-text-color);
+      }
+
+      :host([disabled]) [part="clear-button"] {
+        display: none;
+      }
+
       [part="clear-button"]:hover,
-      [part="toggle-button"]:hover {
+      :host(:not([readonly])) [part="toggle-button"]:hover {
         color: inherit;
       }
 
-      [part="clear-button"] {
-        border-radius: 50%;
-        background-color: var(--material-divider-color);
-        font-size: calc(var(--material-icon-font-size) - 8px);
+      [part="clear-button"]::before {
+        content: var(--material-icons-clear);
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--material-icons-calendar);
       }
 
       /* Overlay width */
