@@ -1,4 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-split-layout.svg)
 [![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-split-layout.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-split-layout)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-split-layout)
 ![Polymer 2 supported](https://img.shields.io/badge/Polymer2-supported-blue.svg)
