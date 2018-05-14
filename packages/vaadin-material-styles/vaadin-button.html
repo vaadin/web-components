@@ -5,7 +5,7 @@
 
 <dom-module id="material-button" theme-for="vaadin-button">
   <template>
-    <style include="material-button-sizing material-button-states material-button-types material-button-icons">
+    <style>
       :host {
         display: inline-flex;
         align-items: center;
@@ -14,7 +14,7 @@
         color: var(--material-body-text-color);
         font-family: var(--material-font-family);
         text-transform: uppercase;
-        font-size: var(--material-body-font-size);
+        font-size: var(--material-button-font-size);
         font-weight: 500;
         letter-spacing: 0.05em;
         overflow: hidden;
@@ -23,6 +23,17 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         z-index: 0;
+        margin: 8px;
+        padding: 0 16px;
+        min-width: 64px;
+        min-height: 36px;
+        box-sizing: border-box;
+      }
+
+      /* Dense style */
+      :host([theme~="dense"]) {
+        font-size: var(--material-caption-font-size);
+        min-height: 32px;
       }
 
       :host::before,
@@ -56,34 +67,7 @@
       [part="label"] ::slotted(*) {
         vertical-align: middle;
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="material-button-sizing">
-  <template>
-    <style>
-      :host {
-        font-size: var(--material-body-font-size);
-        margin: 8px;
-        padding: 0 16px;
-        min-width: 64px;
-        min-height: 36px;
-        box-sizing: border-box;
-      }
-
-      /* Dense style */
-      :host([theme~="dense"]) {
-        font-size: var(--material-small-font-size);
-        min-height: 32px;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="material-button-states">
-  <template>
-    <style>
       :host(:hover)::before,
       :host([focus-ring])::before {
         opacity: 0.08;
@@ -110,13 +94,7 @@
         pointer-events: none;
         color: var(--material-disabled-text-color);
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="material-button-types">
-  <template>
-    <style>
       /* Raised style */
       :host([theme~="raised"]:not([disabled])) {
         background-color: var(--_material-button-raised-background-color, var(--material-background-color));
@@ -154,13 +132,7 @@
       :host([theme~="primary"][theme~="raised"][focus-ring])::before {
         opacity: 0.2;
       }
-    </style>
-  </template>
-</dom-module>
 
-<dom-module id="material-button-icons">
-  <template>
-    <style>
       [part] ::slotted(iron-icon) {
         display: block;
         width: 18px;
