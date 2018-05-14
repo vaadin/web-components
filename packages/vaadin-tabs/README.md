@@ -1,4 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-tabs.svg)
 [![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-tabs.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-tabs)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://webcomponents.org/element/vaadin/vaadin-tabs)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-tabs.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-tabs)
