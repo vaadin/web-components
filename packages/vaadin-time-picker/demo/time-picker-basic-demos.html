@@ -34,11 +34,17 @@
 
             timePicker.i18n = {
               formatTime: function(time) {
-                let [hours, minutes, period] = time;
-                if (!period) {
-                  period = (hours > 12) ? 'PM' : 'AM';
+                let hours, period = 'AM';
+                if (parseInt(time.hours) > 12) {
+                  period = 'PM';
+                  hours = parseInt(time.hours) - 12;
+                } else if (parseInt(time.hours) < 10) {
+                  hours = `0${time.hours}`;
+                } else {
+                  hours = time.hours;
                 }
-                return `${hours}:${minutes ? minutes : '00'} ${period}`;
+
+                return `${hours}:${time.minutes ? time.minutes : '00'} ${period}`;
               },
               parseTime: function(text) {
                 const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(text);
@@ -46,13 +52,16 @@
                   return;
                 }
 
-                let period;
-                if (!parts[3]) {
-                  period = (parseInt(parts[1]) > 12) ? 'PM' : 'AM';
+                let hours;
+                if (parts[3] === 'PM') {
+                  hours = parseInt(parts[1]) + 12;
                 } else {
-                  period = parts[3];
+                  hours = parseInt(parts[1]);
                 }
-                return [parts[1], parts[2], period];
+                return {
+                  hours: hours,
+                  minutes: parts[2]
+                }
               }
             };
           });
