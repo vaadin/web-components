@@ -1,4 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-dropdown-menu.svg)
 [![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-dropdown-menu.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-dropdown-menu)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dropdown-menu)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-dropdown-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dropdown-menu)
