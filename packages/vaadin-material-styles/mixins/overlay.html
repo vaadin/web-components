@@ -5,6 +5,14 @@
 <dom-module id="material-overlay">
   <template>
     <style>
+      :host {
+        top: 16px;
+        right: 16px;
+        /* TODO (@jouni): remove unnecessary multiplication after https://github.com/vaadin/vaadin-overlay/issues/90 is fixed */
+        bottom: calc(1px * var(--vaadin-overlay-viewport-bottom) + 16px);
+        left: 16px;
+      }
+
       [part="overlay"] {
         background-color: var(--material-background-color);
         border-radius: 4px;
