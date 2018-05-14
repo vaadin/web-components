@@ -1,4 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-dialog.svg)
 [![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-dialog.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-dialog)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dialog)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-dialog.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dialog)
