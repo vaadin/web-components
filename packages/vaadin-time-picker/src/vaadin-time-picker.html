@@ -122,7 +122,8 @@ This program is available under Apache License Version 2.0, available at https:/
                     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
                   },
 
-                  // A function to parse the given text to an `Object` in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+                  // A function to parse the given text to an `Object` in the format
+                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
                   // Must properly parse (at least) text
                   // formatted by `formatTime`.
                   parseTime: text => {
@@ -157,12 +158,12 @@ This program is available under Apache License Version 2.0, available at https:/
                     if (!parts) {
                       return;
                     }
-                    return {hours: parts[1], minutes: parts[2] || '00', seconds: parts[3] || '00', milliseconds: parts[4] || '000'}
+                    return {hours: parts[1], minutes: parts[2] || '00', seconds: parts[3] || '00', milliseconds: parts[4] || '000'};
                   }
                 };
               }
             }
-          }
+          };
         }
 
         static get observers() {

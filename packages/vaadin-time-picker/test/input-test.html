@@ -58,12 +58,6 @@
         expect(timePicker.value).to.be.equal('');
       });
 
-      it('should set values of inputElement and time-picker if the format is valid', () => {
-        changeInputValue(timePicker.__inputElement, '12:00');
-        expect(timePicker.value).to.be.equal('12:00');
-        expect(timePicker.__inputElement.value).to.be.equal('12:00');
-      });
-
       it('should propagate value to the inputElement', () => {
         timePicker.value = '12:00';
         expect(timePicker.__inputElement.value).to.be.equal('12:00');
