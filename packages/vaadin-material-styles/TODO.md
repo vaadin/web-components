@@ -2,6 +2,7 @@
 
 [Won’t fix: this works the same in Lumo at the moment]
 - Inconsistent font styles. `<vaadin-button>` sets material font style over contents, while some others (`<vaadin-checkbox>`, `<vaadin-radio-button>`) use inherited font.
+- Some elements have `will-change` in the styles, which might slow down the grid scrolling. Especially important for `<vaadin-checkbox>`.
 
 ### `<vaadin-button>`
 
