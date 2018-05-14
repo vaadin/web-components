@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" value="{{value}}" filtered-items="[[__dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[_dropdownItems]]">
       <template>
         [[item.label]]
       </template>
@@ -110,12 +110,19 @@ This program is available under Apache License Version 2.0, available at https:/
              * The object has the following JSON structure:
 
                 {
-                  // A function to format given time
-                  formatTime: t => {
-                    // returns a string representation of the given time string
+                  // A function to format given `Object` as
+                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+                  // `stepSegment` parameter reflect the current resolution:
+                  // 1 - `hh`
+                  // 2 - `hh:mm`
+                  // 3 - `hh:mm:ss`
+                  // 4 - `hh:mm:ss.fff`
+                  formatTime: (time, stepSegment) => {
+                    // returns a string representation of the given
+                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
                   },
 
-                  // A function to parse the given text to a format recognizable by `formatTime`.
+                  // A function to parse the given text to an `Object` in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
                   // Must properly parse (at least) text
                   // formatted by `formatTime`.
                   parseTime: text => {
@@ -123,8 +130,39 @@ This program is available under Apache License Version 2.0, available at https:/
                   }
                 }
               */
-            i18n: Object
-          };
+            i18n: {
+              type: Object,
+              value: () => {
+                return {
+                  formatTime: (time, stepSegment) => {
+                    function pad(num = 0, fmt = '00') {
+                      return (fmt + num).substr((fmt + num).length - fmt.length);
+                    }
+
+                    // Always display hour and minute
+                    let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
+                    // Adding second and millisecond depends on resolution
+                    stepSegment >= 3 && (timeString += `:${pad(time.seconds)}`);
+                    stepSegment == 4 && (timeString += `.${pad(time.milliseconds, '000')}`);
+                    return timeString;
+                  },
+                  parseTime: text => {
+                    // Parsing with RegExp to ensure correct format
+                    const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
+                    const MATCH_MINUTES = '(\\d|[0-5]\\d)';
+                    const MATCH_SECONDS = MATCH_MINUTES;
+                    const MATCH_MILLISECONDS = '(\\d{1,3})';
+                    const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
+                    const parts = re.exec(text);
+                    if (!parts) {
+                      return;
+                    }
+                    return {hours: parts[1], minutes: parts[2] || '00', seconds: parts[3] || '00', milliseconds: parts[4] || '000'}
+                  }
+                };
+              }
+            }
+          }
         }
 
         static get observers() {
@@ -165,7 +203,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 // we only pick items with minute resolution
                 label: `${this.__pad(hour)}:${this.__pad(min)}`,
                 // but we set value with step defined resolution
-                value: this.__formatTime([hour, min])
+                value: this.i18n.formatTime({hours: hour, minutes: min}, this._stepSegment)
               });
             }
           }
@@ -173,20 +211,29 @@ This program is available under Apache License Version 2.0, available at https:/
           return generatedlist;
         }
 
-        __valueChanged(value, oldValue) {
-          this.__setValue(value);
+        _valueChanged(value) {
+          this._setValue(value);
         }
 
         __onChange(e) {
           this.__setValue(this.__inputElement.value);
         }
 
-        __setValue(checkedValue) {
-          const newValue = this.__formatTime(this.__parseTime(checkedValue));
+        _setValue(checkedValue) {
+          if (this.i18n.formatTime === undefined) {
+            return;
+          }
+
+          const timeObject = this.i18n.parseTime && this.i18n.parseTime(checkedValue);
+          const newValue = timeObject && this.i18n.formatTime(timeObject, this._stepSegment) && this._formatTime(timeObject);
           if (newValue) {
-            this.value = this.__inputElement.value = this.__previousValue = newValue;
+            this.value = this._previousValue = this._formatTime(timeObject);
           } else {
-            this.value = this.__inputElement.value = this.__previousValue || '';
+            this.value = this._previousValue;
+          }
+
+          if (this.value && this._formatTime(this.i18n.parseTime(this._dropdownElement.value)) !== this.value) {
+            this._dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
           }
         }
 
@@ -206,49 +253,26 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _parseTime(str) {
-          if (this.i18n && this.i18n.parseTime) {
-            return this.i18n.parseTime(str);
-          }
-
-          // Parsing with RegExp to ensure correct format
-          const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
-          const MATCH_MINUTES = '(\\d|[0-5]\\d)';
-          const MATCH_SECONDS = MATCH_MINUTES;
-          const MATCH_MILLISECONDS = '(\\d{1,3})';
-          const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
-          const parts = re.exec(str);
-          if (parts) {
-            if (this.__stepSegment) {
-              return parts.slice(1, this.__stepSegment + 1);
-            }
-          }
-        }
-
-        // pad a number with leading zeros
-        __pad(num = 0, fmt = '00') {
-          return (fmt + num).substr((fmt + num).length - fmt.length);
-        }
-
         _formatTime(time) {
-          if (this.i18n && this.i18n.formatTime) {
-            return this.i18n.formatTime(time);
-          }
-
           if (time) {
-            const [hour, min, sec, ms] = time;
             // Always display hour and minute
-            let ret = `${this.__pad(hour)}:${this.__pad(min)}`;
+            let ret = `${this._pad(time.hours)}:${this._pad(time.minutes)}`;
             // Adding second and millisecond depends on resolution
-            this.__stepSegment >= 3 && (ret += `:${this.__pad(sec)}`);
-            this.__stepSegment == 4 && (ret += `.${this.__pad(ms, '000')}`);
+            this._stepSegment >= 3 && (ret += `:${this._pad(time.seconds)}`);
+            this._stepSegment == 4 && (ret += `.${this._pad(time.milliseconds, '000')}`);
             return ret;
           }
         }
 
-        __stepChanged(step, oldStep) {
-          this.__dropdownItems = this.__generateDropdownList();
-          this.__setValue(this.value);
+        // pad a number with leading zeros
+        _pad(num = 0, fmt = '00') {
+          return (fmt + num).substr((fmt + num).length - fmt.length);
+        }
+
+        _stepChanged(step, oldStep) {
+          this._dropdownItems = this._generateDropdownList();
+          this._setValue(this.value);
+          this._dropdownElement.selectedItem = this._dropdownItems.filter(item => item.value === this.value)[0];
         }
 
         get __inputElement() {
