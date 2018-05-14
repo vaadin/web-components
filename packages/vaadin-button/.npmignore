@@ -3,9 +3,13 @@ demo
 .eslintrc.json
 .stylelintrc
 .travis.yml
+.gemini.yml
+.gemini-ie.yml
+test/visual
 wct.conf.js
 analysis.json
 bower.json
 gulpfile.js
 index.html
 screenshot.png
+vaadin-directory-description.md
