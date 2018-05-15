@@ -4,13 +4,39 @@
 <dom-module id="material-date-picker-month-calendar" theme-for="vaadin-month-calendar">
   <template>
     <style include="vaadin-month-calendar-default-theme">
+      :host {
+        color: var(--material-body-text-color);
+        padding: 0 calc(50% / 8 - 0.5em + 8px);
+      }
+
+      :host([show-week-numbers]) {
+        padding: 0 calc(50% / 9 - 0.5em + 8px);
+      }
+
+      [part="month-header"] {
+        font-size: var(--material-h6-font-size);
+        margin-bottom: 12px;
+        line-height: 1;
+      }
+
+      [part="week-number"],
+      [part="weekday"] {
+        font-size: var(--material-caption-font-size);
+        line-height: 20px;
+        color: var(--material-secondary-text-color);
+      }
+
+      :host([disabled]),
+      :host([disabled]) [part="week-number"],
+      :host([disabled]) [part="weekday"] {
+        color: var(--material-disabled-text-color);
+      }
+
       [part="date"] {
         position: relative;
-        height: 40px;
         font-size: var(--material-body-font-size);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        line-height: 42px;
+        height: 40px;
       }
 
       [part="date"][today] {
@@ -21,28 +47,36 @@
         font-weight: 500;
       }
 
+      [part="date"]::after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 38px;
+        height: 38px;
+        box-sizing: border-box;
+        border-radius: 50%;
+        border: 2px solid transparent;
+      }
+
       [part="date"][focused]:not([disabled])::after,
       [part="date"]:active:not([disabled])::after {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: auto;
-        z-index: -1;
-        content: '';
-        height: 38px;
-        width: 38px;
-        border-radius: 100%;
-        opacity: 0.5;
+        opacity: 0.7;
         background-color: var(--material-primary-color);
+        border-color: var(--material-primary-color);
+      }
+
+      [part="date"][selected]::after {
+        border-color: currentColor;
+        z-index: -2;
       }
 
       [part="date"][focused]:not([disabled]),
-      :host([focused]) [part="date"][focused]:not([disabled]) {
+      [part="date"]:active:not([disabled]) {
         color: var(--material-primary-contrast-color);
         background-color: transparent;
-        box-sizing: border-box;
       }
 
       :host([focused]) [part="date"][focused]:not([disabled])::after {
@@ -56,26 +90,9 @@
         }
       }
 
-      [part="weekday"] {
-        color: var(--material-disabled-text-color);
-        font-size: var(--material-caption-font-size);
-        padding: 0;
-        opacity: 1;
-      }
-
       [part="week-number"] {
+        line-height: 44px;
         height: 40px;
-        font-size: var(--material-caption-font-size);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--material-disabled-text-color);
-        opacity: 1;
-      }
-
-      [part="month-header"] {
-        font-size: var(--material-subhead-font-size);
-        font-weight: 500;
       }
     </style>
   </template>
