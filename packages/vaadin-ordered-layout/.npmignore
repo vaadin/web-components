@@ -5,6 +5,7 @@ demo
 .travis.yml
 .gemini.yml
 .gemini-ie-ff.yml
+test/visual
 wct.conf.js
 analysis.json
 bower.json
