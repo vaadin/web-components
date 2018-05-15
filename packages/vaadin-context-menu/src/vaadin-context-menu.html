@@ -19,6 +19,19 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-start;
       }
 
+      :host(.reset-position),
+      :host(.reset-position) [part="overlay"]{
+        top: 0px !important;
+        left: 0px !important;
+        right: auto !important;
+        bottom: auto !important;
+        overflow: visible !important;
+      }
+
+      [part="overlay"] {
+        overflow: auto;
+      }
+
       [part="content"] {
         background-color: #fff;
       }
@@ -419,14 +432,49 @@ This program is available under Apache License Version 2.0, available at https:/
               e.stopPropagation();
 
               this.$.overlay.opened = true;
-
-              this.$.overlay.style.left = this._getEventCoordinate(e, 'x') + 'px';
-              const top = this._getEventCoordinate(e, 'y');
-              this.$.overlay.style.top = top + 'px';
-
               this._setOpened(true);
+              this._setOverlayPosition(e);
             }
           }
+        }
+
+        _setOverlayPosition(e) {
+          // Position in phone is set by CSS
+          if (this._phone) {
+            return;
+          }
+
+          // Async needed because overlay should be full rendered before measuring
+          Polymer.Async.microTask.run(() => {
+            const overlay = this.$.overlay;
+            const viewHeight = document.documentElement.clientHeight;
+            const viewWidth = document.documentElement.clientWidth;
+            const x = this._getEventCoordinate(e, 'x');
+            const y = this._getEventCoordinate(e, 'y');
+
+            // Temporary reset styles to correctly get overlay dimensions
+            overlay.classList.add('reset-position')
+            const rect = overlay.$.overlay.getClientRects()[0];
+            overlay.classList.remove('reset-position')
+
+            const style = overlay.style;
+            if (x < viewWidth / 2 || x + rect.width < viewWidth) {
+              style.left = x + 'px';
+              style.maxWidth = (viewWidth - x) + 'px';
+            } else {
+              style.right = (viewWidth - x) + 'px';
+              style.left = 'auto';
+              style.maxWidth = x + 'px';
+            }
+            if (y < viewHeight / 2 || y + rect.height < viewHeight) {
+              style.top = y + 'px';
+              style.maxHeight = (viewHeight - y) + 'px';
+            } else {
+              style.bottom = (viewHeight - y) + 'px';
+              style.top = 'auto';
+              style.maxHeight = y + 'px';
+            }
+          });
         }
 
         _getEventCoordinate(event, coord) {
