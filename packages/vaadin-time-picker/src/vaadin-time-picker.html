@@ -103,21 +103,16 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * The object used to create custom parser and formatter for this component.
-             * To change the default functions, replace the entire
-             * _i18n_ object or just the function you want to modify.
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * _i18n_ object or just the property you want to modify.
              *
              * The object has the following JSON structure:
 
                 {
                   // A function to format given `Object` as
                   // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
-                  // `stepSegment` parameter reflect the current resolution:
-                  // 1 - `hh`
-                  // 2 - `hh:mm`
-                  // 3 - `hh:mm:ss`
-                  // 4 - `hh:mm:ss.fff`
-                  formatTime: (time, stepSegment) => {
+                  formatTime: (time) => {
                     // returns a string representation of the given
                     // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
                   },
@@ -135,16 +130,19 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Object,
               value: () => {
                 return {
-                  formatTime: (time, stepSegment) => {
+                  formatTime: (time) => {
+                    if (!time) {
+                      return;
+                    }
+
                     function pad(num = 0, fmt = '00') {
                       return (fmt + num).substr((fmt + num).length - fmt.length);
                     }
-
                     // Always display hour and minute
                     let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
                     // Adding second and millisecond depends on resolution
-                    stepSegment >= 3 && (timeString += `:${pad(time.seconds)}`);
-                    stepSegment == 4 && (timeString += `.${pad(time.milliseconds, '000')}`);
+                    (time.seconds !== undefined) && (timeString += `:${pad(time.seconds)}`);
+                    (time.milliseconds !== undefined) && (timeString += `.${pad(time.milliseconds, '000')}`);
                     return timeString;
                   },
                   parseTime: text => {
@@ -158,7 +156,7 @@ This program is available under Apache License Version 2.0, available at https:/
                     if (!parts) {
                       return;
                     }
-                    return {hours: parts[1], minutes: parts[2] || '00', seconds: parts[3] || '00', milliseconds: parts[4] || '000'};
+                    return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                   }
                 };
               }
@@ -202,9 +200,9 @@ This program is available under Apache License Version 2.0, available at https:/
             for (let min = 0; min < 60; min += minIncr) {
               generatedlist.push({
                 // we only pick items with minute resolution
-                label: `${this.__pad(hour)}:${this.__pad(min)}`,
+                label: this.i18n.formatTime(this._validateTime({hours: hour, minutes: min})),
                 // but we set value with step defined resolution
-                value: this.i18n.formatTime({hours: hour, minutes: min}, this._stepSegment)
+                value: this.i18n.formatTime(this._validateTime({hours: hour, minutes: min}))
               });
             }
           }
@@ -221,24 +219,42 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setValue(checkedValue) {
-          if (this.i18n.formatTime === undefined) {
-            return;
-          }
-
-          const timeObject = this.i18n.parseTime && this.i18n.parseTime(checkedValue);
-          const newValue = timeObject && this.i18n.formatTime(timeObject, this._stepSegment) && this._formatTime(timeObject);
+          const timeObject = this.i18n.parseTime && this._validateTime(this.i18n.parseTime(checkedValue));
+          const newValue = timeObject && this.i18n.formatTime(timeObject) && this._formatTime(timeObject);
           if (newValue) {
             this.value = this._previousValue = this._formatTime(timeObject);
           } else {
-            this.value = this._previousValue;
+            this.value = this._dropdownElement.value = this._previousValue;
           }
 
-          if (this.value && this._formatTime(this.i18n.parseTime(this._dropdownElement.value)) !== this.value) {
+          const dropdownValue = this._dropdownElement.value;
+          if ((this.value && this._formatTime(this.i18n.parseTime(dropdownValue)) !== this.value) ||
+               this.i18n.formatTime(this.i18n.parseTime(dropdownValue)) != dropdownValue) {
             this._dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
           }
         }
 
-        get __stepSegment() {
+        _validateTime(timeObject) {
+          if (!timeObject) {
+            return;
+          }
+
+          timeObject.hours = parseInt(timeObject.hours);
+          timeObject.minutes = parseInt(timeObject.minutes || 0);
+          timeObject.seconds = (this._stepSegment >= 3 && timeObject.seconds === undefined) ? 0 : parseInt(timeObject.seconds);
+          timeObject.milliseconds = (this._stepSegment >= 3 && timeObject.milliseconds === undefined) ? 0 : parseInt(timeObject.milliseconds);
+
+          if (this._stepSegment < 4) {
+            timeObject.milliseconds = undefined;
+          }
+          if (this._stepSegment < 3) {
+            timeObject.seconds = undefined;
+          }
+
+          return timeObject;
+        }
+
+        get _stepSegment() {
           if (this.step % 3600 === 0) {
             // Accept hours
             return 1;
@@ -257,11 +273,11 @@ This program is available under Apache License Version 2.0, available at https:/
         _formatTime(time) {
           if (time) {
             // Always display hour and minute
-            let ret = `${this._pad(time.hours)}:${this._pad(time.minutes)}`;
+            let timeString = `${this._pad(time.hours)}:${this._pad(time.minutes)}`;
             // Adding second and millisecond depends on resolution
-            this._stepSegment >= 3 && (ret += `:${this._pad(time.seconds)}`);
-            this._stepSegment == 4 && (ret += `.${this._pad(time.milliseconds, '000')}`);
-            return ret;
+            (time.seconds !== undefined) && (timeString += `:${this._pad(time.seconds)}`);
+            (time.milliseconds !== undefined) && (timeString += `.${this._pad(time.milliseconds, '000')}`);
+            return timeString;
           }
         }
 
