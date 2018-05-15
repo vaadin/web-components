@@ -220,15 +220,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _setValue(checkedValue) {
           const timeObject = this._validateTime(this.i18n.parseTime(checkedValue));
-          const newValue = timeObject && this.i18n.formatTime(timeObject) && this._formatTime(timeObject);
+          const newValue = timeObject && this.i18n.formatTime(timeObject) && this._formatISO(timeObject);
           if (newValue) {
-            this.value = this._previousValue = this._formatTime(timeObject);
+            this.value = this._previousValue = this._formatISO(timeObject);
           } else {
             this.value = this._dropdownElement.value = this._previousValue;
           }
 
           const dropdownValue = this._dropdownElement.value;
-          if ((this.value && this._formatTime(this.i18n.parseTime(dropdownValue)) !== this.value) ||
+          if ((this.value && this._formatISO(this.i18n.parseTime(dropdownValue)) !== this.value) ||
                this.i18n.formatTime(this.i18n.parseTime(dropdownValue)) != dropdownValue) {
             this._dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
           }
@@ -270,7 +270,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _formatTime(time) {
+        _formatISO(time) {
           if (time) {
             // Always display hour and minute
             let timeString = `${this._pad(time.hours)}:${this._pad(time.minutes)}`;
