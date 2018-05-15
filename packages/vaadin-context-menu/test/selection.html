@@ -41,7 +41,7 @@
         describe('selection', () => {
 
           it('should close on item tap', done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
               const listBox = menu.$.overlay.content.querySelector('#menu');
               Polymer.RenderStatus.afterNextRender(listBox, () => {
                 MockInteractions.tap(listBox.items[0]);
@@ -54,7 +54,7 @@
           });
 
           it('should close on keyboard selection', done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
               setTimeout(() => {
                 listenOnce(menu, 'opened-changed', () => {
                   done();
@@ -69,7 +69,7 @@
           });
 
           it('should focus the child element', done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
               Polymer.Async.timeOut.run(() => {
                 const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
                 expect(document.activeElement).to.eql(item);
@@ -81,7 +81,7 @@
           });
 
           it('should focus the child element on `contextmenu` event', done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(menu.$.overlay, 'vaadin-overlay-open', () => {
               Polymer.Async.timeOut.run(() => {
                 const item = menu.$.overlay.content.querySelector('#menu vaadin-item');
                 expect(document.activeElement).to.eql(item);
