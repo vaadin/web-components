@@ -1,0 +1,84 @@
+<link rel="import" href="color.html">
+<link rel="import" href="typography.html">
+
+<dom-module id="material-date-picker-month-calendar" theme-for="vaadin-month-calendar">
+  <template>
+    <style include="vaadin-month-calendar-default-theme">
+      [part="date"] {
+        position: relative;
+        height: 40px;
+        font-size: var(--material-body-font-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="date"][today] {
+        color: var(--material-primary-text-color);
+      }
+
+      [part="date"][selected] {
+        font-weight: 500;
+      }
+
+      [part="date"][focused]:not([disabled])::after,
+      [part="date"]:active:not([disabled])::after {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        z-index: -1;
+        content: '';
+        height: 38px;
+        width: 38px;
+        border-radius: 100%;
+        opacity: 0.5;
+        background-color: var(--material-primary-color);
+      }
+
+      [part="date"][focused]:not([disabled]),
+      :host([focused]) [part="date"][focused]:not([disabled]) {
+        color: var(--material-primary-contrast-color);
+        background-color: transparent;
+        box-sizing: border-box;
+      }
+
+      :host([focused]) [part="date"][focused]:not([disabled])::after {
+        opacity: 1;
+      }
+
+      /* Hide for touch devices */
+      @media not all and (hover: hover) {
+        [part="date"]:active:not([disabled])::after {
+          opacity: 0;
+        }
+      }
+
+      [part="weekday"] {
+        color: var(--material-disabled-text-color);
+        font-size: var(--material-caption-font-size);
+        padding: 0;
+        opacity: 1;
+      }
+
+      [part="week-number"] {
+        height: 40px;
+        font-size: var(--material-caption-font-size);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--material-disabled-text-color);
+        opacity: 1;
+      }
+
+      [part="month-header"] {
+        font-size: var(--material-subhead-font-size);
+        font-weight: 500;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../vaadin-date-picker/src/vaadin-month-calendar.html">

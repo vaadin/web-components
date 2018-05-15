@@ -1,0 +1,139 @@
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+<link rel="import" href="typography.html">
+
+<link rel="import" href="vaadin-button.html">
+
+<dom-module id="material-date-picker-overlay-content" theme-for="vaadin-date-picker-overlay-content">
+  <template>
+    <style>
+      :host {
+        border-radius: 0 0 3px 3px;
+        padding: 4px;
+        right: auto;
+        max-height: 500px;
+        background: var(--_material-date-picker-overlay-background-color, var(--material-background-color));
+      }
+
+      :host(:not([fullscreen])) {
+        box-shadow:
+          0 8px 10px 1px rgba(0, 0, 0, 0.14),
+          0 3px 14px 2px rgba(0, 0, 0, 0.12),
+          0 5px 5px -3px rgba(0, 0, 0, 0.4);
+
+        /* tweak the margin-top set by iron-dropdown. */
+        transform: translateY(-2px);
+      }
+
+      [part="years"] {
+        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        z-index: 1;
+      }
+
+      [part="years"]::before {
+        border: 0;
+        width: 12px;
+        height: 12px;
+        transform: translateX(-50%) rotate(-45deg);
+        background: var(--_material-date-picker-overlay-background-color, var(--material-background-color));
+        box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
+      }
+
+      [part="years"]::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(.25turn, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0) 4px);
+      }
+
+      [part="months"] {
+        --vaadin-infinite-scroller-item-height: 300px;
+      }
+
+      [part="toolbar"] {
+        padding: 8px;
+        color: var(--material-body-text-color);
+        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        border-top: 1px solid var(--material-divider-color);
+      }
+
+      [part="overlay-header"] {
+        color: var(--material-body-text-color);
+        font-size: var(--material-subhead-font-size);
+        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        border-bottom: 2px solid var(--material-primary-color);
+        padding: 8px;
+      }
+
+      [part="overlay-header"]:not([desktop]) {
+        padding-bottom: 8px;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        color: var(--material-disabled-text-color);
+        line-height: 24px;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+        margin-left: 16px;
+      }
+
+      [part="clear-button"]:hover,
+      [part="toggle-button"]:hover {
+        color: inherit;
+      }
+
+      :host([years-visible]) [part="years"]::after {
+        top: calc(20px + 16px);
+        height: calc(100% - 20px - 16px);
+      }
+
+      [part="years-toggle-button"]::before {
+        display: inline;
+        vertical-align: middle;
+      }
+
+      [part="years-toggle-button"] {
+        position: absolute;
+        height: 20px;
+        line-height: 20px;
+        font-size: var(--material-body-font-size);
+        width: 60px;
+        z-index: 1;
+        top: calc(100% + 2px);
+        right: 0;
+        padding: 8px;
+        background: var(--_material-date-picker-dark-secondary-background-color, var(--material-secondary-background-color));
+        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
+        border-bottom-left-radius: 3px;
+      }
+
+      [part="year-number"] {
+        font-size: var(--material-small-font-size);
+      }
+
+      [part="year-number"] {
+        color: var(--material-secondary-text-color);
+      }
+
+      [part="year-separator"] {
+        color: var(--material-disabled-text-color);
+      }
+
+      [part="month"][disabled] {
+        opacity: 0.3;
+      }
+
+      [part="today-button"],
+      [part="cancel-button"] {
+        margin: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker-overlay-content.html">

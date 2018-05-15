@@ -1,0 +1,31 @@
+<link rel="import" href="./mixins/overlay.html">
+
+<dom-module id="material-date-picker-overlay" theme-for="vaadin-date-picker-overlay">
+  <template>
+    <style>
+      :host([fullscreen]) {
+        top: 0;
+        right: 0;
+        bottom: var(--vaadin-overlay-viewport-bottom);
+        left: 0;
+        align-items: stretch;
+        justify-content: stretch;
+      }
+
+      [part="overlay"] {
+        width: 360px;
+        padding: 0;
+      }
+
+      :host([fullscreen]) [part="overlay"] {
+        width: auto;
+      }
+
+      :host(:not([fullscreen])[show-week-numbers]) [part="overlay"] {
+        width: 396px;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker-overlay.html">
