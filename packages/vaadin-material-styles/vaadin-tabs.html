@@ -1,6 +1,5 @@
 <link rel="import" href="font-icons.html">
 <link rel="import" href="color.html">
-<link rel="import" href="typography.html">
 
 <link rel="import" href="../vaadin-tabs/src/vaadin-tabs.html">
 <link rel="import" href="vaadin-tab.html">
@@ -13,46 +12,35 @@
       }
 
       :host {
-        box-shadow: inset 0 -1px 0 0 var(--material-background-color);
-        position: relative;
         min-height: 48px;
         display: flex;
       }
 
-      :host(:not([theme~="fixed"])) [part="tabs"] ::slotted(vaadin-tab) {
-        justify-content: center;
-        margin: 0;
-        min-width: 160px;
-        max-width: 264px;
+      /* Hide scroll buttons when no needed, and on touch devices */
+
+      :host(:not([overflow])) [part="forward-button"],
+      :host(:not([overflow])) [part="back-button"] {
+        display: none;
       }
 
-      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab) {
-        justify-content: center;
-        margin: 0;
-        flex: 1;
-        min-width: 72px;
-        max-width: 264px;
-      }
-
-      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab:first-child) {
-        margin-left: auto;
-      }
-
-      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab:last-child) {
-        margin-right: auto;
+      @media (pointer: coarse) {
+        [part="back-button"],
+        [part="forward-button"] {
+          display: none !important;
+        }
       }
 
       [part="forward-button"],
       [part="back-button"] {
-        position: absolute;
-        z-index: 1;
-        font-family: valo-icons;
+        font-family: material-icons;
         color: var(--material-secondary-text-color);
-        font-size: 1.5em;
+        font-size: 24px;
         display: flex;
+        flex-shrink: 0;
+        flex-grow: 0;
         align-items: center;
         justify-content: center;
-        width: 1.5em;
+        width: 48px;
         height: 100%;
         transition: 0.2s opacity;
         top: 0;
@@ -68,70 +56,19 @@
       }
 
       [part="forward-button"]::after {
-        content: "\e906";
+        content: var(--material-icons-chevron-right);
       }
 
       [part="back-button"]::after {
-        content: "\e903";
+        content: var(--material-icons-chevron-left);
       }
 
-      :host([theme="fixed"]) [part="forward-button"] {
-        display: none;
+      :host([overflow]) [part="tabs"]::after {
+        content: "";
+        display: flex;
+        flex-shrink: 0;
+        width: 32px;
       }
-
-      :host([theme="fixed"]) [part="back-button"] {
-        display: none;
-      }
-
-      /* Tabs overflow */
-
-      [part="tabs"] {
-        --_material-tabs-overflow-mask-image: none;
-        -webkit-mask-image: var(--_material-tabs-overflow-mask-image);
-        mask-image: var(--_material-tabs-overflow-mask-image);
-        /* For IE11 */
-        min-height: 44px;
-      }
-
-      /* Horizontal tabs overflow */
-
-      /* Both ends overflowing */
-      :host(:not([theme="fixed"])[overflow~="start"][overflow~="end"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em, #000 calc(100% - 4em), transparent calc(100% - 2em));
-      }
-
-      /* End overflowing */
-      :host(:not([theme="fixed"])[overflow~="end"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 4em), transparent calc(100% - 2em));
-      }
-
-      /* Start overflowing */
-      :host(:not([theme="fixed"])[overflow~="start"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent 2em, #000 4em);
-      }
-
-      :host ::slotted(:not(vaadin-tab)) {
-        margin-left: 16px;
-      }
-
-      /* No-button theme */
-      :host([theme~="hide-scroll-buttons"]) [part="back-button"],
-      :host([theme~="hide-scroll-buttons"]) [part="forward-button"] {
-        display: none;
-      }
-
-      :host([theme~="hide-scroll-buttons"][overflow~="start"][overflow~="end"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em, #000 calc(100% - 2em), transparent 100%);
-      }
-
-      :host([theme~="hide-scroll-buttons"][overflow~="end"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, #000 calc(100% - 2em), transparent 100%);
-      }
-
-      :host([theme~="hide-scroll-buttons"][overflow~="start"]) [part="tabs"] {
-        --_material-tabs-overflow-mask-image: linear-gradient(90deg, transparent, #000 2em);
-      }
-
     </style>
   </template>
 </dom-module>

@@ -7,89 +7,103 @@
   <template>
     <style>
       :host {
-        box-sizing: border-box;
-        padding: 4px 12px;
-        font-family: var(--material-font-family);
-        font-size: var(--material-body-font-size);
-        text-transform: uppercase;
-        word-wrap: break-word;
-        overflow: hidden;
-        line-height: 1;
-        font-weight: 500;
-        opacity: 1;
-        color: var(--material-secondary-text-color);
-        transition: 0.2s color, 0.2s transform;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
         text-align: center;
+        min-width: 90px;
+        padding: 12px 16px;
+        box-sizing: border-box;
+        font-family: var(--material-font-family);
+        font-size: var(--material-button-font-size);
+        text-transform: uppercase;
+        white-space: nowrap;
+        line-height: 1.2;
+        font-weight: 500;
+        color: var(--material-secondary-text-color);
+        overflow: hidden;
         position: relative;
         cursor: pointer;
-        transform-origin: 50% 100%;
         outline: none;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        transition: box-shadow 0.3s;
       }
 
-      :host(:hover),
-      :host(:focus),
-      :host([focus-ring]) {
-        color: var(--material-body-text-color);
-        background-color: var(--material-divider-color);
+      :host::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: var(--material-primary-color);
+        opacity: 0;
+        transition: opacity 0.1s linear;
       }
 
-      :host([selected]:not(:focus)) {
-        color: var(--material-body-text-color);
-        background-color: transparent;
-        transition: 0.6s color;
+      :host(:hover)::before {
+        opacity: 0.04;
       }
 
-      :host([active]:not([selected])) {
-        color: var(--material-body-text-color);
-        background-color: var(--material-background-color);
-        transition: 0.1s background-color cubic-bezier(0.4, 0, 1, 1);
+      :host([focus-ring])::before {
+        opacity: 0.1;
       }
 
-      :host::before,
+      :host([selected]) {
+        color: var(--material-primary-text-color);
+        box-shadow: inset 0 -2px 0 0 var(--material-primary-color);
+      }
+
+      /* Ripple */
+
       :host::after {
         content: "";
         position: absolute;
-        display: var(--_material-tab-marker-display, block);
-        bottom: 0;
+        top: 50%;
         left: 50%;
-        width: 100%;
-        max-width: 100%;
-        height: 2px;
-        max-height: 80%;
-        background-color: var(--material-background-color);
-        border-radius: 0;
-        transform: translateX(-50%) scale(0);
-        transform-origin: 50% 100%;
-        transition: 0.14s transform cubic-bezier(.12, .32, .54, 1);
-        will-change: transform;
-      }
-
-      :host([selected])::before,
-      :host([selected])::after {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%) scale(0);
         background-color: var(--material-primary-color);
+        opacity: 0;
+        transition: transform 0s cubic-bezier(.215, .61, .355, 1), opacity 0s linear;
+        transition-delay: 0s, 0s;
       }
 
-      :host([theme~="icon-on-top"]) {
-        height: 72px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        padding: 0 1em;
+      :host([focused])::after {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+        transition-delay: 0s, 0s;
+        transition-duration: 0.6s, 0.6s;
       }
 
-      :host([theme~="icon-on-top"]) ::slotted(iron-icon) {
-        margin: 0 0 8px;
+      :host([active]:not([selected]))::after {
+        opacity: 0.2;
+        transition-duration: 0.6s, 0s;
       }
 
       /* Disabled */
-
       :host([disabled]) {
         pointer-events: none;
         opacity: 1;
         color: var(--material-disabled-text-color);
+      }
+
+      /* Touch device adjustments */
+      @media (pointer: coarse) {
+        :host(:hover)::before {
+          display: none;
+        }
+      }
+
+      /* Small space between icon and label */
+      ::slotted(iron-icon) {
+        margin-bottom: 8px;
       }
     </style>
   </template>
