@@ -8,20 +8,8 @@
   <template>
     <style>
       :host {
-        border-radius: 0 0 3px 3px;
-        padding: 4px;
         right: auto;
         background: var(--_material-date-picker-overlay-background-color, var(--material-background-color));
-      }
-
-      :host(:not([fullscreen])) {
-        box-shadow:
-          0 8px 10px 1px rgba(0, 0, 0, 0.14),
-          0 3px 14px 2px rgba(0, 0, 0, 0.12),
-          0 5px 5px -3px rgba(0, 0, 0, 0.4);
-
-        /* tweak the margin-top set by iron-dropdown. */
-        transform: translateY(-2px);
       }
 
       [part="years"] {
