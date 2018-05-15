@@ -19,17 +19,12 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-start;
       }
 
-      :host(.reset-position),
-      :host(.reset-position) [part="overlay"]{
-        top: 0px !important;
-        left: 0px !important;
-        right: auto !important;
-        bottom: auto !important;
-        overflow: visible !important;
+      :host([right-aligned]) {
+        align-items: flex-end;
       }
 
-      [part="overlay"] {
-        overflow: auto;
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
       }
 
       [part="content"] {
@@ -377,16 +372,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened) {
-            if (!this._instance) {
-              this.$.overlay.template = this.querySelector('template');
-              this._instance = this.$.overlay._instance;
-            }
             document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           } else {
             document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           }
-
-          this.$.overlay.opened = opened;
         }
 
         _contextChanged(context, instance) {
@@ -401,6 +390,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Closes the overlay.
          */
         close() {
+          this.$.overlay.opened = false;
           this._setOpened(false);
         }
 
@@ -422,6 +412,11 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         open(e) {
           if (e && !this.opened) {
+            if (!this._instance) {
+              this.$.overlay.template = this.querySelector('template');
+              this._instance = this.$.overlay._instance;
+            }
+
             this._context = {
               detail: e.detail,
               target: this._contextTarget(e)
@@ -432,59 +427,62 @@ This program is available under Apache License Version 2.0, available at https:/
               e.stopPropagation();
 
               this.$.overlay.opened = true;
+
+              Polymer.RenderStatus.afterNextRender(this.$.overlay, () => {
+                if (!this._phone) { // Position in phone is set by CSS
+                  this.__alignOverlayPosition(e);
+                }
+              });
+
               this._setOpened(true);
-              this._setOverlayPosition(e);
             }
           }
         }
 
-        _setOverlayPosition(e) {
-          // Position in phone is set by CSS
-          if (this._phone) {
-            return;
+        __alignOverlayPosition(e) {
+          const overlay = this.$.overlay;
+          const style = overlay.style;
+
+          // Reset all properties before measuring
+          ['top', 'right', 'bottom', 'left'].forEach(prop => style.removeProperty(prop));
+          ['right-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
+
+          // Measure actual overlay and content sizes
+          const overlayRect = overlay.getClientRects()[0];
+          const contentRect = overlay.$.overlay.getClientRects()[0];
+
+          const x = this.__getEventCoordinate(e, 'x');
+          const y = this.__getEventCoordinate(e, 'y');
+          // Top x and y values are imposed by content size and overlay limits.
+          const xMax = overlayRect.x + overlayRect.width - contentRect.width;
+          const yMax = overlayRect.y + overlayRect.height - contentRect.height;
+
+          // Select and move one of overlay corners to the event x/y position.
+          // Then flex-align the content against it.
+          const wdthVport = document.documentElement.clientWidth;
+          const hghtVport = document.documentElement.clientHeight;
+          if (x < wdthVport / 2 || x < xMax) {
+            style.left = x + 'px';
+          } else {
+            style.right = (wdthVport - x) + 'px';
+            overlay.setAttribute('right-aligned', '');
           }
-
-          // Async needed because overlay should be full rendered before measuring
-          Polymer.Async.microTask.run(() => {
-            const overlay = this.$.overlay;
-            const viewHeight = document.documentElement.clientHeight;
-            const viewWidth = document.documentElement.clientWidth;
-            const x = this._getEventCoordinate(e, 'x');
-            const y = this._getEventCoordinate(e, 'y');
-
-            // Temporary reset styles to correctly get overlay dimensions
-            overlay.classList.add('reset-position')
-            const rect = overlay.$.overlay.getClientRects()[0];
-            overlay.classList.remove('reset-position')
-
-            const style = overlay.style;
-            if (x < viewWidth / 2 || x + rect.width < viewWidth) {
-              style.left = x + 'px';
-              style.maxWidth = (viewWidth - x) + 'px';
-            } else {
-              style.right = (viewWidth - x) + 'px';
-              style.left = 'auto';
-              style.maxWidth = x + 'px';
-            }
-            if (y < viewHeight / 2 || y + rect.height < viewHeight) {
-              style.top = y + 'px';
-              style.maxHeight = (viewHeight - y) + 'px';
-            } else {
-              style.bottom = (viewHeight - y) + 'px';
-              style.top = 'auto';
-              style.maxHeight = y + 'px';
-            }
-          });
+          if (y < hghtVport / 2 || y < yMax) {
+            style.top = y + 'px';
+          } else {
+            style.bottom = (hghtVport - y) + 'px';
+            overlay.setAttribute('bottom-aligned', '');
+          }
         }
 
-        _getEventCoordinate(event, coord) {
+        __getEventCoordinate(event, coord) {
           if (event.detail instanceof Object) {
             if (event.detail[coord]) {
               // Polymer gesture events, get coordinate from detail
               return event.detail[coord];
             } else if (event.detail.sourceEvent) {
               // Unwrap detailed event
-              return this._getEventCoordinate(event.detail.sourceEvent, coord);
+              return this.__getEventCoordinate(event.detail.sourceEvent, coord);
             }
           } else {
             // Native mouse or touch event
