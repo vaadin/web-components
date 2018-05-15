@@ -13,14 +13,13 @@
       }
 
       [part="overlay"] {
-        width: 360px;
-        padding: 0;
         overflow: visible;
         -webkit-overflow-scrolling: auto;
       }
 
-      :host([fullscreen]) [part="overlay"] {
-        width: auto;
+      :host(:not([fullscreen])) [part="overlay"] {
+        width: 360px;
+        max-height: 500px;
       }
 
       :host(:not([fullscreen])[show-week-numbers]) [part="overlay"] {
