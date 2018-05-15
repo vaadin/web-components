@@ -93,6 +93,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-context-menu-overlay id="overlay"
         on-opened-changed="_onOverlayOpened"
+        on-vaadin-overlay-open="_onVaadinOverlayOpen"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]">
     </vaadin-context-menu-overlay>
@@ -306,20 +307,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
         }
 
+        // Runs before overlay is fully rendered
         _onOverlayOpened(e) {
-          if (e.detail.value === true) {
-            // wait for a timeOut before focusing the child element
-            // to allow overlay to position itself correctly first.
-            // Otherwise, the browser window will jump scroll.
-            Polymer.Async.timeOut.run(() => {
-              const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
-              if (child) {
-                child.focus();
-              }
-            });
+          this._setOpened(e.detail.value);
+        }
 
-          } else if (e.detail.value === false) {
-            this._setOpened(false);
+        // Runs after overlay is fully rendered
+        _onVaadinOverlayOpen(e) {
+          // Phone alignment is done in CSS
+          if (this.opened && !this._phone) {
+            this.__alignOverlayPosition();
+          }
+
+          const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
+          if (child) {
+            child.focus();
           }
         }
 
@@ -372,10 +374,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened) {
+            if (!this._instance) {
+              this.$.overlay.template = this.querySelector('template');
+              this._instance = this.$.overlay._instance;
+            }
             document.documentElement.addEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           } else {
             document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           }
+
+          // Has to be set after instance has been created
+          this.$.overlay.opened = opened;
         }
 
         _contextChanged(context, instance) {
@@ -390,7 +399,6 @@ This program is available under Apache License Version 2.0, available at https:/
          * Closes the overlay.
          */
         close() {
-          this.$.overlay.opened = false;
           this._setOpened(false);
         }
 
@@ -412,11 +420,6 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         open(e) {
           if (e && !this.opened) {
-            if (!this._instance) {
-              this.$.overlay.template = this.querySelector('template');
-              this._instance = this.$.overlay._instance;
-            }
-
             this._context = {
               detail: e.detail,
               target: this._contextTarget(e)
@@ -426,20 +429,15 @@ This program is available under Apache License Version 2.0, available at https:/
               this._preventDefault(e);
               e.stopPropagation();
 
-              this.$.overlay.opened = true;
-
-              Polymer.RenderStatus.afterNextRender(this.$.overlay, () => {
-                if (!this._phone) { // Position in phone is set by CSS
-                  this.__alignOverlayPosition(e);
-                }
-              });
-
+              // Used in alignment which is delayed until overlay is rendered
+              this.__x = this.__getEventCoordinate(e, 'x');
+              this.__y = this.__getEventCoordinate(e, 'y');
               this._setOpened(true);
             }
           }
         }
 
-        __alignOverlayPosition(e) {
+        __alignOverlayPosition() {
           const overlay = this.$.overlay;
           const style = overlay.style;
 
@@ -451,11 +449,11 @@ This program is available under Apache License Version 2.0, available at https:/
           const overlayRect = overlay.getClientRects()[0];
           const contentRect = overlay.$.overlay.getClientRects()[0];
 
-          const x = this.__getEventCoordinate(e, 'x');
-          const y = this.__getEventCoordinate(e, 'y');
           // Top x and y values are imposed by content size and overlay limits.
           const xMax = overlayRect.x + overlayRect.width - contentRect.width;
           const yMax = overlayRect.y + overlayRect.height - contentRect.height;
+          const x = this.__x || overlayRect.x;
+          const y = this.__y || overlayRect.y;
 
           // Select and move one of overlay corners to the event x/y position.
           // Then flex-align the content against it.
