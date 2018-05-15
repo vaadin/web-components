@@ -25,13 +25,13 @@
         color: var(--material-body-text-color);
         background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
         border-bottom: 2px solid var(--material-primary-color);
-        padding: 8px 8px 6px;
+        padding: 8px;
         box-shadow: var(--material-shadow-elevation-4dp);
       }
 
       /* FIXME(platosha): fix the core styles and remove this override. */
       [part="overlay-header"]:not([desktop]) {
-        padding-bottom: 6px;
+        padding-bottom: 8px;
       }
 
       [part="label"] {
@@ -52,7 +52,7 @@
       [part="clear-button"],
       [part="toggle-button"],
       [part="years-toggle-button"] {
-        padding: 4px 8px;
+        padding: 8px;
         color: var(--material-secondary-text-color);
       }
 
@@ -144,16 +144,27 @@
         margin: calc(0.5 * var(--vaadin-infinite-scroller-item-height) - 0.5 * 10px - 0.5 * 4px) auto;
       }
 
+      /* Bottom Bar */
+
       [part="toolbar"] {
-        padding: 8px;
-        color: var(--material-body-text-color);
-        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px 4px;
         border-top: 1px solid var(--material-divider-color);
+      }
+
+      [part="cancel-button"] {
+        order: 1;
+      }
+
+      [part="today-button"] {
+        order: 2;
       }
 
       [part="today-button"],
       [part="cancel-button"] {
-        margin: 0;
+        margin: 0 4px;
+        color: var(--material-primary-color);
       }
     </style>
   </template>
