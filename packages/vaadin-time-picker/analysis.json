@@ -1642,7 +1642,7 @@
             {
               "name": "value",
               "type": "String",
-              "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `HH:mm` (default)\n- `HH:mm:ss`\n- `HH:mm:ss.SSS`",
+              "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `hh:mm` (default)\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -1666,7 +1666,7 @@
             {
               "name": "step",
               "type": "number | null | undefined",
-              "description": "Specifies the number of valid intervals in a day or in an hour used for\nconfiguring the items displayed in the selection box.\n\nIt also configures the precission of the value string. By default\nthe component formats values as `HH:MM` but setting a step value\nlower than one minute or one second, format resolution changes to\n`HH:mm:ss` and `HH:mm:ss.SSS` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day or an hour.",
+              "description": "Specifies the number of valid intervals in a day or in an hour used for\nconfiguring the items displayed in the selection box.\n\nIt also configures the precission of the value string. By default\nthe component formats values as `hh:mm` but setting a step value\nlower than one minute or one second, format resolution changes to\n`hh:mm:ss` and `hh:mm:ss.fff` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day or an hour.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
@@ -1940,7 +1940,7 @@
           "attributes": [
             {
               "name": "value",
-              "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `HH:mm` (default)\n- `HH:mm:ss`\n- `HH:mm:ss.SSS`",
+              "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `hh:mm` (default)\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
               "sourceRange": {
                 "start": {
                   "line": 76,
@@ -1956,7 +1956,7 @@
             },
             {
               "name": "step",
-              "description": "Specifies the number of valid intervals in a day or in an hour used for\nconfiguring the items displayed in the selection box.\n\nIt also configures the precission of the value string. By default\nthe component formats values as `HH:MM` but setting a step value\nlower than one minute or one second, format resolution changes to\n`HH:mm:ss` and `HH:mm:ss.SSS` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day or an hour.",
+              "description": "Specifies the number of valid intervals in a day or in an hour used for\nconfiguring the items displayed in the selection box.\n\nIt also configures the precission of the value string. By default\nthe component formats values as `hh:mm` but setting a step value\nlower than one minute or one second, format resolution changes to\n`hh:mm:ss` and `hh:mm:ss.fff` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day or an hour.",
               "sourceRange": {
                 "start": {
                   "line": 95,

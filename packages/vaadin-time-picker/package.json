@@ -38,5 +38,6 @@
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.1.5"
-  }
+  },
+  "dependencies": {}
 }
