@@ -89,6 +89,14 @@
         timePicker.value = '13:00';
         expect(timePicker.value).to.be.equal('13:00');
       });
+
+      it('should autocomplete the value', () => {
+        timePicker.value = '8';
+        expect(timePicker.value).to.be.equal('08:00');
+        timePicker.step = 0.5;
+        timePicker.value = '3:1';
+        expect(timePicker.value).to.be.equal('03:01:00.000');
+      });
     });
   </script>
 </body>
