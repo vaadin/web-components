@@ -8,8 +8,92 @@
   <template>
     <style>
       :host {
-        right: auto;
-        background: var(--_material-date-picker-overlay-background-color, var(--material-background-color));
+        font-family: var(--material-font-family);
+        font-size: var(--material-body-font-size);
+        -webkit-text-size-adjust: 100%;
+        line-height: 1.4;
+      }
+
+      /* Fullscreen Toolbar */
+
+      [part="overlay-header"] {
+        display: flex;
+        align-items: baseline;
+        color: var(--material-body-text-color);
+        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
+        border-bottom: 2px solid var(--material-primary-color);
+        padding: 8px 8px 6px;
+      }
+
+      /* FIXME(platosha): fix the core styles and remove this override. */
+      [part="overlay-header"]:not([desktop]) {
+        padding-bottom: 6px;
+      }
+
+      [part="label"] {
+        padding: 0 8px;
+        flex: auto;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"] {
+        font-family: 'material-icons';
+        font-size: var(--material-icon-font-size);
+        line-height: 24px;
+        width: 24px;
+        height: 24px;
+        text-align: center;
+      }
+
+      [part="clear-button"],
+      [part="toggle-button"],
+      [part="years-toggle-button"] {
+        padding: 4px 8px;
+        color: var(--material-secondary-text-color);
+      }
+
+      [part="clear-button"]:hover,
+      [part="toggle-button"]:hover,
+      [part="years-toggle-button"]:hover {
+        color: inherit;
+      }
+
+      [part="clear-button"]::before {
+        content: var(--material-icons-clear);
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--material-icons-calendar);
+      }
+
+      [part="years-toggle-button"] {
+        position: static;
+        padding: 4px 8px;
+        font-size: var(--material-body-font-size);
+        font-weight: 500;
+        line-height: 24px;
+        letter-spacing: 0.05em;
+        color: var(--material-secondary-text-color);
+      }
+
+      [part="years-toggle-button"]::before {
+        content: '';
+        display: none;
+      }
+
+      [part="years-toggle-button"]::after {
+        content: var(--material-icons-play);
+        display: inline-block;
+        width: 24px;
+        font-family: 'material-icons';
+        font-size: var(--material-icon-font-size);
+        line-height: 24px;
+        text-align: center;
+        transition: transform 100ms cubic-bezier(0.4, 0.0, 0.2, 1);
+      }
+
+      :host([years-visible]) [part="years-toggle-button"]::after {
+        transform: rotate(90deg);
       }
 
       [part="years"] {
@@ -47,56 +131,9 @@
         border-top: 1px solid var(--material-divider-color);
       }
 
-      [part="overlay-header"] {
-        color: var(--material-body-text-color);
-        font-size: var(--material-subhead-font-size);
-        background: var(--_material-date-picker-overlay-toolbar-background-color, var(--material-secondary-background-color));
-        border-bottom: 2px solid var(--material-primary-color);
-        padding: 8px;
-      }
-
-      [part="overlay-header"]:not([desktop]) {
-        padding-bottom: 8px;
-      }
-
-      [part="clear-button"],
-      [part="toggle-button"] {
-        color: var(--material-disabled-text-color);
-        line-height: 24px;
-        width: 24px;
-        height: 24px;
-        text-align: center;
-        margin-left: 16px;
-      }
-
-      [part="clear-button"]:hover,
-      [part="toggle-button"]:hover {
-        color: inherit;
-      }
-
       :host([years-visible]) [part="years"]::after {
         top: calc(20px + 16px);
         height: calc(100% - 20px - 16px);
-      }
-
-      [part="years-toggle-button"]::before {
-        display: inline;
-        vertical-align: middle;
-      }
-
-      [part="years-toggle-button"] {
-        position: absolute;
-        height: 20px;
-        line-height: 20px;
-        font-size: var(--material-body-font-size);
-        width: 60px;
-        z-index: 1;
-        top: calc(100% + 2px);
-        right: 0;
-        padding: 8px;
-        background: var(--_material-date-picker-dark-secondary-background-color, var(--material-secondary-background-color));
-        box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.3);
-        border-bottom-left-radius: 3px;
       }
 
       [part="year-number"] {
