@@ -34,16 +34,11 @@
 
             timePicker.i18n = {
               formatTime: function(time) {
-                let hours, period = 'AM';
+                let period = 'AM', hours = time.hours;
                 if (parseInt(time.hours) > 12) {
                   period = 'PM';
                   hours = parseInt(time.hours) - 12;
-                } else if (parseInt(time.hours) < 10) {
-                  hours = `0${time.hours}`;
-                } else {
-                  hours = time.hours;
                 }
-
                 return `${hours}:${time.minutes ? time.minutes : '00'} ${period}`;
               },
               parseTime: function(text) {
