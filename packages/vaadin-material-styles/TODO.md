@@ -26,18 +26,6 @@
 
 Note: see `<vaadin-list-box>`, `<vaadin-item>`.
 
-### `<vaadin-date-picker>`
-
-In the overlay:
-
-- Expected: no spacing between the overlay edges and the scrollers. Actual: there is some padding inside.
-- Expected: uses material font styles. Actual: font family is inherited from the body.
-- Expected: centering for years, months, and week titles. Actual: have default alignment to the left.
-- Expected: vertical spacing for month and week titles in the overlay. Actual: no vertical spacing.
-- Actual: year scroller has gray text on gray background, contrast ratio: 4.50. Expected: higher contrast ratio, maybe inverse color theme (white on black or almost black).
-- Expected: dots between the years in the year scroller. Actual: no dots.
-- Expected: buttons toolbar drops a shadow on the scrollers and does not have a top border. Actual: no shadow, but there is a border.
-
 ### `<vaadin-dialog>`
 
 - There is a `.buttons` class exposed for arbitary users’s template. Should we scope it?
