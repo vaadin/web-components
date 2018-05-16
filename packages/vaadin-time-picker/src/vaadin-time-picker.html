@@ -240,22 +240,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __validateTime(timeObject) {
-          if (!timeObject) {
-            return;
+          if (timeObject) {
+            timeObject.hours = parseInt(timeObject.hours);
+            timeObject.minutes = parseInt(timeObject.minutes || 0);
+            timeObject.seconds = this.__stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
+            timeObject.milliseconds = this.__stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
           }
-
-          timeObject.hours = parseInt(timeObject.hours);
-          timeObject.minutes = parseInt(timeObject.minutes || 0);
-          timeObject.seconds = (this.__stepSegment >= 3 && timeObject.seconds === undefined) ? 0 : parseInt(timeObject.seconds);
-          timeObject.milliseconds = (this.__stepSegment >= 3 && timeObject.milliseconds === undefined) ? 0 : parseInt(timeObject.milliseconds);
-
-          if (this.__stepSegment < 4) {
-            timeObject.milliseconds = undefined;
-          }
-          if (this.__stepSegment < 3) {
-            timeObject.seconds = undefined;
-          }
-
           return timeObject;
         }
 
@@ -291,7 +281,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return (fmt + num).substr((fmt + num).length - fmt.length);
         }
 
-        __stepChanged(step, oldStep) {
+        __stepChanged(step) {
           this.__updateDropdownItems();
           this.__setValue(this.value);
           this.__dropdownElement.selectedItem = this.__dropdownItems.filter(item => item.value === this.value)[0];
