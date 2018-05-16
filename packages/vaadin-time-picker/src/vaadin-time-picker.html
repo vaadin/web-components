@@ -162,10 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             },
 
-            __previousValue: {
-              type: String,
-              value: ''
-            }
+            __previousValue: Object
           };
         }
 
@@ -177,8 +174,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this._boundOnChange = this.__onChange.bind(this);
-          this.__dropdownElement.addEventListener('change', this._boundOnChange);
+          this._boundOnChange = this.__onInputChange.bind(this);
+          this.__dropdownElement.addEventListener('value-changed', this._boundOnChange);
           this.__updateDropdownItems();
         }
 
@@ -215,28 +212,28 @@ This program is available under Apache License Version 2.0, available at https:/
           return generatedlist;
         }
 
-        __valueChanged(value) {
-          this.__setValue(value);
+        __valueChanged(value, oldValue) {
+          const parsedObj = this.__parseISO(value);
+          if (!parsedObj && value !== '') {
+            this.value = oldValue || '';
+            return;
+          }
+          parsedObj !== 'undefined' && this.__updateInputValue(parsedObj);
         }
 
-        __onChange(e) {
-          this.__setValue(this.__inputElement.value);
+        __onInputChange(e) {
+          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
+          this.__updateValue(parsedObj);
         }
 
-        __setValue(checkedValue) {
-          const timeObject = this.__validateTime(this.i18n.parseTime(checkedValue));
-          const newValue = timeObject && this.i18n.formatTime(timeObject) && this.__formatISO(timeObject);
-          if (newValue) {
-            this.value = this.__previousValue = newValue;
-          } else {
-            this.value = this.__dropdownElement.value = this.__previousValue;
-          }
+        __updateValue(obj) {
+          const timeString = this.__formatISO(this.__validateTime(obj));
+          this.value = timeString;
+        }
 
-          const dropdownValue = this.__dropdownElement.value;
-          if ((this.value && this.__formatISO(this.i18n.parseTime(dropdownValue)) !== this.value) ||
-               this.i18n.formatTime(this.i18n.parseTime(dropdownValue)) != dropdownValue) {
-            this.__dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
-          }
+        __updateInputValue(obj) {
+          const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
+          this.__dropdownElement.value = timeString;
         }
 
         __validateTime(timeObject) {
@@ -276,6 +273,14 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        __parseISO(text) {
+          const parts = /^(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?(?:\.(\d{1,3}))?$/.exec(text);
+          if (!parts) {
+            return;
+          }
+          return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
+        }
+
         // pad a number with leading zeros
         __pad(num = 0, fmt = '00') {
           return (fmt + num).substr((fmt + num).length - fmt.length);
@@ -283,7 +288,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __stepChanged(step) {
           this.__updateDropdownItems();
-          this.__setValue(this.value);
+          const parsedObj = this.__validateTime(this.__parseISO(this.value));
+          this.__updateValue(parsedObj);
         }
 
         get __inputElement() {

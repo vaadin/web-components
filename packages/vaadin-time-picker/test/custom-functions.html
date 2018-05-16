@@ -27,22 +27,29 @@
       it('should use custom parser if that exists', function() {
         timePicker.set('i18n.parseTime', sinon.stub().returns({hours: 12, minutes: 0, seconds: 0}));
         timePicker.value = '12';
-        // The default step is set to display hours and minutes, so first call should be for input value
-        expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12');
-        // Second call should be for parsed input value: hours and minutes (came from formatter)
-        expect(timePicker.i18n.parseTime.args[1][0]).to.be.equal('12:00');
+        expect(timePicker.i18n.parseTime.args[0][0]).to.be.equal('12:00');
         expect(timePicker.value).to.be.equal('12:00');
       });
 
       it('should use custom formatter if that exists', function() {
-        timePicker.set('i18n.formatTime', sinon.stub().returns('12:00 AM'));
+        timePicker.set('i18n.formatTime', sinon.stub().withArgs({hours: 12, minutes: 0}).returns('12:00 AM'));
         timePicker.value = '12';
         // Formatter is used for filling dropdown items, so we should check only the last call
         const lastCall = timePicker.i18n.formatTime.args.length - 1;
         expect(timePicker.i18n.formatTime.args[lastCall][0]).to.deep.equal(
-          {hours: '12', minutes: '00', seconds: undefined, milliseconds: undefined}
+          {hours: 12, minutes: 0, seconds: undefined, milliseconds: undefined}
         );
         expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
+      });
+
+      it('should accept custom timeformat', function() {
+        timePicker.set('i18n.formatTime', sinon.stub().returns('1200'));
+        const parseTime = sinon.stub();
+        parseTime.withArgs('1200').returns({hours: 12, minutes: 0});
+        timePicker.set('i18n.parseTime', parseTime);
+        timePicker.value = '12:00';
+        expect(timePicker.__inputElement.value).to.equal('1200');
+        expect(timePicker.value).to.equal('12:00');
       });
     });
   </script>
