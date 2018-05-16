@@ -262,7 +262,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _toggleChecked() {
           this.checked = !this.checked;
+          this.dispatchEvent(new CustomEvent('change', {composed: true, bubbles: true}));
         }
+
+        /**
+         * Fired when the user commits a value change.
+         *
+         * @event change
+         */
       }
 
       customElements.define(CheckboxElement.is, CheckboxElement);

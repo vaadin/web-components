@@ -233,6 +233,30 @@
       });
     });
 
+    describe('change-event', () => {
+      let vaadinCheckbox;
+
+      beforeEach(() => vaadinCheckbox = fixture('default'));
+
+      it('should not fire change-event when changing checked value programatically', () => {
+        vaadinCheckbox.addEventListener('change', () => {
+          throw new Error('Should not come here!');
+        });
+        vaadinCheckbox.checked = true;
+      });
+
+      it('should fire change-event when user checks the element', done => {
+        vaadinCheckbox.addEventListener('change', () => done());
+        vaadinCheckbox.click();
+      });
+
+      it('should fire change-event when user unchecks the element', done => {
+        vaadinCheckbox.checked = true;
+        vaadinCheckbox.addEventListener('change', () => done());
+        vaadinCheckbox.click();
+      });
+    });
+
     describe('iron-form-checkbox', () => {
       let boundNameCheckbox, attrNameCheckbox, form;
 
@@ -276,7 +300,6 @@
         attrNameCheckbox.checked = true;
         expect(form.serializeForm().attrcheckbox).to.equal('on');
       });
-
     });
   </script>
 </body>
