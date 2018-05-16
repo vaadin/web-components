@@ -84,9 +84,7 @@ gulp.task('icons', function() {
           formats: ['woff'],
           fontHeight: 2400,
           descent: 400,
-          fixedWidth: true,
           normalize: true,
-          centerHorizontally: true,
         }))
         .on('glyphs', function(glyphData, options) {
           // Store for later use
