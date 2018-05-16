@@ -18,12 +18,6 @@
       opacity: 0;
     }
   </style>
-  <script>
-    window.openDialog = function(id) {
-      var dialog = document.querySelector(id);
-      dialog.opened = true;
-    };
-  </script>
 </head>
 
 <body unresolved>
@@ -67,6 +61,12 @@
       </template>
     </nice-demo-snippet>
 
+    <script>
+        window.openDialog = function(id) {
+          var dialog = document.querySelector(id);
+          dialog.opened = true;
+        };
+      </script>
   </div>
 </body>
 </html>
