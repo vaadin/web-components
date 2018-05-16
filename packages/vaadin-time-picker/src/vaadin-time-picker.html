@@ -227,7 +227,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const timeObject = this.__validateTime(this.i18n.parseTime(checkedValue));
           const newValue = timeObject && this.i18n.formatTime(timeObject) && this.__formatISO(timeObject);
           if (newValue) {
-            this.value = this.__previousValue = this.__formatISO(timeObject);
+            this.value = this.__previousValue = newValue;
           } else {
             this.value = this.__dropdownElement.value = this.__previousValue;
           }
@@ -284,7 +284,6 @@ This program is available under Apache License Version 2.0, available at https:/
         __stepChanged(step) {
           this.__updateDropdownItems();
           this.__setValue(this.value);
-          this.__dropdownElement.selectedItem = this.__dropdownItems.filter(item => item.value === this.value)[0];
         }
 
         get __inputElement() {
