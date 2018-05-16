@@ -7,27 +7,13 @@
     <style include="material-overlay">
       [part="overlay"] {
         box-shadow: var(--material-shadow-elevation-24dp);
-        animation: 0.2s vaadin-dialog-enter cubic-bezier(.215, .61, .355, 1);
-        border-radius: 2px;
-        background-image: none;
-        margin: 24px 40px;
+        outline: none;
+        max-width: 560px;
+        min-width: 280px;
       }
 
       [part="content"] {
         padding: 24px;
-      }
-
-      [part="content"] .buttons {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: -16px;
-      }
-
-      @keyframes vaadin-dialog-enter {
-        0% {
-          opacity: 0;
-          transform: scale(0.8) translateY(10px);
-        }
       }
     </style>
   </template>
