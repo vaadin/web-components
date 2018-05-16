@@ -3,7 +3,7 @@
 
 <dom-module id="material-date-picker-month-calendar" theme-for="vaadin-month-calendar">
   <template>
-    <style include="vaadin-month-calendar-default-theme">
+    <style>
       :host {
         color: var(--material-body-text-color);
         padding: 0 calc(50% / 8 - 0.5em + 8px);
@@ -37,20 +37,13 @@
         font-size: var(--material-body-font-size);
         line-height: 42px;
         height: 40px;
-      }
-
-      [part="date"][today] {
-        color: var(--material-primary-text-color);
-      }
-
-      [part="date"][selected] {
-        font-weight: 500;
+        cursor: default;
       }
 
       [part="date"]::after {
         content: '';
         position: absolute;
-        z-index: -1;
+        z-index: -4;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -61,38 +54,64 @@
         border: 2px solid transparent;
       }
 
-      [part="date"][focused]:not([disabled])::after,
-      [part="date"]:active:not([disabled])::after {
-        opacity: 0.7;
-        background-color: var(--material-primary-color);
-        border-color: var(--material-primary-color);
+      [part="week-number"] {
+        line-height: 44px;
+        height: 40px;
       }
 
+      /* Today */
+
+      [part="date"][today] {
+        color: var(--material-primary-text-color);
+      }
+
+      /* Hover */
+
+      [part="date"]:not([disabled]):hover::after {
+        background-color: var(--material-secondary-background-color);
+        border-color: var(--material-secondary-background-color);
+        z-index: -3;
+      }
+
+      /* Hide for touch devices */
+      @media (hover: none) {
+        [part="date"]:not([disabled]):hover::after {
+          background-color: transparent;
+          border-color: transparent;
+          z-index: -4;
+        }
+      }
+
+      /* Selected */
+
+      [part="date"][selected] {
+        font-weight: 500;
+      }
+
+      [part="date"]:not([disabled])[selected]::after,
       [part="date"][selected]::after {
+        background-color: transparent;
         border-color: currentColor;
         z-index: -2;
       }
 
-      [part="date"][focused]:not([disabled]),
-      [part="date"]:active:not([disabled]) {
+      /* Focused */
+
+      [part="date"]:not([disabled])[focused],
+      [part="date"]:not([disabled]):active {
         color: var(--material-primary-contrast-color);
-        background-color: transparent;
       }
 
-      :host([focused]) [part="date"][focused]:not([disabled])::after {
+      [part="date"]:not([disabled])[focused]::after,
+      [part="date"]:not([disabled]):active::after {
+        opacity: 0.7;
+        background-color: var(--material-primary-color);
+        border-color: var(--material-primary-color);
+        z-index: -1;
+      }
+
+      :host([focused]) [part="date"]:not([disabled])[focused]::after {
         opacity: 1;
-      }
-
-      /* Hide for touch devices */
-      @media not all and (hover: hover) {
-        [part="date"]:active:not([disabled])::after {
-          opacity: 0;
-        }
-      }
-
-      [part="week-number"] {
-        line-height: 44px;
-        height: 40px;
       }
     </style>
   </template>
