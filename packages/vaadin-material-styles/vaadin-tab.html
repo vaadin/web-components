@@ -20,6 +20,7 @@
         font-family: var(--material-font-family);
         font-size: var(--material-button-font-size);
         text-transform: uppercase;
+        letter-spacing: 0.05em;
         white-space: nowrap;
         line-height: 1.2;
         font-weight: 500;
@@ -31,6 +32,8 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         transition: box-shadow 0.3s;
+        -webkit-user-select: none;
+        user-select: none;
       }
 
       :host::before {
@@ -71,20 +74,20 @@
         transform: translate(-50%, -50%) scale(0);
         background-color: var(--material-primary-color);
         opacity: 0;
-        transition: transform 0s cubic-bezier(.215, .61, .355, 1), opacity 0s linear;
-        transition-delay: 0s, 0s;
+        transition: transform 0s cubic-bezier(0.05, 0.8, 0.5, 1), opacity 0s linear;
       }
 
-      :host([focused])::after {
-        transform: translate(-50%, -50%) scale(2);
+      :host([focused]:not([focus-ring]))::after,
+      :host([focused][active])::after,
+      :host([focus-ring][selected])::after {
+        transform: translate(-50%, -50%) scale(3);
         opacity: 0;
-        transition-delay: 0s, 0s;
-        transition-duration: 0.6s, 0.6s;
+        transition-duration: 2s, 0.6s;
       }
 
       :host([active]:not([selected]))::after {
         opacity: 0.2;
-        transition-duration: 0.6s, 0s;
+        transition-duration: 2s, 0s;
       }
 
       /* Disabled */
