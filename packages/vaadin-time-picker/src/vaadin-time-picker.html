@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" value="{{value}}" filtered-items="[[_dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" value="{{value}}" filtered-items="[[__dropdownItems]]">
       <template>
         [[item.label]]
       </template>
@@ -40,11 +40,16 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-time-picker>` is a Polymer 2 element.
+       * `<vaadin-time-picker>` is a Web Component providing a time-selection field.
        *
-       * ```
+       * ```html
        * <vaadin-time-picker></vaadin-time-picker>
        * ```
+       * ```js
+       * timePicker.value = '14:30';
+       * ```
+       *
+       * When the selected `value` is changed, a `value-changed` event is triggered.
        *
        * @memberof Vaadin
        * @demo demo/index.html
@@ -60,45 +65,40 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             /**
-             * The value for this element.
+             * The time value for this element.
              *
-             * Supported time formats:
-             * - ISO 8601 `"hh:mm"` (default)
-             * - ISO 8601 `"hh:mm:ss"`
-             * - ISO 8601 `"hh:mm:ss.fff"`
+             * Supported time formats are in ISO 8601:
+             * - `hh:mm` (default)
+             * - `hh:mm:ss`
+             * - `hh:mm:ss.fff`
              *
              * @type {String}
              */
             value: {
               type: String,
-              observer: '_valueChanged',
+              observer: '__valueChanged',
               notify: true,
               value: ''
             },
 
-            _previousValue: {
-              type: String,
-              value: ''
-            },
-
             /**
-             * Specifies the number of valid intervals in a day or an hour used for
+             * Specifies the number of valid intervals in a day or in an hour used for
              * configuring the items displayed in the selection box.
              *
              * It also configures the precission of the value string. By default
-             * the component formats values as `HH:MM` but setting a step value
+             * the component formats values as `hh:mm` but setting a step value
              * lower than one minute or one second, format resolution changes to
-             * `HH:mm:ss` and `HH:mm:ss.SSS` respectively.
+             * `hh:mm:ss` and `hh:mm:ss.fff` respectively.
              *
-             * Unit should be set in seconds. For correctly configuring intervals
-             * in the dropdown, it need to evenly divide day and hour.
+             * Unit must be set in seconds, and for correctly configuring intervals
+             * in the dropdown, it need to evenly divide a day or an hour.
              */
             step: {
               type: Number,
-              observer: '_stepChanged'
+              observer: '__stepChanged'
             },
 
-            _dropdownItems: {
+            __dropdownItems: {
               type: Array
             }
           };
@@ -106,16 +106,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this._boundOnChange = this._onChange.bind(this);
-          this._bindListeners();
-          this._dropdownItems = this._generateDropdownList();
+          this._boundOnChange = this.__onChange.bind(this);
+          this.__inputElement.addEventListener('change', this._boundOnChange);
+          this.__dropdownItems = this.__generateDropdownList();
         }
 
-        _bindListeners() {
-          this._inputElement.addEventListener('change', this._boundOnChange);
-        }
-
-        _generateDropdownList() {
+        __generateDropdownList() {
           const generatedlist = [];
 
           // Default step in overlay items is 1 hour
@@ -134,9 +130,9 @@ This program is available under Apache License Version 2.0, available at https:/
             for (let min = 0; min < 60; min += minIncr) {
               generatedlist.push({
                 // we only pick items with minute resolution
-                label: `${this._pad(hour)}:${this._pad(min)}`,
+                label: `${this.__pad(hour)}:${this.__pad(min)}`,
                 // but we set value with step defined resolution
-                value: this._formatTime([hour, min])
+                value: this.__formatTime([hour, min])
               });
             }
           }
@@ -144,24 +140,24 @@ This program is available under Apache License Version 2.0, available at https:/
           return generatedlist;
         }
 
-        _valueChanged(value, oldValue) {
-          this._setValue(value);
+        __valueChanged(value, oldValue) {
+          this.__setValue(value);
         }
 
-        _onChange(e) {
-          this._setValue(this._inputElement.value);
+        __onChange(e) {
+          this.__setValue(this.__inputElement.value);
         }
 
-        _setValue(checkedValue) {
-          const newValue = this._formatTime(this._parseTime(checkedValue));
+        __setValue(checkedValue) {
+          const newValue = this.__formatTime(this.__parseTime(checkedValue));
           if (newValue) {
-            this.value = this._inputElement.value = this._previousValue = newValue;
+            this.value = this.__inputElement.value = this.__previousValue = newValue;
           } else {
-            this.value = this._inputElement.value = this._previousValue;
+            this.value = this.__inputElement.value = this.__previousValue || '';
           }
         }
 
-        get _stepSegment() {
+        get __stepSegment() {
           if (this.step % 3600 === 0) {
             // Accept hours
             return 1;
@@ -177,44 +173,40 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _parseTime(str) {
+        __parseTime(str) {
           // Parsing with RegExp to ensure correct format
           const parts = /^(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?(?:\.(\d{1,3}))?$/.exec(str);
           if (parts) {
-            if (this._stepSegment) {
-              return parts.slice(1, this._stepSegment + 1);
+            if (this.__stepSegment) {
+              return parts.slice(1, this.__stepSegment + 1);
             }
           }
         }
 
         // pad a number with leading zeros
-        _pad(num = 0, fmt = '00') {
+        __pad(num = 0, fmt = '00') {
           return (fmt + num).substr((fmt + num).length - fmt.length);
         }
 
-        _formatTime(time) {
+        __formatTime(time) {
           if (time) {
             const [hour, min, sec, ms] = time;
             // Always display hour and minute
-            let ret = `${this._pad(hour)}:${this._pad(min)}`;
+            let ret = `${this.__pad(hour)}:${this.__pad(min)}`;
             // Adding second and millisecond depends on resolution
-            this._stepSegment >= 3 && (ret += `:${this._pad(sec)}`);
-            this._stepSegment == 4 && (ret += `.${this._pad(ms, '000')}`);
+            this.__stepSegment >= 3 && (ret += `:${this.__pad(sec)}`);
+            this.__stepSegment == 4 && (ret += `.${this.__pad(ms, '000')}`);
             return ret;
           }
         }
 
-        _stepChanged(step, oldStep) {
-          this._dropdownItems = this._generateDropdownList();
-          this._setValue(this.value);
+        __stepChanged(step, oldStep) {
+          this.__dropdownItems = this.__generateDropdownList();
+          this.__setValue(this.value);
         }
 
-        get _inputElement() {
+        get __inputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
-        }
-
-        get _dropdownElement() {
-          return this.shadowRoot.querySelector('vaadin-combo-box-light');
         }
       }
 

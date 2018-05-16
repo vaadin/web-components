@@ -9,7 +9,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
 
 
-[&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Web Component](http://webcomponents.org) providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -23,12 +23,10 @@
 ```
 -->
 ```html
-<vaadin-time-picker>
-  ...
-</vaadin-time-picker>
+<vaadin-time-picker label="Delivery Time"></vaadin-time-picker>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-time-picker/master/screenshot.png" width="200" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/components/vaadin-time-picker)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-time-picker/master/screenshot.gif" alt="Screenshot of vaadin-time-picker">](https://vaadin.com/components/vaadin-time-picker)
 
 
 ## Getting Started
@@ -37,17 +35,17 @@ Vaadin components use the Lumo theme by default.
 
 ## The file structure for Vaadin components
 
-- `src/component-name.html`
+- `src/vaadin-time-picker.html`
 
   Unstyled component.
 
-- `theme/lumo/component-name.html`
+- `theme/lumo/vaadin-time-picker.html`
 
   Component with Lumo theme.
 
-- `component-name.html`
+- `vaadin-time-picker.html`
 
-  Alias for theme/lumo/component-name.html
+  Alias for theme/lumo/vaadin-time-picker.html
 
 
 ## Running demos and tests in browser
