@@ -82,9 +82,8 @@ gulp.task('icons', function() {
         .pipe(iconfont({
           fontName: 'material-icons',
           formats: ['woff'],
-          fontHeight: 1000,
-          ascent: 850,
-          descent: 150,
+          fontHeight: 2400,
+          descent: 400,
           fixedWidth: true,
           normalize: true,
           centerHorizontally: true,
