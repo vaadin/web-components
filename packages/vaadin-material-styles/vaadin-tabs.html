@@ -69,6 +69,11 @@
         flex-shrink: 0;
         width: 32px;
       }
+
+      /* Fixed width tabs */
+      :host([theme~="fixed"]) [part="tabs"] ::slotted(vaadin-tab) {
+        flex-basis: 0.0001px;
+      }
     </style>
   </template>
 </dom-module>
