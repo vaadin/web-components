@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[_dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[__dropdownItems]]">
       <template>
         [[item.label]]
       </template>
@@ -160,25 +160,30 @@ This program is available under Apache License Version 2.0, available at https:/
                   }
                 };
               }
+            },
+
+            __previousValue: {
+              type: String,
+              value: ''
             }
           };
         }
 
         static get observers() {
           return [
-            '_updateDropdownItems(i18n.*)'
+            '__updateDropdownItems(i18n.*)'
           ];
         }
 
         ready() {
           super.ready();
           this._boundOnChange = this.__onChange.bind(this);
-          this.__inputElement.addEventListener('change', this._boundOnChange);
-          this.__dropdownItems = this.__generateDropdownList();
+          this.__dropdownElement.addEventListener('change', this._boundOnChange);
+          this.__updateDropdownItems();
         }
 
-        _updateDropdownItems() {
-          this._dropdownItems = this._generateDropdownList();
+        __updateDropdownItems() {
+          this.__dropdownItems = this.__generateDropdownList();
         }
 
         __generateDropdownList() {
@@ -200,9 +205,9 @@ This program is available under Apache License Version 2.0, available at https:/
             for (let min = 0; min < 60; min += minIncr) {
               generatedlist.push({
                 // we only pick items with minute resolution
-                label: this.i18n.formatTime(this._validateTime({hours: hour, minutes: min})),
+                label: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min})),
                 // but we set value with step defined resolution
-                value: this.i18n.formatTime(this._validateTime({hours: hour, minutes: min}))
+                value: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min}))
               });
             }
           }
@@ -210,51 +215,51 @@ This program is available under Apache License Version 2.0, available at https:/
           return generatedlist;
         }
 
-        _valueChanged(value) {
-          this._setValue(value);
+        __valueChanged(value) {
+          this.__setValue(value);
         }
 
         __onChange(e) {
           this.__setValue(this.__inputElement.value);
         }
 
-        _setValue(checkedValue) {
-          const timeObject = this._validateTime(this.i18n.parseTime(checkedValue));
-          const newValue = timeObject && this.i18n.formatTime(timeObject) && this._formatISO(timeObject);
+        __setValue(checkedValue) {
+          const timeObject = this.__validateTime(this.i18n.parseTime(checkedValue));
+          const newValue = timeObject && this.i18n.formatTime(timeObject) && this.__formatISO(timeObject);
           if (newValue) {
-            this.value = this._previousValue = this._formatISO(timeObject);
+            this.value = this.__previousValue = this.__formatISO(timeObject);
           } else {
-            this.value = this._dropdownElement.value = this._previousValue;
+            this.value = this.__dropdownElement.value = this.__previousValue;
           }
 
-          const dropdownValue = this._dropdownElement.value;
-          if ((this.value && this._formatISO(this.i18n.parseTime(dropdownValue)) !== this.value) ||
+          const dropdownValue = this.__dropdownElement.value;
+          if ((this.value && this.__formatISO(this.i18n.parseTime(dropdownValue)) !== this.value) ||
                this.i18n.formatTime(this.i18n.parseTime(dropdownValue)) != dropdownValue) {
-            this._dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
+            this.__dropdownElement.value = this.i18n.formatTime(this.i18n.parseTime(this.value));
           }
         }
 
-        _validateTime(timeObject) {
+        __validateTime(timeObject) {
           if (!timeObject) {
             return;
           }
 
           timeObject.hours = parseInt(timeObject.hours);
           timeObject.minutes = parseInt(timeObject.minutes || 0);
-          timeObject.seconds = (this._stepSegment >= 3 && timeObject.seconds === undefined) ? 0 : parseInt(timeObject.seconds);
-          timeObject.milliseconds = (this._stepSegment >= 3 && timeObject.milliseconds === undefined) ? 0 : parseInt(timeObject.milliseconds);
+          timeObject.seconds = (this.__stepSegment >= 3 && timeObject.seconds === undefined) ? 0 : parseInt(timeObject.seconds);
+          timeObject.milliseconds = (this.__stepSegment >= 3 && timeObject.milliseconds === undefined) ? 0 : parseInt(timeObject.milliseconds);
 
-          if (this._stepSegment < 4) {
+          if (this.__stepSegment < 4) {
             timeObject.milliseconds = undefined;
           }
-          if (this._stepSegment < 3) {
+          if (this.__stepSegment < 3) {
             timeObject.seconds = undefined;
           }
 
           return timeObject;
         }
 
-        get _stepSegment() {
+        get __stepSegment() {
           if (this.step % 3600 === 0) {
             // Accept hours
             return 1;
@@ -270,30 +275,34 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _formatISO(time) {
+        __formatISO(time) {
           if (time) {
             // Always display hour and minute
-            let timeString = `${this._pad(time.hours)}:${this._pad(time.minutes)}`;
+            let timeString = `${this.__pad(time.hours)}:${this.__pad(time.minutes)}`;
             // Adding second and millisecond depends on resolution
-            (time.seconds !== undefined) && (timeString += `:${this._pad(time.seconds)}`);
-            (time.milliseconds !== undefined) && (timeString += `.${this._pad(time.milliseconds, '000')}`);
+            (time.seconds !== undefined) && (timeString += `:${this.__pad(time.seconds)}`);
+            (time.milliseconds !== undefined) && (timeString += `.${this.__pad(time.milliseconds, '000')}`);
             return timeString;
           }
         }
 
         // pad a number with leading zeros
-        _pad(num = 0, fmt = '00') {
+        __pad(num = 0, fmt = '00') {
           return (fmt + num).substr((fmt + num).length - fmt.length);
         }
 
-        _stepChanged(step, oldStep) {
-          this._dropdownItems = this._generateDropdownList();
-          this._setValue(this.value);
-          this._dropdownElement.selectedItem = this._dropdownItems.filter(item => item.value === this.value)[0];
+        __stepChanged(step, oldStep) {
+          this.__updateDropdownItems();
+          this.__setValue(this.value);
+          this.__dropdownElement.selectedItem = this.__dropdownItems.filter(item => item.value === this.value)[0];
         }
 
         get __inputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
+        }
+
+        get __dropdownElement() {
+          return this.shadowRoot.querySelector('vaadin-combo-box-light');
         }
       }
 

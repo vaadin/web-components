@@ -42,7 +42,7 @@
         expect(timePicker.i18n.formatTime.args[lastCall][0]).to.deep.equal(
           {hours: '12', minutes: '00', seconds: undefined, milliseconds: undefined}
         );
-        expect(timePicker._dropdownElement.value).to.be.equal('12:00 AM');
+        expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
       });
     });
   </script>
