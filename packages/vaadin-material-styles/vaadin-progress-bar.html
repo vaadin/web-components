@@ -8,90 +8,80 @@
       :host {
         height: 4px;
         margin: 8px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      :host::before {
+        content: "";
+        display: block;
+        height: 100%;
+        background-color: var(--material-primary-color);
+        opacity: 0.16;
       }
 
       [part="bar"] {
-        background-color: var(--material-divider-color);
+        position: absolute;
+        top: 0;
+        width: 100%;
+        transform: scaleX(var(--vaadin-progress-value));
+        transform-origin: 0 0;
       }
 
       [part="value"] {
-        background-color: var(--material-primary-color);
         transform: none;
-        width: calc(var(--vaadin-progress-value) * 100%);
-        min-width: 0.25em;
-        will-change: width;
-        transition: 0.2s width;
+        background-color: var(--material-primary-color);
       }
 
-      /* Indeterminate mode */
+      /* Indeterminate */
+
+      :host([indeterminate]) [part="bar"] {
+        left: -100%;
+        animation: primary-indeterminate-translate 2s infinite linear;
+      }
 
       :host([indeterminate]) [part="value"] {
-        --material-progress-indeterminate-progress-bar-background: var(--material-primary-color);
-        width: 30%;
-        background-color: var(--material-progress-indeterminate-progress-bar-background);
-        overflow: hidden;
-        will-change: transform;
-        animation: running-progress 4s linear infinite;
+        animation: primary-indeterminate-scale 2s infinite linear;
       }
 
-      @-webkit-keyframes running-progress {
+      @keyframes primary-indeterminate-translate {
         0% {
-          margin-left: 0;
-          margin-right: 100%;
-          width: 0%;
+          transform: translateX(0);
         }
 
-        37.5% {
-          margin-left: 0;
-          margin-right: 40%;
-          width: 60%;
+        20% {
+          animation-timing-function: cubic-bezier(.5, 0, .701732, .495819);
+          transform: translateX(0);
         }
 
-        62.5% {
-          margin-left: 40%;
-          margin-right: 0;
-          width: 60%;
+        59.15% {
+          animation-timing-function: cubic-bezier(.302435, .381352, .55, .956352);
+          transform: translateX(83.67142%);
         }
 
         100% {
-          margin-left: 100%;
-          margin-right: 0;
-          width: 0%;
+          transform: translateX(200.611057%);
         }
       }
 
-      @keyframes running-progress {
+      @keyframes primary-indeterminate-scale {
         0% {
-          margin-left: 0;
-          margin-right: 100%;
-          width: 0%;
+          transform: scaleX(.08);
         }
 
-        37.5% {
-          margin-left: 0;
-          margin-right: 40%;
-          width: 60%;
+        36.65% {
+          animation-timing-function: cubic-bezier(.334731, .12482, .785844, 1);
+          transform: scaleX(.08);
         }
 
-        62.5% {
-          margin-left: 40%;
-          margin-right: 0;
-          width: 60%;
+        69.15% {
+          animation-timing-function: cubic-bezier(.06, .11, .6, 1);
+          transform: scaleX(.661479);
         }
 
         100% {
-          margin-left: 100%;
-          margin-right: 0;
-          width: 0%;
+          transform: scaleX(.08);
         }
-      }
-
-      /* Error color */
-
-      :host([theme~="error"]) [part="value"],
-      :host([theme~="error"]) [part="value"]::before {
-        background-color: var(--material-error-color);
-        --material-progress-indeterminate-progress-bar-background: var(--material-error-color);
       }
 
     </style>
