@@ -175,7 +175,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __parseTime(str) {
           // Parsing with RegExp to ensure correct format
-          const parts = /^(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?(?:\.(\d{1,3}))?$/.exec(str);
+          const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
+          const MATCH_MINUTES = '(\\d|[0-5]\\d)';
+          const MATCH_SECONDS = MATCH_MINUTES;
+          const MATCH_MILLISECONDS = '(\\d{1,3})';
+          const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
+          const parts = re.exec(str);
           if (parts) {
             if (this.__stepSegment) {
               return parts.slice(1, this.__stepSegment + 1);
