@@ -50,6 +50,12 @@
       it('should not allow setting invalid time value', () => {
         timePicker.value = '90:00';
         expect(timePicker.value).to.be.equal('');
+        timePicker.value = '00:70';
+        expect(timePicker.value).to.be.equal('');
+        timePicker.value = '00:00:999';
+        expect(timePicker.value).to.be.equal('');
+        timePicker.value = '00:00:00.9999';
+        expect(timePicker.value).to.be.equal('');
       });
 
       it('should set values of inputElement and time-picker if the format is valid', () => {
