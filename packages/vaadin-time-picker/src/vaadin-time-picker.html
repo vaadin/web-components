@@ -223,6 +223,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __updateValue(obj) {
           const timeString = this.__formatISO(this.__validateTime(obj));
+          // This check is required when user is entering string value equals current value
+          const parsedTime = this.i18n.parseTime(timeString);
+          if (this.__dropdownElement.value !== parsedTime && this.value === timeString) {
+            this.__dropdownElement.value = this.i18n.formatTime(parsedTime);
+          }
           this.value = timeString;
         }
 

@@ -63,6 +63,13 @@
         expect(timePicker.__inputElement.value).to.be.equal('12:00');
       });
 
+      it('input value should be constantly formatted on same input', () => {
+        timePicker.__dropdownElement.value = '12';
+        expect(timePicker.__inputElement.value).to.be.equal('12:00');
+        timePicker.__dropdownElement.value = '12';
+        expect(timePicker.__inputElement.value).to.be.equal('12:00');
+      });
+
       it('should restore the previous value if the format is invalid', () => {
         timePicker.value = '12:00';
         changeInputValue(timePicker.__inputElement, 'invalid');
