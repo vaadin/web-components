@@ -101,6 +101,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.yAxis = this.unit;
           }
 
+          if (this.stack) {
+            options.stack = this.stack;
+          }
+
+          if (this.stacking) {
+            options.stacking = this.stacking;
+          }
+
           if (isFinite(this.valueMin)) {
             options.yAxisValueMin = this.valueMin;
           }
@@ -108,7 +116,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (isFinite(this.valueMax)) {
             options.yAxisValueMax = this.valueMax;
           }
-
 
           return options;
         }
@@ -221,6 +228,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               reflectToAttribute: true
             },
 
+            /** Used to group series in a different stacks.
+             * "stacking" property should be specified either for each series or in plotOptions.
+             * It is recommended to place series in a single stack, when they belong to the same yAxis.
+             */
+            stack: {
+              type: String,
+              observer: '__stackObserver',
+              reflectToAttribute: true
+            },
+
+            /** Used to group series in a stacked chart.
+             * Can be specified for each series separately or at chart's plotOptions for the entire chart.
+             * Possible values are null, "normal" or "percent".
+             * If "stack" property is not defined, then series will be put into default stack.
+             */
+            stacking: {
+              type: String,
+              observer: '__stackingObserver',
+              reflectToAttribute: true
+            },
+
             /**
              * Object with the configured options defined and used to create a series.
              *
@@ -304,7 +332,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           if (!isFinite(this.valueMin)) {
-            console.warn('<vaadin-chart-series> Acceptable values for "value-min" are Numbers or null');
+            this.__showWarn('value-min', 'Numbers or null');
             return;
           }
 
@@ -321,7 +349,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           if (!isFinite(this.valueMax)) {
-            console.warn('<vaadin-chart-series> Acceptable values for "value-max" are Numbers or null');
+            this.__showWarn('value-max', 'Numbers or null');  
             return;
           }
 
@@ -348,6 +376,39 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        __stackObserver() {
+          if (!this.__hasSeriesConfig()) {
+            return;
+          }
+
+          this._series.update({
+            stack: this.stack
+          });
+        }
+
+        __stackingObserver() {
+          if (!this.__isStackingValid()) {
+            this.stacking = null;
+            return;
+          }
+
+          if (!this.__hasSeriesConfig()) {
+            return;
+          }
+
+          this._series.update({
+            stacking: this.stacking
+          });
+        }
+
+        __isStackingValid() {
+          if (['normal', 'percent', null].indexOf(this.stacking) === -1) {
+            this.__showWarn('stacking', '"normal", "percent" or null');
+            return false;
+          }
+          return true;
+        }
+
         __unitObserver() {
           if (this.__hasSeriesConfig()) {
             const parent = this.parentNode instanceof Vaadin.ChartElement && this.parentNode;
@@ -371,7 +432,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __isMarkersValid() {
           if (['shown', 'hidden', 'auto'].indexOf(this.markers) === -1) {
-            console.warn('<vaadin-chart-series> Acceptable values for "markers" are "shown", "hidden" or "auto"');
+            this.__showWarn('markers', '"shown", "hidden" or "auto"');
             return false;
           }
           return true;
@@ -405,6 +466,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           return config;
+        }
+
+        __showWarn(propertyName, acceptedValues) {
+          console.warn('<vaadin-chart-series> Acceptable values for "' + propertyName + '" are ' + acceptedValues);
         }
       }
 
