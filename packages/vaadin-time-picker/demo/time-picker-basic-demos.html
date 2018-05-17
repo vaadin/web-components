@@ -24,6 +24,49 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Parser And Formatter</h3>
+    <vaadin-demo-snippet id="time-picker-basic-demos-format-parse-example">
+      <template preserve-content>
+        <vaadin-time-picker></vaadin-time-picker>
+        <script>
+          window.addDemoReadyListener('#time-picker-basic-demos-format-parse-example', function(document) {
+            const timePicker = document.querySelector('vaadin-time-picker');
+
+            timePicker.i18n = {
+              formatTime: function(time) {
+                if (!time) {
+                  return;
+                }
+                let period = 'AM', hours = time.hours;
+                if (parseInt(time.hours) > 12) {
+                  period = 'PM';
+                  hours = parseInt(time.hours) - 12;
+                }
+                return `${hours}:${time.minutes ? time.minutes : '00'} ${period}`;
+              },
+              parseTime: function(text) {
+                const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(text);
+                if (!parts) {
+                  return;
+                }
+
+                let hours;
+                if (parts[3] === 'PM') {
+                  hours = parseInt(parts[1]) + 12;
+                } else {
+                  hours = parseInt(parts[1]);
+                }
+                return {
+                  hours: hours,
+                  minutes: parts[2]
+                };
+              }
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class TimePickerBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {

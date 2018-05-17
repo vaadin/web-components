@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" value="{{value}}" filtered-items="[[__dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" on-value-changed="__onInputChange" filtered-items="[[__dropdownItems]]">
       <template>
         [[item.label]]
       </template>
@@ -100,19 +100,86 @@ This program is available under Apache License Version 2.0, available at https:/
 
             __dropdownItems: {
               type: Array
-            }
+            },
+
+            /**
+             * The object used to localize this component.
+             * To change the default localization, replace the entire
+             * _i18n_ object or just the property you want to modify.
+             *
+             * The object has the following JSON structure:
+
+                {
+                  // A function to format given `Object` as
+                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+                  formatTime: (time) => {
+                    // returns a string representation of the given
+                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats
+                  },
+
+                  // A function to parse the given text to an `Object` in the format
+                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.
+                  // Must properly parse (at least) text
+                  // formatted by `formatTime`.
+                  parseTime: text => {
+                    // Parses a string in object/string that can be formatted by`formatTime`.
+                  }
+                }
+              */
+            i18n: {
+              type: Object,
+              value: () => {
+                return {
+                  formatTime: (time) => {
+                    if (!time) {
+                      return;
+                    }
+
+                    const pad = (num = 0, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
+                    // Always display hour and minute
+                    let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
+                    // Adding second and millisecond depends on resolution
+                    (time.seconds !== undefined) && (timeString += `:${pad(time.seconds)}`);
+                    (time.milliseconds !== undefined) && (timeString += `.${pad(time.milliseconds, '000')}`);
+                    return timeString;
+                  },
+                  parseTime: text => {
+                    // Parsing with RegExp to ensure correct format
+                    const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
+                    const MATCH_MINUTES = '(\\d|[0-5]\\d)';
+                    const MATCH_SECONDS = MATCH_MINUTES;
+                    const MATCH_MILLISECONDS = '(\\d{1,3})';
+                    const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
+                    const parts = re.exec(text);
+                    if (parts) {
+                      return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
+                    }
+                  }
+                };
+              }
+            },
+
+            __previousValue: Object
           };
+        }
+
+        static get observers() {
+          return [
+            '__updateDropdownItems(i18n.*)'
+          ];
         }
 
         ready() {
           super.ready();
-          this._boundOnChange = this.__onChange.bind(this);
-          this.__inputElement.addEventListener('change', this._boundOnChange);
+          this.__updateDropdownItems();
+        }
+
+        __updateDropdownItems() {
           this.__dropdownItems = this.__generateDropdownList();
         }
 
         __generateDropdownList() {
-          const generatedlist = [];
+          const generatedList = [];
 
           // Default step in overlay items is 1 hour
           const step = this.step || 3600;
@@ -128,33 +195,56 @@ This program is available under Apache License Version 2.0, available at https:/
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
 
             for (let min = 0; min < 60; min += minIncr) {
-              generatedlist.push({
+              const timeObj = this.__validateTime({hours: hour, minutes: min});
+              generatedList.push({
                 // we only pick items with minute resolution
-                label: `${this.__pad(hour)}:${this.__pad(min)}`,
+                label: this.i18n.formatTime(timeObj),
                 // but we set value with step defined resolution
-                value: this.__formatTime([hour, min])
+                value: this.i18n.formatTime(timeObj)
               });
             }
           }
 
-          return generatedlist;
+          return generatedList;
         }
 
         __valueChanged(value, oldValue) {
-          this.__setValue(value);
-        }
-
-        __onChange(e) {
-          this.__setValue(this.__inputElement.value);
-        }
-
-        __setValue(checkedValue) {
-          const newValue = this.__formatTime(this.__parseTime(checkedValue));
-          if (newValue) {
-            this.value = this.__inputElement.value = this.__previousValue = newValue;
-          } else {
-            this.value = this.__inputElement.value = this.__previousValue || '';
+          const parsedObj = this.__parseISO(value);
+          if (!parsedObj && value !== '') {
+            this.value = oldValue || '';
+            return;
           }
+          parsedObj !== 'undefined' && this.__updateInputValue(parsedObj);
+        }
+
+        __onInputChange(e) {
+          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
+          this.__updateValue(parsedObj);
+        }
+
+        __updateValue(obj) {
+          const timeString = this.__formatISO(this.__validateTime(obj));
+          // This check is required when user is entering string value equals current value
+          const parsedTime = this.i18n.parseTime(timeString);
+          if (this.__dropdownElement.value !== parsedTime && this.value === timeString) {
+            this.__dropdownElement.value = this.i18n.formatTime(parsedTime);
+          }
+          this.value = timeString;
+        }
+
+        __updateInputValue(obj) {
+          const timeString = this.i18n.formatTime(this.__validateTime(obj)) || '';
+          this.__dropdownElement.value = timeString;
+        }
+
+        __validateTime(timeObject) {
+          if (timeObject) {
+            timeObject.hours = parseInt(timeObject.hours);
+            timeObject.minutes = parseInt(timeObject.minutes || 0);
+            timeObject.seconds = this.__stepSegment < 3 ? undefined : parseInt(timeObject.seconds || 0);
+            timeObject.milliseconds = this.__stepSegment < 4 ? undefined : parseInt(timeObject.milliseconds || 0);
+          }
+          return timeObject;
         }
 
         get __stepSegment() {
@@ -173,45 +263,29 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        __parseTime(str) {
-          // Parsing with RegExp to ensure correct format
-          const MATCH_HOURS = '(\\d|[0-1]\\d|2[0-3])';
-          const MATCH_MINUTES = '(\\d|[0-5]\\d)';
-          const MATCH_SECONDS = MATCH_MINUTES;
-          const MATCH_MILLISECONDS = '(\\d{1,3})';
-          const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
-          const parts = re.exec(str);
-          if (parts) {
-            if (this.__stepSegment) {
-              return parts.slice(1, this.__stepSegment + 1);
-            }
-          }
+        __formatISO(time) {
+          // The default i18n formatter implementation is ISO 8601 compliant
+          return TimePickerElement.properties.i18n.value().formatTime(time);
         }
 
-        // pad a number with leading zeros
-        __pad(num = 0, fmt = '00') {
-          return (fmt + num).substr((fmt + num).length - fmt.length);
+        __parseISO(text) {
+          // The default i18n parser implementation is ISO 8601 compliant
+          return TimePickerElement.properties.i18n.value().parseTime(text);
         }
 
-        __formatTime(time) {
-          if (time) {
-            const [hour, min, sec, ms] = time;
-            // Always display hour and minute
-            let ret = `${this.__pad(hour)}:${this.__pad(min)}`;
-            // Adding second and millisecond depends on resolution
-            this.__stepSegment >= 3 && (ret += `:${this.__pad(sec)}`);
-            this.__stepSegment == 4 && (ret += `.${this.__pad(ms, '000')}`);
-            return ret;
-          }
-        }
-
-        __stepChanged(step, oldStep) {
-          this.__dropdownItems = this.__generateDropdownList();
-          this.__setValue(this.value);
+        __stepChanged(step) {
+          this.__updateDropdownItems();
+          const parsedObj = this.__validateTime(this.__parseISO(this.value));
+          this.__updateValue(parsedObj);
         }
 
         get __inputElement() {
           return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
+        }
+
+        get __dropdownElement() {
+          return this.__memoDropdown ||
+            (this.__memoDropdown = this.shadowRoot.querySelector('vaadin-combo-box-light'));
         }
       }
 
