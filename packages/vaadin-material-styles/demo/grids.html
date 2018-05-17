@@ -26,8 +26,6 @@
     }
 
     vaadin-grid {
-      /* Make room for the "View source" button */
-      margin-top: 32px;
       height: 300px;
     }
   </style>
@@ -55,7 +53,7 @@
 
             <vaadin-grid aria-label="Basic example" items="[[users.result]]" column-reordering-allowed multi-sort>
 
-              <vaadin-grid-selection-column auto-select> </vaadin-grid-selection-column>
+              <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
 
               <vaadin-grid-column width="9em">
                 <template class="header">

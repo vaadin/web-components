@@ -74,6 +74,10 @@
 
         /* Split layout tweaks */
         --_material-split-layout-splitter-background-color: rgba(255, 255, 255, 0.8);
+
+        /* Grid tweaks */
+        --_material-grid-row-hover-background-color: rgba(255, 255, 255, 0.08);
+        --_material-grid-row-selected-overlay-opacity: 0.16;
       }
 
       html {
@@ -95,12 +99,12 @@
 
 <!-- Only needed for IE11 when you want to use the dark palette inside the light palette -->
 <dom-module id="material-color-legacy">
-    <template>
-      <style include="material-color">
-        :host {
-          color: var(--material-body-text-color) !important;
-          background-color: var(--material-background-color) !important;
-        }
-      </style>
-    </template>
-  </dom-module>
+  <template>
+    <style include="material-color">
+      :host {
+        color: var(--material-body-text-color) !important;
+        background-color: var(--material-background-color) !important;
+      }
+    </style>
+  </template>
+</dom-module>
