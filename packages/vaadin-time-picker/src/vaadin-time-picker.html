@@ -195,11 +195,12 @@ This program is available under Apache License Version 2.0, available at https:/
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
 
             for (let min = 0; min < 60; min += minIncr) {
+              const timeObj = this.__validateTime({hours: hour, minutes: min});
               generatedList.push({
                 // we only pick items with minute resolution
-                label: this.i18n.formatTime({hours: hour, minutes: min}),
+                label: this.i18n.formatTime(timeObj),
                 // but we set value with step defined resolution
-                value: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min}))
+                value: this.i18n.formatTime(timeObj)
               });
             }
           }
