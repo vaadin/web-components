@@ -62,9 +62,16 @@ This program is available under Apache License Version 2.0, available at https:/
        * When the selected `value` is changed, a `value-changed` event is triggered.
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ControlStateMixin
+       * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class TimePickerElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class TimePickerElement extends
+        Vaadin.ElementMixin(
+          Vaadin.ControlStateMixin(
+            Vaadin.ThemableMixin(Polymer.Element))) {
+
         static get is() {
           return 'vaadin-time-picker';
         }
@@ -354,12 +361,20 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get __inputElement() {
-          return this.shadowRoot.querySelector('vaadin-time-picker-text-field');
+          return this.__memoInput ||
+            (this.__memoInput = this.shadowRoot.querySelector('vaadin-time-picker-text-field'));
         }
 
         get __dropdownElement() {
           return this.__memoDropdown ||
             (this.__memoDropdown = this.shadowRoot.querySelector('vaadin-combo-box-light'));
+        }
+
+        /**
+         * Focusable element used by vaadin-control-state-mixin
+         */
+        get focusElement() {
+          return this.__inputElement || this;
         }
       }
 
