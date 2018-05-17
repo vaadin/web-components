@@ -175,11 +175,11 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __updateDropdownItems() {
-          this.__generateDropdownList();
+          this.__dropdownItems = this.__generateDropdownList();
         }
 
         __generateDropdownList() {
-          this.__dropdownItems = [];
+          const generatedList = [];
 
           // Default step in overlay items is 1 hour
           const step = this.step || 3600;
@@ -195,14 +195,16 @@ This program is available under Apache License Version 2.0, available at https:/
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
 
             for (let min = 0; min < 60; min += minIncr) {
-              this.__dropdownItems.push({
+              generatedList.push({
                 // we only pick items with minute resolution
-                label: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min})),
+                label: this.i18n.formatTime({hours: hour, minutes: min}),
                 // but we set value with step defined resolution
                 value: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min}))
               });
             }
           }
+
+          return generatedList;
         }
 
         __valueChanged(value, oldValue) {
@@ -276,7 +278,8 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get __dropdownElement() {
-          return this.shadowRoot.querySelector('vaadin-combo-box-light');
+          return this.__memoDropdown ||
+            (this.__memoDropdown = this.shadowRoot.querySelector('vaadin-combo-box-light'));
         }
       }
 
