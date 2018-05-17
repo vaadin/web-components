@@ -1,7 +1,4 @@
-<link rel="import" href="font-icons.html">
 <link rel="import" href="color.html">
-<link rel="import" href="../vaadin-grid/src/vaadin-grid.html">
-<link rel="import" href="vaadin-checkbox.html">
 
 <dom-module id="material-grid" theme-for="vaadin-grid">
   <template>
@@ -131,79 +128,4 @@
   </template>
 </dom-module>
 
-<dom-module id="material-grid-sorter" theme-for="vaadin-grid-sorter">
-  <template>
-    <style>
-      :host {
-        justify-content: flex-start;
-        height: 100%;
-        min-height: 28px;
-        align-items: center;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      :host([direction]) {
-        color: var(--material-body-text-color);
-      }
-
-      [part="content"] {
-        flex: none;
-      }
-
-      [part="indicators"] {
-        order: -1;
-      }
-
-      [part="indicators"]::before {
-        display: inline-block;
-        font-size: 18px;
-        line-height: 18px;
-        width: 24px;
-        vertical-align: top;
-        font-family: "material-icons";
-        overflow: hidden;
-        transition: 0.2s width;
-        opacity: 0.5;
-      }
-
-      :host(:not([direction])) [part="indicators"]::before {
-        content: "\e5d8";
-        width: 0;
-      }
-
-      :host([direction]) [part="indicators"]::before {
-        opacity: 1;
-      }
-
-      :host([direction="asc"]) [part="indicators"]::before {
-        content: "\e5d8";
-      }
-
-      :host([direction="desc"]) [part="indicators"]::before {
-        content: "\e5db";
-      }
-
-      :host(:hover) [part="indicators"]::before {
-        width: 24px;
-      }
-
-      [part="order"] {
-        right: 4px;
-        top: -8px;
-        font-size: 10px;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<!-- Make the selection column checkbox ripple effect visible. This only works for grids in the global scope. -->
-<!-- TODO make it possible to target the selection column checkboxes separately -->
-<custom-style>
-  <style>
-    vaadin-grid-cell-content vaadin-checkbox:only-child {
-      position: fixed;
-    }
-  </style>
-</custom-style>
+<link rel="import" href="../vaadin-grid/src/vaadin-grid.html">

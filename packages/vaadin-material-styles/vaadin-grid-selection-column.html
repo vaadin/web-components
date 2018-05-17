@@ -1,0 +1,13 @@
+<link rel="import" href="vaadin-checkbox.html">
+
+<!-- Make the selection column checkbox ripple effect visible. This only works for grids in the global scope. -->
+<!-- TODO make it possible to target the selection column checkboxes separately -->
+<custom-style>
+  <style>
+    vaadin-grid-cell-content vaadin-checkbox:only-child {
+      position: fixed;
+    }
+  </style>
+</custom-style>
+
+<link rel="import" href="../vaadin-grid/src/vaadin-grid-selection-column.html">
