@@ -26,7 +26,7 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[__dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" on-value-changed="__onInputChange" filtered-items="[[__dropdownItems]]">
       <template>
         [[item.label]]
       </template>
@@ -135,9 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
                       return;
                     }
 
-                    function pad(num = 0, fmt = '00') {
-                      return (fmt + num).substr((fmt + num).length - fmt.length);
-                    }
+                    const pad = (num = 0, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
                     // Always display hour and minute
                     let timeString = `${pad(time.hours)}:${pad(time.minutes)}`;
                     // Adding second and millisecond depends on resolution
@@ -153,10 +151,9 @@ This program is available under Apache License Version 2.0, available at https:/
                     const MATCH_MILLISECONDS = '(\\d{1,3})';
                     const re = new RegExp(`^${MATCH_HOURS}(?::${MATCH_MINUTES}(?::${MATCH_SECONDS}(?:\\.${MATCH_MILLISECONDS})?)?)?$`);
                     const parts = re.exec(text);
-                    if (!parts) {
-                      return;
+                    if (parts) {
+                      return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                     }
-                    return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                   }
                 };
               }
@@ -174,17 +171,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this._boundOnChange = this.__onInputChange.bind(this);
-          this.__dropdownElement.addEventListener('value-changed', this._boundOnChange);
           this.__updateDropdownItems();
         }
 
         __updateDropdownItems() {
-          this.__dropdownItems = this.__generateDropdownList();
+          this.__generateDropdownList();
         }
 
         __generateDropdownList() {
-          const generatedlist = [];
+          this.__dropdownItems = [];
 
           // Default step in overlay items is 1 hour
           const step = this.step || 3600;
@@ -200,7 +195,7 @@ This program is available under Apache License Version 2.0, available at https:/
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
 
             for (let min = 0; min < 60; min += minIncr) {
-              generatedlist.push({
+              this.__dropdownItems.push({
                 // we only pick items with minute resolution
                 label: this.i18n.formatTime(this.__validateTime({hours: hour, minutes: min})),
                 // but we set value with step defined resolution
@@ -208,8 +203,6 @@ This program is available under Apache License Version 2.0, available at https:/
               });
             }
           }
-
-          return generatedlist;
         }
 
         __valueChanged(value, oldValue) {
@@ -263,27 +256,13 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __formatISO(time) {
-          if (time) {
-            // Always display hour and minute
-            let timeString = `${this.__pad(time.hours)}:${this.__pad(time.minutes)}`;
-            // Adding second and millisecond depends on resolution
-            (time.seconds !== undefined) && (timeString += `:${this.__pad(time.seconds)}`);
-            (time.milliseconds !== undefined) && (timeString += `.${this.__pad(time.milliseconds, '000')}`);
-            return timeString;
-          }
+          // The default i18n formatter implementation is ISO 8601 compliant
+          return TimePickerElement.properties.i18n.value().formatTime(time);
         }
 
         __parseISO(text) {
-          const parts = /^(\d{1,2})(?::(\d{1,2}))?(?::(\d{1,2}))?(?:\.(\d{1,3}))?$/.exec(text);
-          if (!parts) {
-            return;
-          }
-          return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
-        }
-
-        // pad a number with leading zeros
-        __pad(num = 0, fmt = '00') {
-          return (fmt + num).substr((fmt + num).length - fmt.length);
+          // The default i18n parser implementation is ISO 8601 compliant
+          return TimePickerElement.properties.i18n.value().parseTime(text);
         }
 
         __stepChanged(step) {
