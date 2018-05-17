@@ -70,13 +70,6 @@ Note: see `<vaadin-list-box>`, `<vaadin-item>`.
 
 - eye-disabled icon is visually larger than the normal eye icon
 
-### `<vaadin-tab>`
-
-- Expected: text content is vertically centered in the tab by default. Actual: text content is at the top of the tab.
-- The active tab appearance is hard to differenciate from the regular one:
-  - Expected: active tab has an active color 2px underline. Actual: no underline.
-  - Expected: active tab uses primary color. Theme variant with body color for active tab. Actual: active tab always uses body color, hard to see by default, better in the dark theme.
-
 ### `<vaadin-text-field>` and the derived elements
 
 - [Won’t fix: requires a structurlal change.] When floating, the label goes underneath the prefix. Expected: label stays always on top when prefix is in use, same way as with the value and with the placeholder.
