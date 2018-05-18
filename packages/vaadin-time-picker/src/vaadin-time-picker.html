@@ -209,26 +209,37 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __valueChanged(value, oldValue) {
-          const parsedObj = this.__parseISO(value);
-          if (!parsedObj && value !== '') {
-            this.value = oldValue || '';
-            return;
+          const parsedObj = this.__parseISO(value) || '';
+
+          const valueFromOld = this.__parseISO(oldValue) || '';
+          const valueFromCurrent = this.__formatISO(this.__parseISO(value)) || '';
+
+          if (this.value !== '' && parsedObj === '') {
+            this.value = valueFromOld;
+          } else if (this.value !== valueFromCurrent) {
+            this.value = valueFromCurrent;
+          } else {
+            this.__updateInputValue(parsedObj);
           }
-          parsedObj !== 'undefined' && this.__updateInputValue(parsedObj);
         }
 
         __onInputChange(e) {
-          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
-          this.__updateValue(parsedObj);
+          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value) || '';
+
+          const inputFromDropdownValue = this.i18n.formatTime(parsedObj) || '';
+          const inputFromValue = this.i18n.formatTime(this.i18n.parseTime(this.value)) || '';
+
+          if (this.__dropdownElement.value !== '' && parsedObj === '') {
+            this.__dropdownElement.value = inputFromValue;
+          } else if (this.__dropdownElement.value !== inputFromDropdownValue) {
+            this.__dropdownElement.value = inputFromDropdownValue;
+          } else {
+            this.__updateValue(parsedObj);
+          }
         }
 
         __updateValue(obj) {
-          const timeString = this.__formatISO(this.__validateTime(obj));
-          // This check is required when user is entering string value equals current value
-          const parsedTime = this.i18n.parseTime(timeString);
-          if (this.__dropdownElement.value !== parsedTime && this.value === timeString) {
-            this.__dropdownElement.value = this.i18n.formatTime(parsedTime);
-          }
+          const timeString = this.__formatISO(this.__validateTime(obj)) || '';
           this.value = timeString;
         }
 
