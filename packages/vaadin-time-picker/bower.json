@@ -38,6 +38,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "test-fixture": "^3.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
+    "iron-form": "^2.3.0"
   }
 }
