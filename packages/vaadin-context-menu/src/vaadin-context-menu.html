@@ -452,8 +452,8 @@ This program is available under Apache License Version 2.0, available at https:/
           const contentRect = overlay.$.overlay.getBoundingClientRect();
 
           // Maximum x and y values are imposed by content size and overlay limits.
-          const xMax = overlayRect.left + overlayRect.width - contentRect.width;
-          const yMax = overlayRect.top + overlayRect.height - contentRect.height;
+          const xMax = overlayRect.right - contentRect.width;
+          const yMax = overlayRect.bottom - contentRect.height;
           // Reuse saved x and y event values, in order to this method be used async
           // in the `vaadin-overlay-change` which guarantees that overlay is ready
           const x = this.__x || overlayRect.left;
@@ -466,13 +466,13 @@ This program is available under Apache License Version 2.0, available at https:/
           if (x < wdthVport / 2 || x < xMax) {
             style.left = x + 'px';
           } else {
-            style.right = (wdthVport - x) + 'px';
+            style.right = Math.max(0, (wdthVport - x)) + 'px';
             overlay.setAttribute('right-aligned', '');
           }
           if (y < hghtVport / 2 || y < yMax) {
             style.top = y + 'px';
           } else {
-            style.bottom = (hghtVport - y) + 'px';
+            style.bottom = Math.max(0, (hghtVport - y)) + 'px';
             overlay.setAttribute('bottom-aligned', '');
           }
         }
