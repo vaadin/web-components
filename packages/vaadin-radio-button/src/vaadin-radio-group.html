@@ -11,6 +11,43 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-group">
   <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      :host([has-label])::before {
+        /* Label height + margin */
+        margin-top: calc(var(--lumo-font-size-s) * 1.5);
+      }
+
+      :host([has-label]) {
+        padding-top: var(--lumo-space-m);
+      }
+
+      [part="label"] {
+        display: block;
+        align-self: flex-start;
+        color: var(--lumo-secondary-text-color);
+        font-weight: 500;
+        font-size: var(--lumo-font-size-s);
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        transition: color 0.2s;
+        line-height: 1;
+        padding-bottom: 0.5em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        position: relative;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+    </style>
+    <label part="label">[[label]]</label>
     <slot id="slot"></slot>
   </template>
 
@@ -29,11 +66,18 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       *
        * The following state attributes are available for styling:
        *
        * Attribute  | Description | Part name
        * -----------|-------------|------------
-       * `disabled`   | Set when the radio group and its children are disabled. | :host
+       * `disabled` | Set when the radio group and its children are disabled. | :host
+       * `has-label` | Set when the element has a label | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -61,6 +105,15 @@ This program is available under Apache License Version 2.0, available at https:/
             _checkedButton: {
               type: Object,
               observer: '_checkedButtonChanged'
+            },
+
+            /**
+            * String used for the label element.
+            */
+            label: {
+              type: String,
+              value: '',
+              observer: '_labelChanged'
             },
 
             /**
@@ -225,6 +278,14 @@ This program is available under Apache License Version 2.0, available at https:/
         _setFocusable(idx) {
           const items = this._radioButtons;
           items.forEach(e => e.tabindex = e === items[idx] ? 0 : -1);
+        }
+
+        _labelChanged(label) {
+          if (label !== '' && label != null) {
+            this.setAttribute('has-label', '');
+          } else {
+            this.removeAttribute('has-label');
+          }
         }
 
       }
