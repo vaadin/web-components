@@ -11,16 +11,9 @@
 </head>
 
 <body>
-  <script>
-    function listenForEvent(elem, type, callback) {
-      var listener = function() {
-        elem.removeEventListener(type, listener);
-        callback();
-      };
-      elem.addEventListener(type, listener);
-    }
-
-    listenForEvent(document, 'WebComponentsReady', () => {
+  <dom-module id="vaadin-time-picker-20">
+    <script>
+    document.addEventListener('WebComponentsReady', () => {
       class TimePicker20Element extends Vaadin.TimePickerElement {
         checkValidity() {
           return this.value === '20:00';
@@ -28,7 +21,8 @@
       }
       customElements.define('vaadin-time-picker-20', TimePicker20Element);
     });
-  </script>
+    </script>
+  </dom-module>
 
   <test-fixture id="custom-validation">
     <template>
