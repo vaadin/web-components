@@ -1,7 +1,7 @@
 <script>
   window.demos = [
     {name: 'index', title: 'Getting started'},
-    {name: 'typography', title: 'Typography', group: 'Style guide'},
+    {name: 'typography', title: 'Typography', group: 'Foundation'},
     {name: 'colors', title: 'Colors'},
     {name: 'buttons', title: 'Button', group: 'Components'},
     {name: 'checkboxes', title: 'Checkbox'},
@@ -17,7 +17,9 @@
     {name: 'radio-buttons', title: 'Radio button'},
     {name: 'split-layouts', title: 'Split layout'},
     {name: 'tabs', title: 'Tabs'},
-    {name: 'text-fields', title: 'Text field'}
+    {name: 'text-fields', title: 'Text field'},
+    {name: 'customization', title: 'Customization', group: 'Guides'},
+    {name: 'compatibility', title: 'Browser compatibility'}
   ];
 </script>
 
@@ -72,6 +74,18 @@
 
     [theme~="dark"] #theme-select select {
       background-color: var(--material-background-color);
+    }
+
+    .vertical-section-container.centered {
+      /* Limit the line length for better readability */
+      max-width: 50em;
+    }
+
+    hr {
+      height: 0;
+      border: 0;
+      border-top: 1px solid var(--material-divider-color);
+      margin: 64px 0;
     }
 
     code {

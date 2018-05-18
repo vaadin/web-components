@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Vaadin Material Theme Customization</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+  <link rel="import" href="../../iron-icons/iron-icons.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Material</span>
+    </demo-navigation>
+
+    <h1>Customization</h1>
+
+    <p>When the default styles are not suitable, you can adjust them with in the following ways.</p>
+
+    <h2 demo-section>CSS custom properties</h2>
+
+    <p>Material defines global <a href="https://www.sitepoint.com/practical-guide-css-variables-custom-properties/">CSS custom properties</a>
+      that you can use to make smaller adjustments to the styles.</p>
+
+    <p>The pages under the “Foundation” section (<a href="colors.html">Colors</a> for example) list
+      the custom properties that affect all elements that .</p>
+
+    <h3>Global changes</h3>
+
+    <p>As an example, if you wish to adjust the font family for all elements you can place the following code in the global style scope of you application:</p>
+
+    <div class="note">
+      <h6>Style scopes</h6>
+      <p>With the addition of Shadow DOM, styles on a webpage can be divided into global and local scoped styles.<br><a href="https://github.com/vaadin/vaadin-themable-mixin/wiki/1.-Style-Scopes">Learn more about style scopes</a></p>
+    </div>
+
+    <div class="note">
+      <h6>Browser compatibility</h6>
+      <p>Use the <code>&lt;custom-style&gt;</code> element for <a href="compatibility.html">cross-browser compatility</a>. You should import it explicitly from the Polymer package.</p>
+      <nice-demo-snippet code-only>
+        <template slot="source">
+          <link rel="import" href="bower_components/polymer/lib/elements/custom-style.html">
+        </template>
+      </nice-demo-snippet>
+    </div>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- Add directly to your app’s entrypoint or use a separate HTML import -->
+        <custom-style>
+          <style>
+            html {
+              --material-font-family: 'Helvetica Neue', Arial, sans-serif;
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <h3>Scoped changes</h3>
+
+    <p>If you wish to adjust the font family for <code>vaadin-button</code> specifically, for example, you can
+      do the following:</p>
+
+    <nice-demo-snippet code-only>
+      <template slot="source">
+        <!-- This needs to be in the same style scope as the vaadin-button -->
+        <custom-style>
+          <style>
+            vaadin-button {
+              --material-font-family: monospace;
+            }
+          </style>
+        </custom-style>
+      </template>
+    </nice-demo-snippet>
+
+    <div class="note">
+      <h6>Global scope</h6>
+      <p>This only works if the styles are placed in the same <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki/1.-Style-Scopes">style scope</a>
+      as the buttons you want to style. To work around this limitation you need to use a <a href="#theme-modules">theme module</a>.</p>
+    </div>
+
+
+    <hr>
+
+
+    <h2 demo-section>Theme modules</h2>
+
+    <p>You can create new theme modules to add low level CSS for any element when you can’t accomplish the styling you want using the CSS custom properties provided by the Material theme and need to style elements freely.</p>
+
+    <p>Read the documentation for <code>ThemableMixin</code> to learn how theme modules work.</p>
+
+    <a href="https://github.com/vaadin/vaadin-themable-mixin/wiki">Theme module documentation <iron-icon icon="chevron-right"></iron-icon></a>
+
+  </div>
+</body>
+</html>

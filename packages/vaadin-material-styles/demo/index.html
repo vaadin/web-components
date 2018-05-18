@@ -41,9 +41,12 @@
       <span slot="header">Material</span>
     </demo-navigation>
 
-    <h1>Getting started</h1>
+    <h1>Vaadin Material Theme</h1>
+    <p>Vaadin Material is a complete theme for <a href="https://vaadin.com/components">Vaadin components</a>, inspired by Google’s <a href="https://material.io">Material Design</a> guidelines.</p>
 
-    <h2 demo-section>Install</h2>
+    <h2>Getting started</h2>
+
+    <h3 demo-section>1. Install</h3>
     <p>To start using the Material theme you need to install the
       <a href="https://github.com/vaadin/vaadin-material-theme">vaadin-material-theme</a> package using
       <a href="https://bower.io">Bower</a>.</p>
@@ -54,38 +57,32 @@
       </template>
     </nice-demo-snippet>
 
-    <div class="note">
-      <h6>Vaadin components</h6>
-      <p>To have the full benefit of using the theme, you should also use
-        <a href="https://vaadin.com/components">Vaadin components</a>, such as
-        <a href="https://github.com/vaadin/vaadin-text-field">vaadin-text-field</a>,
-        <a href="https://github.com/vaadin/vaadin-button">vaadin-button</a> or
-        <a href="https://github.com/vaadin/vaadin-grid">vaadin-grid</a>. You can install those using
-        Bower as well.</p>
-    </div>
-
-    <h2 demo-section>Import a theme</h2>
-
-    <p>After installing the theme package, import any element specific theme files you need. Here,
-      we are importing the Material theme for vaadin-text-field.</p>
-
+    <h3 demo-section>2. Import and include main style modules</h3>
+    <p>Import and include the main style modules in the global scope:</p>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Import the theme before the corresponding element (in index.html or in a separate HTML import) -->
-        <link rel="import" href="bower_components/vaadin-material-theme/vaadin-text-field.html">
-        <link rel="import" href="bower_components/vaadin-text-field/vaadin-text-field.html">
+        <!-- Place these in your app’s entry point -->
+        <link rel="import" href="bower_components/vaadin-material-theme/color.html">
+        <link rel="import" href="bower_components/vaadin-material-theme/typography.html">
+
+        <!-- Include the main style modules in global scope (you app’s entry point) -->
+        <custom-style>
+          <style include="material-color material-typography"></style>
+        </custom-style>
       </template>
     </nice-demo-snippet>
 
-    <h2 demo-section>Next steps</h2>
-
+    <h3 demo-section>3. Next steps</h3>
     <ul>
-      <li>Get to know the style guide, such as <b><a href="typography.html">fonts</a></b> and <b>
-        <a href="colors.html">colors</a></b>, which affect the overall look and feel of all
-          components.</li>
-      <li>Browse the component themes, <b><a href="buttons.html">Buttons</a></b> for example</li>
-      <!-- <li>Learn how to <b><a href="customization.html">customize the theme</a></b> to your needs</li>
-      <li>Read about <b><a href="compatibility.html">browser compatibility</a></b></li> -->
+      <li>Get to know the foundation which defines the overall look and feel of the theme.
+        <ul>
+          <li><b><a href="typography.html">Typography</a></b></li>
+          <li><b><a href="colors.html">Color</a></b></li>
+        </ul>
+      </li>
+      <li>Browse the components, starting from <a href="buttons.html">Button</a></li>
+      <li>Learn how to <b><a href="customization.html">customize the styles</a></b> to your needs.</li>
+      <li>Remember to read about <b><a href="compatibility.html">browser compatibility</a></b>, if you need to support Internet Explorer 11 or EdgeHTML 14.</li>
     </ul>
 
   </div>
