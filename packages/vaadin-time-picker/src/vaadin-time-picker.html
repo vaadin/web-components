@@ -26,12 +26,14 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" on-value-changed="__onInputChange" filtered-items="[[__dropdownItems]]"
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[__dropdownItems]]"
         disabled="[[disabled]]" readonly="[[readonly]]">
       <template>
         [[item.label]]
       </template>
       <vaadin-time-picker-text-field class="input"
+          name="[[name]]"
+          invalid="[[invalid]]"
           autocomplete="off"
           label="[[label]]"
           required="[[required]]"
@@ -82,6 +84,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
+            /**
+             * The name of this element.
+             */
+            name: {
+              type: String
+            },
+
             /**
              * The time value for this element.
              *
@@ -152,6 +161,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
             readonly: {
               type: Boolean,
+              value: false
+            },
+
+            /**
+             * Set to true if the value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
               value: false
             },
 
@@ -244,6 +263,10 @@ This program is available under Apache License Version 2.0, available at https:/
         ready() {
           super.ready();
           this.__updateDropdownItems();
+
+          // Not using declarative because we receive an event before text-element shadow is ready,
+          // thus querySelector in textField.focusElement raises an undefined exception on validate
+          this.__dropdownElement.addEventListener('value-changed', e => this.__onInputChange(e));
         }
 
         __updateDropdownItems() {
@@ -296,7 +319,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __onInputChange(e) {
           const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
-
           const inputFromDropdownValue = this.i18n.formatTime(parsedObj) || '';
           const inputFromValue = this.i18n.formatTime(this.i18n.parseTime(this.value)) || '';
 
@@ -306,6 +328,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__dropdownElement.value = inputFromDropdownValue;
           } else {
             this.__updateValue(parsedObj);
+            this.validate();
           }
         }
 
@@ -376,6 +399,25 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         get focusElement() {
           return this.__inputElement || this;
+        }
+
+        /**
+         * Returns true if `value` is valid, and sets the `invalid` flag appropriately.
+         *
+         * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
+         */
+        validate() {
+          return !(this.invalid = !this.checkValidity());
+        }
+
+        /**
+         * Returns true if the current input value satisfies all constraints (if any)
+         *
+         * You can override the `checkValidity` method for custom validations.
+         */
+        checkValidity() {
+          return this.__inputElement.focusElement.checkValidity() &&
+            (this.value === this.__inputElement.value || this.i18n.parseTime(this.__dropdownElement.value));
         }
       }
 
