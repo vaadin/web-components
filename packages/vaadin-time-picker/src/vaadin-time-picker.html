@@ -209,13 +209,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __valueChanged(value, oldValue) {
-          const parsedObj = this.__parseISO(value) || '';
+          const parsedObj = this.__parseISO(value);
 
-          const valueFromOld = this.__parseISO(oldValue) || '';
-          const valueFromCurrent = this.__formatISO(this.__parseISO(value)) || '';
+          const valueFromCurrent = this.__formatISO(parsedObj) || '';
 
-          if (this.value !== '' && parsedObj === '') {
-            this.value = valueFromOld;
+          if (this.value !== '' && !parsedObj) {
+            this.value = oldValue;
           } else if (this.value !== valueFromCurrent) {
             this.value = valueFromCurrent;
           } else {
@@ -224,12 +223,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onInputChange(e) {
-          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value) || '';
+          const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
 
           const inputFromDropdownValue = this.i18n.formatTime(parsedObj) || '';
           const inputFromValue = this.i18n.formatTime(this.i18n.parseTime(this.value)) || '';
 
-          if (this.__dropdownElement.value !== '' && parsedObj === '') {
+          if (this.__dropdownElement.value !== '' && !parsedObj) {
             this.__dropdownElement.value = inputFromValue;
           } else if (this.__dropdownElement.value !== inputFromDropdownValue) {
             this.__dropdownElement.value = inputFromDropdownValue;
