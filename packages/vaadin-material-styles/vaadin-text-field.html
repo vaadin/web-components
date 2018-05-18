@@ -10,6 +10,7 @@
         outline: none;
         color: var(--material-body-text-color);
         font-size: var(--material-body-font-size);
+        line-height: 24px;
         font-family: var(--material-font-family);
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -21,7 +22,7 @@
          (no label, with label, without prefix, with prefix, etc.) */
 
       :host([has-label]) {
-        vertical-align: 22px;
+        vertical-align: 20px;
         padding-top: 16px;
       }
 
@@ -35,7 +36,7 @@
       }
 
       :host(:not([has-label])) {
-        vertical-align: 22px;
+        vertical-align: 20px;
       }
 
       [part="input-field"] {
@@ -207,7 +208,7 @@
       /* Only target the visible floating label */
       :host([has-label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
         /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
-        transform: scale(1) translateY(25px);
+        transform: scale(1) translateY(24px);
         transition-timing-function: ease, ease, step-start;
         pointer-events: none;
         left: auto;

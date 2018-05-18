@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html theme="">
+  <head>
+    <meta charset="utf-8">
+    <title>Material components baseline test</title>
+    <meta name="viewport" content="width=device-width">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="../../iron-icons/iron-icons.html">
+    <link rel="import" href="all-theme-imports.html">
+    <link rel="import" href="all-src-imports.html">
+    <custom-style>
+      <style include="material-typography">
+        body {
+          margin: 0;
+          line-height: 100px !important;
+          background-image: linear-gradient(
+            180deg,
+            transparent,
+            transparent 55px,
+            rgba(0, 0, 0, 0.25) 56px,
+            transparent 57px,
+            transparent
+          );
+          background-size: 100px 100px;
+          background-repeat: repeat;
+        }
+
+        /* Test for common CSS reset */
+        * {
+          box-sizing: border-box;
+        }
+
+        vaadin-split-layout {
+          width: 100vw;
+          height: 100vh;
+        }
+
+        vaadin-context-menu,
+        vaadin-grid {
+          height: 100%;
+        }
+      </style>
+    </custom-style>
+
+    <custom-style>
+      <style include="material-typography"></style>
+    </custom-style>
+  </head>
+  <body unresolved>
+
+    Baseline <br>
+
+    zzz
+    <vaadin-text-field value="zzz no label"></vaadin-text-field>
+
+    zzz
+    <vaadin-text-field label="zzz label"></vaadin-text-field>
+
+    zzz
+    <vaadin-text-field label="with label" value="zzz"></vaadin-text-field>
+
+    zzz
+    <vaadin-combo-box label="with label"></vaadin-combo-box>
+
+    zzz
+    <vaadin-button>zzz</vaadin-button>
+
+    zzz
+    <vaadin-button theme="outlined">zzz</vaadin-button>
+
+    zzz
+    <vaadin-button theme="contained">zzz</vaadin-button>
+
+  </body>
+</html
+
