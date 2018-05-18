@@ -32,7 +32,7 @@
       });
 
       it('should use custom formatter if that exists', function() {
-        timePicker.set('i18n.formatTime', sinon.stub().returns('12:00 AM'));
+        timePicker.set('i18n.formatTime', sinon.stub().withArgs({hours: 12, minutes: 0}).returns('12:00 AM'));
         timePicker.value = '12';
         // NOTE (yuriy): Formatter is used for filling dropdown items, so we should check only the last valid call
         const lastCall = timePicker.i18n.formatTime.args.length - 1;
