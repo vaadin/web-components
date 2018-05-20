@@ -109,6 +109,30 @@
         });
       });
 
+      it('should validate correctly with pattern regexp', () => {
+        timepicker.pattern = '^1\\d:.*';
+
+        timepicker.value = '20:01';
+        expect(timepicker.validate()).to.equal(false);
+        expect(timepicker.invalid).to.equal(true);
+
+        timepicker.value = '11:00';
+        expect(timepicker.__inputElement.value).to.equal('11:00');
+        expect(timepicker.validate()).to.equal(true);
+        expect(timepicker.invalid).to.equal(false);
+      });
+
+      it('should prevent invalid input', () => {
+        timepicker.pattern = '^1\\d:.*';
+        timepicker.preventInvalidInput = true;
+
+        inputValue('22:00');
+        expect(timepicker.__inputElement.value).to.be.emtpy;
+
+        inputValue('12:34');
+        expect(timepicker.__inputElement.value).to.equal('12:34');
+      });
+
       it('should be possible to force invalid status', () => {
         timepicker.invalid = true;
         expect(timepicker.__inputElement.invalid).to.be.true;
