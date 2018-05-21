@@ -6,6 +6,7 @@
   <template>
     <style>
       :host {
+        display: inline-flex;
         position: relative;
         outline: none;
         color: var(--material-body-text-color);
@@ -18,11 +19,14 @@
         contain: content;
       }
 
+      :host::before {
+        line-height: 32px;
+      }
+
       /* Strange gymnastics to make fields vertically align nicely in most cases
          (no label, with label, without prefix, with prefix, etc.) */
 
       :host([has-label]) {
-        vertical-align: 20px;
         padding-top: 16px;
       }
 
@@ -35,12 +39,9 @@
         position: absolute;
       }
 
-      :host(:not([has-label])) {
-        vertical-align: 20px;
-      }
-
       [part="input-field"] {
         position: relative;
+        top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
         height: 32px;
         padding-left: 0;
         background-color: transparent;
@@ -88,6 +89,7 @@
         height: 100%;
         font-family: inherit;
         font-size: 1em;
+        line-height: inherit;
         color: inherit;
         background-color: transparent;
         /* Disable default invalid style in Firefox */
@@ -140,11 +142,14 @@
 
       [part="label"] {
         display: block;
+        position: absolute;
+        top: 0;
         font-size: 1em;
         line-height: 1;
-        height: 16px;
+        height: 20px;
+        margin-bottom: -4px;
         white-space: nowrap;
-        overflow: hidden;
+        overflow-x: hidden;
         text-overflow: ellipsis;
         color: var(--material-secondary-text-color);
         transform-origin: 0 75%;
