@@ -34,10 +34,10 @@
       it('should use custom formatter if that exists', function() {
         timePicker.set('i18n.formatTime', sinon.stub().withArgs({hours: 12, minutes: 0}).returns('12:00 AM'));
         timePicker.value = '12';
-        // Formatter is used for filling dropdown items, so we should check only the last call
+        // NOTE (yuriy): Formatter is used for filling dropdown items, so we should check only the last valid call
         const lastCall = timePicker.i18n.formatTime.args.length - 1;
         expect(timePicker.i18n.formatTime.args[lastCall][0]).to.deep.equal(
-          {hours: 12, minutes: 0, seconds: undefined, milliseconds: undefined}
+          {hours: '12', minutes: '00', seconds: undefined, milliseconds: undefined}
         );
         expect(timePicker.__dropdownElement.value).to.be.equal('12:00 AM');
       });

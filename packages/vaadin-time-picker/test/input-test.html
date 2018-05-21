@@ -38,13 +38,15 @@
       });
 
       it('should not set value if the format is invalid', () => {
-        changeInputValue(timePicker.__inputElement, 'invalid');
+        changeInputValue(timePicker.__dropdownElement, 'invalid');
         expect(timePicker.value).to.be.equal('');
+        expect(timePicker.__dropdownElement.value).to.be.equal('');
       });
 
       it('should not allow setting invalid value programmatically', () => {
         timePicker.value = 'invalid';
         expect(timePicker.value).to.be.equal('');
+        expect(timePicker.__dropdownElement.value).to.be.equal('');
       });
 
       it('should not allow setting invalid time value', () => {
@@ -70,9 +72,10 @@
         expect(timePicker.__inputElement.value).to.be.equal('12:00');
       });
 
-      it('should restore the previous value if the format is invalid', () => {
+      it('should restore the previous value if the format of new value is invalid', () => {
         timePicker.value = '12:00';
-        changeInputValue(timePicker.__inputElement, 'invalid');
+        timePicker.value = 'invalid';
+        changeInputValue(timePicker.__dropdownElement, 'invalid');
         expect(timePicker.value).to.be.equal('12:00');
       });
 
@@ -103,6 +106,22 @@
         timePicker.step = 0.5;
         timePicker.value = '3:1';
         expect(timePicker.value).to.be.equal('03:01:00.000');
+      });
+
+      it('should autocomplete the same value', () => {
+        timePicker.value = '8';
+        expect(timePicker.value).to.be.equal('08:00');
+        timePicker.value = '8';
+        expect(timePicker.value).to.be.equal('08:00');
+      });
+
+      it('should fire only one value-change event', () => {
+        const spy = sinon.spy();
+        timePicker.addEventListener('value-changed', spy);
+        timePicker.value = '12:00';
+        expect(spy.callCount).to.equal(1);
+        timePicker.value = '';
+        expect(spy.callCount).to.equal(2);
       });
     });
   </script>
