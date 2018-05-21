@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <title>Material Theme Upload</title>
+
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <link rel="import" href="common.html">
+
+  <link rel="import" href="../vaadin-upload.html">
+
+  <style>
+    [unresolved] {
+      opacity: 0;
+    }
+  </style>
+</head>
+
+<body unresolved>
+
+  <div class="vertical-section-container centered">
+
+    <demo-navigation>
+      <span slot="header">Material</span>
+    </demo-navigation>
+
+    <h1>Upload</h1>
+
+    <nice-demo-snippet>
+      <template slot="source">
+        <vaadin-upload></vaadin-upload>
+        <p>Files over 1MB are always rejected by the server in this demo.</p>
+      </template>
+    </nice-demo-snippet>
+
+    <script src="../../mock-http-request/lib/mock.js"></script>
+    <script>
+      // Use MockHttpRequest in demos
+      function mockXhrGenerator(file) {
+        var xhr = new MockHttpRequest();
+        xhr.upload = {};
+        xhr.onsend = function() {
+          if (xhr.upload.onloadstart) {
+            xhr.upload.onloadstart();
+          }
+          var total = file && file.size || 1024, done = 0;
+          function start() {
+            setTimeout(progress, 1000);
+          }
+          function progress() {
+            xhr.upload.onprogress({total: total, loaded: done});
+            if (done < total) {
+              setTimeout(progress, 200);
+              done = Math.min(total, done + 254000);
+            } else if (!file.abort) {
+              setTimeout(finish, 1000);
+            }
+          }
+          function finish() {
+            xhr.receive(200, '{"message":"OK"}');
+          }
+          start();
+        };
+        return xhr;
+      }
+      window.addEventListener('WebComponentsReady', () => {
+        // Monkey-patch vaadin-upload prototype to use MockHttpRequest
+        Object.getPrototypeOf(document.createElement('vaadin-upload'))._createXhr = mockXhrGenerator;
+
+        var upload = document.querySelector('vaadin-upload');
+        upload.addEventListener('upload-response', function(event) {
+          if (event.detail.file.size > 1024 * 1024)
+            event.detail.file.error = 'The file is too big';
+      });
+
+    });
+    </script>
+
+  </div>
+</body>
+</html>
