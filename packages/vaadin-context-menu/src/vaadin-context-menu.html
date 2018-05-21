@@ -314,16 +314,14 @@ This program is available under Apache License Version 2.0, available at https:/
 
         // Runs after overlay is fully rendered
         _onVaadinOverlayOpen(e) {
-          if (this.opened) {
-            // Phone alignment is done in CSS
-            if (!this._phone) {
-              this.__alignOverlayPosition();
-            }
+          // Phone alignment is done in CSS
+          if (!this._phone) {
+            this.__alignOverlayPosition();
+          }
 
-            const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
-            if (child) {
-              child.focus();
-            }
+          const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
+          if (child) {
+            child.focus();
           }
         }
 
