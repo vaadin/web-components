@@ -36,7 +36,6 @@
 
       :host(:not([has-label])) {
         vertical-align: 22px;
-        /* vertical-align: 21px; */
       }
 
       [part="input-field"] {
@@ -172,7 +171,7 @@
       }
 
       :host([focused]:not([invalid])) [part="label"] {
-        color: var(--material-primary-color);
+        color: var(--material-primary-text-color);
       }
 
       :host([focused]) [part="input-field"]::after,

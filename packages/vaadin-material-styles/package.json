@@ -1,13 +1,14 @@
 {
   "name": "vaadin-material-theme",
   "version": "0.3.0",
-  "description": "Material is a customizable theme for Vaadin components",
-  "main": "material.html",
+  "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
+  "main": "",
   "repository": "vaadin/vaadin-material-theme",
   "keywords": [
     "vaadin",
     "material",
     "theme",
+    "design-system",
     "web-components",
     "web-component",
     "polymer"
@@ -19,7 +20,8 @@
   },
   "homepage": "https://vaadin.com/components",
   "scripts": {
-    "test": "wct"
+    "test": "wct",
+    "preversion": "gulp version:update"
   },
   "devDependencies": {
     "bower": "latest",
@@ -27,9 +29,15 @@
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
     "gulp": "latest",
+    "gulp-clip-empty-files": "^0.1.2",
     "gulp-eslint": "^4.0.0",
+    "gulp-expect-file": "0.0.7",
+    "gulp-find": "0.0.10",
+    "gulp-git": "^2.4.2",
+    "gulp-grep-contents": "0.0.1",
     "gulp-html-extract": "^0.3.0",
     "gulp-iconfont": "^9.1.0",
+    "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
     "gulp-svgmin": "^1.2.4",
     "polyserve": "^0.19.1",
