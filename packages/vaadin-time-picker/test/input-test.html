@@ -140,6 +140,19 @@
           expect(timePicker.__inputElement[prop]).to.be.equal('foo');
         });
       });
+
+      // they are used in both combo-box-mixin and text-field
+      ['disabled', 'readonly'].forEach(prop => {
+        ['__inputElement', '__dropdownElement'].forEach(elem => {
+          it(`should propagate ${prop} property and attribute to ${elem}`, function() {
+            expect(timePicker[elem][prop]).to.be.false;
+            expect(timePicker[elem].hasAttribute(prop)).to.be.false;
+            timePicker[prop] = true;
+            expect(timePicker[elem][prop]).to.be.true;
+            expect(timePicker[elem].hasAttribute(prop)).to.be.true;
+          });
+        });
+      });
     });
   </script>
 </body>

@@ -26,7 +26,8 @@ This program is available under Apache License Version 2.0, available at https:/
         cursor: pointer;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" on-value-changed="__onInputChange" filtered-items="[[__dropdownItems]]">
+    <vaadin-combo-box-light allow-custom-value item-label-path="value" on-value-changed="__onInputChange" filtered-items="[[__dropdownItems]]"
+        disabled="[[disabled]]" readonly="[[readonly]]">
       <template>
         [[item.label]]
       </template>
