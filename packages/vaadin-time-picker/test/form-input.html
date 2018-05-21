@@ -92,6 +92,16 @@
         expect(timepicker.invalid).to.be.equal(false);
       });
 
+      it('should not mark empty input as invalid', () => {
+        expect(timepicker.validate()).to.equal(true);
+
+        inputValue('22:00');
+        expect(timepicker.validate()).to.equal(true);
+
+        inputValue('');
+        expect(timepicker.validate()).to.equal(true);
+      });
+
       describe('custom validator', () => {
 
         beforeEach(() => timepicker = fixture('custom-validation'));

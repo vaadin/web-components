@@ -305,13 +305,12 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __valueChanged(value, oldValue) {
           const parsedObj = this.__parseISO(value);
-
-          const valueFromCurrent = this.__formatISO(parsedObj) || '';
+          const newValue = this.__formatISO(parsedObj) || '';
 
           if (this.value !== '' && !parsedObj) {
             this.value = oldValue;
-          } else if (this.value !== valueFromCurrent) {
-            this.value = valueFromCurrent;
+          } else if (this.value !== newValue) {
+            this.value = newValue;
           } else {
             this.__updateInputValue(parsedObj);
           }
@@ -319,16 +318,15 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __onInputChange(e) {
           const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
-          const inputFromDropdownValue = this.i18n.formatTime(parsedObj) || '';
-          const inputFromValue = this.i18n.formatTime(this.i18n.parseTime(this.value)) || '';
+          const oldValue = this.value;
+          const newValue = this.i18n.formatTime(parsedObj) || '';
 
-          if (this.__dropdownElement.value !== '' && !parsedObj) {
-            this.__dropdownElement.value = inputFromValue;
-          } else if (this.__dropdownElement.value !== inputFromDropdownValue) {
-            this.__dropdownElement.value = inputFromDropdownValue;
-          } else {
+          if (!parsedObj && oldValue && this.__dropdownElement.value) {
+            this.__dropdownElement.value = oldValue;
+          } else if (parsedObj && this.__dropdownElement.value !== newValue) {
+            this.__dropdownElement.value = newValue;
+          } else if (this.validate()) {
             this.__updateValue(parsedObj);
-            this.validate();
           }
         }
 
@@ -416,7 +414,8 @@ This program is available under Apache License Version 2.0, available at https:/
          * You can override the `checkValidity` method for custom validations.
          */
         checkValidity() {
-          return this.__inputElement.focusElement.checkValidity() && this.i18n.parseTime(this.__dropdownElement.value);
+          return this.__inputElement.focusElement.checkValidity() &&
+            (!this.__dropdownElement.value || this.i18n.parseTime(this.__dropdownElement.value));
         }
       }
 
