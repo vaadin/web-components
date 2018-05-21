@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-button.html">
+  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
+
+  <custom-style>
+    <style include="lumo-typography lumo-color">
+      body {
+        margin: 2em;
+      }
+    </style>
+  </custom-style>
+
+</head>
+
+<body>
+  <h2>Sizing and vertical align</h2>
+
+  <vaadin-button style="width: 200px;">
+    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    <span>Fixed width</span>
+  </vaadin-button>
+
+  <vaadin-button style="height: 60px;">
+    Fixed height
+    <iron-icon slot="suffix" icon="lumo:plus"></iron-icon>
+  </vaadin-button>
+
+  <vaadin-button style="width: 200px; height: 80px;">
+    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    Fixed width and height
+  </vaadin-button>
+
+  <vaadin-button>
+    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    Multiple<br>lines
+  </vaadin-button>
+</body>
