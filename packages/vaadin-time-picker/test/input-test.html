@@ -123,6 +123,23 @@
         timePicker.value = '';
         expect(spy.callCount).to.equal(2);
       });
+
+      ['readonly', 'required', 'disabled', 'preventInvalidInput', 'autofocus'].forEach(prop => {
+        it(`should propagate boolean property to text-field ${prop}`, () => {
+          timePicker[prop] = true;
+          expect(timePicker.__inputElement[prop]).to.be.true;
+          timePicker[prop] = false;
+          expect(timePicker.__inputElement[prop]).to.be.false;
+        });
+      });
+
+      ['label', 'placeholder', 'pattern', 'errorMessage'].forEach(prop => {
+        it(`should propagate string property to text-field ${prop}`, () => {
+          expect(timePicker.__inputElement[prop]).to.be.empty;
+          timePicker[prop] = 'foo';
+          expect(timePicker.__inputElement[prop]).to.be.equal('foo');
+        });
+      });
     });
   </script>
 </body>
