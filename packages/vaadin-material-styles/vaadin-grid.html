@@ -19,9 +19,6 @@
       [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         padding: 8px 16px;
 
-        /* NOTE(platosha): Raise cell content above background cell pseudo elements */
-        position: relative;
-        z-index: 1;
       }
 
       [part~="details-cell"] ::slotted(vaadin-grid-cell-content) {
@@ -36,27 +33,15 @@
         font-weight: 500;
       }
 
-      [part~="header-cell"] ::slotted(vaadin-grid-cell-content),
-      [part~="footer-cell"] ::slotted(vaadin-grid-cell-content) {
-      }
-
-      [part~="header-cell"],
-      [part~="footer-cell"] {
-      }
-
-      [part="row"]:only-child [part~="header-cell"],
-      [part="row"]:only-child [part~="footer-cell"] {
-      }
-
       /* Header and footer divider between body rows */
 
       [part~="body-cell"],
       [part~="details-cell"],
-      [part~="row"]:last-child [part~="header-cell"] {
+      [part~="row"]:last-child > [part~="header-cell"] {
         border-bottom: 1px solid var(--material-divider-color);
       }
 
-      [part~="row"]:first-child [part~="footer-cell"] {
+      [part~="row"]:first-child > [part~="footer-cell"] {
         border-top: 1px solid var(--material-divider-color);
       }
 
@@ -66,19 +51,19 @@
         background-color: var(--material-background-color);
       }
 
-      [part~="row"]:hover [part~="body-cell"] {
+      [part~="row"]:hover > [part~="body-cell"] {
         background: linear-gradient(var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04)), var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04))) var(--material-background-color);
       }
 
       @media (hover: none) {
-        [part~="row"]:hover [part~="body-cell"] {
+        [part~="row"]:hover > [part~="body-cell"] {
           background: var(--material-background-color);
         }
       }
 
       /* Selected row */
 
-      [part~="cell"]::before {
+      [part~="body-cell"]::before {
         content: "";
         pointer-events: none;
         position: absolute;
@@ -91,8 +76,13 @@
         transition: opacity 0.1s cubic-bezier(0.4, 0.0, 0.2, 0.1);
       }
 
-      :host(:not([reordering])) [part~="row"][selected] [part~="cell"]::before {
+      :host(:not([reordering])) [part~="row"][selected] > [part~="body-cell"]::before {
         opacity: var(--_material-grid-row-selected-overlay-opacity, 0.08);
+      }
+
+      [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
+        /* NOTE(platosha): Raise cell content above background cell pseudo elements */
+        position: relative;
       }
 
       /* Column reordering */
