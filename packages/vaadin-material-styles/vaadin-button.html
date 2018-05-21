@@ -7,33 +7,24 @@
   <template>
     <style>
       :host {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 4px;
-        color: var(--material-body-text-color);
-        font-family: var(--material-font-family);
-        text-transform: uppercase;
-        font-size: var(--material-button-font-size);
-        font-weight: 500;
-        letter-spacing: 0.05em;
-        overflow: hidden;
-        transition: background-color 0.3s, box-shadow 0.2s;
-        -webkit-tap-highlight-color: transparent;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        z-index: 0;
-        margin: 8px;
-        padding: 0 16px;
+        padding: 0 8px;
         min-width: 64px;
         min-height: 36px;
         box-sizing: border-box;
-      }
-
-      /* Dense style */
-      :host([theme~="dense"]) {
-        font-size: var(--material-caption-font-size);
-        min-height: 32px;
+        border-radius: 4px;
+        color: var(--material-primary-text-color);
+        font-family: var(--material-font-family);
+        text-transform: uppercase;
+        font-size: var(--material-button-font-size);
+        line-height: 36px;
+        font-weight: 500;
+        letter-spacing: 0.05em;
+        white-space: nowrap;
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
 
       :host::before,
@@ -95,43 +86,35 @@
         color: var(--material-disabled-text-color);
       }
 
-      /* Raised style */
-      :host([theme~="raised"]:not([disabled])) {
-        background-color: var(--_material-button-raised-background-color, var(--material-background-color));
+      /* Contained and outline variants */
+      :host([theme~="contained"]),
+      :host([theme~="outlined"]) {
+        padding: 0 16px;
+      }
+
+      :host([theme~="outlined"]) {
+        box-shadow: inset 0 0 0 1px var(--_material-button-outline-color, rgba(0, 0, 0, 0.2));
+      }
+
+      :host([theme~="contained"]:not([disabled])) {
+        background-color: var(--material-primary-color);
+        color: var(--material-primary-contrast-color);
         box-shadow: var(--material-shadow-elevation-2dp);
       }
 
-      :host([theme~="raised"]:hover) {
+      :host([theme~="contained"][disabled]) {
+        background-color: var(--material-secondary-background-color);
+      }
+
+      :host([theme~="contained"]:hover) {
         box-shadow: var(--material-shadow-elevation-4dp);
       }
 
-      :host([theme~="raised"][active]) {
+      :host([theme~="contained"][active]) {
         box-shadow: var(--material-shadow-elevation-8dp);
       }
 
-      :host([theme~="raised"][disabled])::before {
-        opacity: 0.3;
-      }
-
-      /* Primary style */
-      :host([theme~="primary"]:not([disabled])) {
-        color: var(--material-primary-text-color);
-      }
-
-      :host([theme~="primary"][active])::before,
-      :host([theme~="primary"][active])::after {
-        opacity: 0.2;
-      }
-
-      /* Raised primary style */
-      :host([theme~="raised"][theme~="primary"]:not([disabled])) {
-        color: var(--material-primary-contrast-color);
-        background-color: var(--material-primary-color);
-      }
-
-      :host([theme~="primary"][theme~="raised"][focus-ring])::before {
-        opacity: 0.2;
-      }
+      /* Icon alignment */
 
       [part] ::slotted(iron-icon) {
         display: block;
@@ -147,31 +130,6 @@
       [part="suffix"] ::slotted(iron-icon) {
         margin-left: 8px;
         margin-right: -4px;
-      }
-
-      /* Icon-only */
-      :host([theme~="icon"]) {
-        min-width: 0;
-        width: 40px;
-        height: 40px;
-        min-height: 0;
-        border-radius: 50%;
-        padding: 8px;
-        --iron-icon-width: 100%;
-        --iron-icon-height: 100%;
-      }
-
-      :host([theme~="icon"])::before {
-        transition-delay: 0.3s;
-      }
-
-      :host([theme~="icon"])::after {
-        width: 300%;
-        height: 300%;
-      }
-
-      :host([theme~="icon"][active])::before {
-        transition-delay: 0s;
       }
     </style>
   </template>
