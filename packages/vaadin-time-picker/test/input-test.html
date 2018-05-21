@@ -40,6 +40,7 @@
       it('should not set value if the format is invalid', () => {
         changeInputValue(timePicker.__dropdownElement, 'invalid');
         expect(timePicker.value).to.be.equal('');
+        expect(timePicker.__dropdownElement.value).to.be.equal('invalid');
       });
 
       it('should not allow setting invalid value programmatically', () => {
