@@ -209,6 +209,12 @@
         ironForm.submit();
         expect(timepicker.__inputElement.invalid).to.be.true;
       });
+
+      it('should not pass the value when disabled', () => {
+        timepicker.value = '23:00';
+        timepicker.disabled = true;
+        expect(ironForm.serializeForm().foo).to.be.equal(undefined);
+      });
     });
   </script>
 
