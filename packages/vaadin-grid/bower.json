@@ -16,7 +16,15 @@
     "data-grid",
     "data-table"
   ],
-  "main": "vaadin-grid.html",
+  "main": [
+    "vaadin-grid.html",
+    "vaadin-grid-column-group.html",
+    "vaadin-grid-column.html",
+    "vaadin-grid-filter.html",
+    "vaadin-grid-selection-column.html",
+    "vaadin-grid-sorter.html",
+    "vaadin-grid-tree-toggle.html"
+  ],
   "ignore": [
     "**/.*",
     "**/node_modules",
