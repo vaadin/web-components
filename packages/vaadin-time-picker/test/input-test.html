@@ -144,7 +144,7 @@
       // they are used in both combo-box-mixin and text-field
       ['disabled', 'readonly'].forEach(prop => {
         ['__inputElement', '__dropdownElement'].forEach(elem => {
-          it(`should propagate ${prop} property and attribute to ${elem}`, function() {
+          it(`should propagate ${prop} property and attribute to ${elem}`, () => {
             expect(timePicker[elem][prop]).to.be.false;
             expect(timePicker[elem].hasAttribute(prop)).to.be.false;
             timePicker[prop] = true;
