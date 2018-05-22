@@ -21,7 +21,10 @@
                 return hour >= 9 && hour < 17;
               }
             }
-            customElements.define('vaadin-time-picker-working-hours', TimePickerWorkingHoursElement);
+
+            if (!customElements.get('vaadin-time-picker-working-hours')) {
+              customElements.define('vaadin-time-picker-working-hours', TimePickerWorkingHoursElement);
+            }
           });
         </script>
       </template>
