@@ -1,0 +1,27 @@
+<dom-module id="tab-styles" theme-for="vaadin-tab">
+  <template>
+    <style>
+      :host,
+      :host([selected]),
+      :host::before,
+      :host::after,
+      :host::after {
+        transition: none !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="tabs-styles" theme-for="vaadin-tabs">
+  <template>
+    <style>
+      [part="forward-button"],
+      [part="back-button"] {
+        transition: none !important;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<link rel="import" href="../../vaadin-tab.html">
+<link rel="import" href="../../vaadin-tabs.html">
