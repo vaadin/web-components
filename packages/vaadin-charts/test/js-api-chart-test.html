@@ -76,7 +76,7 @@
           const series = chartContainer.querySelectorAll('.highcharts-series');
           expect(series).to.have.lengthOf(1);
           const firstSeries = series[0];
-          // IE11 doesn't support SVGElement.classList 
+          // IE11 doesn't support SVGElement.classList
           expect(firstSeries.getAttribute('class')).to.include('highcharts-column-series');
           expect(firstSeries.querySelectorAll('.highcharts-point')).to.have.lengthOf(12);
           done();

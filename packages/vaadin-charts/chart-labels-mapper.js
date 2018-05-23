@@ -1,5 +1,8 @@
+window.Vaadin = window.Vaadin || {};
+Vaadin.Charts = Vaadin.Charts || {};
+/** @private */
 // eslint-disable-next-line no-unused-vars
-class ChartLabelsMapper {
+Vaadin.Charts.ChartLabelsMapper = (() => class {
 
   constructor(mapper) {
     const value = mapper || [];
@@ -82,4 +85,4 @@ class ChartLabelsMapper {
       });
     }
   }
-}
+})();

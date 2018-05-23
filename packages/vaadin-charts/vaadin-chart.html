@@ -28,7 +28,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/js/modules/heatmap.js"></script>
 <script src="../highcharts/js/modules/solid-gauge.js"></script>
 <script src="../highcharts/js/modules/treemap.js"></script>
-<script src="./chart-temporary-display.js"></script>
+<script src="chart-temporary-display.js"></script>
+<script src="chart-deep-merger.js"></script>
 
 <link rel="import" href="vaadin-chart-series.html">
 
@@ -54,6 +55,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     {
+      const {ChartDeepMerger} = Vaadin.Charts;
 
       /**
        * `<vaadin-chart>` is a Polymer 2 element for creating high quality charts.
@@ -445,7 +447,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         get options() {
           const options = Object.assign({}, this._baseConfig);
-          this.__deepMerge(options, this.additionalOptions);
+          ChartDeepMerger.__deepMerge(options, this.additionalOptions);
 
           if (this.type) {
             options.chart = options.chart || {};
@@ -929,7 +931,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (resetConfiguration || !this._jsonConfigurationBuffer) {
             this._jsonConfigurationBuffer = {};
           }
-          const configCopy = this.__deepMerge({}, jsonConfiguration);
+
+          const configCopy = ChartDeepMerger.__deepMerge({}, jsonConfiguration);
           this.__inflateFunctions(configCopy);
           this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
@@ -1257,28 +1260,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (this.configuration) {
             this.update(this.additionalOptions);
           }
-        }
-
-        __isObject(item) {
-          return (item && typeof item === 'object' && !Array.isArray(item));
-        }
-
-        __deepMerge(target, source) {
-          if (this.__isObject(source) && this.__isObject(target)) {
-            for (const key in source) {
-              if (this.__isObject(source[key])) {
-                if (!target[key]) {
-                  Object.assign(target, {[key]: {}});
-                }
-
-                this.__deepMerge(target[key], source[key]);
-              } else {
-                Object.assign(target, {[key]: source[key]});
-              }
-            }
-          }
-
-          return target;
         }
 
         __callChartFunction(functionName) {

@@ -72,6 +72,17 @@
         </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="additionalseries">
+    <template>
+      <vaadin-chart>
+        <vaadin-chart-series id="additional-series"
+                             values="[10,20,30]"
+                             title="series-title"
+                             additional-options='{"name": "Awe", "type": "column"}'>
+        </vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
   <test-fixture id="multipleaxes">
     <template>
       <vaadin-chart additional-options='{"yAxis": [{"id": "additional-unit-1"},{"id": "additional-unit-2"}]}'>
@@ -419,7 +430,7 @@
         const stackChart = fixture('stack');
         stackChart.children[2].stack = '0';
         stackChart.children[3].stack = '0';
-        setTimeout(function() {  
+        setTimeout(function() {
           expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(40);
           expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(30);
           expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
@@ -438,6 +449,50 @@
           expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(50);
           done();
         }, 120);
+      });
+
+      it('should have additional-options', done => {
+        const chart = fixture('additionalseries');
+
+        setTimeout(() => {
+          const hcSeries = chart.configuration.series[0];
+          expect(hcSeries.type).to.be.equal('column');
+          done();
+        }, 200);
+      });
+
+      it('additional-options should not overwrite top-level element properties', done => {
+        const chart = fixture('additionalseries');
+
+        setTimeout(() => {
+          const hcSeries = chart.configuration.series[0];
+          expect(hcSeries.name).to.be.equal('series-title');
+          done();
+        }, 200);
+      });
+
+      it('should react to additionalOptions object change', done => {
+        const chart = fixture('additionalseries');
+        const series = chart.querySelector('vaadin-chart-series');
+        series.additionalOptions = {type: 'line'};
+
+        setTimeout(() => {
+          const hcSeries = chart.configuration.series[0];
+          expect(hcSeries.type).to.be.equal('line');
+          done();
+        }, 200);
+      });
+
+      it('should react to additionalOptions subproperty change', done => {
+        const chart = fixture('additionalseries');
+        const series = chart.querySelector('vaadin-chart-series');
+        series.additionalOptions.type = 'line';
+
+        setTimeout(() => {
+          const hcSeries = chart.configuration.series[0];
+          expect(hcSeries.type).to.be.equal('line');
+          done();
+        }, 200);
       });
 
     });

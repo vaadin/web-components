@@ -24,7 +24,7 @@
           static get is() {
             return 'chart-series-dom-repeat';
           }
-  
+
           static get properties() {
             return {
               seriesData: {
@@ -47,7 +47,7 @@
     </script>
   </dom-module>
   <chart-series-dom-repeat></chart-series-dom-repeat>
- 
+
   <script>
     describe('High-level Charts Series API with DOM Repeat', function() {
       let chart;
@@ -76,7 +76,7 @@
           expect(series).to.have.lengthOf(3);
           for (let index = 0; index < series.length; index++) {
             const currentSeries = series[index];
-            // IE11 doesn't support SVGElement.classList 
+            // IE11 doesn't support SVGElement.classList
             expect(currentSeries.getAttribute('class')).to.include('highcharts-line-series');
             expect(chart.configuration.series[0].data).to.have.lengthOf(element.seriesData[index].data.length);
           }

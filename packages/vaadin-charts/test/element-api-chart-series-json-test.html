@@ -22,7 +22,7 @@
           static get is() {
             return 'chart-series-with-json-api';
           }
-  
+
           connectedCallback() {
             super.connectedCallback();
             this.$.mychart.update({
@@ -39,7 +39,7 @@
     </script>
   </dom-module>
   <chart-series-with-json-api></chart-series-with-json-api>
- 
+
   <script>
     describe('High-level Charts Series API with JSON API', function() {
       let chart;
@@ -59,7 +59,7 @@
           done();
         }, 20);
       });
-      
+
       it('should have 1 series with merged options', function(done) {
         setTimeout(function() {
           const series = chart.configuration.series[0];

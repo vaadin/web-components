@@ -9,6 +9,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
 <link rel="import" href="../polymer/polymer-element.html">
 <script src="chart-labels-mapper.js"></script>
+<script src="chart-deep-merger.js"></script>
 
 <dom-module id="vaadin-chart-series">
   <script>
@@ -17,6 +18,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     {
+      const {ChartLabelsMapper, ChartDeepMerger} = Vaadin.Charts;
 
       /**
        * `<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.
@@ -76,7 +78,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         get options() {
-          const options = {};
+          const options = ChartDeepMerger.__deepMerge({}, this.additionalOptions);
 
           if (this.type) {
             options.type = this.type;
@@ -256,6 +258,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             options: {
               type: Object
+            },
+
+            /**
+             * Represents additional JSON configuration.
+             */
+            additionalOptions: {
+              type: Object,
+              reflectToAttribute: true
             }
           };
         }
@@ -263,7 +273,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get observers() {
           return [
             '__valuesObserver(values.splices)',
-            '__labelsObserver(valueLabels.*, values)'
+            '__labelsObserver(valueLabels.*, values)',
+            '__additionalOptionsObserver(additionalOptions.*)'
           ];
         }
 
@@ -307,6 +318,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             return value.type === 'function' ? value.mapper.toString() : super._serializeValue(value.mapper);
           }
           return super._serializeValue(value);
+        }
+
+        __additionalOptionsObserver() {
+          if (this.__hasSeriesConfig()) {
+            this._series.update(this.additionalOptions);
+          }
         }
 
         __labelsObserver(changeRecord, values) {

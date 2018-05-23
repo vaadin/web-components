@@ -163,7 +163,7 @@
       });
 
       it('should not trigger axis event if axis is hidden by action', done => {
-        const axisResizeSpy = sinon.spy(); 
+        const axisResizeSpy = sinon.spy();
         chart.addEventListener('yaxes-extremes-set', axisResizeSpy);
         chart.configuration.series[0].setVisible(false);
         setTimeout(() => {
