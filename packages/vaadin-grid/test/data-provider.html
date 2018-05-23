@@ -254,7 +254,10 @@
           raf = requestAnimationFrame(() => {
             // Cleanup
             grid.dataProvider = null;
-            done();
+            if (!done._called) {
+              done._called = true;
+              done();
+            }
           });
         };
         scrollToEnd(grid);
