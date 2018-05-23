@@ -16,14 +16,14 @@ gemini.suite('vaadin-split-layout', function(rootSuite) {
 
   gemini.suite('default', function(suite) {
     suite
-      .setUrl('/default.html')
+      .setUrl('default.html')
       .setCaptureElements('#default')
       .capture('default');
   });
 
   gemini.suite('customized', function(suite) {
     suite
-      .setUrl('/customized.html')
+      .setUrl('customized.html')
       .setCaptureElements('#customized')
       .capture('customized');
   });
