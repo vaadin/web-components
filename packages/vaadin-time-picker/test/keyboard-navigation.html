@@ -37,6 +37,20 @@
         timePicker = fixture('default');
       });
 
+      describe('with invalid step', () => {
+        beforeEach(() => timePicker.step = 899);
+
+        it('should add one minute to input value on arrow up', () => {
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:01:00');
+        });
+
+        it('should substract one minute from input value on arrow down', () => {
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('23:59:00');
+        });
+      });
+
       describe('with step less than 15 mins', () => {
         beforeEach(() => timePicker.step = 720);
 
