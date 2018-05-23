@@ -10,6 +10,7 @@
   ],
   "globals": {
     "Polymer": false,
-    "Vaadin": false
+    "Vaadin": false,
+    "MockInteractions": false
   }
 }

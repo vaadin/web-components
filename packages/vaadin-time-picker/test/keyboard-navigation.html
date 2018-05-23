@@ -38,9 +38,7 @@
       });
 
       describe('with step less than 15 mins', () => {
-        beforeEach(() => {
-          timePicker.step = 60;
-        });
+        beforeEach(() => timePicker.step = 720);
 
         it('should not change the value on arrow up', () => {
           timePicker.value = '00:00';
@@ -54,14 +52,14 @@
           expect(timePicker.value).to.be.equal('00:00');
         });
 
-        it('on arrow up with default step value should update the input value to 00:01', () => {
+        it('on arrow up should update the input value to 00:12', () => {
           arrowUp();
-          expect(timePicker.__inputElement.value).to.be.equal('00:01');
+          expect(timePicker.__inputElement.value).to.be.equal('00:12');
         });
 
-        it('on arrow up with default step value should update the input value to 23:59', () => {
+        it('on arrow up should update the input value to 23:48', () => {
           arrowDown();
-          expect(timePicker.__inputElement.value).to.be.equal('23:59');
+          expect(timePicker.__inputElement.value).to.be.equal('23:48');
         });
 
         it('should substract step value from the current input value on arrow down', () => {

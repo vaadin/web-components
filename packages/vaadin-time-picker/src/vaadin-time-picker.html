@@ -274,19 +274,6 @@ This program is available under Apache License Version 2.0, available at https:/
           this.__inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
         }
 
-        __eventKey(e) {
-          var keys = ['down', 'up'];
-          for (var i = 0; i < keys.length; i++) {
-            var k = keys[i];
-            if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, k)) {
-              return k;
-            }
-          }
-        }
-
-         /**
-          * Keyboard navigation
-          */
         __onKeyDown(e) {
           const stepResolution = this.step || 3600;
 
@@ -294,17 +281,12 @@ This program is available under Apache License Version 2.0, available at https:/
             return;
           }
 
-          let parsedValue = this.__validateTime(this.i18n.parseTime(this.__inputElement.value));
+          const parsedValue = this.__validateTime(this.i18n.parseTime(this.__inputElement.value));
 
-          switch (this.__eventKey(e)) {
-            case 'down':
-              this.__onArrowPressWithStep(-stepResolution, parsedValue);
-              break;
-            case 'up':
-              this.__onArrowPressWithStep(stepResolution, parsedValue);
-              break;
-            default:
-              break;
+          if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'down')) {
+            this.__onArrowPressWithStep(-stepResolution, parsedValue);
+          } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'up')) {
+            this.__onArrowPressWithStep(stepResolution, parsedValue);
           }
         }
 
@@ -331,17 +313,16 @@ This program is available under Apache License Version 2.0, available at https:/
          * from the result of adding step value in milliseconds to the milliseconds amount
          */
         __addStep(msec, step) {
-          const fullDay = 24 * 60 * 60 * 1000;
           const stepMsec = step * 1000;
           // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
           if (msec === 0 && step < 0) {
-            msec = fullDay;
+            msec = 24 * 60 * 60 * 1000;
           }
 
           const diffToNext = msec % stepMsec;
           if (stepMsec < 0 && diffToNext) {
             msec -= diffToNext;
-          } else if(stepMsec > 0 && diffToNext) {
+          } else if (stepMsec > 0 && diffToNext) {
             msec -= diffToNext - stepMsec;
           } else {
             msec += stepMsec;
@@ -354,7 +335,7 @@ This program is available under Apache License Version 2.0, available at https:/
           var ss = Math.floor(msec / 1000);
           msec -= ss * 1000;
 
-          return {hours: (hh < 24) ? hh: 0, minutes: mm, seconds: ss, milliseconds: msec}
+          return {hours: (hh < 24) ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec};
         }
 
         __updateDropdownItems() {

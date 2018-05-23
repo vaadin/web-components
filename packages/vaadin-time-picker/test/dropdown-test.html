@@ -40,7 +40,7 @@
       });
 
       it('vaadin-combo-box-light should not have an empty array as filteredItems if step is less than 15 mins', () => {
-        timePicker.step = 60;
+        timePicker.step = 899;
         expect(timePicker.__dropdownElement.filteredItems).to.be.empty;
       });
 
