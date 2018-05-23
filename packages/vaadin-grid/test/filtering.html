@@ -155,6 +155,28 @@
         grid._filters[0].value = '';
       });
 
+      it('should filter display all filtered items', (done) => {
+        flushFilters(grid);
+        grid._filters[0].value = '';
+        grid._filters[1].value = '';
+        flushFilters(grid);
+        const items = [];
+        for (let i = 0; i < 1000; i++) {
+          items.push({first: i, last: i});
+        }
+        grid.items = items;
+        scrollToEnd(grid);
+
+        setTimeout(() => {
+          grid._filters[0].value = '99';
+          flushFilters(grid);
+          requestAnimationFrame(() => {
+            expect(grid.$.items.querySelectorAll('tr:not([hidden])')).to.have.length(19);
+            done();
+          });
+        }, 200);
+      });
+
     });
 
     describe('array data provider', () => {
