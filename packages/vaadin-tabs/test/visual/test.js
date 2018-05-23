@@ -19,27 +19,21 @@ gemini.suite('vaadin-tabs', function(rootSuite) {
     suite
       .setUrl('horizontal-tabs.html')
       .setCaptureElements('#horizontal-tabs')
-      .capture('horizontal-tabs', {}, (actions, find) => {
-        actions.wait(6000);
-      });
+      .capture('horizontal-tabs');
   });
 
   gemini.suite('vertical-tabs', (suite) => {
     suite
       .setUrl('vertical-tabs.html')
       .setCaptureElements('#vertical-tabs')
-      .capture('vertical-tabs', {}, (actions, find) => {
-        actions.wait(6000);
-      });
+      .capture('vertical-tabs');
   });
 
   gemini.suite('scrollable-tabs', (suite) => {
     suite
       .setUrl('scrollable-tabs.html')
       .setCaptureElements('#scrollable-tabs')
-      .capture('scrollable-tabs', {}, (actions, find) => {
-        actions.wait(6000);
-      });
+      .capture('scrollable-tabs');
   });
 
 });
