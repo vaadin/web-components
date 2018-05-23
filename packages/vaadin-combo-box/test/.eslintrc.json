@@ -27,6 +27,7 @@
     "MockTouchInteractions": false,
     "touchDevice": false,
     "hackIE11Focus": false,
-    "_fixture": false
+    "_fixture": false,
+    "gemini": false
   }
 }
