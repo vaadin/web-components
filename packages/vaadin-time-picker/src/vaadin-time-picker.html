@@ -332,12 +332,21 @@ This program is available under Apache License Version 2.0, available at https:/
          */
         __addStep(msec, step) {
           const fullDay = 24 * 60 * 60 * 1000;
+          const stepMsec = step * 1000;
           // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
           if (msec === 0 && step < 0) {
             msec = fullDay;
           }
 
-          msec += step * 1000;
+          const diffToNext = msec % stepMsec;
+          if (stepMsec < 0 && diffToNext) {
+            msec -= diffToNext;
+          } else if(stepMsec > 0 && diffToNext) {
+            msec -= diffToNext - stepMsec;
+          } else {
+            msec += stepMsec;
+          }
+
           var hh = Math.floor(msec / 1000 / 60 / 60);
           msec -= hh * 1000 * 60 * 60;
           var mm = Math.floor(msec / 1000 / 60);
