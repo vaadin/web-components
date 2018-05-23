@@ -43,8 +43,12 @@ This program is available under Apache License Version 2.0, available at https:/
           error-message="[[errorMessage]]"
           autofocus="[[autofocus]]"
           placeholder="[[placeholder]]"
-          readonly="[[readonly]]">
-        <iron-icon slot="suffix" role="button" icon="lumo:clock" part="toggle-button" class="toggle-button"></iron-icon>
+          readonly="[[readonly]]"
+          role="application"
+          aria-live="assertive"
+          aria-label$=[[label]]>
+        <iron-icon slot="suffix" role="button" icon="lumo:clock" part="toggle-button" class="toggle-button"
+            aria-label$="[[i18n.selector]]"></iron-icon>
       </vaadin-time-picker-text-field>
     </vaadin-combo-box-light>
   </template>
@@ -220,6 +224,9 @@ This program is available under Apache License Version 2.0, available at https:/
                   parseTime: text => {
                     // Parses a string in object/string that can be formatted by`formatTime`.
                   }
+
+                  // Translation of the time selector icon button title.
+                  selector: 'Time selector',
                 }
               */
             i18n: {
@@ -250,7 +257,8 @@ This program is available under Apache License Version 2.0, available at https:/
                     if (parts) {
                       return {hours: parts[1], minutes: parts[2], seconds: parts[3], milliseconds: parts[4]};
                     }
-                  }
+                  },
+                  selector: 'Time selector'
                 };
               }
             }
