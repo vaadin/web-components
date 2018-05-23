@@ -1,0 +1,117 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-time-picker tests</title>
+  <script src='../../web-component-tester/browser.js'></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <script src='../../iron-test-helpers/mock-interactions.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../src/vaadin-time-picker.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-time-picker></vaadin-time-picker>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('keyboard navigation test', () => {
+      let timePicker;
+
+      function arrowUp() {
+        MockInteractions.keyDownOn(getInput(), 38);
+      }
+
+      function arrowDown() {
+        MockInteractions.keyDownOn(getInput(), 40);
+      }
+
+      function getInput() {
+        return timePicker.__inputElement;
+      }
+
+      beforeEach(() => {
+        timePicker = fixture('default');
+      });
+
+      describe('with step less than 15 mins', () => {
+        beforeEach(() => {
+          timePicker.step = 60;
+        });
+
+        it('should not change the value on arrow up', () => {
+          timePicker.value = '00:00';
+          arrowUp();
+          expect(timePicker.value).to.be.equal('00:00');
+        });
+
+        it('should not change the value on arrow down', () => {
+          timePicker.value = '00:00';
+          arrowDown();
+          expect(timePicker.value).to.be.equal('00:00');
+        });
+
+        it('on arrow up with default step value should update the input value to 00:01', () => {
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:01');
+        });
+
+        it('on arrow up with default step value should update the input value to 23:59', () => {
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('23:59');
+        });
+
+        it('should substract step value from the current input value on arrow down', () => {
+          timePicker.__inputElement.value = '23:55:55.500';
+          timePicker.step = 1.5;
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('23:55:54.000');
+        });
+
+        it('should add step value to the current input value on arrow up', () => {
+          timePicker.__inputElement.value = '23:55:55.500';
+          timePicker.step = 1.5;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('23:55:57.000');
+        });
+      });
+
+      describe('with step more than 15 mins', () => {
+        beforeEach(() => {
+          timePicker.step = 1800;
+          timePicker.value = '02:00';
+          timePicker.__dropdownElement.opened = true;
+        });
+
+        it('should not change the value on arrow up', () => {
+          arrowUp();
+          expect(timePicker.value).to.be.equal('02:00');
+        });
+
+        it('should not change the value on arrow down', () => {
+          arrowDown();
+          expect(timePicker.value).to.be.equal('02:00');
+        });
+
+        it('should change the value of the input to the previous step value', (done) => {
+          arrowUp();
+          setTimeout(() => {
+            expect(timePicker.__inputElement.value).to.be.equal('01:30');
+            done();
+          });
+        });
+
+        it('should change the value of the input to the next step value', (done) => {
+          arrowDown();
+          setTimeout(() => {
+            expect(timePicker.__inputElement.value).to.be.equal('02:30');
+            done();
+          });
+        });
+      });
+    });
+  </script>
+</body>
