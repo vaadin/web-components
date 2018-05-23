@@ -32,6 +32,13 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="column">
+    <template>
+      <vaadin-chart type="column">
+        <vaadin-chart-series values="[1,2,8,18]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
@@ -195,6 +202,18 @@
         }
         chart.addEventListener('xaxes-extremes-set', extremesListener);
         chart.setAttribute('category-max', newCategoryMax);
+      });
+
+      it('should react to chart3d change', function(done) {
+        chart = fixture('column');
+        setTimeout(function() {
+          expect(chart.configuration.frame3d).to.be.undefined;
+          chart.chart3d = true;
+          setTimeout(function() {
+            expect(chart.configuration.frame3d).not.to.be.undefined;
+            done();
+          }, 150);
+        }, 100);
       });
     });
   </script>

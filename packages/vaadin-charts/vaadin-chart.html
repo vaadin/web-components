@@ -386,6 +386,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Specifies whether to show chart in 3 or in 2 dimensions.
+             * Some display angles are added by default to the "chart.options3d" (`{alpha: 15, beta: 15, depth: 50}`).
+             * 3D display options can be modified via `additionalOptions`.
+             * The thickness of a Pie chart can be set on `additionalOptions` through `plotOptions.pie.depth`.
+             * 3D is supported by Bar, Column, Pie and Scatter3D charts.
+             * More info available at [Highcharts](https://www.highcharts.com/docs/chart-concepts/3d-charts).
+             */
+            chart3d: {
+              type: Boolean,
+              observer: '__chart3dObserver',
+              reflectToAttribute: true
+            },
+
+            /**
              * Represents additional JSON configuration.
              */
             additionalOptions: {
@@ -419,6 +433,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             yAxis: {
               axisGenerated: true
             }
+          };
+
+          this._baseChart3d = {
+            enabled: true,
+            alpha: 15,
+            beta: 15,
+            depth: 50
           };
 
           this.__mutationCallback = this.__mutationCallback.bind(this);
@@ -508,6 +529,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.legend = {
               enabled: false
             };
+          }
+
+          if (this.chart3d) {
+            options.chart = options.chart || {};
+
+            options.chart.options3d = Object.assign({}, this._baseChart3d, options.chart.options3d);
           }
           return options;
         }
@@ -1259,6 +1286,37 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         __updateAdditionalOptions() {
           if (this.configuration) {
             this.update(this.additionalOptions);
+          }
+        }
+
+        __chart3dObserver() {
+          if (!this.configuration) {
+            return;
+          }
+
+          if (this.chart3d) {
+            this.configuration.update({
+              chart: {
+                options3d: Object.assign(
+                  {},
+                  this._baseChart3d,
+                  (
+                    this.additionalOptions
+                    && this.additionalOptions.chart
+                    && this.additionalOptions.chart.options3d
+                  ),
+                  {enabled: true}
+                )
+              }
+            });
+          } else {
+            this.configuration.update({
+              chart: {
+                options3d: {
+                  enabled: false
+                }
+              }
+            });
           }
         }
 
