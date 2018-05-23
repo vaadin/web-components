@@ -77,6 +77,20 @@
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('23:55:57.000');
         });
+
+        it('should change to the next even value on arrow up', () => {
+          timePicker.__inputElement.value = '23:52';
+          timePicker.step = 5 * 60;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('23:55');
+        });
+
+        it('should change to the next even value on arrow down', () => {
+          timePicker.__inputElement.value = '23:52';
+          timePicker.step = 5 * 60;
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('23:50');
+        });
       });
 
       describe('with step more than 15 mins', () => {
