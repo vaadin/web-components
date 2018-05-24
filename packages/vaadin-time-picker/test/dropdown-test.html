@@ -44,6 +44,11 @@
         expect(timePicker.__dropdownElement.filteredItems).to.be.empty;
       });
 
+      it('vaadin-combo-box-light should have an empty array if step is not a divisor of day', () => {
+        timePicker.step = 60 * 60 * 16;
+        expect(timePicker.__dropdownElement.filteredItems).to.be.empty;
+      });
+
       it('undefined step divides dropdown on one hour increments', () => {
         timePicker.step = undefined;
         expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(24);
@@ -57,11 +62,6 @@
         timePicker.step = 60 * 60 * 3;
         expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(8);
         expect(timePicker.__dropdownElement.filteredItems[7].value).to.be.equal('21:00');
-      });
-
-      it('should not be possible to divide the day in inexact fragments', () => {
-        timePicker.step = 60 * 60 * 7;
-        expect(timePicker.__dropdownElement.filteredItems.length).to.be.equal(24);
       });
 
       it('should be possible to divide one hour in exact fragments', () => {
