@@ -172,7 +172,7 @@
               Row details
             </template>
             <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
-            <vaadin-grid-column width="14em" resizable frozen>
+            <vaadin-grid-column width="200px" resizable frozen>
               <template class="header">
                 <vaadin-grid-sorter>Item</vaadin-grid-sorter>
               </template>
@@ -180,11 +180,11 @@
                 <vaadin-grid-tree-toggle leaf="[[!item.children]]" expanded="{{expanded}}" level="[[level]]">[[item.name]]</vaadin-grid-tree-toggle>
               </template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="10em" resizable>
+            <vaadin-grid-column width="160px" resizable>
               <template class="header">Description</template>
               <template>[[item.name]] description</template>
             </vaadin-grid-column>
-            <vaadin-grid-column width="14em" resizable>
+            <vaadin-grid-column width="200px" resizable>
               <template class="header">
                 <vaadin-grid-sorter>Another column</vaadin-grid-sorter><br>
                 <vaadin-grid-filter path="name" value="[[_filterName]]">
@@ -193,7 +193,7 @@
               </template>
               <template>Another column for [[item.name]]</template>
             </vaadin-grid-column>
-            <vaadin-grid-column flex-grow="0" width="10em" resizable>
+            <vaadin-grid-column flex-grow="0" width="200px" resizable>
               <template><vaadin-checkbox checked="{{detailsOpened}}">View details</vaadin-checkbox></template>
             </vaadin-grid-column>
           </vaadin-grid>
