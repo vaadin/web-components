@@ -137,8 +137,8 @@
 
       [part="done-icon"],
       [part="warning-icon"] {
-        padding: 4px;
-        margin: -4px 4px -4px 0;
+        padding: 8px;
+        margin: -8px 0 -8px -8px;
         font-family: material-icons;
         font-size: var(--material-icon-font-size);
       }
@@ -161,8 +161,12 @@
         flex: none;
         color: var(--material-secondary-text-color);
         line-height: 1;
-        padding: 4px;
-        margin: -4px 0;
+        padding: 8px;
+        margin: -8px 0;
+      }
+
+      [part="clear-button"] {
+        margin-right: -8px;
       }
 
       [part="start-button"]:hover,
@@ -207,7 +211,7 @@
 
       [part="progress"] {
         width: auto;
-        margin-left: 32px;
+        margin-left: 28px;
       }
 
       [part="progress"][complete],
