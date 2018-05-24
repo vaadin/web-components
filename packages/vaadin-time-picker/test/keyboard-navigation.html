@@ -22,11 +22,11 @@
       let timePicker;
 
       function arrowUp() {
-        MockInteractions.keyDownOn(getInput(), 38);
+        MockInteractions.pressAndReleaseKeyOn(getInput(), 38);
       }
 
       function arrowDown() {
-        MockInteractions.keyDownOn(getInput(), 40);
+        MockInteractions.pressAndReleaseKeyOn(getInput(), 40);
       }
 
       function getInput() {
@@ -103,6 +103,13 @@
           arrowDown();
           expect(timePicker.__inputElement.value).to.be.equal('23:50');
         });
+
+        it('should call __onArrowPressWithStep on arrow down/up', () => {
+          const spy = sinon.spy(timePicker, '__onArrowPressWithStep');
+          arrowDown();
+          arrowUp();
+          expect(spy.callCount).to.eql(2);
+        });
       });
 
       describe('with step more than 15 mins', () => {
@@ -122,20 +129,11 @@
           expect(timePicker.value).to.be.equal('02:00');
         });
 
-        it('should change the value of the input to the previous step value', (done) => {
-          arrowUp();
-          setTimeout(() => {
-            expect(timePicker.__inputElement.value).to.be.equal('01:30');
-            done();
-          });
-        });
-
-        it('should change the value of the input to the next step value', (done) => {
+        it('should not call __onArrowPressWithStep on arrow down/up', () => {
+          const spy = sinon.spy(timePicker, '__onArrowPressWithStep');
           arrowDown();
-          setTimeout(() => {
-            expect(timePicker.__inputElement.value).to.be.equal('02:30');
-            done();
-          });
+          arrowUp();
+          expect(spy.callCount).to.eql(0);
         });
       });
     });
