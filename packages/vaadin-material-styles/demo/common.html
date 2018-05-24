@@ -229,6 +229,7 @@
   themeSelect.addEventListener('change', function(e) {
     const theme = e.target.value.toLowerCase();
     document.documentElement.setAttribute('theme', theme);
+    Polymer.updateStyles();
 
     if (window.localStorage) {
       window.localStorage.setItem('theme', theme);
