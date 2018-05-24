@@ -77,12 +77,12 @@
         background-color: var(--material-primary-color);
         opacity: 0;
         transform: translate(-50%, -50%) scale(0);
-        transition: transform 0s cubic-bezier(0.05, 0.8, 0.5, 1), opacity 0.4s linear;
+        transition: transform 0s cubic-bezier(.075, .82, .165, 1), opacity 0.4s linear;
         transition-delay: 0.4s, 0s;
       }
 
       :host([dragover-valid])::before {
-        transform: translate(-50%, -50%) scale(6);
+        transform: translate(-50%, -50%) scale(10);
         opacity: 0.1;
         transition-duration: 2s, 0.1s;
         transition-delay: 0s, 0s;
