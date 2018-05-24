@@ -39,17 +39,18 @@
         <link rel="import" href="bower_components/vaadin-material-theme/typography.html">
       </template>
     </nice-demo-snippet>
+    <div class="note">
+      <p>Importing the typography modules imports the Roboto font from <a href="https://fonts.google.com/specimen/Roboto">Google Fonts</a> automatically.</p>
+    </div>
 
     <h2 demo-section>Global typography styles</h2>
-    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope. It will set the font family, font size and line height for the body element, as well as specify consistent header styles (it doesn’t override header margins).</p>
+    <p>To easily apply basic typographic styles for your app, include the following style module in the global scope. It will set the font family, font size and line height for the body element, as well as specify consistent header styles.</p>
     <p>If needed, you can include the style module in any other style scopes (i.e. shadow roots) as well.</p>
 
     <nice-demo-snippet code-only>
       <template slot="source">
         <custom-style>
-          <style include="material-typography">
-            /* The <style> tag needs to be non-empty for IE11 */
-          </style>
+          <style include="material-typography"></style>
         </custom-style>
       </template>
     </nice-demo-snippet>
@@ -73,18 +74,10 @@
         <custom-style>
           <style>
             html {
-              --material-font-family: "Open Sans", sans-serif;
+              --material-font-family: "Helvetica Neue", Arial, sans-serif;
             }
           </style>
         </custom-style>
-      </template>
-    </nice-demo-snippet>
-
-    <h4>Roboto font</h4>
-    <p>The Roboto font is not imported by default, but only used if found from the users system. If you wish to use the Roboto font for all users, you need to import it manually. You can include the following snippet in your app to easily import it from <a href="https://fonts.google.com/specimen/Roboto">Google Fonts</a>:</p>
-    <nice-demo-snippet code-only>
-      <template slot="source">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic" crossorigin="anonymous">
       </template>
     </nice-demo-snippet>
 
