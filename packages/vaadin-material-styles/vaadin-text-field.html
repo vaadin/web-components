@@ -8,6 +8,8 @@
       :host {
         display: inline-flex;
         position: relative;
+        padding-top: 8px;
+        margin-bottom: 8px;
         outline: none;
         color: var(--material-body-text-color);
         font-size: var(--material-body-font-size);
@@ -27,7 +29,7 @@
          (no label, with label, without prefix, with prefix, etc.) */
 
       :host([has-label]) {
-        padding-top: 16px;
+        padding-top: 24px;
       }
 
       [part="label"]:empty {
@@ -143,7 +145,7 @@
       [part="label"] {
         display: block;
         position: absolute;
-        top: 0;
+        top: 8px;
         font-size: 1em;
         line-height: 1;
         height: 20px;
