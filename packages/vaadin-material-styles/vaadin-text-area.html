@@ -4,18 +4,15 @@
 <dom-module id="material-text-area" theme-for="vaadin-text-area">
   <template>
     <style include="material-text-field">
-      :host {
-        width: 330px;
-      }
-
       [part="input-field"] {
         height: auto;
         box-sizing: border-box;
       }
 
-      [part="value"] {
-        margin-top: 8px;
+      /* NOTE(platosha): double attribute workarounds specifity for Firefox */
+      [part="value"][part="value"] {
         padding-top: 0;
+        margin-top: 4px;
       }
     </style>
   </template>

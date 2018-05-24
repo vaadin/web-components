@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html theme="">
+  <head>
+    <meta charset="utf-8">
+    <title>Material components baseline test</title>
+    <meta name="viewport" content="width=device-width">
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+    <link rel="import" href="../../iron-icons/iron-icons.html">
+    <link rel="import" href="all-theme-imports.html">
+    <link rel="import" href="all-src-imports.html">
+    <custom-style>
+      <style include="material-typography">
+        body {
+          margin: 0 50px;
+          line-height: 100px !important;
+          background-image: linear-gradient(
+            180deg,
+            transparent,
+            transparent 55px,
+            rgba(0, 0, 0, 0.125) 55px,
+            rgba(0, 0, 0, 0.125) 56px,
+            transparent 56px,
+            transparent
+          );
+          background-size: 100px 100px;
+          background-repeat: repeat;
+        }
+
+        h2 {
+          margin: 0 -50px;
+          padding: 100px 50px 0;
+          line-height: inherit !important;
+          background: #fff;
+        }
+
+        vaadin-context-menu,
+        vaadin-grid {
+          height: 100%;
+        }
+
+        .flex-baseline {
+          display: flex;
+          align-items: baseline;
+          flex-wrap: wrap;
+        }
+
+        strong {
+          display: inline-block;
+          width: 16em;
+        }
+      </style>
+    </custom-style>
+
+    <custom-style>
+      <style include="material-typography"></style>
+    </custom-style>
+  </head>
+  <body unresolved>
+
+    <h2>Baseline line context</h2>
+
+    <strong>&lt;vaadin-text-field&gt;</strong>
+    zzz
+    <vaadin-text-field value="zzz only value"></vaadin-text-field>
+    zzz
+    <vaadin-text-field label="zzz only label"></vaadin-text-field>
+    zzz
+    <vaadin-text-field label="zzz label" value="zzz value"></vaadin-text-field>
+
+    <br>
+
+    <strong>&lt;vaadin-password-field&gt;</strong>
+    zzz
+    <vaadin-password-field value="zzz only value" password-visible></vaadin-password-field>
+    zzz
+    <vaadin-password-field label="zzz only label" password-visible></vaadin-password-field>
+    zzz
+    <vaadin-password-field label="zzz label" value="zzz value" password-visible></vaadin-password-field>
+
+    <div style="height: 100px;">
+    <strong>&lt;vaadin-text-area&gt;</strong>
+    zzz
+    <vaadin-text-area value="zzz only value" rows="1"></vaadin-text-area>
+    zzz
+    <vaadin-text-area label="zzz only label" rows="1"></vaadin-text-area>
+    zzz
+    <vaadin-text-area label="zzz label" value="zzz value"></vaadin-text-area>
+    </div>
+
+    <br>
+
+    <strong>&lt;vaadin-combo-box&gt;</strong>
+    zzz
+    <vaadin-combo-box value="zzz only value" allow-custom-value></vaadin-combo-box>
+    zzz
+    <vaadin-combo-box label="zzz only label" allow-custom-value></vaadin-combo-box>
+    zzz
+    <vaadin-combo-box label="zzz label" value="zzz value" allow-custom-value></vaadin-combo-box>
+
+    <br>
+
+    <strong>&lt;vaadin-date-picker&gt;</strong>
+    zzz
+    <vaadin-date-picker value="2010-01-01"></vaadin-date-picker>
+    zzz
+    <vaadin-date-picker label="zzz only label"></vaadin-date-picker>
+    zzz
+    <vaadin-date-picker label="zzz label" value="2010-01-01"></vaadin-date-picker>
+
+    <br>
+
+    <strong>&lt;vaadin-dropdown-menu&gt;</strong>
+    zzz
+    <vaadin-dropdown-menu value="zzz">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>zzz</vaadin-item>
+          <vaadin-item>xxx</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-dropdown-menu>
+    zzz
+    <vaadin-dropdown-menu label="zzz only label">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>zzz</vaadin-item>
+          <vaadin-item>xxx</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-dropdown-menu>
+    zzz
+    <vaadin-dropdown-menu label="zzz label" value="zzz">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>zzz</vaadin-item>
+          <vaadin-item>xxx</vaadin-item>
+        </vaadin-list-box>
+      </template>
+    </vaadin-dropdown-menu>
+
+    <br>
+
+    <strong>&lt;vaadin-button&gt;</strong>
+    zzz
+    <vaadin-button>zzz</vaadin-button>
+    zzz
+    <vaadin-button theme="outlined">zzz</vaadin-button>
+    zzz
+    <vaadin-button theme="contained">zzz</vaadin-button>
+
+    <h2>Baseline flex context</h2>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-text-field&gt;</strong>
+      zzz
+      <vaadin-text-field value="zzz only value"></vaadin-text-field>
+      zzz
+      <vaadin-text-field label="zzz only label"></vaadin-text-field>
+      zzz
+      <vaadin-text-field label="zzz label" value="zzz value"></vaadin-text-field>
+    </div>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-password-field&gt;</strong>
+      zzz
+      <vaadin-password-field value="zzz only value" password-visible></vaadin-password-field>
+      zzz
+      <vaadin-password-field label="zzz only label" password-visible></vaadin-password-field>
+      zzz
+      <vaadin-password-field label="zzz label" value="zzz value" password-visible></vaadin-password-field>
+    </div>
+
+    <div class="flex-baseline" style="height: 100px;">
+      <strong>&lt;vaadin-text-area&gt;</strong>
+      zzz
+      <vaadin-text-area value="zzz only value" rows="1"></vaadin-text-area>
+      zzz
+      <vaadin-text-area label="zzz only label" rows="1"></vaadin-text-area>
+      zzz
+      <vaadin-text-area label="zzz label" value="zzz value"></vaadin-text-area>
+    </div>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-combo-box&gt;</strong>
+      zzz
+      <vaadin-combo-box value="zzz only value" allow-custom-value></vaadin-combo-box>
+      zzz
+      <vaadin-combo-box label="zzz only label" allow-custom-value></vaadin-combo-box>
+      zzz
+      <vaadin-combo-box label="zzz label" value="zzz value" allow-custom-value></vaadin-combo-box>
+    </div>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-date-picker&gt;</strong>
+      zzz
+      <vaadin-date-picker value="2010-01-01"></vaadin-date-picker>
+      zzz
+      <vaadin-date-picker label="zzz only label"></vaadin-date-picker>
+      zzz
+      <vaadin-date-picker label="zzz label" value="2010-01-01"></vaadin-date-picker>
+    </div>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-dropdown-menu&gt;</strong>
+      zzz
+      <vaadin-dropdown-menu value="zzz">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>zzz</vaadin-item>
+            <vaadin-item>xxx</vaadin-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+      zzz
+      <vaadin-dropdown-menu label="zzz only label">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>zzz</vaadin-item>
+            <vaadin-item>xxx</vaadin-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+      zzz
+      <vaadin-dropdown-menu label="zzz label" value="zzz">
+        <template>
+          <vaadin-list-box>
+            <vaadin-item>zzz</vaadin-item>
+            <vaadin-item>xxx</vaadin-item>
+          </vaadin-list-box>
+        </template>
+      </vaadin-dropdown-menu>
+    </div>
+
+    <div class="flex-baseline">
+      <strong>&lt;vaadin-button&gt;</strong>
+      zzz
+      <vaadin-button>zzz</vaadin-button>
+      zzz
+      <vaadin-button theme="outlined">zzz</vaadin-button>
+      zzz
+      <vaadin-button theme="contained">zzz</vaadin-button>
+    </div>
+
+  </body>
+</html
+
