@@ -7,12 +7,29 @@
   <link href="../../vaadin-context-menu.html" rel="import">
   <link rel="import" href="../../../vaadin-list-box/vaadin-list-box.html">
   <link rel="import" href="../../../vaadin-item/vaadin-item.html">
+  <style>
+    /* cover all the viewport */
+    #default-tests {
+      padding: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    /* position by the right-bottom corner of the viewport */
+    #bottom {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div id="default-tests" style="padding: 10px; min-height: 300px">
-
+  <div id="default-tests">
     <vaadin-context-menu id="plain">
       <template>
         <vaadin-list-box>
@@ -36,9 +53,21 @@
               </dom-repeat>
             </vaadin-list-box>
           </template>
-    
           <p>Long menu</p>
-        </vaadin-context-menu>        
+        </vaadin-context-menu>
+
+        <vaadin-context-menu id="bottom">
+          <template>
+            <vaadin-list-box>
+              <dom-repeat items="[[menuItems]]">
+                <template>
+                  <vaadin-item>Menu Item [[index]]</vaadin-item>
+                </template>
+              </dom-repeat>
+            </vaadin-list-box>
+          </template>
+          <p>Bottom menu</p>
+        </vaadin-context-menu>
       </template>
     </dom-bind>
   </div>

@@ -27,6 +27,11 @@ gemini.suite('vaadin-context-menu', function(rootSuite) {
         actions.executeJS(function(window) {
           window.contextmenu(window.document.querySelector('#long'));
         });
+      })
+      .capture('bottom-menu', function(actions) {
+        actions.executeJS(function(window) {
+          window.contextmenu(window.document.querySelector('#bottom'));
+        });
       });
   });
 
