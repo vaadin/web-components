@@ -30,6 +30,7 @@
 
     <h1>Dialogs</h1>
 
+    <h3 demo-section>Text-only dialog</h3>
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-dialog id="simpleDialog">
@@ -42,21 +43,43 @@
 
         <vaadin-button onclick="openDialog('#simpleDialog')">Show simple dialog</vaadin-button>
 
+        <custom-style>
+          <style>
+            vaadin-dialog-overlay h3 {
+              margin-top: 8px;
+            }
+          </style>
+        </custom-style>
       </template>
     </nice-demo-snippet>
 
+    <h3 demo-section>Dialog with buttons</h3>
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-dialog id="buttondialog">
           <template>
+            <h3>Confirm dialog</h3>
             <p>Dialog with two buttons will close by pressing the Esc key, or by a mouse click anywhere outside the dialog area</p>
             <div class="buttons" style="text-align: right;">
-              <vaadin-button theme="primary">Cancel</vaadin-button>
-              <vaadin-button theme="primary">OK</vaadin-button>
+              <vaadin-button>Cancel</vaadin-button>
+              <vaadin-button>Confirm</vaadin-button>
             </div>
           </template>
         </vaadin-dialog>
-        <vaadin-button onclick="openDialog('#buttondialog')">Show dialog</vaadin-button>
+
+        <vaadin-button onclick="openDialog('#buttondialog')">Show dialog with buttons</vaadin-button>
+
+        <custom-style>
+          <style>
+            vaadin-dialog-overlay h3 {
+              margin-top: 8px;
+            }
+
+            vaadin-dialog-overlay .buttons {
+              margin: 0 -8px -8px;
+            }
+          </style>
+        </custom-style>
       </template>
     </nice-demo-snippet>
 
