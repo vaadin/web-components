@@ -26,8 +26,8 @@
         height: 3.5em;
         margin: 0.25em;
         font-size: var(--material-small-font-size);
-        font-weight: 600;
-        border-radius: 50%;
+        font-weight: 500;
+        border-radius: 4px;
       }
     </style>
   </custom-style>
@@ -45,7 +45,7 @@
 
     <p>The theme defines a set of CSS custom properties you can use to apply a consistent color palette across your application.</p>
 
-    <h3 id="importing">Importing the style module</h3>
+    <h3 id="importing">Importing the style modules</h3>
 
     <p>If you are not importing any component themes, and want to use these colors, you need to import the style module explicitly.</p>
     <nice-demo-snippet code-only>
@@ -54,44 +54,41 @@
       </template>
     </nice-demo-snippet>
 
-    <h2 demo-section>Light and dark themes</h2>
-    <p>The theme has a dark color variation available out of the box.</p>
-    <p>Each color has two variations: the default variation which is used for the light theme, and another variation used for the dark theme.</p>
-    <p><a href="#importing">You need to import</a> and include the “material-color” style module before you can use the dark theme. It needs to be imported in the same style scope where you want to apply the dark colors.</p>
+    <h2 demo-section>Style module</h2>
+    <p>Include the color style module to easily apply basic colors for any style scope (e.g. app's entrypoint for global scope). It will set the background, text and link colors and enable you to use the dark palette colors inside that style scope.</p>
 
-    <h4>1. Import and include the style module</h4>
     <nice-demo-snippet code-only>
       <template slot="source">
-        <!-- Import the colors (this is done implicitly by all component themes) -->
-        <link rel="import" href="bower_components/vaadin-material-theme/color.html">
-
-        <!-- Include the color style module. This will set the background and text color
-             for this style scope (html element of a the host of a custom element) -->
+        <!-- Add directly to your app's entrypoint or use a separate HTML import -->
         <custom-style>
-          <style include="material-color"></style>
+          <style include="material-light-color"></style>
         </custom-style>
       </template>
     </nice-demo-snippet>
 
-    <h4>2.a. Applying the dark theme for global scope</h4>
-    <p>Apply the <code>theme="dark"</code> attribute on the HTML element:</p>
-    <code class="block">&lt;html theme="dark"&gt;
-  &lt;!-- The whole page/app will use the dark theme colors --&gt;
-&lt;/html&gt;</code>
-
-    <h4>2.b. Applying the dark theme for a single element scope</h4>
-    <p>You can apply the <code>theme="dark"</code> attribute on any element inside the style scope where you include the style module:</p>
+    <h2 demo-section>Dark palette</h2>
+    <p>The dark color palette is available when you include the <a href="#style-module">main style module</a>.</p>
+    <p>You can apply the <code>theme="dark"</code> attribute on any element inside the style scope where you include the main style module.</p>
+    <p>If you include the main style module in the global scope (i.e. app's entrypoint), you can apply the <code>theme="dark"</code> attribute on the <code>html</code> element directly, to make the whole page adopt the dark color palette.</p>
     <nice-demo-snippet code-only>
       <template slot="source">
+        <!-- Import the style modules -->
+        <link rel="import" href="bower_components/vaadin-material-theme/color.html">
+
+        <!-- Include the "material-light-color" style module -->
+        <custom-style>
+          <style include="material-light-color"></style>
+        </custom-style>
+
         <div theme="dark">
-          <!-- Everything inside this element will use the dark theme colors -->
+          <!-- Everything inside this element will use the dark palette colors -->
         </div>
       </template>
     </nice-demo-snippet>
-    <!-- <div class="note warn">
+    <div class="note warn">
       <h6>Browser compatibility</h6>
-      <p>This example doesn’t work in Internet Explorer 11 or Edge 14. Read the <a href="compatibility.html#dark-themes">compatibility instructions</a> how to make the dark colors, scoped inside an element, work in all supported browsers.</p>
-    </div> -->
+      <p>This example doesn’t work in Internet Explorer 11 or EdgeHTML 14. Read the <a href="compatibility.html#dark-color-palette">browser compatibility instructions</a> if you need to support those browsers.</p>
+    </div>
 
 
     <h2 demo-section>Primary</h2>
@@ -113,7 +110,7 @@
 
 
 
-    <h2 demo-section>Error/danger</h2>
+    <h2 demo-section>Error</h2>
     <p>Usually a red color, used for things like error indicators, error messages and buttons that can cause permanent data loss.</p>
     <nice-demo-snippet>
       <template slot="source">
@@ -131,6 +128,19 @@
 
 
     <h2 demo-section>Text</h2>
+
+    <p>The following text colors have the desired contrast with the main background color.</p>
+
+    <div class="note">
+      <h6>Separate text colors</h6>
+      <p>Note, that <code><span class="color-swatch" style="background-color: var(--material-primary-text-color);"></span>--material-primary-text-color</code> is not necessarily the same as <code><span class="color-swatch" style="background-color: var(--material-primary-color);"></span>--material-primary-color</code>. Use the main color for backgrounds and the “text” version for text.</p>
+      <p>The same applies for the “error” and “success” colors as well.</p>
+    </div>
+    <div class="note warn">
+      <h6>Accessibility</h6>
+      <p>The “disabled” text color does not have enough contrast by default to meet WCAG 2.0 AA level requirements (3:1). Only use it for text which is not crucial for the end user to see.</p>
+    </div>
+
     <nice-demo-snippet>
       <template slot="source">
         <div class="base">

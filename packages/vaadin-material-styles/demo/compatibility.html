@@ -44,7 +44,7 @@
 
     <p>In order to apply the <a href="colors.html#dark-palette">dark color palette</a>, you need to introduce a new CSS scope in the form of a shadow root, as a custom element. The <a href="https://github.com/webcomponents/shadycss">ShadyCSS</a> shim polyfills custom property values only on shadow root boundaries.</p>
 
-    <p>The easiest way to create a new shadow root, for which the custom property values are shimmed, is to create a new Polymer element. To apply the dark color palette for that custom element, include the <code>material-color-legacy</code> style module inside its template and add the <code>theme="dark"</code> attribute for the host element. This makes all the elements inside that custom element adopt the dark color palette.</p>
+    <p>The easiest way to create a new shadow root, for which the custom property values are shimmed, is to create a new Polymer element. To apply the dark color palette for that custom element, include the <code>material-color-dark</code> style module inside its template. This makes all the elements inside that custom element adopt the dark color palette.</p>
 
     <h4>1. Define a new custom element, e.g. my-dark-ui.html</h4>
     <nice-demo-snippet code-only>
@@ -58,8 +58,8 @@
         <!-- Define a new custom element -->
         <dom-module id="my-dark-ui">
           <template>
-            <!-- Include the legacy browser color style module -->
-            <style include="material-color-legacy">
+            <!-- Include the dark color style module -->
+            <style include="material-color-dark">
               :host {
                 display: block;
                 padding: 1em;
@@ -85,28 +85,17 @@
     </nice-demo-snippet>
 
     <h4>2. Use the new custom element</h4>
-    <my-dark-ui theme="dark"></my-dark-ui>
+    <my-dark-ui></my-dark-ui>
 
     <nice-demo-snippet code-only>
       <template slot="source">
         <!-- Import the new custom element -->
         <link rel="import" href="my-dark-ui.html">
 
-        <!-- Import and include the color style module -->
-        <!-- The parent style scope for the new custom element needs to include the normal color style module -->
-        <link rel="import" href="bower_components/vaadin-material-theme/color.html">
-        <custom-style>
-          <style include="material-color"></style>
-        </custom-style>
-
-        <!-- Use the element and apply the dark color palette -->
-        <my-dark-ui theme="dark"></my-dark-ui>
+        <!-- Use the element -->
+        <my-dark-ui></my-dark-ui>
       </template>
     </nice-demo-snippet>
-
-    <div class="note warn">
-      <p>The parent scope for <code>&lt;my-dark-ui&gt;</code> needs to include the <code>material-color</code> style module as well (the global scope in this example).</p>
-    </div>
 
     <hr>
 
