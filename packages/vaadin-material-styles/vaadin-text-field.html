@@ -250,33 +250,6 @@
         color: inherit;
       }
 
-      /* Dense style */
-
-      :host([theme~="dense"]) {
-        padding-top: 8px;
-      }
-
-      :host([theme~="dense"]) [part="input-field"] {
-        height: 24px;
-      }
-
-      :host([theme~="dense"]) [part="value"] {
-        font-size: 0.8125em;
-      }
-
-      :host([theme~="dense"]) [part="label"] {
-        font-size: 0.8125em;
-        transform: scale(0.92);
-      }
-
-      :host([theme~="dense"]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
-        transform: translateY(20px);
-      }
-
-      :host([theme~="dense"]) [part="error-message"] {
-        margin-top: 4px;
-      }
-
       /* Slotted content */
 
       [part="input-field"] ::slotted(*:not([part="value"])) {
