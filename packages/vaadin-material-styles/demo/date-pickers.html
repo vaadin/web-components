@@ -33,7 +33,7 @@
       window.addEventListener('WebComponentsReady', function() {
         // Async call needed here for IE11 compatibility.
         Polymer.Base.async(function() {
-          var datepickers = document.querySelectorAll('vaadin-date-picker');
+          var datepickers = document.querySelectorAll('vaadin-date-picker[show-week-numbers]');
           Array.prototype.forEach.call(datepickers, d => {
             d.set('i18n.firstDayOfWeek', 1);
           });
@@ -45,7 +45,7 @@
     <h3 demo-section>Light Theme</h3>
     <nice-demo-snippet>
       <template slot="source">
-        <vaadin-date-picker label="Label" placeholder="Placeholder" show-week-numbers min="2017-06-01"></vaadin-date-picker>
+        <vaadin-date-picker label="Label" placeholder="Placeholder" min="2017-06-01"></vaadin-date-picker>
       </template>
     </nice-demo-snippet>
 
@@ -58,7 +58,7 @@
       </template>
     </nice-demo-snippet>
 
-    <h3 demo-section>Weeknumbers</h3>
+    <h3 demo-section>Week numbers</h3>
     <nice-demo-snippet>
       <template slot="source">
         <vaadin-date-picker show-week-numbers></vaadin-date-picker>
