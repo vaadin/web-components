@@ -47,22 +47,16 @@
           width: var(--lumo-icon-size-s);
           height: var(--lumo-icon-size-s);
         }
+
+        vaadin-dialog-overlay {
+          max-width: 30em;
+        }
+
+        vaadin-dialog-overlay h2 {
+          margin-top: 0;
+        }
       </style>
     </custom-style>
-
-    <dom-module id="my-app-dialog" theme-for="vaadin-dialog-overlay">
-      <template>
-        <style include="lumo-typography lumo-color">
-          [part="content"] {
-            max-width: 30em;
-          }
-
-          h2 {
-            margin-top: 0;
-          }
-        </style>
-      </template>
-    </dom-module>
   </head>
   <body unresolved>
     <vaadin-split-layout theme="minimal">
@@ -72,8 +66,8 @@
           <p>Paragraph lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
         </div>
         <vaadin-form-layout responsive-steps='[{"minWidth": "0", "columns": 1, "labelsPosition": "top"}, {"minWidth": "400px", "columns": 2, "labelsPosition": "top"}]'>
-          <vaadin-text-field label="Label" placeholder="Placeholder" error-message="Error message" required></vaadin-text-field>
-          <vaadin-dropdown-menu label="Label" placeholder="Placeholder" required error-message="Select an option">
+          <vaadin-text-field label="Text field" placeholder="Placeholder" error-message="Error message" required></vaadin-text-field>
+          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder" required error-message="Select an option">
             <iron-icon icon="lumo:bar-chart" slot="prefix"></iron-icon>
             <template>
               <vaadin-list-box>
@@ -96,8 +90,8 @@
               </vaadin-list-box>
             </template>
           </vaadin-dropdown-menu>
-          <vaadin-date-picker label="Label" placeholder="Placeholder"></vaadin-date-picker>
-          <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
+          <vaadin-date-picker label="Date picker" placeholder="Placeholder"></vaadin-date-picker>
+          <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder">
             <template>
               <vaadin-list-box>
                 <vaadin-item><iron-icon icon="lumo:user"></iron-icon> Option one</vaadin-item>
@@ -108,21 +102,22 @@
               </vaadin-list-box>
             </template>
           </vaadin-dropdown-menu>
-          <vaadin-text-area label="Label" placeholder="Placeholder" colspan="2">
+          <vaadin-text-area label="Text area" placeholder="Placeholder" colspan="2">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-area>
-          <vaadin-combo-box label="Label" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]' allow-custom-value>
+          <vaadin-password-field label="Password"></vaadin-password-field>
+          <vaadin-combo-box label="Combo box" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]' allow-custom-value>
             <iron-icon icon="vaadin:clock" slot="prefix"></iron-icon>
           </vaadin-combo-box>
-          <vaadin-form-item style="align-self: flex-start;">
-            <label slot="label">Options</label>
+          <vaadin-form-item>
+            <label slot="label">Checkboxes</label>
             <div>
               <vaadin-checkbox checked>Option one</vaadin-checkbox>
               <vaadin-checkbox>Option two</vaadin-checkbox>
             </div>
           </vaadin-form-item>
-          <vaadin-form-item colspan="2">
-            <label slot="label">Options</label>
+          <vaadin-form-item>
+            <label slot="label">Radio group</label>
             <vaadin-radio-group>
               <vaadin-radio-button checked>Option one</vaadin-radio-button>
               <vaadin-radio-button>Option two</vaadin-radio-button>
@@ -142,9 +137,9 @@
         <vaadin-horizontal-layout theme="padding spacing" style="flex: none; box-sizing: border-box;">
           <vaadin-vertical-layout>
             <vaadin-tabs style="align-self: stretch;">
-              <vaadin-tab><iron-icon icon="lumo:search"></iron-icon> Dashboard</vaadin-tab>
-              <vaadin-tab><iron-icon icon="vaadin:calendar"></iron-icon> Reports</vaadin-tab>
-              <vaadin-tab><iron-icon icon="lumo:cog"></iron-icon> Settings</vaadin-tab>
+              <vaadin-tab><iron-icon icon="lumo:search"></iron-icon> <span>Dashboard</span></vaadin-tab>
+              <vaadin-tab><iron-icon icon="lumo:calendar"></iron-icon> <span>Reports</span></vaadin-tab>
+              <vaadin-tab><iron-icon icon="lumo:cog"></iron-icon> <span>Settings</span></vaadin-tab>
             </vaadin-tabs>
             <h5>Header 5</h5>
             <p theme="font-size-s">Small text lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud</p>
@@ -153,7 +148,7 @@
             </div>
             <br>
             <div>
-              <vaadin-button theme="large primary success" id="openDialog"><iron-icon icon="lumo:arrow-up" slot="prefix"></iron-icon>Open Dialog</vaadin-button>
+              <vaadin-button theme="primary success" id="openDialog"><iron-icon icon="lumo:arrow-up" slot="prefix"></iron-icon>Open Dialog</vaadin-button>
               <vaadin-dialog>
                 <template>
                   <h2>Dialog</h2>
@@ -164,7 +159,12 @@
                   <vaadin-button theme="primary">Close</vaadin-button>
                 </template>
               </vaadin-dialog>
-              <vaadin-button><iron-icon icon="lumo:edit" slot="prefix"></iron-icon>Normal Button</vaadin-button>
+              <vaadin-button id="openNotification">Show notification</vaadin-button>
+              <vaadin-notification position="top-end" duration="4000">
+                <template>
+                  Notication message <vaadin-button>Dismiss</vaadin-button>
+                </template>
+              </vaadin-notification>
               <vaadin-button theme="small">Small Button</vaadin-button>
               <vaadin-button theme="tertiary">Tertiary Button</vaadin-button>
               <div theme="font-size-s">Lorem ipsum dolor… <vaadin-button theme="tertiary-inline">Show more</vaadin-button></div>
@@ -178,14 +178,14 @@
               <vaadin-item><iron-icon icon="lumo:cog" class="small-icon"></iron-icon> Option three</vaadin-item>
               <vaadin-item disabled><iron-icon icon="lumo:upload" class="small-icon"></iron-icon> Option four</vaadin-item>
             </vaadin-list-box>
-            <h6>Lumo icons</h6>
+            <!-- <h6>Lumo icons</h6>
             <iron-icon icon="lumo:calendar" class="large-icon"></iron-icon>
             <iron-icon icon="lumo:calendar"></iron-icon>
             <iron-icon icon="lumo:calendar" class="small-icon"></iron-icon>
             <h6>Vaadin icons</h6>
             <iron-icon icon="vaadin:calendar" class="large-icon"></iron-icon>
             <iron-icon icon="vaadin:calendar"></iron-icon>
-            <iron-icon icon="vaadin:calendar" class="small-icon"></iron-icon>
+            <iron-icon icon="vaadin:calendar" class="small-icon"></iron-icon> -->
           </div>
         </vaadin-horizontal-layout>
         <vaadin-context-menu>
@@ -232,32 +232,23 @@
       </vaadin-split-layout>
     </vaadin-split-layout>
 
-    <vaadin-notification opened duration="0" position="bottom-start">
-      <template>
-        Notification text, which is so long that it should wrap to multiple lines.
-        <vaadin-button>Action</vaadin-button>
-        <vaadin-button theme="icon tertiary large contrast"><iron-icon icon="lumo:cross"></iron-icon></vaadin-button>
-      </template>
-    </vaadin-notification>
-
-    <vaadin-notification opened duration="0" position="top-end">
-      <template>Notification text</template>
-    </vaadin-notification>
-
-    <vaadin-notification opened duration="0" position="bottom-stretch">
-      <template>
-        Notification text
-        <vaadin-button>Action</vaadin-button>
-      </template>
-    </vaadin-notification>
-
     <script>
       document.getElementById('openDialog').addEventListener('click', function() {
         document.querySelector('vaadin-dialog').opened = true;
       });
 
       document.querySelector('vaadin-dialog').addEventListener('opened-changed', function() {
-        this.$.overlay.shadowRoot.querySelector('vaadin-button').addEventListener('click', () => {
+        this.$.overlay.querySelector('vaadin-button').addEventListener('click', () => {
+          this.opened = false;
+        });
+      });
+
+      document.getElementById('openNotification').addEventListener('click', function() {
+        document.querySelector('vaadin-notification').opened = true;
+      });
+
+      document.querySelector('vaadin-notification').addEventListener('opened-changed', function() {
+        this.$['vaadin-notification-card'].querySelector('vaadin-button').addEventListener('click', () => {
           this.opened = false;
         });
       });
