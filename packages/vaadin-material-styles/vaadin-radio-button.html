@@ -9,13 +9,7 @@
         display: inline-block;
         -webkit-user-select: none;
         outline: none;
-      }
-
-      [part="wrapper"] {
-        display: flex;
-        align-items: baseline;
         -webkit-tap-highlight-color: transparent;
-        outline: none;
       }
 
       /* This makes the :active style work in IE11 */
@@ -23,6 +17,10 @@
         pointer-events: none;
         transition: transform 0.3s;
         will-change: transform;
+      }
+
+      [part="label"] > * {
+        pointer-events: auto;
       }
 
       [part="label"]:not(:empty) {

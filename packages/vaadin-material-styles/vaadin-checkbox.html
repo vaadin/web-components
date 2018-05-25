@@ -8,13 +8,7 @@
         display: inline-block;
         -webkit-user-select: none;
         outline: none;
-      }
-
-      [part="wrapper"] {
-        display: flex;
-        align-items: baseline;
         -webkit-tap-highlight-color: transparent;
-        outline: none;
       }
 
       /* This makes the :active style work in IE11 */
@@ -24,7 +18,6 @@
         will-change: transform;
       }
 
-      /* Not sure if this is necessary: should there ever be anything clickable inside the label? */
       [part="label"] > * {
         pointer-events: auto;
       }
