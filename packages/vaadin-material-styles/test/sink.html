@@ -9,7 +9,7 @@
     <link rel="import" href="all-theme-imports.html">
     <link rel="import" href="all-src-imports.html">
     <custom-style>
-      <style include="material-color material-typography">
+      <style include="material-color-light material-typography">
         body {
           margin: 0;
         }
@@ -35,10 +35,10 @@
     <vaadin-split-layout>
       <vaadin-vertical-layout style="width: 45%;" theme="padding">
         <div>
-          <h3>Header 3</h3>
+          <h4>Header 4</h4>
           <p>Paragraph lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
         </div>
-        <vaadin-form-layout responsive-steps='[{"columns": 2}]'>
+        <vaadin-form-layout responsive-steps='[{"columns": 2, "labelsPosition": "top"}]'>
           <vaadin-text-field label="Text field" placeholder="Placeholder" error-message="Error message" required></vaadin-text-field>
           <vaadin-dropdown-menu label="Dropdown menu" placeholder="Placeholder" required error-message="Select an option">
             <template>
@@ -67,14 +67,14 @@
           <vaadin-password-field label="Password">
           </vaadin-password-field>
           <vaadin-combo-box label="Combo box" placeholder="Placeholder" items='["Option one", "Option two", "Option three"]' allow-custom-value></vaadin-combo-box>
-          <vaadin-form-item colspan="2">
+          <vaadin-form-item>
             <label slot="label">Checkboxes</label>
             <div>
               <vaadin-checkbox checked>Option one</vaadin-checkbox>
               <vaadin-checkbox>Option two</vaadin-checkbox>
             </div>
           </vaadin-form-item>
-          <vaadin-form-item colspan="2">
+          <vaadin-form-item>
             <label slot="label">Radio group</label>
             <vaadin-radio-group>
               <vaadin-radio-button checked>Option one</vaadin-radio-button>
