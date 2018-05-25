@@ -23,6 +23,12 @@
     .bad-example::after {
       border: 1px dashed #f43b2e;
     }
+
+    iron-icon[icon*="vaadin:"] {
+      width: 12px;
+      height: 12px;
+      vertical-align: baseline;
+    }
   </style>
 </head>
 
@@ -36,13 +42,13 @@
 
     <h1>Browser compatibility</h1>
 
-    <p>If you need to support browsers that do not have native support for CSS Custom Properties (<a href="http://caniuse.com/#feat=css-variables">compatibility info</a>) there are some limitations how the styling features can be used. These limitations are described below.</p>
+    <p>If you need to support browsers that do not have native support for CSS Custom Properties (<a href="http://caniuse.com/#feat=css-variables">compatibility info <iron-icon icon="vaadin:external-link"></iron-icon></a>) there are some limitations how the styling features can be used. These limitations are described below.</p>
 
     <hr>
 
     <h2 demo-section>Dark color palette</h2>
 
-    <p>In order to apply the <a href="colors.html#dark-palette">dark color palette</a>, you need to introduce a new CSS scope in the form of a shadow root, as a custom element. The <a href="https://github.com/webcomponents/shadycss">ShadyCSS</a> shim polyfills custom property values only on shadow root boundaries.</p>
+    <p>In order to apply the <a href="colors.html#dark-palette">dark color palette</a>, you need to introduce a new CSS scope in the form of a shadow root, as a custom element. The <a href="https://github.com/webcomponents/shadycss">ShadyCSS <iron-icon icon="vaadin:external-link"></iron-icon></a> shim polyfills custom property values only on shadow root boundaries.</p>
 
     <p>The easiest way to create a new shadow root, for which the custom property values are shimmed, is to create a new Polymer element. To apply the dark color palette for that custom element, include the <code>lumo-color-legacy</code> style module inside its template and add the <code>theme="dark"</code> attribute for the host element. This makes all the elements inside that custom element adopt the dark color palette.</p>
 
@@ -158,7 +164,7 @@
 
     <h3 demo-section>Defining and overriding custom property values</h3>
 
-    <p>From <a href="https://github.com/webcomponents/shadycss#custom-properties-and-apply">ShadyCSS documentation</a>:</p>
+    <p>From <a href="https://github.com/webcomponents/shadycss#custom-properties-and-apply">ShadyCSS documentation <iron-icon icon="vaadin:external-link"></iron-icon></a>:</p>
 
     <blockquote>
       <p>Properties cannot change from parent to child as they can under native custom properties; they can only change when a shadowRoot boundary is crossed.</p>
