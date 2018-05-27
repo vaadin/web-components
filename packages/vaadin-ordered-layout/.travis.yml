@@ -20,13 +20,22 @@ before_script:
   - polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html
   - xvfb-run -s '-screen 0 1024x768x24' wct
 
+env:
+  - TEST_SUITE=visual_tests
+  - TEST_SUITE=unit_tests
+
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      npm i gemini@^4.0.0 gemini-sauce gemini-polyserve &&
-      gemini test test/visual &&
-      gemini test test/visual -c .gemini-ie-ff.yml &&
-      wct --env saucelabs;
+      if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+        npm i --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+        gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+      fi &&
+      if [[ "$TEST_SUITE" = "unit_tests" ]]; then
+        wct --env saucelabs;
+      fi;
     fi
   - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      wct --env saucelabs-cron;
+      if [[ "$TEST_SUITE" = "unit_tests" ]]; then
+        wct --env saucelabs-cron;
+      fi;
     fi

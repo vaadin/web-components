@@ -14,14 +14,14 @@ gemini.suite('vaadin-ordered-layout', function(rootSuite) {
 
   gemini.suite('horizontal-layout', function(suite) {
     suite
-      .setUrl('/default.html')
+      .setUrl('default.html')
       .setCaptureElements('#horizontal-layout')
       .capture('horizontal-layout');
   });
 
   gemini.suite('vertical-layout', function(suite) {
     suite
-      .setUrl('/default.html')
+      .setUrl('default.html')
       .setCaptureElements('#vertical-layout')
       .capture('vertical-layout');
   });
