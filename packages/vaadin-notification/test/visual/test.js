@@ -16,9 +16,9 @@ gemini.suite('vaadin-notification', function(rootSuite) {
 
   gemini.suite('default-tests', function(suite) {
     suite
-      .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .setUrl('default.html')
+      .setCaptureElements('body')
+      .capture('default');
   });
 
 });
