@@ -43,7 +43,7 @@
 
   <test-fixture id="default">
     <template>
-      <vaadin-checkbox name="test-checkbox">Vaadin <i>Checkbox</i></vaadin-checkbox>
+      <vaadin-checkbox name="test-checkbox">Vaadin <i>Checkbox</i> with <a href="#">Terms &amp; Conditions</a></vaadin-checkbox>
     </template>
   </test-fixture>
 
@@ -106,6 +106,13 @@
 
         vaadinCheckbox.click();
 
+        expect(vaadinCheckbox.checked).to.be.false;
+      });
+
+      it('should not toggle on link inside host click', () => {
+        const link = Polymer.dom(label).getEffectiveChildNodes()[4];
+        expect(link.outerHTML).to.be.equal('<a href="#">Terms &amp; Conditions</a>');
+        link.click();
         expect(vaadinCheckbox.checked).to.be.false;
       });
 

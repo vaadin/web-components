@@ -207,7 +207,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _addActiveListeners() {
           // DOWN
           this._addEventListenerToNode(this, 'down', (e) => {
-            if (!this.disabled) {
+            if (this.__interactionsAllowed(e)) {
               this.setAttribute('active', '');
             }
           });
@@ -217,7 +217,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // KEYDOWN
           this.addEventListener('keydown', e => {
-            if (!this.disabled && e.keyCode === 32) {
+            if (this.__interactionsAllowed(e) && e.keyCode === 32) {
               e.preventDefault();
               this.setAttribute('active', '');
             }
@@ -225,7 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // KEYUP
           this.addEventListener('keyup', e => {
-            if (!this.disabled && e.keyCode === 32) {
+            if (this.__interactionsAllowed(e) && e.keyCode === 32) {
               e.preventDefault();
               this._toggleChecked();
               this.removeAttribute('active');
@@ -241,8 +241,25 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.shadowRoot.querySelector('label');
         }
 
+        /**
+         * True if users' interactions (mouse or keyboard)
+         * should toggle the checkbox
+         */
+        __interactionsAllowed(e) {
+          if (this.disabled) {
+            return false;
+          }
+
+          // https://github.com/vaadin/vaadin-checkbox/issues/63
+          if (e.target.localName === 'a') {
+            return false;
+          }
+
+          return true;
+        }
+
         _handleClick(e) {
-          if (!this.disabled) {
+          if (this.__interactionsAllowed(e)) {
             if (!this.indeterminate) {
               if (e.composedPath()[0] !== this._nativeCheckbox) {
                 e.preventDefault();
