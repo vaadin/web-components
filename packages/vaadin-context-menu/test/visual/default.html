@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-context-menu.html" rel="import">
+  <link rel="import" href="../../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../../vaadin-item/vaadin-item.html">
+  <style>
+    /* cover all the viewport */
+    #default-tests {
+      padding: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    /* position by the right-bottom corner of the viewport */
+    #bottom {
+      position: absolute;
+      bottom: 50px;
+      right: 50px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="default-tests">
+    <vaadin-context-menu id="plain">
+      <template>
+        <vaadin-list-box>
+          <vaadin-item>First menu item</vaadin-item>
+          <vaadin-item>Second menu item</vaadin-item>
+        </vaadin-list-box>
+      </template>
+
+      <p>Plain</p>
+    </vaadin-context-menu>
+
+    <dom-bind id="app">
+      <template>
+        <vaadin-context-menu id="long">
+          <template>
+            <vaadin-list-box>
+              <dom-repeat items="[[menuItems]]">
+                <template>
+                  <vaadin-item>Menu Item [[index]]</vaadin-item>
+                </template>
+              </dom-repeat>
+            </vaadin-list-box>
+          </template>
+          <p>Long menu</p>
+        </vaadin-context-menu>
+
+        <vaadin-context-menu id="bottom">
+          <template>
+            <vaadin-list-box>
+              <dom-repeat items="[[menuItems]]">
+                <template>
+                  <vaadin-item>Menu Item [[index]]</vaadin-item>
+                </template>
+              </dom-repeat>
+            </vaadin-list-box>
+          </template>
+          <p>Bottom menu</p>
+        </vaadin-context-menu>
+      </template>
+    </dom-bind>
+  </div>
+
+  <script>
+    document.querySelector('#app').menuItems = new Array(30);
+
+    // eslint-disable-next-line no-unused-vars
+    function contextmenu(target) {
+      var domRect = target.getBoundingClientRect();
+      var e;
+      try {
+        e = new MouseEvent('contextmenu', {
+          bubbles: true,
+          cancelable: true,
+          clientX: domRect.x,
+          clientY: domRect.y
+        });
+      } catch (err) {
+        // For IE11
+        e = document.createEvent('MouseEvent');
+        e.initMouseEvent('contextmenu', true, true,
+          null, /* view */
+          null, /* detail */
+          0, /* screenX */
+          0, /* screenY */
+          domRect.x, domRect.y,
+          false, /* ctrlKey */
+          false, /* altKey */
+          false, /* shiftKey */
+          false, /* metaKey */
+          0, /* button */
+          null /* relatedTarget*/
+        );
+      }
+
+      target.listenOn.dispatchEvent(e);
+    }
+  </script>
+
+</body>
