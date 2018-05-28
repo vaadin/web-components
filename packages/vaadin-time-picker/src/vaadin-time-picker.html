@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-combo-box/src/vaadin-combo-box-light.html">
+<link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../../vaadin-lumo-styles/icons.html">
 <link rel="import" href="vaadin-time-picker-text-field.html">
 
@@ -278,6 +279,75 @@ This program is available under Apache License Version 2.0, available at https:/
           // Not using declarative because we receive an event before text-element shadow is ready,
           // thus querySelector in textField.focusElement raises an undefined exception on validate
           this.__dropdownElement.addEventListener('value-changed', e => this.__onInputChange(e));
+          this.__inputElement.addEventListener('keydown', this.__onKeyDown.bind(this));
+        }
+
+        __validDayDivisor(step) {
+          return 24 * 3600 % step === 0 || !step;
+        }
+
+        __onKeyDown(e) {
+          const stepResolution = this.__validDayDivisor(this.step) && this.step || 60;
+
+          if (stepResolution >= 15 * 60) {
+            return;
+          }
+
+          const parsedValue = this.__validateTime(this.i18n.parseTime(this.__inputElement.value));
+
+          if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'down')) {
+            this.__onArrowPressWithStep(-stepResolution, parsedValue);
+          } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'up')) {
+            this.__onArrowPressWithStep(stepResolution, parsedValue);
+          }
+        }
+
+
+        __onArrowPressWithStep(step, parsedValue = '00:00') {
+          const objWithStep = this.__addStep(this.__getMsec(parsedValue), step);
+          this.__inputElement.value = this.i18n.formatTime(this.__validateTime(objWithStep));
+        }
+
+        /**
+         * Returning milliseconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+         */
+        __getMsec(obj) {
+          let result = (obj.hours || 0) * 60 * 60 * 1000;
+          result += (obj.minutes || 0) * 60 * 1000;
+          result += (obj.seconds || 0) * 1000;
+          result += (obj.milliseconds || 0);
+
+          return result;
+        }
+
+        /**
+         * Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`
+         * from the result of adding step value in milliseconds to the milliseconds amount
+         */
+        __addStep(msec, step) {
+          // If the time is `00:00` and step changes value downwards, it should be considered as `24:00`
+          if (msec === 0 && step < 0) {
+            msec = 24 * 60 * 60 * 1000;
+          }
+
+          const stepMsec = step * 1000;
+          const diffToNext = msec % stepMsec;
+          if (stepMsec < 0 && diffToNext) {
+            msec -= diffToNext;
+          } else if (stepMsec > 0 && diffToNext) {
+            msec -= diffToNext - stepMsec;
+          } else {
+            msec += stepMsec;
+          }
+
+          var hh = Math.floor(msec / 1000 / 60 / 60);
+          msec -= hh * 1000 * 60 * 60;
+          var mm = Math.floor(msec / 1000 / 60);
+          msec -= mm * 1000 * 60;
+          var ss = Math.floor(msec / 1000);
+          msec -= ss * 1000;
+
+          return {hours: (hh < 24) ? hh : 0, minutes: mm, seconds: ss, milliseconds: msec};
         }
 
         __updateDropdownItems() {
@@ -285,6 +355,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __generateDropdownList() {
+          if (this.step < 15 * 60 || !this.__validDayDivisor(this.step)) {
+            return [];
+          }
+
           const generatedList = [];
 
           // Default step in overlay items is 1 hour
@@ -301,7 +375,7 @@ This program is available under Apache License Version 2.0, available at https:/
             minIncr = minIncr < 15 ? 15 : 60 % minIncr != 0 ? 60 : minIncr;
 
             for (let min = 0; min < 60; min += minIncr) {
-              const timeObj = this.__validateTime({hours: hour, minutes: min});
+              const timeObj = this.__validateTime({hours: hour, minutes: (min === 60) ? 0 : min});
               generatedList.push({
                 // we only pick items with minute resolution
                 label: this.i18n.formatTime(timeObj),
