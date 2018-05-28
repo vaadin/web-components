@@ -1,47 +1,20 @@
-<link rel="import" href="color.html">
-<link rel="import" href="font-icons.html">
+<link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker.html">
 
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-month-calendar.html">
-
 <link rel="import" href="vaadin-text-field.html">
+
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+<link rel="import" href="mixins/field-button.html">
 
 <dom-module id="material-date-picker" theme-for="vaadin-date-picker">
   <template>
-    <style>
+    <style include="material-field-button">
       :host {
         display: inline-flex;
         -webkit-tap-highlight-color: transparent;
-      }
-
-      [part="clear-button"],
-      [part="toggle-button"] {
-        width: 24px;
-        height: 24px;
-        padding: 4px;
-        color: var(--material-secondary-text-color);
-        font-family: "material-icons";
-        font-size: var(--material-icon-font-size);
-        line-height: 24px;
-        text-align: center;
-        cursor: pointer;
-      }
-
-      /* TODO(platosha): align icon sizes with other elements */
-
-      :host([disabled]) [part="toggle-button"],
-      :host([readonly]) [part="toggle-button"] {
-        color: var(--material-disabled-text-color);
-      }
-
-      :host([disabled]) [part="clear-button"] {
-        display: none;
-      }
-
-      [part="clear-button"]:hover,
-      :host(:not([readonly])) [part="toggle-button"]:hover {
-        color: inherit;
       }
 
       [part="clear-button"]::before {
@@ -54,5 +27,3 @@
     </style>
   </template>
 </dom-module>
-
-<link rel="import" href="../vaadin-date-picker/src/vaadin-date-picker.html">

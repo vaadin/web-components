@@ -1,37 +1,20 @@
-<link rel="import" href="font-icons.html">
-<link rel="import" href="color.html">
-
 <link rel="import" href="../vaadin-dropdown-menu/src/vaadin-dropdown-menu.html">
-<link rel="import" href="vaadin-text-field.html">
+
 <link rel="import" href="vaadin-item.html">
 <link rel="import" href="vaadin-list-box.html">
-<link rel="import" href="./mixins/menu-overlay.html">
+<link rel="import" href="vaadin-text-field.html">
+
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+<link rel="import" href="mixins/menu-overlay.html">
+<link rel="import" href="mixins/field-button.html">
 
 <dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
   <template>
-    <style>
+    <style include="material-field-button">
       :host {
         display: inline-flex;
         -webkit-tap-highlight-color: transparent;
-      }
-
-      [part$="button"] {
-        flex: none;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 24px;
-        text-align: center;
-        color: var(--material-secondary-text-color);
-        transition: 0.2s color, 0.2s transform;
-      }
-
-      [part$="button"]:hover {
-        color: var(--material-text-color);
-      }
-
-      [part$="button"]::before {
-        font-family: "material-icons";
       }
 
       [part="toggle-button"]::before {
@@ -46,10 +29,6 @@
 
       :host([disabled]) {
         pointer-events: none;
-      }
-
-      :host([disabled]) [part$="button"] {
-        color: var(--material-disabled-text-color);
       }
     </style>
   </template>
