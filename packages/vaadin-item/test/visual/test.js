@@ -16,9 +16,9 @@ gemini.suite('vaadin-item', function(rootSuite) {
 
   gemini.suite('vaadin-item', function(suite) {
     suite
-      .setUrl('/default.html')
+      .setUrl('default.html')
       .setCaptureElements('#default-tests')
-      .capture('normal-button');
+      .capture('default');
   });
 
 });
