@@ -8,8 +8,7 @@
   <link rel="import" href="../../vaadin-form-layout.html">
   <link rel="import" href="../../vaadin-form-item.html">
   <script>
-    addEventListener('WebComponentsReady', function() {
-      // Wait for the other 'WebComponentsReady' event listeners
+    window.addEventListener('WebComponentsReady', function() {
       setTimeout(function() {
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
         window.webComponentsAreReady = true; // Checked in gemini before capture callback
@@ -66,7 +65,7 @@
       customElements.define(MyFormElement.is, MyFormElement);
     });
   </script>
-  <my-form capture></my-form>
+  <my-form id="capture"></my-form>
 
 </body>
 </html>

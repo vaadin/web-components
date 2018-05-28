@@ -1,5 +1,5 @@
-rootUrl: http://127.0.0.1:8080/components/vaadin-form-layout/test/visual/
-gridUrl: http://127.0.0.1:4444/wd/hub
+rootUrl: http://localhost:8080/components/vaadin-form-layout/test/visual/
+gridUrl: http://localhost:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 windowSize: 1024x768
 
@@ -10,17 +10,30 @@ system:
     sauce: true
 
 browsers:
-  chrome:
+  firefox:
     desiredCapabilities:
-      browserName: "chrome"
-      version: "55.0"
+      browserName: "firefox"
+      version: "47.0"
+      platform: "Windows 10"
+
+  ie:
+    desiredCapabilities:
+      browserName: "internet explorer"
+      version: "11"
       platform: "Windows 10"
 
   edge:
     desiredCapabilities:
       browserName: "microsoftedge"
-      version: "14"
+      version: "15"
       platform: "Windows 10"
+
+  # Disabled because Sauce opens a chrome 48 instead of proper android
+  #
+  # android:
+  #   desiredCapabilities:
+  #     browserName: "chrome"
+  #     platform: "Android"
 
   # The following setups don't currently work due to Selenium SafariDriver issue
   # https://github.com/vaadin/vaadin-element-skeleton/issues/19
