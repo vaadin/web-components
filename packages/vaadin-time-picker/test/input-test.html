@@ -124,35 +124,55 @@
         expect(spy.callCount).to.equal(2);
       });
 
-      ['readonly', 'required', 'disabled', 'preventInvalidInput', 'autofocus'].forEach(prop => {
-        it(`should propagate boolean property to text-field ${prop}`, () => {
-          timePicker[prop] = true;
-          expect(timePicker.__inputElement[prop]).to.be.true;
-          timePicker[prop] = false;
-          expect(timePicker.__inputElement[prop]).to.be.false;
-        });
-      });
-
-      ['label', 'placeholder', 'pattern', 'errorMessage'].forEach(prop => {
-        it(`should propagate string property to text-field ${prop}`, () => {
-          expect(timePicker.__inputElement[prop]).to.be.empty;
-          timePicker[prop] = 'foo';
-          expect(timePicker.__inputElement[prop]).to.be.equal('foo');
-        });
-      });
-
-      // they are used in both combo-box-mixin and text-field
-      ['disabled', 'readonly'].forEach(prop => {
-        ['__inputElement', '__dropdownElement'].forEach(elem => {
-          it(`should propagate ${prop} property and attribute to ${elem}`, () => {
-            expect(timePicker[elem][prop]).to.be.false;
-            expect(timePicker[elem].hasAttribute(prop)).to.be.false;
+      describe('properties and attributes', () => {
+        ['readonly', 'required', 'disabled', 'preventInvalidInput', 'autofocus'].forEach(prop => {
+          it(`should propagate boolean property to text-field ${prop}`, () => {
             timePicker[prop] = true;
-            expect(timePicker[elem][prop]).to.be.true;
-            expect(timePicker[elem].hasAttribute(prop)).to.be.true;
+            expect(timePicker.__inputElement[prop]).to.be.true;
+            timePicker[prop] = false;
+            expect(timePicker.__inputElement[prop]).to.be.false;
+          });
+        });
+
+        ['label', 'placeholder', 'pattern', 'errorMessage'].forEach(prop => {
+          it(`should propagate string property to text-field ${prop}`, () => {
+            expect(timePicker.__inputElement[prop]).to.be.empty;
+            timePicker[prop] = 'foo';
+            expect(timePicker.__inputElement[prop]).to.be.equal('foo');
+          });
+        });
+
+        // they are used in both combo-box-mixin and text-field
+        ['disabled', 'readonly'].forEach(prop => {
+          ['__inputElement', '__dropdownElement'].forEach(elem => {
+            it(`should propagate ${prop} property and attribute to ${elem}`, () => {
+              expect(timePicker[elem][prop]).to.be.false;
+              expect(timePicker[elem].hasAttribute(prop)).to.be.false;
+              timePicker[prop] = true;
+              expect(timePicker[elem][prop]).to.be.true;
+              expect(timePicker[elem].hasAttribute(prop)).to.be.true;
+            });
+          });
+        });
+
+        describe('aria', () => {
+          it('text-field should have the `aria-label` attribute', () => {
+            expect(timePicker.__inputElement.hasAttribute('aria-label')).to.be.false;
+            timePicker.label = 'foo';
+            expect(timePicker.__inputElement.getAttribute('aria-label')).to.be.equal('foo');
+          });
+
+          it('text-field should have the `aria-live` attribute', () => {
+            expect(timePicker.__inputElement.getAttribute('aria-live')).to.be.equal('assertive');
+          });
+
+          it('clock:icon should have the `aria-label` attribute', () => {
+            const icon = timePicker.shadowRoot.querySelector('iron-icon');
+            expect(icon.getAttribute('aria-label')).to.be.equal(timePicker.i18n.selector);
           });
         });
       });
+
     });
   </script>
 </body>
