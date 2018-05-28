@@ -1,37 +1,20 @@
-<link rel="import" href="color.html">
-<link rel="import" href="font-icons.html">
-
 <link rel="import" href="../vaadin-combo-box/src/vaadin-combo-box.html">
-<link rel="import" href="vaadin-text-field.html">
+
 <link rel="import" href="vaadin-combo-box-dropdown.html">
 <link rel="import" href="vaadin-combo-box-item.html">
+<link rel="import" href="vaadin-text-field.html">
+
+<link rel="import" href="color.html">
+<link rel="import" href="font-icons.html">
+<link rel="import" href="mixins/field-button.html">
 
 <dom-module id="material-combo-box" theme-for="vaadin-combo-box">
   <template>
-    <style>
+    <style include="material-field-button">
       :host {
         display: inline-flex;
         outline: none;
         -webkit-tap-highlight-color: transparent;
-      }
-
-      [part$="button"] {
-        flex: none;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        font-size: 24px;
-        text-align: center;
-        color: var(--material-secondary-text-color);
-        transition: 0.2s color, 0.2s transform;
-      }
-
-      [part$="button"]:hover {
-        color: var(--material-text-color);
-      }
-
-      [part$="button"]::before {
-        font-family: "material-icons";
       }
 
       [part="toggle-button"]::before {
@@ -42,25 +25,9 @@
         transform: rotate(180deg);
       }
 
-      [part="clear-button"] {
-        width: 18px;
-        height: 18px;
-        padding: 3px;
-        font-size: 18px;
-        line-height: 18px;
-      }
-
       [part="clear-button"]::before {
         content: var(--material-icons-clear);
       }
-
-      /* Disabled & read-only */
-
-      :host([disabled]) [part$="button"],
-      :host([readonly]) [part$="button"] {
-        color: var(--material-disabled-color);
-      }
-
     </style>
   </template>
 </dom-module>
