@@ -11,17 +11,6 @@
         -webkit-tap-highlight-color: transparent;
       }
 
-      /* This makes the :active style work in IE11 */
-      [part="label"] {
-        pointer-events: none;
-        transition: transform 0.3s;
-        will-change: transform;
-      }
-
-      [part="label"] > * {
-        pointer-events: auto;
-      }
-
       [part="label"]:not(:empty) {
         margin: 3px 12px 3px 6px;
       }
