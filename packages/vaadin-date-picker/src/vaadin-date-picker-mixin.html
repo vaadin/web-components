@@ -411,7 +411,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (selectedDate === undefined || formatDate === undefined) {
         return;
       }
+      if (this.__userInputOccurred) {
+        this.__dispatchChange = true;
+      }
       this.value = this._formatISO(selectedDate);
+      this.__userInputOccurred = false;
+      this.__dispatchChange = false;
       this._focusedDate = selectedDate;
       this._inputValue = selectedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate)) : '';
     }
@@ -420,6 +425,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (focusedDate === undefined || formatDate === undefined) {
         return;
       }
+      this.__userInputOccurred = true;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(focusedDate)) : '';
       }
@@ -450,6 +456,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _valueChanged(value, oldValue) {
+      if (this.__dispatchChange) {
+        this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+      }
       this._handleDateChange('_selectedDate', value, oldValue);
     }
 
@@ -781,6 +790,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this._overlayContent.announceFocusedDate();
       }
     }
-  };
 
+    /**
+     * Fired when the user commits a value change.
+     *
+     * @event change
+     */
+  };
 </script>
