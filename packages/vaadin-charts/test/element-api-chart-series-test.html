@@ -368,7 +368,7 @@
           expect(firstAxis.series).to.have.length(1);
           expect(secondAxis.series).to.have.length(0);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should work value-min initially', function(done) {
@@ -423,7 +423,7 @@
           expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
           expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should be available to change stack with default stacking in plotOptions', function(done) {
@@ -436,7 +436,7 @@
           expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
           expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should be available to change stacking with default stacking in plotOptions', function(done) {
@@ -448,7 +448,7 @@
           expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(100);
           expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(50);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should have additional-options', done => {

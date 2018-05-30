@@ -39,6 +39,17 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="nodata">
+    <template>
+      <vaadin-chart></vaadin-chart>
+      <vaadin-chart empty-text="Empty Vaadin Chart"></vaadin-chart>
+      <vaadin-chart empty-text="Empty Vaadin Chart">
+        <vaadin-chart-series values="[1,2,3]"></vaadin-chart-series>
+        <vaadin-chart-series values="[4,5,6]"></vaadin-chart-series>
+        <vaadin-chart-series values="[]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
@@ -170,7 +181,7 @@
           const [xAxis] = chart.configuration.xAxis;
           expect(xAxis.min).to.be.equal(1);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should change category minimum value', done => {
@@ -190,7 +201,7 @@
           const [xAxis] = chart.configuration.xAxis;
           expect(xAxis.max).to.be.equal(2);
           done();
-        }, 120);
+        }, 150);
       });
 
       it('should change category maximum value', done => {
@@ -213,6 +224,77 @@
             expect(chart.configuration.frame3d).not.to.be.undefined;
             done();
           }, 150);
+        }, 100);
+      });
+
+      it('should display no message for empty chart by default', done => {
+        chart = fixture('nodata')[0];
+        setTimeout(() => {
+          const actual = chart.$.chart.querySelector('.highcharts-no-data > text').textContent.trim();
+          expect(actual).to.be.empty;
+          done();
+        }, 100);
+      });
+
+      it('should show a the configured empty-text message for empty chart', done => {
+        chart = fixture('nodata')[1];
+        setTimeout(() => {
+          const expected = 'Empty Vaadin Chart';
+          const actual = chart.$.chart.querySelector('.highcharts-no-data > text > tspan').textContent;
+          expect(expected).to.be.equal(actual);
+          done();
+        }, 100);
+      });
+
+      it('should react to empty-text changes on empty charts', done => {
+        chart = fixture('nodata')[0];
+        setTimeout(() => {
+          const actual = chart.$.chart.querySelector('.highcharts-no-data > text').textContent.trim();
+          expect(actual).to.be.empty;
+
+          const newEmptyText = 'A real chart';
+          chart.emptyText = newEmptyText;
+          setTimeout(() => {
+            const actual = chart.$.chart.querySelector('.highcharts-no-data > text > tspan').textContent;
+            expect(newEmptyText).to.be.equal(actual);
+
+            done();
+          }, 100);
+        }, 100);
+      });
+
+      it('should display empty-text when all series are removed form existing charts', done => {
+        chart = fixture('nodata')[2];
+        const newEmptyText = 'A real chart';
+        chart.emptyText = newEmptyText;
+
+        [...chart.childNodes]
+          .filter(e => e.tagName === 'VAADIN-CHART-SERIES')
+          .forEach(e => chart.removeChild(e));
+
+        setTimeout(() => {
+          const actual = chart.$.chart.querySelector('.highcharts-no-data > text > tspan').textContent;
+          expect(newEmptyText).to.be.equal(actual);
+
+          done();
+        }, 100);
+      });
+
+      it('should display empty-text when all data-containing series are removed from existing charts', done => {
+        chart = fixture('nodata')[2];
+        const newEmptyText = 'A real chart';
+        chart.emptyText = newEmptyText;
+
+        [...chart.childNodes]
+          .filter(e => e.tagName === 'VAADIN-CHART-SERIES')
+          .splice(0, 2)
+          .forEach(e => chart.removeChild(e));
+
+        setTimeout(() => {
+          const actual = chart.$.chart.querySelector('.highcharts-no-data > text > tspan').textContent;
+          expect(newEmptyText).to.be.equal(actual);
+
+          done();
         }, 100);
       });
     });

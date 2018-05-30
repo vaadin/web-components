@@ -28,6 +28,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/js/modules/heatmap.js"></script>
 <script src="../highcharts/js/modules/solid-gauge.js"></script>
 <script src="../highcharts/js/modules/treemap.js"></script>
+<script src="../highcharts/js/modules/no-data-to-display.js"></script>
 <script src="chart-temporary-display.js"></script>
 <script src="chart-deep-merger.js"></script>
 
@@ -400,6 +401,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Specifies the message displayed on a chart without displayable data.
+             */
+            emptyText: {
+              type: String,
+              value: ' ',
+              observer: '__emptyTextObserver',
+              reflectToAttribute: true
+            },
+
+            /**
              * Represents additional JSON configuration.
              */
             additionalOptions: {
@@ -536,6 +547,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
             options.chart.options3d = Object.assign({}, this._baseChart3d, options.chart.options3d);
           }
+
+          if (this.emptyText) {
+            options.lang = options.lang || {};
+            options.lang.noData = this.emptyText;
+          }
+
           return options;
         }
 
@@ -854,6 +871,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           this.__removeAxisIfEmpty();
+
+          // Best effort to make chart display custom empty-text messages when series are removed.
+          // This is needed because Highcharts currently doesn't react. A condition not catered for is
+          // when all points are removed from all series without removing any series.
+          const isEmpty = this.configuration.series.length === 0 ||
+              this.configuration.series.map(e => e.data.length === 0).reduce((e1, e2) => e1 && e2, true);
+          if (isEmpty) {
+            this.configuration.hideNoData();
+            this.configuration.showNoData(this.emptyText);
+          }
         }
 
         __initChart(options) {
@@ -1318,6 +1345,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
             });
           }
+        }
+
+        __emptyTextObserver() {
+          if (!this.configuration) {
+            return;
+          }
+
+          this.configuration.update({
+            lang: {
+              noData: this.emptyText
+            }
+          });
+          this.configuration.hideNoData();
+          this.configuration.showNoData(this.emptyText);
         }
 
         __callChartFunction(functionName) {
