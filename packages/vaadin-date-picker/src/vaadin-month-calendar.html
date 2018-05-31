@@ -196,6 +196,13 @@ This program is available under Apache License Version 2.0, available at https:/
           lastDate.setMonth(month.getMonth() + 1);
           lastDate.setDate(-1);
 
+          if ((minDate && maxDate)
+            && minDate.getMonth() === maxDate.getMonth()
+            && minDate.getMonth() === month.getMonth()
+            && maxDate.getDate() - minDate.getDate() >= 0) {
+            return false;
+          }
+
           return !this._dateAllowed(firstDate, minDate, maxDate)
             && !this._dateAllowed(lastDate, minDate, maxDate);
         }
