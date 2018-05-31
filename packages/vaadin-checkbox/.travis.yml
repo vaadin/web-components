@@ -39,3 +39,6 @@ script:
         wct --env saucelabs-cron;
       fi;
     fi
+
+after_success:
+  - cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls
