@@ -110,6 +110,42 @@
           arrowUp();
           expect(spy.callCount).to.eql(2);
         });
+
+        describe('with custom parser and formatter', () => {
+          beforeEach(() => {
+            timePicker.i18n.parseTime = text => {
+              const parts = text.split('.');
+              return {
+                hours: parts[0],
+                minutes: parts[1]
+              };
+            };
+            timePicker.i18n.formatTime = time => {
+              return `${time.hours}.${time.minutes}`;
+            };
+          });
+
+          it('should correctly add the step with custom parser and formatter', () => {
+            timePicker.value = '12:0';
+            timePicker.step = 20;
+            for (let inc = 1; inc < 4; inc ++) {
+              expect(timePicker.__inputElement.value).to.be.equal('12.0');
+              arrowUp();
+            }
+            expect(timePicker.__inputElement.value).to.be.equal('12.1');
+          });
+
+          it('should correctly substract the step with custom parser and formatter', () => {
+            timePicker.value = '12:0';
+            timePicker.step = 20;
+            for (let inc = 1; inc < 4; inc ++) {
+              arrowDown();
+              expect(timePicker.__inputElement.value).to.be.equal('11.59');
+            }
+            arrowDown();
+            expect(timePicker.__inputElement.value).to.be.equal('11.58');
+          });
+        });
       });
 
       describe('with step more than 15 mins', () => {
