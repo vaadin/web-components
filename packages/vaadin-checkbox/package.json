@@ -39,6 +39,7 @@
     "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
+    "wct-istanbul": "^0.14.3",
     "web-component-tester": "^6.1.5",
     "yargs": "^8.0.0"
   }

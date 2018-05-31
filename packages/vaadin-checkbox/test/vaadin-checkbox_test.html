@@ -116,6 +116,12 @@
         expect(vaadinCheckbox.checked).to.be.false;
       });
 
+      it('should not toggle on click when disabled', () => {
+        vaadinCheckbox.disabled = true;
+        label.click();
+        expect(vaadinCheckbox.checked).to.be.false;
+      });
+
       it('should bind checked to the native checkbox and vice versa', () => {
         vaadinCheckbox.checked = true;
         expect(nativeCheckbox.checked).to.be.eql(true);
