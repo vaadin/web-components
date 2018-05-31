@@ -119,6 +119,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.yAxisValueMax = this.valueMax;
           }
 
+          if (this.neckWidth) {
+            options.neckWidth = this.neckWidth;
+          }
+
           return options;
         }
 
@@ -251,6 +255,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               reflectToAttribute: true
             },
 
+            /** The width of the neck, the lower part of the funnel.
+             * A number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.
+             * Note that this property only applies for "funnel" charts.
+             */
+            neckWidth: {
+              type: String,
+              observer: '__neckWidthOberserver',
+              reflectToAttribute: true
+            },
+
             /**
              * Object with the configured options defined and used to create a series.
              *
@@ -357,7 +371,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._series.yAxis.update({
               min: this.valueMin
             });
-          } 
+          }
         }
 
         __valueMaxObserver() {
@@ -366,7 +380,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           if (!isFinite(this.valueMax)) {
-            this.__showWarn('value-max', 'Numbers or null');  
+            this.__showWarn('value-max', 'Numbers or null');
             return;
           }
 
@@ -374,7 +388,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._series.yAxis.update({
               max: this.valueMax
             });
-          } 
+          }
         }
 
         __typeObserver() {
@@ -415,6 +429,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           this._series.update({
             stacking: this.stacking
+          });
+        }
+
+        __neckWidthOberserver() {
+          if (!this.__hasSeriesConfig()) {
+            return;
+          }
+          this._series.update({
+            neckWidth: this.neckWidth
           });
         }
 

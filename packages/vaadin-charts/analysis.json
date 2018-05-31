@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 143,
                   "column": 12
                 },
                 "end": {
-                  "line": 142,
+                  "line": 146,
                   "column": 13
                 }
               },
@@ -49,11 +49,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 157,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 160,
                   "column": 13
                 }
               },
@@ -68,11 +68,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 166,
                   "column": 12
                 },
                 "end": {
-                  "line": 165,
+                  "line": 169,
                   "column": 13
                 }
               },
@@ -87,11 +87,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 177,
+                  "line": 181,
                   "column": 13
                 }
               },
@@ -108,11 +108,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 187,
                   "column": 12
                 },
                 "end": {
-                  "line": 187,
+                  "line": 191,
                   "column": 13
                 }
               },
@@ -129,11 +129,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -150,11 +150,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -171,11 +171,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 13
                 }
               },
@@ -192,11 +192,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 226,
+                  "line": 230,
                   "column": 12
                 },
                 "end": {
-                  "line": 230,
+                  "line": 234,
                   "column": 13
                 }
               },
@@ -213,11 +213,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 240,
+                  "line": 244,
                   "column": 13
                 }
               },
@@ -234,11 +234,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 251,
                   "column": 12
                 },
                 "end": {
-                  "line": 251,
+                  "line": 255,
                   "column": 13
                 }
               },
@@ -249,17 +249,38 @@
               }
             },
             {
+              "name": "neckWidth",
+              "type": "string",
+              "description": "The width of the neck, the lower part of the funnel.\nA number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.\nNote that this property only applies for \"funnel\" charts.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 261,
+                  "column": 12
+                },
+                "end": {
+                  "line": 265,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"__neckWidthOberserver\""
+                }
+              }
+            },
+            {
               "name": "options",
               "type": "Object",
               "description": "Object with the configured options defined and used to create a series.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 258,
+                  "line": 272,
                   "column": 12
                 },
                 "end": {
-                  "line": 260,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -274,11 +295,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 265,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 268,
+                  "line": 282,
                   "column": 13
                 }
               },
@@ -294,11 +315,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 281,
+                  "line": 295,
                   "column": 8
                 },
                 "end": {
-                  "line": 286,
+                  "line": 300,
                   "column": 9
                 }
               },
@@ -311,11 +332,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 292,
+                  "line": 306,
                   "column": 8
                 },
                 "end": {
-                  "line": 297,
+                  "line": 311,
                   "column": 9
                 }
               },
@@ -333,11 +354,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 299,
+                  "line": 313,
                   "column": 8
                 },
                 "end": {
-                  "line": 303,
+                  "line": 317,
                   "column": 9
                 }
               },
@@ -350,11 +371,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 306,
+                  "line": 320,
                   "column": 8
                 },
                 "end": {
-                  "line": 312,
+                  "line": 326,
                   "column": 9
                 }
               },
@@ -374,11 +395,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 315,
+                  "line": 329,
                   "column": 8
                 },
                 "end": {
-                  "line": 320,
+                  "line": 334,
                   "column": 9
                 }
               },
@@ -395,11 +416,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 322,
+                  "line": 336,
                   "column": 8
                 },
                 "end": {
-                  "line": 326,
+                  "line": 340,
                   "column": 9
                 }
               },
@@ -412,11 +433,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 328,
+                  "line": 342,
                   "column": 8
                 },
                 "end": {
-                  "line": 339,
+                  "line": 353,
                   "column": 9
                 }
               },
@@ -436,11 +457,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 341,
+                  "line": 355,
                   "column": 8
                 },
                 "end": {
-                  "line": 343,
+                  "line": 357,
                   "column": 9
                 }
               },
@@ -457,11 +478,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 345,
+                  "line": 359,
                   "column": 8
                 },
                 "end": {
-                  "line": 360,
+                  "line": 374,
                   "column": 9
                 }
               },
@@ -474,11 +495,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 362,
+                  "line": 376,
                   "column": 8
                 },
                 "end": {
-                  "line": 377,
+                  "line": 391,
                   "column": 9
                 }
               },
@@ -491,11 +512,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 379,
+                  "line": 393,
                   "column": 8
                 },
                 "end": {
-                  "line": 385,
+                  "line": 399,
                   "column": 9
                 }
               },
@@ -508,11 +529,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 387,
+                  "line": 401,
                   "column": 8
                 },
                 "end": {
-                  "line": 393,
+                  "line": 407,
                   "column": 9
                 }
               },
@@ -525,11 +546,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 395,
+                  "line": 409,
                   "column": 8
                 },
                 "end": {
-                  "line": 403,
+                  "line": 417,
                   "column": 9
                 }
               },
@@ -542,11 +563,28 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 405,
+                  "line": 419,
                   "column": 8
                 },
                 "end": {
-                  "line": 418,
+                  "line": 432,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__neckWidthOberserver",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 434,
+                  "column": 8
+                },
+                "end": {
+                  "line": 441,
                   "column": 9
                 }
               },
@@ -559,11 +597,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 420,
+                  "line": 443,
                   "column": 8
                 },
                 "end": {
-                  "line": 426,
+                  "line": 449,
                   "column": 9
                 }
               },
@@ -576,11 +614,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 428,
+                  "line": 451,
                   "column": 8
                 },
                 "end": {
-                  "line": 443,
+                  "line": 466,
                   "column": 9
                 }
               },
@@ -593,11 +631,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 445,
+                  "line": 468,
                   "column": 8
                 },
                 "end": {
-                  "line": 447,
+                  "line": 470,
                   "column": 9
                 }
               },
@@ -610,11 +648,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 449,
+                  "line": 472,
                   "column": 8
                 },
                 "end": {
-                  "line": 455,
+                  "line": 478,
                   "column": 9
                 }
               },
@@ -627,11 +665,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 457,
+                  "line": 480,
                   "column": 8
                 },
                 "end": {
-                  "line": 467,
+                  "line": 490,
                   "column": 9
                 }
               },
@@ -644,11 +682,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 487,
+                  "line": 510,
                   "column": 8
                 },
                 "end": {
-                  "line": 489,
+                  "line": 512,
                   "column": 9
                 }
               },
@@ -677,7 +715,7 @@
               "column": 6
             },
             "end": {
-              "line": 490,
+              "line": 513,
               "column": 7
             }
           },
@@ -690,11 +728,11 @@
               "description": "An array of data used by the series.\nFormat depends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)\nto mutate the values array in order to make the component aware of the\nchange and be able to synchronize it.",
               "sourceRange": {
                 "start": {
-                  "line": 139,
+                  "line": 143,
                   "column": 12
                 },
                 "end": {
-                  "line": 142,
+                  "line": 146,
                   "column": 13
                 }
               },
@@ -706,11 +744,11 @@
               "description": "Labels for the series values. Acceptable input are:\n- An array e.g `'[\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\"]'`. This maps to corresponding values by position.\n- A mapping object e.g `'{10: \"Mon\", 20: \"Tue\", 30: \"Wed\"}'`. This maps to specific values.\n- A function e.g `'e => e + \"km\"'`. This is evaluated against every value to generate its label.\n\nAny data point not covered (e.g value not present in the mapping object\nor mapping array shorter than the list of values), results in the actual value being used as the label.",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 157,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 160,
                   "column": 13
                 }
               },
@@ -722,11 +760,11 @@
               "description": "Value-axis minimum-value.\n Sets the value to a series bound by 'unit' property.\n Otherwise sets the value to the first series.\n Undefined by default (determined from data).",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 177,
                   "column": 12
                 },
                 "end": {
-                  "line": 177,
+                  "line": 181,
                   "column": 13
                 }
               },
@@ -738,11 +776,11 @@
               "description": "Value-axis maximum-value.\n See the 'valueMin'",
               "sourceRange": {
                 "start": {
-                  "line": 183,
+                  "line": 187,
                   "column": 12
                 },
                 "end": {
-                  "line": 187,
+                  "line": 191,
                   "column": 13
                 }
               },
@@ -754,11 +792,11 @@
               "description": "A string with the type of the series.\n Defaults to `'line'` in case no type is set for the chart.\nNote that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type on `<vaadin-chart>`.",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 198,
                   "column": 12
                 },
                 "end": {
-                  "line": 198,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -770,11 +808,11 @@
               "description": "The name of the series as shown in the legend, tooltip etc.",
               "sourceRange": {
                 "start": {
-                  "line": 203,
+                  "line": 207,
                   "column": 12
                 },
                 "end": {
-                  "line": 207,
+                  "line": 211,
                   "column": 13
                 }
               },
@@ -786,11 +824,11 @@
               "description": "Shows/hides data-point markers for line-like series.\nAcceptable input are:\n - `shown`: markers are always visible\n - `hidden`: markers are always hidden\n - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 220,
                   "column": 12
                 },
                 "end": {
-                  "line": 220,
+                  "line": 224,
                   "column": 13
                 }
               },
@@ -802,11 +840,11 @@
               "description": "Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.\nDisplayed as a title for the axis.\nIf no unit is defined, then series will be connected to the first axis.",
               "sourceRange": {
                 "start": {
-                  "line": 226,
+                  "line": 230,
                   "column": 12
                 },
                 "end": {
-                  "line": 230,
+                  "line": 234,
                   "column": 13
                 }
               },
@@ -818,11 +856,11 @@
               "description": "Used to group series in a different stacks.\n\"stacking\" property should be specified either for each series or in plotOptions.\nIt is recommended to place series in a single stack, when they belong to the same yAxis.",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 240,
                   "column": 12
                 },
                 "end": {
-                  "line": 240,
+                  "line": 244,
                   "column": 13
                 }
               },
@@ -834,11 +872,27 @@
               "description": "Used to group series in a stacked chart.\nCan be specified for each series separately or at chart's plotOptions for the entire chart.\nPossible values are null, \"normal\" or \"percent\".\nIf \"stack\" property is not defined, then series will be put into default stack.",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 251,
                   "column": 12
                 },
                 "end": {
-                  "line": 251,
+                  "line": 255,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string"
+            },
+            {
+              "name": "neck-width",
+              "description": "The width of the neck, the lower part of the funnel.\nA number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.\nNote that this property only applies for \"funnel\" charts.",
+              "sourceRange": {
+                "start": {
+                  "line": 261,
+                  "column": 12
+                },
+                "end": {
+                  "line": 265,
                   "column": 13
                 }
               },
@@ -850,11 +904,11 @@
               "description": "Object with the configured options defined and used to create a series.",
               "sourceRange": {
                 "start": {
-                  "line": 258,
+                  "line": 272,
                   "column": 12
                 },
                 "end": {
-                  "line": 260,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -866,11 +920,11 @@
               "description": "Represents additional JSON configuration.",
               "sourceRange": {
                 "start": {
-                  "line": 265,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 268,
+                  "line": 282,
                   "column": 13
                 }
               },

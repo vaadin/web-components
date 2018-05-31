@@ -11,7 +11,7 @@
   <dom-module id="chart-series-api-demo">
     <template>
       <vaadin-chart id="mychart">
-        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}"></vaadin-chart-series>
+        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}" neck-width="{{neckWidth}}"></vaadin-chart-series>
       </vaadin-chart>
     </template>
 
@@ -43,6 +43,10 @@
               secondUnit: {
                 type: String,
                 value: 'series-unit-2'
+              },
+              neckWidth: {
+                type: String,
+                value: '20%'
               }
             };
           }
@@ -493,6 +497,22 @@
           expect(hcSeries.type).to.be.equal('line');
           done();
         }, 200);
+      });
+
+      it('should be able to set neck-width', () => {
+        const {neckWidth} = series.options;
+        expect(neckWidth).to.be.equal(element.neckWidth);
+      });
+
+      it('should be able to change neck-width', () => {
+        let {neckWidth} = series.options;
+        expect(neckWidth).to.be.equal(element.neckWidth);
+
+        const newNeckWidth = 100;
+        element.neckWidth = newNeckWidth;
+        neckWidth = series.options.neckWidth;
+
+        expect(neckWidth).to.be.equal(newNeckWidth);
       });
 
     });
