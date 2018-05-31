@@ -77,28 +77,28 @@
         });
 
         it('should substract step value from the current input value on arrow down', () => {
-          timePicker.__inputElement.value = '23:55:55.500';
           timePicker.step = 1.5;
+          timePicker.value = '23:55:55.500';
           arrowDown();
           expect(timePicker.__inputElement.value).to.be.equal('23:55:54.000');
         });
 
         it('should add step value to the current input value on arrow up', () => {
-          timePicker.__inputElement.value = '23:55:55.500';
           timePicker.step = 1.5;
+          timePicker.value = '23:55:55.500';
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('23:55:57.000');
         });
 
         it('should change to the next even value on arrow up', () => {
-          timePicker.__inputElement.value = '23:52';
+          timePicker.value = '23:52';
           timePicker.step = 5 * 60;
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('23:55');
         });
 
         it('should change to the next even value on arrow down', () => {
-          timePicker.__inputElement.value = '23:52';
+          timePicker.value = '23:52';
           timePicker.step = 5 * 60;
           arrowDown();
           expect(timePicker.__inputElement.value).to.be.equal('23:50');
