@@ -27,10 +27,17 @@ env:
   - TEST_SUITE=mobile
   - TEST_SUITE=polyfilled
   - TEST_SUITE=desktop
+  - TEST_SUITE=visual_tests
 
 script:
   - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" ]]; then
-      wct --env saucelabs:$TEST_SUITE --expanded --verbose;
+      if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+        npm i --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+        gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+      fi &&
+      if [[ "$TEST_SUITE" != "visual_tests" ]]; then
+        wct --env saucelabs:$TEST_SUITE --expanded --verbose;
+      fi;
     fi
   - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
       if [[ "$TEST_SUITE" = "desktop" ]]; then
