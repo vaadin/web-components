@@ -123,6 +123,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.neckWidth = this.neckWidth;
           }
 
+          if (this.neckPosition) {
+            options.neckHeight = this.neckPosition;
+          }
+
           return options;
         }
 
@@ -252,6 +256,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             stacking: {
               type: String,
               observer: '__stackingObserver',
+              reflectToAttribute: true
+            },
+
+            /** The height of the neck, the lower part of the funnel.
+             * A number defines pixel width, a percentage string defines a percentage of the plot area height. Defaults to 30%.
+             * Note that this property only applies for "funnel" charts.
+             */
+            neckPosition: {
+              type: String,
+              observer: '__neckPositionOberserver',
               reflectToAttribute: true
             },
 
@@ -429,6 +443,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           this._series.update({
             stacking: this.stacking
+          });
+        }
+
+        __neckPositionOberserver() {
+          if (!this.__hasSeriesConfig()) {
+            return;
+          }
+          this._series.update({
+            neckHeight: this.neckPosition
           });
         }
 

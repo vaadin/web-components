@@ -11,7 +11,7 @@
   <dom-module id="chart-series-api-demo">
     <template>
       <vaadin-chart id="mychart">
-        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}" neck-width="{{neckWidth}}"></vaadin-chart-series>
+        <vaadin-chart-series id="myseries" values="{{values}}" title="{{title}}" type="{{type}}" unit="{{firstUnit}}" neck-width="{{neckWidth}}" neck-position="{{neckPosition}}"></vaadin-chart-series>
       </vaadin-chart>
     </template>
 
@@ -45,6 +45,10 @@
                 value: 'series-unit-2'
               },
               neckWidth: {
+                type: String,
+                value: '20%'
+              },
+              neckPosition: {
                 type: String,
                 value: '20%'
               }
@@ -500,19 +504,35 @@
       });
 
       it('should be able to set neck-width', () => {
-        const {neckWidth} = series.options;
+        const {neckWidth} = series._series.options;
         expect(neckWidth).to.be.equal(element.neckWidth);
       });
 
       it('should be able to change neck-width', () => {
-        let {neckWidth} = series.options;
+        let {neckWidth} = series._series.options;
         expect(neckWidth).to.be.equal(element.neckWidth);
 
         const newNeckWidth = 100;
         element.neckWidth = newNeckWidth;
-        neckWidth = series.options.neckWidth;
+        neckWidth = series._series.options.neckWidth;
 
         expect(neckWidth).to.be.equal(newNeckWidth);
+      });
+
+      it('should be able to set neck-position', () => {
+        const {neckHeight} = series._series.options;
+        expect(neckHeight).to.be.equal(element.neckPosition);
+      });
+
+      it('should be able to change neck-position', () => {
+        let {neckHeight} = series._series.options;
+        expect(neckHeight).to.be.equal(element.neckPosition);
+
+        const newNeckPosition = 100;
+        element.neckPosition = newNeckPosition;
+        neckHeight = series._series.options.neckHeight;
+
+        expect(neckHeight).to.be.equal(newNeckPosition);
       });
 
     });
