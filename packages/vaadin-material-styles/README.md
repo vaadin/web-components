@@ -1,31 +1,30 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-material-theme.svg)
-[![Build Status](https://travis-ci.org/vaadin/vaadin-material-theme.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-material-theme)
+![Bower version](https://img.shields.io/bower/v/vaadin-material-styles.svg)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Material Theme for Vaadin components
 
-`vaadin-material-theme` is customizable theme for the [Vaadin components](https://vaadin.com/components).
+`vaadin-material-styles` is customizable theme for the [Vaadin components](https://vaadin.com/components).
 
 
 ## Running demos and tests in browser
 
-1. Fork the `vaadin-material-theme` repository and clone it locally.
+1. Fork the `vaadin-material-styles` repository and clone it locally.
 
 1. Make sure you have [npm](https://www.npmjs.com/) installed.
 
-1. When in the `vaadin-material-theme` directory, run `npm install` and then `bower install` to install dependencies.
+1. When in the `vaadin-material-styles` directory, run `npm install` and then `bower install` to install dependencies.
 
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
 
-  - http://127.0.0.1:8080/components/vaadin-material-theme/demo
-  - http://127.0.0.1:8080/components/vaadin-material-theme/test
+  - http://127.0.0.1:8080/components/vaadin-material-styles/demo
+  - http://127.0.0.1:8080/components/vaadin-material-styles/test
 
 
 ## Running tests from the command line
 
-1. When in the `vaadin-material-theme` directory, run `polymer test`
+1. When in the `vaadin-material-styles` directory, run `polymer test`
 
 
 ## Following the coding style
