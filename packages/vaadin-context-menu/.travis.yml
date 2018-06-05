@@ -40,3 +40,5 @@ script:
       fi;
     fi
 
+after_success:
+  - cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls
