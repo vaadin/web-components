@@ -2,6 +2,19 @@ var argv = require('yargs').argv;
 
 module.exports = {
   plugins: {
+    'istanbul': {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-combo-box/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 94
+        }
+      }
+    },
     'random-output': true
   },
   registerHooks: function(context) {
