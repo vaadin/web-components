@@ -2,3 +2,4 @@ bower_*
 bower-*
 node_modules
 package-lock.json
+coverage
