@@ -26,7 +26,8 @@
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "^1.1.3",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0"
-  },
+,
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#md-preview"  },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
     "iron-component-page": "^3.0.0",
