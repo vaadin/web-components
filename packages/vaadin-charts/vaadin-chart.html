@@ -416,6 +416,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             additionalOptions: {
               type: Object,
               reflectToAttribute: true
+            },
+
+            /**
+             * When present, cartesian charts like line, spline, area and column are transformed
+             * into the polar coordinate system.
+             */
+            polar: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '__polarObserver'
             }
           };
         }
@@ -484,6 +494,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (this.type) {
             options.chart = options.chart || {};
             options.chart.type = this.type;
+          }
+
+          if (this.polar) {
+            options.chart = options.chart || {};
+            options.chart.polar = true;
           }
 
           if (this.title) {
@@ -1345,6 +1360,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               }
             });
           }
+        }
+
+        __polarObserver() {
+          if (!this.configuration) {
+            return;
+          }
+
+          this.configuration.update({
+            chart: {
+              polar: this.polar
+            }
+          });
         }
 
         __emptyTextObserver() {

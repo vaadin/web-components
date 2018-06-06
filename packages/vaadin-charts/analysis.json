@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "vaadin-chart.html",
         "start": {
-          "line": 1436,
+          "line": 1463,
           "column": 6
         },
         "end": {
-          "line": 1436,
+          "line": 1463,
           "column": 48
         }
       },
@@ -1266,6 +1266,27 @@
               "metadata": {
                 "polymer": {}
               }
+            },
+            {
+              "name": "polar",
+              "type": "boolean",
+              "description": "When present, cartesian charts like line, spline, area and column are transformed\ninto the polar coordinate system.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 424,
+                  "column": 12
+                },
+                "end": {
+                  "line": 428,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"__polarObserver\""
+                }
+              }
             }
           ],
           "methods": [
@@ -1275,11 +1296,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 459,
+                  "line": 469,
                   "column": 8
                 },
                 "end": {
-                  "line": 477,
+                  "line": 487,
                   "column": 9
                 }
               },
@@ -1292,11 +1313,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 791,
+                  "line": 806,
                   "column": 8
                 },
                 "end": {
-                  "line": 798,
+                  "line": 813,
                   "column": 9
                 }
               },
@@ -1309,11 +1330,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 800,
+                  "line": 815,
                   "column": 8
                 },
                 "end": {
-                  "line": 807,
+                  "line": 822,
                   "column": 9
                 }
               },
@@ -1326,11 +1347,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 809,
+                  "line": 824,
                   "column": 8
                 },
                 "end": {
-                  "line": 816,
+                  "line": 831,
                   "column": 9
                 }
               },
@@ -1343,11 +1364,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 818,
+                  "line": 833,
                   "column": 8
                 },
                 "end": {
-                  "line": 820,
+                  "line": 835,
                   "column": 9
                 }
               },
@@ -1364,11 +1385,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 822,
+                  "line": 837,
                   "column": 8
                 },
                 "end": {
-                  "line": 853,
+                  "line": 868,
                   "column": 9
                 }
               },
@@ -1385,11 +1406,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 855,
+                  "line": 870,
                   "column": 8
                 },
                 "end": {
-                  "line": 861,
+                  "line": 876,
                   "column": 9
                 }
               },
@@ -1412,11 +1433,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 863,
+                  "line": 878,
                   "column": 8
                 },
                 "end": {
-                  "line": 865,
+                  "line": 880,
                   "column": 9
                 }
               },
@@ -1433,11 +1454,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 867,
+                  "line": 882,
                   "column": 8
                 },
                 "end": {
-                  "line": 883,
+                  "line": 898,
                   "column": 9
                 }
               },
@@ -1454,11 +1475,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 885,
+                  "line": 900,
                   "column": 8
                 },
                 "end": {
-                  "line": 894,
+                  "line": 909,
                   "column": 9
                 }
               },
@@ -1475,11 +1496,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 897,
+                  "line": 912,
                   "column": 8
                 },
                 "end": {
-                  "line": 901,
+                  "line": 916,
                   "column": 9
                 }
               },
@@ -1492,11 +1513,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 909,
+                  "line": 924,
                   "column": 8
                 },
                 "end": {
-                  "line": 916,
+                  "line": 931,
                   "column": 9
                 }
               },
@@ -1520,11 +1541,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 924,
+                  "line": 939,
                   "column": 8
                 },
                 "end": {
-                  "line": 929,
+                  "line": 944,
                   "column": 9
                 }
               },
@@ -1548,11 +1569,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 936,
+                  "line": 951,
                   "column": 8
                 },
                 "end": {
-                  "line": 946,
+                  "line": 961,
                   "column": 9
                 }
               },
@@ -1571,11 +1592,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 983,
+                  "line": 998,
                   "column": 8
                 },
                 "end": {
-                  "line": 1021,
+                  "line": 1036,
                   "column": 9
                 }
               },
@@ -1599,11 +1620,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1023,
+                  "line": 1038,
                   "column": 8
                 },
                 "end": {
-                  "line": 1032,
+                  "line": 1047,
                   "column": 9
                 }
               },
@@ -1623,11 +1644,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1034,
+                  "line": 1049,
                   "column": 8
                 },
                 "end": {
-                  "line": 1049,
+                  "line": 1064,
                   "column": 9
                 }
               },
@@ -1650,11 +1671,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1051,
+                  "line": 1066,
                   "column": 8
                 },
                 "end": {
-                  "line": 1067,
+                  "line": 1082,
                   "column": 9
                 }
               },
@@ -1671,11 +1692,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1069,
+                  "line": 1084,
                   "column": 8
                 },
                 "end": {
-                  "line": 1075,
+                  "line": 1090,
                   "column": 9
                 }
               },
@@ -1692,11 +1713,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1077,
+                  "line": 1092,
                   "column": 8
                 },
                 "end": {
-                  "line": 1079,
+                  "line": 1094,
                   "column": 9
                 }
               },
@@ -1713,11 +1734,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1081,
+                  "line": 1096,
                   "column": 8
                 },
                 "end": {
-                  "line": 1083,
+                  "line": 1098,
                   "column": 9
                 }
               },
@@ -1734,11 +1755,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1085,
+                  "line": 1100,
                   "column": 8
                 },
                 "end": {
-                  "line": 1087,
+                  "line": 1102,
                   "column": 9
                 }
               },
@@ -1755,11 +1776,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1089,
+                  "line": 1104,
                   "column": 8
                 },
                 "end": {
-                  "line": 1105,
+                  "line": 1120,
                   "column": 9
                 }
               },
@@ -1779,11 +1800,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1107,
+                  "line": 1122,
                   "column": 8
                 },
                 "end": {
-                  "line": 1158,
+                  "line": 1173,
                   "column": 9
                 }
               },
@@ -1809,11 +1830,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1160,
+                  "line": 1175,
                   "column": 8
                 },
                 "end": {
-                  "line": 1170,
+                  "line": 1185,
                   "column": 9
                 }
               },
@@ -1833,11 +1854,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1172,
+                  "line": 1187,
                   "column": 8
                 },
                 "end": {
-                  "line": 1178,
+                  "line": 1193,
                   "column": 9
                 }
               },
@@ -1854,11 +1875,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1180,
+                  "line": 1195,
                   "column": 8
                 },
                 "end": {
-                  "line": 1193,
+                  "line": 1208,
                   "column": 9
                 }
               },
@@ -1878,11 +1899,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1195,
+                  "line": 1210,
                   "column": 8
                 },
                 "end": {
-                  "line": 1203,
+                  "line": 1218,
                   "column": 9
                 }
               },
@@ -1899,11 +1920,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1205,
+                  "line": 1220,
                   "column": 8
                 },
                 "end": {
-                  "line": 1212,
+                  "line": 1227,
                   "column": 9
                 }
               },
@@ -1923,24 +1944,7 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1214,
-                  "column": 8
-                },
-                "end": {
-                  "line": 1222,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "__updateCategoryMax",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 1224,
+                  "line": 1229,
                   "column": 8
                 },
                 "end": {
@@ -1952,7 +1956,7 @@
               "params": []
             },
             {
-              "name": "__updateCategoryMin",
+              "name": "__updateCategoryMax",
               "description": "",
               "privacy": "private",
               "sourceRange": {
@@ -1969,7 +1973,7 @@
               "params": []
             },
             {
-              "name": "__hideLegend",
+              "name": "__updateCategoryMin",
               "description": "",
               "privacy": "private",
               "sourceRange": {
@@ -1978,7 +1982,24 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 1264,
+                  "line": 1267,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__hideLegend",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 1269,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1279,
                   "column": 9
                 }
               },
@@ -1995,11 +2016,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1266,
+                  "line": 1281,
                   "column": 8
                 },
                 "end": {
-                  "line": 1274,
+                  "line": 1289,
                   "column": 9
                 }
               },
@@ -2016,11 +2037,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1276,
+                  "line": 1291,
                   "column": 8
                 },
                 "end": {
-                  "line": 1282,
+                  "line": 1297,
                   "column": 9
                 }
               },
@@ -2037,11 +2058,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1284,
+                  "line": 1299,
                   "column": 8
                 },
                 "end": {
-                  "line": 1296,
+                  "line": 1311,
                   "column": 9
                 }
               },
@@ -2058,11 +2079,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1298,
+                  "line": 1313,
                   "column": 8
                 },
                 "end": {
-                  "line": 1310,
+                  "line": 1325,
                   "column": 9
                 }
               },
@@ -2079,11 +2100,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1312,
+                  "line": 1327,
                   "column": 8
                 },
                 "end": {
-                  "line": 1316,
+                  "line": 1331,
                   "column": 9
                 }
               },
@@ -2096,11 +2117,28 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1318,
+                  "line": 1333,
                   "column": 8
                 },
                 "end": {
-                  "line": 1347,
+                  "line": 1362,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
+            },
+            {
+              "name": "__polarObserver",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 1364,
+                  "column": 8
+                },
+                "end": {
+                  "line": 1374,
                   "column": 9
                 }
               },
@@ -2113,11 +2151,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1349,
+                  "line": 1376,
                   "column": 8
                 },
                 "end": {
-                  "line": 1361,
+                  "line": 1388,
                   "column": 9
                 }
               },
@@ -2130,11 +2168,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1363,
+                  "line": 1390,
                   "column": 8
                 },
                 "end": {
-                  "line": 1371,
+                  "line": 1398,
                   "column": 9
                 }
               },
@@ -2151,11 +2189,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1373,
+                  "line": 1400,
                   "column": 8
                 },
                 "end": {
-                  "line": 1382,
+                  "line": 1409,
                   "column": 9
                 }
               },
@@ -2175,11 +2213,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1384,
+                  "line": 1411,
                   "column": 8
                 },
                 "end": {
-                  "line": 1417,
+                  "line": 1444,
                   "column": 9
                 }
               },
@@ -2202,11 +2240,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1419,
+                  "line": 1446,
                   "column": 8
                 },
                 "end": {
-                  "line": 1428,
+                  "line": 1455,
                   "column": 9
                 }
               },
@@ -2238,7 +2276,7 @@
               "column": 6
             },
             "end": {
-              "line": 1429,
+              "line": 1456,
               "column": 7
             }
           },
@@ -2453,6 +2491,22 @@
               },
               "metadata": {},
               "type": "Object"
+            },
+            {
+              "name": "polar",
+              "description": "When present, cartesian charts like line, spline, area and column are transformed\ninto the polar coordinate system.",
+              "sourceRange": {
+                "start": {
+                  "line": 424,
+                  "column": 12
+                },
+                "end": {
+                  "line": 428,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean"
             }
           ],
           "events": [

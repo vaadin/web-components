@@ -50,6 +50,13 @@
       </vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="polar">
+    <template>
+      <vaadin-chart polar>
+        <vaadin-chart-series values="[0,1,2,3]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
@@ -296,6 +303,25 @@
 
           done();
         }, 100);
+      });
+
+      it('should be able to set polar', (done) => {
+        const chart = fixture('polar');
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          const {polar} = chart.configuration.options.chart;
+          expect(polar).to.be.true;
+          done();
+        });
+      });
+
+      it('should be able to modify polar', (done) => {
+        const chart = fixture('polar');
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          chart.polar = false;
+          const {polar} = chart.configuration.options.chart;
+          expect(polar).to.not.be.true;
+          done();
+        });
       });
     });
   </script>
