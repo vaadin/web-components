@@ -27,6 +27,7 @@
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-overlay": "^3.0.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#md-preview",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
@@ -34,9 +35,9 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-button": "^2.0.0",
+    "vaadin-button": "#md-preview",
     "vaadin-grid": "^5.0.0",
-    "vaadin-item": "^2.0.0",
+    "vaadin-item": "#md-preview",
     "vaadin-list-box": "^1.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
