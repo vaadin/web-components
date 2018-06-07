@@ -36,7 +36,7 @@
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.0.0",
     "vaadin-themable-mixin": "^1.1.0",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#md-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   }
 }
