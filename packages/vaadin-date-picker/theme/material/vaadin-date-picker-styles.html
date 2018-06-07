@@ -1,0 +1,27 @@
+<link rel="import" href="vaadin-date-picker-overlay.html">
+<link rel="import" href="vaadin-date-picker-overlay-content.html">
+<link rel="import" href="vaadin-month-calendar.html">
+<link rel="import" href="../../../vaadin-text-field/theme/material/vaadin-text-field.html">
+
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
+
+<dom-module id="material-date-picker" theme-for="vaadin-date-picker">
+  <template>
+    <style include="material-field-button">
+      :host {
+        display: inline-flex;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      [part="clear-button"]::before {
+        content: var(--material-icons-clear);
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--material-icons-calendar);
+      }
+    </style>
+  </template>
+</dom-module>
