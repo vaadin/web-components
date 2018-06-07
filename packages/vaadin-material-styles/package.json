@@ -1,9 +1,9 @@
 {
-  "name": "vaadin-material-theme",
+  "name": "vaadin-material-styles",
   "version": "0.3.0",
   "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
   "main": "",
-  "repository": "vaadin/vaadin-material-theme",
+  "repository": "vaadin/vaadin-material-styles",
   "keywords": [
     "vaadin",
     "material",
@@ -16,7 +16,7 @@
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/vaadin/vaadin-material-theme/issues"
+    "url": "https://github.com/vaadin/vaadin-material-styles/issues"
   },
   "homepage": "https://vaadin.com/components",
   "scripts": {
