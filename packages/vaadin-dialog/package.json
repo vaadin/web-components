@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "bower": "latest",
+    "coveralls": "^3.0.1",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
@@ -39,6 +40,7 @@
     "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
+    "wct-istanbul": "^0.14.3",
     "web-component-tester": "^6.1.5",
     "yargs": "^8.0.0"
   }
