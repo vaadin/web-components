@@ -32,7 +32,7 @@
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^2.0.0",
     "vaadin-item": "#md-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#md-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1"
   },
   "devDependencies": {
