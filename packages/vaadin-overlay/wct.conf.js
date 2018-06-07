@@ -3,6 +3,23 @@ var argv = require('yargs').argv;
 module.exports = {
   testTimeout: 180 * 1000,
 
+  plugins: {
+    'istanbul': {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-overlay/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 98
+        }
+      }
+    },
+    'random-output': true
+  },
+
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@11.0',
@@ -45,9 +62,5 @@ module.exports = {
         );
         break;
     }
-  },
-
-  plugins: {
-    'random-output': true
   }
 };
