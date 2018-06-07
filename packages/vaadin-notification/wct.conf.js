@@ -1,6 +1,22 @@
 var argv = require('yargs').argv;
 
 module.exports = {
+  plugins: {
+    'istanbul': {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-notification/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 88
+        }
+      }
+    }
+  },
+
   registerHooks: function(context) {
     var saucelabsPlatforms = [
       'macOS 10.12/iphone@11.0',
