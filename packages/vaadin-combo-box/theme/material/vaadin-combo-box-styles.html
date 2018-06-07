@@ -1,0 +1,31 @@
+<link rel="import" href="vaadin-combo-box-dropdown-styles.html">
+<link rel="import" href="vaadin-combo-box-item-styles.html">
+<link rel="import" href="../../../vaadin-text-field/theme/material/vaadin-text-field.html">
+
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
+
+<dom-module id="material-combo-box" theme-for="vaadin-combo-box">
+  <template>
+    <style include="material-field-button">
+      :host {
+        display: inline-flex;
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--material-icons-dropdown);
+      }
+
+      :host([opened]) [part="toggle-button"] {
+        transform: rotate(180deg);
+      }
+
+      [part="clear-button"]::before {
+        content: var(--material-icons-clear);
+      }
+    </style>
+  </template>
+</dom-module>
