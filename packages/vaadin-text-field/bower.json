@@ -35,7 +35,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "^1.0.0",
-    "vaadin-button": "#^2.1.0"
+    "vaadin-button": "^2.1.0"
   },
   "dependencies": {
     "polymer": "^2.0.0",
