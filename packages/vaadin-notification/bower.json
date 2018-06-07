@@ -34,10 +34,10 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-button": "#^2.1.0",
-    "vaadin-checkbox": "#^2.2.0",
+    "vaadin-button": "^2.1.0",
+    "vaadin-checkbox": "^2.2.0",
     "vaadin-demo-helpers": "^1.2.0",
     "vaadin-radio-button": "#1.0.0-alpha11",
-    "vaadin-text-field": "#^2.1.0"
+    "vaadin-text-field": "^2.1.0"
   }
 }
