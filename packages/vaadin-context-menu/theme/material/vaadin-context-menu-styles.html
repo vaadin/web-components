@@ -1,0 +1,16 @@
+<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-item/theme/material/vaadin-item.html">
+<link rel="import" href="../../../vaadin-list-box/theme/material/vaadin-list-box.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/menu-overlay.html">
+
+<dom-module id="material-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
+  <template>
+    <style include="material-menu-overlay">
+      [part="content"] {
+        /* FIXME(jouni): move the default background color to the overlay part in the context-menu core styles */
+        background-color: transparent;
+      }
+    </style>
+  </template>
+</dom-module>
