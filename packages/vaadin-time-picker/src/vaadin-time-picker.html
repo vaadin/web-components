@@ -405,10 +405,12 @@ This program is available under Apache License Version 2.0, available at https:/
           const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
           const newValue = this.i18n.formatTime(parsedObj) || '';
 
-          if (parsedObj && this.__dropdownElement.value !== newValue) {
-            this.__dropdownElement.value = newValue;
-          } else if (parsedObj) {
-            this.__updateValue(parsedObj);
+          if (parsedObj) {
+            if (this.__dropdownElement.value !== newValue) {
+              this.__dropdownElement.value = newValue;
+            } else {
+              this.__updateValue(parsedObj);
+            }
           }
 
           this.validate();

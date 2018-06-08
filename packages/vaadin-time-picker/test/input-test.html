@@ -72,11 +72,13 @@
         expect(timePicker.__inputElement.value).to.be.equal('12:00');
       });
 
-      it('should restore the previous value if the format of new value is invalid', () => {
+      it('should not restore the previous value in input field if input value is invalid', () => {
         timePicker.value = '12:00';
         timePicker.value = 'invalid';
+        expect(timePicker.value).to.be.equal('12:00');
         changeInputValue(timePicker.__dropdownElement, 'invalid');
         expect(timePicker.value).to.be.equal('12:00');
+        expect(timePicker.__dropdownElement.value).to.be.equal('invalid');
       });
 
       it('should dispatch value-changed when value changes', () => {
