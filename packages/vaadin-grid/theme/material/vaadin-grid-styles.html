@@ -19,7 +19,6 @@
 
       [part~="cell"] ::slotted(vaadin-grid-cell-content) {
         padding: 8px 16px;
-
       }
 
       [part~="details-cell"] ::slotted(vaadin-grid-cell-content) {
@@ -74,11 +73,11 @@
         left: 0;
         background-color: var(--material-primary-color);
         opacity: 0;
-        transition: opacity 0.1s cubic-bezier(0.4, 0.0, 0.2, 0.1);
+        transition: opacity .1s cubic-bezier(.4, 0, .2, .1);
       }
 
       :host(:not([reordering])) [part~="row"][selected] > [part~="body-cell"]::before {
-        opacity: var(--_material-grid-row-selected-overlay-opacity, 0.08);
+        opacity: var(--_material-grid-row-selected-overlay-opacity, .08);
       }
 
       [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
