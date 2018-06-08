@@ -34,33 +34,24 @@
             const timePicker = document.querySelector('vaadin-time-picker');
 
             timePicker.i18n = {
-              formatTime: function(time) {
-                if (!time) {
-                  return;
+              formatTime: function(timeObject) {
+                if (timeObject) {
+                  const pad = function(n = 0) {
+                    return n < 10 ? '0' + parseInt(n) : n;
+                  };
+                  const period = timeObject.hours > 12 ? 'PM' : 'AM';
+                  const hours = timeObject.hours % 12 || 12;
+                  return pad(hours) + ':' + pad(timeObject.minutes) + ' ' + period;
                 }
-                let period = 'AM', hours = time.hours;
-                if (parseInt(time.hours) > 12) {
-                  period = 'PM';
-                  hours = parseInt(time.hours) - 12;
-                }
-                return `${hours}:${time.minutes ? time.minutes : '00'} ${period}`;
               },
-              parseTime: function(text) {
-                const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(text);
-                if (!parts) {
-                  return;
+              parseTime: function(timeString) {
+                if (timeString) {
+                  const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(timeString);
+                  return parts && {
+                    hours: parseInt(parts[1]) + (parts[3] == 'PM' ? 12 : 0),
+                    minutes: parts[2]
+                  };
                 }
-
-                let hours;
-                if (parts[3] === 'PM') {
-                  hours = parseInt(parts[1]) + 12;
-                } else {
-                  hours = parseInt(parts[1]);
-                }
-                return {
-                  hours: hours,
-                  minutes: parts[2]
-                };
               }
             };
           });
