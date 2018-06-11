@@ -36,8 +36,9 @@
             timePicker.i18n = {
               formatTime: function(timeObject) {
                 if (timeObject) {
-                  const pad = function(n = 0) {
-                    return n < 10 ? '0' + parseInt(n) : n;
+                  const pad = function(n) {
+                    n = parseInt(n || 0);
+                    return n < 10 ? '0' + n : n;
                   };
                   const period = timeObject.hours > 12 ? 'PM' : 'AM';
                   const hours = timeObject.hours % 12 || 12;
