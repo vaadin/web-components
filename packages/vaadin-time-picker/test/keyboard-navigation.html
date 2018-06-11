@@ -76,6 +76,22 @@
           expect(timePicker.__inputElement.value).to.be.equal('23:48');
         });
 
+        it('on arrow up/down should not change input value if readonly', () => {
+          timePicker.readonly = true;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('');
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('');
+        });
+
+        it('on arrow up/down should not change input value if disabled', () => {
+          timePicker.disabled = true;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('');
+          arrowDown();
+          expect(timePicker.__inputElement.value).to.be.equal('');
+        });
+
         it('should substract step value from the current input value on arrow down', () => {
           timePicker.__inputElement.value = '23:55:55.500';
           timePicker.step = 1.5;
@@ -134,6 +150,28 @@
           arrowDown();
           arrowUp();
           expect(spy.callCount).to.eql(0);
+        });
+      });
+
+      describe('with millisecond step', () => {
+        it('should change the value on millisecond resolution', () => {
+          timePicker.step = 0.5;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:00:00.500');
+
+          timePicker.step = 0.1;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:00:00.600');
+        });
+
+        it('should change by default value increments on microsecond resolution', () => {
+          timePicker.step = 0.9999;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:01:00.000');
+
+          timePicker.step = 0.9991;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:02:00.000');
         });
       });
     });

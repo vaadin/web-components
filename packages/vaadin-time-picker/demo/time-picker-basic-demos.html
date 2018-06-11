@@ -10,7 +10,7 @@
     <h3>Plain Time Picker</h3>
     <vaadin-demo-snippet id="time-picker-basic-demos-plain-example">
       <template preserve-content>
-        <vaadin-time-picker></vaadin-time-picker>
+        <vaadin-time-picker label="Arrival hour (hh:mm)"></vaadin-time-picker>
       </template>
     </vaadin-demo-snippet>
 
@@ -21,46 +21,38 @@
     </p>
     <vaadin-demo-snippet id="time-picker-basic-demos-step-example">
       <template preserve-content>
-        <vaadin-time-picker step="0.5"></vaadin-time-picker>
+        <vaadin-time-picker step="0.5" label="Duration (hh:mm:ss.fff)"></vaadin-time-picker>
       </template>
     </vaadin-demo-snippet>
 
     <h3>Custom Parser And Formatter</h3>
     <vaadin-demo-snippet id="time-picker-basic-demos-format-parse-example">
       <template preserve-content>
-        <vaadin-time-picker></vaadin-time-picker>
+        <vaadin-time-picker label="Arrival hour"></vaadin-time-picker>
         <script>
           window.addDemoReadyListener('#time-picker-basic-demos-format-parse-example', function(document) {
             const timePicker = document.querySelector('vaadin-time-picker');
 
             timePicker.i18n = {
-              formatTime: function(time) {
-                if (!time) {
-                  return;
+              formatTime: function(timeObject) {
+                if (timeObject) {
+                  const pad = function(n) {
+                    n = parseInt(n || 0);
+                    return n < 10 ? '0' + n : n;
+                  };
+                  const period = timeObject.hours > 12 ? 'PM' : 'AM';
+                  const hours = timeObject.hours % 12 || 12;
+                  return pad(hours) + ':' + pad(timeObject.minutes) + ' ' + period;
                 }
-                let period = 'AM', hours = time.hours;
-                if (parseInt(time.hours) > 12) {
-                  period = 'PM';
-                  hours = parseInt(time.hours) - 12;
-                }
-                return `${hours}:${time.minutes ? time.minutes : '00'} ${period}`;
               },
-              parseTime: function(text) {
-                const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(text);
-                if (!parts) {
-                  return;
+              parseTime: function(timeString) {
+                if (timeString) {
+                  const parts = /^(\d{1,2})(?::(\d{1,2}))?(?:\s(\w{2}))?$/.exec(timeString);
+                  return parts && {
+                    hours: parseInt(parts[1]) + (parts[3] == 'PM' ? 12 : 0),
+                    minutes: parts[2]
+                  };
                 }
-
-                let hours;
-                if (parts[3] === 'PM') {
-                  hours = parseInt(parts[1]) + 12;
-                } else {
-                  hours = parseInt(parts[1]);
-                }
-                return {
-                  hours: hours,
-                  minutes: parts[2]
-                };
               }
             };
           });

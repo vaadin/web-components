@@ -283,10 +283,16 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __validDayDivisor(step) {
-          return 24 * 3600 % step === 0 || !step;
+          // valid if undefined, or exact divides a day, or has millisecond resolution
+          return !step || 24 * 3600 % step === 0 || (step < 1 && step % 1 * 1000 % 1 === 0);
         }
 
         __onKeyDown(e) {
+
+          if (this.readonly || this.disabled) {
+            return;
+          }
+
           const stepResolution = this.__validDayDivisor(this.step) && this.step || 60;
 
           if (stepResolution >= 15 * 60) {
@@ -405,10 +411,12 @@ This program is available under Apache License Version 2.0, available at https:/
           const parsedObj = this.i18n.parseTime(this.__dropdownElement.value);
           const newValue = this.i18n.formatTime(parsedObj) || '';
 
-          if (parsedObj && this.__dropdownElement.value !== newValue) {
-            this.__dropdownElement.value = newValue;
-          } else if (parsedObj) {
-            this.__updateValue(parsedObj);
+          if (parsedObj) {
+            if (this.__dropdownElement.value !== newValue) {
+              this.__dropdownElement.value = newValue;
+            } else {
+              this.__updateValue(parsedObj);
+            }
           }
 
           this.validate();
