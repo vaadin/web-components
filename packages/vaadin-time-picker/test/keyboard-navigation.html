@@ -152,6 +152,28 @@
           expect(spy.callCount).to.eql(0);
         });
       });
+
+      describe('with millisecond step', () => {
+        it('should change the value on millisecond resolution', () => {
+          timePicker.step = 0.5;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:00:00.500');
+
+          timePicker.step = 0.1;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:00:00.600');
+        });
+
+        it('should change by default value increments on microsecond resolution', () => {
+          timePicker.step = 0.9999;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:01:00.000');
+
+          timePicker.step = 0.9991;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:02:00.000');
+        });
+      });
     });
   </script>
 </body>
