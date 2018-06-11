@@ -10,7 +10,14 @@
     <p>The <code>&lt;vaadin-button&gt;</code> element works the same as the native <code>&lt;button&gt;</code> element, but offers better styling support and accessibility features.</p>
     <vaadin-demo-snippet id='button-basic-demos-basic'>
       <template preserve-content>
-        <vaadin-button>Button</vaadin-button>
+        <vaadin-button id="my-button">Button</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#button-basic-demos-basic', function(document) {
+            document.querySelector('#my-button').addEventListener('click', function(e) {
+              window.console.log(e.target.id + ' clicked');
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
