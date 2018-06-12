@@ -1,13 +1,25 @@
-var envIndex = process.argv.indexOf('--env') + 1;
-var env = envIndex ? process.argv[envIndex] : undefined;
+var argv = require('yargs').argv;
 
 module.exports = {
+  plugins: {
+    istanbul: {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-time-picker/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 99
+        }
+      }
+    }
+  },
+
   registerHooks: function(context) {
     var saucelabsPlatforms = [
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@59',
       'macOS 10.12/iphone@10.3',
-      'macOS 10.12/ipad@11.0',
       'Windows 10/microsoftedge@15',
       'Windows 10/internet explorer@11',
       'macOS 10.12/safari@11.0',
@@ -15,14 +27,15 @@ module.exports = {
     ];
 
     var cronPlatforms = [
-      'Android/chrome',
+      'macOS 10.12/ipad@11.0',
       'Windows 10/chrome@65',
       'Windows 10/firefox@59'
     ];
 
-    if (env === 'saucelabs') {
+    if (argv.env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
-    } else if (env === 'saucelabs-cron') {
+
+    } else if (argv.env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
     }
   }

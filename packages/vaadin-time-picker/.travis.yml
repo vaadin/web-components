@@ -48,3 +48,6 @@ script:
       npm install &&
       polymer test --env saucelabs-cron;
     fi
+
+after_success:
+  - cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls
