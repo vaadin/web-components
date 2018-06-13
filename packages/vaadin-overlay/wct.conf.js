@@ -4,6 +4,22 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 module.exports = {
   verbose: true,
   testTimeout: 180 * 1000,
+  plugins: {
+    'istanbul': {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-overlay/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 85
+        }
+      }
+    },
+    'random-output': true
+  },
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@10.3',

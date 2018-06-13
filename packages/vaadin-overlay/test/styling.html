@@ -58,6 +58,52 @@
     </template>
   </test-fixture>
 
+  <dom-module id="local-styles-property">
+    <template>
+      <style>
+        :host {
+          font-family: ":host";
+        }
+
+        .local-styles-content {
+          font-family: var(--local-styles-property, '.local-styles-content');
+        }
+
+        [part="overlay"] {
+          font-family: '[part="overlay"]';
+        }
+      </style>
+
+      <vaadin-overlay id="overlay" opened="{{opened}}">
+        <template>
+          <div class="local-styles-content"></div>
+          <div class="global-styles-content"></div>
+        </template>
+      </vaadin-overlay>
+    </template>
+  </dom-module>
+  <script>
+    addEventListener('WebComponentsReady', () => {
+      customElements.define('local-styles-property', class extends Polymer.Element {
+        static get is() {
+          return 'local-styles-property';
+        }
+
+        static get properties() {
+          return {
+            opened: Boolean
+          };
+        }
+      });
+    });
+  </script>
+
+  <test-fixture id="localStylesProperty">
+    <template>
+      <local-styles-property></local-styles-property>
+    </template>
+  </test-fixture>
+
   <custom-style>
     <style>
       .global-styles-content {
@@ -154,6 +200,66 @@
         });
       });
 
+      if (window.ShadyCSS && !window.ShadyCSS.nativeShadow && !window.ShadyCSS.nativeCss) {
+        // NOTE(platosha): 'local styles' and 'local styles property' are two
+        // very similar cases, the only difference is that the latter uses
+        // a custom CSS property in the styles. If ShadyCSS’ CSS properties
+        // shim is in use (read: in MSIE 11), additional scoping is applied
+        // in this case.
+
+        describe('local styles property', () => {
+          beforeEach(done => {
+            const localStylesProperty = fixture('localStylesProperty');
+            overlay = localStylesProperty.$.overlay;
+            overlay.opened = true;
+            // NOTE(platosha): It’s important that nothing breaks after a flush.
+            // Not having a flush here might produce false positive results.
+            flush(done);
+          });
+
+          afterEach(() => {
+            overlay.opened = false;
+          });
+
+          it('should stamp content into a shadowRoot', () => {
+            expect(overlay.content).to.be.instanceof(ShadowRoot);
+          });
+
+          it('should not slot the content', () => {
+            expect(overlay.content.children[0].assignedSlot).to.be.null;
+            expect(overlay.content.children[1].assignedSlot).to.be.null;
+          });
+
+          it('should apply local styles to overlay content', () => {
+            expect(getComputedStyleSource(
+              overlay.content.querySelector('.local-styles-content')
+            )).to.equal('.local-styles-content');
+          });
+
+          it('should not apply global styles to overlay content', () => {
+            expect(getComputedStyleSource(
+              overlay.content.querySelector('.global-styles-content')
+            )).to.not.equal('.global-styles-content');
+          });
+
+          it('should not apply host styles to overlay content', () => {
+            expect(getComputedStyleSource(overlay.content.host)).to.not.equal(':host');
+          });
+
+          it('should not apply local part styles to overlay', () => {
+            expect(getComputedStyleSource(
+              overlay.shadowRoot.querySelector('[part="overlay"]')
+            )).to.not.equal('[part="overlay"]');
+          });
+
+          it('should have overlay style scope on the content part', () => {
+            expect(
+              overlay.shadowRoot.querySelector('[part="content"]').className
+            ).to.contain('style-scope vaadin-overlay');
+          });
+        });
+      }
+
       describe('global styles', () => {
         beforeEach(() => {
           overlay = fixture('globalStyles');
@@ -186,34 +292,6 @@
           )).to.not.equal('.local-styles-content');
         });
       });
-
-      if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-        describe('ShadyCSS scoping with is attribute', () => {
-          function getStyleScope(overlay) {
-            return overlay.$.content.getAttribute('is');
-          }
-
-          it('should use is value for builtin elements', () => {
-            const template = document.createElement('template');
-            template.innerHTML = 'is-builtin-element';
-            const overlay = document.createElement('vaadin-overlay');
-            overlay.appendChild(template);
-            const owner = document.createElement('div');
-            owner.setAttribute('is', 'is-builtin-element');
-            owner.attachShadow({mode: 'open'});
-            owner.shadowRoot.appendChild(overlay);
-            document.body.appendChild(owner);
-            expect(getStyleScope(overlay)).to.equal('is-builtin-element');
-            document.body.removeChild(owner);
-          });
-
-          it('should not use is value for custom elements', () => {
-            const owner = fixture('isCustomElement');
-            const overlay = owner.shadowRoot.querySelector('vaadin-overlay');
-            expect(getStyleScope(overlay)).to.equal('is-custom-element');
-          });
-        });
-      }
     });
   </script>
 </body>

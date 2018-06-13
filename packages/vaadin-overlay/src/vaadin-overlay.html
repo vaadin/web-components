@@ -93,6 +93,49 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <script>
   (function() {
+    let overlayContentCounter = 0;
+
+    const createOverlayContent = (cssText) => {
+      overlayContentCounter++;
+      const is = `vaadin-overlay-content-${overlayContentCounter}`;
+
+      const styledTemplate = document.createElement('template');
+      const style = document.createElement('style');
+      style.textContent = ':host { display: block; }' + cssText;
+      styledTemplate.content.appendChild(style);
+
+      if (window.ShadyCSS) {
+        window.ShadyCSS.prepareTemplate(styledTemplate, is);
+      }
+
+      // NOTE(platosha): Have to use an awkward IIFE returning class here
+      // to prevent this class from showing up in analysis.json & API docs.
+      /** @private */
+      const klass = (() => class extends HTMLElement {
+        static get is() {
+          return is;
+        }
+
+        connectedCallback() {
+          if (window.ShadyCSS) {
+            window.ShadyCSS.styleElement(this);
+          }
+
+          if (!this.shadowRoot) {
+            this.attachShadow({mode: 'open'});
+            this.shadowRoot.appendChild(document.importNode(styledTemplate.content, true));
+
+            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
+            this.root = this.shadowRoot;
+          }
+        }
+      })();
+
+      customElements.define(klass.is, klass);
+
+      return document.createElement(is);
+    };
+
     /**
      * `<vaadin-overlay>` is a Polymer 2 element for creating overlays.
      *
@@ -235,7 +278,7 @@ This program is available under Apache License Version 2.0, available at https:/
             type: Object
           },
 
-          _shadyStyleScope: String,
+          _originalContentPart: Object,
 
           _contentNodes: Array
         };
@@ -546,9 +589,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
 
-        if (this._shadyStyleScope) {
-          // NOTE(platosha): Remove the style scope related to old content.
-          this.$.content.removeAttribute('is');
+        if (this._originalContentPart) {
+          // Restore the original <div part="content">
+          this.$.content.parentNode.replaceChild(this._originalContentPart, this.$.content);
+          this.$.content = this._originalContentPart;
+          this._originalContentPart = undefined;
         }
 
         this._observer.connect();
@@ -588,32 +633,41 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.content.root = this.$.content.shadowRoot;
           }
 
-          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-            // Shady DOM
-            this._shadyStyleScope = templateRoot.host && templateRoot.host.localName;
-            if (this._shadyStyleScope && this._shadyStyleScope.indexOf('-') === -1) {
-              this._shadyStyleScope = templateRoot.host.getAttribute('is');
-            }
-            if (this._shadyStyleScope) {
-              // NOTE(platosha): here we trick ShadyCSS to think that the scope is
-              // what `this._shadyStyleScope` says. What we actually need is to add
-              // `style-scope ${this._shadyStyleScope}` classes to every element
-              // inside this.$.content.shadowRoot. But if we do that manually,
-              // these classes might get removed by ShadyCSS later (for example,
-              // after next flush).
-              this.$.content.setAttribute('is', this._shadyStyleScope);
-            }
-          } else {
-            // Shadow DOM
-            const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
-              .reduce((result, style) => result + style.textContent, '')
-              // The overlay root’s :host styles should not apply inside the overlay
-              .replace(/:host/g, ':host-nomatch');
+          let scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+            .reduce((result, style) => result + style.textContent, '');
 
-            if (scopeCssText) {
+          if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+            // NOTE(platosha): ShadyCSS removes <style>’s from templates, so
+            // we have to use these protected APIs to get their contents back
+            const styleInfo = window.ShadyCSS.ScopingShim
+              ._styleInfoForNode(templateRoot.host);
+            if (styleInfo) {
+              scopeCssText += styleInfo._getStyleRules().parsedCssText;
+              scopeCssText += '}';
+            }
+          }
+
+          // The overlay root’s :host styles should not apply inside the overlay
+          scopeCssText = scopeCssText.replace(/:host/g, ':host-nomatch');
+
+          if (scopeCssText) {
+            if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+              // ShadyDOM: replace the <div part="content"> with a generated
+              // styled custom element
+              const contentPart = createOverlayContent(scopeCssText);
+              contentPart.id = 'content';
+              contentPart.setAttribute('part', 'content');
+              this.$.content.parentNode.replaceChild(contentPart, this.$.content);
+              // NOTE(platosha): carry the style scope of the content part
+              contentPart.className = this.$.content.className;
+              this._originalContentPart = this.$.content;
+              this.$.content = contentPart;
+            } else {
+              // Shadow DOM: append a style to the content shadowRoot
               const style = document.createElement('style');
               style.textContent = scopeCssText;
               this.$.content.shadowRoot.appendChild(style);
+              this._contentNodes.unshift(style);
             }
           }
 
