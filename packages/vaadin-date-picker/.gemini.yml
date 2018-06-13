@@ -28,11 +28,11 @@ browsers:
       version: "15"
       platform: "Windows 10"
 
-  android:
-    desiredCapabilities:
-      browserName: "chrome"
-      platform: "Android"
-
+  # android:
+  #   desiredCapabilities:
+  #     browserName: "chrome"
+  #     platform: "Android"
+  #
   # The following setups don't currently work due to Selenium SafariDriver issue
   # https://github.com/vaadin/vaadin-element-skeleton/issues/19
   #
