@@ -289,7 +289,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __onKeyDown(e) {
 
-          if (this.readonly || this.disabled) {
+          if (this.readonly || this.disabled || this.__dropdownItems.length) {
             return;
           }
 

@@ -128,6 +128,14 @@
         });
       });
 
+      describe('with dropdown', () => {
+        it('should not change the value on arrow up, but should open the overlay', () => {
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('');
+          expect(timePicker.__dropdownElement.opened).to.be.true;
+        });
+      });
+
       describe('with step more than 15 mins', () => {
         beforeEach(() => {
           timePicker.step = 1800;
