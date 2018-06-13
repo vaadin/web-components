@@ -45,10 +45,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       :host([hidden]) {
         display: none !important;
       }
-
-      #chart {
-        height: 100%;
-      }
     </style>
     <div id="chart"></div>
     <slot id="slot"></slot>
@@ -442,6 +438,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         constructor() {
           super();
+
+          /**
+           * List of properties that will always be copied from the chart element to the container div
+           **/
+          this._copyStyleProperties = ['flex', '-webkit-flex', '-ms-flex'];
+
           this._baseConfig = {
             credits: {
               enabled: false
@@ -473,6 +475,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         /** @private */
         connectedCallback() {
           super.connectedCallback();
+          this.__updateStyles();
           this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
             // Detect if the chart had already been initialized. This might happen in
@@ -1456,6 +1459,32 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             if (functionToCall && typeof functionToCall === 'function') {
               functionToCall.apply(point, argumentsForCall);
             }
+          }
+        }
+
+        /**
+         * Updates chart container and current chart style property depending on flex status
+         */
+        __updateStyles() {
+          // Chrome returns default value if property is not set
+          // check if flex is defined for chart, and different than default value
+          const isFlex = this._copyStyleProperties.some(property =>
+            getComputedStyle(this)[property] && getComputedStyle(this)[property] != '0 1 auto', this);
+
+          // If chart element is a flexible item the chartContainer should be flex too
+          if (isFlex) {
+            this.$.chart.setAttribute('style', 'flex: 1; -webkit-flex: 1; -ms-flex: 1; ');
+            var style = '';
+            if (this.hasAttribute('style')) {
+              style = this.getAttribute('style');
+              if (style.charAt(style.length - 1) !== ';') {
+                style += ';';
+              }
+            }
+            style += 'display: -ms-flexbox; display: -webkit-flex; display: flex;';
+            this.setAttribute('style', style);
+          } else {
+            this.$.chart.setAttribute('style', 'height:100%; width:100%;');
           }
         }
       }
