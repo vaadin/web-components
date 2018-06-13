@@ -2,22 +2,11 @@
   "name": "Vaadin Element",
   "pages": [
   {
-    "name": "Basic Examples",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+    "name": "Alert Dialog Demos",
+    "url": "alert-demos",
+    "src": "alert-demos.html",
     "meta": {
-      "title": "vaadin-confirm-dialog Basic Examples",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-confirm-dialog Advanced Examples",
+      "title": "vaadin-confirm-dialog Alert Examples",
       "description": "",
       "image": ""
      }

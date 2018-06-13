@@ -1,0 +1,42 @@
+<link rel="import" href="../../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
+<link rel="import" href="../../../vaadin-dialog/theme/lumo/vaadin-dialog-styles.html">
+
+<dom-module id="lumo-confirm-dialog" theme-for="vaadin-confirm-dialog">
+  <template>
+    <style include="lumo-dialog">
+      [part="header"],
+      .header {
+        margin-top: var(--lumo-space-s);
+        margin-bottom: var(--lumo-space-m);
+      }
+
+      [part="message"] {
+        width: 25em;
+        min-width: 100%;
+        max-width: 100%;
+      }
+
+      [part="footer"] {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        margin: calc(var(--lumo-space-l) * -1);
+        margin-top: var(--lumo-space-l);
+        padding: 0 var(--lumo-space-l);
+        background-color: var(--lumo-contrast-5pct);
+      }
+
+      [part="footer"] vaadin-button {
+        margin-top: var(--lumo-space-s);
+        margin-bottom: var(--lumo-space-s);
+      }
+
+      [part="footer"] vaadin-button[theme~="tertiary"] {
+        padding-left: var(--lumo-space-s);
+        padding-right: var(--lumo-space-s);
+      }
+
+    </style>
+  </template>
+</dom-module>

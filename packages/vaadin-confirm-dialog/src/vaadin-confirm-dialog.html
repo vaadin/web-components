@@ -10,28 +10,49 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
+<link rel="import" href="../../vaadin-button/src/vaadin-button.html">
+<link rel="import" href="../../vaadin-dialog/src/vaadin-dialog.html">
+
 <dom-module id="vaadin-confirm-dialog">
   <template>
     <style>
       :host {
-        display: inline-block;
-      }
-
-      :host([hidden]) {
-        display: none !important;
+        display: hidden;
       }
     </style>
-    <slot></slot>
+    <vaadin-dialog id="dialog" opened="{{opened}}" no-close-on-outside-click="{{noCloseOnOutsideClick}}" no-close-on-esc="{{noCloseOnEsc}}">
+      <template>
+        <div part="header">
+          <slot name="header">
+            <h3 class="header">[[header]]</h3>
+          </slot>
+        </div>
+
+        <div part="message">
+          <slot></slot>
+          [[message]]
+        </div>
+
+        <div part="footer">
+          <slot name="confirm-button">
+            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" hidden$="[[!confirm]]">[[confirmText]]</vaadin-button>
+          </slot>
+        </div>
+      </template>
+      <slot></slot>
+    </vaadin-dialog>
   </template>
 
   <script>
     (function() {
 
       /**
-       * `<vaadin-confirm-dialog>` is a Web Component.
+       * `<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.
        *
        * ```
-       * <vaadin-confirm-dialog></vaadin-confirm-dialog>
+       * <vaadin-confirm-dialog on-confirm="_doConfirm">
+       *  Sample confirmation question
+       * </vaadin-confirm-dialog>
        * ```
        *
        * @memberof Vaadin
@@ -47,7 +68,89 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         static get properties() {
           return {
+            /**
+             * True if the overlay is currently displayed.
+             */
+            opened: {
+              type: Boolean,
+              value: false,
+              notify: true
+            },
+            /**
+             * Set to true to disable closing dialog on outside click.
+             */
+            noCloseOnOutsideClick: {
+              type: Boolean,
+              value: false
+            },
+            /**
+             * Set to true to disable closing dialog on Escape press.
+             */
+            noCloseOnEsc: {
+              type: Boolean,
+              value: false
+            },
+            /**
+             * Set the confirmation dialog title.
+             */
+            header: {
+              type: String,
+              reflectToAttribute: true
+            },
+            /**
+             * Set the message or confirmation question.
+             */
+            message: {
+              type: String,
+              reflectToAttribute: true
+            },
+            /**
+             * Whether to show confirm button or not.
+             */
+            confirm: {
+              type: Boolean,
+              reflectToAttribute: true,
+              value: false,
+              notify: true
+            },
+            /**
+             * Text displayed on confirm-button.
+             * Changing sets confirm property to true.
+             */
+            confirmText: {
+              type: String,
+              value: 'Confirm',
+              reflectToAttribute: true,
+              observer: '_confirmPropertyChanged'
+            },
+            /**
+             * Theme for a confirm-button.
+             * Changing sets confirm property to true.
+             */
+            confirmTheme: {
+              type: String,
+              value: 'tertiary',
+              reflectToAttribute: true,
+              observer: '_confirmPropertyChanged'
+            }
           };
+        }
+
+        ready() {
+          super.ready();
+
+          Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
+        }
+
+        _confirmPropertyChanged() {
+          if (this.confirmText !== 'Confirm' || this.confirmTheme !== 'tertiary') {
+            this.confirm = true;
+          }
+        }
+
+        _confirm() {
+          this.dispatchEvent(new CustomEvent('confirm'));
+          this.opened = false;
         }
       }
 

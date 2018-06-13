@@ -1,3 +1,4 @@
 window.VaadinConfirmDialogSuites = [
-  'sample-test.html'
+  'sample-test.html',
+  'element-api-test.html'
 ];
