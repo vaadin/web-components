@@ -5,7 +5,16 @@
     "Vaadin Ltd"
   ],
   "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
-  "main": "",
+  "main": [
+    "mixins/field-button.html",
+    "mixins/menu-overlay.html",
+    "mixins/overlay.html",
+    "color.html",
+    "font-icons.html",
+    "shadow.html",
+    "typography.html",
+    "version.html"
+  ],
   "keywords": [
     "vaadin",
     "material",

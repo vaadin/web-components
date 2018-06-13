@@ -1,4 +1,18 @@
 <script>
-window.Vaadin = window.Vaadin || {};
-window.Vaadin.Material = {version: '1.0.0-alpha1'};
+  (function() {
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+
+    class Material extends HTMLElement {
+      static get version() {
+        return '1.0.0-alpha1';
+      }
+    }
+
+    customElements.define('vaadin-material-styles', Material);
+
+    window.Vaadin.Material = Material;
+  })();
 </script>

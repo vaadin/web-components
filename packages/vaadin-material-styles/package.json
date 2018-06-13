@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-material-styles",
+  "name": "@vaadin/vaadin-material-styles",
   "version": "1.0.0-alpha1",
   "description": "Vaadin Material is a complete theme for Vaadin components, inspired by Google’s Material Design guidelines.",
   "main": "",
