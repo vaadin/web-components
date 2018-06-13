@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-themable-mixin",
-  "version": "1.1.5-pre.4",
+  "version": "1.1.6",
   "description": "vaadin-themable-mixin",
   "main": "vaadin-themable-mixin.html",
   "repository": "vaadin/vaadin-themable-mixin",
