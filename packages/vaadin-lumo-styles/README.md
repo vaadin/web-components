@@ -4,18 +4,18 @@
 
 # Lumo
 
-*Lumo – ✨ enchantment (Finnish) and 🔆 light (Esperanto)*
+> Lumo – ✨ enchantment (Finnish) and 🔆 light (Esperanto)
 
 **Lumo is a design system foundation** for modern, beautiful and accessible web applications.
 
 Lumo contains foundational styles – typography, colors, visual style, sizing & spacing and icons – that components and applications can use to achieve a consistent visual design.
 
-The implementation of Lumo is based on CSS custom properties, and [Polymer 2.0 style modules](https://www.polymer-project.org/2.0/docs/devguide/style-shadow-dom#style-modules). Note, that you don’t need to use Polymer to build your application in order to use Lumo, though it is recommended.
+The implementation of Lumo is based on CSS custom properties, and [Polymer style modules](https://www.polymer-project.org/2.0/docs/devguide/style-shadow-dom#style-modules). Note, that you don’t need to use Polymer to build your application in order to use Lumo.
 
 
 ## Documentation
 
-*🚧 Documentation will eventually be deployed at https://vaadin.com/themes/lumo 🚧*
+*🚧 Documentation will eventually be deployed at https://vaadin.com 🚧*
 
 For documentation and instructions how to get started, use the “Documentation” link in the latest [release notes](https://github.com/vaadin/vaadin-lumo-styles/releases).
 
@@ -25,13 +25,6 @@ For documentation and instructions how to get started, use the “Documentation�
 Lumo is maintained as a part of the [Vaadin platform](https://vaadin.com/).
 
 [Vaadin components](https://vaadin.com/components) is a collection of web components that use the Lumo design language as their default theme. The [Vaadin app starters](https://vaadin.com/start) are also based on Lumo.
-
-
-## Roadmap
-
-Currently, Lumo is perhaps just a glorified visual style guide. The intention, however, is to gradually grow it to contain design guidelines and patterns as well, with a focus on enterprise/business application use cases. The vision is that you could use Lumo as a starting point for creating your own design system.
-
-Also, the technical implementation is expected to evolve together with Vaadin components and Polymer, with Polymer 3 around the corner.
 
 
 ## Contributing
@@ -52,6 +45,17 @@ Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-sty
 1. You can also open demo/documentation by adding **demo** to the URL, for example:
 
   - http://127.0.0.1:8080/components/vaadin-lumo-styles/demo
+
+
+## Adding or updating icons
+
+1. Open `icons/lumo-icons.sketch` using [Sketch](https://sketchapp.com)
+
+1. Modify an icon, or create a new artboard (the name of the artboard is used as the icon name) for a new icon – make sure to simplify and flatten the shape when you’re done (and save the file).
+
+1. Run `npm install` to install dependencies
+
+1. Run `gulp icons` to generate new versions of `icons.html` and `font-icons.html`
 
 
 ## Following the coding style

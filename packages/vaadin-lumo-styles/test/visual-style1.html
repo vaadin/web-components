@@ -23,10 +23,10 @@
       --lumo-error-color-10pct: hsla(340, 81%, 52%, 0.1);
       --lumo-error-text-color: hsl(3, 92%, 53%);
 
-      --lumo-success-color: hsl(150,93%,39%);
-      --lumo-success-color-50pct: hsla(145, 76%, 44%, 0.55);
-      --lumo-success-color-10pct: hsla(145, 76%, 44%, 0.12);
-      --lumo-success-text-color: hsl(145, 100%, 32%);
+      --lumo-success-color: hsl(165, 94%, 40%);
+      --lumo-success-color-50pct: hsla(165, 94%, 40%, 0.55);
+      --lumo-success-color-10pct: hsla(165, 94%, 40%, 0.12);
+      --lumo-success-text-color: hsl(165, 100%, 32%);
 
       --lumo-border-radius: 1px;
 
@@ -78,6 +78,16 @@
   </template>
 </dom-module>
 
+<dom-module id="form-item-theme" theme-for="vaadin-form-item">
+  <template>
+    <style>
+      [part="label"] {
+        font-weight: 600;
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="menu-overlay-theme" theme-for="vaadin-dropdown-menu-overlay vaadin-context-menu-overlay">
   <template>
     <style>
@@ -91,11 +101,11 @@
 <dom-module id="combo-box-overlay-theme" theme-for="vaadin-combo-box-overlay">
   <template>
     <style>
-      /* This doesn't work for some reason, it only removes the border/visual padding */
-      iron-list {
+      :host([opened]) {
         --iron-list-items-container: {
-          border-top: var(--lumo-space-s) solid transparent;
-          border-bottom: var(--lumo-space-s) solid transparent;
+          border-width: 8px 0;
+          border-style: solid;
+          border-color: transparent;
         }
       }
     </style>
