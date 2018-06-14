@@ -11,40 +11,42 @@ addons:
   firefox: latest
   chrome: stable
 
-before_script:
-  - npm install -g bower polymer-cli
-  - bower install
-
 env:
-  - POLYMER=2
+  - POLYMER=2 TEST_SUITE=unit_tests
+  - POLYMER=2 TEST_SUITE=visual_tests
   - POLYMER=3
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm install &&
+      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
       gulp lint version:check &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
-      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' polymer test;
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+          npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+          gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+        else
+          wct --env saucelabs;
+        fi;
       else
-        polymer test --env saucelabs;
+        xvfb-run -s '-screen 0 1024x768x24' wct;
+      fi &&
+      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
+        wct --env saucelabs-cron;
       fi;
     fi
-
   - if [[ "$POLYMER" = "3" ]]; then
-      npm install -g yarn magi-cli &&
-      (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm link) &&
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester &&
+      (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
-      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' polymer test --module-resolution=node --npm;
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        wct --module-resolution=node --npm --env saucelabs;
       else
-        polymer test --module-resolution=node --npm --env saucelabs;
+        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
       fi;
     fi
 
-  - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
-      npm install &&
-      polymer test --env saucelabs-cron;
-    fi
+after_success:
+  - "cat ${TRAVIS_BUILD_DIR}/coverage/lcov.info | coveralls"

@@ -95,7 +95,10 @@
       The property value is specified by the Lumo theme.
     </p>
     <p>
-      <b>Note:</b> The same behavior can achieved by setting corresponding property in CSS.
+      <b>Note:</b> The same behavior can achieved by setting corresponding property in CSS,
+      but this theme also attaches <code>::before</code> pseudo element to compensate the first item margin.
+      So please keep in mind that <code>justify-content</code> CSS property is not supposed to work with
+      <code>spacing</code> theme, and if you want to handle alignment yourself, you should remove the theme and use CSS.
     </p>
     <vaadin-demo-snippet id='ordered-layout-theme-demos-spacing'>
       <template preserve-content>
