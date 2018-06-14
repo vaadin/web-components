@@ -16,7 +16,7 @@ gemini.suite('vaadin-progress-bar', function(rootSuite) {
 
   gemini.suite('default-tests', function(suite) {
     suite
-      .setUrl('/default.html')
+      .setUrl('default.html')
       .setCaptureElements('#default-tests')
       .capture('vaadin-progress-bar');
   });
