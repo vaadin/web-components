@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-button.html">
+  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
+
+  <custom-style>
+    <style include="lumo-typography lumo-color">
+      body {
+        margin: 2em;
+      }
+    </style>
+  </custom-style>
+
+</head>
+
+<body>
+  <h2>Truncation and expansion</h2>
+
+  <vaadin-button style="width: 100px;">Longer text for a button</vaadin-button>
+
+  <vaadin-button style="width: 100px;">
+    <iron-icon slot="prefix" icon="lumo:plus"></iron-icon>
+    <span>Longer text for a button</span>
+  </vaadin-button>
+
+  <vaadin-button style="width: 100px;">
+    <span>Longer text for a button</span>
+    <iron-icon slot="suffix" icon="lumo:plus"></iron-icon>
+  </vaadin-button>
+
+  <vaadin-button style="width: 300px;">Longer text for a button</vaadin-button>
+
+  <vaadin-button style="width: 300px;">
+    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+    <span>Longer text for a button</span>
+  </vaadin-button>
+
+  <vaadin-button style="width: 300px;">
+    <span>Longer text for a button</span>
+    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+  </vaadin-button>
+</body>

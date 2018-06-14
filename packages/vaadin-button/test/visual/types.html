@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../vaadin-button.html">
+  <link rel="import" href="../../../vaadin-lumo-styles/icons.html">
+
+  <custom-style>
+    <style include="lumo-typography lumo-color">
+      body {
+        margin: 2em;
+      }
+    </style>
+  </custom-style>
+
+</head>
+
+<body>
+  <h2>Types</h2>
+
+  Primary:
+
+  <vaadin-button theme="primary">
+    <span>Button</span>
+  </vaadin-button>
+
+  <vaadin-button theme="primary">
+    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+    <span>Icon prefix</span>
+  </vaadin-button>
+
+  <vaadin-button theme="primary">
+    <span>Icon suffix</span>
+    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+  </vaadin-button>
+
+  <br>Tertiary:
+
+  <vaadin-button theme="tertiary">
+    <span>Button</span>
+  </vaadin-button>
+
+  <vaadin-button theme="tertiary">
+    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+    <span>Icon prefix</span>
+  </vaadin-button>
+
+  <vaadin-button theme="tertiary">
+    <span>Icon suffix</span>
+    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+  </vaadin-button>
+
+  <br>Tertiary inline:
+
+  <vaadin-button theme="tertiary-inline">
+    <span>Button</span>
+  </vaadin-button>
+  and
+  <vaadin-button theme="tertiary-inline">
+    <iron-icon slot="prefix" icon="lumo:edit"></iron-icon>
+    <span>Icon prefix</span>
+  </vaadin-button>
+  and
+  <vaadin-button theme="tertiary-inline">
+    <span>Icon suffix</span>
+    <iron-icon slot="suffix" icon="lumo:arrow-right"></iron-icon>
+  </vaadin-button>
+</body>

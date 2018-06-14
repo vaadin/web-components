@@ -16,15 +16,43 @@ gemini.suite('vaadin-button', function(rootSuite) {
 
   gemini.suite('default-tests', function(suite) {
     suite
-      .setUrl('/default.html')
-      .setCaptureElements('#default-tests')
+      .setUrl('default.html')
+      .setCaptureElements('body')
       .capture('default');
   });
 
-  gemini.suite('styling', function(suite) {
+  gemini.suite('colors', function(suite) {
     suite
-      .setUrl('styling.html')
-      .setCaptureElements('vaadin-button')
+      .setUrl('colors.html')
+      .setCaptureElements('body')
+      .capture('default');
+  });
+
+  gemini.suite('icons', function(suite) {
+    suite
+      .setUrl('icons.html')
+      .setCaptureElements('body')
+      .capture('default');
+  });
+
+  gemini.suite('sizing', function(suite) {
+    suite
+      .setUrl('sizing.html')
+      .setCaptureElements('body')
+      .capture('default');
+  });
+
+  gemini.suite('truncation-expansion', function(suite) {
+    suite
+      .setUrl('truncation-expansion.html')
+      .setCaptureElements('body')
+      .capture('default');
+  });
+
+  gemini.suite('types', function(suite) {
+    suite
+      .setUrl('types.html')
+      .setCaptureElements('body')
       .capture('default');
   });
 
