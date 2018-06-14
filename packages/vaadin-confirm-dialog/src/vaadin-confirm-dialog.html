@@ -20,7 +20,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         display: hidden;
       }
     </style>
-    <vaadin-dialog id="dialog" opened="{{opened}}" no-close-on-outside-click="{{noCloseOnOutsideClick}}" no-close-on-esc="{{noCloseOnEsc}}">
+    <vaadin-dialog id="dialog" opened="{{opened}}" no-close-on-outside-click no-close-on-esc>
       <template>
         <div part="header">
           <slot name="header">
@@ -34,8 +34,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         </div>
 
         <div part="footer">
+          <slot name="cancel-button">
+            <vaadin-button id="cancel" theme$="[[cancelTheme]]" on-click="_cancel" hidden$="[[!cancel]]">
+              [[cancelText]]
+            </vaadin-button>
+          </slot>
+          <slot name="reject-button">
+            <vaadin-button id="reject" theme$="[[rejectTheme]]" on-click="_reject" hidden$="[[!reject]]">
+              [[rejectText]]
+            </vaadin-button>
+          </slot>
           <slot name="confirm-button">
-            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" hidden$="[[!confirm]]">[[confirmText]]</vaadin-button>
+            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" hidden$="[[!confirm]]">
+              [[confirmText]]
+            </vaadin-button>
           </slot>
         </div>
       </template>
@@ -77,32 +89,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               notify: true
             },
             /**
-             * Set to true to disable closing dialog on outside click.
-             */
-            noCloseOnOutsideClick: {
-              type: Boolean,
-              value: false
-            },
-            /**
-             * Set to true to disable closing dialog on Escape press.
-             */
-            noCloseOnEsc: {
-              type: Boolean,
-              value: false
-            },
-            /**
              * Set the confirmation dialog title.
              */
             header: {
-              type: String,
-              reflectToAttribute: true
+              type: String
             },
             /**
              * Set the message or confirmation question.
              */
             message: {
-              type: String,
-              reflectToAttribute: true
+              type: String
             },
             /**
              * Whether to show confirm button or not.
@@ -119,9 +115,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             confirmText: {
               type: String,
-              value: 'Confirm',
-              reflectToAttribute: true,
-              observer: '_confirmPropertyChanged'
+              value: 'Confirm'
             },
             /**
              * Theme for a confirm-button.
@@ -129,27 +123,125 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              */
             confirmTheme: {
               type: String,
-              value: 'tertiary',
+              value: 'primary'
+            },
+            /**
+             * Whether to show cancel button or not.
+             */
+            reject: {
+              type: Boolean,
               reflectToAttribute: true,
-              observer: '_confirmPropertyChanged'
+              value: false,
+              notify: true
+            },
+            /**
+             * Text displayed on cancel-button.
+             * Changing sets cancel property to true.
+             */
+            rejectText: {
+              type: String,
+              value: 'Reject'
+            },
+            /**
+             * Theme for a cancel-button.
+             * Changing sets cancel property to true.
+             */
+            rejectTheme: {
+              type: String,
+              value: 'error tertiary'
+            },
+            /**
+             * Whether to show cancel button or not.
+             */
+            cancel: {
+              type: Boolean,
+              reflectToAttribute: true,
+              value: false,
+              notify: true
+            },
+            /**
+             * Text displayed on cancel-button.
+             * Changing sets cancel property to true.
+             */
+            cancelText: {
+              type: String,
+              value: 'Cancel'
+            },
+            /**
+             * Theme for a cancel-button.
+             * Changing sets cancel property to true.
+             */
+            cancelTheme: {
+              type: String,
+              value: 'tertiary'
             }
           };
         }
 
+        static get observers() {
+          return [
+            '_confirmPropertyChanged(confirmText, confirmTheme)',
+            '_rejectPropertyChanged(rejectText, rejectTheme)',
+            '_cancelPropertyChanged(cancelText, cancelTheme)'
+          ];
+        }
+
         ready() {
           super.ready();
-
+          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
           Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
         }
 
-        _confirmPropertyChanged() {
-          if (this.confirmText !== 'Confirm' || this.confirmTheme !== 'tertiary') {
+        _escPressed(event) {
+          if (this.cancel) {
+            this._cancel();
+          } else {
+            this.opened = false;
+          }
+        }
+
+        _confirmPropertyChanged(confirmText, confirmTheme) {
+          if (confirmText !== 'Confirm' || confirmTheme !== 'primary') {
             this.confirm = true;
           }
         }
 
+        /**
+         * @event confirm
+         * fired when Confirm button was pressed.
+         */
         _confirm() {
           this.dispatchEvent(new CustomEvent('confirm'));
+          this.opened = false;
+        }
+
+        _cancelPropertyChanged(cancelText, cancelTheme) {
+          if (cancelText !== 'Cancel' || cancelTheme !== 'tertiary') {
+            this.cancel = true;
+          }
+        }
+
+        /**
+         * @event cancel
+         * fired when Cancel button or Escape key was pressed.
+         */
+        _cancel() {
+          this.dispatchEvent(new CustomEvent('cancel'));
+          this.opened = false;
+        }
+
+        _rejectPropertyChanged(rejectText, rejectTheme) {
+          if (rejectText !== 'Reject' || rejectTheme !== 'error tertiary') {
+            this.reject = true;
+          }
+        }
+
+        /**
+         * @event reject
+         * fired when Reject button was pressed.
+         */
+        _reject() {
+          this.dispatchEvent(new CustomEvent('reject'));
           this.opened = false;
         }
       }

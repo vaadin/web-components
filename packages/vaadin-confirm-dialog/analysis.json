@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-confirm-dialog.html",
         "start": {
-          "line": 161,
+          "line": 253,
           "column": 6
         },
         "end": {
-          "line": 161,
+          "line": 253,
           "column": 62
         }
       },
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 73,
+                  "line": 85,
                   "column": 12
                 },
                 "end": {
-                  "line": 77,
+                  "line": 89,
                   "column": 13
                 }
               },
@@ -46,61 +46,17 @@
               "defaultValue": "false"
             },
             {
-              "name": "noCloseOnOutsideClick",
-              "type": "boolean | null | undefined",
-              "description": "Set to true to disable closing dialog on outside click.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 81,
-                  "column": 12
-                },
-                "end": {
-                  "line": 84,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
-              },
-              "defaultValue": "false"
-            },
-            {
-              "name": "noCloseOnEsc",
-              "type": "boolean | null | undefined",
-              "description": "Set to true to disable closing dialog on Escape press.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 88,
-                  "column": 12
-                },
-                "end": {
-                  "line": 91,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {
-                  "attributeType": "Boolean"
-                }
-              },
-              "defaultValue": "false"
-            },
-            {
               "name": "header",
               "type": "string | null | undefined",
               "description": "Set the confirmation dialog title.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 93,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 95,
                   "column": 13
                 }
               },
@@ -117,11 +73,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 99,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 101,
                   "column": 13
                 }
               },
@@ -138,11 +94,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 105,
                   "column": 12
                 },
                 "end": {
-                  "line": 114,
+                  "line": 110,
                   "column": 13
                 }
               },
@@ -161,17 +117,16 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 119,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 118,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_confirmPropertyChanged\"",
                   "attributeType": "String"
                 }
               },
@@ -184,17 +139,150 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 123,
                   "column": 12
                 },
                 "end": {
-                  "line": 134,
+                  "line": 126,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_confirmPropertyChanged\"",
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"primary\""
+            },
+            {
+              "name": "reject",
+              "type": "boolean | null | undefined",
+              "description": "Whether to show cancel button or not.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 130,
+                  "column": 12
+                },
+                "end": {
+                  "line": 135,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "rejectText",
+              "type": "string | null | undefined",
+              "description": "Text displayed on cancel-button.\nChanging sets cancel property to true.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 140,
+                  "column": 12
+                },
+                "end": {
+                  "line": 143,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"Reject\""
+            },
+            {
+              "name": "rejectTheme",
+              "type": "string | null | undefined",
+              "description": "Theme for a cancel-button.\nChanging sets cancel property to true.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 148,
+                  "column": 12
+                },
+                "end": {
+                  "line": 151,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"error tertiary\""
+            },
+            {
+              "name": "cancel",
+              "type": "boolean | null | undefined",
+              "description": "Whether to show cancel button or not.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 155,
+                  "column": 12
+                },
+                "end": {
+                  "line": 160,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "cancelText",
+              "type": "string | null | undefined",
+              "description": "Text displayed on cancel-button.\nChanging sets cancel property to true.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 165,
+                  "column": 12
+                },
+                "end": {
+                  "line": 168,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"Cancel\""
+            },
+            {
+              "name": "cancelTheme",
+              "type": "string | null | undefined",
+              "description": "Theme for a cancel-button.\nChanging sets cancel property to true.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 173,
+                  "column": 12
+                },
+                "end": {
+                  "line": 176,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
                   "attributeType": "String"
                 }
               },
@@ -208,16 +296,40 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 142,
+                  "line": 192,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_escPressed",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 194,
+                  "column": 8
+                },
+                "end": {
+                  "line": 200,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "event"
+                }
+              ],
               "return": {
                 "type": "void"
               }
@@ -228,16 +340,23 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 202,
                   "column": 8
                 },
                 "end": {
-                  "line": 148,
+                  "line": 206,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": [],
+              "params": [
+                {
+                  "name": "confirmText"
+                },
+                {
+                  "name": "confirmTheme"
+                }
+              ],
               "return": {
                 "type": "void"
               }
@@ -248,11 +367,105 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 212,
                   "column": 8
                 },
                 "end": {
-                  "line": 153,
+                  "line": 215,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_cancelPropertyChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 217,
+                  "column": 8
+                },
+                "end": {
+                  "line": 221,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "cancelText"
+                },
+                {
+                  "name": "cancelTheme"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_cancel",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 227,
+                  "column": 8
+                },
+                "end": {
+                  "line": 230,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_rejectPropertyChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 232,
+                  "column": 8
+                },
+                "end": {
+                  "line": 236,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "rejectText"
+                },
+                {
+                  "name": "rejectTheme"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_reject",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 242,
+                  "column": 8
+                },
+                "end": {
+                  "line": 245,
                   "column": 9
                 }
               },
@@ -273,11 +486,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 60,
+              "line": 72,
               "column": 6
             },
             "end": {
-              "line": 154,
+              "line": 246,
               "column": 7
             }
           },
@@ -290,43 +503,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 73,
+                  "line": 85,
                   "column": 12
                 },
                 "end": {
-                  "line": 77,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean | null | undefined"
-            },
-            {
-              "name": "no-close-on-outside-click",
-              "description": "Set to true to disable closing dialog on outside click.",
-              "sourceRange": {
-                "start": {
-                  "line": 81,
-                  "column": 12
-                },
-                "end": {
-                  "line": 84,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "boolean | null | undefined"
-            },
-            {
-              "name": "no-close-on-esc",
-              "description": "Set to true to disable closing dialog on Escape press.",
-              "sourceRange": {
-                "start": {
-                  "line": 88,
-                  "column": 12
-                },
-                "end": {
-                  "line": 91,
+                  "line": 89,
                   "column": 13
                 }
               },
@@ -338,11 +519,11 @@
               "description": "Set the confirmation dialog title.",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 93,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 95,
                   "column": 13
                 }
               },
@@ -354,11 +535,11 @@
               "description": "Set the message or confirmation question.",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 99,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 101,
                   "column": 13
                 }
               },
@@ -370,11 +551,11 @@
               "description": "Whether to show confirm button or not.",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 105,
                   "column": 12
                 },
                 "end": {
-                  "line": 114,
+                  "line": 110,
                   "column": 13
                 }
               },
@@ -386,11 +567,11 @@
               "description": "Text displayed on confirm-button.\nChanging sets confirm property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 119,
+                  "line": 115,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 118,
                   "column": 13
                 }
               },
@@ -402,11 +583,107 @@
               "description": "Theme for a confirm-button.\nChanging sets confirm property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 123,
                   "column": 12
                 },
                 "end": {
-                  "line": 134,
+                  "line": 126,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "reject",
+              "description": "Whether to show cancel button or not.",
+              "sourceRange": {
+                "start": {
+                  "line": 130,
+                  "column": 12
+                },
+                "end": {
+                  "line": 135,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "reject-text",
+              "description": "Text displayed on cancel-button.\nChanging sets cancel property to true.",
+              "sourceRange": {
+                "start": {
+                  "line": 140,
+                  "column": 12
+                },
+                "end": {
+                  "line": 143,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "reject-theme",
+              "description": "Theme for a cancel-button.\nChanging sets cancel property to true.",
+              "sourceRange": {
+                "start": {
+                  "line": 148,
+                  "column": 12
+                },
+                "end": {
+                  "line": 151,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "cancel",
+              "description": "Whether to show cancel button or not.",
+              "sourceRange": {
+                "start": {
+                  "line": 155,
+                  "column": 12
+                },
+                "end": {
+                  "line": 160,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "cancel-text",
+              "description": "Text displayed on cancel-button.\nChanging sets cancel property to true.",
+              "sourceRange": {
+                "start": {
+                  "line": 165,
+                  "column": 12
+                },
+                "end": {
+                  "line": 168,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "cancel-theme",
+              "description": "Theme for a cancel-button.\nChanging sets cancel property to true.",
+              "sourceRange": {
+                "start": {
+                  "line": 173,
+                  "column": 12
+                },
+                "end": {
+                  "line": 176,
                   "column": 13
                 }
               },
@@ -417,6 +694,24 @@
           "events": [
             {
               "type": "CustomEvent",
+              "name": "cancel",
+              "description": "cancel\nfired when Cancel button or Escape key was pressed.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "confirm",
+              "description": "confirm\nfired when Confirm button was pressed.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "reject",
+              "description": "reject\nfired when Reject button was pressed.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
               "name": "opened-changed",
               "description": "Fired when the `opened` property changes.",
               "metadata": {}
@@ -425,6 +720,18 @@
               "type": "CustomEvent",
               "name": "confirm-changed",
               "description": "Fired when the `confirm` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "reject-changed",
+              "description": "Fired when the `reject` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "cancel-changed",
+              "description": "Fired when the `cancel` property changes.",
               "metadata": {}
             }
           ],
@@ -438,11 +745,11 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 41,
+                  "line": 53,
                   "column": 6
                 },
                 "end": {
-                  "line": 41,
+                  "line": 53,
                   "column": 19
                 }
               }

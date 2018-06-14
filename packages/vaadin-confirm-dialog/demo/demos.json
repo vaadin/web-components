@@ -10,6 +10,26 @@
       "description": "",
       "image": ""
      }
+  },
+  {
+    "name": "Confirmation Dialog",
+    "url": "confirmation-demos",
+    "src": "confirmation-demos.html",
+    "meta": {
+      "title": "vaadin-confirm-dialog Confirmation Dialog Examples",
+      "description": "",
+      "image": ""
+     }
+  },
+  {
+    "name": "Yes/No/Cancel Dialog",
+    "url": "confirm-reject-demos",
+    "src": "confirm-reject-demos.html",
+    "meta": {
+      "title": "vaadin-confirm-dialog Confirm or Reject Dialog Examples",
+      "description": "",
+      "image": ""
+     }
   }
   ]
 }

@@ -1,0 +1,62 @@
+<dom-module id="confirm-reject-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Confirm or discard dialog example</h3>
+    <vaadin-demo-snippet id="confirm-reject-dialog-example">
+      <template preserve-content>
+        <vaadin-button>Close</vaadin-button>
+        <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" cancel reject-text="Discard">
+          <p>Do you want to save or discard the changes and close the editor?</p>
+          <p>Press <b>Cancel</b> to continue editing</p>
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-reject-dialog-example', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>DIY Confirmation dialog example</h3>
+    <vaadin-demo-snippet id="diy-confirm-reject-dialog-example">
+      <template preserve-content>
+        <vaadin-button theme="primary">Exit</vaadin-button>
+        <vaadin-confirm-dialog cancel>
+          <h2 slot="header">Unsaved changes</h2>
+          Save before exit?
+          <vaadin-button slot="reject-button" theme="error primary" on-click="_back" tabindex="2">
+            <iron-icon icon="vaadin:eraser" slot="prefix"></iron-icon>
+            Don't save
+          </vaadin-button>
+          <vaadin-button slot="confirm-button" theme="primary" on-click="_send" tabindex="1">
+            <iron-icon icon="vaadin:file-text" slot="prefix"></iron-icon>
+            Save
+          </vaadin-button>
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#diy-confirm-reject-dialog-example', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ConfirmRejectDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'confirm-reject-demos';
+      }
+    }
+    customElements.define(ConfirmRejectDemos.is, ConfirmRejectDemos);
+  </script>
+</dom-module>
