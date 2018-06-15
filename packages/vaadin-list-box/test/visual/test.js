@@ -16,7 +16,7 @@ gemini.suite('vaadin-list-box', function(rootSuite) {
 
   gemini.suite('list-box', function(suite) {
     suite
-      .setUrl('/list-box.html')
+      .setUrl('list-box.html')
       .setCaptureElements('#list-box-tests')
       .capture('list-box');
   });

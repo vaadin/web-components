@@ -28,6 +28,7 @@
     "vaadin-item": "vaadin/vaadin-item#p3-preview",
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#p3-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
   },
   "devDependencies": {
