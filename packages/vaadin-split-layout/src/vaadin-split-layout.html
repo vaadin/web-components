@@ -65,6 +65,11 @@ This program is available under Apache License Version 2.0, available at https:/
       <div part="handle"></div>
     </div>
     <slot id="secondary" name="secondary"></slot>
+
+    <div hidden>
+      <!-- Workaround to fix a Shady style scoping issue caused by dynamic slot naming of the child elements (primary/secondary) -->
+      <slot></slot>
+    </div>
   </template>
 
   <script>
@@ -228,7 +233,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get version() {
-          return '4.0.0-pre.3';
+          return '4.1.0-alpha1';
         }
 
         static get properties() {
