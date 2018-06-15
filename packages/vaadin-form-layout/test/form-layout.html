@@ -36,6 +36,19 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="flex-child">
+    <template>
+      <div style="display: flex">
+        <div>Foo</div>
+        <vaadin-form-layout>
+          <vaadin-text-field></vaadin-text-field>
+          <br>
+          <vaadin-text-field></vaadin-text-field>
+        </vaadin-form-layout>
+      </div>
+    </template>
+  </test-fixture>
+
   <test-fixture id="overflow">
     <template>
       <div style="width: 300px; overflow: auto;">
@@ -399,6 +412,22 @@
           });
         });
       });
+    });
+
+    describe('flex child', function() {
+      let container, layout;
+
+      beforeEach(() => {
+        container = fixture('flex-child');
+        layout = container.querySelector('vaadin-form-layout');
+      });
+
+      it('should have less width than then flexbox', () => {
+        const containerRect = container.getBoundingClientRect();
+        const layoutRect = layout.getBoundingClientRect();
+        expect(layoutRect.width).to.be.below(containerRect.width);
+      });
+
     });
   </script>
 </body>

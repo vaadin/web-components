@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-form-layout.html",
         "start": {
-          "line": 485,
+          "line": 486,
           "column": 6
         },
         "end": {
-          "line": 485,
+          "line": 486,
           "column": 58
         }
       },
@@ -42,7 +42,10 @@
                 {
                   "name": "e"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [
@@ -51,7 +54,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -67,6 +70,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -101,7 +107,6 @@
               "description": "",
               "name": "label",
               "range": {
-                "file": "src/vaadin-form-item.html",
                 "start": {
                   "line": 55,
                   "column": 6
@@ -116,7 +121,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-form-item.html",
                 "start": {
                   "line": 59,
                   "column": 6
@@ -155,14 +159,15 @@
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_responsiveStepsChanged\""
+                  "observer": "\"_responsiveStepsChanged\"",
+                  "attributeType": "Array"
                 }
               },
-              "defaultValue": "[]"
+              "defaultValue": "[{\"minWidth\":0,\"columns\":1,\"labelsPosition\":\"top\"},{\"minWidth\":\"20em\",\"columns\":1},{\"minWidth\":\"40em\",\"columns\":2}]"
             },
             {
               "name": "_columnCount",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Current number of columns in the layout",
               "privacy": "protected",
               "sourceRange": {
@@ -176,12 +181,14 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Number"
+                }
               }
             },
             {
               "name": "_labelsOnTop",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Indicates that labels are on top",
               "privacy": "protected",
               "sourceRange": {
@@ -195,7 +202,9 @@
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               }
             }
           ],
@@ -215,7 +224,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "connectedCallback",
@@ -232,7 +244,10 @@
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_naturalNumberOrOne",
@@ -265,7 +280,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 314,
+                  "line": 315,
                   "column": 9
                 }
               },
@@ -282,11 +297,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 316,
+                  "line": 317,
                   "column": 8
                 },
                 "end": {
-                  "line": 354,
+                  "line": 355,
                   "column": 9
                 }
               },
@@ -298,7 +313,10 @@
                 {
                   "name": "oldResponsiveSteps"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_selectResponsiveStep",
@@ -306,16 +324,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 356,
+                  "line": 357,
                   "column": 8
                 },
                 "end": {
-                  "line": 386,
+                  "line": 387,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_invokeUpdateStyles",
@@ -323,16 +344,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 388,
+                  "line": 389,
                   "column": 8
                 },
                 "end": {
-                  "line": 390,
+                  "line": 391,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "updateStyles",
@@ -340,11 +364,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 395,
+                  "line": 396,
                   "column": 8
                 },
                 "end": {
-                  "line": 477,
+                  "line": 478,
                   "column": 9
                 }
               },
@@ -354,7 +378,10 @@
                   "name": "args",
                   "rest": true
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [
@@ -363,7 +390,7 @@
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
                   "line": 46,
                   "column": 4
@@ -379,6 +406,9 @@
                   "name": "moduleName"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -395,7 +425,7 @@
               "column": 6
             },
             "end": {
-              "line": 478,
+              "line": 479,
               "column": 7
             }
           },
@@ -430,7 +460,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-form-layout.html",
                 "start": {
                   "line": 58,
                   "column": 6
