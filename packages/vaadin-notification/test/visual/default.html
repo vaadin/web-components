@@ -4,15 +4,72 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <dom-module id="test-card" theme-for="vaadin-notification-card">
+    <template>
+      <style>
+        :host([opening]) {
+          animation: none !important;
+        }
+      </style>
+    </template>
+  </dom-module>
   <link href="../../vaadin-notification.html" rel="import">
 </head>
 
-<body>
-
-  <vaadin-notification opened>
+<body style="height: 100vh;">
+  <vaadin-notification opened duration="0" position="top-stretch">
     <template>
-      Your work has been saved
+      top-strech
     </template>
   </vaadin-notification>
 
+  <vaadin-notification opened duration="0" position="top-start">
+    <template>
+      top-start
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="top-center">
+    <template>
+      top-start
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="top-end">
+    <template>
+      top-start
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="middle">
+    <template>
+      middle
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-start">
+    <template>
+      bottom-start
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-center">
+    <template>
+      bottom-center
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-end">
+    <template>
+      bottom-end
+    </template>
+  </vaadin-notification>
+
+  <vaadin-notification opened duration="0" position="bottom-stretch">
+    <template>
+      bottom-stretch
+    </template>
+  </vaadin-notification>
+  
 </body>
