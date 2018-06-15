@@ -1,8 +1,11 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-upload.svg)
 [![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-upload.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-upload)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-upload)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-upload.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-upload)
+[![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-upload/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-upload?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+[![Published on Vaadin  Directory](https://img.shields.io/badge/Vaadin%20Directory-published-00b4f0.svg)](https://vaadin.com/directory/component/vaadinvaadin-upload)
+[![Stars on vaadin.com/directory](https://img.shields.io/vaadin-directory/star/vaadinvaadin-upload.svg)](https://vaadin.com/directory/component/vaadinvaadin-upload)
 
 # &lt;vaadin-upload&gt;
 

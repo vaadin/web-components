@@ -80,10 +80,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute | Description | Part name
        * ---|---|---
-       * `error` | An error has happened during uploading | `progress`
-       * `indeterminate` | Uploading is in progress, but the progress value is unknown | `progress`
-       * `uploading` | Uploading is in progress | `progress`
-       * `complete` | Uploading has finished successfully | `progress`
+       * `error` | An error has happened during uploading | `:host`
+       * `indeterminate` | Uploading is in progress, but the progress value is unknown | `:host`
+       * `uploading` | Uploading is in progress | `:host`
+       * `complete` | Uploading has finished successfully | `:host`
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -104,7 +104,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_fileAborted(file.abort)'
+            '_fileAborted(file.abort)',
+            '_toggleHostAttribute(file.error, "error")',
+            '_toggleHostAttribute(file.indeterminate, "indeterminate")',
+            '_toggleHostAttribute(file.uploading, "uploading")',
+            '_toggleHostAttribute(file.complete, "complete")',
           ];
         }
 
@@ -137,6 +141,18 @@ This program is available under Apache License Version 2.0, available at https:/
               composed: true
             })
           );
+        }
+
+        _toggleHostAttribute(value, attributeName) {
+          const shouldHave = Boolean(value);
+          const has = this.hasAttribute(attributeName);
+          if (has !== shouldHave) {
+            if (shouldHave) {
+              this.setAttribute(attributeName, '');
+            } else {
+              this.removeAttribute(attributeName);
+            }
+          }
         }
 
         /**
