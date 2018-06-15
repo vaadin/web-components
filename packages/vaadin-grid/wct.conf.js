@@ -11,19 +11,19 @@ module.exports = {
     ];
 
     const saucelabsPlatformsMicrosoft = [
-      'Windows 10/microsoftedge@16',
+      'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
       'macOS 10.12/safari@11.0',
       'Windows 10/chrome@65',
-      'Windows 10/firefox@59'
+      'Windows 10/firefox@60'
     ];
 
     const cronPlatforms = [
       'Windows 10/chrome@65',
-      'Windows 10/firefox@59'
+      'Windows 10/firefox@60'
     ];
 
     if (env === 'saucelabs:mobile') {

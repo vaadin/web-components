@@ -1,0 +1,126 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
+
+<dom-module id="material-grid" theme-for="vaadin-grid">
+  <template>
+    <style>
+      :host {
+        background-color: var(--material-background-color);
+        font-family: var(--material-font-family);
+        font-size: var(--material-small-font-size);
+        line-height: 20px;
+        color: var(--material-body-text-color);
+      }
+
+      [part~="cell"] {
+        min-height: 48px;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      [part~="cell"] ::slotted(vaadin-grid-cell-content) {
+        padding: 8px 16px;
+      }
+
+      [part~="details-cell"] ::slotted(vaadin-grid-cell-content) {
+        padding: 14px 16px;
+      }
+
+      [part~="header-cell"],
+      [part~="footer-cell"] {
+        background-color: var(--material-background-color);
+        color: var(--material-secondary-text-color);
+        font-size: var(--material-caption-font-size);
+        font-weight: 500;
+      }
+
+      /* Header and footer divider between body rows */
+
+      [part~="body-cell"],
+      [part~="details-cell"],
+      [part~="row"]:last-child > [part~="header-cell"] {
+        border-bottom: 1px solid var(--material-divider-color);
+      }
+
+      [part~="row"]:first-child > [part~="footer-cell"] {
+        border-top: 1px solid var(--material-divider-color);
+      }
+
+      /* Body rows/cells */
+
+      [part~="body-cell"] {
+        background-color: var(--material-background-color);
+      }
+
+      [part~="row"]:hover > [part~="body-cell"] {
+        background: linear-gradient(var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04)), var(--_material-grid-row-hover-background-color, rgba(0, 0, 0, 0.04))) var(--material-background-color);
+      }
+
+      @media (hover: none) {
+        [part~="row"]:hover > [part~="body-cell"] {
+          background: var(--material-background-color);
+        }
+      }
+
+      /* Selected row */
+
+      [part~="body-cell"]::before {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: var(--material-primary-color);
+        opacity: 0;
+        transition: opacity .1s cubic-bezier(.4, 0, .2, .1);
+      }
+
+      :host(:not([reordering])) [part~="row"][selected] > [part~="body-cell"]::before {
+        opacity: var(--_material-grid-row-selected-overlay-opacity, .08);
+      }
+
+      [part~="body-cell"] ::slotted(vaadin-grid-cell-content) {
+        /* NOTE(platosha): Raise cell content above background cell pseudo elements */
+        position: relative;
+      }
+
+      /* Column reordering */
+
+      :host([reordering]) [part~="cell"] {
+        background: var(--material-secondary-background-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="allowed"] {
+        background: var(--material-background-color);
+      }
+
+      :host([reordering]) [part~="cell"][reorder-status="dragging"] {
+        background: var(--material-background-color);
+      }
+
+      /* Frozen columns */
+
+      [part~="cell"][last-frozen] {
+        border-right: 1px solid var(--material-divider-color);
+      }
+
+      /* Column resizing */
+
+      :host(:not([theme~="column-dividers"])) [part~="cell"]:not([last-frozen]) [part="resize-handle"] {
+        border-right: 1px solid var(--material-divider-color);
+        right: -1px;
+      }
+
+      /* Keyboard navigation */
+
+      [part~="cell"]:focus {
+        outline: none;
+      }
+
+      :host([navigating]) [part~="cell"]:focus {
+        box-shadow: inset 0 0 0 2px var(--material-primary-color);
+      }
+    </style>
+  </template>
+</dom-module>

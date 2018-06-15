@@ -50,7 +50,9 @@
     "app-localize-behavior": "^v2.0.0",
     "iron-list": "^v2.0.4",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
-    "vaadin-button": "vaadin/vaadin-button#p3-preview"
+    "vaadin-button": "vaadin/vaadin-button#p3-preview",
+    "vaadin-text-field": "vaadin/vaadin-text-field#p3-preview",
+    "vaadin-checkbox": "vaadin/vaadin-checkbox#p3-preview"
   },
   "dependencies": {
     "polymer": "^2.0.0",
@@ -62,6 +64,7 @@
     "vaadin-checkbox": "vaadin/vaadin-checkbox#p3-preview",
     "vaadin-text-field": "vaadin/vaadin-text-field#p3-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
   },
   "resolutions": {
