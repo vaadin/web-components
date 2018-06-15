@@ -29,6 +29,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-context-menu-overlay id="overlay"
         on-opened-changed="_onOverlayOpened"
+        on-vaadin-overlay-open="_onVaadinOverlayOpen"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]">
     </vaadin-context-menu-overlay>
@@ -162,7 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get version() {
-          return '4.0.0-pre.3';
+          return '4.1.0-alpha2';
         }
 
         static get properties() {
@@ -242,20 +243,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
         }
 
+        // Runs before overlay is fully rendered
         _onOverlayOpened(e) {
-          if (e.detail.value === true) {
-            // wait for a timeOut before focusing the child element
-            // to allow overlay to position itself correctly first.
-            // Otherwise, the browser window will jump scroll.
-            Polymer.Async.timeOut.run(() => {
-              const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
-              if (child) {
-                child.focus();
-              }
-            });
+          this._setOpened(e.detail.value);
+        }
 
-          } else if (e.detail.value === false) {
-            this._setOpened(false);
+        // Runs after overlay is fully rendered
+        _onVaadinOverlayOpen(e) {
+          // Phone alignment is done in CSS
+          if (!this._phone) {
+            this.__alignOverlayPosition();
+          }
+
+          const child = this.$.overlay.content.querySelector(':not(style):not(slot)');
+          if (child) {
+            child.focus();
           }
         }
 
@@ -317,6 +319,7 @@ This program is available under Apache License Version 2.0, available at https:/
             document.documentElement.removeEventListener('contextmenu', this._boundOnGlobalContextMenu, true);
           }
 
+          // Has to be set after instance has been created
           this.$.overlay.opened = opened;
         }
 
@@ -362,14 +365,49 @@ This program is available under Apache License Version 2.0, available at https:/
               this._preventDefault(e);
               e.stopPropagation();
 
-              this.$.overlay.opened = true;
-
-              this.$.overlay.style.left = this._getEventCoordinate(e, 'x') + 'px';
-              const top = this._getEventCoordinate(e, 'y');
-              this.$.overlay.style.top = top + 'px';
-
+              // Used in alignment which is delayed until overlay is rendered
+              this.__x = this._getEventCoordinate(e, 'x');
+              this.__y = this._getEventCoordinate(e, 'y');
               this._setOpened(true);
             }
+          }
+        }
+
+        __alignOverlayPosition() {
+          const overlay = this.$.overlay;
+          const style = overlay.style;
+
+          // Reset all properties before measuring
+          ['top', 'right', 'bottom', 'left'].forEach(prop => style.removeProperty(prop));
+          ['right-aligned', 'bottom-aligned'].forEach(attr => overlay.removeAttribute(attr));
+
+          // Measure actual overlay and content sizes
+          const overlayRect = overlay.getBoundingClientRect();
+          const contentRect = overlay.$.overlay.getBoundingClientRect();
+
+          // Maximum x and y values are imposed by content size and overlay limits.
+          const xMax = overlayRect.right - contentRect.width;
+          const yMax = overlayRect.bottom - contentRect.height;
+          // Reuse saved x and y event values, in order to this method be used async
+          // in the `vaadin-overlay-change` which guarantees that overlay is ready
+          const x = this.__x || overlayRect.left;
+          const y = this.__y || overlayRect.top;
+
+          // Select one overlay corner and move to the event x/y position.
+          // Then set styling attrs for flex-aligning the content appropriatelly.
+          const wdthVport = document.documentElement.clientWidth;
+          const hghtVport = document.documentElement.clientHeight;
+          if (x < wdthVport / 2 || x < xMax) {
+            style.left = x + 'px';
+          } else {
+            style.right = Math.max(0, (wdthVport - x)) + 'px';
+            overlay.setAttribute('right-aligned', '');
+          }
+          if (y < hghtVport / 2 || y < yMax) {
+            style.top = y + 'px';
+          } else {
+            style.bottom = Math.max(0, (hghtVport - y)) + 'px';
+            overlay.setAttribute('bottom-aligned', '');
           }
         }
 

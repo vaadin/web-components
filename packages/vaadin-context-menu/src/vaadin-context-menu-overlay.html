@@ -15,6 +15,14 @@ This program is available under Apache License Version 2.0, available at https:/
         justify-content: flex-start;
       }
 
+      :host([right-aligned]) {
+        align-items: flex-end;
+      }
+
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+
       [part="content"] {
         background-color: #fff;
       }

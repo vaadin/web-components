@@ -12,6 +12,7 @@
     "fixture": false,
     "fire": false,
     "MockInteractions": false,
-    "MockTouchInteractions": false
+    "MockTouchInteractions": false,
+    "gemini": false
   }
 }

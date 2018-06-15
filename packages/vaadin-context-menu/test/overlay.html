@@ -5,11 +5,11 @@
     <title></title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
     <link rel="import" href="not-animated-styles.html">
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <script src="common.js"></script>
   </head>
   <body>
@@ -23,13 +23,22 @@
     </test-fixture>
 
     <script>
-
       describe('overlay', () => {
-        let menu;
+        let menu, overlay, content, viewHeight, viewWidth;
 
-        beforeEach(() => menu = fixture('default'));
+        beforeEach(() => {
+          menu = fixture('default');
+          overlay = menu.$.overlay;
+          content = overlay.$.overlay.children[0];
+          // make content have a fixed size
+          content.style.height = content.style.width = '100px';
+          content.style.boxSizing = 'border-box';
+          // Compute viewport at the end of the test setup
+          viewHeight = document.documentElement.clientHeight;
+          viewWidth = document.documentElement.clientWidth;
+        });
 
-        afterEach(() => menu.$.overlay.opened = false);
+        afterEach(() => overlay.opened = false);
 
         function contextmenu(x, y, shiftKey, target) {
           shiftKey = shiftKey || false;
@@ -68,10 +77,9 @@
         describe('opening', () => {
 
           it('should be visible when open', done => {
-            expect(window.getComputedStyle(menu.$.overlay).display).to.eql('none');
-
-            listenOnce(menu, 'opened-changed', () => {
-              expect(window.getComputedStyle(menu.$.overlay).display).to.not.eql('none');
+            expect(window.getComputedStyle(overlay).display).to.eql('none');
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              expect(window.getComputedStyle(overlay).display).to.not.eql('none');
               done();
             });
 
@@ -79,7 +87,7 @@
           });
 
           it('should open on `contextmenu` event', done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
               expect(menu.opened).to.eql(true);
               done();
             });
@@ -87,9 +95,9 @@
             contextmenu();
           });
 
-          it('should be positioned on click target', function(done) {
-            listenOnce(menu, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+          it('should be positioned on click target', done => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 10);
               expect(rect.top).to.eql(menu._phone ? 0 : 10);
               done();
@@ -98,9 +106,75 @@
             contextmenu(10, 10);
           });
 
+          describe('position', () => {
+            it('should be aligned relative to top-left corner', done => {
+              listenOnce(overlay, 'vaadin-overlay-open', () => {
+                expect(overlay.hasAttribute('right-aligned')).to.be.false;
+                expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+                expect(overlay.style.left).to.be.equal(menu._phone ? '' : '10px');
+                expect(overlay.style.top).to.be.equal(menu._phone ? '' : '10px');
+                done();
+              });
+              contextmenu(10, 10);
+            });
+
+            it('should be aligned relative to bottom-right corner', done => {
+              listenOnce(overlay, 'vaadin-overlay-open', () => {
+                expect(menu._phone || overlay.hasAttribute('right-aligned')).to.be.true;
+                expect(menu._phone || overlay.hasAttribute('bottom-aligned')).to.be.true;
+                expect(overlay.style.right).to.be.equal(menu._phone ? '' : '0px');
+                expect(overlay.style.bottom).to.be.equal(menu._phone ? '' : '0px');
+                done();
+              });
+              contextmenu(viewWidth, viewHeight);
+            });
+
+            it('css should be correctly configured to set content position', done => {
+              listenOnce(overlay, 'vaadin-overlay-open', () => {
+                const rect = content.getBoundingClientRect();
+                expect(rect.width).to.be.equal(100);
+                expect(rect.height).to.be.equal(100);
+                !menu._phone && expect(rect.left).to.be.equal(viewWidth - 100);
+                !menu._phone && expect(rect.top).to.be.equal(viewHeight - 100);
+                done();
+              });
+              contextmenu(viewWidth, viewHeight);
+            });
+
+            it('should reset css properties and attributes on each open', done => {
+              listenOnce(overlay, 'vaadin-overlay-open', () => {
+
+                overlay.opened = false;
+                listenOnce(overlay, 'vaadin-overlay-open', () => {
+                  const rect = content.getBoundingClientRect();
+                  !menu._phone && expect(rect.left).to.be.equal(16);
+                  !menu._phone && expect(rect.top).to.be.equal(16);
+                  expect(overlay.hasAttribute('right-aligned')).to.be.false;
+                  expect(overlay.hasAttribute('bottom-aligned')).to.be.false;
+                  expect(overlay.style.right).to.be.empty;
+                  expect(overlay.style.bottom).to.be.empty;
+                  done();
+                });
+                contextmenu(16, 16);
+
+              });
+              contextmenu(viewWidth, viewHeight);
+            });
+
+            it('overlay position should be constrained to the viewport', done => {
+              listenOnce(overlay, 'vaadin-overlay-open', () => {
+                const rect = content.getBoundingClientRect();
+                !menu._phone && expect(rect.left).to.be.equal(viewWidth - 100);
+                !menu._phone && expect(rect.top).to.be.equal(viewHeight - 100);
+                done();
+              });
+              contextmenu(viewWidth * 1.1, viewHeight * 1.1);
+            });
+          });
+
           it('should be positioned on detailed mouse event', done => {
-            listenOnce(menu.listenOn, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 10);
               expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
@@ -112,8 +186,8 @@
           });
 
           it('should be positioned by gesture event', done => {
-            listenOnce(menu.listenOn, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 5);
               expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
@@ -125,8 +199,8 @@
           });
 
           it('should be positioned by detailed gesture event', done => {
-            listenOnce(menu.listenOn, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 5);
               expect(rect.top).to.eql(menu._phone ? 0 : 5);
               done();
@@ -138,8 +212,8 @@
           });
 
           it('should be positioned by touch event', done => {
-            listenOnce(menu.listenOn, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 10);
               expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
@@ -154,8 +228,8 @@
           });
 
           it('should be positioned by detailed touch event', done => {
-            listenOnce(menu.listenOn, 'opened-changed', () => {
-              const rect = menu.$.overlay.getBoundingClientRect();
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
+              const rect = overlay.getBoundingClientRect();
               expect(rect.left).to.eql(menu._phone ? 0 : 10);
               expect(rect.top).to.eql(menu._phone ? 0 : 20);
               done();
@@ -182,7 +256,7 @@
             it('should have zero bottom by default', done => {
               if (menu._phone) {
                 listenOnce(menu, 'opened-changed', () => {
-                  expect(parseFloat(getComputedStyle(menu.$.overlay).bottom)).to.equal(0);
+                  expect(parseFloat(getComputedStyle(overlay).bottom)).to.equal(0);
                   done();
                 });
 
@@ -195,10 +269,10 @@
             it('should accept --vaadin-overlay-viewport-bottom CSS property', done => {
               if (menu._phone) {
                 listenOnce(menu, 'opened-changed', () => {
-                  menu.$.overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
-                  menu.$.overlay.updateStyles({'--vaadin-overlay-viewport-bottom': '50px'});
+                  overlay.style.setProperty('--vaadin-overlay-viewport-bottom', '50px');
+                  overlay.updateStyles({'--vaadin-overlay-viewport-bottom': '50px'});
 
-                  expect(getComputedStyle(menu.$.overlay).bottom).to.equal('50px');
+                  expect(getComputedStyle(overlay).bottom).to.equal('50px');
                   done();
                 });
 
@@ -212,7 +286,7 @@
 
         describe('closing', () => {
           beforeEach(done => {
-            listenOnce(menu, 'opened-changed', () => {
+            listenOnce(overlay, 'vaadin-overlay-open', () => {
               done();
             });
 
@@ -237,7 +311,7 @@
               done();
             });
 
-            const e = contextmenu(0, 0, false, menu.$.overlay);
+            const e = contextmenu(0, 0, false, overlay);
             expect(e.defaultPrevented).to.be.true;
           });
 
@@ -252,7 +326,7 @@
           });
 
           it('should close on `click`', () => {
-            menu.$.overlay.click();
+            overlay.click();
 
             expect(menu.opened).to.eql(false);
           });
@@ -260,7 +334,7 @@
           it('should close on custom event', () => {
             menu.closeOn = 'foobar';
 
-            menu.$.overlay.dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
+            overlay.dispatchEvent(new CustomEvent('foobar', {bubbles: true}));
 
             expect(menu.opened).to.eql(false);
           });
@@ -268,14 +342,14 @@
           it('should disable close on empty `closeOn`', () => {
             menu.closeOn = '';
 
-            menu.$.overlay.dispatchEvent(new CustomEvent('click'));
+            overlay.dispatchEvent(new CustomEvent('click'));
 
             expect(menu.opened).to.eql(true);
           });
 
           describe('with shift key', () => {
             it('should not close on menu contextmenu', () => {
-              const e = contextmenu(0, 0, true, menu.$.overlay);
+              const e = contextmenu(0, 0, true, overlay);
 
               expect(menu.opened).to.be.true;
               expect(e.defaultPrevented).to.be.false;
@@ -292,7 +366,6 @@
 
         describe('styling', () => {
           it('should set default background color for content', () => {
-            const content = menu.$.overlay.shadowRoot.querySelector('[part="content"]');
             expect(getComputedStyle(content).backgroundColor).to.eql('rgb(255, 255, 255)');
           });
         });

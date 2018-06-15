@@ -3,8 +3,26 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
   testTimeout: 180 * 1000,
-  verbose: true,
-  registerHooks: function(context) {
+  verbose: false,
+  // MAGI REMOVE START
+  plugins: {
+    istanbul: {
+      dir: './coverage',
+      reporters: ['text-summary', 'lcov'],
+      include: [
+        '**/vaadin-context-menu/src/*.html'
+      ],
+      exclude: [],
+      thresholds: {
+        global: {
+          statements: 85
+        }
+      }
+    }
+  },
+  // MAGI REMOVE END
+
+  registerHooks: context => {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@10.3',
       'macOS 10.12/ipad@11.2',
