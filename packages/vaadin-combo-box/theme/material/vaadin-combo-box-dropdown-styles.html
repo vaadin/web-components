@@ -1,0 +1,25 @@
+<link rel="import" href="../../../vaadin-material-styles/mixins/menu-overlay.html">
+
+<dom-module id="material-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+  <template>
+    <style include="material-menu-overlay">
+      :host {
+        /* TODO using a legacy mixin (unsupported) */
+        --iron-list-items-container: {
+          border-width: 8px 0;
+          border-style: solid;
+          border-color: transparent;
+        };
+      }
+
+      [part="overlay"] {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+      }
+
+      [part="content"] {
+        padding: 0;
+      }
+    </style>
+  </template>
+</dom-module>

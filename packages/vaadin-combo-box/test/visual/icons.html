@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-combo-box-light.html" rel="import">
+  <link href="../../../vaadin-text-field/vaadin-text-field.html" rel="import">
+  <link href="../../../paper-icon-button/paper-icon-button.html" rel="import">
+  <link rel="import" href="../../../iron-icons/iron-icons.html">
+
+  <style>
+    paper-icon-button {
+      opacity: 0.4;
+      width: 24px;
+      height: 24px;
+      padding: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="icons-tests" style="padding: 10px;">
+    Icon
+    <vaadin-combo-box-light>
+      <vaadin-text-field>
+        <paper-icon-button slot="suffix" icon="remove-circle" class="clear-button"></paper-icon-button>
+        <paper-icon-button slot="suffix" icon="search" class="toggle-button"></paper-icon-button>
+      </vaadin-text-field>
+    </vaadin-combo-box-light>
+  </div>
+
+</body>

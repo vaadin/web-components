@@ -12,7 +12,10 @@
     "Vaadin",
     "combo-box"
   ],
-  "main": "vaadin-combo-box.html",
+  "main": [
+    "vaadin-combo-box.html",
+    "vaadin-combo-box-light.html"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/Vaadin/vaadin-combo-box"
@@ -37,6 +40,7 @@
     "vaadin-text-field": "vaadin/vaadin-text-field#p3-preview",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#p3-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-item": "vaadin/vaadin-item#p3-preview",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
   },
