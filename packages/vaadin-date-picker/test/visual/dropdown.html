@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+
+  <dom-module id="text-field-styles" theme-for="vaadin-text-field">
+    <template>
+      <style>
+        /* Hide caret */
+        :host [part="value"] {
+          font-size: 0;
+          height: 24px;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <dom-module id="month-calendar-test-styles" theme-for="vaadin-month-calendar">
+    <template>
+      <style>
+        :host(:not([focused])) [part="date"][focused]::before {
+          animation: none !important;
+        }
+      </style>
+    </template>
+  </dom-module>
+
+  <link href="../../vaadin-date-picker.html" rel="import">
+</head>
+
+<body style="height: 100vh;">
+
+  <div id="dropdown-tests" style="padding: 10px;">
+    Plain
+    <vaadin-date-picker id="plain" initial-position="2013-04-27"></vaadin-date-picker>
+
+    <br>Pre-selected value
+    <vaadin-date-picker value="1991-12-20" id="selected-value"></vaadin-date-picker>
+
+    <br>Date limit
+    <vaadin-date-picker min="2017-06-10" max="2017-06-29" initial-position="2017-06-15" id="date-limit"></vaadin-date-picker>
+
+    <br>Week numbers
+    <vaadin-date-picker show-week-numbers id="weeks" initial-position="2018-04-28"></vaadin-date-picker>    
+  </div>
+
+  <script>
+    window.addEventListener('WebComponentsReady', function() {
+      var datepicker = document.querySelector('vaadin-date-picker#weeks');
+      datepicker.set('i18n.firstDayOfWeek', 1);
+    });
+
+    function closeDatePickers() {
+      var datePickers = document.querySelectorAll('vaadin-date-picker');
+
+      [].forEach.call(datePickers, function(datePicker) {
+        datePicker.close();
+      });
+    }
+  </script>
+
+</body>

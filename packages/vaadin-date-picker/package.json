@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-date-picker",
-  "version": "3.0.0-pre.3",
+  "version": "3.2.0-alpha2",
   "description": "Polymer element providing a date selection field with scrollable month calendar",
   "main": "vaadin-date-picker.html",
   "repository": "vaadin/vaadin-date-picker",
@@ -22,6 +22,8 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
+    "bower": "latest",
+    "coveralls": "^3.0.1",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
@@ -37,6 +39,7 @@
     "gulp-stylelint": "^7.0.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
+    "wct-istanbul": "^0.14.3",
     "wct-random-output": "^0.2.0",
     "web-component-tester": "^v6.1.5"
   }

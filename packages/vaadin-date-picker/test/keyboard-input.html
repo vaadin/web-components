@@ -583,6 +583,74 @@
 
         });
 
+        describe('change event', () => {
+
+          let spy;
+
+          beforeEach(() => {
+            spy = sinon.spy();
+            datepicker.addEventListener('change', spy);
+          });
+
+          it('should fire change on user text input commit', () => {
+            inputText('1/2/2000');
+            enter();
+            expect(spy.calledOnce).to.be.true;
+          });
+
+          it('should fire change on user arrow input commit', () => {
+            arrowDown();
+            arrowDown();
+            enter();
+            expect(spy.calledOnce).to.be.true;
+          });
+
+          it('should fire change clear button click', () => {
+            const clearButton = datepicker.shadowRoot.querySelector('[part="clear-button"]');
+            datepicker.value = '2000-01-01';
+            click(clearButton);
+            expect(spy.calledOnce).to.be.true;
+          });
+
+          it('should not fire change on focused date change', () => {
+            inputText('1/2/2000');
+            expect(spy.called).to.be.false;
+          });
+
+          it('should not fire change on programmatic value change', () => {
+            datepicker.value = '2000-01-01';
+            expect(spy.called).to.be.false;
+          });
+
+          it('should not fire change on programmatic value change when opened', () => {
+            datepicker.open();
+            datepicker.value = '2000-01-01';
+            datepicker.close();
+            expect(spy.called).to.be.false;
+          });
+
+          it('should not fire change on programmatic value change when text input changed', () => {
+            inputText('1/2/2000');
+            datepicker.value = '2000-01-01';
+            datepicker.close();
+            expect(spy.called).to.be.false;
+          });
+
+          it('should not fire change if the value wasn not changed', () => {
+            datepicker.value = '2000-01-01';
+            datepicker.open();
+            enter();
+            expect(spy.called).to.be.false;
+          });
+
+          it('should not fire change on revert', () => {
+            datepicker.value = '2000-01-01';
+            esc();
+            expect(spy.called).to.be.false;
+          });
+
+        });
+
       });
     }
   </script>

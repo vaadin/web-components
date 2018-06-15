@@ -13,7 +13,10 @@
     "date",
     "picker"
   ],
-  "main": "vaadin-date-picker.html",
+  "main": [
+    "vaadin-date-picker.html",
+    "vaadin-date-picker-light.html"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/vaadin/vaadin-date-picker"
@@ -39,6 +42,7 @@
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#p3-preview",
     "vaadin-overlay": "vaadin/vaadin-overlay#p3-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
   },
   "devDependencies": {

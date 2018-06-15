@@ -72,7 +72,7 @@
       it('should update position of the overlay after changing opened property', () => {
         datepicker.opened = true;
 
-        expect(input.getBoundingClientRect().bottom).to.equal(overlay.getBoundingClientRect().top);
+        expect(input.getBoundingClientRect().bottom).to.be.closeTo(overlay.getBoundingClientRect().top, 0.01);
       });
 
       if (document.createElement('div').style.webkitOverflowScrolling === '') {

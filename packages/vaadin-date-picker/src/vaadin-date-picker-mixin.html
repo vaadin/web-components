@@ -394,9 +394,28 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _formatISO(date) {
-      return date instanceof Date ?
-        (new Date(date.getTime() - date.getTimezoneOffset() * 60000)).toISOString().split('T')[0] :
-        '';
+      if (!(date instanceof Date)) {
+        return '';
+      }
+
+      const pad = (num, fmt = '00') => (fmt + num).substr((fmt + num).length - fmt.length);
+
+      let yearSign = '';
+      let yearFmt = '0000';
+      let yearAbs = date.getFullYear();
+      if (yearAbs < 0) {
+        yearAbs = -yearAbs;
+        yearSign = '-';
+        yearFmt = '000000';
+      } else if (date.getFullYear() >= 10000) {
+        yearSign = '+';
+        yearFmt = '000000';
+      }
+
+      const year = yearSign + pad(yearAbs, yearFmt);
+      const month = pad(date.getMonth() + 1);
+      const day = pad(date.getDate());
+      return [year, month, day].join('-');
     }
 
     _openedChanged(opened) {
@@ -411,7 +430,12 @@ This program is available under Apache License Version 2.0, available at https:/
       if (selectedDate === undefined || formatDate === undefined) {
         return;
       }
+      if (this.__userInputOccurred) {
+        this.__dispatchChange = true;
+      }
       this.value = this._formatISO(selectedDate);
+      this.__userInputOccurred = false;
+      this.__dispatchChange = false;
       this._focusedDate = selectedDate;
       this._inputValue = selectedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate)) : '';
     }
@@ -420,6 +444,7 @@ This program is available under Apache License Version 2.0, available at https:/
       if (focusedDate === undefined || formatDate === undefined) {
         return;
       }
+      this.__userInputOccurred = true;
       if (!this._ignoreFocusedDateChange && !this._noInput) {
         this._inputValue = focusedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(focusedDate)) : '';
       }
@@ -450,6 +475,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _valueChanged(value, oldValue) {
+      if (this.__dispatchChange) {
+        this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
+      }
       this._handleDateChange('_selectedDate', value, oldValue);
     }
 
@@ -781,6 +809,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this._overlayContent.announceFocusedDate();
       }
     }
-  };
 
+    /**
+     * Fired when the user commits a value change.
+     *
+     * @event change
+     */
+  };
 </script>

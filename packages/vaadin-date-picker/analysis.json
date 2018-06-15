@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-date-picker.html",
         "start": {
-          "line": 317,
+          "line": 319,
           "column": 6
         },
         "end": {
-          "line": 317,
+          "line": 319,
           "column": 58
         }
       },
@@ -30,11 +30,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 487,
+                  "line": 494,
                   "column": 6
                 },
                 "end": {
-                  "line": 489,
+                  "line": 496,
                   "column": 7
                 }
               },
@@ -700,7 +700,7 @@
                   "column": 6
                 },
                 "end": {
-                  "line": 482,
+                  "line": 489,
                   "column": 7
                 }
               },
@@ -718,11 +718,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 491,
+                  "line": 498,
                   "column": 6
                 },
                 "end": {
-                  "line": 499,
+                  "line": 506,
                   "column": 7
                 }
               },
@@ -744,11 +744,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 501,
+                  "line": 508,
                   "column": 6
                 },
                 "end": {
-                  "line": 513,
+                  "line": 520,
                   "column": 7
                 }
               },
@@ -766,11 +766,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 515,
+                  "line": 522,
                   "column": 6
                 },
                 "end": {
-                  "line": 526,
+                  "line": 533,
                   "column": 7
                 }
               },
@@ -788,11 +788,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 528,
+                  "line": 535,
                   "column": 6
                 },
                 "end": {
-                  "line": 550,
+                  "line": 557,
                   "column": 7
                 }
               },
@@ -810,11 +810,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 552,
+                  "line": 559,
                   "column": 6
                 },
                 "end": {
-                  "line": 616,
+                  "line": 623,
                   "column": 7
                 }
               },
@@ -836,11 +836,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 618,
+                  "line": 625,
                   "column": 6
                 },
                 "end": {
-                  "line": 620,
+                  "line": 627,
                   "column": 7
                 }
               },
@@ -859,11 +859,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 622,
+                  "line": 629,
                   "column": 6
                 },
                 "end": {
-                  "line": 625,
+                  "line": 632,
                   "column": 7
                 }
               },
@@ -882,11 +882,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 627,
+                  "line": 634,
                   "column": 6
                 },
                 "end": {
-                  "line": 645,
+                  "line": 652,
                   "column": 7
                 }
               },
@@ -911,11 +911,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 647,
+                  "line": 654,
                   "column": 6
                 },
                 "end": {
-                  "line": 650,
+                  "line": 657,
                   "column": 7
                 }
               },
@@ -930,11 +930,11 @@
               "sourceRange": {
                 "file": "../../vaadin-overlay/src/vaadin-overlay.html",
                 "start": {
-                  "line": 652,
+                  "line": 659,
                   "column": 6
                 },
                 "end": {
-                  "line": 656,
+                  "line": 663,
                   "column": 7
                 }
               },
@@ -8795,7 +8795,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 421,
                   "column": 5
                 }
               },
@@ -8820,11 +8820,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 418,
+                  "line": 423,
                   "column": 4
                 },
                 "end": {
-                  "line": 425,
+                  "line": 431,
                   "column": 5
                 }
               },
@@ -8849,11 +8849,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 427,
+                  "line": 433,
                   "column": 4
                 },
                 "end": {
-                  "line": 433,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -8875,11 +8875,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 435,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 449,
+                  "line": 455,
                   "column": 5
                 }
               },
@@ -8907,11 +8907,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 451,
+                  "line": 457,
                   "column": 4
                 },
                 "end": {
-                  "line": 453,
+                  "line": 462,
                   "column": 5
                 }
               },
@@ -8936,11 +8936,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 455,
+                  "line": 464,
                   "column": 4
                 },
                 "end": {
-                  "line": 457,
+                  "line": 466,
                   "column": 5
                 }
               },
@@ -8965,11 +8965,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 459,
+                  "line": 468,
                   "column": 4
                 },
                 "end": {
-                  "line": 461,
+                  "line": 470,
                   "column": 5
                 }
               },
@@ -8994,11 +8994,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 463,
+                  "line": 472,
                   "column": 4
                 },
                 "end": {
-                  "line": 495,
+                  "line": 504,
                   "column": 5
                 }
               },
@@ -9016,11 +9016,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 497,
+                  "line": 506,
                   "column": 4
                 },
                 "end": {
-                  "line": 501,
+                  "line": 510,
                   "column": 5
                 }
               },
@@ -9038,11 +9038,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 503,
+                  "line": 512,
                   "column": 4
                 },
                 "end": {
-                  "line": 547,
+                  "line": 556,
                   "column": 5
                 }
               },
@@ -9060,11 +9060,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 551,
+                  "line": 560,
                   "column": 4
                 },
                 "end": {
-                  "line": 565,
+                  "line": 574,
                   "column": 5
                 }
               },
@@ -9083,11 +9083,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 567,
+                  "line": 576,
                   "column": 4
                 },
                 "end": {
-                  "line": 606,
+                  "line": 615,
                   "column": 5
                 }
               },
@@ -9105,11 +9105,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 614,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 617,
+                  "line": 626,
                   "column": 5
                 }
               },
@@ -9134,11 +9134,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 627,
+                  "line": 636,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 654,
                   "column": 5
                 }
               },
@@ -9163,11 +9163,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 647,
+                  "line": 656,
                   "column": 4
                 },
                 "end": {
-                  "line": 651,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -9189,11 +9189,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 653,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 668,
                   "column": 5
                 }
               },
@@ -9211,11 +9211,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 661,
+                  "line": 670,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 673,
                   "column": 5
                 }
               },
@@ -9233,11 +9233,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 666,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 670,
+                  "line": 679,
                   "column": 5
                 }
               },
@@ -9262,11 +9262,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 672,
+                  "line": 681,
                   "column": 4
                 },
                 "end": {
-                  "line": 674,
+                  "line": 683,
                   "column": 5
                 }
               },
@@ -9288,11 +9288,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 679,
+                  "line": 688,
                   "column": 4
                 },
                 "end": {
-                  "line": 688,
+                  "line": 697,
                   "column": 5
                 }
               },
@@ -9311,11 +9311,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 690,
+                  "line": 699,
                   "column": 4
                 },
                 "end": {
-                  "line": 692,
+                  "line": 701,
                   "column": 5
                 }
               },
@@ -9334,11 +9334,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 694,
+                  "line": 703,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -9360,11 +9360,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 749,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 753,
+                  "line": 762,
                   "column": 5
                 }
               },
@@ -9392,11 +9392,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 755,
+                  "line": 764,
                   "column": 4
                 },
                 "end": {
-                  "line": 760,
+                  "line": 769,
                   "column": 5
                 }
               },
@@ -9418,11 +9418,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 762,
+                  "line": 771,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 785,
                   "column": 5
                 }
               },
@@ -9444,11 +9444,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 778,
+                  "line": 787,
                   "column": 4
                 },
                 "end": {
-                  "line": 782,
+                  "line": 791,
                   "column": 5
                 }
               },
@@ -9728,7 +9728,15 @@
               "type": "string | null | undefined"
             }
           ],
-          "events": [],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "change",
+              "description": "Fired when the user commits a value change.",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            }
+          ],
           "styling": {
             "cssVariables": [],
             "selectors": []
@@ -9767,11 +9775,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 307,
+                  "line": 309,
                   "column": 8
                 },
                 "end": {
-                  "line": 309,
+                  "line": 311,
                   "column": 9
                 }
               },
@@ -10418,11 +10426,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 296,
+                  "line": 298,
                   "column": 8
                 },
                 "end": {
-                  "line": 298,
+                  "line": 300,
                   "column": 9
                 }
               },
@@ -10687,11 +10695,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 653,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 668,
                   "column": 5
                 }
               },
@@ -10970,7 +10978,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 421,
                   "column": 5
                 }
               },
@@ -10995,11 +11003,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 418,
+                  "line": 423,
                   "column": 4
                 },
                 "end": {
-                  "line": 425,
+                  "line": 431,
                   "column": 5
                 }
               },
@@ -11024,11 +11032,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 427,
+                  "line": 433,
                   "column": 4
                 },
                 "end": {
-                  "line": 433,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -11050,11 +11058,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 435,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 449,
+                  "line": 455,
                   "column": 5
                 }
               },
@@ -11082,11 +11090,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 451,
+                  "line": 457,
                   "column": 4
                 },
                 "end": {
-                  "line": 453,
+                  "line": 462,
                   "column": 5
                 }
               },
@@ -11111,11 +11119,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 455,
+                  "line": 464,
                   "column": 4
                 },
                 "end": {
-                  "line": 457,
+                  "line": 466,
                   "column": 5
                 }
               },
@@ -11140,11 +11148,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 459,
+                  "line": 468,
                   "column": 4
                 },
                 "end": {
-                  "line": 461,
+                  "line": 470,
                   "column": 5
                 }
               },
@@ -11169,11 +11177,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 463,
+                  "line": 472,
                   "column": 4
                 },
                 "end": {
-                  "line": 495,
+                  "line": 504,
                   "column": 5
                 }
               },
@@ -11191,11 +11199,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 497,
+                  "line": 506,
                   "column": 4
                 },
                 "end": {
-                  "line": 501,
+                  "line": 510,
                   "column": 5
                 }
               },
@@ -11213,11 +11221,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 503,
+                  "line": 512,
                   "column": 4
                 },
                 "end": {
-                  "line": 547,
+                  "line": 556,
                   "column": 5
                 }
               },
@@ -11235,11 +11243,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 551,
+                  "line": 560,
                   "column": 4
                 },
                 "end": {
-                  "line": 565,
+                  "line": 574,
                   "column": 5
                 }
               },
@@ -11258,11 +11266,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 567,
+                  "line": 576,
                   "column": 4
                 },
                 "end": {
-                  "line": 606,
+                  "line": 615,
                   "column": 5
                 }
               },
@@ -11280,11 +11288,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 614,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 617,
+                  "line": 626,
                   "column": 5
                 }
               },
@@ -11309,11 +11317,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 627,
+                  "line": 636,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 654,
                   "column": 5
                 }
               },
@@ -11338,11 +11346,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 647,
+                  "line": 656,
                   "column": 4
                 },
                 "end": {
-                  "line": 651,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -11364,11 +11372,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 661,
+                  "line": 670,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 673,
                   "column": 5
                 }
               },
@@ -11386,11 +11394,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 666,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 670,
+                  "line": 679,
                   "column": 5
                 }
               },
@@ -11415,11 +11423,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 672,
+                  "line": 681,
                   "column": 4
                 },
                 "end": {
-                  "line": 674,
+                  "line": 683,
                   "column": 5
                 }
               },
@@ -11441,11 +11449,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 679,
+                  "line": 688,
                   "column": 4
                 },
                 "end": {
-                  "line": 688,
+                  "line": 697,
                   "column": 5
                 }
               },
@@ -11464,11 +11472,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 690,
+                  "line": 699,
                   "column": 4
                 },
                 "end": {
-                  "line": 692,
+                  "line": 701,
                   "column": 5
                 }
               },
@@ -11487,11 +11495,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 694,
+                  "line": 703,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -11513,11 +11521,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 749,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 753,
+                  "line": 762,
                   "column": 5
                 }
               },
@@ -11545,11 +11553,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 755,
+                  "line": 764,
                   "column": 4
                 },
                 "end": {
-                  "line": 760,
+                  "line": 769,
                   "column": 5
                 }
               },
@@ -11571,11 +11579,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 762,
+                  "line": 771,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 785,
                   "column": 5
                 }
               },
@@ -11597,11 +11605,11 @@
               "sourceRange": {
                 "file": "vaadin-date-picker-mixin.html",
                 "start": {
-                  "line": 778,
+                  "line": 787,
                   "column": 4
                 },
                 "end": {
-                  "line": 782,
+                  "line": 791,
                   "column": 5
                 }
               },
@@ -11732,7 +11740,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 275,
+                  "line": 277,
                   "column": 9
                 }
               },
@@ -11748,11 +11756,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 277,
+                  "line": 279,
                   "column": 8
                 },
                 "end": {
-                  "line": 281,
+                  "line": 283,
                   "column": 9
                 }
               },
@@ -11772,11 +11780,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 283,
+                  "line": 285,
                   "column": 8
                 },
                 "end": {
-                  "line": 286,
+                  "line": 288,
                   "column": 9
                 }
               },
@@ -11796,11 +11804,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 288,
+                  "line": 290,
                   "column": 8
                 },
                 "end": {
-                  "line": 290,
+                  "line": 292,
                   "column": 9
                 }
               },
@@ -11813,11 +11821,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 300,
+                  "line": 302,
                   "column": 8
                 },
                 "end": {
-                  "line": 302,
+                  "line": 304,
                   "column": 9
                 }
               },
@@ -11870,7 +11878,7 @@
               "column": 6
             },
             "end": {
-              "line": 310,
+              "line": 312,
               "column": 7
             }
           },
@@ -12158,6 +12166,13 @@
             }
           ],
           "events": [
+            {
+              "type": "CustomEvent",
+              "name": "change",
+              "description": "Fired when the user commits a value change.",
+              "metadata": {},
+              "inheritedFrom": "Vaadin.DatePickerMixin"
+            },
             {
               "type": "CustomEvent",
               "name": "invalid-changed",
@@ -12913,7 +12928,7 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 416,
+                  "line": 421,
                   "column": 5
                 }
               },
@@ -12936,11 +12951,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 418,
+                  "line": 423,
                   "column": 4
                 },
                 "end": {
-                  "line": 425,
+                  "line": 431,
                   "column": 5
                 }
               },
@@ -12963,11 +12978,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 427,
+                  "line": 433,
                   "column": 4
                 },
                 "end": {
-                  "line": 433,
+                  "line": 439,
                   "column": 5
                 }
               },
@@ -12987,11 +13002,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 435,
+                  "line": 441,
                   "column": 4
                 },
                 "end": {
-                  "line": 449,
+                  "line": 455,
                   "column": 5
                 }
               },
@@ -13017,11 +13032,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 451,
+                  "line": 457,
                   "column": 4
                 },
                 "end": {
-                  "line": 453,
+                  "line": 462,
                   "column": 5
                 }
               },
@@ -13044,11 +13059,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 455,
+                  "line": 464,
                   "column": 4
                 },
                 "end": {
-                  "line": 457,
+                  "line": 466,
                   "column": 5
                 }
               },
@@ -13071,11 +13086,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 459,
+                  "line": 468,
                   "column": 4
                 },
                 "end": {
-                  "line": 461,
+                  "line": 470,
                   "column": 5
                 }
               },
@@ -13098,11 +13113,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 463,
+                  "line": 472,
                   "column": 4
                 },
                 "end": {
-                  "line": 495,
+                  "line": 504,
                   "column": 5
                 }
               },
@@ -13118,11 +13133,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 497,
+                  "line": 506,
                   "column": 4
                 },
                 "end": {
-                  "line": 501,
+                  "line": 510,
                   "column": 5
                 }
               },
@@ -13138,11 +13153,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 503,
+                  "line": 512,
                   "column": 4
                 },
                 "end": {
-                  "line": 547,
+                  "line": 556,
                   "column": 5
                 }
               },
@@ -13158,11 +13173,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 551,
+                  "line": 560,
                   "column": 4
                 },
                 "end": {
-                  "line": 565,
+                  "line": 574,
                   "column": 5
                 }
               },
@@ -13179,11 +13194,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 567,
+                  "line": 576,
                   "column": 4
                 },
                 "end": {
-                  "line": 606,
+                  "line": 615,
                   "column": 5
                 }
               },
@@ -13199,11 +13214,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 614,
+                  "line": 623,
                   "column": 4
                 },
                 "end": {
-                  "line": 617,
+                  "line": 626,
                   "column": 5
                 }
               },
@@ -13226,11 +13241,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 627,
+                  "line": 636,
                   "column": 4
                 },
                 "end": {
-                  "line": 645,
+                  "line": 654,
                   "column": 5
                 }
               },
@@ -13253,11 +13268,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 647,
+                  "line": 656,
                   "column": 4
                 },
                 "end": {
-                  "line": 651,
+                  "line": 660,
                   "column": 5
                 }
               },
@@ -13277,11 +13292,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 653,
+                  "line": 662,
                   "column": 4
                 },
                 "end": {
-                  "line": 659,
+                  "line": 668,
                   "column": 5
                 }
               },
@@ -13297,11 +13312,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 661,
+                  "line": 670,
                   "column": 4
                 },
                 "end": {
-                  "line": 664,
+                  "line": 673,
                   "column": 5
                 }
               },
@@ -13317,11 +13332,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 666,
+                  "line": 675,
                   "column": 4
                 },
                 "end": {
-                  "line": 670,
+                  "line": 679,
                   "column": 5
                 }
               },
@@ -13344,11 +13359,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 672,
+                  "line": 681,
                   "column": 4
                 },
                 "end": {
-                  "line": 674,
+                  "line": 683,
                   "column": 5
                 }
               },
@@ -13368,11 +13383,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 679,
+                  "line": 688,
                   "column": 4
                 },
                 "end": {
-                  "line": 688,
+                  "line": 697,
                   "column": 5
                 }
               },
@@ -13389,11 +13404,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 690,
+                  "line": 699,
                   "column": 4
                 },
                 "end": {
-                  "line": 692,
+                  "line": 701,
                   "column": 5
                 }
               },
@@ -13410,11 +13425,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 694,
+                  "line": 703,
                   "column": 4
                 },
                 "end": {
-                  "line": 747,
+                  "line": 756,
                   "column": 5
                 }
               },
@@ -13434,11 +13449,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 749,
+                  "line": 758,
                   "column": 4
                 },
                 "end": {
-                  "line": 753,
+                  "line": 762,
                   "column": 5
                 }
               },
@@ -13464,11 +13479,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 755,
+                  "line": 764,
                   "column": 4
                 },
                 "end": {
-                  "line": 760,
+                  "line": 769,
                   "column": 5
                 }
               },
@@ -13488,11 +13503,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 762,
+                  "line": 771,
                   "column": 4
                 },
                 "end": {
-                  "line": 776,
+                  "line": 785,
                   "column": 5
                 }
               },
@@ -13512,11 +13527,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 778,
+                  "line": 787,
                   "column": 4
                 },
                 "end": {
-                  "line": 782,
+                  "line": 791,
                   "column": 5
                 }
               },
@@ -13546,7 +13561,7 @@
               "column": 2
             },
             "end": {
-              "line": 783,
+              "line": 798,
               "column": 3
             }
           },
@@ -13714,7 +13729,14 @@
               "type": "String"
             }
           ],
-          "events": [],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "change",
+              "description": "Fired when the user commits a value change.",
+              "metadata": {}
+            }
+          ],
           "styling": {
             "cssVariables": [],
             "selectors": []
