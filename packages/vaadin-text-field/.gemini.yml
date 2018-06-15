@@ -9,10 +9,16 @@ system:
     sauce: true
 
 browsers:
-  chrome:
+  firefox:
     desiredCapabilities:
-      browserName: "chrome"
-      version: "59.0"
+      browserName: "firefox"
+      version: "47.0"
+      platform: "Windows 10"
+
+  ie:
+    desiredCapabilities:
+      browserName: "internet explorer"
+      version: "11.0"
       platform: "Windows 10"
 
   edge:
@@ -21,10 +27,13 @@ browsers:
       version: "15"
       platform: "Windows 10"
 
+  android:
+    desiredCapabilities:
+      browserName: "chrome"
+      platform: "Android"
+
   # The following setups don't currently work due to Selenium SafariDriver issue
-  # https://github.com/seleniumhq/selenium-google-code-issue-archive/issues/4136
-  #
-  # TODO @limonte revisit
+  # https://github.com/vaadin/vaadin-element-skeleton/issues/19
   #
   # safari:
   #   desiredCapabilities:

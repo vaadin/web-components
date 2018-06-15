@@ -1,0 +1,260 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
+
+<dom-module id="material-text-field" theme-for="vaadin-text-field">
+  <template>
+    <style>
+      :host {
+        display: inline-flex;
+        position: relative;
+        padding-top: 8px;
+        margin-bottom: 8px;
+        outline: none;
+        color: var(--material-body-text-color);
+        font-size: var(--material-body-font-size);
+        line-height: 24px;
+        font-family: var(--material-font-family);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        /* Fix Chrome’s dancing labels */
+        contain: content;
+      }
+
+      :host::before {
+        line-height: 32px;
+      }
+
+      /* Strange gymnastics to make fields vertically align nicely in most cases
+         (no label, with label, without prefix, with prefix, etc.) */
+
+      :host([has-label]) {
+        padding-top: 24px;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
+      [part="label"]:empty::before {
+        content: " ";
+        position: absolute;
+      }
+
+      [part="input-field"] {
+        position: relative;
+        top: -0.2px; /* NOTE(platosha): Adjusts for wrong flex baseline in Chrome & Safari */
+        height: 32px;
+        padding-left: 0;
+        background-color: transparent;
+        margin: 0;
+      }
+
+      [part="input-field"]::before,
+      [part="input-field"]::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        transform-origin: 50% 0%;
+        background-color: var(--_material-text-field-input-line-background-color, #000);
+        opacity: var(--_material-text-field-input-line-opacity, 0.42);
+      }
+
+      [part="input-field"]::after {
+        background-color: var(--material-primary-color);
+        opacity: 0;
+        height: 2px;
+        bottom: 0;
+        transform: scaleX(0);
+        transition: opacity 0.175s;
+      }
+
+      :host([disabled]) [part="label"],
+      :host([disabled]) [part="value"],
+      :host([disabled]) [part="input-field"] ::slotted([part="value"]) {
+        color: var(--material-disabled-text-color);
+        -webkit-text-fill-color: var(--material-disabled-text-color);
+      }
+
+      [part="value"],
+      /* For vaadin-dropdown-menu-text-field */
+      [part="input-field"] ::slotted([part="value"]) {
+        outline: none;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        padding: 8px 0;
+        width: 100%;
+        height: 100%;
+        font-family: inherit;
+        font-size: 1em;
+        line-height: inherit;
+        color: inherit;
+        background-color: transparent;
+        /* Disable default invalid style in Firefox */
+        box-shadow: none;
+      }
+
+      /* TODO: the text opacity should be 42%, but the disabled style is 38%.
+      Would need to introduce another property for it if we want to be 100% accurate. */
+      [part="value"]::-webkit-input-placeholder {
+        color: var(--material-disabled-text-color);
+        transition: opacity 0.175s 0.05s;
+        opacity: 1;
+      }
+
+      [part="value"]:-ms-input-placeholder {
+        color: var(--material-disabled-text-color);
+      }
+
+      [part="value"]::-moz-placeholder {
+        color: var(--material-disabled-text-color);
+        transition: opacity 0.175s 0.05s;
+        opacity: 1;
+      }
+
+      [part="value"]::placeholder {
+        color: var(--material-disabled-text-color);
+        transition: opacity 0.175s 0.1s;
+        opacity: 1;
+      }
+
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-webkit-input-placeholder {
+        opacity: 0;
+        transition-delay: 0;
+      }
+
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::-moz-placeholder {
+        opacity: 0;
+        transition-delay: 0;
+      }
+
+      :host([has-label]:not([focused]):not([invalid]):not([theme="always-float-label"])) [part="value"]::placeholder {
+        opacity: 0;
+        transition-delay: 0;
+      }
+
+      /* IE11 doesn’t show the placeholder when the input is focused, so it’s basically useless for this theme */
+      :host([has-label]) [part="value"]:-ms-input-placeholder {
+        opacity: 0;
+      }
+
+      [part="label"] {
+        display: block;
+        position: absolute;
+        top: 8px;
+        font-size: 1em;
+        line-height: 1;
+        height: 20px;
+        margin-bottom: -4px;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        color: var(--material-secondary-text-color);
+        transform-origin: 0 75%;
+        transform: scale(0.75);
+        transition: transform 0.175s, color 0.175s, width 0.175s;
+        transition-timing-function: ease, ease, step-end;
+      }
+
+      /* TODO: using unsupported selector to fix IE11 (even thought the label element is scaled down,
+         the 133% width still takes the same space as an unscaled element */
+      ::-ms-backdrop,
+      .vaadin-text-field-container {
+        overflow: hidden;
+      }
+
+      /* Same fix for MS Edge ^^   */
+      @supports (-ms-ime-align:auto) {
+        .vaadin-text-field-container {
+          overflow: hidden;
+        }
+      }
+
+      :host(:hover:not([readonly]):not([invalid])) [part="input-field"]::before {
+        opacity: var(--_material-text-field-input-line-hover-opacity, 0.87);
+      }
+
+      :host([focused]:not([invalid])) [part="label"] {
+        color: var(--material-primary-text-color);
+      }
+
+      :host([focused]) [part="input-field"]::after,
+      :host([invalid]) [part="input-field"]::after {
+        opacity: 1;
+        transform: none;
+        transition: transform 0.175s, opacity 0.175s;
+      }
+
+      :host([invalid]) [part="label"] {
+        color: var(--material-error-text-color);
+      }
+
+      :host([invalid]) [part="input-field"]::after {
+        background-color: var(--material-error-color);
+      }
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+
+      :host([disabled]) [part="input-field"] {
+        color: var(--material-disabled-text-color);
+      }
+
+      :host([disabled]) [part="input-field"]::before {
+        background-color: transparent;
+        background-image: linear-gradient(90deg, var(--_material-text-field-input-line-background-color, #000) 0, var(--_material-text-field-input-line-background-color, #000) 2px, transparent 2px);
+        background-size: 4px 1px;
+        background-repeat: repeat-x;
+      }
+
+      /* Only target the visible floating label */
+      :host([has-label]:not([has-value]):not([focused]):not([invalid]):not([theme~="always-float-label"])) [part="label"] {
+        /* IE11 doesn’t work with calc inside the translate function, so we need to have a fixed pixel value instead of 50% + 16px */
+        transform: scale(1) translateY(24px);
+        transition-timing-function: ease, ease, step-start;
+        pointer-events: none;
+        left: auto;
+        transition-delay: 0.1s;
+      }
+
+      [part="error-message"] {
+        font-size: .75em;
+        line-height: 1;
+        color: var(--material-error-text-color);
+        margin-top: 6px;
+      }
+
+      :host(:not([invalid])) [part="error-message"] {
+        margin-top: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      :host([invalid]) [part="error-message"] {
+        animation: reveal 0.2s;
+      }
+
+      @keyframes reveal {
+        0% {
+          opacity: 0;
+        }
+      }
+
+      :host([required]) [part="label"]::after {
+        content: " *";
+        color: inherit;
+      }
+
+      /* Slotted content */
+
+      [part="input-field"] ::slotted(*:not([part="value"])) {
+        color: var(--material-secondary-text-color);
+      }
+
+    </style>
+  </template>
+</dom-module>

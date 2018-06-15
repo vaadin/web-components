@@ -91,6 +91,20 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-text-area>
        * ```
        *
+       * ### Prefixes and suffixes
+       *
+       * These are child elements of a `<vaadin-text-area>` that are displayed
+       * inline with the input, before or after.
+       * In order for an element to be considered as a prefix, it must have the slot
+       * attribute set to `prefix` (and similarly for `suffix`).
+       *
+       * ```html
+       * <vaadin-text-area label="Add description">
+       *   <div slot="prefix">Details:</div>
+       *   <div slot="suffix">The end!</div>
+       * </vaadin-text-area>
+       * ```
+       *
        * ### Styling
        *
        * The following shadow DOM parts are available for styling:
@@ -127,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get version() {
-          return '2.0.1-pre.2';
+          return '2.1.0-alpha1';
         }
 
         static get observers() {

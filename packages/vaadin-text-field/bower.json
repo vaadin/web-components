@@ -5,7 +5,11 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-text-field",
-  "main": "vaadin-text-field.html",
+  "main": [
+    "vaadin-text-field.html",
+    "vaadin-password-field.html",
+    "vaadin-text-area.html"
+  ],
   "keywords": [
     "Vaadin",
     "input",
@@ -38,6 +42,7 @@
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#p3-preview",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#p3-preview",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
   }
 }
