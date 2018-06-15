@@ -35,7 +35,7 @@
     "wct.conf.js"
   ],
   "devDependencies": {
-    "webcomponentsjs": "^1.0.0",
+    "webcomponentsjs": "1.2.0",
     "web-component-tester": "^6.1.5",
     "iron-test-helpers": "^v2.0.0",
     "paper-input": "^v2.0.0",
