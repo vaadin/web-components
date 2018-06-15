@@ -9,8 +9,8 @@ system:
     sauce: true
 
 browsers:
-  edge:
+  chrome:
     desiredCapabilities:
-      browserName: "microsoftedge"
-      version: "15"
+      browserName: "chrome"
+      version: "61.0"
       platform: "Windows 10"

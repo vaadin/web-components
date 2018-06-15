@@ -1,0 +1,67 @@
+<link rel="import" href="../../../vaadin-item/theme/material/vaadin-item.html">
+<link rel="import" href="../../../vaadin-list-box/theme/material/vaadin-list-box.html">
+<link rel="import" href="../../../vaadin-text-field/theme/material/vaadin-text-field.html">
+
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/font-icons.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/menu-overlay.html">
+<link rel="import" href="../../../vaadin-material-styles/mixins/field-button.html">
+
+<dom-module id="material-dropdown-menu" theme-for="vaadin-dropdown-menu">
+  <template>
+    <style include="material-field-button">
+      :host {
+        display: inline-flex;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      [part="toggle-button"]::before {
+        content: var(--material-icons-dropdown);
+      }
+
+      :host([opened]) [part="toggle-button"] {
+        transform: rotate(180deg);
+      }
+
+      /* Disabled */
+
+      :host([disabled]) {
+        pointer-events: none;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-dropdown-menu-text-field" theme-for="vaadin-dropdown-menu-text-field">
+  <template>
+    <style>
+      :host {
+        width: 100%;
+      }
+
+      :host([disabled]) [part="input-field"],
+      [part="input-field"],
+      [part="value"] {
+        cursor: default;
+      }
+
+      [part="input-field"]:focus {
+        outline: none;
+      }
+
+      ::slotted([part="value"]) {
+        display: flex;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="material-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
+  <template>
+    <style include="material-menu-overlay">
+      [part="overlay"] {
+        min-width: var(--vaadin-dropdown-menu-text-field-width);
+      }
+    </style>
+  </template>
+</dom-module>
