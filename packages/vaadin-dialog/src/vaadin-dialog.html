@@ -9,6 +9,20 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 
+<dom-module id="vaadin-dialog-overlay-styles" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      /*
+        NOTE(platosha): Make some min-width to prevent collapsing of the content
+        taking the parent width, e. g., <vaadin-grid> and such.
+      */
+      [part="content"] {
+        min-width: 12em; /* matches the default <vaadin-text-field> width */
+      }
+    </style>
+  </template>
+</dom-module>
+
 <dom-module id="vaadin-dialog">
   <template>
     <style>
@@ -78,7 +92,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get version() {
-          return '2.0.0-pre.3';
+          return '2.1.0-alpha1';
         }
 
         static get properties() {

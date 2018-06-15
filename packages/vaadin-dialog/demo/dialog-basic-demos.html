@@ -6,27 +6,21 @@
       }
     </style>
 
-
     <h3>Simple Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-simple-dialog">
       <template preserve-content>
-        <dom-bind id="simple-dialog-example">
+        <vaadin-dialog>
           <template>
-            <vaadin-dialog id="simpledialog">
-              <template>
-                <div>This simple dialog will close by pressing the Esc key,</div>
-                <div> or by a mouse click anywhere outside the dialog area</div>
-              </template>
-            </vaadin-dialog>
-            <vaadin-button on-click="showSimpleDialog">Show dialog</vaadin-button>
+            <div>This simple dialog will close by pressing the Esc key,</div>
+            <div> or by a mouse click anywhere outside the dialog area</div>
           </template>
-        </dom-bind>
+        </vaadin-dialog>
+        <vaadin-button>Show dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-simple-dialog', function(document) {
-            var simpleDialogExample = document.querySelector('#simple-dialog-example');
-            simpleDialogExample.showSimpleDialog = function() {
-              simpleDialogExample.$.simpledialog.opened = true;
-            };
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-dialog').opened = true;
+            });
           });
         </script>
       </template>
@@ -44,23 +38,18 @@
             border: .25em solid #000;
           }
         </style>
-        <dom-bind id="styled-dialog-example">
+        <vaadin-dialog>
           <template>
-            <vaadin-dialog id="styleddialog">
-              <template>
-                <div class="dialog-message">I am styled from the parent scope and can be closed by pressing the Esc key,
-                or by a mouse click anywhere outside the dialog area</div>
-              </template>
-            </vaadin-dialog>
-            <vaadin-button on-click="showStyledDialog">Show dialog</vaadin-button>
+            <div class="dialog-message">I am styled from the parent scope and can be closed by pressing the Esc key,
+            or by a mouse click anywhere outside the dialog area</div>
           </template>
-        </dom-bind>
+        </vaadin-dialog>
+        <vaadin-button>Show dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-styled-dialog', function(document) {
-            var styledDialogExample = document.querySelector('#styled-dialog-example');
-            styledDialogExample.showStyledDialog = function() {
-              styledDialogExample.$.styleddialog.opened = true;
-            };
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-dialog').opened = true;
+            });
           });
         </script>
       </template>

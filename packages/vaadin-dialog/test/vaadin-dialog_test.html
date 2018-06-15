@@ -115,6 +115,12 @@
         const openDialog = () => dialog.opened = true;
         expect(openDialog).to.not.throw();
       });
+
+      it('should have min-width for content', () => {
+        dialog.opened = true;
+        const contentMinWidth = parseFloat(window.getComputedStyle(dialog.$.overlay.$.content).minWidth);
+        expect(contentMinWidth).to.be.gt(0);
+      });
     });
 
     describe('vaadin-dialog data binding', () => {

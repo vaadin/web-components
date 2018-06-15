@@ -1,5 +1,5 @@
-rootUrl: http://127.0.0.1:8080/components/vaadin-dialog/test/visual/
-gridUrl: http://127.0.0.1:4444/wd/hub
+rootUrl: http://localhost:8080/components/vaadin-dialog/test/visual/
+gridUrl: http://localhost:4444/wd/hub
 screenshotsDir: ./test/visual/screens
 
 system:
@@ -12,7 +12,7 @@ browsers:
   firefox:
     desiredCapabilities:
       browserName: "firefox"
-      version: "47"
+      version: "47.0"
       platform: "Windows 10"
 
   ie:
@@ -24,7 +24,7 @@ browsers:
   edge:
     desiredCapabilities:
       browserName: "microsoftedge"
-      version: "14"
+      version: "15"
       platform: "Windows 10"
 
   android:
