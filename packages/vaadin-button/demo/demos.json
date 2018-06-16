@@ -24,11 +24,11 @@
   }
   ,
   {
-    "name": "Lumo Theme",
-    "url": "button-lumo-theme-demos",
-    "src": "button-lumo-theme-demos.html",
+    "name": "Theme Variants",
+    "url": "button-theme-variants-demos",
+    "src": "button-theme-variants-demos.html",
         "meta": {
-      "title": "Vaadin Button Lumo Theme",
+      "title": "Vaadin Button Theme Variants",
       "description": "",
       "image": ""
      }
