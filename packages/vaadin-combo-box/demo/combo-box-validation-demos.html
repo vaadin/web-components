@@ -1,0 +1,49 @@
+<dom-module id="combo-box-validation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Using as a Form Field</h3>
+    <vaadin-demo-snippet id="combo-box-validation-demos-using-as-a-form-field">
+      <template preserve-content>
+        <iron-form>
+          <form method="post">
+            <vaadin-combo-box name="name" required error-message="This field is required"></vaadin-combo-box>
+            <vaadin-button>Submit</vaadin-button>
+          </form>
+        </iron-form>
+
+        <script>
+          window.addDemoReadyListener('#combo-box-validation-demos-using-as-a-form-field', function(document) {
+            var form = document.querySelector('iron-form');
+            var combobox = form.querySelector('vaadin-combo-box');
+            combobox.items = elements;
+
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with name: ' + form.serializeForm().name);
+              return false;
+            });
+
+            var button = document.querySelector('vaadin-button');
+            button.addEventListener('click', function() {
+              form.submit();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ComboBoxValidationDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'combo-box-validation-demos';
+      }
+    }
+    customElements.define(ComboBoxValidationDemos.is, ComboBoxValidationDemos);
+  </script>
+</dom-module>

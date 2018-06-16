@@ -7,7 +7,7 @@
     </style>
 
 
-    <h3>Remote Data Source</h3>
+    <h3>Filtering with a Remote Data Source</h3>
     <vaadin-demo-snippet id="combo-box-filtering-demos-remote-data-source">
       <template preserve-content>
         <dom-bind>
@@ -23,7 +23,7 @@
 
 
     <h3>Custom Filtering</h3>
-
+    <p>Example uses case-sensitive starts-with filtering</p>
     <vaadin-demo-snippet id="combo-box-filtering-demos-custom-filtering">
       <template preserve-content>
         <custom-filter></custom-filter>
@@ -34,20 +34,22 @@
           </template>
           <script>
             window.addDemoReadyListener('#combo-box-filtering-demos-custom-filtering', function(document) {
-              Polymer({
-                is: 'custom-filter',
+              if (!customElements.get('custom-filter')) {
+                Polymer({
+                  is: 'custom-filter',
 
-                properties: {
-                  items: Array,
-                },
+                  properties: {
+                    items: Array,
+                  },
 
-                _filterChanged: function(e) {
-                  // case-sensitive starts-with filtering
-                  this.items = elements.filter(function(el) {
-                    return el.indexOf(e.detail.value) === 0;
-                  });
-                }
-              });
+                  _filterChanged: function(e) {
+                    // case-sensitive starts-with filtering
+                    this.items = elements.filter(function(el) {
+                      return el.indexOf(e.detail.value) === 0;
+                    });
+                  }
+                });
+              }
             });
           </script>
         </dom-module>
