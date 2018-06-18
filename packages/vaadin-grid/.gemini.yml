@@ -9,24 +9,13 @@ system:
     sauce: true
 
 browsers:
-  ie:
-    desiredCapabilities:
-      browserName: "internet explorer"
-      version: "11.0"
-      platform: "Windows 10"
-
-  edge:
-    desiredCapabilities:
-      browserName: "microsoftedge"
-      version: "15"
-      platform: "Windows 10"
-
-  android:
+  chrome:
     desiredCapabilities:
       browserName: "chrome"
-      platform: "Android"
-  
-  # Selenium with Firefox receives the following error in "sorting" tests: 
+      version: "66.0"
+      platform: "Windows 10"
+
+  # Selenium with Firefox receives the following error in "sorting" tests:
   # "Permission denied to access property "__eventWrappers1527612800414""
   #
   # firefox:
