@@ -47,9 +47,7 @@
 
       it('should be possible to set confirm button text', function() {
         var confirmButton = content.root.querySelector('#confirm');
-        expect(confirmButton.hidden).to.be.equal(true);
         confirm.confirmText = 'Of course';
-        expect(confirmButton.hidden).to.be.equal(false);
         var confirmButtonText = confirmButton.textContent;
         expect(confirmButtonText).to.contain('Of course');
       });

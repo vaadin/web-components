@@ -45,7 +45,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             </vaadin-button>
           </slot>
           <slot name="confirm-button">
-            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm" hidden$="[[!confirm]]">
+            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm">
               [[confirmText]]
             </vaadin-button>
           </slot>
@@ -101,17 +101,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               type: String
             },
             /**
-             * Whether to show confirm button or not.
-             */
-            confirm: {
-              type: Boolean,
-              reflectToAttribute: true,
-              value: false,
-              notify: true
-            },
-            /**
              * Text displayed on confirm-button.
-             * Changing sets confirm property to true.
              */
             confirmText: {
               type: String,
@@ -119,7 +109,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
             /**
              * Theme for a confirm-button.
-             * Changing sets confirm property to true.
              */
             confirmTheme: {
               type: String,
@@ -135,16 +124,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
               notify: true
             },
             /**
-             * Text displayed on cancel-button.
-             * Changing sets cancel property to true.
+             * Text displayed on reject-button.
+             * Should also set `reject` property to true.
              */
             rejectText: {
               type: String,
               value: 'Reject'
             },
             /**
-             * Theme for a cancel-button.
-             * Changing sets cancel property to true.
+             * Theme for a reject-button.
+             * Should also set `reject` property to true.
              */
             rejectTheme: {
               type: String,
@@ -161,7 +150,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
             /**
              * Text displayed on cancel-button.
-             * Changing sets cancel property to true.
+             * Should also set `cancel` property to true.
              */
             cancelText: {
               type: String,
@@ -169,21 +158,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
             /**
              * Theme for a cancel-button.
-             * Changing sets cancel property to true.
+             * Should also set `cancel` property to true.
              */
             cancelTheme: {
               type: String,
               value: 'tertiary'
             }
           };
-        }
-
-        static get observers() {
-          return [
-            '_confirmPropertyChanged(confirmText, confirmTheme)',
-            '_rejectPropertyChanged(rejectText, rejectTheme)',
-            '_cancelPropertyChanged(cancelText, cancelTheme)'
-          ];
         }
 
         ready() {
@@ -200,12 +181,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
-        _confirmPropertyChanged(confirmText, confirmTheme) {
-          if (confirmText !== 'Confirm' || confirmTheme !== 'primary') {
-            this.confirm = true;
-          }
-        }
-
         /**
          * @event confirm
          * fired when Confirm button was pressed.
@@ -215,12 +190,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.opened = false;
         }
 
-        _cancelPropertyChanged(cancelText, cancelTheme) {
-          if (cancelText !== 'Cancel' || cancelTheme !== 'tertiary') {
-            this.cancel = true;
-          }
-        }
-
         /**
          * @event cancel
          * fired when Cancel button or Escape key was pressed.
@@ -228,12 +197,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _cancel() {
           this.dispatchEvent(new CustomEvent('cancel'));
           this.opened = false;
-        }
-
-        _rejectPropertyChanged(rejectText, rejectTheme) {
-          if (rejectText !== 'Reject' || rejectTheme !== 'error tertiary') {
-            this.reject = true;
-          }
         }
 
         /**
