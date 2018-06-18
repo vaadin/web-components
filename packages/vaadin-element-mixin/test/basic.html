@@ -45,11 +45,46 @@
   <script>
     describe('basic functionality', function() {
 
+      let called = 0;
+
       beforeEach(function(done) {
+
+        // TODO(manolo): Polyfilled browsers return false
+        // in isUnbundled because no `@vaadin` in tests
+        localStorage.setItem('vaadin.developmentmode.force', true);
+
+        // maybeGatherAndSend is called each time a class extending element-mixin is
+        // created. Overriding it so as we track number of times it's called
+        if (window.Vaadin.UsageStatistics) {
+          window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => called ++;
+        } else {
+          // First time `vaadin-usage-statistics` is loaded asynchronously, we need
+          // a property observer to modify the class.
+          Object.defineProperty(window.Vaadin, 'UsageStatistics', {
+            get() {
+              return this._val;
+            },
+            set(val) {
+              this._val = val;
+              window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => {
+                called ++;
+                // first time
+                done();
+              };
+            }
+          });
+        }
+
+        // This will trigger asynchronously import of `vaadin-usage-statistics`
         fixture('default');
-        // wait for usage statistics to load
-        setTimeout(done, 100);
+
+        if (window.Vaadin.UsageStatistics) {
+          // second and sucessive times
+          setTimeout(done, 100);
+        }
       });
+
+      afterEach(() => localStorage.removeItem('vaadin.developmentmode.force'));
 
       it('should define window.Vaadin', function() {
         expect(window.Vaadin).to.exist;
@@ -84,12 +119,8 @@
       });
 
       it('should load usage statistics once per class', function() {
-        var called = 0;
-        window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function() {
-          called++;
-        };
+        called = 0;
 
-        expect(called).to.equal(0);
         class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
             return 'test-bar';
