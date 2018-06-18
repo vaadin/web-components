@@ -49,11 +49,7 @@
 
       beforeEach(function(done) {
 
-        // TODO(manolo): Polyfilled browsers return false
-        // in isUnbundled because no `@vaadin` in tests
-        localStorage.setItem('vaadin.developmentmode.force', true);
-
-        // maybeGatherAndSend is called each time a class extending element-mixin is
+        // `maybeGatherAndSend` is called each time a class extending `element-mixin` is
         // created. Overriding it so as we track number of times it's called
         if (window.Vaadin.UsageStatistics) {
           window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => called ++;
@@ -84,8 +80,6 @@
         }
       });
 
-      afterEach(() => localStorage.removeItem('vaadin.developmentmode.force'));
-
       it('should define window.Vaadin', function() {
         expect(window.Vaadin).to.exist;
       });
@@ -95,13 +89,8 @@
       });
 
       it('should load usage statistics only on localhost', function() {
-        const localhost = window.location.href.indexOf('localhost') != -1;
-        if (localhost) {
-          expect(window.Vaadin.developmentModeCallback).to.exist;
-          expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
-        } else {
-          expect(window.Vaadin.developmentModeCallback).not.to.exist;
-        }
+        expect(window.Vaadin.developmentModeCallback).to.exist;
+        expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
       });
 
       it('should be possible to exclude development mode detector', function() {

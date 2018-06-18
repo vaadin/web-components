@@ -6,6 +6,14 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-themable-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script>
+    /*
+      Force development-mode, because
+       - Polyfilled browsers return false in isUnbundled because no `@vaadin` in tests
+       - We can run tests in any of local machine interfaces, not only loopback.
+    */
+    localStorage.setItem('vaadin.developmentmode.force', true);
+  </script>
 </head>
 
 <body>
