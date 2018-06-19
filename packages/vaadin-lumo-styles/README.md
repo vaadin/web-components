@@ -49,9 +49,9 @@ Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-sty
 
 ## Adding or updating icons
 
-1. Open `icons/lumo-icons.sketch` using [Sketch](https://sketchapp.com)
+1. Open `icons/Lumo Icons.sketch` using [Sketch](https://sketchapp.com)
 
-1. Modify an icon, or create a new artboard (the name of the artboard is used as the icon name) for a new icon – make sure to simplify and flatten the shape when you’re done (and save the file).
+1. Follow the instructions in the Sketch document
 
 1. Run `npm install` to install dependencies
 
