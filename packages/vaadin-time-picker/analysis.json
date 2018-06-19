@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-time-picker.html",
         "start": {
-          "line": 389,
+          "line": 518,
           "column": 6
         },
         "end": {
-          "line": 389,
+          "line": 518,
           "column": 58
         }
       },
@@ -1604,11 +1604,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 379,
+                  "line": 489,
                   "column": 8
                 },
                 "end": {
-                  "line": 381,
+                  "line": 491,
                   "column": 9
                 }
               },
@@ -1671,11 +1671,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 121,
+                  "line": 135,
                   "column": 13
                 }
               },
@@ -1716,11 +1716,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 334,
+                  "line": 444,
                   "column": 8
                 },
                 "end": {
-                  "line": 348,
+                  "line": 458,
                   "column": 9
                 }
               },
@@ -1737,11 +1737,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 366,
+                  "line": 476,
                   "column": 8
                 },
                 "end": {
-                  "line": 369,
+                  "line": 479,
                   "column": 9
                 }
               },
@@ -1758,11 +1758,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 371,
+                  "line": 481,
                   "column": 8
                 },
                 "end": {
-                  "line": 374,
+                  "line": 484,
                   "column": 9
                 }
               },
@@ -1773,17 +1773,38 @@
               }
             },
             {
+              "name": "name",
+              "type": "string | null | undefined",
+              "description": "The name of this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 94,
+                  "column": 12
+                },
+                "end": {
+                  "line": 96,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              }
+            },
+            {
               "name": "value",
               "type": "string | null | undefined",
               "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `hh:mm` (default)\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 92,
+                  "line": 106,
                   "column": 12
                 },
                 "end": {
-                  "line": 97,
+                  "line": 111,
                   "column": 13
                 }
               },
@@ -1803,11 +1824,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 116,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 119,
                   "column": 13
                 }
               },
@@ -1824,11 +1845,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 113,
+                  "line": 127,
                   "column": 13
                 }
               },
@@ -1846,11 +1867,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 126,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 128,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -1867,11 +1888,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -1888,11 +1909,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 142,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -1909,11 +1930,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 147,
+                  "line": 161,
                   "column": 12
                 },
                 "end": {
-                  "line": 150,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -1931,16 +1952,39 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 158,
+                  "line": 172,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "invalid",
+              "type": "boolean | null | undefined",
+              "description": "Set to true if the value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 177,
+                  "column": 12
+                },
+                "end": {
+                  "line": 182,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
                   "attributeType": "Boolean"
                 }
               },
@@ -1953,11 +1997,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 196,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 199,
                   "column": 13
                 }
               },
@@ -1975,11 +2019,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 201,
                   "column": 12
                 },
                 "end": {
-                  "line": 179,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -1992,15 +2036,15 @@
             {
               "name": "i18n",
               "type": "Object | null | undefined",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure:\n\n                {\n                  // A function to format given `Object` as\n                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\n                  formatTime: (time) => {\n                    // returns a string representation of the given\n                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats\n                  },\n\n                  // A function to parse the given text to an `Object` in the format\n                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.\n                  // Must properly parse (at least) text\n                  // formatted by `formatTime`.\n                  parseTime: text => {\n                    // Parses a string in object/string that can be formatted by`formatTime`.\n                  }\n                }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure:\n\n                {\n                  // A function to format given `Object` as\n                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\n                  formatTime: (time) => {\n                    // returns a string representation of the given\n                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats\n                  },\n\n                  // A function to parse the given text to an `Object` in the format\n                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.\n                  // Must properly parse (at least) text\n                  // formatted by `formatTime`.\n                  parseTime: text => {\n                    // Parses a string in object/string that can be formatted by`formatTime`.\n                  }\n\n                  // Translation of the time selector icon button title.\n                  selector: 'Time selector',\n                }",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 232,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 264,
                   "column": 13
                 }
               },
@@ -2018,11 +2062,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 246,
+                  "line": 274,
                   "column": 8
                 },
                 "end": {
-                  "line": 249,
+                  "line": 282,
                   "column": 9
                 }
               },
@@ -2273,16 +2317,134 @@
               "inheritedFrom": "Vaadin.ControlStateMixin"
             },
             {
+              "name": "__validDayDivisor",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 284,
+                  "column": 8
+                },
+                "end": {
+                  "line": 287,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "step"
+                }
+              ]
+            },
+            {
+              "name": "__onKeyDown",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 289,
+                  "column": 8
+                },
+                "end": {
+                  "line": 308,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "__onArrowPressWithStep",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 311,
+                  "column": 8
+                },
+                "end": {
+                  "line": 314,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "step"
+                },
+                {
+                  "name": "parsedValue",
+                  "defaultValue": "'00:00'"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "__getMsec",
+              "description": "Returning milliseconds from Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 319,
+                  "column": 8
+                },
+                "end": {
+                  "line": 326,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "obj"
+                }
+              ]
+            },
+            {
+              "name": "__addStep",
+              "description": "Returning Object in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\nfrom the result of adding step value in milliseconds to the milliseconds amount",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 332,
+                  "column": 8
+                },
+                "end": {
+                  "line": 356,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "msec"
+                },
+                {
+                  "name": "step"
+                }
+              ]
+            },
+            {
               "name": "__updateDropdownItems",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 251,
+                  "line": 358,
                   "column": 8
                 },
                 "end": {
-                  "line": 253,
+                  "line": 360,
                   "column": 9
                 }
               },
@@ -2298,11 +2460,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 255,
+                  "line": 362,
                   "column": 8
                 },
                 "end": {
-                  "line": 283,
+                  "line": 394,
                   "column": 9
                 }
               },
@@ -2315,11 +2477,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 285,
+                  "line": 396,
                   "column": 8
                 },
                 "end": {
-                  "line": 297,
+                  "line": 407,
                   "column": 9
                 }
               },
@@ -2342,11 +2504,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 299,
+                  "line": 409,
                   "column": 8
                 },
                 "end": {
-                  "line": 312,
+                  "line": 422,
                   "column": 9
                 }
               },
@@ -2366,11 +2528,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 314,
+                  "line": 424,
                   "column": 8
                 },
                 "end": {
-                  "line": 317,
+                  "line": 427,
                   "column": 9
                 }
               },
@@ -2390,11 +2552,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 319,
+                  "line": 429,
                   "column": 8
                 },
                 "end": {
-                  "line": 322,
+                  "line": 432,
                   "column": 9
                 }
               },
@@ -2414,11 +2576,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 324,
+                  "line": 434,
                   "column": 8
                 },
                 "end": {
-                  "line": 332,
+                  "line": 442,
                   "column": 9
                 }
               },
@@ -2435,11 +2597,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 350,
+                  "line": 460,
                   "column": 8
                 },
                 "end": {
-                  "line": 353,
+                  "line": 463,
                   "column": 9
                 }
               },
@@ -2456,11 +2618,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 355,
+                  "line": 465,
                   "column": 8
                 },
                 "end": {
-                  "line": 358,
+                  "line": 468,
                   "column": 9
                 }
               },
@@ -2477,11 +2639,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 360,
+                  "line": 470,
                   "column": 8
                 },
                 "end": {
-                  "line": 364,
+                  "line": 474,
                   "column": 9
                 }
               },
@@ -2494,6 +2656,44 @@
               "return": {
                 "type": "void"
               }
+            },
+            {
+              "name": "validate",
+              "description": "Returns true if `value` is valid, and sets the `invalid` flag appropriately.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 498,
+                  "column": 8
+                },
+                "end": {
+                  "line": 500,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid and sets the `invalid` flag appropriately"
+              }
+            },
+            {
+              "name": "checkValidity",
+              "description": "Returns true if the current input value satisfies all constraints (if any)\n\nYou can override the `checkValidity` method for custom validations.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 507,
+                  "column": 8
+                },
+                "end": {
+                  "line": 510,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": []
             }
           ],
           "staticMethods": [
@@ -2584,11 +2784,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 70,
+              "line": 77,
               "column": 6
             },
             "end": {
-              "line": 382,
+              "line": 511,
               "column": 7
             }
           },
@@ -2619,11 +2819,11 @@
               "description": "Set to true to disable this input.",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 132,
                   "column": 12
                 },
                 "end": {
-                  "line": 121,
+                  "line": 135,
                   "column": 13
                 }
               },
@@ -2631,15 +2831,31 @@
               "type": "boolean | null | undefined"
             },
             {
+              "name": "name",
+              "description": "The name of this element.",
+              "sourceRange": {
+                "start": {
+                  "line": 94,
+                  "column": 12
+                },
+                "end": {
+                  "line": 96,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
               "name": "value",
               "description": "The time value for this element.\n\nSupported time formats are in ISO 8601:\n- `hh:mm` (default)\n- `hh:mm:ss`\n- `hh:mm:ss.fff`",
               "sourceRange": {
                 "start": {
-                  "line": 92,
+                  "line": 106,
                   "column": 12
                 },
                 "end": {
-                  "line": 97,
+                  "line": 111,
                   "column": 13
                 }
               },
@@ -2651,11 +2867,11 @@
               "description": "The label for this element.",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 116,
                   "column": 12
                 },
                 "end": {
-                  "line": 105,
+                  "line": 119,
                   "column": 13
                 }
               },
@@ -2667,11 +2883,11 @@
               "description": "Set to true to mark the input as required.",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 113,
+                  "line": 127,
                   "column": 13
                 }
               },
@@ -2683,11 +2899,11 @@
               "description": "Set to true to prevent the user from entering invalid input.",
               "sourceRange": {
                 "start": {
-                  "line": 126,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 128,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -2699,11 +2915,11 @@
               "description": "A pattern to validate the `input` with.",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 147,
                   "column": 12
                 },
                 "end": {
-                  "line": 135,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -2715,11 +2931,11 @@
               "description": "The error message to display when the input is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 140,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 142,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -2731,11 +2947,11 @@
               "description": "A placeholder string in addition to the label.",
               "sourceRange": {
                 "start": {
-                  "line": 147,
+                  "line": 161,
                   "column": 12
                 },
                 "end": {
-                  "line": 150,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -2747,11 +2963,27 @@
               "description": "Set to true to prevent user picking a date or typing in the input.",
               "sourceRange": {
                 "start": {
-                  "line": 155,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 158,
+                  "line": 172,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "invalid",
+              "description": "Set to true if the value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 177,
+                  "column": 12
+                },
+                "end": {
+                  "line": 182,
                   "column": 13
                 }
               },
@@ -2763,11 +2995,11 @@
               "description": "Specifies the number of valid intervals in a day or in an hour used for\nconfiguring the items displayed in the selection box.\n\nIt also configures the precission of the value string. By default\nthe component formats values as `hh:mm` but setting a step value\nlower than one minute or one second, format resolution changes to\n`hh:mm:ss` and `hh:mm:ss.fff` respectively.\n\nUnit must be set in seconds, and for correctly configuring intervals\nin the dropdown, it need to evenly divide a day or an hour.",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 196,
                   "column": 12
                 },
                 "end": {
-                  "line": 175,
+                  "line": 199,
                   "column": 13
                 }
               },
@@ -2776,14 +3008,14 @@
             },
             {
               "name": "i18n",
-              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure:\n\n                {\n                  // A function to format given `Object` as\n                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\n                  formatTime: (time) => {\n                    // returns a string representation of the given\n                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats\n                  },\n\n                  // A function to parse the given text to an `Object` in the format\n                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.\n                  // Must properly parse (at least) text\n                  // formatted by `formatTime`.\n                  parseTime: text => {\n                    // Parses a string in object/string that can be formatted by`formatTime`.\n                  }\n                }",
+              "description": "The object used to localize this component.\nTo change the default localization, replace the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure:\n\n                {\n                  // A function to format given `Object` as\n                  // time string. Object is in the format `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`\n                  formatTime: (time) => {\n                    // returns a string representation of the given\n                    // object in `hh` / 'hh:mm' / 'hh:mm:ss' / 'hh:mm:ss.fff' - formats\n                  },\n\n                  // A function to parse the given text to an `Object` in the format\n                  // `{ hours: ..., minutes: ..., seconds: ..., milliseconds: ... }`.\n                  // Must properly parse (at least) text\n                  // formatted by `formatTime`.\n                  parseTime: text => {\n                    // Parses a string in object/string that can be formatted by`formatTime`.\n                  }\n\n                  // Translation of the time selector icon button title.\n                  selector: 'Time selector',\n                }",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 232,
                   "column": 12
                 },
                 "end": {
-                  "line": 236,
+                  "line": 264,
                   "column": 13
                 }
               },
@@ -2796,6 +3028,12 @@
               "type": "CustomEvent",
               "name": "value-changed",
               "description": "Fired when the `value` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
               "metadata": {}
             }
           ],
