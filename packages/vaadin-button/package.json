@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-button",
+  "name": "@vaadin/vaadin-button",
   "version": "2.1.0-alpha1",
   "description": "vaadin-button",
   "main": "vaadin-button.html",
@@ -37,7 +37,6 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "wct-istanbul": "^0.14.3",
