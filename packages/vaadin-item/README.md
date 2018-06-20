@@ -14,7 +14,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-item/html-api)
 
 
-[&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a [Polymer 2](http://polymer-project.org) element providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-item&gt;](https://vaadin.com/components/vaadin-item) is a Web Component providing a container for item elements, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -33,6 +33,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-item/master/screenshot.png" width="169" alt="Screenshot of vaadin-item">](https://vaadin.com/components/vaadin-item)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-item`:
+
+```sh
+bower i vaadin/vaadin-item --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-item/vaadin-item.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-item`:
+
+```sh
+npm i @vaadin/vaadin-item --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-item/vaadin-item.js';
+```
 
 ## Getting Started
 

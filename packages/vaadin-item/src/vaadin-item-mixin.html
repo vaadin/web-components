@@ -5,6 +5,9 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <script>
+  /**
+   * @namespace Vaadin
+   */
   window.Vaadin = window.Vaadin || {};
 
   /**
@@ -12,6 +15,7 @@ This program is available under Apache License Version 2.0, available at https:/
    *
    * `focused`, `active` and `focus-ring` are set as only as attributes.
    * @polymerMixin
+   * @memberof Vaadin
    */
   Vaadin.ItemMixin = superClass => class VaadinItemMixin extends superClass {
     static get properties() {
