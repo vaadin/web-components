@@ -235,6 +235,16 @@
         expect(menu.items[0].textContent.trim()).to.equal('foo');
       });
 
+      it('dropdown-menu should update selected item on host property changes', done => {
+        container.message = 'foo';
+        menu.selected = 0;
+        container.message = 'bar';
+        setTimeout(() => {
+          expect(dropdown._inputElement.querySelector('mock-item').textContent.trim()).to.equal('bar');
+          done();
+        });
+      });
+
       it('dropdown-menu should support two-way data binding', () => {
         const input = menu.items[1].querySelector('input');
         input.value = 'bar';
