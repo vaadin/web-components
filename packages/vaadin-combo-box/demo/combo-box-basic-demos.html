@@ -6,100 +6,34 @@
       }
     </style>
 
+    <h3>Combo Box</h3>
+
+    <vaadin-demo-snippet id="combo-box-basic-combo-box">
+      <template preserve-content>
+        <vaadin-combo-box id="demo1" label="Element"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-basic-combo-box', function(document) {
+            document.querySelector('#demo1').items = ['Hydrogen', 'Helium', 'Lithium'];
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
 
     <h3>Configuring the Combo Box</h3>
 
     <vaadin-demo-snippet id="combo-box-basic-demos-configuring-the-combo-box">
       <template preserve-content>
-        <vaadin-combo-box id="demo1-1" label="Element"></vaadin-combo-box>
-        <vaadin-combo-box id="demo1-2" label="Disabled" disabled></vaadin-combo-box>
-        <vaadin-combo-box id="demo1-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
+        <vaadin-combo-box id="demo2-1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box id="demo2-2" label="Disabled" disabled></vaadin-combo-box>
+        <vaadin-combo-box id="demo2-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-configuring-the-combo-box', function(document) {
-            var combobox1 = document.querySelector('#demo1-1');
-            var combobox2 = document.querySelector('#demo1-2');
-            var combobox3 = document.querySelector('#demo1-3');
+            var combobox1 = document.querySelector('#demo2-1');
+            var combobox2 = document.querySelector('#demo2-2');
+            var combobox3 = document.querySelector('#demo2-3');
             combobox1.items = combobox2.items = combobox3.items = elements;
             combobox1.value = combobox2.value = combobox3.value = 'Carbon';
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Selecting a Value</h3>
-    <vaadin-demo-snippet id="combo-box-basic-demos-selecting-a-value">
-      <template preserve-content>
-        <vaadin-combo-box id="demo2" label="Element"></vaadin-combo-box>
-        <p>Selected value: <span id="selected-value"></span>.</p>
-
-        <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-selecting-a-value', function(document) {
-            var combobox = document.querySelector('#demo2');
-            combobox.items = elements;
-
-            combobox.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value').innerHTML = combobox.value;
-            });
-            combobox.value = 'Carbon';
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Using as a Form Field</h3>
-    <vaadin-demo-snippet id="combo-box-basic-demos-using-as-a-form-field">
-      <template preserve-content>
-        <iron-form>
-          <form method="post">
-            <vaadin-combo-box name="name" required error-message="This field is required"></vaadin-combo-box>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
-        <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-using-as-a-form-field', function(document) {
-            var form = document.querySelector('iron-form');
-            var combobox = form.querySelector('vaadin-combo-box');
-            combobox.items = elements;
-
-            form.addEventListener('iron-form-submit', function() {
-              alert('Form submitted with name: ' + form.serializeForm().name);
-              return false;
-            });
-
-            var button = document.querySelector('vaadin-button');
-            button.addEventListener('click', function() {
-              form.submit();
-            });
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Change Event</h3>
-    <vaadin-demo-snippet id="combo-box-basic-demos-change-event">
-      <template preserve-content>
-        <vaadin-combo-box id="changeEventDemo"></vaadin-combo-box>
-        <vaadin-button id="setRandomValue">Set random value</vaadin-button>
-        <script>
-          window.addDemoReadyListener('#combo-box-basic-demos-change-event', function(document) {
-            var combobox = document.querySelector('#changeEventDemo');
-            combobox.items = elements;
-
-            combobox.addEventListener('change', function(e) {
-              if (combobox.value) {
-                alert('User selected value ' + combobox.value);
-              } else {
-                alert('User has cleared the value');
-              }
-            });
-
-            document.querySelector('#setRandomValue').addEventListener('click', function() {
-              combobox.value = combobox.items[Math.floor(Math.random() * combobox.items.length)];
-            });
           });
         </script>
       </template>
@@ -110,12 +44,12 @@
     <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
     <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values">
       <template preserve-content>
-        <vaadin-combo-box id="demo1" label="Element" allow-custom-value></vaadin-combo-box>
+        <vaadin-combo-box id="demo2" label="Element" allow-custom-value></vaadin-combo-box>
         <p>Selected value: <span id="selected-value2"></span></p>
 
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-allow-custom-values', function(document) {
-            var combobox = document.querySelector('#demo1');
+            var combobox = document.querySelector('#demo2');
             combobox.items = elements;
 
             combobox.addEventListener('value-changed', function() {

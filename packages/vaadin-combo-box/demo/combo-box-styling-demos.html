@@ -1,0 +1,117 @@
+<dom-module id="combo-box-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Customizing Item Template</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template">
+      <template preserve-content>
+        <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
+          <template>
+            <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
+            array index: [[index]]
+          </template>
+        </vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-custom-item-template', function(document) {
+            var elementsTemplateBox = document.querySelector('#elements-template-box');
+            // elementsJson is an Array of Objects. Item object format:
+            //   {name: 'Hydrogen', symbol: 'H', number: 1}
+            elementsTemplateBox.items = elementsJson;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Configuring Icons</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-configuring-icons">
+      <template preserve-content>
+        <style>
+          paper-icon-button {
+            opacity: 0.4;
+            width: 24px;
+            height: 24px;
+            padding: 2px;
+          }
+        </style>
+        <vaadin-combo-box-light id="demo2">
+          <vaadin-text-field label="Custom Icons">
+            <paper-icon-button slot="suffix" icon="remove-circle" class="clear-button"></paper-icon-button>
+            <paper-icon-button slot="suffix" icon="search" class="toggle-button"></paper-icon-button>
+          </vaadin-text-field>
+        </vaadin-combo-box-light>
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-configuring-icons', function(document) {
+            var combobox = document.querySelector('#demo2');
+            // Array of String values.
+            combobox.items = elements;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Replacing the Input</h3>
+    <p>
+      If you are using other custom input fields like &lt;iron-input>, you
+      need to define the name of the bindable property with the `attrForValue` attribute.
+    </p>
+    <vaadin-demo-snippet id="combo-box-styling-demos-replacing-the-input-with-an-iron-input">
+      <template preserve-content>
+        <vaadin-combo-box-light id="demo3" attr-for-value="bind-value">
+          <iron-input>
+            <input>
+          </iron-input>
+        </vaadin-combo-box-light>
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-replacing-the-input-with-an-iron-input', function(document) {
+            var combobox = document.querySelector('#demo3');
+            // Array of String values.
+            combobox.items = elements;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Using Focused and Selected Flags</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-focused-and-selected-flags">
+      <template preserve-content>
+        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+          <template>
+            <style>
+              span[focused] {
+                color: var(--lumo-primary-color);
+              }
+
+              span[selected] {
+                font-weight: bold;
+              }
+            </style>
+            <span selected$="[[selected]]" focused$="[[focused]]">[[item]]</span>
+          </template>
+        </vaadin-combo-box>
+
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-focused-and-selected-flags', function(document) {
+            var elementsSelectedBox = document.querySelector('#elements-selected-box');
+            elementsSelectedBox.items = elements;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {
+      static get is() {
+        return 'combo-box-styling-demos';
+      }
+    }
+    customElements.define(ComboBoxStylingDemos.is, ComboBoxStylingDemos);
+  </script>
+</dom-module>
