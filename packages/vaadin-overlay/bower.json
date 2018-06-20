@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-overlay",
-  "main": "vaadin-overlay.html",
+  "main": [
+    "vaadin-overlay.html",
+    "src/vaadin-overlay.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-overlay",
@@ -24,13 +27,13 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.1.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
     "iron-overlay-behavior": "PolymerElements/iron-overlay-behavior#^2.2.1"
   },
   "devDependencies": {
-    "elements-demo-resources": "^2.0.0",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
@@ -40,16 +43,6 @@
     "iron-input": "^2.0.0",
     "paper-button": "^2.0.0",
     "paper-input": "^2.0.0",
-    "vaadin-combo-box": "master",
-    "vaadin-context-menu": "master",
-    "vaadin-date-picker": "master",
-    "vaadin-dialog": "master",
-    "vaadin-dropdown-menu": "master",
-    "vaadin-item": "master",
-    "vaadin-list-box": "master",
     "web-component-tester": "^6.0.0"
-  },
-  "resolutions": {
-    "vaadin-item": "master"
   }
 }

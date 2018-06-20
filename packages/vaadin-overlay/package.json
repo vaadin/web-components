@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-overlay",
+  "name": "@vaadin/vaadin-overlay",
   "version": "3.1.0-alpha1",
   "description": "vaadin-overlay",
   "main": "vaadin-overlay.html",
@@ -31,7 +31,6 @@
     "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "wct-istanbul": "^0.14.3",

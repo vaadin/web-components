@@ -6,29 +6,13 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-overlay tests</title>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../vaadin-combo-box/test/test-suites.js"></script>
-  <script src="../../vaadin-context-menu/test/test-suites.js"></script>
-  <script src="../../vaadin-date-picker/test/test-suites.js"></script>
-  <script src="../../vaadin-dialog/test/test-suites.js"></script>
-  <script src="../../vaadin-dropdown-menu/test/test-suites.js"></script>
   <script src="test-suites.js"></script>
 </head>
 
 <body>
   <script>
-    WCT._config.environmentScripts.push('iron-test-helpers/mock-interactions.js');
-    WCT._config.environmentScripts.push('vaadin-combo-box/test/mock-touch-interactions.js');
-    WCT._config.environmentScripts.push('webcomponentsjs/webcomponents-lite.js');
-
     WCT.loadSuites(
       window.VaadinOverlaySuites
-        .concat(
-          window.VaadinComboBoxSuites.map(suite => `../../vaadin-combo-box/test/${suite}`),
-          window.VaadinContextMenuSuites.map(suite => `../../vaadin-context-menu/test/${suite}`),
-          window.VaadinDatePickerSuites.map(suite => `../../vaadin-date-picker/test/${suite}`),
-          window.VaadinDialogSuites.map(suite => `../../vaadin-dialog/test/${suite}`),
-          window.VaadinDropdownMenuSuites.map(suite => `../../vaadin-dropdown-menu/test/${suite}`)
-        )
     );
   </script>
 </body>

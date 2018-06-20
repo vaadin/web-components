@@ -1,20 +1,16 @@
 <!-- Common imports for all examples -->
 <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-<link rel="import" href="../../iron-flex-layout/iron-flex-layout-classes.html">
-<style is="custom-style" include="iron-flex iron-flex-alignment">
-    /* The <style> tag needs to be non-empty for IE11 */
-</style>
 <link rel="import" href="../../paper-styles/default-theme.html">
 
-<link rel="import" href="../../elements-demo-resources/common.html">
-
-<!-- Menu Items -->
-<script>
-  window.demos = [
-    {name: 'index', title: 'Basic Examples'}
-  ];
-</script>
-<link rel="import" href="../../elements-demo-resources/demo-navigation.html">
+<link rel="import" href="../../vaadin-demo-helpers/vaadin-component-demo.html">
+<custom-style>
+  <style include="vaadin-component-demo-shared-styles">
+    .vertical-section-container {
+      max-width: 60em;
+      margin: 0 auto;
+    }
+  </style>
+</custom-style>
 
 <!-- The component to demo -->
 <link rel="import" href="../vaadin-overlay.html">

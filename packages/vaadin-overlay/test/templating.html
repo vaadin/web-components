@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>vaadin-overlay templating tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-overlay.html">
   <link rel="import" href="../../polymer/polymer-element.html">
 </head>
@@ -135,43 +137,45 @@
           });
         });
 
-        describe('external template connected in component scope', () => {
-          const instanceProps = {foo: true};
+        if (window.Polymer && window.Polymer.version) {
+          describe('external template connected in component scope', () => {
+            const instanceProps = {foo: true};
 
-          beforeEach(() => {
-            overlay.getRootNode().appendChild(externalTemplate);
-            sinon.spy(Polymer.Templatize, 'templatize');
-            overlay.instanceProps = instanceProps;
-            overlay.template = externalTemplate;
-            overlay.opened = true;
-          });
+            beforeEach(() => {
+              overlay.getRootNode().appendChild(externalTemplate);
+              sinon.spy(Polymer.Templatize, 'templatize');
+              overlay.instanceProps = instanceProps;
+              overlay.template = externalTemplate;
+              overlay.opened = true;
+            });
 
-          afterEach(() => {
-            overlay.opened = false;
-            overlay.getRootNode().removeChild(externalTemplate);
-            Polymer.Templatize.templatize.restore();
-          });
+            afterEach(() => {
+              overlay.opened = false;
+              overlay.getRootNode().removeChild(externalTemplate);
+              Polymer.Templatize.templatize.restore();
+            });
 
-          it('should use content part shadowRoot for contents', () => {
-            expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
-          });
+            it('should use content part shadowRoot for contents', () => {
+              expect(overlay.content).to.equal(overlay.$.content.shadowRoot);
+            });
 
-          it('should stamp contents', () => {
-            expect(overlay.content).to.be.ok;
-            expect(overlay.content.textContent).to.contain('external template content');
-          });
+            it('should stamp contents', () => {
+              expect(overlay.content).to.be.ok;
+              expect(overlay.content.textContent).to.contain('external template content');
+            });
 
-          it('should not use default child template', () => {
-            expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
-          });
+            it('should not use default child template', () => {
+              expect(overlay.content.textContent).to.not.contain('my-overlay-view content');
+            });
 
-          it('should use instanceProps when templatize', () => {
-            const call = Polymer.Templatize.templatize.lastCall;
-            expect(call.args[0]).to.equal(externalTemplate);
-            expect(call.args[1]).to.equal(overlay);
-            expect(call.args[2].instanceProps).to.equal(instanceProps);
+            it('should use instanceProps when templatize', () => {
+              const call = Polymer.Templatize.templatize.lastCall;
+              expect(call.args[0]).to.equal(externalTemplate);
+              expect(call.args[1]).to.equal(overlay);
+              expect(call.args[2].instanceProps).to.equal(instanceProps);
+            });
           });
-        });
+        }
 
         describe('external template connected in document scope', () => {
           beforeEach(() => {
@@ -280,46 +284,48 @@
           });
         });
 
-        describe('external template connected in document scope', () => {
-          const instanceProps = {foo: true};
+        if (window.Polymer && window.Polymer.version) {
+          describe('external template connected in document scope', () => {
+            const instanceProps = {foo: true};
 
-          beforeEach(() => {
-            document.body.appendChild(externalTemplate);
-            sinon.spy(Polymer.Templatize, 'templatize');
-            overlay.instanceProps = instanceProps;
-            overlay.template = externalTemplate;
-            overlay.opened = true;
-          });
+            beforeEach(() => {
+              document.body.appendChild(externalTemplate);
+              sinon.spy(Polymer.Templatize, 'templatize');
+              overlay.instanceProps = instanceProps;
+              overlay.template = externalTemplate;
+              overlay.opened = true;
+            });
 
-          afterEach(() => {
-            overlay.opened = false;
-            document.body.removeChild(externalTemplate);
-            Polymer.Templatize.templatize.restore();
-          });
+            afterEach(() => {
+              overlay.opened = false;
+              document.body.removeChild(externalTemplate);
+              Polymer.Templatize.templatize.restore();
+            });
 
-          it('should use overlay host for contents, slot in content part', () => {
-            expect(overlay.content).to.equal(overlay);
-            const contentSlot = overlay.$.content.querySelector('slot');
-            expect(contentSlot).to.be.ok;
-            expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
-          });
+            it('should use overlay host for contents, slot in content part', () => {
+              expect(overlay.content).to.equal(overlay);
+              const contentSlot = overlay.$.content.querySelector('slot');
+              expect(contentSlot).to.be.ok;
+              expect(overlay.lastChild.assignedSlot).to.equal(contentSlot);
+            });
 
-          it('should stamp contents', () => {
-            expect(overlay.content).to.be.ok;
-            expect(overlay.content.textContent).to.contain('external template content');
-          });
+            it('should stamp contents', () => {
+              expect(overlay.content).to.be.ok;
+              expect(overlay.content.textContent).to.contain('external template content');
+            });
 
-          it('should not use default child template', () => {
-            expect(overlay.content.textContent).to.not.contain('plain overlay content');
-          });
+            it('should not use default child template', () => {
+              expect(overlay.content.textContent).to.not.contain('plain overlay content');
+            });
 
-          it('should use instanceProps when templatize', () => {
-            const call = Polymer.Templatize.templatize.lastCall;
-            expect(call.args[0]).to.equal(externalTemplate);
-            expect(call.args[1]).to.equal(overlay);
-            expect(call.args[2].instanceProps).to.equal(instanceProps);
+            it('should use instanceProps when templatize', () => {
+              const call = Polymer.Templatize.templatize.lastCall;
+              expect(call.args[0]).to.equal(externalTemplate);
+              expect(call.args[1]).to.equal(overlay);
+              expect(call.args[2].instanceProps).to.equal(instanceProps);
+            });
           });
-        });
+        }
       });
     });
   </script>
