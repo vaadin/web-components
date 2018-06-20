@@ -1,0 +1,15 @@
+bower_components
+demo
+.eslintrc.json
+.stylelintrc
+.travis.yml
+.gemini.yml
+.gemini-chrome.yml
+test/visual
+wct.conf.js
+analysis.json
+bower.json
+gulpfile.js
+index.html
+screenshot.gif
+vaadin-directory-description.md

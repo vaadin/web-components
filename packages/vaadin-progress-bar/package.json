@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-progress-bar",
+  "name": "@vaadin/vaadin-progress-bar",
   "version": "1.1.0-alpha1",
   "description": "vaadin-progress-bar",
   "main": "vaadin-progress-bar.html",
@@ -23,7 +23,7 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "bower": "latest",
+    "bower": "^1.8.4",
     "coveralls": "^3.0.1",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
@@ -38,7 +38,6 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "wct-istanbul": "^0.14.3",

@@ -13,7 +13,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-progress-bar/html-api)
 
-[&lt;vaadin-progress-bar&gt;](https://vaadin.com/components/vaadin-progress-bar) is a [Polymer 2](http://polymer-project.org) progress bar, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-progress-bar&gt;](https://vaadin.com/components/vaadin-progress-bar) is a progress bar Web Component, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -34,6 +34,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-progress-bar/master/screenshot.gif" width="418" alt="Screenshot of vaadin-progress-bar">](https://vaadin.com/components/vaadin-progress-bar)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-progress-bar`:
+
+```sh
+bower i vaadin/vaadin-progress-bar --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-progress-bar/vaadin-progress-bar.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-progress-bar`:
+
+```sh
+npm i @vaadin/vaadin-progress-bar --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-progress-bar/vaadin-progress-bar.js';
+```
 
 ## Getting Started
 
