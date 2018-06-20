@@ -13,7 +13,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-combo-box/html-api)
 
-[&lt;vaadin-combo-box&gt;](https://vaadin.com/components/vaadin-combo-box) is a [Polymer](http://polymer-project.org) element combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-combo-box&gt;](https://vaadin.com/components/vaadin-combo-box) is a Web Component combining a dropdown list with an input field for filtering the list of items, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -44,6 +44,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-combo-box/master/screenshot.png" width="208" alt="Screenshot of vaadin-combo-box" />](https://vaadin.com/components/vaadin-combo-box)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-combo-box`:
+
+```sh
+bower i vaadin/vaadin-combo-box --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-combo-box/vaadin-combo-box.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-combo-box`:
+
+```sh
+npm i @vaadin/vaadin-combo-box --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
+```
 
 ## Getting Started
 
