@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-element-mixin",
+  "name": "@vaadin/vaadin-element-mixin",
   "version": "1.0.2",
   "description": "vaadin-element-mixin",
   "main": "vaadin-element-mixin.html",
@@ -16,9 +16,6 @@
     "url": "https://github.com/vaadin/vaadin-element-mixin/issues"
   },
   "homepage": "https://vaadin.com/elements",
-  "scripts": {
-    "test": "wct"
-  },
   "devDependencies": {
     "bower": "latest",
     "eslint": "^4.0.0",

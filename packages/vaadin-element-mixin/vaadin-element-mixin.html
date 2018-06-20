@@ -1,12 +1,6 @@
-<!-- boot.html defines Polymer.version -->
-<link rel="import" href="../polymer/lib/utils/boot.html">
 <link rel="import" href="../vaadin-development-mode-detector/vaadin-development-mode-detector.html">
 
 <script>
-if (Polymer && Polymer.version.indexOf('2.') !== 0) {
-  throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
-}
-
 /**
  * @namespace Vaadin
  */
@@ -14,8 +8,9 @@ window.Vaadin = window.Vaadin || {};
 
 
 /**
-* @polymerMixin
-*/
+ * @polymerMixin
+ * @memberof Vaadin
+ */
 Vaadin.ElementMixin = superClass => {
   try {
     return class VaadinElementMixin extends superClass {

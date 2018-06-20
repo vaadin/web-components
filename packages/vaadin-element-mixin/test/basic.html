@@ -5,6 +5,8 @@
   <title>vaadin-element-mixin tests</title>
 
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-element-mixin.html">
   <link rel="import" href="../../polymer/polymer-element.html">
 </head>
@@ -43,11 +45,39 @@
   <script>
     describe('basic functionality', function() {
 
+      let called = 0;
+
       beforeEach(function(done) {
+
+        // `maybeGatherAndSend` is called each time a class extending `element-mixin` is
+        // created. Overriding it so as we track number of times it's called
+        if (window.Vaadin.UsageStatistics) {
+          window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => called ++;
+        } else {
+          // First time `vaadin-usage-statistics` is loaded asynchronously, we need
+          // a property observer to modify the class.
+          Object.defineProperty(window.Vaadin, 'UsageStatistics', {
+            get() {
+              return this._val;
+            },
+            set(val) {
+              this._val = val;
+              window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => {
+                called ++;
+                // first time
+                done();
+              };
+            }
+          });
+        }
+
+        // This will trigger asynchronously import of `vaadin-usage-statistics`
         fixture('default');
-        window.HTMLImports.whenReady(() => {
-          done();
-        });
+
+        if (window.Vaadin.UsageStatistics) {
+          // second and sucessive times
+          setTimeout(done, 100);
+        }
       });
 
       it('should define window.Vaadin', function() {
@@ -59,13 +89,8 @@
       });
 
       it('should load usage statistics only on localhost', function() {
-        const localhost = window.location.href.indexOf('localhost') != -1;
-        if (localhost) {
-          expect(window.Vaadin.developmentModeCallback).to.exist;
-          expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
-        } else {
-          expect(window.Vaadin.developmentModeCallback).not.to.exist;
-        }
+        expect(window.Vaadin.developmentModeCallback).to.exist;
+        expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
       });
 
       it('should be possible to exclude development mode detector', function() {
@@ -83,12 +108,8 @@
       });
 
       it('should load usage statistics once per class', function() {
-        var called = 0;
-        window.Vaadin.developmentModeCallback['vaadin-usage-statistics'] = function() {
-          called++;
-        };
+        called = 0;
 
-        expect(called).to.equal(0);
         class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
             return 'test-bar';
