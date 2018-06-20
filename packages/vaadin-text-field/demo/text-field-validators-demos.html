@@ -109,7 +109,7 @@
                 this.ajax.addEventListener('response', function() {
                   var elementName = this.value || '';
                   this.invalid = this.ajax.lastResponse.elements.indexOf(elementName.toLowerCase()) < 0;
-                  this.errorMessage = this.invalid ? `${elementName} is not a Chemical Element` : '';
+                  this.errorMessage = this.invalid ? elementName + 'is not a Chemical Element' : '';
                 }.bind(this));
               }
 
