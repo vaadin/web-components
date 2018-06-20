@@ -14,7 +14,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-ordered-layout/html-api)
 
 
-[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of two [Polymer 2](http://polymer-project.org) elements providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-ordered-layout&gt;](https://vaadin.com/components/vaadin-ordered-layout) consist of two Web Components providing a simple way to horizontally or vertically align your HTML elements, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -40,6 +40,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-ordered-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-ordered-layout">](https://vaadin.com/components/vaadin-ordered-layout)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-ordered-layout`:
+
+```sh
+bower i vaadin/vaadin-ordered-layout --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-ordered-layout/vaadin-vertical-layout.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-ordered-layout`:
+
+```sh
+npm i @vaadin/vaadin-ordered-layout --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-ordered-layout/vaadin-vertical-layout.js';
+```
 
 ## Getting Started
 
