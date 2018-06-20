@@ -4,9 +4,11 @@
   <meta charset="UTF-8">
   <title>vaadin-list-mixin tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-list-mixin.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 </head>
 
 <body>
@@ -52,6 +54,7 @@
       <style>
         :host {
           display: block;
+          flex-shrink: 0; /* fix Safari 9 flex bug: https://github.com/philipwalton/flexbugs#flexbug-1 */
         }
       </style>
       <slot></slot>
@@ -78,12 +81,6 @@
           }
         }
         customElements.define('test-item-element', TestElement);
-
-        /**
-         * @namespace Vaadin
-         */
-        window.Vaadin = window.Vaadin || {};
-        Vaadin.TabElement = TestElement;
       });
     </script>
   </dom-module>

@@ -24,20 +24,11 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "^1.1.3"
+    "polymer": "^2.0.0"
   },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
     "web-component-tester": "^6.1.5",
-    "webcomponentsjs": "^1.0.0",
-    "vaadin-context-menu": "^4.0.0",
-    "vaadin-dropdown-menu": "^1.0.0",
-    "vaadin-list-box": "master",
-    "vaadin-tabs": "master",
-    "vaadin-item": "master"
-  },
-  "resolutions": {
-    "vaadin-item": "master"
+    "webcomponentsjs": "^1.0.0"
   }
 }
