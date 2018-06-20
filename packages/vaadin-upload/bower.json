@@ -27,12 +27,12 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#p3-preview",
-    "vaadin-button": "vaadin/vaadin-button#p3-preview",
-    "vaadin-progress-bar": "vaadin/vaadin-progress-bar#p3-preview",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.0.0",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview"
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
+    "vaadin-progress-bar": "vaadin/vaadin-progress-bar#^1.1.0",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -41,7 +41,7 @@
     "mock-http-request": "abuinitski/MockHttpRequest#npm_fix",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
     "iron-icons": "^2.0.1"
   }
 }
