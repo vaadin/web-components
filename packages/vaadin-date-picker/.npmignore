@@ -1,0 +1,13 @@
+bower_components
+demo
+.eslintrc.json
+.stylelintrc
+.travis.yml
+ISSUE_TEMPLATE.md
+wct.conf.js
+analysis.json
+bower.json
+gulpfile.js
+index.html
+screenshot.png
+vaadin-directory-description.md

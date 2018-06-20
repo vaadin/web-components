@@ -11,10 +11,6 @@
 
 <body>
   <script>
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent) && window.Polymer && Polymer.Element) {
-      WCT._config.environmentScripts.push('webcomponentsjs/custom-elements-es5-adapter.js');
-    }
-
     WCT.loadSuites(window.VaadinDatePickerSuites);
   </script>
 </body>

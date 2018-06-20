@@ -7,6 +7,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <script src="common.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="../src/vaadin-date-picker-overlay-content.html">
   <link rel="import" href="../../polymer/lib/utils/render-status.html">
@@ -21,6 +22,18 @@
   </test-fixture>
 
   <script>
+    function waitUntilScrolledTo(overlay, date, callback) {
+      if (overlay.$.monthScroller.position) {
+        overlay._onMonthScroll();
+      }
+      var monthIndex = overlay._differenceInMonths(date, new Date());
+      if (overlay.$.monthScroller.position === monthIndex) {
+        Polymer.RenderStatus.afterNextRender(overlay, callback);
+      } else {
+        setTimeout(waitUntilScrolledTo, 10, overlay, date, callback);
+      }
+    }
+
     describe('vaadin-date-picker-overlay', () => {
       var overlay;
 

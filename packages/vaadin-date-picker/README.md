@@ -13,7 +13,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-date-picker/html-api)
 
-[&lt;vaadin-date-picker&gt;](https://vaadin.com/components/vaadin-date-picker) is a [Polymer](http://polymer-project.org) element providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-date-picker&gt;](https://vaadin.com/components/vaadin-date-picker) is a Web Component providing a date selection field which includes a scrollable month calendar view, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -32,6 +32,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-date-picker/master/screenshot.png" width="439" alt="Screenshot of vaadin-date-picker">](https://vaadin.com/components/vaadin-date-picker)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-date-picker`:
+
+```sh
+bower i vaadin/vaadin-date-picker --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-date-picker/vaadin-date-picker.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-date-picker`:
+
+```sh
+npm i @vaadin/vaadin-date-picker --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-date-picker/vaadin-date-picker.js';
+```
 
 ## Getting Started
 

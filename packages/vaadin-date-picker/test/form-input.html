@@ -6,6 +6,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="common.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../vaadin-date-picker.html">
@@ -14,8 +15,8 @@
 
 <body>
   <script>
-    listenForEvent(document, 'WebComponentsReady', () => {
-      class DatePicker2016Element extends Vaadin.DatePickerElement {
+    customElements.whenDefined('vaadin-date-picker').then(() => {
+      class DatePicker2016Element extends customElements.get('vaadin-date-picker') {
         checkValidity(value) {
           return new Date(value).getFullYear() === 2016;
         }
