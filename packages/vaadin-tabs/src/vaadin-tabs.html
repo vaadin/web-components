@@ -36,10 +36,6 @@ This program is available under Apache License Version 2.0, available at https:/
         -ms-overflow-style: none;
       }
 
-      :host([orientation="horizontal"][centered]) [part="tabs"] {
-        justify-content: center;
-      }
-
       /* This seems more future-proof than `overflow: -moz-scrollbars-none` which is marked obsolete
          and is no longer guaranteed to work:
          https://developer.mozilla.org/en-US/docs/Web/CSS/overflow#Mozilla_Extensions */
@@ -125,7 +121,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * Attribute  | Description | Part name
        * -----------|-------------|------------
        * `orientation` | Tabs disposition, valid values are `horizontal` and `vertical`. | :host
-       * `centered` | Center tabs horizontally. Ignored for vertical tabs, incompatible with scrolling. | :host
        * `overflow` | It's set to `start`, `end`, none or both. | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
@@ -158,14 +153,6 @@ This program is available under Apache License Version 2.0, available at https:/
             orientation: {
               value: 'horizontal',
               type: String
-            },
-
-            /**
-             * Center tabs horizontally. Ignored for vertical tabs, incompatible with scrolling.
-             */
-            centered: {
-              value: false,
-              type: Boolean
             },
 
             /**
