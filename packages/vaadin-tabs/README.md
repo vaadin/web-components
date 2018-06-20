@@ -14,7 +14,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-tabs/html-api)
 
 
-[&lt;vaadin-tabs&gt;](https://vaadin.com/components/vaadin-tabs) is a [Polymer 2](http://polymer-project.org) element providing item navigation part of the [Vaadin components](https://vaadin.com/components). It is designed for menu and tab components.
+[&lt;vaadin-tabs&gt;](https://vaadin.com/components/vaadin-tabs) is a Web Component providing item navigation part of the [Vaadin components](https://vaadin.com/components). It is designed for menu and tab components.
 
 <!--
 ```
@@ -37,6 +37,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-tabs/master/screenshot.png" width="355" alt="Screenshot of vaadin-tabs, using the default Lumo theme">](https://vaadin.com/components/vaadin-tabs)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-tabs`:
+
+```sh
+bower i vaadin/vaadin-tabs --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-tabs/vaadin-tabs.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-tabs`:
+
+```sh
+npm i @vaadin/vaadin-tabs --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-tabs/vaadin-tabs.js';
+```
 
 ## Getting Started
 
