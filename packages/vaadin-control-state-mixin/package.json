@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-control-state-mixin",
+  "name": "@vaadin/vaadin-control-state-mixin",
   "version": "2.0.3",
   "description": "vaadin-control-state-mixin",
   "main": "vaadin-control-state-mixin.html",
@@ -32,8 +32,6 @@
     "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
-    "wct-random-output": "^0.1.1",
-    "web-component-tester": "^6.0.0",
-    "yargs": "latest"
+    "web-component-tester": "^6.0.0"
   }
 }
