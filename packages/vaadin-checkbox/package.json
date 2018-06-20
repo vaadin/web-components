@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-checkbox",
+  "name": "@vaadin/vaadin-checkbox",
   "version": "2.2.0-alpha1",
   "description": "vaadin-checkbox",
   "main": "vaadin-checkbox.html",
@@ -22,7 +22,6 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "bower": "latest",
     "coveralls": "^3.0.1",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
@@ -37,7 +36,6 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "wct-istanbul": "^0.14.3",

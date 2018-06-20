@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <title>vaadin-checkbox tests</title>
   <script src="../../web-component-tester/browser.js"></script>
-  <script src="../../iron-test-helpers/mock-interactions.js"></script>
-  <link rel="import" href="../../polymer/polymer.html">
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
   <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../vaadin-checkbox.html">
 </head>
@@ -72,7 +74,7 @@
       });
 
       it('should define checkbox label using light DOM', () => {
-        const children = Polymer.dom(label).getEffectiveChildNodes();
+        const children = Polymer.FlattenedNodesObserver.getFlattenedNodes(label);
         expect(children[1].textContent).to.be.equal('Vaadin ');
         expect(children[2].outerHTML).to.be.equal('<i>Checkbox</i>');
       });
