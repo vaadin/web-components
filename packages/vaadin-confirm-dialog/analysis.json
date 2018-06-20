@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-confirm-dialog.html",
         "start": {
-          "line": 216,
+          "line": 229,
           "column": 6
         },
         "end": {
-          "line": 216,
+          "line": 229,
           "column": 62
         }
       },
@@ -29,17 +29,18 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 85,
+                  "line": 91,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 96,
                   "column": 13
                 }
               },
               "metadata": {
                 "polymer": {
                   "notify": true,
+                  "observer": "\"_openedChanged\"",
                   "attributeType": "Boolean"
                 }
               },
@@ -52,11 +53,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 95,
+                  "line": 102,
                   "column": 13
                 }
               },
@@ -73,11 +74,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 99,
+                  "line": 106,
                   "column": 12
                 },
                 "end": {
-                  "line": 101,
+                  "line": 108,
                   "column": 13
                 }
               },
@@ -94,11 +95,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 105,
+                  "line": 112,
                   "column": 12
                 },
                 "end": {
-                  "line": 108,
+                  "line": 115,
                   "column": 13
                 }
               },
@@ -116,11 +117,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 112,
+                  "line": 119,
                   "column": 12
                 },
                 "end": {
-                  "line": 115,
+                  "line": 122,
                   "column": 13
                 }
               },
@@ -138,11 +139,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 119,
+                  "line": 126,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 131,
                   "column": 13
                 }
               },
@@ -161,11 +162,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 136,
                   "column": 12
                 },
                 "end": {
-                  "line": 132,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -183,11 +184,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 147,
                   "column": 13
                 }
               },
@@ -205,11 +206,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 151,
                   "column": 12
                 },
                 "end": {
-                  "line": 149,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -228,11 +229,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 161,
                   "column": 12
                 },
                 "end": {
-                  "line": 157,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -250,11 +251,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 165,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -273,11 +274,31 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 169,
+                  "line": 176,
                   "column": 8
                 },
                 "end": {
-                  "line": 173,
+                  "line": 179,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_openedChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 181,
+                  "column": 8
+                },
+                "end": {
+                  "line": 186,
                   "column": 9
                 }
               },
@@ -293,11 +314,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 175,
+                  "line": 188,
                   "column": 8
                 },
                 "end": {
-                  "line": 181,
+                  "line": 194,
                   "column": 9
                 }
               },
@@ -317,11 +338,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 200,
                   "column": 8
                 },
                 "end": {
-                  "line": 190,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -337,11 +358,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 196,
+                  "line": 209,
                   "column": 8
                 },
                 "end": {
-                  "line": 199,
+                  "line": 212,
                   "column": 9
                 }
               },
@@ -357,11 +378,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 205,
+                  "line": 218,
                   "column": 8
                 },
                 "end": {
-                  "line": 208,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -382,11 +403,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 72,
+              "line": 78,
               "column": 6
             },
             "end": {
-              "line": 209,
+              "line": 222,
               "column": 7
             }
           },
@@ -399,11 +420,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 85,
+                  "line": 91,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 96,
                   "column": 13
                 }
               },
@@ -415,11 +436,11 @@
               "description": "Set the confirmation dialog title.",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 95,
+                  "line": 102,
                   "column": 13
                 }
               },
@@ -431,23 +452,7 @@
               "description": "Set the message or confirmation question.",
               "sourceRange": {
                 "start": {
-                  "line": 99,
-                  "column": 12
-                },
-                "end": {
-                  "line": 101,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "string | null | undefined"
-            },
-            {
-              "name": "confirm-text",
-              "description": "Text displayed on confirm-button.",
-              "sourceRange": {
-                "start": {
-                  "line": 105,
+                  "line": 106,
                   "column": 12
                 },
                 "end": {
@@ -459,8 +464,8 @@
               "type": "string | null | undefined"
             },
             {
-              "name": "confirm-theme",
-              "description": "Theme for a confirm-button.",
+              "name": "confirm-text",
+              "description": "Text displayed on confirm-button.",
               "sourceRange": {
                 "start": {
                   "line": 112,
@@ -475,15 +480,31 @@
               "type": "string | null | undefined"
             },
             {
-              "name": "reject",
-              "description": "Whether to show cancel button or not.",
+              "name": "confirm-theme",
+              "description": "Theme for a confirm-button.",
               "sourceRange": {
                 "start": {
                   "line": 119,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 122,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "reject",
+              "description": "Whether to show cancel button or not.",
+              "sourceRange": {
+                "start": {
+                  "line": 126,
+                  "column": 12
+                },
+                "end": {
+                  "line": 131,
                   "column": 13
                 }
               },
@@ -495,11 +516,11 @@
               "description": "Text displayed on reject-button.\nShould also set `reject` property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 136,
                   "column": 12
                 },
                 "end": {
-                  "line": 132,
+                  "line": 139,
                   "column": 13
                 }
               },
@@ -511,11 +532,11 @@
               "description": "Theme for a reject-button.\nShould also set `reject` property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 144,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 147,
                   "column": 13
                 }
               },
@@ -527,11 +548,11 @@
               "description": "Whether to show cancel button or not.",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 151,
                   "column": 12
                 },
                 "end": {
-                  "line": 149,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -543,11 +564,11 @@
               "description": "Text displayed on cancel-button.\nShould also set `cancel` property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 161,
                   "column": 12
                 },
                 "end": {
-                  "line": 157,
+                  "line": 164,
                   "column": 13
                 }
               },
@@ -559,11 +580,11 @@
               "description": "Theme for a cancel-button.\nShould also set `cancel` property to true.",
               "sourceRange": {
                 "start": {
-                  "line": 162,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 165,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -619,11 +640,11 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 53,
+                  "line": 59,
                   "column": 6
                 },
                 "end": {
-                  "line": 53,
+                  "line": 59,
                   "column": 19
                 }
               }

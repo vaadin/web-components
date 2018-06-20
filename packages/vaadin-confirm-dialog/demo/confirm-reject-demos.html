@@ -10,7 +10,7 @@
     <vaadin-demo-snippet id="confirm-reject-dialog-example">
       <template preserve-content>
         <vaadin-button>Close</vaadin-button>
-        <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" cancel reject-text="Discard">
+        <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" cancel reject reject-text="Discard">
           <p>Do you want to save or discard the changes and close the editor?</p>
           <p>Press <b>Cancel</b> to continue editing</p>
         </vaadin-confirm-dialog>
@@ -31,7 +31,7 @@
         <vaadin-confirm-dialog cancel>
           <h2 slot="header">Unsaved changes</h2>
           Save before exit?
-          <vaadin-button slot="reject-button" theme="error primary" on-click="_back" tabindex="2">
+          <vaadin-button slot="reject-button" theme="error tertiary" on-click="_back" tabindex="2">
             <iron-icon icon="vaadin:eraser" slot="prefix"></iron-icon>
             Don't save
           </vaadin-button>

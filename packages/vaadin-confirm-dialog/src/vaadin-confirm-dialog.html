@@ -17,7 +17,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
   <template>
     <style>
       :host {
-        display: hidden;
+        display: none;
       }
     </style>
     <vaadin-dialog id="dialog" opened="{{opened}}" no-close-on-outside-click no-close-on-esc>
@@ -34,21 +34,27 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         </div>
 
         <div part="footer">
-          <slot name="cancel-button">
-            <vaadin-button id="cancel" theme$="[[cancelTheme]]" on-click="_cancel" hidden$="[[!cancel]]">
-              [[cancelText]]
-            </vaadin-button>
-          </slot>
-          <slot name="reject-button">
-            <vaadin-button id="reject" theme$="[[rejectTheme]]" on-click="_reject" hidden$="[[!reject]]">
-              [[rejectText]]
-            </vaadin-button>
-          </slot>
-          <slot name="confirm-button">
-            <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm">
-              [[confirmText]]
-            </vaadin-button>
-          </slot>
+          <div class="cancel-button">
+            <slot name="cancel-button">
+              <vaadin-button id="cancel" theme$="[[cancelTheme]]" on-click="_cancel" hidden$="[[!cancel]]">
+                [[cancelText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="reject-button">
+            <slot name="reject-button">
+              <vaadin-button id="reject" theme$="[[rejectTheme]]" on-click="_reject" hidden$="[[!reject]]">
+                [[rejectText]]
+              </vaadin-button>
+            </slot>
+          </div>
+          <div class="confirm-button">
+            <slot name="confirm-button">
+              <vaadin-button id="confirm" theme$="[[confirmTheme]]" on-click="_confirm">
+                [[confirmText]]
+              </vaadin-button>
+            </slot>
+          </div>
         </div>
       </template>
       <slot></slot>
@@ -86,7 +92,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             opened: {
               type: Boolean,
               value: false,
-              notify: true
+              notify: true,
+              observer: '_openedChanged'
             },
             /**
              * Set the confirmation dialog title.
@@ -169,7 +176,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         ready() {
           super.ready();
-          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));
+          this.$.dialog.$.overlay.addEventListener('vaadin-overlay-escape-press', this._escPressed.bind(this));      
+        }
+
+        _openedChanged() {
+          if (!this.opened) {
+            return;
+          }
           Array.from(this.childNodes).forEach(c => this.$.dialog.$.overlay.$.content.appendChild(c));
         }
 

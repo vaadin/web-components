@@ -27,31 +27,27 @@
         background-color: var(--lumo-contrast-5pct);
       }
 
-      [part="footer"] vaadin-button,
-      [part="footer"] ::slotted(vaadin-button) {
+      [part="footer"] div {
         margin-top: var(--lumo-space-s);
         margin-bottom: var(--lumo-space-s);
       }
 
-      [part="footer"] vaadin-button[theme~="tertiary"],
-      [part="footer"] ::slotted(vaadin-button[theme~="tertiary"]) {
+      vaadin-button[theme~="tertiary"] {
         padding-left: var(--lumo-space-s);
         padding-right: var(--lumo-space-s);
       }
 
-      [part="footer"] slot:first-child vaadin-button,
-      [part="footer"] slot:first-child::slotted(vaadin-button) {
-        margin-right: auto;
+      .cancel-button {
+        flex-grow: 1;
         margin-left: calc(var(--lumo-space-s) * -1);
       }
 
-      [part="footer"] slot:last-child vaadin-button,
-      [part="footer"] slot:last-child::slotted(vaadin-button) {
+      .confirm-button {
         margin-right: calc(var(--lumo-space-s) * -1);
       }
 
-      [part="footer"] slot + slot vaadin-button,
-      [part="footer"] slot + slot::slotted(vaadin-button) {
+      .reject-button,
+      .confirm-button {
         margin-left: var(--lumo-space-s);
       }
     </style>
