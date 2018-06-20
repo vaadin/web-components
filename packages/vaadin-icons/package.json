@@ -1,5 +1,5 @@
 {
-  "name": "vaadin-icons",
+  "name": "@vaadin/vaadin-icons",
   "version": "4.1.4",
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.html",
@@ -20,7 +20,6 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
-    "gulp-modify": "^0.1.1",
-    "polymer-cli": "^1.6.0"
+    "gulp-modify": "^0.1.1"
   }
 }
