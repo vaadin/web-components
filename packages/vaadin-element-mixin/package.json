@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-element-mixin",
-  "version": "1.0.2-pre.3",
+  "version": "1.0.2",
   "description": "vaadin-element-mixin",
   "main": "vaadin-element-mixin.html",
   "repository": "vaadin/vaadin-element-mixin",
@@ -16,9 +16,6 @@
     "url": "https://github.com/vaadin/vaadin-element-mixin/issues"
   },
   "homepage": "https://vaadin.com/elements",
-  "scripts": {
-    "test": "wct"
-  },
   "devDependencies": {
     "bower": "latest",
     "eslint": "^4.0.0",
@@ -28,8 +25,10 @@
     "gulp-eslint": "^4.0.0",
     "gulp-html-extract": "^0.3.0",
     "gulp-stylelint": "^4.0.0",
+    "polymer-cli": "^1.2.0",
     "stylelint": "^8.0.0",
     "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.0.0"
+    "web-component-tester": "^6.0.0",
+    "yargs": "latest"
   }
 }

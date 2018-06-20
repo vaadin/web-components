@@ -23,12 +23,15 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#p3-preview",
-    "vaadin-development-mode-detector": "vaadin/vaadin-development-mode-detector#p3-preview"
+    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^1.1.0",
+    "vaadin-development-mode-detector": "vaadin/vaadin-development-mode-detector#^1.1.0"
   },
   "devDependencies": {
-    "iron-test-helpers": "#2.0-preview",
+    "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "polymer": "5f5d2c2"
   }
 }
