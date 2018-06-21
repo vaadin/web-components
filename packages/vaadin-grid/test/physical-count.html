@@ -109,21 +109,6 @@
         expect(grid._physicalCount).to.equal(25);
       });
 
-      it('should minimize increase pool iterations', () => {
-        const spy = sinon.spy(grid, '_increasePoolIfNeeded');
-        grid.style.height = '1000px';
-        grid._resizeHandler();
-        flushGrid(grid);
-
-        expect(spy.callCount).to.be.above(2);
-
-        if (navigator.userAgent.match(/iPhone/i) || grid._ie) {
-          expect(spy.callCount).to.be.below(20);
-        } else {
-          expect(spy.callCount).to.be.below(8);
-        }
-      });
-
       it('should minimize physical count', () => {
         expect(grid._physicalCount).to.be.below(26);
         grid.style.height = '1000px';
