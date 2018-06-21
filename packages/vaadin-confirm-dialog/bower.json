@@ -24,12 +24,12 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#p3-preview",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#p3-preview",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.0.0",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.0.1",
     "vaadin-license-checker": "vaadin/license-checker#^2.0.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#p3-preview",
-    "vaadin-dialog": "vaadin/vaadin-dialog#p3-preview",
-    "vaadin-button": "vaadin/vaadin-button#p3-preview"
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.0.0",
+    "vaadin-dialog": "vaadin/vaadin-dialog#^2.0.2",
+    "vaadin-button": "vaadin/vaadin-button#^2.0.1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -37,7 +37,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "test-fixture": "^3.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#p3-preview",
-    "vaadin-icons": "vaadin/vaadin-icons#p3-preview"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^1.0.0",
+    "vaadin-icons": "vaadin/vaadin-icons#^4.1.4"
   }
 }
