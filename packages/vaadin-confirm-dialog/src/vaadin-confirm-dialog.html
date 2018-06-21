@@ -76,7 +76,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinConfirmDialog extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class ConfirmDialogElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-confirm-dialog';
         }
@@ -222,14 +222,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
       }
 
-      customElements.define(VaadinConfirmDialog.is, VaadinConfirmDialog);
+      customElements.define(ConfirmDialogElement.is, ConfirmDialogElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinConfirmDialog = VaadinConfirmDialog;
+      window.Vaadin.ConfirmDialogElement = ConfirmDialogElement;
       if (window.Vaadin.runIfDevelopmentMode) {
-        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', VaadinConfirmDialog);
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', ConfirmDialogElement);
       }
     })();
   </script>
