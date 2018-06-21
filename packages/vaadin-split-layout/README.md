@@ -13,7 +13,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-split-layout/html-api)
 
-[&lt;vaadin-split-layout&gt;](https://vaadin.com/components/vaadin-split-layout) is a [Polymer](http://polymer-project.org) element implementing a split layout for two content elements with a draggable splitter between them, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-split-layout&gt;](https://vaadin.com/components/vaadin-split-layout) is a Web Component implementing a split layout for two content elements with a draggable splitter between them, part of the [Vaadin components](https://vaadin.com/components).
 
 <!---
 ```
@@ -51,6 +51,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-split-layout/master/screenshot.png" width="616" alt="Screenshot of vaadin-split-layout">](https://vaadin.com/components/vaadin-split-layout)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-split-layout`:
+
+```sh
+bower i vaadin/vaadin-split-layout --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-split-layout/vaadin-split-layout.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-split-layout`:
+
+```sh
+npm i @vaadin/vaadin-split-layout --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-split-layout/vaadin-split-layout.js';
+```
 
 ## Getting Started
 

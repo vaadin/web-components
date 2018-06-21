@@ -1,7 +1,7 @@
 sudo: true
 dist: trusty
 language: node_js
-node_js: 8.9
+node_js: 8.11
 
 cache:
   directories:
@@ -11,32 +11,40 @@ addons:
   firefox: latest
   chrome: stable
 
-install:
-  - npm install
-  - bower install
-
-before_script:
-  - gulp lint version:check
-  - polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html
-  - xvfb-run -s '-screen 0 1024x768x24' wct
-
 env:
-  - TEST_SUITE=visual_tests
-  - TEST_SUITE=unit_tests
+  - POLYMER=2 TEST_SUITE=unit_tests
+  - POLYMER=2 TEST_SUITE=visual_tests
+  - POLYMER=3
 
 script:
-  - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      if [[ "$TEST_SUITE" = "visual_tests" ]]; then
-        npm i --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
-        gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+  - if [[ "$POLYMER" = "2" ]]; then
+      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
+      gulp lint version:check &&
+      polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+          npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+          gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+        else
+          wct --env saucelabs;
+        fi;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct;
       fi &&
-      if [[ "$TEST_SUITE" = "unit_tests" ]]; then
-        wct --env saucelabs;
+      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
+        wct --env saucelabs-cron;
       fi;
     fi
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      if [[ "$TEST_SUITE" = "unit_tests" ]]; then
-        wct --env saucelabs-cron;
+  - if [[ "$POLYMER" = "3" ]]; then
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester &&
+      (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
+      rm -rf node_modules &&
+      magi p3-convert --out . --import-style=name &&
+      yarn install --flat &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        wct --module-resolution=node --npm --env saucelabs;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
       fi;
     fi
 
