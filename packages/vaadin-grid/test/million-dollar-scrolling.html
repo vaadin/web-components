@@ -9,6 +9,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
 
@@ -39,7 +40,7 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => {
+      customElements.whenDefined('vaadin-grid').then(() => {
         Polymer({
           is: 'x-grid'
         });
@@ -90,7 +91,7 @@
       let container, grid;
       this.timeout(300000);
 
-      before(done => HTMLImports.whenReady(done));
+      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
 
       [100, 10000, 100000, 1000000].forEach((size) => {
         describe(size + ' items', () => {

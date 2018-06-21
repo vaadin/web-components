@@ -1,41 +1,48 @@
-var argv = require('yargs').argv;
+var envIndex = process.argv.indexOf('--env') + 1;
+var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
   testTimeout: 180 * 1000,
+  verbose: true,
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@11.2',
       'macOS 9.3.2/iphone@9.3'
     ];
 
-    const saucelabsPlatformsPolyfilled = [
-      'Windows 10/microsoftedge@15',
+    const saucelabsPlatformsMicrosoft = [
+      'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.12/safari@11.0'
+      'macOS 10.12/safari@11.0',
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@60'
     ];
 
     const cronPlatforms = [
-      'Windows 10/chrome@55',
-      'Windows 10/firefox@54'
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@60'
     ];
 
-    if (argv.env === 'saucelabs:mobile') {
+    if (env === 'saucelabs:mobile') {
       context.options.plugins.sauce.browsers = saucelabsPlatformsMobile;
 
-    } else if (argv.env === 'saucelabs:polyfilled') {
-      context.options.plugins.sauce.browsers = saucelabsPlatformsPolyfilled;
+    } else if (env === 'saucelabs:microsoft') {
+      context.options.plugins.sauce.browsers = saucelabsPlatformsMicrosoft;
 
-    } else if (argv.env === 'saucelabs:desktop') {
+    } else if (env === 'saucelabs:desktop') {
       context.options.plugins.sauce.browsers = saucelabsPlatformsDesktop;
 
-    } else if (argv.env === 'saucelabs') {
-      context.options.plugins.sauce.browsers = cronPlatforms.concat(saucelabsPlatformsDesktop)
-        .concat(saucelabsPlatformsMobile).concat(saucelabsPlatformsPolyfilled);
+    } else if (env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = [
+        ...saucelabsPlatformsMobile,
+        ...saucelabsPlatformsMicrosoft,
+        ...saucelabsPlatformsDesktop
+      ];
 
-    } else if (argv.env === 'saucelabs-cron') {
+    } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
 
     // Add coverage for local tests only
@@ -71,9 +78,5 @@ module.exports = {
         'exclude': []
       };*/
     }
-  },
-
-  plugins: {
-    'random-output': true
   }
 };

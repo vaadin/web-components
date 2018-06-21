@@ -12,7 +12,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-grid/html-api)
 
-[&lt;vaadin-grid&gt;](https://vaadin.com/components/vaadin-grid) is a free, high quality data grid / data table [Polymer](http://polymer-project.org) element, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-grid&gt;](https://vaadin.com/components/vaadin-grid) is a free, high quality data grid / data table Web Component, part of the [Vaadin components](https://vaadin.com/components).
 
 <!---
 ```
@@ -64,6 +64,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-grid/master/screenshot.png" alt="Screenshot of vaadin-grid, using the default Lumo theme">](https://vaadin.com/components/vaadin-grid)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-grid`:
+
+```sh
+bower i vaadin/vaadin-grid --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-grid/vaadin-grid.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-grid`:
+
+```sh
+npm i @vaadin/vaadin-grid --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-grid/vaadin-grid.js';
+```
 
 ## Getting Started
 

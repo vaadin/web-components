@@ -1,7 +1,7 @@
+const isPolymer2 = document.querySelector('script[src*="wct-browser-legacy"]') === null;
 
 window.VaadinGridSuites = [
   'accessibility.html',
-  'app-localize-behavior.html',
   'array-data-provider.html',
   'basic.html',
   'column-group.html',
@@ -33,3 +33,7 @@ window.VaadinGridSuites = [
   'style-scope.html',
   'templates.html'
 ];
+
+if (isPolymer2) {
+  window.VaadinGridSuites.push('app-localize-behavior.html');
+}

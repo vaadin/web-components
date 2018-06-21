@@ -7,6 +7,9 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../polymer/lib/utils/render-status.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 </head>
@@ -77,7 +80,22 @@
           grid._toggleAttribute('foo', undefined, node);
           expect(node.removeAttribute.called).to.be.false;
         });
+      });
 
+      it('should not warn on init', done => {
+        const warn = sinon.stub(console, 'warn');
+        const func = grid._warnPrivateAPIAccess;
+        sinon.stub(grid, '_warnPrivateAPIAccess', (a) => {
+          func.bind(grid)(a);
+          Polymer.RenderStatus.afterNextRender(grid, () => {
+            if (!done._called) {
+              done._called = true;
+              warn.restore();
+              expect(warn.called).to.be.false;
+              done();
+            }
+          });
+        });
       });
 
       it('check physical item heights', () => {
@@ -297,18 +315,24 @@
           });
 
           it('should not warn for present import', (done) => {
-            Polymer.Base.importHref(`../${elementName}.html`, () => {
-              sinon.stub(console, 'warn');
+            if (window.isV2()) {
+              Polymer.Base.importHref(`../${elementName}.html`, () => {
+                sinon.stub(console, 'warn');
 
-              grid.appendChild(document.createElement(elementName));
-              grid._observer && grid._observer.flush && grid._observer.flush();
-              grid._debouncerCheckImports.flush();
+                grid.appendChild(document.createElement(elementName));
+                grid._observer && grid._observer.flush && grid._observer.flush();
+                grid._debouncerCheckImports.flush();
 
-              expect(console.warn.called).to.be.false;
-              console.warn.restore();
+                expect(console.warn.called).to.be.false;
+                console.warn.restore();
+                done();
+              });
+            } else {
+              // importHref doesn't work with modulizer -> p3 yet, skip the test on P3
               done();
-            });
+            }
           });
+
         });
       };
 

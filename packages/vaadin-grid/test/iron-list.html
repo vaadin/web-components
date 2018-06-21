@@ -7,9 +7,10 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
-  <link rel="import" href="helpers.html">
-
   <link rel="import" href="../../iron-list/iron-list.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
 </head>
 
@@ -39,7 +40,7 @@
       });
 
       it('should work with another iron-list on the page', () => {
-        expect(grid.is && ironList.is).to.equal('iron-list');
+        expect(grid.$ && ironList.is).to.equal('iron-list');
       });
 
       it('should warn when using iron-list APIs trough grid', () => {

@@ -8,6 +8,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
@@ -42,14 +43,14 @@
       </vaadin-grid>
     </template>
     <script>
-      HTMLImports.whenReady(() => Polymer({is: 'grid-wrapper'}));
+      customElements.whenDefined('vaadin-grid').then(() => Polymer({is: 'grid-wrapper'}));
     </script>
   </dom-module>
 
   <dom-module id="x-boolean-toggle">
     <template>[[value]]</template>
     <script>
-      HTMLImports.whenReady(function() {
+      customElements.whenDefined('vaadin-grid').then(() => {
         class XBooleanToggle extends Polymer.Element {
           static get is() {
             return 'x-boolean-toggle';

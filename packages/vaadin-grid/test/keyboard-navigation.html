@@ -9,6 +9,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
@@ -445,7 +446,10 @@
         it('should have a focus exit as the very last child', () => {
           expect(grid.$.focusexit).to.be.ok;
           expect(grid.$.focusexit.tabIndex).to.equal(0);
-          expect(grid.shadowRoot.lastElementChild).to.equal(grid.$.focusexit);
+          const lastChild = Array.from(grid.shadowRoot.children)
+            .filter(child => child.localName !== 'style')
+            .pop();
+          expect(lastChild).to.equal(grid.$.focusexit);
         });
 
         it('should be possible to tab through the grid', () => {

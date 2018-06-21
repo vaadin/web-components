@@ -9,6 +9,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="helpers.html">
   <link rel="import" href="../vaadin-grid.html">
@@ -37,7 +38,7 @@
 
     </template>
     <script>
-      HTMLImports.whenReady(() => {
+      customElements.whenDefined('vaadin-grid').then(() => {
         Polymer({
           is: 'test-component',
 
@@ -63,7 +64,7 @@
       describe('notifyResize', () => {
         let grid, scroller;
 
-        before(done => HTMLImports.whenReady(done));
+        window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
 
         beforeEach(done => {
           grid = fixture('default').$.grid;

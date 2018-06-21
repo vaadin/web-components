@@ -1,7 +1,8 @@
 {
-  "name": "vaadin-grid",
+  "name": "@vaadin/vaadin-grid",
   "version": "5.1.0-alpha1",
   "description": "A free, flexible and high-quality Web Component for showing large amounts of tabular data",
+  "main": "vaadin-grid.html",
   "author": "Vaadin Ltd",
   "license": "Apache-2.0",
   "repository": "vaadin/vaadin-grid",
@@ -10,8 +11,6 @@
   },
   "homepage": "https://vaadin.com/components",
   "devDependencies": {
-    "bower": "latest",
-    "coveralls": "2.11.3",
     "eslint": "^4.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
@@ -26,13 +25,9 @@
     "gulp-html-extract": "^0.3.0",
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
-    "polymer-cli": "^1.6.0",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
-    "wct-random-output": "^0.1.1",
-    "web-component-tester": "6.1.5",
-    "web-component-tester-istanbul": "https://github.com/t2ym/web-component-tester-istanbul/tarball/0.10.1",
-    "yargs": "^8.0.0"
+    "web-component-tester": "6.1.5"
   },
   "scripts": {
     "test": "wct",

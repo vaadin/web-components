@@ -7,6 +7,7 @@
 
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
 
   <link rel="import" href="../../polymer/polymer.html">
   <link rel="import" href="helpers.html">
@@ -25,27 +26,30 @@
   </test-fixture>
 
   <script>
-    describe('basic features', () => {
-      let scroller, grid;
+    window.addEventListener('WebComponentsReady', function() {
+      if (window.isV2()) {
+        describe('basic features', () => {
+          let scroller, grid;
 
-      beforeEach(() => {
-
-        grid = fixture('default');
-        grid.dataProvider = infiniteDataProvider;
-      });
-
-      it('check physical item heights', done => {
-        const _error = console.error;
-        const spy = console.error = sinon.spy();
-        Polymer.Base.importHref('../vaadin-grid.html', () => {
-          animationFrameFlush(() => {
-            console.error = _error;
-            expect(spy.called).to.be.false;
-            done();
+          beforeEach(() => {
+            grid = fixture('default');
+            grid.dataProvider = infiniteDataProvider;
           });
-        });
-      });
 
+          it('check physical item heights', done => {
+            const _error = console.error;
+            const spy = console.error = sinon.spy();
+            Polymer.Base.importHref('../vaadin-grid.html', () => {
+              animationFrameFlush(() => {
+                console.error = _error;
+                expect(spy.called).to.be.false;
+                done();
+              });
+            });
+          });
+
+        });
+      }
     });
   </script>
 

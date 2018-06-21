@@ -4,7 +4,9 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../polymer/lib/utils/render-status.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/flush.html">
 <link rel="import" href="iron-list.html">
 
 <script>
@@ -290,12 +292,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _accessIronListAPI(cb) {
         this._warnPrivateAPIAccessAsyncEnabled = false;
+        const returnValue = cb.apply(this);
         this._debouncerWarnPrivateAPIAccess = Polymer.Debouncer.debounce(
           this._debouncerWarnPrivateAPIAccess,
           Polymer.Async.animationFrame,
           () => this._warnPrivateAPIAccessAsyncEnabled = true
         );
-        return cb.apply(this);
+        return returnValue;
       }
 
       /* Allow iron-list to access its APIs from debounced callbacks without warns */
@@ -342,25 +345,20 @@ This program is available under Apache License Version 2.0, available at https:/
       set lastVisibleIndex(value) {
         this._warnPrivateAPIAccess('lastVisibleIndex'); super.lastVisibleIndex = value;
       }
-      get maxPhysicalCount() {
-        this._warnPrivateAPIAccess('maxPhysicalCount'); return super.maxPhysicalCount;
-      }
-      set maxPhysicalCount(value) {
-        this._warnPrivateAPIAccess('maxPhysicalCount'); super.maxPhysicalCount = value;
-      }
-      get scrollOffset() {
-        this._warnPrivateAPIAccess('scrollOffset'); return super.scrollOffset;
-      }
-      set scrollOffset(value) {
-        this._warnPrivateAPIAccess('scrollOffset'); super.scrollOffset = value;
-      }
       updateViewportBoundaries() {
         this._warnPrivateAPIAccess('updateViewportBoundaries'); super.updateViewportBoundaries.apply(this, arguments);
+      }
+      _resizeHandler() {
+        super._resizeHandler();
+        Polymer.flush();
       }
     }
 
     customElements.define(GridScrollerElement.is, GridScrollerElement);
 
+    /**
+     * @namespace Vaadin.Grid
+     */
     window.Vaadin = window.Vaadin || {};
     window.Vaadin.Grid = window.Vaadin.Grid || {};
     Vaadin.Grid.ScrollerElement = GridScrollerElement;
