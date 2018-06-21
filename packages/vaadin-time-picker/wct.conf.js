@@ -12,7 +12,7 @@ module.exports = {
       thresholds: {
         global: {
           statements: 98
-
+        }
       }
     }
   },
