@@ -1,0 +1,44 @@
+<dom-module id="confirm-dialog-advanced-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Custom buttons example</h3>
+    <vaadin-demo-snippet id="confirm-dialog-advanced-demos-custom-buttons">
+      <template preserve-content>
+        <vaadin-button theme="primary">Close</vaadin-button>
+        <vaadin-confirm-dialog cancel>
+          <h3 slot="header">Unsaved changes</h3>
+          <p>Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
+          <vaadin-button slot="reject-button" theme="error tertiary" on-click="_discard" tabindex="2">
+            <iron-icon icon="vaadin:trash" slot="prefix"></iron-icon>
+            Discard
+          </vaadin-button>
+          <vaadin-button slot="confirm-button" theme="primary" on-click="_send" tabindex="1">
+            <iron-icon icon="vaadin:envelope-open" slot="prefix"></iron-icon>
+            Save
+          </vaadin-button>
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-dialog-advanced-demos-custom-buttons', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ConfirmDialogAdvancedDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'confirm-dialog-advanced-demos';
+      }
+    }
+    customElements.define(ConfirmDialogAdvancedDemos.is, ConfirmDialogAdvancedDemos);
+  </script>
+</dom-module>

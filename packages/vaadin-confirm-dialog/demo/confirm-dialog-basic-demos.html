@@ -1,0 +1,85 @@
+<dom-module id="confirm-dialog-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Alert Dialog</h3>
+    <vaadin-demo-snippet id="confirm-dialog-basic-demos-alert-dialog">
+      <template preserve-content>
+        <vaadin-button>Show alert</vaadin-button>
+        <vaadin-confirm-dialog header="Meeting starting" confirm-text="OK">
+          Your next meeting starts in 5 minutes
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-dialog-basic-demos-alert-dialog', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Confirm Delete</h3>
+    <vaadin-demo-snippet id="confirm-dialog-basic-demos-alert-dialog-confirm-delete">
+      <template preserve-content>
+        <vaadin-button theme="error">Delete item</vaadin-button>
+        <vaadin-confirm-dialog header="Confirm delete" confirm-text="Delete" confirm-theme="error primary" cancel>
+          Are you sure you want to delete the item?
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-dialog-basic-demos-alert-dialog-confirm-delete', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Confirmation Dialog</h3>
+    <vaadin-demo-snippet id="confirm-dialog-basic-demos-confirmation-dialog">
+      <template preserve-content>
+        <vaadin-button>Publish</vaadin-button>
+        <vaadin-confirm-dialog header="Publish" confirm-text="Publish" cancel message="Are you sure you want to publish the article?">
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-dialog-basic-demos-confirmation-dialog', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Confirm or discard dialog example</h3>
+    <vaadin-demo-snippet id="confirm-dialog-basic-demos-confirm-discard">
+      <template preserve-content>
+        <vaadin-button>Close</vaadin-button>
+        <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" cancel reject reject-text="Discard">
+          Do you want to save or discard your changes before navigating away?
+        </vaadin-confirm-dialog>
+        <script>
+          window.addDemoReadyListener('#confirm-dialog-basic-demos-confirm-discard', function(document) {
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              document.querySelector('vaadin-confirm-dialog').opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ConfirmDialogBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+      static get is() {
+        return 'confirm-dialog-basic-demos';
+      }
+    }
+    customElements.define(ConfirmDialogBasicDemos.is, ConfirmDialogBasicDemos);
+  </script>
+</dom-module>

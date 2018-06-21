@@ -1,32 +1,22 @@
 {
-  "name": "Vaadin Element",
+  "name": "Vaadin Confirm Dialog",
   "pages": [
   {
-    "name": "Alert Dialog Demos",
-    "url": "alert-demos",
-    "src": "alert-demos.html",
+    "name": "Basics",
+    "url": "confirm-dialog-basic-demos",
+    "src": "confirm-dialog-basic-demos.html",
     "meta": {
-      "title": "vaadin-confirm-dialog Alert Examples",
+      "title": "vaadin-confirm-dialog Basic Examples",
       "description": "",
       "image": ""
      }
   },
   {
-    "name": "Confirmation Dialog",
-    "url": "confirmation-demos",
-    "src": "confirmation-demos.html",
+    "name": "Advanced Demos",
+    "url": "confirm-dialog-advanced-demos",
+    "src": "confirm-dialog-advanced-demos.html",
     "meta": {
-      "title": "vaadin-confirm-dialog Confirmation Dialog Examples",
-      "description": "",
-      "image": ""
-     }
-  },
-  {
-    "name": "Yes/No/Cancel Dialog",
-    "url": "confirm-reject-demos",
-    "src": "confirm-reject-demos.html",
-    "meta": {
-      "title": "vaadin-confirm-dialog Confirm or Reject Dialog Examples",
+      "title": "vaadin-confirm-dialog Confirm Dialog Advanced Examples",
       "description": "",
       "image": ""
      }

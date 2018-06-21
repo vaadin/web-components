@@ -52,7 +52,7 @@ bower i vaadin/vaadin-confirm-dialog --save
 Once installed, import it in your application:
 
 ```html
-<link rel="import" href="bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="bower_components/vaadin-confirm-dialog/vaadin-confirm-dialog.html">
 ```
 ### Polymer 3 and ES Modules compatible version
 
