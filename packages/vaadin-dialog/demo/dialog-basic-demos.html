@@ -55,24 +55,24 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>A Dialog That Can Only Be Closed with Buttons Inside It</h3>
-    <vaadin-demo-snippet id="dialog-basic-demos-a-dialog-that-can-only-be-closed-with-buttons-inside-it">
+    <h3>Confirmation Dialog</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-confirm-dialog">
       <template preserve-content>
         <dom-bind id="dialog-example">
           <template>
             <vaadin-dialog id="dialog" no-close-on-esc no-close-on-outside-click>
               <template>
-                <div>Press any button to close</div>
+                <div>Are you sure?</div>
                 <br>
-                <vaadin-button on-click="closeDialog">Ok</vaadin-button>
+                <vaadin-button theme="primary" on-click="closeDialog">OK</vaadin-button>
                 <vaadin-button on-click="closeDialog">Cancel</vaadin-button>
               </template>
             </vaadin-dialog>
-            <vaadin-button on-click="openDialog">Show dialog</vaadin-button>
+            <vaadin-button on-click="openDialog">Show Confirmation Dialog</vaadin-button>
           </template>
         </dom-bind>
         <script>
-          window.addDemoReadyListener('#dialog-basic-demos-a-dialog-that-can-only-be-closed-with-buttons-inside-it', function(document) {
+          window.addDemoReadyListener('#dialog-basic-demos-confirm-dialog', function(document) {
             var dialogExample = document.querySelector('#dialog-example');
             dialogExample.openDialog = function() {
               dialogExample.$.dialog.opened = true;
