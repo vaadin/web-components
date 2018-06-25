@@ -5,6 +5,8 @@
   <title>vaadin-dropdown-menu animation tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
   <link rel="import" href="mock-item.html">
   <link rel="import" href="../vaadin-dropdown-menu.html">
@@ -38,10 +40,10 @@
       const name = getComputedStyle(el).getPropertyValue('animation-name');
       if (name && name != 'none') {
         const listener = () => {
-          this.removeEventListener('animationend', listener);
+          el.removeEventListener('animationend', listener);
           callback();
         };
-        this.addEventListener('animationend', listener);
+        el.addEventListener('animationend', listener);
       } else {
         callback();
       }

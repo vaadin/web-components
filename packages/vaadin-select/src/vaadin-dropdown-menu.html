@@ -6,51 +6,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/elements/custom-style.html">
-<link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
-<link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
-<link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
-
-<dom-module id="vaadin-dropdown-menu-overlay-styles" theme-for="vaadin-dropdown-menu-overlay">
-  <template>
-    <style>
-      :host {
-        align-items: flex-start;
-        justify-content: flex-start;
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="vaadin-dropdown-menu-overlay">
-  <script>
-    (function() {
-      /**
-       * The overlay element.
-       *
-       * ### Styling
-       *
-       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
-       * for `<vaadin-dropdown-menu-overlay>` parts.
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-       *
-       * @memberof Vaadin
-       * @extends Vaadin.OverlayElement
-       */
-      class DropdownMenuOverlayElement extends Vaadin.OverlayElement {
-        static get is() {
-          return 'vaadin-dropdown-menu-overlay';
-        }
-      }
-      customElements.define(DropdownMenuOverlayElement.is, DropdownMenuOverlayElement);
-    })();
-  </script>
-</dom-module>
+<link rel="import" href="vaadin-dropdown-menu-overlay.html">
+<link rel="import" href="vaadin-dropdown-menu-text-field.html">
 
 <custom-style>
   <style>
@@ -62,55 +24,6 @@ This program is available under Apache License Version 2.0, available at https:/
     }
   </style>
 </custom-style>
-
-<dom-module id="vaadin-dropdown-menu-text-field">
-  <script>
-    (function() {
-      let memoizedTemplate;
-      /**
-       * The text-field element.
-       *
-       * ### Styling
-       *
-       * See [`<vaadin-text-field>` documentation](https://github.com/vaadin/vaadin-text-field/blob/master/src/vaadin-text-field.html)
-       * for `<vaadin-dropdown-menu-text-field>` parts and available slots (prefix, suffix etc.)
-       *
-       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
-       *
-       * @memberof Vaadin
-       * @extends Vaadin.TextFieldElement
-       */
-      class DropdownMenuTextFieldElement extends Vaadin.TextFieldElement {
-        static get is() {
-          return 'vaadin-dropdown-menu-text-field';
-        }
-
-        static get template() {
-          if (!memoizedTemplate) {
-            // Clone the superclass template
-            memoizedTemplate = super.template.cloneNode(true);
-
-            // Create a slot for the value element
-            const slot = document.createElement('slot');
-            slot.setAttribute('name', 'value');
-
-            // Insert the slot before the text-field
-            const input = memoizedTemplate.content.querySelector('input');
-
-            input.parentElement.replaceChild(slot, input);
-            slot.appendChild(input);
-          }
-          return memoizedTemplate;
-        }
-
-        get focusElement() {
-          return this.root.querySelector('[part=input-field]');
-        }
-      }
-      customElements.define(DropdownMenuTextFieldElement.is, DropdownMenuTextFieldElement);
-    })();
-  </script>
-</dom-module>
 
 <dom-module id="vaadin-dropdown-menu">
   <template>

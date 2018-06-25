@@ -14,7 +14,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-dropdown-menu/html-api)
 
 
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -42,6 +42,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/components/vaadin-dropdown-menu)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-dropdown-menu`:
+
+```sh
+bower i vaadin/vaadin-dropdown-menu --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-dropdown-menu/vaadin-dropdown-menu.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-dropdown-menu`:
+
+```sh
+npm i @vaadin/vaadin-dropdown-menu --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-dropdown-menu/vaadin-dropdown-menu.js';
+```
 
 ## Getting Started
 

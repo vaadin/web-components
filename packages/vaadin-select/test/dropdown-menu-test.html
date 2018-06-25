@@ -5,7 +5,10 @@
   <title>vaadin-dropdown-menu tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
+  <link rel="import" href="../../vaadin-item/vaadin-item.html">
   <link rel="import" href="mock-item.html">
   <link rel="import" href="../vaadin-dropdown-menu.html">
   <link rel="import" href="not-animated-styles.html">
@@ -397,20 +400,15 @@
 
         it('overlay should be opened on click event on input field', () => {
           expect(dropdown._overlayElement.opened).to.be.false;
-          MockInteractions.tap(input.root.querySelector('[part="input-field"]'));
+          input.focusElement.dispatchEvent(
+            new CustomEvent('click', {bubbles: true, cancelable: true, composed: true})
+          );
           expect(dropdown._overlayElement.opened).to.be.true;
-        });
-
-        it('overlay should not be opened on click event on underlying native input', () => {
-          expect(dropdown._overlayElement.opened).to.be.false;
-          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
-          MockInteractions.tap(nativeInput);
-          expect(dropdown._overlayElement.opened).to.be.false;
         });
 
         it('overlay should be opened on click event on toggle button', () => {
           expect(dropdown._overlayElement.opened).to.be.false;
-          MockInteractions.tap(dropdown._toggleElement);
+          dropdown._toggleElement.click();
           expect(dropdown._overlayElement.opened).to.be.true;
         });
 
@@ -520,10 +518,13 @@
           expect(ev.defaultPrevented).to.be.false;
         });
 
-        it('Should set pointer-events to none on the native input to fix iOS Zooming', () => {
+        it('Should set pointer-events to none on the native input to fix iOS Zooming', done => {
           dropdown.value = 'nomatch';
-          const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
-          expect(getComputedStyle(nativeInput)['pointer-events']).to.equal('none');
+          flush(() => {
+            const nativeInput = dropdown._inputElement.shadowRoot.querySelector('input');
+            expect(getComputedStyle(nativeInput)['pointer-events']).to.equal('none');
+            done();
+          });
         });
       });
 
