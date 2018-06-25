@@ -1,15 +1,13 @@
-<script>
-  /* @polymerMixin */
-  ContextMenuDemo = superClass => {
-    return class extends superClass {
-      static get properties() {
-        return {
-        };
-      }
-    };
+/* @polymerMixin */
+window.ContextMenuDemo = superClass => {
+  return class extends superClass {
+    static get properties() {
+      return {
+      };
+    }
   };
-</script>
-<script>
+};
+
 function getNewItem() {
   function random(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
@@ -30,4 +28,4 @@ function getItems() {
   }
   return items;
 }
-</script>
+

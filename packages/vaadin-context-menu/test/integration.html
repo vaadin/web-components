@@ -22,7 +22,7 @@
         <button on-click="_showMenu" id="button">Show context menu</button>
       </template>
       <script>
-        listenOnce(document, 'WebComponentsReady', () => {
+        customElements.whenDefined('vaadin-context-menu').then(() => {
           class ContextMenuButton extends Polymer.Element {
             static get is() {
               return 'context-menu-button';

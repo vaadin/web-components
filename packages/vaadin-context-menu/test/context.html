@@ -9,8 +9,7 @@
     <link rel="import" href="../../test-fixture/test-fixture.html">
     <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
     <link rel="import" href="../vaadin-context-menu.html">
-    <link rel="import" href="../../vaadin-list-box/vaadin-list-box.html">
-    <link rel="import" href="../../vaadin-item/vaadin-item.html">
+    <link rel="import" href="external-imports.html">
     <link rel="import" href="not-animated-styles.html">
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <script src="common.js"></script>
@@ -23,7 +22,7 @@
         </div>
       </template>
       <script>
-        listenOnce(document, 'WebComponentsReady', () => {
+        customElements.whenDefined('vaadin-context-menu').then(() => {
           class Xfoo extends Polymer.Element {
             static get is() {
               return 'x-foo';

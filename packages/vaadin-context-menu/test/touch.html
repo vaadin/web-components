@@ -9,19 +9,21 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-context-menu.html">
   <link rel="import" href="not-animated-styles.html">
+  <link rel="import" href="../../polymer/lib/utils/html-tag.html">
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <script src="common.js"></script>
 </head>
 
 <body>
   <script>
-    listenOnce(document, 'WebComponentsReady', () => {
+    customElements.whenDefined('vaadin-context-menu').then(() => {
       class TestWrapper extends Polymer.Element {
         static get template() {
-          return `
+          return Polymer.html`
             <vaadin-context-menu selector="#target" id="menu">
               <div id="target">Target</div>
               <template>

@@ -90,11 +90,16 @@ This program is available under Apache License Version 2.0, available at https:/
       },
 
       fire: function(target, x, y) {
-        Polymer.Gestures._fire(target, 'vaadin-contextmenu', {
-          x: x,
-          y: y,
-          sourceEvent: this.info.sourceEvent
-        });
+        // NOTE(web-padawan): the code below is copied from `Polymer.Gestures._fire`,
+        // which is not exported from `gestures.js` module for Polymer 3.
+        const sourceEvent = this.info.sourceEvent;
+        const ev = new Event('vaadin-contextmenu', {bubbles: true, cancelable: true, composed: true});
+        ev.detail = {x, y, sourceEvent};
+        target.dispatchEvent(ev);
+        // forward `preventDefault` in a clean way
+        if (ev.defaultPrevented && sourceEvent && sourceEvent.preventDefault) {
+          sourceEvent.preventDefault();
+        }
       }
     });
   })();
