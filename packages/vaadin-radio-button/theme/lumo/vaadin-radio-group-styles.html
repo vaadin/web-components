@@ -1,0 +1,35 @@
+<dom-module id="lumo-radio-group" theme-for="vaadin-radio-group">
+  <template>
+    <style>
+      :host([theme~="vertical"]) {
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host([has-label])::before {
+        margin-top: calc(var(--lumo-font-size-s) * 1.5);
+      }
+
+      :host([has-label]) {
+        padding-top: var(--lumo-space-m);
+      }
+
+      [part="label"] {
+        align-self: flex-start;
+        color: var(--lumo-secondary-text-color);
+        font-weight: 500;
+        font-size: var(--lumo-font-size-s);
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        transition: color 0.2s;
+        line-height: 1;
+        padding-bottom: 0.5em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        position: relative;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+  </template>
+</dom-module>
