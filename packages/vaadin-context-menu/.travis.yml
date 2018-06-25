@@ -37,7 +37,7 @@ script:
     fi
   - if [[ "$POLYMER" = "3" ]]; then
       npm --no-save -q install -g yarn bower magi-cli web-component-tester &&
-      (cd .. && git clone --depth 1 -b vaadin-components git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
+      (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
