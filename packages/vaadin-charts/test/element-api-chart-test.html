@@ -77,6 +77,16 @@
       <vaadin-chart id="multipleXAxes"></vaadin-chart>
     </template>
   </test-fixture>
+  <test-fixture id="stack">
+    <template>
+      <vaadin-chart stacking="normal">
+        <vaadin-chart-series title="First" values="[1,2,8,10]" stack="0"></vaadin-chart-series>
+        <vaadin-chart-series title="Second" values="[0,0,2,10]" stack="0"></vaadin-chart-series>
+        <vaadin-chart-series title="Third" values="[0,1,2,10]" stack="1" ></vaadin-chart-series>
+        <vaadin-chart-series title="4th" values="[1,0,1,10]" stack="1" ></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+  </test-fixture>
 
   <script>
     describe('High-level API', function() {
@@ -244,33 +254,40 @@
 
       it('should react to chart3d change', function(done) {
         chart = fixture('column');
-        setTimeout(function() {
-          expect(chart.configuration.frame3d).to.be.undefined;
+        setTimeout(() => {
+          expect(chart.configuration.is3d()).to.be.false;
           chart.chart3d = true;
-          setTimeout(function() {
-            expect(chart.configuration.frame3d).not.to.be.undefined;
+          setTimeout(() => {
+            expect(chart.configuration.is3d()).to.be.true;
             done();
-          }, 150);
-        }, 100);
+          }, 100);
+        }, 1000);
+        // Large timeout needed to workaround a timing issue with HighCharts animation as a result of the
+        // workaround suggested in https://github.com/highcharts/highcharts/issues/8417#issuecomment-394317748
+        // Investigate this further later.
       });
 
-      it('should display no message for empty chart by default', done => {
-        chart = fixture('nodata')[0];
-        setTimeout(() => {
-          const actual = chart.$.chart.querySelector('.highcharts-no-data > text').textContent.trim();
-          expect(actual).to.be.empty;
+      it('should be able to set stacking initially', function(done) {
+        const stackChart = fixture('stack');
+        setTimeout(function() {
+          expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(20);
+          expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(10);
+          expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
+          expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
           done();
-        }, 100);
+        }, 150);
       });
 
-      it('should show a the configured empty-text message for empty chart', done => {
-        chart = fixture('nodata')[1];
-        setTimeout(() => {
-          const expected = 'Empty Vaadin Chart';
-          const actual = chart.$.chart.querySelector('.highcharts-no-data > text > tspan').textContent;
-          expect(expected).to.be.equal(actual);
+      it('should react to stacking change', function(done) {
+        const stackChart = fixture('stack');
+        stackChart.stacking = 'percent';
+        setTimeout(function() {
+          expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(100);
+          expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(50);
+          expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(100);
+          expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(50);
           done();
-        }, 100);
+        }, 150);
       });
 
       it('should react to empty-text changes on empty charts', done => {

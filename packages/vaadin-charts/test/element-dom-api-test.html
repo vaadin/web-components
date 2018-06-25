@@ -28,7 +28,7 @@
 
         container.appendChild(vaadinChart);
         setTimeout(() => {
-          expect(vaadinChart.$.chart.querySelector('.highcharts-title')).to.be.null;
+          expect(vaadinChart.$.chart.querySelector('.highcharts-title').textContent).to.be.empty;
           done();
         });
       });

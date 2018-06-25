@@ -29,8 +29,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/js/modules/solid-gauge.js"></script>
 <script src="../highcharts/js/modules/treemap.js"></script>
 <script src="../highcharts/js/modules/no-data-to-display.js"></script>
-<script src="chart-temporary-display.js"></script>
 <script src="chart-deep-merger.js"></script>
+<script src="chart-3d-stacking.js"></script>
 
 <link rel="import" href="vaadin-chart-series.html">
 
@@ -356,6 +356,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * Specifies how series are stacked on top of each other.
+             * Possible values are null, "normal" or "percent".
+             * If "stack" property is not defined on the vaadin-chart-series elements, then series will be put into
+             * the default stack.
+             */
+            stacking: {
+              type: String,
+              observer: '__stackingObserver',
+              reflectToAttribute: true
+            },
+
+            /**
              * Specifies whether the chart is a normal chart or a timeline chart.
              */
             timeline: {
@@ -490,7 +502,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         connectedCallback() {
           super.connectedCallback();
           this.__updateStyles();
-          this.__addChildObserver();
           Polymer.RenderStatus.beforeNextRender(this, () => {
             // Detect if the chart had already been initialized. This might happen in
             // environments where the chart is lazily attached (e.g Grid).
@@ -502,6 +513,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             const options = Object.assign({}, this.options, this._jsonConfigurationBuffer);
             this._jsonConfigurationBuffer = null;
             this.__initChart(options);
+            this.__addChildObserver();
             const config = {attributes: true, characterData: true};
             this.__mutationObserver = new MutationObserver(this.__mutationCallback);
             this.__mutationObserver.observe(this, config);
@@ -578,12 +590,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             };
           }
 
-          if (this.chart3d) {
-            options.chart = options.chart || {};
-
-            options.chart.options3d = Object.assign({}, this._baseChart3d, options.chart.options3d);
-          }
-
           if (this.emptyText) {
             options.lang = options.lang || {};
             options.lang.noData = this.emptyText;
@@ -599,6 +605,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             } else if (options.xAxis) {
               options.xAxis.opposite = this.__shouldFlipOpposite();
             }
+          }
+
+          if (this.stacking) {
+            options.plotOptions = options.plotOptions || {};
+            options.plotOptions.series = options.plotOptions.series || {};
+            options.plotOptions.series.stacking = this.stacking;
           }
 
           return options;
@@ -1406,35 +1418,64 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
-        __chart3dObserver() {
+        __isStackingValid() {
+          if (['normal', 'percent', null].indexOf(this.stacking) === -1) {
+            this.__showWarn('stacking', '"normal", "percent" or null');
+            return false;
+          }
+          return true;
+        }
+
+        __stackingObserver() {
           if (!this.configuration) {
             return;
           }
 
-          if (this.chart3d) {
-            this.configuration.update({
-              chart: {
-                options3d: Object.assign(
-                  {},
-                  this._baseChart3d,
-                  (
-                    this.additionalOptions
-                    && this.additionalOptions.chart
-                    && this.additionalOptions.chart.options3d
-                  ),
-                  {enabled: true}
-                )
-              }
-            });
-          } else {
-            this.configuration.update({
-              chart: {
-                options3d: {
-                  enabled: false
-                }
-              }
-            });
+          if (!this.__isStackingValid()) {
+            this.stacking = null;
+            return;
           }
+
+          this.configuration.update({
+            plotOptions: {
+              series: {
+                stacking: this.stacking
+              }
+            }
+          });
+        }
+
+        __chart3dObserver() {
+          Polymer.RenderStatus.afterNextRender(this, () => {
+            if (!this.configuration) {
+              return;
+            }
+
+            if (this.chart3d) {
+              this.configuration.update({
+                chart: {
+                  options3d: Object.assign(
+                    {},
+                    this._baseChart3d,
+                    (
+                      this.additionalOptions
+                      && this.additionalOptions.chart
+                      && this.additionalOptions.chart.options3d
+                    ),
+                    {enabled: true}
+                  )
+                }
+              });
+            } else {
+              this.configuration.update({
+                chart: {
+                  options3d: {
+                    enabled: false
+                  }
+                }
+              });
+            }
+          });
         }
 
         __polarObserver() {

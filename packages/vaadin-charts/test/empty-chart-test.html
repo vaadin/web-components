@@ -28,9 +28,9 @@
 
       it('should have no title', done => {
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title')).to.be.null;
+          expect(element.$.chart.querySelector('.highcharts-title').textContent).to.be.empty;
           done();
-        });
+        }, 50);
       });
 
     });

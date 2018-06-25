@@ -117,7 +117,7 @@
         Polymer.flush();
 
         setTimeout(function() {
-          expect(chartContainer.querySelector('.highcharts-title')).to.be.null;
+          expect(chartContainer.querySelector('.highcharts-title').textContent).to.be.empty;
           done();
         }, 150);
       });

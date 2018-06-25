@@ -109,7 +109,7 @@
   </test-fixture>
   <test-fixture id="stack">
     <template>
-      <vaadin-chart additional-options='{"plotOptions": {"series": {"stacking": "normal"}}}' >
+      <vaadin-chart stacking="normal">
         <vaadin-chart-series title="First" values="[1,2,8,10]" stack="0"></vaadin-chart-series>
         <vaadin-chart-series title="Second" values="[0,0,2,10]" stack="0"></vaadin-chart-series>
         <vaadin-chart-series title="Third" values="[0,1,2,10]" stack="1" ></vaadin-chart-series>
@@ -345,7 +345,7 @@
           const secondAxis = chart.configuration.yAxis[0];
           expect(secondAxis.options.id).to.be.equal(unit);
           done();
-        }, 150);
+        }, 200);
       });
 
       it('should make series goes to first y axis if unit is removed', function(done) {
@@ -423,7 +423,7 @@
         }, 150);
       });
 
-      it('should be available initially to set stack with default stacking in plotOptions', function(done) {
+      it('should be available initially to set stack with default stacking', function(done) {
         const stackChart = fixture('stack');
         setTimeout(function() {
           expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(20);
@@ -434,7 +434,7 @@
         }, 150);
       });
 
-      it('should be available to change stack with default stacking in plotOptions', function(done) {
+      it('should be available to change stack with default stacking', function(done) {
         const stackChart = fixture('stack');
         stackChart.children[2].stack = '0';
         stackChart.children[3].stack = '0';
@@ -443,18 +443,6 @@
           expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(30);
           expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
           expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
-          done();
-        }, 150);
-      });
-
-      it('should be available to change stacking with default stacking in plotOptions', function(done) {
-        const stackChart = fixture('stack');
-        stackChart.children[0].stacking = 'percent';
-        setTimeout(function() {
-          expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(100);
-          expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(50);
-          expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(100);
-          expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(50);
           done();
         }, 150);
       });

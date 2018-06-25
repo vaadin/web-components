@@ -129,24 +129,30 @@
       });
 
       it('should accept labels as mapping object for values (array of arrays)', function(done) {
-        const valuesArrayArray = [['Vaadin', 90], ['Flow', 30], [10, 20], [40, 50], [70, 80]];
-        element.values = valuesArrayArray;
-
         const labelsAsObject = {10: 'Mon', 20: 'Tue', 30: 'Wed', 50: 'Thur'};
         element.labels = labelsAsObject;
 
+        element.values = [[10, 20], [40, 50], [70, 80]];
         setTimeout(function() {
           const firstSeries = chart.configuration.series[0];
-          const expected = [[0, 'Vaadin'], [1, 'Wed'], [10, 'Tue'], [40, 'Thur'], [70, 80]];
-          const actual = firstSeries.data.map(e => [e.x, e.name]);
-
+          let expected = [[10, 'Tue'], [40, 'Thur'], [70, 80]];
+          let actual = firstSeries.data.map(e => [e.x, e.name]);
           expect(expected).to.deep.equal(actual);
-          done();
+
+          // Highcharts assigns serial values for missing x starting from 0
+          element.values = [['Vaadin', 90], ['Flow', 30]];
+          setTimeout(function() {
+            expected = [[0, 'Vaadin'], [1, 'Wed']];
+            actual = firstSeries.data.map(e => [e.x, e.name]);
+            expect(expected).to.deep.equal(actual);
+
+            done();
+          }, 70);
         }, 70);
       });
 
       it('should accept labels as mapping object for values (array of objects)', function(done) {
-        const valuesObjectArray = [{name: '10', x: 1, y: 20}, {name: '40', x: 2, y: 50}, {y: 100}];
+        const valuesObjectArray = [{name: '10', x: 1, y: 20}, {name: '40', x: 2, y: 50}];
         element.values = valuesObjectArray;
 
         const labelsAsObject = {10: 'Mon', 20: 'Tue', 30: 'Wed', 50: 'Thur'};
@@ -155,10 +161,8 @@
         setTimeout(function() {
           const firstSeries = chart.configuration.series[0];
 
-          // We pick the mapping, if absent the name, if absent the value.
-          // The last x was intentionally left off in the test input
-          // Highcharts assigns serial values for missing x starting from 0
-          const expected = element.values.map(e => [e.x || 0, labelsAsObject[e.y] || e.name || e.y]);
+          // We pick the mapping, if absent the name, if absent the value
+          const expected = element.values.map(e => [e.x, labelsAsObject[e.y] || e.name || e.y]);
           const actual = firstSeries.data.map(e => [e.x, e.name]);
 
           expect(expected).to.deep.equal(actual);
@@ -271,7 +275,7 @@
       });
 
       it('should accept labels as array for values (array of objects)', function(done) {
-        const valuesObjectArray = [{name: '10', x: 1, y: 20}, {name: '40', x: 2, y: 50}, {name: 'Vaadin', x: 7, y: 100}, {x: 7, y: 100}];
+        const valuesObjectArray = [{name: '10', x: 1, y: 20}, {name: '40', x: 2, y: 50}, {name: 'Vaadin', x: 7, y: 100}];
         element.values = valuesObjectArray;
 
         const labelsAsArray = ['Mon', 'Tue'];
