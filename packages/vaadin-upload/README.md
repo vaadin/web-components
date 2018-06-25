@@ -13,7 +13,7 @@
 |
 [API documentation ↗](https://vaadin.com/components/vaadin-upload/html-api)
 
-[&lt;vaadin-upload&gt;](https://vaadin.com/components/vaadin-upload) is a [Polymer](http://polymer-project.org) element for uploading files, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-upload&gt;](https://vaadin.com/components/vaadin-upload) is a Web Component for uploading files, part of the [Vaadin components](https://vaadin.com/components).
 
 <!---
 ```
@@ -67,6 +67,42 @@
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-upload/master/screenshot.png" alt="Screenshot of vaadin-upload" width="670" />](https://vaadin.com/components/vaadin-upload)
+
+## Installation
+
+The Vaadin components are distributed as Bower and npm packages.
+Please note that the version range is the same, as the API has not changed.
+You should not mix Bower and npm versions in the same application, though.
+
+Unlike the official Polymer Elements, the converted Polymer 3 compatible Vaadin components
+are only published on npm, not pushed to GitHub repositories.
+
+### Polymer 2 and HTML Imports Compatible Version
+
+Install `vaadin-upload`:
+
+```sh
+bower i vaadin/vaadin-upload --save
+```
+
+Once installed, import it in your application:
+
+```html
+<link rel="import" href="bower_components/vaadin-upload/vaadin-upload.html">
+```
+### Polymer 3 and ES Modules Compatible Version
+
+Install `vaadin-upload`:
+
+```sh
+npm i @vaadin/vaadin-upload --save
+```
+
+Once installed, import it in your application:
+
+```js
+import '@vaadin/vaadin-upload/vaadin-upload.js';
+```
 
 ## Getting Started
 

@@ -5,8 +5,15 @@
   <meta charset="UTF-8">
   <title>vaadin-upload tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 
-  <link rel="import" href="common.html">
+  <script src="../../iron-test-helpers/mock-interactions.js"></script>
+  <script src="../../mock-http-request/lib/mock.js"></script>
+  <script src="common.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-upload.html">
+  <link rel="import" href="../../polymer/lib/utils/async.html">
 </head>
 
 <body>
@@ -195,7 +202,7 @@
           upload.addEventListener('upload-request', e => {
             e.preventDefault();
 
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               expect(e.detail.xhr.readyState).to.be.equal(1);
               done();
             }, 100);
@@ -224,7 +231,7 @@
             e.preventDefault();
           });
 
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             expect(file.uploading).to.be.ok;
             expect(file.error).not.to.be.ok;
             done();
@@ -234,7 +241,7 @@
 
         it('should fire the `upload-retry` event on retrying', done => {
           upload.addEventListener('upload-retry', e => {
-            Polymer.Base.async(() => {
+            setTimeout(() => {
               expect(file.uploading).to.be.ok;
               done();
             }, 100);
@@ -304,7 +311,7 @@
         });
 
         it('should be indeterminate when connecting', done => {
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             expect(file.indeterminate).to.be.ok;
             expect(file.status).to.be.equal(upload.i18n.uploading.status.connecting);
             done();
@@ -326,7 +333,7 @@
         });
 
         it('should be indeterminate when server is processing the file', done => {
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             expect(file.indeterminate).to.be.ok;
             expect(file.status).to.be.equal(upload.i18n.uploading.status.processing);
             done();
@@ -345,7 +352,7 @@
         });
 
         it('should be stalled when progress is not updated for more than 2 sec.', done => {
-          Polymer.Base.async(() => {
+          setTimeout(() => {
             expect(file.status).to.be.equal(upload.i18n.uploading.status.stalled);
             done();
           }, 2200);
