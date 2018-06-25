@@ -5,6 +5,28 @@
         display: flex;
         flex-direction: column;
       }
+
+      :host([disabled]) [part="label"] {
+        color: var(--material-disabled-text-color);
+        -webkit-text-fill-color: var(--material-disabled-text-color);
+      }
+
+
+      [part="label"] {
+        display: block;
+        font-size: 1em;
+        line-height: 1;
+        height: 20px;
+        margin-bottom: -4px;
+        white-space: nowrap;
+        overflow-x: hidden;
+        text-overflow: ellipsis;
+        color: var(--material-secondary-text-color);
+        transform-origin: 0 75%;
+        transform: scale(0.75);
+        transition: transform 0.175s, color 0.175s, width 0.175s;
+        transition-timing-function: ease, ease, step-end;
+      }
     </style>
   </template>
 </dom-module>
