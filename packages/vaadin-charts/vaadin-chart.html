@@ -332,6 +332,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
 
             /**
+             * The position of the category axis. Acceptable values are `left`, `right`, `top` and `bottom`
+             * except for bar charts which only accept `left` and `right`.
+             * With the default value, charts appear as though they have `category-position="bottom"`
+             * except for bar charts that appear as though they have `category-position="left"`.
+             *
+             * Defaults to `undefined`
+             */
+            categoryPosition: {
+              type: String,
+              observer: '__updateCategoryPosition',
+              reflectToAttribute: true
+            },
+
+            /**
              * Specifies whether to hide legend or show.
              * Legend configuration can be set up via additionalOptions property
              */
@@ -573,6 +587,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           if (this.emptyText) {
             options.lang = options.lang || {};
             options.lang.noData = this.emptyText;
+          }
+
+          if (this.categoryPosition) {
+            options.chart = options.chart || {};
+
+            options.chart.inverted = this.__shouldInvert();
+
+            if (Array.isArray(options.xAxis)) {
+              options.xAxis.forEach(e => e.opposite = this.__shouldFlipOpposite());
+            } else if (options.xAxis) {
+              options.xAxis.opposite = this.__shouldFlipOpposite();
+            }
           }
 
           return options;
@@ -1272,6 +1298,48 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           this.__updateOrAddAxes([{
             min: this.categoryMin
           }], true);
+        }
+
+        __shouldInvert() {
+          // A bar chart will never be inverted, consider using a column chart.
+          // See https://stackoverflow.com/questions/11235251#answer-21739793
+          if (this.type === 'bar' && ['top', 'bottom'].indexOf(this.categoryPosition) >= 0) {
+            console.warn(`<vaadin-chart> Acceptable "category-position" values for bar charts are
+                "left" and "right". For "top" and "bottom" positions please consider using a column chart.`);
+            return;
+          }
+
+          const inverted = ['left', 'right'];
+          return inverted.indexOf(this.categoryPosition) >= 0;
+        }
+
+        __shouldFlipOpposite() {
+          const opposite = ['top', 'right'];
+          const oppositeBar = ['right'];
+          return (this.type === 'bar' ? oppositeBar : opposite).indexOf(this.categoryPosition) >= 0;
+        }
+
+        __updateCategoryPosition() {
+          if (!this.configuration) {
+            return;
+          }
+
+          const validPositions = ['left', 'right', 'top', 'bottom'];
+
+          if (validPositions.indexOf(this.categoryPosition) < 0) {
+            console.warn(`<vaadin-chart> Acceptable "category-position" values are ${validPositions}`);
+            return;
+          }
+
+          this.configuration.update({
+            chart: {
+              inverted: this.__shouldInvert()
+            }
+          });
+
+          this.configuration.xAxis.forEach(e => e.update({
+            opposite: this.__shouldFlipOpposite()
+          }));
         }
 
         __hideLegend(newValue) {
