@@ -43,8 +43,12 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot id="slot"></slot>
       </div>
 
+      <div part="error-message"
+        id="[[_errorId]]"
+        aria-live="assertive"
+        aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage, _errorId)]]"
+      >[[errorMessage]]</div>
     </div>
-
   </template>
 
   <script>
@@ -73,7 +77,10 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * Attribute  | Description | Part name
        * -----------|-------------|------------
-       * `disabled` | Set when the radio group and its children are disabled. | :host
+       * `disabled`   | Set when the radio group and its children are disabled. | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `readonly` | Set to a readonly text field | :host
        * `has-label` | Set when the element has a label | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
@@ -97,6 +104,41 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               observer: '_disabledChanged'
+            },
+
+            /**
+             * This attribute indicates that the user cannot modify the value of the control.
+             */
+            readonly: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_readonlyChanged'
+            },
+
+            /**
+             * This property is set to true when the value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * Error to show when the input value is invalid.
+             */
+            errorMessage: {
+              type: String,
+              value: ''
             },
 
             _checkedButton: {
@@ -160,6 +202,8 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this.setAttribute('role', 'radiogroup');
+
+          this.addEventListener('focusout', e => this.validate());
         }
 
         get _radioButtons() {
@@ -177,13 +221,21 @@ This program is available under Apache License Version 2.0, available at https:/
           this._radioButtons.forEach(button => button.disabled = disabled);
         }
 
+        _readonlyChanged(readonly) {
+          // it's not possible to set readonly to radio buttons, but by disabling
+          // all other radio buttons.
+          this._radioButtons.forEach(button =>
+            button.disabled = this.disabled || button !== this._checkedButton && readonly);
+        }
+
         _addActiveListeners() {
           this.addEventListener('keydown', e => {
-            // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
-            var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
-            if (this.disabled) {
+
+            if (this.disabled || this.readonly) {
               return;
             }
+            // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
+            var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
 
             // LEFT, UP - select previous radio button
             if (e.keyCode === 37 || e.keyCode === 38) {
@@ -215,6 +267,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const activeElement = root._activeElement !== undefined ? root._activeElement : root.activeElement;
           return this.contains(activeElement);
         }
+
 
         _hasEnabledButtons() {
           return !this._radioButtons.every((button) => button.disabled);
@@ -250,14 +303,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _changeSelectedButton(button) {
           this._checkedButton = button;
-
           this._setFocusable(this._radioButtons.indexOf(button));
         }
 
         _checkedButtonChanged(checkedButton) {
           this._radioButtons.forEach(button => button.checked = button === checkedButton);
-
           this.value = checkedButton.value;
+          this.validate();
         }
 
         _valueChanged(newV, oldV) {
@@ -270,6 +322,30 @@ This program is available under Apache License Version 2.0, available at https:/
               console.warn(`No <vaadin-radio-button> with value ${newV} found.`);
             }
           }
+
+          if (newV !== '' && newV != null) {
+            this.setAttribute('has-value', '');
+          } else {
+            this.removeAttribute('has-value');
+          }
+        }
+
+        /**
+         * Returns true if `value` is valid.
+         * `<iron-form>` uses this to check the validity or all its elements.
+         *
+         * @return {boolean} True if the value is valid.
+         */
+        validate() {
+          return !(this.invalid = !this.checkValidity());
+        }
+
+        /**
+         * Returns true if the current input value satisfies all constraints (if any)
+         * @returns {boolean}
+         */
+        checkValidity() {
+          return !this.required || this.value;
         }
 
         _setFocusable(idx) {
@@ -285,6 +361,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        _getActiveErrorId(invalid, errorMessage, errorId) {
+          return errorMessage && invalid ? errorId : undefined;
+        }
+
+        _getErrorMessageAriaHidden(invalid, errorMessage, errorId) {
+          return (!this._getActiveErrorId(invalid, errorMessage, errorId)).toString();
+        }
       }
 
       customElements.define(RadioGroupElement.is, RadioGroupElement);
