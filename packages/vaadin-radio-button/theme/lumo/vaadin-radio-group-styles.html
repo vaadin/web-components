@@ -1,6 +1,14 @@
 <dom-module id="lumo-radio-group" theme-for="vaadin-radio-group">
   <template>
     <style>
+      [part="label"] {
+        display: block;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+
       :host([theme~="vertical"]) {
         display: flex;
         flex-direction: column;
