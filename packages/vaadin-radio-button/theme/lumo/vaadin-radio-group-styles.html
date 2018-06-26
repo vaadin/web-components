@@ -55,6 +55,29 @@
       :host([invalid]) [part="label"] {
         color: var(--lumo-error-text-color);
       }
+
+      [part="error-message"] {
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+        color: var(--lumo-error-text-color);
+        will-change: max-height;
+        transition: 0.4s max-height;
+        max-height: 5em;
+      }
+
+      /* Margin that doesn’t reserve space when there’s no error message */
+      [part="error-message"]:not(:empty)::before,
+      [part="error-message"]:not(:empty)::after {
+        content: "";
+        display: block;
+        height: 0.4em;
+      }
+
+      :host(:not([invalid])) [part="error-message"] {
+        max-height: 0;
+        overflow: hidden;
+      }
     </style>
   </template>
 </dom-module>
