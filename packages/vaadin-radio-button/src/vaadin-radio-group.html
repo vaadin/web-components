@@ -232,8 +232,8 @@ This program is available under Apache License Version 2.0, available at https:/
             if (this.disabled) {
               button.disabled = true;
             } else if (this.readonly) {
-             // it's not possible to set readonly to radio buttons, but we can
-             // unchecked ones instead.
+              // it's not possible to set readonly to radio buttons, but we can
+              // unchecked ones instead.
               button.disabled = button !== this._checkedButton && this.readonly;
             } else {
               button.disabled = false;
@@ -242,7 +242,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _readonlyChanged(newV, oldV) {
-          (newV || oldV)  && this._updateDisableButtons();
+          (newV || oldV) && this._updateDisableButtons();
         }
 
         _addActiveListeners() {

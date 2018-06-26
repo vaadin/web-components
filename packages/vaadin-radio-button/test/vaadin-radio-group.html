@@ -35,12 +35,23 @@
 
   <script>
     describe('vaadin-radio-group', () => {
-      var vaadinRadioButtonGroup, vaadinRadioButtonList,
+
+      function blur(e) {
+        e.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: true}));
+      }
+
+      function visible(e) {
+        const rect = e.getBoundingClientRect();
+        return !!(rect.width && rect.height);
+      }
+
+      var vaadinRadioButtonGroup, vaadinRadioButtonList, errorElement,
         buttonsListWithDisabled, groupWithDisabledButton;
 
       beforeEach(() => {
         vaadinRadioButtonGroup = fixture('default');
         vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
+        errorElement = vaadinRadioButtonGroup.shadowRoot.querySelector('[part="error-message"]');
 
         groupWithDisabledButton = fixture('with-disabled-button');
         buttonsListWithDisabled = groupWithDisabledButton.querySelectorAll('vaadin-radio-button');
@@ -215,6 +226,60 @@
         expect(vaadinRadioButtonGroup.label).to.be.equal('foo');
       });
 
+      it('should disable unchecked buttons when readonly', () => {
+        vaadinRadioButtonGroup.readonly = true;
+        expect(vaadinRadioButtonList[0].disabled).to.be.true;
+        expect(vaadinRadioButtonList[1].disabled).to.be.true;
+        expect(vaadinRadioButtonList[2].disabled).to.be.true;
+
+        vaadinRadioButtonGroup.value = '2';
+        expect(vaadinRadioButtonList[0].disabled).to.be.true;
+        expect(vaadinRadioButtonList[1].disabled).to.be.false;
+        expect(vaadinRadioButtonList[2].disabled).to.be.true;
+
+        vaadinRadioButtonGroup.readonly = false;
+        expect(vaadinRadioButtonList[0].disabled).to.be.false;
+        expect(vaadinRadioButtonList[1].disabled).to.be.false;
+        expect(vaadinRadioButtonList[2].disabled).to.be.false;
+      });
+
+      it('should validate when field is not required', () => {
+        expect(vaadinRadioButtonGroup.checkValidity()).to.be.true;
+        expect(vaadinRadioButtonGroup.invalid).to.be.false;
+      });
+
+      it('should validate when field is required and user has not blurred', () => {
+        vaadinRadioButtonGroup.required = true;
+        expect(vaadinRadioButtonGroup.checkValidity()).to.be.false;
+        expect(vaadinRadioButtonGroup.invalid).to.be.false;
+      });
+
+      it('should validate when field is required and user blurs', () => {
+        vaadinRadioButtonGroup.required = true;
+        blur(vaadinRadioButtonGroup);
+        expect(vaadinRadioButtonGroup.checkValidity()).to.be.false;
+        expect(vaadinRadioButtonGroup.invalid).to.be.true;
+      });
+
+      it('error should have appropriate aria attributes and id', () => {
+        expect(errorElement.getAttribute('aria-live')).to.be.equal('assertive');
+        expect(errorElement.getAttribute('aria-hidden')).to.be.equal('true');
+        expect(/^vaadin-radio-group-error-\d+$/.test(errorElement.id)).to.be.true;
+      });
+
+      it('should hide error message by default', () => {
+        vaadinRadioButtonGroup.errorMessage = 'Bad input!';
+        expect(visible(errorElement)).to.be.false;
+      });
+
+      it('should show error message on invalid', () => {
+        vaadinRadioButtonGroup.required = true;
+        vaadinRadioButtonGroup.errorMessage = 'Bad input!';
+        blur(vaadinRadioButtonGroup);
+
+        expect(visible(errorElement)).to.be.true;
+        expect(errorElement.getAttribute('aria-hidden')).to.be.equal('false');
+      });
     });
   </script>
 </body>
