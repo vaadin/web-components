@@ -1,6 +1,7 @@
 <link rel="import" href="../../../vaadin-lumo-styles/color.html">
 <link rel="import" href="../../../vaadin-lumo-styles/spacing.html">
 <link rel="import" href="../../../vaadin-dialog/theme/lumo/vaadin-dialog.html">
+<link rel="import" href="../../../vaadin-button/theme/lumo/vaadin-button.html">
 
 <dom-module id="lumo-confirm-dialog" theme-for="vaadin-confirm-dialog">
   <template>
@@ -32,6 +33,11 @@
         margin-bottom: var(--lumo-space-s);
       }
 
+      vaadin-button {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
       vaadin-button[theme~="tertiary"] {
         padding-left: var(--lumo-space-s);
         padding-right: var(--lumo-space-s);
@@ -49,6 +55,24 @@
       .reject-button,
       .confirm-button {
         margin-left: var(--lumo-space-s);
+      }
+
+      @media (max-width: 360px) {
+        [part="footer"] {
+          flex-direction: column-reverse;
+        }
+
+        [part="footer"] div {
+          margin: var(--lumo-space-xs) auto calc(var(--lumo-space-xs) * -1);
+        }
+
+        [part="footer"] .confirm-button {
+          margin-top: var(--lumo-space-s);
+        }
+
+        [part="footer"] .cancel-button {
+          margin-bottom: var(--lumo-space-s);
+        }
       }
     </style>
   </template>
