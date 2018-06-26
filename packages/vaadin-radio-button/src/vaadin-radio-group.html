@@ -217,15 +217,25 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _disabledChanged(disabled) {
           this.setAttribute('aria-disabled', disabled);
-
-          this._radioButtons.forEach(button => button.disabled = disabled);
+          this._updateDisableButtons();
         }
 
-        _readonlyChanged(readonly) {
-          // it's not possible to set readonly to radio buttons, but by disabling
-          // all other radio buttons.
-          this._radioButtons.forEach(button =>
-            button.disabled = this.disabled || button !== this._checkedButton && readonly);
+        _updateDisableButtons() {
+          this._radioButtons.forEach(button => {
+            if (this.disabled) {
+              button.disabled = true;
+            } else if (this.readonly) {
+             // it's not possible to set readonly to radio buttons, but we can
+             // unchecked ones instead.
+              button.disabled = button !== this._checkedButton && this.readonly;
+            } else {
+              button.disabled = false;
+            }
+          });
+        }
+
+        _readonlyChanged(newV, oldV) {
+          (newV || oldV)  && this._updateDisableButtons();
         }
 
         _addActiveListeners() {
@@ -303,6 +313,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _changeSelectedButton(button) {
           this._checkedButton = button;
+          this.readonly && this._updateDisableButtons();
           this._setFocusable(this._radioButtons.indexOf(button));
         }
 
