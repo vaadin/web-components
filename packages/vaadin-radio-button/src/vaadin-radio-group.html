@@ -141,6 +141,10 @@ This program is available under Apache License Version 2.0, available at https:/
               value: ''
             },
 
+            _errorId: {
+              type: String
+            },
+
             _checkedButton: {
               type: Object,
               observer: '_checkedButtonChanged'
@@ -204,6 +208,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('role', 'radiogroup');
 
           this.addEventListener('focusout', e => this.validate());
+
+          const uniqueId = RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0;
+          this._errorId = `${this.constructor.is}-error-${uniqueId}`;
         }
 
         get _radioButtons() {
@@ -356,7 +363,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * @returns {boolean}
          */
         checkValidity() {
-          return !this.required || this.value;
+          return !this.required || !!this.value;
         }
 
         _setFocusable(idx) {
