@@ -7,7 +7,7 @@
     </style>
 
     <h3>Radio Group</h3>
-    <vaadin-demo-snippet id="radio-group-demos-radio-group">
+    <vaadin-demo-snippet id="radio-group-demos-radio-group-label">
       <template preserve-content>
         <vaadin-radio-group label="Risk level">
           <vaadin-radio-button name="low">Low</vaadin-radio-button>
@@ -34,8 +34,7 @@
       <template preserve-content>
         <dom-bind>
           <template>
-            <p>Preferred language of contact:</p>
-            <vaadin-radio-group value="{{radioValue}}">
+            <vaadin-radio-group value="{{radioValue}}" label="Preferred language of contact">
               <vaadin-radio-button value="en">English</vaadin-radio-button>
               <vaadin-radio-button value="fr">Français</vaadin-radio-button>
               <vaadin-radio-button value="de">Deutsch</vaadin-radio-button>
