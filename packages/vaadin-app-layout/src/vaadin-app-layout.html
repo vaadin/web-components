@@ -1,0 +1,60 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+
+<dom-module id="vaadin-app-layout">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+    </style>
+    <slot></slot>
+  </template>
+
+  <script>
+    (function() {
+
+      /**
+       * `<vaadin-app-layout>` is a Polymer 2 element.
+       *
+       * ```
+       * <vaadin-app-layout></vaadin-app-layout>
+       * ```
+       *
+       * @memberof Vaadin
+       * @demo demo/index.html
+       */
+      class AppLayoutElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+        static get is() {
+          return 'vaadin-app-layout';
+        }
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+          };
+        }
+      }
+
+      customElements.define(AppLayoutElement.is, AppLayoutElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.AppLayoutElement = AppLayoutElement;
+    })();
+  </script>
+</dom-module>
