@@ -691,6 +691,8 @@ This program is available under Apache License Version 2.0, available at https:/
         // (especially when aligned on top of input)
         setTimeout(() => {
           this.$.overlay.$.dropdown.notifyResize();
+          this.$.overlay._selector.notifyResize();
+          Polymer.flush && Polymer.flush();
         }, 1);
       }
     }
