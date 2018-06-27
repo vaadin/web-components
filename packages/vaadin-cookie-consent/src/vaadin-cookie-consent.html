@@ -22,10 +22,10 @@ This program is available under Apache License Version 2.0, available at https:/
     (function() {
 
       /**
-       * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first 
+       * `<vaadin-cookie-consent>` is used to show a cookie consent banner the first
        *  time a user visits the application.
-       * 
-       * By default, the banner is shown attached to the top of the screen and with a 
+       *
+       * By default, the banner is shown attached to the top of the screen and with a
        * predefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.
        *
        * The texts, link and position can be configured using attributes/properties, e.g.
@@ -36,7 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinCookieConsentElement extends 
+      class VaadinCookieConsentElement extends
         Vaadin.ElementMixin(
           Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
@@ -70,7 +70,7 @@ This program is available under Apache License Version 2.0, available at https:/
               value: 'Learn more'
             },
             /**
-             * The URL the 'learn more' link should open.            
+             * The URL the 'learn more' link should open.
              */
             learnMoreLink: {
               type: String,
@@ -82,16 +82,16 @@ This program is available under Apache License Version 2.0, available at https:/
             },
             /**
              * Determines the position of the banner.
-             * 
+             *
              * Possible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`
-             * For `top` and `bottom`, the banner is shown with full width. For the corner positions, 
+             * For `top` and `bottom`, the banner is shown with full width. For the corner positions,
              * it is shown as a smaller popup.
              */
             position: {
               type: String,
               value: 'top'
             },
-            /** 
+            /**
              * The name of the cookie to set to remember that the user has consented.
              *
              * This rarely needs to be changed.
