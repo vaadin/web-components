@@ -1,7 +1,9 @@
 <!--
 @license
 Copyright (c) 2018 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+This program is available under Commercial Vaadin Add-On License 3.0 (CVALv3).
+
+See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 
 <link rel='import' href='../../polymer/polymer-element.html'>
@@ -36,7 +38,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @demo demo/index.html
        */
-      class VaadinCookieConsentElement extends
+      class CookieConsentElement extends
         Vaadin.ElementMixin(
           Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
@@ -156,15 +158,15 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
       }
-      customElements.define(VaadinCookieConsentElement.is, VaadinCookieConsentElement);
+      customElements.define(CookieConsentElement.is, CookieConsentElement);
 
       /**
        * @namespace Vaadin
        */
       window.Vaadin = window.Vaadin || {};
-      Vaadin.VaadinCookieConsentElement = VaadinCookieConsentElement;
+      Vaadin.CookieConsentElement = CookieConsentElement;
       if (window.Vaadin.runIfDevelopmentMode) {
-        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', VaadinCookieConsentElement);
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', CookieConsentElement);
       }
     })();
   </script>
