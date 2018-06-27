@@ -370,6 +370,15 @@ This program is available under Apache License Version 2.0, available at https:/
           const template = this.querySelector('template');
           this._overlayElement.template = template;
           if (this._overlayElement.content) {
+            const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
+
+            this._overlayElement._instance.forwardHostProp = (...args) => {
+              origForwardHostProp.apply(this._overlayElement._instance, args);
+              setTimeout(() => {
+                this._updateValueSlot();
+              });
+            };
+
             this._menuElement = Array.from(this._overlayElement.content.children).filter(element => element.localName !== 'style')[0];
 
             if (this._menuElement) {
