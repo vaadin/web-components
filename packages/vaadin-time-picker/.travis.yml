@@ -18,13 +18,13 @@ env:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
+      npm -q i && npm i -q --no-save bower polymer-cli wct-istanbul && bower -q i &&
       gulp lint version:check &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         if [[ "$TEST_SUITE" = "visual_tests" ]]; then
           npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
-          gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
+          gemini test test/visual
         else
           wct --env saucelabs;
         fi;
@@ -36,7 +36,7 @@ script:
       fi;
     fi
   - if [[ "$POLYMER" = "3" ]]; then
-      npm --no-save -q install -g yarn bower magi-cli web-component-tester &&
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester wct-istanbul &&
       (cd .. && git clone --depth 1 -b vaadin-components-rc git://github.com/web-padawan/polymer-modulizer.git && cd polymer-modulizer && npm -q link) &&
       rm -rf node_modules &&
       magi p3-convert --out . --import-style=name &&

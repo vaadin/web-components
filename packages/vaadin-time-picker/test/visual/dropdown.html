@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link href="../../vaadin-time-picker.html" rel="import">
+</head>
+
+<body style="height: 100vh;">
+
+  <div id="dropdown-tests" style="padding: 10px;">
+    Plain
+    <vaadin-time-picker id="plain"></vaadin-time-picker>
+
+    <br>Pre-selected value
+    <vaadin-time-picker value="15:00" id="selected-value"></vaadin-time-picker>
+
+    <br>Step
+    <vaadin-time-picker step='900' id="step"></vaadin-time-picker>
+  </div>
+
+  <script>
+    function closeTimePickers() {
+      var timePickers = document.querySelectorAll('vaadin-time-picker');
+
+      [].forEach.call(timePickers, function(timePicker) {
+        timePicker.__dropdownElement.opened = false;
+      });
+    }
+  </script>
+
+</body>
