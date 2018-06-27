@@ -434,9 +434,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this._attachSelectedItem(selected);
 
-          if (!this._valueChanging) {
+          if (!this._valueChanging && selected) {
             this._selectedChanging = true;
-            this.value = selected && selected.value || '';
+            this.value = selected.value || '';
             delete this._selectedChanging;
           }
         }
