@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Theming",
+    "url": "element-theming",
+    "src": "element-theming.html",
+    "meta": {
+      "title": "vaadin-cookie-consent Theming",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }

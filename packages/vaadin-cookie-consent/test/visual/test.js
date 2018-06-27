@@ -17,7 +17,9 @@ gemini.suite('vaadin-cookie-consent', function(rootSuite) {
   gemini.suite('default-tests', function(suite) {
     suite
       .setUrl('/default.html')
-      .setCaptureElements('.cc-window')
+      .before(function(actions, find) {
+        actions.waitForElementToShow('.cc-window', 5000);
+      }).setCaptureElements('.cc-window')
       .capture('default-banner');
   });
 
