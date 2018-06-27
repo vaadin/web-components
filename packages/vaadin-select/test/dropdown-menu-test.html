@@ -363,10 +363,10 @@
           expect(menu.selected).to.be.equal(1);
         });
 
-        it('Should select first item with empty value when when value is not found in items', () => {
+        it('Should not select any item when value is not found in items', () => {
           dropdown.value = 'v2';
           dropdown.value = 'foo';
-          expect(menu.selected).to.be.equal(0);
+          expect(menu.selected).to.be.undefined;
         });
 
         describe('has-value attribute on text-field', () => {
