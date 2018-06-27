@@ -2,15 +2,31 @@
 
 <head lang="en">
   <meta charset="UTF-8">
-  <title></title>
-  <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
   <link href="../../vaadin-time-picker.html" rel="import">
 </head>
 
 <body>
 
-  <span id="default-tests">
+  <div id="default-tests" style="padding: 10px;">
+    Plain
     <vaadin-time-picker></vaadin-time-picker>
-  </span>
+
+    <br>Label
+    <vaadin-time-picker label="Pick a time"></vaadin-time-picker>
+
+    <br>Placeholder
+    <vaadin-time-picker placeholder="Pick a time"></vaadin-time-picker>
+
+    <br>Disabled
+    <vaadin-time-picker disabled></vaadin-time-picker>
+
+    <br>Read-only
+    <vaadin-time-picker readonly></vaadin-time-picker>
+
+    <br>Value
+    <vaadin-time-picker step='0.5' value="12:12:12.122"></vaadin-time-picker>
+  </div>
 
 </body>

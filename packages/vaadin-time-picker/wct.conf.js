@@ -1,6 +1,10 @@
-var argv = require('yargs').argv;
+var envIndex = process.argv.indexOf('--env') + 1;
+var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
+  testTimeout: 180 * 1000,
+  verbose: false,
+  // MAGI REMOVE START
   plugins: {
     istanbul: {
       dir: './coverage',
@@ -16,6 +20,7 @@ module.exports = {
       }
     }
   },
+  // MAGI REMOVE END
 
   registerHooks: function(context) {
     var saucelabsPlatforms = [
@@ -32,10 +37,10 @@ module.exports = {
       'Windows 10/firefox@59'
     ];
 
-    if (argv.env === 'saucelabs') {
+    if (env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
 
-    } else if (argv.env === 'saucelabs-cron') {
+    } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
     }
   }
