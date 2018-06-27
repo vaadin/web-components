@@ -1,4 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-confirm-dialog.svg)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-confirm-dialog)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-confirm-dialog.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-confirm-dialog)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -10,23 +9,13 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-confirm-dialog/html-api)
 
 
-[&lt;vaadin-confirm-dialog&gt;](https://vaadin.com/components/vaadin-confirm-dialog) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-confirm-dialog&gt;](https://vaadin.com/components/vaadin-confirm-dialog) is a Web Component providing an easy way to ask the user to confirm a choice, part of the [Vaadin components](https://vaadin.com/components).
 
-<!--
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="vaadin-confirm-dialog.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
 ```html
-<vaadin-confirm-dialog>
-  ...
-</vaadin-confirm-dialog>
+  <vaadin-confirm-dialog header="Unsaved changes" confirm-text="Save" on-confirm="save"
+    cancel on-cancel="cancel" reject reject-text="Discard" on-reject="discard">
+    Do you want to save or discard your changes before navigating away?
+  </vaadin-confirm-dialog>
 ```
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-confirm-dialog/master/screenshot.png" width="200" alt="Screenshot of vaadin-confirm-dialog">](https://vaadin.com/components/vaadin-confirm-dialog)
