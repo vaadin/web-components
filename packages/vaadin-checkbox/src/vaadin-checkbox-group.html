@@ -1,0 +1,179 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="vaadin-checkbox.html">
+
+<dom-module id="vaadin-checkbox-group">
+  <template>
+    <slot id="slot"></slot>
+  </template>
+
+  <script>
+    (function() {
+      /**
+       * `<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.
+       *
+       * ```html
+       * <vaadin-checkbox-group>
+       *   <vaadin-checkbox value="foo">Foo</vaadin-checkbox>
+       *   <vaadin-checkbox value="bar">Bar</vaadin-checkbox>
+       *   <vaadin-checkbox value="baz">Baz</vaadin-checkbox>
+       * </vaadin-checkbox-group>
+       * ```
+       *
+       * ### Styling
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute  | Description | Part name
+       * -----------|-------------|------------
+       * `disabled`   | Set when the checkbox group and its children are disabled. | :host
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * @memberof Vaadin
+       * @mixes Vaadin.ThemableMixin
+       * @element vaadin-checkbox-group
+       * @demo demo/index.html
+       */
+      class CheckboxGroupElement extends Vaadin.ThemableMixin(Polymer.Element) {
+        static get is() {
+          return 'vaadin-checkbox-group';
+        }
+
+        static get properties() {
+          return {
+            /**
+             * The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.
+             */
+            disabled: {
+              type: Boolean,
+              reflectToAttribute: true,
+              observer: '_disabledChanged'
+            },
+
+            /**
+             * Value of the checkbox group.
+             */
+            value: {
+              type: Array,
+              value: () => [],
+              notify: true
+            }
+          };
+        }
+
+        static get observers() {
+          return [
+            '_valueChanged(value, value.splices)'
+          ];
+        }
+
+        /**
+         * @private
+         */
+        connectedCallback() {
+          super.connectedCallback();
+
+          const checkedChangedListener = (e) => {
+            this._changeSelectedCheckbox(e.target);
+          };
+
+          this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
+
+            this._filterCheckboxes(info.addedNodes).forEach(checkbox => {
+              checkbox.addEventListener('checked-changed', checkedChangedListener);
+              if (this.disabled) {
+                checkbox.disabled = true;
+              }
+              if (checkbox.checked) {
+                this._addCheckboxToValue(checkbox.value);
+              }
+            });
+
+            this._filterCheckboxes(info.removedNodes).forEach(checkbox => {
+              checkbox.removeEventListener('checked-changed', checkedChangedListener);
+              if (checkbox.checked) {
+                this._removeCheckboxFromValue(checkbox.value);
+              }
+            });
+
+            const checkboxWithoutValue = this._filterCheckboxes(info.addedNodes).filter(checkbox => !checkbox
+              .getAttribute('value'));
+            if (checkboxWithoutValue.length) {
+              console.warn('Please add value attribute to all checkboxes in checkbox group');
+            }
+          });
+        }
+
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'checkboxgroup');
+        }
+
+        get _checkboxes() {
+          return this._filterCheckboxes(this.querySelectorAll('*'));
+        }
+
+        _filterCheckboxes(nodes) {
+          return Array.from(nodes)
+            .filter(child => child instanceof Vaadin.CheckboxElement);
+        }
+
+        _disabledChanged(disabled) {
+          this.setAttribute('aria-disabled', disabled);
+
+          this._checkboxes.forEach(checkbox => checkbox.disabled = disabled);
+        }
+
+        _addCheckboxToValue(value) {
+          this.push('value', value);
+        }
+
+        _removeCheckboxFromValue(value) {
+          const index = this.value.indexOf(value);
+          this.splice('value', index, 1);
+        }
+
+        _changeSelectedCheckbox(checkbox) {
+          if (this._updatingValue) {
+            return;
+          }
+
+          if (checkbox.checked) {
+            this._addCheckboxToValue(checkbox.value);
+          } else {
+            this._removeCheckboxFromValue(checkbox.value);
+          }
+
+        }
+
+        _valueChanged(newV, oldV) {
+          // set a flag to avoid updating loop
+          this._updatingValue = true;
+          // reflect the value array to checkboxes
+          this._checkboxes.forEach(checkbox => {
+            checkbox.checked = newV.indexOf(checkbox.value) > -1;
+          });
+          this._updatingValue = false;
+        }
+
+      }
+
+      customElements.define(CheckboxGroupElement.is, CheckboxGroupElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin = window.Vaadin || {};
+      Vaadin.CheckboxGroupElement = CheckboxGroupElement;
+    })();
+  </script>
+</dom-module>

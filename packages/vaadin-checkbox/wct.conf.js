@@ -21,7 +21,7 @@ module.exports = {
     }
   },
   // MAGI REMOVE END
-  
+
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@10.3',
