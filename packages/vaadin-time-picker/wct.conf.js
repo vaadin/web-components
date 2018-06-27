@@ -2,6 +2,9 @@ var envIndex = process.argv.indexOf('--env') + 1;
 var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
+  testTimeout: 180 * 1000,
+  verbose: false,
+  // MAGI REMOVE START
   plugins: {
     istanbul: {
       dir: './coverage',
@@ -17,6 +20,7 @@ module.exports = {
       }
     }
   },
+  // MAGI REMOVE END
 
   registerHooks: function(context) {
     var saucelabsPlatforms = [
