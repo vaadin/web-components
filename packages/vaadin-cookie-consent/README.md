@@ -1,5 +1,3 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-cookie-consent.svg)
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-cookie-consent)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-cookie-consent.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-cookie-consent)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
@@ -10,7 +8,7 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-cookie-consent/html-api)
 
 
-[&lt;vaadin-cookie-consent&gt;](https://vaadin.com/components/vaadin-cookie-consent) is a [Polymer 2](http://polymer-project.org) element providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-cookie-consent&gt;](https://vaadin.com/components/vaadin-cookie-consent) is a web component used for showing a cookie consent banner the first time a user visits the application. Cookie Consent is part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -24,8 +22,11 @@
 ```
 -->
 ```html
-<vaadin-cookie-consent>
-  ...
+<vaadin-cookie-consent 
+  message="We are using cookies to make your visit here awesome!"
+  dismiss="Accept"
+  learn-more="Why?"
+  learn-more-link="https://yourdomain.com/terms-of-service">
 </vaadin-cookie-consent>
 ```
 
