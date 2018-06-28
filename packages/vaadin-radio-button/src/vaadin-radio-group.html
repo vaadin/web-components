@@ -246,10 +246,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _addActiveListeners() {
           this.addEventListener('keydown', e => {
-
-            if (this.disabled || this.readonly) {
-              return;
-            }
             // if e.target is vaadin-radio-group then assign to checkedRadioButton currently checked radio button
             var checkedRadioButton = (e.target == this) ? this._checkedButton : e.target;
 

@@ -118,6 +118,29 @@
         expect(vaadinRadioButtonList[2].checked).to.be.false;
       });
 
+      it('should check radio button with keyboard if not disabled or readonly', () => {
+        vaadinRadioButtonList[1].checked = true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+        expect(vaadinRadioButtonList[2].checked).to.be.true;
+      });
+
+      it('should not check radio button with keyboard if disabled', () => {
+        vaadinRadioButtonList[1].checked = true;
+        vaadinRadioButtonGroup.disabled = true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+        expect(vaadinRadioButtonList[2].checked).to.be.false;
+      });
+
+      it('should not check radio button with keyboard if readonly', () => {
+        vaadinRadioButtonList[1].checked = true;
+        vaadinRadioButtonGroup.readonly = true;
+
+        MockInteractions.keyDownOn(vaadinRadioButtonGroup, 39);
+        expect(vaadinRadioButtonList[2].checked).to.be.false;
+      });
+
       it('previous/last radio button should be focused and checked after left/up', () => {
         vaadinRadioButtonList[1].checked = true;
 
@@ -243,18 +266,44 @@
         expect(vaadinRadioButtonList[2].disabled).to.be.false;
       });
 
-      it('should validate when field is not required', () => {
+      it('should not have the has-value attribute by default', () => {
+        expect(vaadinRadioButtonGroup.hasAttribute('has-value')).to.be.false;
+      });
+
+      it('should change the has-value attribute on value', () => {
+        vaadinRadioButtonGroup.value = '2';
+        expect(vaadinRadioButtonGroup.hasAttribute('has-value')).to.be.true;
+
+        vaadinRadioButtonGroup.value = '';
+        expect(vaadinRadioButtonGroup.hasAttribute('has-value')).to.be.false;
+      });
+
+      it('should pass validation when field is not required', () => {
         expect(vaadinRadioButtonGroup.checkValidity()).to.be.true;
         expect(vaadinRadioButtonGroup.invalid).to.be.false;
       });
 
-      it('should validate when field is required and user has not blurred', () => {
+      it('should not set invalid when field is required and user has not blurred yet', () => {
         vaadinRadioButtonGroup.required = true;
         expect(vaadinRadioButtonGroup.checkValidity()).to.be.false;
         expect(vaadinRadioButtonGroup.invalid).to.be.false;
       });
 
-      it('should validate when field is required and user blurs', () => {
+      it('validate method should set invalid', () => {
+        vaadinRadioButtonGroup.required = true;
+        vaadinRadioButtonGroup.validate();
+        expect(vaadinRadioButtonGroup.invalid).to.be.true;
+      });
+
+      it('should validate after changing selected option', () => {
+        vaadinRadioButtonGroup.required = true;
+        vaadinRadioButtonGroup.validate();
+
+        vaadinRadioButtonList[1].checked = true;
+        expect(vaadinRadioButtonGroup.invalid).to.be.false;
+      });
+
+      it('should pass validation and set invalid when field is required and user blurs', () => {
         vaadinRadioButtonGroup.required = true;
         blur(vaadinRadioButtonGroup);
         expect(vaadinRadioButtonGroup.checkValidity()).to.be.false;
