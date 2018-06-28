@@ -267,18 +267,26 @@
         expect(/^vaadin-radio-group-error-\d+$/.test(errorElement.id)).to.be.true;
       });
 
+      it('should remove aria-hiden when error is shown', () => {
+        vaadinRadioButtonGroup.errorMessage = 'Bad input!';
+        vaadinRadioButtonGroup.invalid = true;
+        expect(errorElement.getAttribute('aria-hidden')).to.be.equal('false');
+      });
+
       it('should hide error message by default', () => {
         vaadinRadioButtonGroup.errorMessage = 'Bad input!';
         expect(visible(errorElement)).to.be.false;
       });
 
-      it('should show error message on invalid', () => {
+      it('should show error message on invalid', done => {
         vaadinRadioButtonGroup.required = true;
         vaadinRadioButtonGroup.errorMessage = 'Bad input!';
         blur(vaadinRadioButtonGroup);
 
-        expect(visible(errorElement)).to.be.true;
-        expect(errorElement.getAttribute('aria-hidden')).to.be.equal('false');
+        Polymer.Base.async(() => {
+          expect(visible(errorElement)).to.be.true;
+          done();
+        }, 100);
       });
     });
   </script>

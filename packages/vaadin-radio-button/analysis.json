@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-radio-group.html",
         "start": {
-          "line": 294,
+          "line": 394,
           "column": 6
         },
         "end": {
-          "line": 294,
+          "line": 394,
           "column": 42
         }
       },
@@ -1454,7 +1454,7 @@
           ]
         },
         {
-          "description": "`<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-group>\n  <vaadin-radio-button name=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button name=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button name=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps radio-buttons\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set when the radio group and its children are disabled. | :host\n`has-label` | Set when the element has a label | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-radio-group>` is a Polymer element for grouping vaadin-radio-buttons.\n\n```html\n<vaadin-radio-group>\n  <vaadin-radio-button name=\"foo\">Foo</vaadin-radio-button>\n  <vaadin-radio-button name=\"bar\">Bar</vaadin-radio-button>\n  <vaadin-radio-button name=\"baz\">Baz</vaadin-radio-button>\n</vaadin-radio-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps radio-buttons\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the radio group and its children are disabled. | :host\n`readonly` | Set to a readonly text field | :host\n`invalid` | Set when the element is invalid | :host\n`has-label` | Set when the element has a label | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-radio-group.html",
           "properties": [
@@ -1465,11 +1465,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 164,
+                  "line": 214,
                   "column": 8
                 },
                 "end": {
-                  "line": 166,
+                  "line": 216,
                   "column": 9
                 }
               },
@@ -1486,11 +1486,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 101,
                   "column": 12
                 },
                 "end": {
-                  "line": 99,
+                  "line": 105,
                   "column": 13
                 }
               },
@@ -1502,17 +1502,126 @@
               }
             },
             {
+              "name": "readonly",
+              "type": "boolean | null | undefined",
+              "description": "This attribute indicates that the user cannot modify the value of the control.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 12
+                },
+                "end": {
+                  "line": 114,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_readonlyChanged\"",
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "invalid",
+              "type": "boolean | null | undefined",
+              "description": "This property is set to true when the value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 119,
+                  "column": 12
+                },
+                "end": {
+                  "line": 124,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "required",
+              "type": "boolean | null | undefined",
+              "description": "Specifies that the user must fill in a value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 129,
+                  "column": 12
+                },
+                "end": {
+                  "line": 132,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "errorMessage",
+              "type": "string | null | undefined",
+              "description": "Error to show when the input value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 137,
+                  "column": 12
+                },
+                "end": {
+                  "line": 140,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "_errorId",
+              "type": "string | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 142,
+                  "column": 12
+                },
+                "end": {
+                  "line": 144,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              }
+            },
+            {
               "name": "_checkedButton",
               "type": "Object | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 101,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 104,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -1530,11 +1639,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 113,
+                  "line": 158,
                   "column": 13
                 }
               },
@@ -1553,11 +1662,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 122,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -1577,11 +1686,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 129,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 150,
+                  "line": 195,
                   "column": 9
                 }
               },
@@ -1597,11 +1706,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 152,
+                  "line": 197,
                   "column": 8
                 },
                 "end": {
-                  "line": 162,
+                  "line": 212,
                   "column": 9
                 }
               },
@@ -1617,11 +1726,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 168,
+                  "line": 218,
                   "column": 8
                 },
                 "end": {
-                  "line": 171,
+                  "line": 221,
                   "column": 9
                 }
               },
@@ -1638,11 +1747,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 223,
                   "column": 8
                 },
                 "end": {
-                  "line": 177,
+                  "line": 226,
                   "column": 9
                 }
               },
@@ -1657,16 +1766,63 @@
               }
             },
             {
+              "name": "_updateDisableButtons",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 228,
+                  "column": 8
+                },
+                "end": {
+                  "line": 240,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_readonlyChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 242,
+                  "column": 8
+                },
+                "end": {
+                  "line": 244,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "newV"
+                },
+                {
+                  "name": "oldV"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
               "name": "_addActiveListeners",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 246,
                   "column": 8
                 },
                 "end": {
-                  "line": 199,
+                  "line": 267,
                   "column": 9
                 }
               },
@@ -1682,11 +1838,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 201,
+                  "line": 269,
                   "column": 8
                 },
                 "end": {
-                  "line": 209,
+                  "line": 277,
                   "column": 9
                 }
               },
@@ -1709,11 +1865,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 279,
                   "column": 8
                 },
                 "end": {
-                  "line": 216,
+                  "line": 284,
                   "column": 9
                 }
               },
@@ -1726,11 +1882,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 218,
+                  "line": 287,
                   "column": 8
                 },
                 "end": {
-                  "line": 220,
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -1743,11 +1899,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 222,
+                  "line": 291,
                   "column": 8
                 },
                 "end": {
-                  "line": 234,
+                  "line": 303,
                   "column": 9
                 }
               },
@@ -1767,11 +1923,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 236,
+                  "line": 305,
                   "column": 8
                 },
                 "end": {
-                  "line": 248,
+                  "line": 317,
                   "column": 9
                 }
               },
@@ -1791,11 +1947,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 319,
                   "column": 8
                 },
                 "end": {
-                  "line": 254,
+                  "line": 323,
                   "column": 9
                 }
               },
@@ -1815,11 +1971,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 256,
+                  "line": 325,
                   "column": 8
                 },
                 "end": {
-                  "line": 260,
+                  "line": 329,
                   "column": 9
                 }
               },
@@ -1839,11 +1995,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 262,
+                  "line": 331,
                   "column": 8
                 },
                 "end": {
-                  "line": 272,
+                  "line": 347,
                   "column": 9
                 }
               },
@@ -1861,16 +2017,57 @@
               }
             },
             {
+              "name": "validate",
+              "description": "Returns true if `value` is valid.\n`<iron-form>` uses this to check the validity or all its elements.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 355,
+                  "column": 8
+                },
+                "end": {
+                  "line": 357,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid."
+              }
+            },
+            {
+              "name": "checkValidity",
+              "description": "Returns true if the current input value satisfies all constraints (if any)",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 363,
+                  "column": 8
+                },
+                "end": {
+                  "line": 365,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "boolean"
+              }
+            },
+            {
               "name": "_setFocusable",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 274,
+                  "line": 367,
                   "column": 8
                 },
                 "end": {
-                  "line": 277,
+                  "line": 370,
                   "column": 9
                 }
               },
@@ -1890,11 +2087,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 279,
+                  "line": 372,
                   "column": 8
                 },
                 "end": {
-                  "line": 285,
+                  "line": 378,
                   "column": 9
                 }
               },
@@ -1907,6 +2104,60 @@
               "return": {
                 "type": "void"
               }
+            },
+            {
+              "name": "_getActiveErrorId",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 380,
+                  "column": 8
+                },
+                "end": {
+                  "line": 382,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ]
+            },
+            {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 384,
+                  "column": 8
+                },
+                "end": {
+                  "line": 386,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                },
+                {
+                  "name": "errorId"
+                }
+              ]
             }
           ],
           "staticMethods": [
@@ -1997,11 +2248,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 91,
               "column": 6
             },
             "end": {
-              "line": 287,
+              "line": 387,
               "column": 7
             }
           },
@@ -2014,11 +2265,11 @@
               "description": "The current disabled state of the radio group. True if group and all internal radio buttons are disabled.",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 101,
                   "column": 12
                 },
                 "end": {
-                  "line": 99,
+                  "line": 105,
                   "column": 13
                 }
               },
@@ -2026,15 +2277,79 @@
               "type": "boolean | null | undefined"
             },
             {
+              "name": "readonly",
+              "description": "This attribute indicates that the user cannot modify the value of the control.",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 12
+                },
+                "end": {
+                  "line": 114,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "invalid",
+              "description": "This property is set to true when the value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 119,
+                  "column": 12
+                },
+                "end": {
+                  "line": 124,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "sourceRange": {
+                "start": {
+                  "line": 129,
+                  "column": 12
+                },
+                "end": {
+                  "line": 132,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the input value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 137,
+                  "column": 12
+                },
+                "end": {
+                  "line": 140,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
               "name": "label",
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 109,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 113,
+                  "line": 158,
                   "column": 13
                 }
               },
@@ -2046,11 +2361,11 @@
               "description": "Value of the radio group.",
               "sourceRange": {
                 "start": {
-                  "line": 118,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 122,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -2059,6 +2374,12 @@
             }
           ],
           "events": [
+            {
+              "type": "CustomEvent",
+              "name": "invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "metadata": {}
+            },
             {
               "type": "CustomEvent",
               "name": "value-changed",
