@@ -55,6 +55,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.AppLayoutElement = AppLayoutElement;
+      if (window.Vaadin.runIfDevelopmentMode) {
+        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', AppLayoutElement);
+      }
     })();
   </script>
 </dom-module>
