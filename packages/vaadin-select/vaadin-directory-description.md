@@ -4,7 +4,7 @@
 [![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-dropdown-menu.svg)](https://vaadin.com/directory/component/vaadinvaadin-dropdown-menu)
 
 
-[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a [Polymer 2](http://polymer-project.org) element similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-dropdown-menu&gt;](https://vaadin.com/components/vaadin-dropdown-menu) is a Web Component similar to a native browser select element, part of the [Vaadin components](https://vaadin.com/components).
 
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-dropdown-menu/master/screenshot.gif" width="220" alt="Screenshot of vaadin-dropdown-menu">](https://vaadin.com/components/vaadin-dropdown-menu)
