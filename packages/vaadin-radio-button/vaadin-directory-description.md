@@ -3,7 +3,7 @@
 
 [![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-radio-button.svg)](https://vaadin.com/directory/component/vaadinvaadin-radio-button)
 
-[&lt;vaadin-radio-button&gt;](https://vaadin.com/components/vaadin-radio-button) is a [Polymer 2](http://polymer-project.org) element providing an accessible and customizable radio button, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-radio-button&gt;](https://vaadin.com/components/vaadin-radio-button) is a Web Component providing an accessible and customizable radio button, part of the [Vaadin components](https://vaadin.com/components).
 
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-radio-button/master/screenshot.png" width="237" alt="Screenshot of vaadin-radio-group">](https://vaadin.com/components/vaadin-radio-button)
