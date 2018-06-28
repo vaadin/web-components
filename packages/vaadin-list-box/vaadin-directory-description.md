@@ -4,7 +4,7 @@
 [![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-list-box.svg)](https://vaadin.com/directory/component/vaadinvaadin-list-box)
 
 
-[&lt;vaadin-list-box&gt;](https://vaadin.com/components/vaadin-list-box) is a [Polymer 2](http://polymer-project.org) element providing reusable list boxes, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-list-box&gt;](https://vaadin.com/components/vaadin-list-box) is a Web Component providing reusable list boxes, part of the [Vaadin components](https://vaadin.com/components).
 
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-list-box/master/screenshot.png" width="150" alt="Screenshot of vaadin-list-box">](https://vaadin.com/components/vaadin-list-box)
