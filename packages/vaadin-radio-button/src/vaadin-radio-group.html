@@ -11,7 +11,40 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-radio-group">
   <template>
-    <slot id="slot"></slot>
+    <style>
+      :host {
+        display: inline-flex;
+      }
+
+      :host::before {
+        content: "\2003";
+        width: 0;
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .vaadin-group-field-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+    </style>
+
+    <div class="vaadin-group-field-container">
+      <label part="label">[[label]]</label>
+
+      <div part="group-field">
+        <slot id="slot"></slot>
+      </div>
+
+    </div>
+
   </template>
 
   <script>
@@ -29,11 +62,19 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       * `group-field` | The element that wraps radio-buttons
+       *
        * The following state attributes are available for styling:
        *
        * Attribute  | Description | Part name
        * -----------|-------------|------------
-       * `disabled`   | Set when the radio group and its children are disabled. | :host
+       * `disabled` | Set when the radio group and its children are disabled. | :host
+       * `has-label` | Set when the element has a label | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -61,6 +102,15 @@ This program is available under Apache License Version 2.0, available at https:/
             _checkedButton: {
               type: Object,
               observer: '_checkedButtonChanged'
+            },
+
+            /**
+             * String used for the label element.
+             */
+            label: {
+              type: String,
+              value: '',
+              observer: '_labelChanged'
             },
 
             /**
@@ -225,6 +275,14 @@ This program is available under Apache License Version 2.0, available at https:/
         _setFocusable(idx) {
           const items = this._radioButtons;
           items.forEach(e => e.tabindex = e === items[idx] ? 0 : -1);
+        }
+
+        _labelChanged(label) {
+          if (label) {
+            this.setAttribute('has-label', '');
+          } else {
+            this.removeAttribute('has-label');
+          }
         }
 
       }

@@ -206,6 +206,15 @@
         document.body.removeChild(focusInput);
       });
 
+      it('should update has-label attribute when setting label', function() {
+        expect(vaadinRadioButtonGroup.hasAttribute('has-label')).to.be.false;
+
+        vaadinRadioButtonGroup.label = 'foo';
+
+        expect(vaadinRadioButtonGroup.hasAttribute('has-label')).to.be.true;
+        expect(vaadinRadioButtonGroup.label).to.be.equal('foo');
+      });
+
     });
   </script>
 </body>
