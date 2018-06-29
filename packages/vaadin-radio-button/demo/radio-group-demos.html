@@ -20,22 +20,12 @@
     <h3>Radio Group Disabled</h3>
     <vaadin-demo-snippet id="radio-group-demos-radio-group-disabled">
       <template preserve-content>
-        <vaadin-radio-group disabled>
+        <vaadin-radio-group label="Mark" disabled>
           <vaadin-radio-button>1</vaadin-radio-button>
           <vaadin-radio-button>2</vaadin-radio-button>
           <vaadin-radio-button>3</vaadin-radio-button>
           <vaadin-radio-button>4</vaadin-radio-button>
-        </vaadin-radio-group>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Validation</h3>
-    <vaadin-demo-snippet id="radio-group-demos-radio-group-validate">
-      <template preserve-content>
-        <vaadin-radio-group required error-message="Please select a valid option" label="Occupation" theme="vertical">
-          <vaadin-radio-button value="professional">Professional</vaadin-radio-button>
-          <vaadin-radio-button value="teacher">Teacher</vaadin-radio-button>
-          <vaadin-radio-button value="student">Student</vaadin-radio-button>
+          <vaadin-radio-button>5</vaadin-radio-button>
         </vaadin-radio-group>
       </template>
     </vaadin-demo-snippet>
@@ -56,16 +46,16 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Radio Group with Iron Form</h3>
+    <h3>Radio Group with Validation in Iron Form</h3>
     <vaadin-demo-snippet id="radio-group-demos-radio-group-with-iron-form">
       <template preserve-content>
         <iron-form id="test-form">
           <form>
-            <vaadin-radio-group>
-              <vaadin-radio-button name="radio-group-first">1</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group-second">2</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group-third">3</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group-fourth">4</vaadin-radio-button>
+            <vaadin-radio-group label="Complexity Level" required error-message="Please select an option">
+              <vaadin-radio-button name="complexity-one">1</vaadin-radio-button>
+              <vaadin-radio-button name="complexity-two">2</vaadin-radio-button>
+              <vaadin-radio-button name="complexity-three">3</vaadin-radio-button>
+              <vaadin-radio-button name="complexity-four">4</vaadin-radio-button>
             </vaadin-radio-group>
             <vaadin-button id="submit-button">Submit</vaadin-button>
           </form>
@@ -88,16 +78,16 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Radio Group with Iron Form with custom value</h3>
+    <h3>Radio Group with Custom Value Name in Iron Form</h3>
     <vaadin-demo-snippet id="radio-group-demos-radio-group-with-iron-form-with-custom-value">
       <template preserve-content>
         <iron-form id="test-form-custom-value">
           <form>
-            <vaadin-radio-group>
-              <vaadin-radio-button name="radio-group" value="first">1</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group" value="second">2</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group" value="third">3</vaadin-radio-button>
-              <vaadin-radio-button name="radio-group" value="fourth">4</vaadin-radio-button>
+            <vaadin-radio-group label="Complexity Level" required error-message="Please select an option">
+              <vaadin-radio-button name="complexity" value="1">1</vaadin-radio-button>
+              <vaadin-radio-button name="complexity" value="2">2</vaadin-radio-button>
+              <vaadin-radio-button name="complexity" value="3">3</vaadin-radio-button>
+              <vaadin-radio-button name="complexity" value="4">4</vaadin-radio-button>
             </vaadin-radio-group>
             <vaadin-button id="submit-button-custom-value">Submit</vaadin-button>
           </form>
