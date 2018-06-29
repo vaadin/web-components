@@ -63,7 +63,11 @@
         }
 
         [part="footer"] div {
-          margin: var(--lumo-space-xs) auto calc(var(--lumo-space-xs) * -1);
+          margin: var(--lumo-space-xs) calc(var(--lumo-space-l) / -2) calc(var(--lumo-space-xs) * -1);
+        }
+
+        [part="footer"] vaadin-button {
+          width: 100%;
         }
 
         [part="footer"] .confirm-button {
