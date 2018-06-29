@@ -2,7 +2,6 @@
   <template>
     <style>
       :host {
-        --lumo-text-field-size: var(--lumo-size-m);
         color: var(--lumo-body-text-color);
         font-size: var(--lumo-font-size-m);
         font-family: var(--lumo-font-family);
@@ -13,7 +12,7 @@
       }
 
       :host::before {
-        height: var(--lumo-text-field-size);
+        height: var(--lumo-size.m);
         box-sizing: border-box;
         display: inline-flex;
         align-items: center;
