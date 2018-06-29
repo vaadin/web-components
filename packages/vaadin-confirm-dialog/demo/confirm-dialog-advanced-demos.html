@@ -12,7 +12,7 @@
         <dom-bind id="custom-example">
           <template>
             <vaadin-button>Open dialog</vaadin-button>
-            <vaadin-confirm-dialog cancel on-cancel="cancel">
+            <vaadin-confirm-dialog cancel>
               <style>
                 vaadin-button {
                   margin-top: 0;
@@ -22,11 +22,11 @@
               </style>
               <h3 slot="header">Unsaved changes</h3>
               <p>Do you want to <b>save</b> or <b>discard</b> your changes before navigating away?</p>
-              <vaadin-button slot="reject-button" theme="error tertiary" on-click="discard" tabindex="2">
+              <vaadin-button id="discard" slot="reject-button" theme="error tertiary" tabindex="2">
                 <iron-icon icon="vaadin:trash" slot="prefix"></iron-icon>
                 Discard
               </vaadin-button>
-              <vaadin-button slot="confirm-button" theme="primary" on-click="save" tabindex="1">
+              <vaadin-button id="save" slot="confirm-button" theme="primary" tabindex="1">
                 <iron-icon icon="vaadin:envelope-open" slot="prefix"></iron-icon>
                 Save
               </vaadin-button>
@@ -37,21 +37,22 @@
         <script>
           window.addDemoReadyListener('#confirm-dialog-advanced-demos-custom-buttons', function(document) {
             var example = document.querySelector('#custom-example');
+            var confirm = document.querySelector('vaadin-confirm-dialog');
             document.querySelector('vaadin-button').addEventListener('click', function() {
               example.$.status.innerText = '';
-              document.querySelector('vaadin-confirm-dialog').opened = true;
+              confirm.opened = true;
             });
-            example.save = function() {
-              document.querySelector('vaadin-confirm-dialog').opened = false;
+            example.$.save.addEventListener('click', function() {
+              confirm.opened = false;
               example.$.status.innerText = 'Your changes were saved';
-            };
-            example.discard = function() {
-              document.querySelector('vaadin-confirm-dialog').opened = false;
+            });
+            example.$.discard.addEventListener('click', function() {
+              confirm.opened = false;
               example.$.status.innerText = 'Your changes were discarded';
-            };
-            example.cancel = function() {
+            });
+            confirm.addEventListener('cancel', function() {
               example.$.status.innerText = 'Cancel was clicked';
-            };
+            });
           });
         </script>
       </template>
