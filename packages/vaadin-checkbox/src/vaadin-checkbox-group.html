@@ -11,7 +11,40 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <dom-module id="vaadin-checkbox-group">
   <template>
-    <slot id="slot"></slot>
+    <style>
+      :host {
+        display: inline-flex;
+      }
+
+      :host::before {
+        content: "\2003";
+        width: 0;
+        display: inline-block;
+      }
+
+      :host([hidden]) {
+        display: none !important;
+      }
+
+      .vaadin-group-field-container {
+        display: flex;
+        flex-direction: column;
+      }
+
+      [part="label"]:empty {
+        display: none;
+      }
+    </style>
+
+    <div class="vaadin-group-field-container">
+      <label part="label">[[label]]</label>
+
+      <div part="group-field">
+        <slot id="slot"></slot>
+      </div>
+
+    </div>
+
   </template>
 
   <script>
@@ -20,20 +53,28 @@ This program is available under Apache License Version 2.0, available at https:/
        * `<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.
        *
        * ```html
-       * <vaadin-checkbox-group>
-       *   <vaadin-checkbox value="foo">Foo</vaadin-checkbox>
-       *   <vaadin-checkbox value="bar">Bar</vaadin-checkbox>
-       *   <vaadin-checkbox value="baz">Baz</vaadin-checkbox>
+       * <vaadin-checkbox-group label="Preferred language of contact:">
+       *  <vaadin-checkbox value="en">English</vaadin-checkbox>
+       *  <vaadin-checkbox value="fr">Français</vaadin-checkbox>
+       *  <vaadin-checkbox value="de">Deutsch</vaadin-checkbox>
        * </vaadin-checkbox-group>
        * ```
        *
        * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `label` | The label element
+       * `group-field` | The element that wraps checkboxes
        *
        * The following state attributes are available for styling:
        *
        * Attribute  | Description | Part name
        * -----------|-------------|------------
        * `disabled`   | Set when the checkbox group and its children are disabled. | :host
+       * `has-label` | Set when the element has a label | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -56,6 +97,15 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Boolean,
               reflectToAttribute: true,
               observer: '_disabledChanged'
+            },
+
+            /**
+            * String used for the label element.
+            */
+            label: {
+              type: String,
+              value: '',
+              observer: '_labelChanged'
             },
 
             /**
@@ -163,6 +213,14 @@ This program is available under Apache License Version 2.0, available at https:/
             checkbox.checked = newV.indexOf(checkbox.value) > -1;
           });
           this._updatingValue = false;
+        }
+
+        _labelChanged(label) {
+          if (label) {
+            this.setAttribute('has-label', '');
+          } else {
+            this.removeAttribute('has-label');
+          }
         }
 
       }

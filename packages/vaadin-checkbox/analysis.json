@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox-group.html",
         "start": {
-          "line": 159,
+          "line": 232,
           "column": 6
         },
         "end": {
-          "line": 159,
+          "line": 232,
           "column": 42
         }
       },
@@ -953,7 +953,7 @@
           ]
         },
         {
-          "description": "`<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.\n\n```html\n<vaadin-checkbox-group>\n  <vaadin-checkbox value=\"foo\">Foo</vaadin-checkbox>\n  <vaadin-checkbox value=\"bar\">Bar</vaadin-checkbox>\n  <vaadin-checkbox value=\"baz\">Baz</vaadin-checkbox>\n</vaadin-checkbox-group>\n```\n\n### Styling\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the checkbox group and its children are disabled. | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.\n\n```html\n<vaadin-checkbox-group label=\"Preferred language of contact:\">\n <vaadin-checkbox value=\"en\">English</vaadin-checkbox>\n <vaadin-checkbox value=\"fr\">Français</vaadin-checkbox>\n <vaadin-checkbox value=\"de\">Deutsch</vaadin-checkbox>\n</vaadin-checkbox-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps checkboxes\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the checkbox group and its children are disabled. | :host\n`has-label` | Set when the element has a label | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-checkbox-group.html",
           "properties": [
@@ -964,11 +964,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 113,
+                  "line": 170,
                   "column": 8
                 },
                 "end": {
-                  "line": 115,
+                  "line": 172,
                   "column": 9
                 }
               },
@@ -985,11 +985,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 54,
+                  "line": 95,
                   "column": 12
                 },
                 "end": {
-                  "line": 58,
+                  "line": 99,
                   "column": 13
                 }
               },
@@ -1001,17 +1001,40 @@
               }
             },
             {
+              "name": "label",
+              "type": "string | null | undefined",
+              "description": "String used for the label element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 104,
+                  "column": 12
+                },
+                "end": {
+                  "line": 108,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_labelChanged\"",
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
               "name": "value",
               "type": "Array | null | undefined",
               "description": "Value of the checkbox group.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 63,
+                  "line": 113,
                   "column": 12
                 },
                 "end": {
-                  "line": 67,
+                  "line": 117,
                   "column": 13
                 }
               },
@@ -1031,11 +1054,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 130,
                   "column": 8
                 },
                 "end": {
-                  "line": 105,
+                  "line": 162,
                   "column": 9
                 }
               },
@@ -1051,11 +1074,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 107,
+                  "line": 164,
                   "column": 8
                 },
                 "end": {
-                  "line": 111,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -1071,11 +1094,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 120,
+                  "line": 177,
                   "column": 9
                 }
               },
@@ -1092,11 +1115,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 122,
+                  "line": 179,
                   "column": 8
                 },
                 "end": {
-                  "line": 126,
+                  "line": 183,
                   "column": 9
                 }
               },
@@ -1111,16 +1134,64 @@
               }
             },
             {
+              "name": "_addCheckboxToValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 185,
+                  "column": 8
+                },
+                "end": {
+                  "line": 187,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_removeCheckboxFromValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 189,
+                  "column": 8
+                },
+                "end": {
+                  "line": 192,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
               "name": "_changeSelectedCheckbox",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 194,
                   "column": 8
                 },
                 "end": {
-                  "line": 140,
+                  "line": 205,
                   "column": 9
                 }
               },
@@ -1140,11 +1211,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 142,
+                  "line": 207,
                   "column": 8
                 },
                 "end": {
-                  "line": 150,
+                  "line": 215,
                   "column": 9
                 }
               },
@@ -1155,6 +1226,30 @@
                 },
                 {
                   "name": "oldV"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_labelChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 217,
+                  "column": 8
+                },
+                "end": {
+                  "line": 223,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "label"
                 }
               ],
               "return": {
@@ -1250,11 +1345,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 44,
+              "line": 85,
               "column": 6
             },
             "end": {
-              "line": 152,
+              "line": 225,
               "column": 7
             }
           },
@@ -1267,11 +1362,11 @@
               "description": "The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.",
               "sourceRange": {
                 "start": {
-                  "line": 54,
+                  "line": 95,
                   "column": 12
                 },
                 "end": {
-                  "line": 58,
+                  "line": 99,
                   "column": 13
                 }
               },
@@ -1279,15 +1374,31 @@
               "type": "boolean | null | undefined"
             },
             {
+              "name": "label",
+              "description": "String used for the label element.",
+              "sourceRange": {
+                "start": {
+                  "line": 104,
+                  "column": 12
+                },
+                "end": {
+                  "line": 108,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
               "name": "value",
               "description": "Value of the checkbox group.",
               "sourceRange": {
                 "start": {
-                  "line": 63,
+                  "line": 113,
                   "column": 12
                 },
                 "end": {
-                  "line": 67,
+                  "line": 117,
                   "column": 13
                 }
               },
@@ -1313,12 +1424,12 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 13,
-                  "column": 4
+                  "line": 42,
+                  "column": 8
                 },
                 "end": {
-                  "line": 13,
-                  "column": 27
+                  "line": 42,
+                  "column": 31
                 }
               }
             }

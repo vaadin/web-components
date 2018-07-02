@@ -1,9 +1,59 @@
 <dom-module id="lumo-checkbox-group" theme-for="vaadin-checkbox-group">
   <template>
     <style>
-      :host([theme~="vertical"]) {
+      :host {
+        color: var(--lumo-body-text-color);
+        font-size: var(--lumo-font-size-m);
+        font-family: var(--lumo-font-family);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-tap-highlight-color: transparent;
+        padding: var(--lumo-space-xs) 0;
+      }
+
+      :host::before {
+        height: var(--lumo-size-m);
+        box-sizing: border-box;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      [part="label"] {
+        display: block;
+      }
+
+      :host([theme~="vertical"]) [part="group-field"] {
         display: flex;
         flex-direction: column;
+      }
+
+      :host([has-label])::before {
+        margin-top: calc(var(--lumo-font-size-s) * 1.5);
+      }
+
+      :host([has-label]) {
+        padding-top: var(--lumo-space-m);
+      }
+
+      [part="label"] {
+        align-self: flex-start;
+        color: var(--lumo-secondary-text-color);
+        font-weight: 500;
+        font-size: var(--lumo-font-size-s);
+        margin-left: calc(var(--lumo-border-radius) / 4);
+        transition: color 0.2s;
+        line-height: 1;
+        padding-bottom: 0.7em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        position: relative;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+
+      :host([invalid]) [part="label"] {
+        color: var(--lumo-error-text-color);
       }
     </style>
   </template>
