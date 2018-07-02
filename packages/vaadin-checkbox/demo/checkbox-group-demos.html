@@ -1,0 +1,111 @@
+<dom-module id="checkbox-group-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Checkbox Group</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-value">
+      <template preserve-content>
+        <dom-bind>
+          <template>
+            <p>Preferred language of contact:</p>
+            <vaadin-checkbox-group value="{{checkboxValue}}">
+              <vaadin-checkbox value="en">English</vaadin-checkbox>
+              <vaadin-checkbox value="fr">Français</vaadin-checkbox>
+              <vaadin-checkbox value="de">Deutsch</vaadin-checkbox>
+            </vaadin-checkbox-group>
+            <p>Selected value: [[checkboxValue]]</p>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Checkbox Group Disabled</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-disabled">
+      <template preserve-content>
+        <vaadin-checkbox-group disabled>
+          <vaadin-checkbox value="1">1</vaadin-checkbox>
+          <vaadin-checkbox value="2">2</vaadin-checkbox>
+          <vaadin-checkbox value="3">3</vaadin-checkbox>
+          <vaadin-checkbox value="4">4</vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Checkbox Group with Iron Form with same names</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form">
+      <template preserve-content>
+        <iron-form id="test-form">
+          <form>
+            <vaadin-checkbox-group>
+              <vaadin-checkbox name="checkbox-group" value="1">1</vaadin-checkbox>
+              <vaadin-checkbox name="checkbox-group" value="2">2</vaadin-checkbox>
+              <vaadin-checkbox name="checkbox-group" value="3">3</vaadin-checkbox>
+              <vaadin-checkbox name="checkbox-group" value="4">4</vaadin-checkbox>
+            </vaadin-checkbox-group>
+            <vaadin-button id="submit-button">Submit</vaadin-button>
+          </form>
+          <div id="iron-form-output"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-iron-form', function(document) {
+            const testForm = document.getElementById('test-form');
+            const submitButton = document.getElementById('submit-button');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
+            testForm.addEventListener('iron-form-submit', function(event) {
+              this.querySelector('#iron-form-output').innerHTML = JSON.stringify(event.detail);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Checkbox Group with Iron Form with different names</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-with-custom-value">
+      <template preserve-content>
+        <iron-form id="test-form-custom-value">
+          <form>
+            <vaadin-checkbox-group>
+              <vaadin-checkbox name="first-checkbox-group" value="1">1</vaadin-checkbox>
+              <vaadin-checkbox name="second-checkbox-group" value="2">2</vaadin-checkbox>
+              <vaadin-checkbox name="third-checkbox-group" value="3">3</vaadin-checkbox>
+              <vaadin-checkbox name="fourth-checkbox-group" value="4">4</vaadin-checkbox>
+            </vaadin-checkbox-group>
+            <vaadin-button id="submit-button-custom-value">Submit</vaadin-button>
+          </form>
+          <div id="iron-form-output-custom-value"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-iron-form-with-custom-value', function(document) {
+            const testForm = document.getElementById('test-form-custom-value');
+            const submitButton = document.getElementById('submit-button-custom-value');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
+            testForm.addEventListener('iron-form-submit', function(event) {
+              this.querySelector('#iron-form-output-custom-value').innerHTML = JSON.stringify(event.detail);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class CheckboxGroupDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
+      static get is() {
+        return 'checkbox-group-demos';
+      }
+    }
+    customElements.define(CheckboxGroupDemos.is, CheckboxGroupDemos);
+  </script>
+</dom-module>

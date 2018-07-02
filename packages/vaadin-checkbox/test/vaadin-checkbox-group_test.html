@@ -1,0 +1,126 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-checkbox-group tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-checkbox.html">
+  <link rel="import" href="../vaadin-checkbox-group.html">
+</head>
+
+<body>
+<test-fixture id="default">
+  <template>
+    <vaadin-checkbox-group>
+      <vaadin-checkbox value="1">Checkbox <b>1</b></vaadin-checkbox>
+      <vaadin-checkbox value="2">Checkbox <b>2</b></vaadin-checkbox>
+      <vaadin-checkbox value="3">Checkbox <b>3</b></vaadin-checkbox>
+    </vaadin-checkbox-group>
+  </template>
+</test-fixture>
+
+<script>
+  describe('vaadin-checkbox-group', () => {
+
+    let vaadinCheckboxGroup, vaadinCheckboxList;
+
+    beforeEach(() => {
+      vaadinCheckboxGroup = fixture('default');
+      vaadinCheckboxList = vaadinCheckboxGroup.querySelectorAll('vaadin-checkbox');
+      vaadinCheckboxGroup._observer.flush();
+    });
+
+    it('sets role properly', () => {
+      expect(vaadinCheckboxGroup.getAttribute('role')).to.eq('checkboxgroup');
+    });
+
+    it('changes aria-disabled on disabled change', () => {
+      vaadinCheckboxGroup.disabled = true;
+      expect(vaadinCheckboxGroup.getAttribute('aria-disabled')).to.eq('true');
+    });
+
+    it('can be disabled imperatively', () => {
+      vaadinCheckboxGroup.disabled = true;
+      expect(vaadinCheckboxGroup.hasAttribute('disabled')).to.be.true;
+      expect(vaadinCheckboxList[0].hasAttribute('disabled')).to.be.true;
+    });
+
+    it('should set disabled property to dynamically added checkboxes', () => {
+      vaadinCheckboxGroup.disabled = true;
+      const checkbox = document.createElement('vaadin-checkbox');
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(checkbox.disabled).to.be.true;
+    });
+
+    it('should add dynamically added checked checkbox value to checkbox group value', () => {
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      checkbox.checked = true;
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.include('new');
+    });
+
+    it('should remove checked checkbox value from checkbox group value, when checkbox is dynamically removed', () => {
+      const checkbox = vaadinCheckboxList[0];
+      checkbox.checked = true;
+      vaadinCheckboxGroup.removeChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.not.include('1');
+    });
+
+    it('should not change checkbox group value if a removed checkbox is checked', () => {
+      const checkbox = vaadinCheckboxList[0];
+      vaadinCheckboxGroup.removeChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      checkbox.checked = true;
+      expect(vaadinCheckboxGroup.value).to.not.include('1');
+    });
+
+    it('should set proper value to checkbox-group when a checkbox is checked', () => {
+      vaadinCheckboxList[0].checked = true;
+      expect(vaadinCheckboxGroup.value).to.deep.equal(['1']);
+      vaadinCheckboxList[1].checked = true;
+      expect(vaadinCheckboxGroup.value).to.deep.equal(['1', '2']);
+    });
+
+    it('should set proper value to checkbox-group when a checkbox is unchecked', () => {
+      vaadinCheckboxList[0].checked = true;
+      vaadinCheckboxList[1].checked = true;
+      expect(vaadinCheckboxGroup.value).to.deep.equal(['1', '2']);
+      vaadinCheckboxList[1].checked = false;
+      expect(vaadinCheckboxGroup.value).to.deep.equal(['1']);
+    });
+
+    it('should check proper checkbox when value is set', () => {
+      vaadinCheckboxGroup.value = ['2'];
+      expect(vaadinCheckboxList[1].checked).to.be.true;
+      vaadinCheckboxGroup.value = ['1', '3'];
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+      expect(vaadinCheckboxList[2].checked).to.be.true;
+    });
+
+    it('should uncheck proper checkbox when value is removed', () => {
+      vaadinCheckboxGroup.value = ['1', '3'];
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+      expect(vaadinCheckboxList[2].checked).to.be.true;
+      vaadinCheckboxGroup.value = ['1'];
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+      expect(vaadinCheckboxList[2].checked).to.be.false;
+    });
+
+    it('should NOT steal focus from currently focused element', () => {
+      const focusInput = document.createElement('input');
+      document.body.appendChild(focusInput);
+      focusInput.focus();
+      vaadinCheckboxGroup.value = '2';
+      expect(document.activeElement).to.be.equal(focusInput);
+      document.body.removeChild(focusInput);
+    });
+  });
+</script>
+</body>
