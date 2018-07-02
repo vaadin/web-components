@@ -253,18 +253,19 @@
       });
 
       it('should react to chart3d change', function(done) {
-        chart = fixture('column');
+        chart = fixture('category');
         setTimeout(() => {
           expect(chart.configuration.is3d()).to.be.false;
           chart.chart3d = true;
           setTimeout(() => {
             expect(chart.configuration.is3d()).to.be.true;
+
+            // Track regression https://github.com/highcharts/highcharts/issues/8555
+            const rendered = chart.$.chart.querySelector('.highcharts-series-0').children.length > 0;
+            expect(rendered).to.be.true;
             done();
           }, 100);
-        }, 1000);
-        // Large timeout needed to workaround a timing issue with HighCharts animation as a result of the
-        // workaround suggested in https://github.com/highcharts/highcharts/issues/8417#issuecomment-394317748
-        // Investigate this further later.
+        }, 100);
       });
 
       it('should be able to set stacking initially', function(done) {

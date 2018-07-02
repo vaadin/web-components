@@ -480,6 +480,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             title: {
               text: null
             },
+            series: [],
             xAxis: {
 
             },
@@ -611,6 +612,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             options.plotOptions = options.plotOptions || {};
             options.plotOptions.series = options.plotOptions.series || {};
             options.plotOptions.series.stacking = this.stacking;
+          }
+
+          if (this.chart3d) {
+            options.chart = options.chart || {};
+
+            options.chart.options3d = Object.assign({}, this._baseChart3d, options.chart.options3d);
           }
 
           return options;
@@ -1446,36 +1453,34 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __chart3dObserver() {
-          Polymer.RenderStatus.afterNextRender(this, () => {
-            if (!this.configuration) {
-              return;
-            }
+          if (!this.configuration) {
+            return;
+          }
 
-            if (this.chart3d) {
-              this.configuration.update({
-                chart: {
-                  options3d: Object.assign(
-                    {},
-                    this._baseChart3d,
-                    (
-                      this.additionalOptions
-                      && this.additionalOptions.chart
-                      && this.additionalOptions.chart.options3d
-                    ),
-                    {enabled: true}
-                  )
+          if (this.chart3d) {
+            this.configuration.update({
+              chart: {
+                options3d: Object.assign(
+                  {},
+                  this._baseChart3d,
+                  (
+                    this.additionalOptions
+                    && this.additionalOptions.chart
+                    && this.additionalOptions.chart.options3d
+                  ),
+                  {enabled: true}
+                )
+              }
+            });
+          } else {
+            this.configuration.update({
+              chart: {
+                options3d: {
+                  enabled: false
                 }
-              });
-            } else {
-              this.configuration.update({
-                chart: {
-                  options3d: {
-                    enabled: false
-                  }
-                }
-              });
-            }
-          });
+              }
+            });
+          }
         }
 
         __polarObserver() {

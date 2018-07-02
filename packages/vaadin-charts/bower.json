@@ -30,7 +30,7 @@
     "wct.conf.js"
   ],
   "dependencies": {
-    "highcharts": "^6.0.0",
+    "highcharts": "6.1.0",
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "^1.0.0",
     "vaadin-license-checker": "vaadin/license-checker#^2.0.1",
