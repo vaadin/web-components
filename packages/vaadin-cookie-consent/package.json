@@ -12,7 +12,7 @@
     "polymer"
   ],
   "author": "Vaadin Ltd",
-  "license": "Apache-2.0",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/LICENSE",
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-cookie-consent/issues"
   },

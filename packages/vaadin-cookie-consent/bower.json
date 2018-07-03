@@ -13,7 +13,7 @@
     "web-component",
     "polymer"
   ],
-  "license": "Apache-2.0",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/LICENSE",
   "ignore": [
     "**/.*",
     "node_modules",
