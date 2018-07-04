@@ -7,11 +7,64 @@
     </style>
 
 
-    <h3>Sample example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example">
+    <h3>Basic example</h3>
+    <vaadin-demo-snippet id="element-basic-demos-sample-example" iframe-src="/components/vaadin-app-layout/demo/iframe.html">
       <template preserve-content>
-        <vaadin-app-layout>Foobar</vaadin-app-layout>
+        <vaadin-app-layout>
+          <iron-icon slot="branding" icon="vaadin:vaadin-h"></iron-icon>  
+
+          <vaadin-tabs slot="menu">
+            <vaadin-tab>Page 1</vaadin-tab>
+            <vaadin-tab>Page 2</vaadin-tab>
+            <vaadin-tab>Page 3</vaadin-tab>
+            <vaadin-tab>Page 4</vaadin-tab>
+          </vaadin-tabs>
+      
+          <h3>Page title</h3>
+          <p>
+            Page content
+          </p>
+        </vaadin-app-layout>
       </template>
+      <script>
+        window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
+          var renderer = document.querySelector('vaadin-demo-iframe-renderer');
+          var frame = renderer.$.demo;
+          frame.style.height = '400px';
+
+          Polymer.dom(renderer.root).querySelector('div').style.display = 'none';
+        });
+      </script>
+    </vaadin-demo-snippet>
+
+    <h3>Mobile example</h3>
+    <vaadin-demo-snippet id="element-basic-demos-mobile-example" iframe-src="/components/vaadin-app-layout/demo/iframe.html">
+      <template preserve-content>
+        <vaadin-app-layout>
+          <iron-icon slot="branding" icon="vaadin:vaadin-h"></iron-icon>
+          <div slot="menu">
+          <vaadin-tabs>
+            <vaadin-tab>Page 1</vaadin-tab>
+            <vaadin-tab>Page 2</vaadin-tab>
+            <vaadin-tab>Page 3</vaadin-tab>
+            <vaadin-tab>Page 4</vaadin-tab>
+          </vaadin-tabs>
+        </div>
+      
+          <h3>Page title</h3>
+          <p>Page content</p>
+        </vaadin-app-layout>
+      </template>
+      <script>
+        window.addDemoReadyListener('#element-basic-demos-mobile-example', function(document) {
+          var renderer = document.querySelector('vaadin-demo-iframe-renderer');
+          var frame = renderer.$.demo;
+          frame.style.height = '600px';
+          frame.style.maxWidth = '340px';
+
+          Polymer.dom(renderer.root).querySelector('div').style.display = 'none';
+        });
+      </script>
     </vaadin-demo-snippet>
 
   </template>

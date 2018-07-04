@@ -59,6 +59,8 @@ module.exports = {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
     } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
+    } else {
+      context.options.plugins.istanbul.thresholds.global.statements = 0;
     }
   }
 };

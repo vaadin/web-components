@@ -12,14 +12,33 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
+        height: 100%;
+        position: fixed;
+        bottom: var(--vaadin-app-layout-viewport-bottom);
+        /* CSS API for host */
+        --vaadin-overlay-viewport-bottom: 0;
       }
 
       :host([hidden]) {
         display: none !important;
       }
     </style>
-    <slot></slot>
+    
+    <div id="container" part="container">
+      <div part="navbar">
+        <div part="branding">
+          <slot name="branding"></slot>
+        </div>
+        <div part="menu">
+          <slot name="menu"></slot>
+        </div>
+      </div>
+      <div id="content" part="content">
+        <slot></slot>
+      </div>
+    </div>
+
   </template>
 
   <script>
@@ -43,9 +62,32 @@ This program is available under Apache License Version 2.0, available at https:/
           return '0.1.0';
         }
 
-        static get properties() {
-          return {
-          };
+        constructor() {
+          super();
+
+          if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            this._boundIosResizeListener = () => this._detectIosNavbar();
+          }
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+          if (this._boundIosResizeListener) {
+            this._detectIosNavbar();
+            window.addEventListener('resize', this._boundIosResizeListener);
+          }
+        }
+
+        _detectIosNavbar() {
+          const innerHeight = window.innerHeight;
+          const innerWidth = window.innerWidth;
+          const landscape = innerWidth > innerHeight;
+          const clientHeight = document.documentElement.clientHeight;
+          if (landscape && clientHeight > innerHeight) {
+            this.style.setProperty('--vaadin-app-layout-viewport-bottom', clientHeight - innerHeight + 'px');
+          } else {
+            this.style.setProperty('--vaadin-app-layout-viewport-bottom', '0');
+          }
         }
       }
 

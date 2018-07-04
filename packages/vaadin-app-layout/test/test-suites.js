@@ -1,3 +1,3 @@
 window.AppLayoutElementSuites = [
-  'sample-test.html'
+  'vaadin-app-layout-test.html'
 ];
