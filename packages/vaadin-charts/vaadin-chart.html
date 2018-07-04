@@ -903,7 +903,9 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             const {yAxis: unit, yAxisValueMin: valueMin, yAxisValueMax: valueMax} = seriesElement.options;
 
             const idxOnChildList = seriesNodes.indexOf(seriesElement);
-            if (unit && !yAxes[unit]) {
+            if (!unit && !this.configuration.yAxis.some(e => e.userOptions.id === undefined)) {
+              yAxes[unit] = this.__addAxis({axisGenerated: true});
+            } else if (unit && !yAxes[unit]) {
               yAxes[unit] = this.__addAxis({id: unit, title: {text: unit}, axisGenerated: true});
             }
             if (isFinite(valueMin)) {
