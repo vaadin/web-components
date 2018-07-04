@@ -35,11 +35,22 @@
   }
   ,
   {
-    "name": "Vaadin Checkbox Group",
+    "name": "Checkbox Group",
     "url": "checkbox-group-demos",
     "src": "checkbox-group-demos.html",
     "meta": {
       "title": "vaadin-checkbox-group Examples",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Checkbox Group Validation",
+    "url": "checkbox-group-validation-demos",
+    "src": "checkbox-group-validation-demos.html",
+    "meta": {
+      "title": "vaadin-checkbox-group Validation Examples",
       "description": "",
       "image": ""
     }
