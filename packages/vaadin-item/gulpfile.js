@@ -3,6 +3,7 @@
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
 var htmlExtract = require('gulp-html-extract');
+const lec = require('gulp-line-ending-corrector');
 var stylelint = require('gulp-stylelint');
 var find = require('gulp-find');
 var replace = require('gulp-replace');
@@ -34,6 +35,7 @@ gulp.task('lint:html', function() {
       sel: 'script, code-example code',
       strip: true
     }))
+    .pipe(lec())
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError('fail'));
