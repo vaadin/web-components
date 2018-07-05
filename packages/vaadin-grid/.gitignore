@@ -19,3 +19,4 @@ directives/typings
 coverage/
 bower-*
 package-lock.json
+yarn.lock
