@@ -316,7 +316,7 @@
         expect(/^vaadin-radio-group-error-\d+$/.test(errorElement.id)).to.be.true;
       });
 
-      it('should remove aria-hiden when error is shown', () => {
+      it('should remove aria-hidden when error is shown', () => {
         vaadinRadioButtonGroup.errorMessage = 'Bad input!';
         vaadinRadioButtonGroup.invalid = true;
         expect(errorElement.getAttribute('aria-hidden')).to.be.equal('false');
