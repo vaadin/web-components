@@ -354,10 +354,12 @@
 
       it('should properly display all items in the selector', done => {
         comboBox.opened = true;
-        comboBox.filteredItems = Array.apply(null, Array(20)).map((_, i) => `item${i}`);
         setTimeout(() => {
-          expect(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').length).to.equal(20);
-          done();
+          comboBox.filteredItems = Array.apply(null, Array(20)).map((_, i) => `item${i}`);
+          setTimeout(() => {
+            expect(comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').length).to.equal(20);
+            done();
+          }, 1);
         });
       });
     });
