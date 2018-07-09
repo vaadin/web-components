@@ -62,6 +62,23 @@
       :host([invalid]) [part="label"] {
         color: var(--material-error-text-color);
       }
+
+      [part="error-message"] {
+        font-size: .75em;
+        line-height: 1;
+        color: var(--material-error-text-color);
+        margin-top: 6px;
+      }
+
+      :host(:not([invalid])) [part="error-message"] {
+        margin-top: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      :host([invalid]) [part="error-message"] {
+        animation: reveal 0.2s;
+      }
     </style>
   </template>
 </dom-module>
