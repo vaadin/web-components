@@ -31,4 +31,11 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
       });
   });
 
+  gemini.suite('group-tests', (suite) => {
+    suite
+      .setUrl('default.html')
+      .setCaptureElements('#group-tests')
+      .capture('default');
+  });
+
 });

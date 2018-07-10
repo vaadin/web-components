@@ -121,6 +121,22 @@
       expect(document.activeElement).to.be.equal(focusInput);
       document.body.removeChild(focusInput);
     });
+
+    it('should update has-label attribute when setting label', () => {
+      expect(vaadinCheckboxGroup.hasAttribute('has-label')).to.be.false;
+
+      vaadinCheckboxGroup.label = 'foo';
+
+      expect(vaadinCheckboxGroup.hasAttribute('has-label')).to.be.true;
+      expect(vaadinCheckboxGroup.label).to.be.equal('foo');
+    });
+
+    it('should add label to checkbox group when a label is dynamically set', () => {
+      vaadinCheckboxGroup.label = 'foo';
+
+      expect(vaadinCheckboxGroup.shadowRoot.querySelector('label').innerText).to.be.equal('foo');
+    });
+
   });
 </script>
 </body>
