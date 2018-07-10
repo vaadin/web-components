@@ -32,5 +32,19 @@
       <vaadin-checkbox value="2">2</vaadin-checkbox>
     </vaadin-checkbox-group>
   </div>
+  
+  <div id="validation-tests">
+    <vaadin-checkbox-group required error-message="Please choose a number" label="Choose a number" id="validation-checkbox-group">
+      <vaadin-checkbox value="1">1</vaadin-checkbox>
+      <vaadin-checkbox value="2">2</vaadin-checkbox>
+    </vaadin-checkbox-group>
+  </div>
+
+  <script>
+    window.addEventListener('WebComponentsReady', () => {
+      const checkboxGroup = document.getElementById('validation-checkbox-group');
+      checkboxGroup.validate();
+    });
+  </script>
 
 </body>

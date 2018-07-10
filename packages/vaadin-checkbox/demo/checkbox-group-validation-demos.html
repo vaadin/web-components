@@ -1,0 +1,71 @@
+<dom-module id="checkbox-group-validation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Checkbox Group with validation message</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-validation-message">
+    <template preserve-content>
+        <vaadin-checkbox-group required label="Preferred language of contact:" error-message="Please choose a language.">
+            <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+            <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+            <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+        </vaadin-checkbox-group>
+        <vaadin-button id="submit-button-validation-message">Validate</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-validation-message', function(document) {
+            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+            const submitButton = document.getElementById('submit-button-validation-message');
+
+            submitButton.addEventListener('click', function(event) {
+              checkboxGroup.validate();
+            });
+          });
+        </script>
+    </template>
+    </vaadin-demo-snippet>
+
+    <h3>Checkbox Group with Iron Form validation</h3>
+    <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-validation">
+      <template preserve-content>
+        <iron-form id="test-form-validation">
+          <form>
+            <vaadin-checkbox-group required label="Preferred language of contact:">
+              <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+              <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+              <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+            </vaadin-checkbox-group>
+            <vaadin-button id="submit-button-validation">Submit</vaadin-button>
+          </form>
+          <div id="iron-form-output-validation"></div>
+        </iron-form>
+        <script>
+          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-iron-form-validation', function(document) {
+            const testForm = document.getElementById('test-form-validation');
+            const submitButton = document.getElementById('submit-button-validation');
+
+            submitButton.addEventListener('click', function(event) {
+              testForm.submit();
+            });
+
+            testForm.addEventListener('iron-form-submit', function(event) {
+              this.querySelector('#iron-form-output-validation').innerHTML = JSON.stringify(event.detail);
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class CheckboxGroupValidationDemos extends DemoReadyEventEmitter(CheckboxDemo(Polymer.Element)) {
+      static get is() {
+        return 'checkbox-group-validation-demos';
+      }
+    }
+    customElements.define(CheckboxGroupValidationDemos.is, CheckboxGroupValidationDemos);
+  </script>
+</dom-module>

@@ -22,6 +22,28 @@
         display: block;
       }
 
+      /* Used for required and invalid indicators */
+      [part="label"]::after {
+        content: var(--lumo-required-field-indicator, "•");
+        transition: opacity 0.2s;
+        opacity: 0;
+        color: var(--lumo-primary-text-color);
+        position: absolute;
+        right: 0;
+        width: 1em;
+        text-align: center;
+      }
+
+      [part="error-message"] {
+        max-height: 0;
+        overflow: hidden;
+        font-size: var(--lumo-font-size-xs);
+        line-height: var(--lumo-line-height-xs);
+        color: var(--lumo-error-text-color);
+        will-change: max-height;
+        transition: 0.4s max-height;
+      }
+
       :host([theme~="vertical"]) [part="group-field"] {
         display: flex;
         flex-direction: column;
@@ -44,6 +66,7 @@
         transition: color 0.2s;
         line-height: 1;
         padding-bottom: 0.7em;
+        padding-right: 1em;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -52,8 +75,14 @@
         box-sizing: border-box;
       }
 
-      :host([invalid]) [part="label"] {
+      :host([invalid]) [part="label"]::after {
         color: var(--lumo-error-text-color);
+        opacity: 1;
+      }
+
+      [part="error-message"][aria-hidden="false"] {
+        color: var(--lumo-error-text-color);
+        max-height: 5em;
       }
     </style>
   </template>

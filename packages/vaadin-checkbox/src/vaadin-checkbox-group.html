@@ -43,6 +43,11 @@ This program is available under Apache License Version 2.0, available at https:/
         <slot id="slot"></slot>
       </div>
 
+      <div part="error-message"
+        aria-live="assertive"
+        aria-hidden$="[[_getErrorMessageAriaHidden(invalid, errorMessage)]]"
+      >[[errorMessage]]</div>
+
     </div>
 
   </template>
@@ -68,6 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ----------------|----------------
        * `label` | The label element
        * `group-field` | The element that wraps checkboxes
+       * `error-message` | The error message element
        *
        * The following state attributes are available for styling:
        *
@@ -75,6 +81,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * -----------|-------------|------------
        * `disabled`   | Set when the checkbox group and its children are disabled. | :host
        * `has-label` | Set when the element has a label | :host
+       * `required` | Set when the element is required | :host
+       * `invalid` | Set when the element is invalid | :host
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -115,7 +123,34 @@ This program is available under Apache License Version 2.0, available at https:/
               type: Array,
               value: () => [],
               notify: true
-            }
+            },
+
+            /**
+             * Error to show when the input value is invalid.
+             */
+            errorMessage: {
+              type: String,
+              value: ''
+            },
+
+            /**
+             * Specifies that the user must fill in a value.
+             */
+            required: {
+              type: Boolean,
+              reflectToAttribute: true
+            },
+
+            /**
+             * This property is set to true when the control value is invalid.
+             */
+            invalid: {
+              type: Boolean,
+              reflectToAttribute: true,
+              notify: true,
+              value: false
+            },
+
           };
         }
 
@@ -168,6 +203,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this.setAttribute('role', 'checkboxgroup');
         }
 
+        /**
+         * Returns true if `value` is valid.
+         * `<iron-form>` uses this to check the validity or all its elements.
+         *
+         * @return {boolean} True if the value is valid.
+         */
+        validate() {
+          this.invalid = this.required && this.value.length === 0;
+          return !this.invalid;
+        }
+
         get _checkboxes() {
           return this._filterCheckboxes(this.querySelectorAll('*'));
         }
@@ -206,6 +252,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _valueChanged(newV, oldV) {
+          // setting initial value to empty string, skip validation
+          if (newV.length === 0 && oldV === undefined) {
+            return;
+          }
           // set a flag to avoid updating loop
           this._updatingValue = true;
           // reflect the value array to checkboxes
@@ -213,6 +263,8 @@ This program is available under Apache License Version 2.0, available at https:/
             checkbox.checked = newV.indexOf(checkbox.value) > -1;
           });
           this._updatingValue = false;
+    
+          this.validate();
         }
 
         _labelChanged(label) {
@@ -221,6 +273,10 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this.removeAttribute('has-label');
           }
+        }
+
+        _getErrorMessageAriaHidden(invalid, errorMessage) {
+          return (!errorMessage || !invalid).toString();
         }
 
       }

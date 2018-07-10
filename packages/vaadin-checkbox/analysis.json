@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox-group.html",
         "start": {
-          "line": 232,
+          "line": 288,
           "column": 6
         },
         "end": {
-          "line": 232,
+          "line": 288,
           "column": 42
         }
       },
@@ -953,7 +953,7 @@
           ]
         },
         {
-          "description": "`<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.\n\n```html\n<vaadin-checkbox-group label=\"Preferred language of contact:\">\n <vaadin-checkbox value=\"en\">English</vaadin-checkbox>\n <vaadin-checkbox value=\"fr\">Français</vaadin-checkbox>\n <vaadin-checkbox value=\"de\">Deutsch</vaadin-checkbox>\n</vaadin-checkbox-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps checkboxes\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the checkbox group and its children are disabled. | :host\n`has-label` | Set when the element has a label | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.\n\n```html\n<vaadin-checkbox-group label=\"Preferred language of contact:\">\n <vaadin-checkbox value=\"en\">English</vaadin-checkbox>\n <vaadin-checkbox value=\"fr\">Français</vaadin-checkbox>\n <vaadin-checkbox value=\"de\">Deutsch</vaadin-checkbox>\n</vaadin-checkbox-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps checkboxes\n`error-message` | The error message element\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the checkbox group and its children are disabled. | :host\n`has-label` | Set when the element has a label | :host\n`required` | Set when the element is required | :host\n`invalid` | Set when the element is invalid | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-checkbox-group.html",
           "properties": [
@@ -964,11 +964,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 170,
+                  "line": 216,
                   "column": 8
                 },
                 "end": {
-                  "line": 172,
+                  "line": 218,
                   "column": 9
                 }
               },
@@ -985,11 +985,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 103,
                   "column": 12
                 },
                 "end": {
-                  "line": 99,
+                  "line": 107,
                   "column": 13
                 }
               },
@@ -1007,11 +1007,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 104,
+                  "line": 112,
                   "column": 12
                 },
                 "end": {
-                  "line": 108,
+                  "line": 116,
                   "column": 13
                 }
               },
@@ -1030,11 +1030,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 113,
+                  "line": 121,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 125,
                   "column": 13
                 }
               },
@@ -1045,6 +1045,72 @@
                 }
               },
               "defaultValue": "[]"
+            },
+            {
+              "name": "errorMessage",
+              "type": "string | null | undefined",
+              "description": "Error to show when the input value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 130,
+                  "column": 12
+                },
+                "end": {
+                  "line": 133,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "required",
+              "type": "boolean | null | undefined",
+              "description": "Specifies that the user must fill in a value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 138,
+                  "column": 12
+                },
+                "end": {
+                  "line": 141,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "invalid",
+              "type": "boolean | null | undefined",
+              "description": "This property is set to true when the control value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 146,
+                  "column": 12
+                },
+                "end": {
+                  "line": 151,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
             }
           ],
           "methods": [
@@ -1054,11 +1120,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 165,
                   "column": 8
                 },
                 "end": {
-                  "line": 162,
+                  "line": 197,
                   "column": 9
                 }
               },
@@ -1074,11 +1140,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 164,
+                  "line": 199,
                   "column": 8
                 },
                 "end": {
-                  "line": 168,
+                  "line": 203,
                   "column": 9
                 }
               },
@@ -1089,16 +1155,37 @@
               }
             },
             {
+              "name": "validate",
+              "description": "Returns true if `value` is valid.\n`<iron-form>` uses this to check the validity or all its elements.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 211,
+                  "column": 8
+                },
+                "end": {
+                  "line": 214,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid."
+              }
+            },
+            {
               "name": "_filterCheckboxes",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 220,
                   "column": 8
                 },
                 "end": {
-                  "line": 177,
+                  "line": 223,
                   "column": 9
                 }
               },
@@ -1115,11 +1202,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 225,
                   "column": 8
                 },
                 "end": {
-                  "line": 183,
+                  "line": 229,
                   "column": 9
                 }
               },
@@ -1139,11 +1226,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 185,
+                  "line": 231,
                   "column": 8
                 },
                 "end": {
-                  "line": 187,
+                  "line": 233,
                   "column": 9
                 }
               },
@@ -1163,11 +1250,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 189,
+                  "line": 235,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 238,
                   "column": 9
                 }
               },
@@ -1187,11 +1274,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 194,
+                  "line": 240,
                   "column": 8
                 },
                 "end": {
-                  "line": 205,
+                  "line": 251,
                   "column": 9
                 }
               },
@@ -1211,11 +1298,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 253,
                   "column": 8
                 },
                 "end": {
-                  "line": 215,
+                  "line": 267,
                   "column": 9
                 }
               },
@@ -1238,11 +1325,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 217,
+                  "line": 269,
                   "column": 8
                 },
                 "end": {
-                  "line": 223,
+                  "line": 275,
                   "column": 9
                 }
               },
@@ -1255,6 +1342,30 @@
               "return": {
                 "type": "void"
               }
+            },
+            {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 277,
+                  "column": 8
+                },
+                "end": {
+                  "line": 279,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                }
+              ]
             }
           ],
           "staticMethods": [
@@ -1345,11 +1456,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 93,
               "column": 6
             },
             "end": {
-              "line": 225,
+              "line": 281,
               "column": 7
             }
           },
@@ -1362,11 +1473,11 @@
               "description": "The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 103,
                   "column": 12
                 },
                 "end": {
-                  "line": 99,
+                  "line": 107,
                   "column": 13
                 }
               },
@@ -1378,11 +1489,11 @@
               "description": "String used for the label element.",
               "sourceRange": {
                 "start": {
-                  "line": 104,
+                  "line": 112,
                   "column": 12
                 },
                 "end": {
-                  "line": 108,
+                  "line": 116,
                   "column": 13
                 }
               },
@@ -1394,16 +1505,64 @@
               "description": "Value of the checkbox group.",
               "sourceRange": {
                 "start": {
-                  "line": 113,
+                  "line": 121,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 125,
                   "column": 13
                 }
               },
               "metadata": {},
               "type": "Array | null | undefined"
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the input value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 130,
+                  "column": 12
+                },
+                "end": {
+                  "line": 133,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "sourceRange": {
+                "start": {
+                  "line": 138,
+                  "column": 12
+                },
+                "end": {
+                  "line": 141,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "invalid",
+              "description": "This property is set to true when the control value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 146,
+                  "column": 12
+                },
+                "end": {
+                  "line": 151,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
             }
           ],
           "events": [
@@ -1411,6 +1570,12 @@
               "type": "CustomEvent",
               "name": "value-changed",
               "description": "Fired when the `value` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
               "metadata": {}
             }
           ],

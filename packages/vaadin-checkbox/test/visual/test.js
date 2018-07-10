@@ -38,4 +38,11 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
       .capture('default');
   });
 
+  gemini.suite('validation-tests', function(suite) {
+    suite
+      .setUrl('default.html')
+      .setCaptureElements('#validation-tests')
+      .capture('error');
+  });
+
 });

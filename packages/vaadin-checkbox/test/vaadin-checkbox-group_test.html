@@ -6,6 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
+  <link rel="import" href="../../iron-form/iron-form.html">
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-checkbox.html">
   <link rel="import" href="../vaadin-checkbox-group.html">
@@ -19,6 +20,20 @@
       <vaadin-checkbox value="2">Checkbox <b>2</b></vaadin-checkbox>
       <vaadin-checkbox value="3">Checkbox <b>3</b></vaadin-checkbox>
     </vaadin-checkbox-group>
+  </template>
+</test-fixture>
+
+<test-fixture id="ironForm">
+  <template>
+      <iron-form>
+        <form>
+          <vaadin-checkbox-group>
+            <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+            <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+            <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+          </vaadin-checkbox-group>
+        </form>
+      </iron-form>
   </template>
 </test-fixture>
 
@@ -138,5 +153,81 @@
     });
 
   });
+
+  describe('vaadin-checkbox-group validation', () => {
+
+    let vaadinCheckboxGroup, vaadinCheckboxList, ironForm;
+
+    beforeEach(() => {
+      ironForm = fixture('ironForm');
+      vaadinCheckboxGroup = ironForm.querySelector('vaadin-checkbox-group');
+      vaadinCheckboxList = vaadinCheckboxGroup.querySelectorAll('vaadin-checkbox');
+      vaadinCheckboxGroup._observer.flush();
+    });
+
+    it('should not have invalid attribute initially', () => {
+      expect(vaadinCheckboxGroup.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should not add invalid attribute if required attribute is not present', () => {
+      vaadinCheckboxList[0].checked = true;
+      vaadinCheckboxList[0].checked = false;
+
+      expect(vaadinCheckboxGroup.hasAttribute('invalid')).to.be.false;
+    });
+
+    it('should add invalid attribute if required attribute is present and checkbox group value is empty', () => {
+      vaadinCheckboxGroup.required = true;
+      vaadinCheckboxList[0].checked = true;
+      vaadinCheckboxList[0].checked = false;
+
+      expect(vaadinCheckboxGroup.hasAttribute('invalid')).to.be.true;
+    });
+
+    it('should remove invalid attribute if checkbox group value is not empty', () => {
+      vaadinCheckboxGroup.required = true;
+      vaadinCheckboxList[0].checked = true;
+      vaadinCheckboxList[0].checked = false;
+
+      expect(vaadinCheckboxGroup.hasAttribute('invalid')).to.be.true;
+
+      vaadinCheckboxList[0].checked = true;
+
+      expect(vaadinCheckboxGroup.hasAttribute('invalid')).to.be.false;
+
+    });
+
+    it('should prevent submitting form when value of required checkbox group is empty', () => {
+      vaadinCheckboxGroup.required = true;
+
+      expect(ironForm.validate()).to.be.false;
+
+    });
+
+    it('should not prevent submitting form when checkbox group value is not empty or does not have required attribute', () => {
+      expect(ironForm.validate()).to.be.true;
+
+      vaadinCheckboxGroup.required = true;
+      vaadinCheckboxGroup.value = ['en'];
+
+      expect(ironForm.validate()).to.be.true;
+
+    });
+
+    it('should not show the error message initially', () => {
+      vaadinCheckboxGroup.errorMessage = 'Error message';
+
+      expect(vaadinCheckboxGroup.shadowRoot.querySelector('[part="error-message"]').getAttribute('aria-hidden')).to.be.equal('true');
+    });
+
+    it('should show the error message if validation status is invalid', () => {
+      vaadinCheckboxGroup.errorMessage = 'Error message';
+      vaadinCheckboxGroup.invalid = true;
+
+      expect(vaadinCheckboxGroup.shadowRoot.querySelector('[part="error-message"]').getAttribute('aria-hidden')).to.be.equal('false');
+    });
+
+  });
+
 </script>
 </body>
