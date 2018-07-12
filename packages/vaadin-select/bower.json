@@ -37,10 +37,12 @@
     "iron-test-helpers": "^2.0.0",
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
+    "iron-form": "^2.0.0",
     "iron-icon": "^2.0.1",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
     "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0",
     "vaadin-item": "vaadin/vaadin-item#^2.1.0"
   }

@@ -1,0 +1,57 @@
+<dom-module id="dropdown-menu-validation-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Using as a Form Field</h3>
+    <vaadin-demo-snippet id="dropdown-menu-validation">
+      <template preserve-content>
+        <iron-form>
+          <form method="post">
+            <vaadin-dropdown-menu name="title" label="Title" error-message="Please choose the option closes to your profession." required>
+              <template>
+                <vaadin-list-box>
+                  <vaadin-item value="">Select your title</vaadin-item>
+                  <hr>
+                  <vaadin-item value="sales">Account manager</vaadin-item>
+                  <vaadin-item value="design">Designer</vaadin-item>
+                  <vaadin-item value="marketing">Marketing manager</vaadin-item>
+                  <vaadin-item value="dev">Developer</vaadin-item>
+                </vaadin-list-box>
+              </template>
+            </vaadin-dropdown-menu>
+            <vaadin-button>Submit</vaadin-button>
+          </form>
+        </iron-form>
+
+        <script>
+          window.addDemoReadyListener('#dropdown-menu-validation', function(document) {
+            var form = document.querySelector('iron-form');
+
+            form.addEventListener('iron-form-submit', function() {
+              alert('Form submitted with title: ' + form.serializeForm().title);
+              return false;
+            });
+
+            var button = document.querySelector('vaadin-button');
+            button.addEventListener('click', function() {
+              form.submit();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DropdownMenuValidationDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'dropdown-menu-validation-demos';
+      }
+    }
+    customElements.define(DropdownMenuValidationDemos.is, DropdownMenuValidationDemos);
+  </script>
+</dom-module>

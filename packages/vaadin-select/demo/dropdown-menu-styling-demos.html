@@ -1,0 +1,67 @@
+<dom-module id="dropdown-menu-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Styling the Content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-styling">
+      <template preserve-content>
+        <style>
+          vaadin-item {
+            font-style: italic;
+          }
+        </style>
+        <vaadin-dropdown-menu label="Name">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Jose</vaadin-item>
+              <vaadin-item>Manolo</vaadin-item>
+              <vaadin-item>Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Customizing the Content</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-custom-content">
+      <template preserve-content>
+        <vaadin-dropdown-menu label="User">
+          <div slot="prefix"><iron-icon icon="lumo:user"></iron-icon></div>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/women/43.jpg" />
+                &nbsp;Gabriella
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/77.jpg" />
+                &nbsp;Rudi
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/35.jpg" />
+                &nbsp;Hamsa
+              </vaadin-item>
+              <vaadin-item>
+                <img style="width: 21px; border-radius: 50%; vertical-align: bottom" src="https://randomuser.me/api/portraits/men/76.jpg" />
+                &nbsp;Jacob
+              </vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DropdownMenuStylingDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'dropdown-menu-styling-demos';
+      }
+    }
+    customElements.define(DropdownMenuStylingDemos.is, DropdownMenuStylingDemos);
+  </script>
+</dom-module>

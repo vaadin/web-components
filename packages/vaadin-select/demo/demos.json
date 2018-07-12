@@ -1,15 +1,37 @@
 {
   "name": "Vaadin Element",
   "pages": [
-  {
-    "name": "Basics",
-    "url": "dropdown-menu-basic-demos",
-    "src": "dropdown-menu-basic-demos.html",
-    "meta": {
-      "title": "vaadin-dropdown-menu Basics",
-      "description": "",
-      "image": ""
-     }
-  }
+    {
+      "name": "Basics",
+      "url": "dropdown-menu-basic-demos",
+      "src": "dropdown-menu-basic-demos.html",
+      "meta": {
+        "title": "vaadin-dropdown-menu Basics",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Validation",
+      "url": "dropdown-menu-validation-demos",
+      "src": "dropdown-menu-validation-demos.html",
+      "meta": {
+        "title": "vaadin-dropdown-menu Validation",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Styling",
+      "url": "dropdown-menu-styling-demos",
+      "src": "dropdown-menu-styling-demos.html",
+      "meta": {
+        "title": "vaadin-dropdown-menu Styling",
+        "description": "",
+        "image": ""
+      }
+    }
   ]
 }
