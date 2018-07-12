@@ -1,15 +1,48 @@
 {
   "name": "Vaadin Form Layout",
   "pages": [
-  {
-    "name": "Basic Examples",
-    "url": "form-layout-basic-demos",
-    "src": "form-layout-basic-demos.html",
-    "meta": {
-      "title": "vaadin-form-layout Basic Examples",
-      "description": "",
-      "image": ""
-     }
-  }
+    {
+      "name": "Basics",
+      "url": "form-layout-basic-demos",
+      "src": "form-layout-basic-demos.html",
+      "meta": {
+        "title": "vaadin-form-layout Basic Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Columns & Rows",
+      "url": "form-layout-columns-rows-demos",
+      "src": "form-layout-columns-rows-demos.html",
+      "meta": {
+        "title": "vaadin-form-layout Columns & Rows Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Styling",
+      "url": "form-layout-styling-demos",
+      "src": "form-layout-styling-demos.html",
+      "meta": {
+        "title": "vaadin-form-layout Styling Examples",
+        "description": "",
+        "image": ""
+      }
+    }
+    ,
+    {
+      "name": "Integrations",
+      "url": "form-layout-integration-demos",
+      "src": "form-layout-integration-demos.html",
+      "meta": {
+        "title": "vaadin-form-layout Integration Examples",
+        "description": "",
+        "image": ""
+      }
+    }
   ]
 }

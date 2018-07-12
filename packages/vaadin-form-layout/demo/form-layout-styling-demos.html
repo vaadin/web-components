@@ -1,0 +1,91 @@
+<dom-module id="form-layout-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Custom CSS Properties</h3>
+    <p>The following custom CSS properties are supported in <code>&lt;vaadin-form-layout&gt;</code>:</p>
+    <table>
+      <tr>
+        <th>CSS Property</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+      <tr>
+        <td><code style="white-space: nowrap;">--vaadin-form-layout-column-spacing</code></td>
+        <td>Length of the spacing between columns</td>
+        <td><code>2em</code></td>
+      </tr>
+    </table>
+    <p>Additionally, <code>&lt;vaadin-form-item&gt;</code> supports:</p>
+    <table>
+      <tr>
+        <th>CSS Property</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+      <tr>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-label-width</code></td>
+        <td>Width of the label column when the labels are aside</td>
+        <td><code>8em</code></td>
+      </tr>
+      <tr>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-label-spacing</code></td>
+        <td>Length of the spacing between the label and input columns when the labels are aside</td>
+        <td><code>1em</code></td>
+      </tr>
+      <tr>
+        <td><code style="white-space: nowrap;">--vaadin-form-item-row-spacing</code></td>
+        <td>Height of the spacing between the form item elements</td>
+        <td><code>1em</code></td>
+      </tr>
+    </table>
+    <vaadin-demo-snippet id="form-layout-styling-demos-custom-css-properties">
+      <template preserve-content>
+        <style>
+          vaadin-form-layout {
+            --vaadin-form-layout-column-spacing: 4em;
+          }
+
+          vaadin-form-item {
+            --vaadin-form-item-label-width: 6em;
+            --vaadin-form-item-label-spacing: 1em;
+            --vaadin-form-item-row-spacing: 1.25em;
+          }
+
+        </style>
+        <vaadin-form-layout>
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class FormLayoutStylingDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
+      static get is() {
+        return 'form-layout-styling-demos';
+      }
+    }
+    customElements.define(FormLayoutStylingDemos.is, FormLayoutStylingDemos);
+  </script>
+</dom-module>

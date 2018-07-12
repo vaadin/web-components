@@ -1,0 +1,182 @@
+<dom-module id="form-layout-columns-rows-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Single Column</h3>
+    <!--
+      Note for maintainers: use <nice-demo-snippet> for this example. The original
+      <vaadin-demo-snippet id='form-layout-basic-demos-single-column'> makes JSON attribute values unreadible.
+    -->
+    <nice-demo-snippet>
+      <script type="text/html" slot="source">
+        <vaadin-form-layout responsive-steps='[{"columns": 1}]'>
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </script>
+    </nice-demo-snippet>
+
+    <h3>Custom Responsive Steps</h3>
+    <p>
+      Use JSON in the <code>&lt;responsive-steps&gt;</code> HTML attribute to specify
+      custom responsive steps for the <code>&lt;vaadin-form-layout&gt;</code> element.
+    </p>
+    <p>
+      <strong>See also:</strong> <a href="../#property-responsiveSteps"><code>responsiveSteps</code></a>
+      property in the API Reference.
+    </p>
+
+    <!--
+      Note: use <nice-demo-snippet> for this example. The original
+      <vaadin-demo-snippet id='form-layout-basic-demos-single-column'> makes JSON attribute values unreadable.
+    -->
+    <nice-demo-snippet>
+      <script type="text/html" slot="source">
+        <vaadin-form-layout
+            responsive-steps='[
+              {"minWidth": 0, "columns": 2},
+              {"minWidth": "640px", "columns": 3}
+            ]'>
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </script>
+    </nice-demo-snippet>
+
+    <p>
+      Alternatively, you can customize the responsive steps by using JavaScript
+      to set the <code>responsiveSteps</code> array property.
+    </p>
+    <p>
+      Responsive steps can optionally set <code>labelsPosition</code> string
+      option. The following values are supported:
+    </p>
+    <dl>
+      <dt>aside</dt>
+      <dd>Default value. Labels are positioned aside the input fields.</dd>
+      <dt>top</dt>
+      <dd>Labels are positioned above the input fields.</dd>
+    </dl>
+    <vaadin-demo-snippet id='form-layout-columns-rows-demos-single-column'>
+      <template preserve-content>
+        <vaadin-form-layout class="custom-steps">
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+        <script>
+          window.addDemoReadyListener('#form-layout-columns-rows-demos-single-column', function(document) {
+            var formLayout = document.querySelector('vaadin-form-layout.custom-steps');
+
+            formLayout.responsiveSteps = [
+              {minWidth: 0, columns: 1, labelsPosition: 'top'},
+              {minWidth: '30em', columns: 1}
+            ];
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Spanning Items on Multiple Columns</h3>
+    <vaadin-demo-snippet id='form-layout-columns-rows-demos-spanning-items-on-multiple-columns'>
+      <template preserve-content>
+        <vaadin-form-layout>
+
+          <vaadin-form-item colspan="2">
+            <label slot="label">Address</label>
+            <input class="full-width">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+
+          <vaadin-form-item>
+            <label slot="label">Last Name</label>
+            <input class="full-width" value="Doe">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Explicit New Row</h3>
+    <vaadin-demo-snippet id='form-layout-columns-rows-demos-explicit-new-row'>
+      <template preserve-content>
+        <vaadin-form-layout>
+
+          <vaadin-form-item>
+            <label slot="label">Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+          <br>
+
+          <vaadin-form-item>
+            <label slot="label">Confirm Email</label>
+            <input class="full-width" value="jane.doe@example.com">
+          </vaadin-form-item>
+
+        </vaadin-form-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class FormLayoutColumnsRowsDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
+      static get is() {
+        return 'form-layout-columns-rows-demos';
+      }
+    }
+    customElements.define(FormLayoutColumnsRowsDemos.is, FormLayoutColumnsRowsDemos);
+  </script>
+</dom-module>
