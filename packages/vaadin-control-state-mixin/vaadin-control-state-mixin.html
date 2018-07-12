@@ -95,6 +95,20 @@ This program is available under Apache License Version 2.0, available at https:/
       // input field on iOS after “Done” is pressed.
       super.ready();
 
+      // This fixes the bug in Firefox 61 (https://bugzilla.mozilla.org/show_bug.cgi?id=1472887)
+      // where focusout event does not go out of shady DOM because composed property in the event is not true
+      const ensureEventComposed = e => {
+        if (!e.composed) {
+          e.target.dispatchEvent(new CustomEvent(e.type, {
+            bubbles: true,
+            composed: true,
+            cancelable: false
+          }));
+        }
+      };
+      this.shadowRoot.addEventListener('focusin', ensureEventComposed);
+      this.shadowRoot.addEventListener('focusout', ensureEventComposed);
+
       this.addEventListener('keydown', e => {
         if (!e.defaultPrevented && e.shiftKey && e.keyCode === 9) {
           // Flag is checked in _focus event handler.

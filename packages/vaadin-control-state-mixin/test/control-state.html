@@ -216,19 +216,22 @@
         });
 
         it('should add focusin and focusout listeners before super.ready', () => {
-          class TestSuperClass {
+          class TestSuperClass extends HTMLElement {
             constructor() {
+              super();
               this.addEventListener = sinon.stub();
             }
             ready() {
-              // The listneres should have been added by now
+              this.attachShadow({mode: 'open'});
+              // The listeners should have been added by now
               expect(this.addEventListener.calledWith('focusin')).to.be.true;
               expect(this.addEventListener.calledWith('focusout')).to.be.true;
             }
           }
 
           class TestClass extends Vaadin.ControlStateMixin(TestSuperClass) {}
-          const instance = new TestClass();
+          customElements.define('test-listeners', TestClass);
+          const instance = document.createElement('test-listeners');
           instance.ready();
         });
       });
@@ -298,6 +301,14 @@
           window.ShadyDOM && window.ShadyDOM.flush();
           expect(customElement.hasAttribute('focused')).to.be.false;
         });
+
+        it('focusin and focusout events should work with event.composed set to false', () => {
+          focusElement.dispatchEvent(new CustomEvent('focusin', {composed: false, bubbles: true}));
+          expect(customElement.hasAttribute('focused')).to.be.true;
+
+          focusElement.dispatchEvent(new CustomEvent('focusout', {composed: false, bubbles: true}));
+          expect(customElement.hasAttribute('focused')).to.be.false;
+        });
       });
     });
 
@@ -319,6 +330,14 @@
         focusElement.dispatchEvent(new CustomEvent('focusin', {composed: true, bubbles: true}));
         expect(customElementWrapper.hasAttribute('focused')).to.be.true;
         focusElement.dispatchEvent(new CustomEvent('focusout', {composed: true, bubbles: true}));
+        expect(customElementWrapper.hasAttribute('focused')).to.be.false;
+      });
+
+      it('focusin and focusout events should work with event.composed set to false', () => {
+        focusElement.dispatchEvent(new CustomEvent('focusin', {composed: false, bubbles: true}));
+        expect(customElementWrapper.hasAttribute('focused')).to.be.true;
+
+        focusElement.dispatchEvent(new CustomEvent('focusout', {composed: false, bubbles: true}));
         expect(customElementWrapper.hasAttribute('focused')).to.be.false;
       });
 
