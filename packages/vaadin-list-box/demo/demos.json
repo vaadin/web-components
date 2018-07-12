@@ -1,13 +1,13 @@
 {
   "name": "Vaadin List Box",
   "pages": [{
-    "name": "Examples",
+    "name": "Basics",
     "url": "list-box-basic-demos",
     "src": "list-box-basic-demos.html",
     "meta": {
       "title": "vaadin-list-box Basic Examples",
       "description": "",
       "image": ""
-     }
+    }
   }]
 }
