@@ -1,0 +1,46 @@
+<dom-module id="context-menu-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Styling the Content</h3>
+    <vaadin-demo-snippet id='context-menu-styling-demos-styling'>
+      <template preserve-content>
+        <style>
+          vaadin-item {
+            color: royalblue;
+          }
+
+          vaadin-item:hover {
+            color: magenta;
+          }
+        </style>
+        <vaadin-context-menu>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>First menu item</vaadin-item>
+              <vaadin-item>Second menu item</vaadin-item>
+            </vaadin-list-box>
+          </template>
+
+          <p>
+            This paragraph has a context menu with custom CSS styles.
+          </p>
+        </vaadin-context-menu>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ContextMenuStylingDemos extends DemoReadyEventEmitter(ContextMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'context-menu-styling-demos';
+      }
+    }
+    customElements.define(ContextMenuStylingDemos.is, ContextMenuStylingDemos);
+  </script>
+</dom-module>

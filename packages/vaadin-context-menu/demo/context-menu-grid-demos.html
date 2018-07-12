@@ -1,0 +1,101 @@
+<dom-module id="context-menu-grid-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Using with Vaadin Grid</h3>
+    <vaadin-demo-snippet id="context-menu-grid-demos-using-with-vaadin-grid">
+      <template preserve-content>
+        <dom-module id="my-grid-view">
+          <template preserve-content>
+
+            <vaadin-context-menu>
+              <template>
+                <vaadin-list-box>
+                  <vaadin-item on-click="_add">Add</vaadin-item>
+                  <template is="dom-if" if="[[_isGridBody(target)]]">
+                    <vaadin-item content="[[target]]" on-click="_remove">Remove</vaadin-item>
+                  </template>
+                </vaadin-list-box>
+              </template>
+
+              <vaadin-grid id="grid" items="[[items]]">
+
+                <vaadin-grid-column>
+                  <template class="header">Name</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.name]]</div>
+                  </template>
+                </vaadin-grid-column>
+
+                <vaadin-grid-column>
+                  <template class="header">Surname</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.surname]]</div>
+                  </template>
+                </vaadin-grid-column>
+
+                <vaadin-grid-column>
+                  <template class="header">Effort</template>
+                  <template>
+                    <div class="body-content" data-index$="[[index]]">[[item.effort]]</div>
+                  </template>
+                </vaadin-grid-column>
+
+              </vaadin-grid>
+
+            </vaadin-context-menu>
+          </template>
+
+          <script>
+
+            window.addDemoReadyListener('#context-menu-grid-demos-using-with-vaadin-grid', function(document) {
+              if (!customElements.get('my-grid-view')) {
+                Polymer({
+                  is: 'my-grid-view',
+
+                  properties: {
+                    items: {
+                      type: Array,
+                      value: function() {
+                        return getItems();
+                      }
+                    }
+                  },
+
+                  _isGridBody: function(target) {
+                    return target.classList.contains('body-content');
+                  },
+
+                  _add: function() {
+                    this.unshift('items', getNewItem());
+                  },
+
+                  _remove: function(e) {
+                    const index = parseInt(e.target.content.getAttribute('data-index'));
+                    this.splice('items', index, 1);
+                  }
+                });
+              }
+            });
+          </script>
+        </dom-module>
+
+        <my-grid-view></my-grid-view>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ContextMenuGridDemos extends DemoReadyEventEmitter(ContextMenuDemo(Polymer.Element)) {
+      static get is() {
+        return 'context-menu-grid-demos';
+      }
+    }
+    customElements.define(ContextMenuGridDemos.is, ContextMenuGridDemos);
+  </script>
+</dom-module>

@@ -24,57 +24,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Styling the Content</h3>
-    <vaadin-demo-snippet id='context-menu-advanced-demos-basic-html-menu'>
-      <template preserve-content>
-        <style>
-          vaadin-item {
-            color: royalblue;
-          }
-
-          vaadin-item:hover {
-            color: magenta;
-          }
-        </style>
-        <vaadin-context-menu>
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>First menu item</vaadin-item>
-              <vaadin-item>Second menu item</vaadin-item>
-            </vaadin-list-box>
-          </template>
-
-          <p>
-            This paragraph has a context menu with custom CSS styles.
-          </p>
-        </vaadin-context-menu>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Custom Listener</h3>
-    <vaadin-demo-snippet id="context-menu-basic-demos-custom-listener">
-      <template preserve-content>
-        <vaadin-context-menu id="customListener">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>First menu item</vaadin-item>
-              <vaadin-item>Second menu item</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-context-menu>
-
-        <div id="menuListener">The element that listens for the context menu.</div>
-
-        <script>
-          window.addDemoReadyListener('#context-menu-basic-demos-custom-listener', function(document) {
-            const contextMenu = document.querySelector('vaadin-context-menu#customListener');
-            contextMenu.listenOn = document.querySelector('#menuListener');
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
 
     <h3>Filtering Menu Targets</h3>
     <vaadin-demo-snippet id="context-menu-basic-demos-filtering-menu-targets">
@@ -105,16 +54,16 @@
           </template>
 
           <ul>
-            <li>Foo</li>
-            <li>Bar</li>
-            <li>Baz</li>
+            <li>Spanish</li>
+            <li>Finnish</li>
+            <li>English</li>
           </ul>
         </vaadin-context-menu>
       </template>
     </vaadin-demo-snippet>
 
 
-    <h3>Menu Item Events</h3>
+    <h3>Use Menu Item Events to Create Clickable Commands</h3>
     <vaadin-demo-snippet id="context-menu-basic-demos-menu-item-events">
       <template preserve-content>
         <dom-module id="my-list-view">
@@ -144,7 +93,7 @@
                   items: {
                     type: Array,
                     value: function() {
-                      return ['Foo', 'Bar', 'Baz'];
+                      return ['Item #1', 'Item #2', 'Item #3'];
                     }
                   }
                 },
@@ -164,36 +113,6 @@
         </dom-module>
 
         <my-list-view></my-list-view>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>JavaScript API</h3>
-    <vaadin-demo-snippet id="context-menu-basic-demos-javascript-api">
-      <template preserve-content>
-        <vaadin-context-menu id="buttonMenu">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>First menu item</vaadin-item>
-              <vaadin-item>Second menu item</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-context-menu>
-
-        <vaadin-button id="menuOpener">Toggle Context Menu</vaadin-button>
-
-        <script>
-          window.addDemoReadyListener('#context-menu-basic-demos-javascript-api', function(document) {
-            document.querySelector('#menuOpener').addEventListener('click', function(event) {
-              const menu = document.querySelector('#buttonMenu');
-              if (!menu.opened) {
-                menu.open(event);
-              } else {
-                menu.close();
-              }
-            });
-          });
-        </script>
       </template>
     </vaadin-demo-snippet>
 
