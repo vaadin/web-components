@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-context-menu",
-  "version": "4.1.0-alpha3",
+  "version": "4.1.0-alpha4",
   "description": "Polymer element for showing context dependent items for any element on the page",
   "main": "vaadin-context-menu.html",
   "repository": "vaadin/vaadin-context-menu",
