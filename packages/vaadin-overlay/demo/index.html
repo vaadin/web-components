@@ -100,6 +100,45 @@
       </template>
     </demo-snippet>
 
+    <h3>Using renderer</h3>
+    <p>
+      By default the overlay is using Polymer's Templatizer and stamp/update the instances.
+      User is able to provide `renderer` function to render the content.
+      `renderer` function is prioritized over the default implementation.
+    </p>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="overlay-renderer">
+          <template>
+            Smth
+          </template>
+        </vaadin-overlay>
+
+        <vaadin-button onclick="document.getElementById('overlay-renderer').opened = true">
+          Show overlay
+        </vaadin-button>
+
+        <script>
+          const overlay = document.querySelector('#overlay-renderer');
+          overlay.renderer = root => {
+            if (root.firstChild) {
+              return;
+            }
+
+            const paragraph = document.createElement('p');
+            const btn = document.createElement('vaadin-button');
+
+            paragraph.innerText = 'The content of this overlay was generated with renderer';
+            btn.innerText = 'Close';
+            btn.addEventListener('click', () => root.opened = false);
+
+            root.appendChild(paragraph);
+            root.appendChild(btn);
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Positioning and Sizing With Inline Styles</h3>
     <p>Default position and size: constrained to fit in the viewport, centering the content.</p>
     <p>To customize, applying inline styles to the overlay in the following steps:</p>
