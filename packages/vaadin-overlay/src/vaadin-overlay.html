@@ -214,6 +214,11 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
+           * Custom function for rendering the content of the overlay
+           */
+          renderer: Function,
+
+          /**
            * The template of the overlay content.
            */
           template: {
@@ -241,6 +246,11 @@ This program is available under Apache License Version 2.0, available at https:/
             value: false,
             reflectToAttribute: true
           },
+
+          /**
+           * Object with properties that is passed to `renderer` function
+           */
+          model: Object,
 
           /**
            * When true the overlay won't disable the main content, showing
@@ -287,7 +297,8 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_openedChanged(opened)',
-          '_templateChanged(template)'
+          '_templateChanged(template)',
+          '_rendererChanged(renderer)'
         ];
       }
 
@@ -640,6 +651,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _templateChanged(template) {
+        if (this.renderer) {
+          return;
+        }
+
         this._removeOldContent();
 
         if (!template) {
@@ -660,7 +675,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._instance = new template._Templatizer({});
         this._contentNodes = Array.from(this._instance.root.childNodes);
 
-        const templateRoot = template.getRootNode();
+        const templateRoot = template._templateRoot || (template._templateRoot = template.getRootNode());
         const _isScoped = templateRoot !== document;
 
         if (_isScoped) {
@@ -713,6 +728,20 @@ This program is available under Apache License Version 2.0, available at https:/
         } else {
           this.appendChild(this._instance.root);
           this.content = this;
+        }
+      }
+
+      _rendererChanged(renderer) {
+        this.content = this;
+
+        while (this.content.firstChild) {
+          this.content.removeChild(this.content.firstChild);
+        }
+
+        if (renderer) {
+          this.renderer(this.content, this.model);
+        } else {
+          this._templateChanged(this.template);
         }
       }
 
