@@ -1,0 +1,68 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-overlay tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+  <link rel="import" href="../vaadin-overlay.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-overlay>
+        <template>
+          overlay-content
+        </template>
+      </vaadin-overlay>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('renderer', function() {
+      let overlay, rendererContent, renderModel;
+
+      beforeEach(function() {
+        overlay = fixture('default');
+        rendererContent = document.createElement('p');
+        rendererContent.innerText = 'renderer-content';
+        renderModel = {selected: true};
+      });
+
+      afterEach(function() {
+        // Avoid stacking up <vaadin-overlay> elements in the body.
+        overlay.opened = false;
+      });
+
+      it('should fallback to render content with Templatizer when renderer is not defined', () => {
+        expect(overlay.textContent.trim()).to.be.eql('overlay-content');
+      });
+
+      it('should use renderer when it is defined', () => {
+        overlay.renderer = root => root.appendChild(rendererContent);
+        expect(overlay.textContent.trim()).to.be.eql('renderer-content');
+      });
+
+      it('renderer should receive empty root when defined after template', () => {
+        overlay.renderer = root => expect(root.firstChild).to.be.null;
+      });
+
+      it('the initial template instance should be used after renderer was assigned and removed', () => {
+        overlay.renderer = root => root.appendChild(rendererContent);
+        expect(overlay.textContent.trim()).to.be.eql('renderer-content');
+        overlay.renderer = null;
+        expect(overlay.textContent.trim()).to.be.eql('overlay-content');
+      });
+
+      it('renderer should receive model when it is defined', () => {
+        overlay.model = renderModel;
+        overlay.renderer = (root, model) => expect(model).to.deep.eql(renderModel);
+      });
+
+    });
+  </script>
+</body>
