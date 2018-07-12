@@ -58,9 +58,7 @@
     "app-localize-behavior": "^v2.0.0",
     "iron-list": "^v2.0.4",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0-alpha2",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-alpha2",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-alpha2",
-    "vaadin-checkbox": "vaadin/vaadin-checkbox#^2.2.0-alpha2"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-alpha2"
   },
   "dependencies": {
     "polymer": "^2.0.0",
