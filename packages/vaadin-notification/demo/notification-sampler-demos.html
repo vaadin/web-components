@@ -1,4 +1,4 @@
-<dom-module id="notification-advanced-demos">
+<dom-module id="notification-sampler-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,7 +7,7 @@
     </style>
 
     <h3>Notification Sampler</h3>
-    <vaadin-demo-snippet id="notification-advanced-demos-custom">
+    <vaadin-demo-snippet id="notification-sampler-demos-custom">
       <template preserve-content>
         <dom-module id="notification-full-demo">
           <template preserve-content>
@@ -44,15 +44,15 @@
                   <vaadin-radio-button name="radio-group" value="bottom-stretch">bottom-stretch</vaadin-radio-button>
                 </vaadin-radio-group>
               </div>
-              <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 100px">
+              <vaadin-text-field label="Duration" value="{{duration}}" pattern="\d\d*" style="width: 100px;">
                 <span slot="suffix">ms</span>
               </vaadin-text-field>
-              <vaadin-text-field label="Text" value="{{text}}" flex="1" style="width: 300px"></vaadin-text-field>
+              <vaadin-text-field label="Text" value="{{text}}" flex="1" style="width: 300px;"></vaadin-text-field>
               <vaadin-button on-click="_show">Show Notification</vaadin-button>
             </div>
           </template>
           <script>
-          window.addDemoReadyListener('#notification-advanced-demos-custom', function(document) {
+          window.addDemoReadyListener('#notification-sampler-demos-custom', function(document) {
             Polymer({
               is: 'notification-full-demo',
 
@@ -103,11 +103,11 @@
 
 
   <script>
-    class NotificationAdvancedDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
+    class NotificationSamplerDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
       static get is() {
-        return 'notification-advanced-demos';
+        return 'notification-sampler-demos';
       }
     }
-    customElements.define(NotificationAdvancedDemos.is, NotificationAdvancedDemos);
+    customElements.define(NotificationSamplerDemos.is, NotificationSamplerDemos);
   </script>
 </dom-module>
