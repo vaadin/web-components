@@ -102,25 +102,25 @@
 
     <h3>Using renderer</h3>
     <p>
-      By default the overlay is using Polymer's Templatizer and stamp/update the instances.
-      User is able to provide `renderer` function to render the content.
-      `renderer` function is prioritized over the default implementation.
+      By default, the overlay uses the content from its template using Polymer.Templatize.
+      Alternatively, the content can be provided using the renderer callback function.
+    </p>
+    <p>
+      <strong>NOTE:</strong> When the renderer property is defined, the <code>&lt;template&gt;</code> content is not used.
     </p>
     <demo-snippet>
       <template>
-        <vaadin-overlay id="overlay-renderer">
-          <template>
-            Smth
-          </template>
-        </vaadin-overlay>
+        <vaadin-overlay id="overlay-renderer"></vaadin-overlay>
 
         <vaadin-button onclick="document.getElementById('overlay-renderer').opened = true">
-          Show overlay
+          Show the overlay
         </vaadin-button>
 
         <script>
           const overlay = document.querySelector('#overlay-renderer');
           overlay.renderer = root => {
+            // The renderer callback can be called several times, so we should not
+            // add extra content when it is already available
             if (root.firstChild) {
               return;
             }
@@ -130,7 +130,7 @@
 
             paragraph.innerText = 'The content of this overlay was generated with renderer';
             btn.innerText = 'Close';
-            btn.addEventListener('click', () => root.opened = false);
+            btn.addEventListener('click', () => overlay.opened = false);
 
             root.appendChild(paragraph);
             root.appendChild(btn);
