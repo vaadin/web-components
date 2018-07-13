@@ -14,6 +14,12 @@
 
   <test-fixture id="default">
     <template>
+      <vaadin-overlay></vaadin-overlay>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="with-template">
+    <template>
       <vaadin-overlay>
         <template>
           overlay-content
@@ -23,50 +29,59 @@
   </test-fixture>
 
   <script>
-    describe('renderer', function() {
-      let overlay, rendererContent, renderModel;
+    describe('vaadin-dropdown-menu renderer', () => {
+      let rendererContent, renderModel;
 
       beforeEach(function() {
-        overlay = fixture('default');
         rendererContent = document.createElement('p');
         rendererContent.innerText = 'renderer-content';
         renderModel = {selected: true};
       });
 
-      afterEach(function() {
-        // Avoid stacking up <vaadin-overlay> elements in the body.
-        overlay.opened = false;
+      describe('without template', () => {
+        let overlay;
+
+        beforeEach(() => overlay = fixture('default'));
+        afterEach(() => overlay.opened = false);
+
+        it('should use renderer when it is defined', () => {
+          overlay.renderer = root => root.appendChild(rendererContent);
+          expect(overlay.textContent.trim()).to.equal('renderer-content');
+        });
+
+        it('renderer should receive model and owner when it is defined', () => {
+          overlay.model = renderModel;
+          overlay.owner = overlay;
+          overlay.renderer = (root, model, owner) => {
+            expect(model).to.eql(renderModel);
+            expect(owner).to.eql(overlay);
+          };
+        });
       });
 
-      it('should fallback to render content with Templatizer when renderer is not defined', () => {
-        expect(overlay.textContent.trim()).to.be.eql('overlay-content');
-      });
+      describe('with template', () => {
+        let overlay;
 
-      it('should use renderer when it is defined', () => {
-        overlay.renderer = root => root.appendChild(rendererContent);
-        expect(overlay.textContent.trim()).to.be.eql('renderer-content');
-      });
+        beforeEach(() => overlay = fixture('with-template'));
+        afterEach(() => overlay.opened = false);
 
-      it('renderer should receive empty root when defined after template', () => {
-        overlay.renderer = root => expect(root.firstChild).to.be.null;
-      });
+        it('should fallback to render content with Templatizer when renderer is not defined', () => {
+          expect(overlay.textContent.trim()).to.equal('overlay-content');
+        });
 
-      it('the initial template instance should be used after renderer was assigned and removed', () => {
-        overlay.renderer = root => root.appendChild(rendererContent);
-        expect(overlay.textContent.trim()).to.be.eql('renderer-content');
-        overlay.renderer = null;
-        expect(overlay.textContent.trim()).to.be.eql('overlay-content');
-      });
+        it('renderer should receive empty root when defined after template', () => {
+          overlay.renderer = root => expect(root.firstChild).to.be.null;
+        });
 
-      it('renderer should receive model and owner when it is defined', () => {
-        overlay.model = renderModel;
-        overlay.owner = overlay;
-        overlay.renderer = (root, model, owner) => {
-          expect(model).to.deep.eql(renderModel);
-          expect(owner).to.deep.eql(overlay);
-        };
+        it('the initial template instance should be used after renderer was assigned and removed', () => {
+          overlay.renderer = root => root.appendChild(rendererContent);
+          expect(overlay.textContent.trim()).to.equal('renderer-content');
+          overlay.renderer = null;
+          expect(overlay.textContent.trim()).to.equal('overlay-content');
+        });
       });
-
     });
   </script>
 </body>
+
+
