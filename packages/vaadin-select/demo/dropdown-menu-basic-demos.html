@@ -21,6 +21,31 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Using renderer</h3>
+    <p>
+      By default the overlay is using Polymer's Templatizer and stamp/update the instances.
+      User is able to provide `renderer` function to render the content.
+      `renderer` function is prioritized over the default implementation.
+    </p>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-renderer">
+      <template preserve-content>
+        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+        <script>
+          window.addDemoReadyListener('#dropdown-menu-list-box-renderer', function(document) {
+            document.querySelector('vaadin-dropdown-menu').renderer = root => {
+              const listBox = window.document.createElement('vaadin-list-box');
+              ['Jose', 'Manolo', 'Pedro'].forEach(name => {
+                const item = window.document.createElement('vaadin-item');
+                item.innerText = name;
+                listBox.appendChild(item);
+              });
+              root.appendChild(listBox);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Configuring the Dropdown</h3>
     <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
       <template preserve-content>
