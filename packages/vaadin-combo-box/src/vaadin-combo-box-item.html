@@ -91,7 +91,12 @@ This program is available under Apache License Version 2.0, available at https:/
           /**
            * The template instance corresponding to the item
            */
-          _itemTemplateInstance: Object
+          _itemTemplateInstance: Object,
+
+          renderer: {
+            type: Function,
+            observer: '_rendererChanged'
+          }
         };
       }
 
@@ -109,22 +114,43 @@ This program is available under Apache License Version 2.0, available at https:/
         super.connectedCallback();
 
         if (!this._itemTemplateInstance) {
-          // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
-          const overlay = this.getRootNode().host.getRootNode().host;
-          const dropdown = overlay.__dataHost;
-          const comboBoxOverlay = dropdown.getRootNode().host;
-          const comboBox = comboBoxOverlay.getRootNode().host;
-          comboBox._ensureTemplatized();
-          if (comboBox._TemplateClass) {
-            this._itemTemplateInstance = new comboBox._TemplateClass({});
-            this.$.content.textContent = '';
-            this.$.content.appendChild(this._itemTemplateInstance.root);
+          this._ensureTemplatized();
+        }
+      }
+
+      _rendererChanged(renderer) {
+        Array.from(this.$.content.childNodes).forEach(node => {
+          this.$.content.removeChild(node);
+        });
+
+        if (renderer) {
+          const model = {
+            index: this.index,
+            item: this.item
           }
+
+          this.renderer(this.$.content, model, this);
+        } else if (!this._itemTemplateInstance || !this._itemTemplateInstance.firstChild) {
+          this._ensureTemplatized();
+        }
+      }
+
+      _ensureTemplatized() {
+        // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
+        const overlay = this.getRootNode().host.getRootNode().host;
+        const dropdown = overlay.__dataHost;
+        const comboBoxOverlay = dropdown.getRootNode().host;
+        const comboBox = comboBoxOverlay.getRootNode().host;
+        comboBox._ensureTemplatized();
+        if (comboBox._TemplateClass) {
+          this._itemTemplateInstance = new comboBox._TemplateClass({});
+          this.$.content.textContent = '';
+          this.$.content.appendChild(this._itemTemplateInstance.root);
         }
       }
 
       _updateLabel(label, _itemTemplateInstance) {
-        if (_itemTemplateInstance === undefined && this.$.content) {
+        if (_itemTemplateInstance === undefined && this.$.content && !this.renderer) {
           // Only set label to textContent no template
           this.$.content.textContent = label;
         }
