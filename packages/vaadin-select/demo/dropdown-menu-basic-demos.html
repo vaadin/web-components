@@ -23,9 +23,11 @@
 
     <h3>Using renderer</h3>
     <p>
-      By default the overlay is using Polymer's Templatizer and stamp/update the instances.
-      User is able to provide `renderer` function to render the content.
-      `renderer` function is prioritized over the default implementation.
+      By default, the dropdown uses the content from its template using Polymer.Templatize.
+      Alternatively, the content can be provided using the renderer callback function.
+    </p>
+    <p>
+      <strong>NOTE:</strong> When the renderer property is defined, the <code>&lt;template&gt;</code> content is not used.
     </p>
     <vaadin-demo-snippet id="dropdown-menu-list-box-renderer">
       <template preserve-content>
