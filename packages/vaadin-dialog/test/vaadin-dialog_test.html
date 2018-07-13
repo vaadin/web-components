@@ -61,6 +61,7 @@
     </template>
   </test-fixture>
 
+
   <script>
     describe('vaadin-dialog', () => {
       var dialog, backdrop, overlay;
@@ -151,11 +152,11 @@
 
       it('dialog should bind parent property', () => {
         container.message = 'foo';
-        expect(overlay.$.content.shadowRoot.querySelector('span').textContent.trim()).to.equal('foo');
+        expect(overlay.content.querySelector('span').textContent.trim()).to.equal('foo');
       });
 
       it('dialog should support two-way data binding', () => {
-        const input = overlay.$.content.shadowRoot.querySelector('input');
+        const input = overlay.content.querySelector('input');
         input.value = 'bar';
         input.dispatchEvent(new CustomEvent('input'));
         expect(container.text).to.equal('bar');

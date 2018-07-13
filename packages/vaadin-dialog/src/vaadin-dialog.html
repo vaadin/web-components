@@ -133,6 +133,24 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             _contentTemplate: Object
+             * Custom function for rendering the content of the dialog.
+             * Receives arguments `root`, `owner`, `model`
+             *
+             * `root` The root container element. Users are able to append content to it.
+             *
+             * `owner` The host element of the renderer function.
+             *
+             * `model` null
+             *
+             * **NOTE:** The renderer callback can be called multiple times with the previous content
+             *
+             * **NOTE:** `dialog` does not have any specific properties to pass with the `model` object,
+             * it is set to null.
+             */
+            renderer: Function,
+
+            _contentTemplate: Object,
+
           };
         }
 
@@ -140,6 +158,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return [
             '_openedChanged(opened)',
             '_ariaLabelChanged(ariaLabel)',
+            '_rendererChanged(renderer)'
           ];
         }
 
@@ -192,6 +211,11 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.noCloseOnEsc) {
             e.preventDefault();
           }
+        }
+
+        _rendererChanged(renderer) {
+          this.$.overlay.owner = this;
+          this.$.overlay.renderer = renderer;
         }
       }
 

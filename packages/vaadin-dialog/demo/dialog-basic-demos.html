@@ -26,6 +26,38 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Content Renderer Function</h3>
+    <vaadin-demo-snippet id="dialog-renderer-function-demo">
+      <template preserve-content>
+        <vaadin-dialog id="dialog-renderer"></vaadin-dialog>
+        <vaadin-button id="dialog-renderer-button">Show dialog</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#dialog-renderer-function-demo', function(document) {
+            const dialog = document.getElementById('dialog-renderer');
+
+            dialog.renderer = function(root, model, dialog) {
+              if (root.firstChild) {
+                return;
+              }
+              const paragraph = window.document.createElement('p');
+              const btn = window.document.createElement('vaadin-button');
+              paragraph.innerText = 'The content of this overlay was generated with renderer';
+              btn.innerText = 'Close';
+              btn.addEventListener('click', function() {
+                dialog.opened = false;
+              });
+              root.appendChild(paragraph);
+              root.appendChild(btn);
+            };
+
+            document.getElementById('dialog-renderer-button').addEventListener('click', function() {
+              dialog.opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Styling the Content</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-styled-dialog">
       <template preserve-content>
