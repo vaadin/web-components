@@ -214,6 +214,11 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
+           * Owner element passed with renderer function
+           */
+          owner: Element,
+
+          /**
            * Custom function for rendering the content of the overlay
            */
           renderer: Function,
@@ -739,7 +744,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (renderer) {
-          this.renderer(this.content, this.model);
+          this.renderer(this.content, this.model, this.owner);
         } else {
           this._templateChanged(this.template);
         }
