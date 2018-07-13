@@ -150,6 +150,14 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
+             * Custom function for rendering the content of the overlay
+             */
+            renderer: {
+              type: Function,
+              observer: '_rendererChanged'
+            },
+
+            /**
              * The error message to display when the dropdown menu value is invalid
              */
             errorMessage: {
@@ -285,22 +293,15 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this._overlayElement.content) {
             const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
 
-            this._overlayElement._instance.forwardHostProp = (...args) => {
-              origForwardHostProp.apply(this._overlayElement._instance, args);
-              setTimeout(() => {
-                this._updateValueSlot();
-              });
-            };
+            if (this._overlayElement._instance) {
+              this._overlayElement._instance.forwardHostProp = (...args) => {
+                origForwardHostProp.apply(this._overlayElement._instance, args);
+                setTimeout(() => {
+                  this._updateValueSlot();
+                });
+              };
 
-            this._menuElement = Array.from(this._overlayElement.content.children).filter(element => element.localName !== 'style')[0];
-
-            if (this._menuElement) {
-              this._menuElement.addEventListener('items-changed', e => {
-                this._items = this._menuElement.items;
-              });
-              this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
-              this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
-              this._menuElement.addEventListener('click', e => this.opened = false);
+              this._assignMenuElement();
             }
           }
         }
