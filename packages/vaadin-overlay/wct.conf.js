@@ -4,6 +4,7 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 module.exports = {
   verbose: true,
   testTimeout: 180 * 1000,
+  // MAGI REMOVE START
   plugins: {
     'istanbul': {
       dir: './coverage',
@@ -20,6 +21,8 @@ module.exports = {
     },
     'random-output': true
   },
+  // MAGI REMOVE END
+
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'macOS 10.12/iphone@10.3',
