@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="common-imports.html">
+  <script src="common.js"></script>
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-combo-box item-label-path="name" item-value-path="symbol">
+      </vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="with-template">
+    <template>
+      <vaadin-combo-box item-label-path="name" item-value-path="symbol">
+        <template>
+          <p>templatizer-content</p>
+        </template>
+      </vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('without template', () => {
+      let comboBox;
+
+      beforeEach(() => {
+        comboBox = fixture('default');
+        comboBox.items = ['foo', 'bar', 'baz'];
+      });
+      afterEach(() => comboBox.opened = false);
+
+      it('should use renderer when it is defined', () => {
+        comboBox.renderer = (root, model) => {
+          const textNode = document.createTextNode(model.item);
+          root.appendChild(textNode);
+        };
+        comboBox.opened = true;
+
+        const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        expect(item.$.content.textContent.trim()).to.equal('foo');
+      });
+    });
+
+    describe('with template', () => {
+      let comboBox;
+
+      beforeEach(() => {
+        comboBox = fixture('with-template');
+        comboBox.items = ['foo', 'bar', 'baz'];
+      });
+      afterEach(() => comboBox.opened = false);
+
+      it('renderer should receive empty root when defined after template', () => {
+        comboBox.renderer = root => expect(root.firstChild).to.be.null;
+        comboBox.opened = true;
+      });
+
+      it('the initial template instance should be used after renderer was assigned and removed', () => {
+        comboBox.renderer = (root, model) => {
+          const textNode = document.createTextNode(model.item);
+          root.appendChild(textNode);
+        };
+        comboBox.opened = true;
+
+        let item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        expect(item.$.content.textContent.trim()).to.equal('foo');
+        comboBox.renderer = null;
+        item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+        expect(item.$.content.textContent.trim()).to.equal('templatizer-content');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

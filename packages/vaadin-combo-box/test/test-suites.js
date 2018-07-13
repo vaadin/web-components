@@ -13,6 +13,7 @@ window.VaadinComboBoxSuites = [
   'using-object-values.html',
   'data-binding.html',
   'vaadin-combo-box-light.html',
+  'item-renderer.html',
   'item-template.html',
   'vaadin-combo-box-dropdown.html'
 ];
