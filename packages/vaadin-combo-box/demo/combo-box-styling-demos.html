@@ -32,20 +32,17 @@
       By default, the combobox item uses the content from template using Polymer.Templatize.
       Alternatively, the item content can be provided using the renderer callback function.
     </p>
-    <p>
-      <strong>NOTE:</strong> When the renderer property is defined, the <code>&lt;template&gt;</code> content is not used.
-    </p>
     <vaadin-demo-snippet id="combo-box-styling-demos-renderer">
       <template preserve-content>
         <vaadin-combo-box id="elements-renderer" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
         </vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
-            var elementsRenderer = document.querySelector('#elements-renderer');
+            var comboBox = document.querySelector('#elements-renderer');
             // elementsJson is an Array of Objects. Item object format:
             //   {name: 'Hydrogen', symbol: 'H', number: 1}
-            elementsRenderer.items = elementsJson;
-            elementsRenderer.renderer = (root, model) => {
+            comboBox.items = elementsJson;
+            comboBox.renderer = (root, model) => {
               const bold = window.document.createElement('b');
               const numberTextNode = window.document.createTextNode(model.item.name + ', ');
               const symbolTextNode = window.document.createTextNode(model.item.symbol);
