@@ -57,6 +57,17 @@
             expect(owner).to.eql(overlay);
           };
         });
+
+        it('should use only renderer when template was assigned after renderer', done => {
+          overlay.renderer = root => root.appendChild(rendererContent);
+          const template = document.createElement('template');
+          template.innerHTML = 'overlay-content';
+          overlay.appendChild(template);
+          setTimeout(() => {
+            expect(overlay.textContent.trim()).to.equal('renderer-content');
+            done();
+          });
+        });
       });
 
       describe('with template', () => {
