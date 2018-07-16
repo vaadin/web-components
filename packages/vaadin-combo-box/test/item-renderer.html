@@ -32,11 +32,12 @@
 
   <script>
     describe('without template', () => {
-      let comboBox;
+      let comboBox, items;
 
       beforeEach(() => {
         comboBox = fixture('default');
-        comboBox.items = ['foo', 'bar', 'baz'];
+        items = ['foo', 'bar', 'baz'];
+        comboBox.items = items;
       });
       afterEach(() => comboBox.opened = false);
 
@@ -49,6 +50,15 @@
 
         const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
         expect(item.$.content.textContent.trim()).to.equal('foo');
+      });
+
+      it('renderer should receive root, model and owner', () => {
+        comboBox.renderer = (root, model, owner) => {
+          expect(root.getAttribute('part')).to.equal('content');
+          expect(items.indexOf(model.item)).to.not.equal(-1);
+          expect(owner).to.eql(comboBox);
+        };
+        comboBox.opened = true;
       });
     });
 
