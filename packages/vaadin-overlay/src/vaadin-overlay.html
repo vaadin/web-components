@@ -162,6 +162,21 @@ This program is available under Apache License Version 2.0, available at https:/
      * every template can only be templatized once, so it is important
      * to set `instanceProps` before the `template` is assigned to the overlay.
      *
+     * ### Rendering
+     *
+     * By default, the overlay uses the content from its template using Polymer.Templatize.
+     * Alternatively, the content can be provided using the renderer callback function.
+     *
+     * The renderer function provides `root`, `model` and `owner` arguments where applicable,
+     * so users are able to check if there is already content in `root`. Generate content using
+     * properties from `model` object if needed, append it to `root` and control the state
+     * of the host element by accessing `owner`.
+     *
+     * **NOTE:** when the renderer property is defined, the `<template>` content is not used.
+     *
+     * **NOTE:** renderer function could be called several times, so it is a good practise to
+     * check the existing content.
+     *
      * ### Styling
      *
      * To style the overlay content, use styles in the parent scope:
@@ -219,8 +234,16 @@ This program is available under Apache License Version 2.0, available at https:/
           owner: Element,
 
           /**
-           * Custom function for rendering the content of the overlay
-           * NOTE: The renderer callback can be called several times with previous content available
+           * Custom function for rendering the content of the overlay.
+           * Receives arguments `root`, `model`, `owner`
+           *
+           * `root` The root container element. Users are able to append content to it.
+           *
+           * `model` Object with properties that could be required during the rendering process.
+           *
+           * `owner` The host element of the renderer function.
+           *
+           * **NOTE:** The renderer callback can be called several times with previous content available
            */
           renderer: {
             type: Function,
