@@ -31,7 +31,8 @@ This program is available under Apache License Version 2.0, available at https:/
         on-opened-changed="_onOverlayOpened"
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
         with-backdrop="[[_phone]]"
-        phone$="[[_phone]]">
+        phone$="[[_phone]]"
+        model="[[_context]]">
     </vaadin-context-menu-overlay>
   </template>
   <script>
@@ -147,6 +148,38 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-context-menu>
        * ```
        *
+       * ### Renderer
+       *
+       * Alternatively to using the template, you can populate the menu content
+       * using the `renderer` callback function:
+       *
+       * ```html
+       * <vaadin-context-menu id="contextMenu">
+       *  <p>This paragraph has a context menu.</p>
+       * </vaadin-context-menu>
+       * ```
+       * ```js
+       * const contextMenu = document.querySelector('#contextMenu');
+       * contextMenu.renderer = (root, context, contextMenu) => {
+       *   if (root.firstChild) {
+       *     // The menu already has a content (probably was reopened).
+       *     return;
+       *   }
+       *
+       *   const listBox = document.createElement('vaadin-list-box');
+       *   const item = document.createElement('vaadin-item');
+       *   item.textContent = 'Context menu item';
+       *   listBox.appendChild(item);
+       *   root.appendChild(listBox);
+       * };
+       * ```
+       *
+       * You can access the menu context inside the renderer using
+       * `context.target` and `context.detail`.
+       *
+       * **NOTE:** when the `renderer` function is defined, the template content
+       * is not in use.
+       *
        * ### Styling
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
@@ -218,6 +251,20 @@ This program is available under Apache License Version 2.0, available at https:/
               observer: '_closeOnChanged'
             },
 
+            /**
+             * Custom function for rendering the content of the menu overlay.
+             * Receives three arguments:
+             *
+             * - `root` The root container DOM element. Append your content to it.
+             * - `contextMenu` The reference to the `<vaadin-context-menu>` element.
+             * - `context` The object with the menu context, contains:
+             *   - `context.target`  the target of the menu opening event,
+             *   - `context.detail` the menu opening event detail.
+             */
+            renderer: {
+              type: Function
+            },
+
             _context: Object,
 
             _boundClose: Object,
@@ -241,6 +288,11 @@ This program is available under Apache License Version 2.0, available at https:/
           this._boundOpen = this.open.bind(this);
           this._boundClose = this.close.bind(this);
           this._boundOnGlobalContextMenu = this._onGlobalContextMenu.bind(this);
+        }
+
+        ready() {
+          super.ready();
+          this.$.overlay.owner = this;
         }
 
         // Runs before overlay is fully rendered
@@ -310,6 +362,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened) {
+            this.$.overlay.renderer = this.renderer;
             if (!this._instance) {
               this.$.overlay.template = this.querySelector('template');
               this._instance = this.$.overlay._instance;

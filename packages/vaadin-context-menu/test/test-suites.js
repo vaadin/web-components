@@ -5,6 +5,7 @@ window.VaadinContextMenuSuites = [
   'selection.html',
   'properties.html',
   'overlay.html',
+  'renderer.html',
   'template.html',
   'touch.html'
 ];

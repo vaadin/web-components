@@ -25,6 +25,38 @@
     </vaadin-demo-snippet>
 
 
+    <h3>Content Renderer Function</h3>
+    <vaadin-demo-snippet id="context-menu-basic-demos-using-renderer">
+      <template preserve-content>
+        <vaadin-context-menu id="contextMenuWithRenderer">
+          <p>
+            This paragraph has the context menu provided in the renderer callback.
+            Use <b>right click</b> to open the context menu.
+          </p>
+        </vaadin-context-menu>
+        <script>
+          window.addDemoReadyListener('#context-menu-basic-demos-using-renderer', function(document) {
+            var contextMenuWithRenderer = document.querySelector('#contextMenuWithRenderer');
+            contextMenuWithRenderer.renderer = function(root, contextMenu, context) {
+              if (root.firstChild) {
+                // The menu content was already rendered.
+                return;
+              }
+
+              var listBox = window.document.createElement('vaadin-list-box');
+              ['First menu item', 'Second menu item'].forEach(function(itemText) {
+                var item = window.document.createElement('vaadin-item');
+                item.textContent = itemText;
+                listBox.appendChild(item);
+              });
+              root.appendChild(listBox);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
     <h3>Filtering Menu Targets</h3>
     <vaadin-demo-snippet id="context-menu-basic-demos-filtering-menu-targets">
       <template preserve-content>
