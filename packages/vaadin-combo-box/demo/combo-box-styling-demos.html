@@ -29,7 +29,7 @@
 
     <h3>Using renderer</h3>
     <p>
-      By default, the combobox item uses the content from template using Polymer.Templatize.
+      By default, the combo box item uses the content from template using Polymer.Templatize.
       Alternatively, the item content can be provided using the renderer callback function.
     </p>
     <vaadin-demo-snippet id="combo-box-styling-demos-renderer">
@@ -39,27 +39,15 @@
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
             var comboBox = document.querySelector('#elements-renderer');
-            // elementsJson is an Array of Objects. Item object format:
-            //   {name: 'Hydrogen', symbol: 'H', number: 1}
             comboBox.items = elementsJson;
             comboBox.renderer = (root, model) => {
-              const bold = window.document.createElement('b');
-              const numberTextNode = window.document.createTextNode(model.item.name + ', ');
-              const symbolTextNode = window.document.createTextNode(model.item.symbol);
-
-              const sub = window.document.createElement('sub');
-              sub.innerText = model.item.number;
-
-              const br = window.document.createElement('br');
-              const indexTextNode = window.document.createTextNode('array index: ' + model.index);
-
-              bold.appendChild(numberTextNode);
-              bold.appendChild(sub);
-              bold.appendChild(symbolTextNode);
-
-              root.appendChild(bold);
-              root.appendChild(br);
-              root.appendChild(indexTextNode);
+              // Avoid rendering if rendered content is already for the same item
+              if (root._rendered !== model.item.number) {
+                root.innerHTML = '<b>' + model.item.name
+                  + ', <sub>' + model.item.number + '</sub>'
+                  + model.item.symbol + '</b><br> array index: ' + model.index;
+                root._rendered = model.item.number;
+              }
             };
           });
         </script>
