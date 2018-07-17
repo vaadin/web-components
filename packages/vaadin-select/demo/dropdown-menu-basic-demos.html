@@ -21,22 +21,18 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Using renderer</h3>
+    <h3>Content Renderer</h3>
     <p>
-      By default, the dropdown uses the content from its template using Polymer.Templatize.
-      Alternatively, the content can be provided using the renderer callback function.
-    </p>
-    <p>
-      <strong>NOTE:</strong> When the renderer property is defined, the <code>&lt;template&gt;</code> content is not used.
+      The content can be provided using the renderer callback function.
     </p>
     <vaadin-demo-snippet id="dropdown-menu-list-box-renderer">
       <template preserve-content>
         <vaadin-dropdown-menu></vaadin-dropdown-menu>
         <script>
           window.addDemoReadyListener('#dropdown-menu-list-box-renderer', function(document) {
-            document.querySelector('vaadin-dropdown-menu').renderer = root => {
+            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
               const listBox = window.document.createElement('vaadin-list-box');
-              ['Jose', 'Manolo', 'Pedro'].forEach(name => {
+              ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
                 const item = window.document.createElement('vaadin-item');
                 item.innerText = name;
                 listBox.appendChild(item);

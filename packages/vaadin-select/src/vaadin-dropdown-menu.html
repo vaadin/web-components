@@ -150,7 +150,19 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Custom function for rendering the content of the dropdown
+             * Custom function for rendering the content of the `<vaadin-dropdown-menu>`.
+             * Receives arguments `root`, `owner`, `model`
+             *
+             * `root` the `<vaadin-dropdown-menu-overlay>` internal container element
+             *
+             * `owner` the `<vaadin-dropdown-menu>` element
+             *
+             * `model` null
+             *
+             * **NOTE:** The renderer callback can be called several times with previous content when available.
+             *
+             * **NOTE:** `<vaadin-dropdown-menu>` does not have any specific properties to pass with the `model` object,
+             * it is set to null.
              */
             renderer: {
               type: Function,
