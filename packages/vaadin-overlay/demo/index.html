@@ -69,7 +69,7 @@
           Show overlay with backdrop and focus-trap
         </vaadin-button>
         <script>
-          document.getElementById('button-focus-trap').addEventListener('click', event => {
+          document.getElementById('button-focus-trap').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
             const field = overlay.content.querySelector('vaadin-text-field');
 
@@ -115,7 +115,7 @@
 
         <script>
           const overlay = document.querySelector('#overlay-renderer');
-          overlay.renderer = root => {
+          overlay.renderer = function(root) {
             // The renderer callback can be called several times, so we should not
             // add extra content when it is already available
             if (root.firstChild) {
@@ -127,7 +127,9 @@
 
             paragraph.innerText = 'The content of this overlay was generated with renderer';
             btn.innerText = 'Close';
-            btn.addEventListener('click', () => overlay.opened = false);
+            btn.addEventListener('click', function() {
+              overlay.opened = false;
+            });
 
             root.appendChild(paragraph);
             root.appendChild(btn);
@@ -171,14 +173,12 @@
         </vaadin-overlay>
         <vaadin-button id="button-overlay-pointer">Show the overlay next to click</vaadin-button>
         <script>
-          document.getElementById('button-overlay-pointer').addEventListener('click', event => {
+          document.getElementById('button-overlay-pointer').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
-            overlay.style = `
-              left: ${event.clientX}px;
-              top: ${event.clientY}px;
-              align-items: start;
-              justify-content: start;
-            `;
+            overlay.style =
+            'left: ' + event.clientX + 'px;' +
+            'top: ' + event.clientY + 'px;' +
+            'align-items: start; justify-content: start;';
             overlay.opened = true;
           });
         </script>
@@ -188,16 +188,14 @@
         </vaadin-overlay>
         <vaadin-button id="button-overlay-below">Show the overlay below me</vaadin-button>
         <script>
-          document.getElementById('button-overlay-below').addEventListener('click', event => {
+          document.getElementById('button-overlay-below').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
             const rect = event.target.getBoundingClientRect();
-            overlay.style = `
-              top: ${rect.bottom}px;
-              left: ${rect.left}px;
-              right: ${document.documentElement.clientWidth - rect.right}px;
-              align-items: stretch;
-              justify-content: start;
-            `;
+            overlay.style =
+              'top: ' + rect.bottom + 'px;' +
+              'left: ' + rect.left + 'px;' +
+              'right: ' + document.documentElement.clientWidth - rect.right + 'px;' +
+              'align-items: stretch; justify-content: start;';
             overlay.opened = true;
           });
         </script>
@@ -240,7 +238,7 @@
         </vaadin-overlay>
         <vaadin-button id="button-overlay-animations">Show the overlay with animations</vaadin-button>
         <script>
-          document.getElementById('button-overlay-animations').addEventListener('click', event => {
+          document.getElementById('button-overlay-animations').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
             overlay.opened = true;
           });
