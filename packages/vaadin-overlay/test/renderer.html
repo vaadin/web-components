@@ -29,7 +29,7 @@
   </test-fixture>
 
   <script>
-    describe('vaadin-dropdown-menu renderer', () => {
+    describe('renderer', () => {
       let rendererContent, renderModel;
 
       beforeEach(function() {
@@ -49,12 +49,21 @@
           expect(overlay.textContent.trim()).to.equal('renderer-content');
         });
 
-        it('renderer should receive model and owner when it is defined', () => {
-          overlay.owner = overlay;
+        it('should receive model and owner when it is defined', () => {
+          const overlayOwner = {};
+          overlay.owner = overlayOwner;
           overlay.model = renderModel;
           overlay.renderer = (root, owner, model) => {
-            expect(owner).to.eql(overlay);
+            expect(owner).to.eql(overlayOwner);
             expect(model).to.eql(renderModel);
+          };
+        });
+
+        it('should pass owner as this to the renderer', () => {
+          overlay.owner = {};
+          overlay.model = renderModel;
+          overlay.renderer = function(root, owner, model) {
+            expect(this).to.eql(owner);
           };
         });
 
@@ -89,6 +98,19 @@
           expect(overlay.textContent.trim()).to.equal('renderer-content');
           overlay.renderer = null;
           expect(overlay.textContent.trim()).to.equal('overlay-content');
+        });
+
+        it('should not restamp template on model change', () => {
+          const lastInstance = overlay._instance;
+          expect(lastInstance).to.be.ok;
+          overlay.model = {};
+          expect(overlay._instance).to.equal(lastInstance);
+        });
+
+        it('should not restamp template on owner change', () => {
+          const lastInstance = overlay._instance;
+          overlay.owner = {};
+          expect(overlay._instance).to.equal(lastInstance);
         });
       });
     });

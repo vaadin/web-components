@@ -329,7 +329,7 @@ This program is available under Apache License Version 2.0, available at https:/
       static get observers() {
         return [
           '_openedChanged(opened)',
-          '_templateChanged(template)',
+          '_stampOverlayTemplate(template)',
           '_render(renderer, owner, model)'
         ];
       }
@@ -682,7 +682,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.content = undefined;
       }
 
-      _templateChanged(template) {
+      _stampOverlayTemplate(template) {
         if (this.renderer) {
           return;
         }
@@ -763,19 +763,22 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _rendererChanged(renderer) {
+      _rendererChanged(renderer, oldRenderer) {
         this.content = this;
 
         while (this.content.firstChild) {
           this.content.removeChild(this.content.firstChild);
         }
+
+        if (oldRenderer && !renderer) {
+          // Renderer was removed, restore the template
+          this._stampOverlayTemplate(this.template);
+        }
       }
 
       _render(renderer, owner, model) {
         if (renderer) {
-          this.renderer(this.content, this.owner, this.model);
-        } else {
-          this._templateChanged(this.template);
+          this.renderer.call(this.owner, this.content, this.owner, this.model);
         }
       }
 
