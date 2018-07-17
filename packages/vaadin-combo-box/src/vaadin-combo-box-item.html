@@ -105,6 +105,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
+          '_render(renderer, item.*)',
           '_updateLabel(label, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
@@ -130,7 +131,9 @@ This program is available under Apache License Version 2.0, available at https:/
         Array.from(this.$.content.childNodes).forEach(node => {
           this.$.content.removeChild(node);
         });
+      }
 
+      _render(renderer, item) {
         if (renderer) {
           const model = {
             index: this.index,
@@ -138,7 +141,7 @@ This program is available under Apache License Version 2.0, available at https:/
           };
 
           this.renderer(this.$.content, model, this._comboBox);
-        } else if (!this._itemTemplateInstance || !this._itemTemplateInstance.firstChild) {
+        } else if (!this._itemTemplateInstance) {
           this._ensureTemplatized();
         }
       }
