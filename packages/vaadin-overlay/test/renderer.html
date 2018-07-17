@@ -50,11 +50,11 @@
         });
 
         it('renderer should receive model and owner when it is defined', () => {
-          overlay.model = renderModel;
           overlay.owner = overlay;
-          overlay.renderer = (root, model, owner) => {
-            expect(model).to.eql(renderModel);
+          overlay.model = renderModel;
+          overlay.renderer = (root, owner, model) => {
             expect(owner).to.eql(overlay);
+            expect(model).to.eql(renderModel);
           };
         });
 

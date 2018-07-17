@@ -167,7 +167,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * By default, the overlay uses the content from its template using Polymer.Templatize.
      * Alternatively, the content can be provided using the renderer callback function.
      *
-     * The renderer function provides `root`, `model` and `owner` arguments where applicable,
+     * The renderer function provides `root`, `owner`, `model` arguments where applicable,
      * so users are able to check if there is already content in `root`. Generate content using
      * properties from `model` object if needed, append it to `root` and control the state
      * of the host element by accessing `owner`.
@@ -239,9 +239,9 @@ This program is available under Apache License Version 2.0, available at https:/
            *
            * `root` The root container element. Users are able to append content to it.
            *
-           * `model` Object with properties that could be required during the rendering process.
-           *
            * `owner` The host element of the renderer function.
+           *
+           * `model` Object with properties that could be required during the rendering process.
            *
            * **NOTE:** The renderer callback can be called several times with previous content available
            */
@@ -330,7 +330,7 @@ This program is available under Apache License Version 2.0, available at https:/
         return [
           '_openedChanged(opened)',
           '_templateChanged(template)',
-          '_render(renderer, model, owner)'
+          '_render(renderer, owner, model)'
         ];
       }
 
@@ -771,9 +771,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _render(renderer, model, owner) {
+      _render(renderer, owner, model) {
         if (renderer) {
-          this.renderer(this.content, this.model, this.owner);
+          this.renderer(this.content, this.owner, this.model);
         } else {
           this._templateChanged(this.template);
         }
