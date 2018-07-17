@@ -95,7 +95,22 @@ This program is available under Apache License Version 2.0, available at https:/
           inputElement: {
             type: Element,
             readOnly: true
-          }
+          },
+
+          /**
+           * Custom function for rendering the content of the `<vaadin-combo-box-item>`.
+           * Receives arguments `root`, `owner`, `model`
+           *
+           * `root` the `<vaadin-combo-box-item>` internal container element
+           *
+           * `owner` the `<vaadin-combo-box>` element
+           *
+           * `model` Object with properties that could be required during the rendering process.
+           * Object is in the format { index: 'the item index', item: 'the item object' }
+           *
+           * **NOTE:** The renderer callback can be called several times with previous content available
+           */
+          renderer: Function,
         };
       }
 
