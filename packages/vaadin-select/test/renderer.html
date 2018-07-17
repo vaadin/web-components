@@ -54,7 +54,7 @@
        });
 
        it('should pass vaadin-dialog as owner to vaadin-overlay', () => {
-         dropdown.renderer = (root, model, owner) => {
+         dropdown.renderer = (root, owner, model) => {
            expect(owner).to.eql(dropdown);
          };
        });
