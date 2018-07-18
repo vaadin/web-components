@@ -534,7 +534,8 @@ This program is available under Apache License Version 2.0, available at https:/
         Array.from(row.children).forEach(cell => {
           const model = {item, index: row.index};
           if (cell._renderer) {
-            cell._renderer.call(this, cell._content, this, model);
+            const owner = cell._column || this;
+            cell._renderer.call(owner, cell._content, owner, model);
           } else if (cell._instance) {
             cell._instance.setProperties(model);
           }

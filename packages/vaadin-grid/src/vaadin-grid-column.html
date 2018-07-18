@@ -103,7 +103,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_stampBodyTemplate(_bodyTemplate, renderer, _cells, _cells.*)',
+        '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
         '_stampHeaderTemplate(_headerTemplate, _headerCell)',
         '_stampFooterTemplate(_footerTemplate, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
@@ -211,7 +211,7 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
-    __stampColumnTemplate(template, renderer, cells) {
+    __setColumnTemplateOrRenderer(template, renderer, cells) {
       cells.forEach(cell => {
         const model = {item: cell.parentElement._item, index: cell.parentElement.index};
 
@@ -233,22 +233,22 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    _stampBodyTemplate(template, renderer, cells, splices) {
+    _setBodyTemplateOrRenderer(template, renderer, cells, splices) {
       if ((template || renderer) && cells) {
-        this.__stampColumnTemplate(template, renderer, cells);
+        this.__setColumnTemplateOrRenderer(template, renderer, cells);
       }
     }
 
     _stampHeaderTemplate(headerTemplate, headerCell) {
       if (headerTemplate && headerCell) {
-        this.__stampColumnTemplate(headerTemplate, null, [headerCell]);
+        this.__setColumnTemplateOrRenderer(headerTemplate, null, [headerCell]);
         headerCell.parentElement.hidden = false;
       }
     }
 
     _stampFooterTemplate(footerTemplate, footerCell) {
       if (footerTemplate && footerCell) {
-        this.__stampColumnTemplate(footerTemplate, null, [footerCell]);
+        this.__setColumnTemplateOrRenderer(footerTemplate, null, [footerCell]);
         footerCell.parentElement.hidden = false;
       }
     }
