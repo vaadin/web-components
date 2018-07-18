@@ -532,11 +532,11 @@ This program is available under Apache License Version 2.0, available at https:/
       _updateItem(row, item) {
         row._item = item;
         Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.setProperties({
-              item,
-              index: row.index
-            });
+          const model = {item, index: row.index};
+          if (cell._renderer) {
+            cell._renderer.call(this, cell._content, this, model);
+          } else if (cell._instance) {
+            cell._instance.setProperties(model);
           }
         });
         this._toggleRowSelected(row, this._isSelected(item));

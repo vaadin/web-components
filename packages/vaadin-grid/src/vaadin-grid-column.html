@@ -78,7 +78,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _footerCell: Object,
 
-        _grid: Object
+        _grid: Object,
+
+        /**
+         * Custom function for rendering the content of the cell content.
+         * Receives arguments `root`, `owner`, `model`
+         *
+         * `root` The root container element. Users are able to append content to it.
+         *
+         * `owner` The column element.
+         *
+         * `model` An object with the structure `{index: index, item: item}`
+         *
+         * **NOTE:** The renderer callback can be called multiple times.
+         */
+        renderer: Function
       };
     }
 
@@ -89,12 +103,12 @@ This program is available under Apache License Version 2.0, available at https:/
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
-        '_stampBodyTemplate(_bodyTemplate, _cells, _cells.*)',
+        '_stampBodyTemplate(_bodyTemplate, renderer, _cells, _cells.*)',
         '_stampHeaderTemplate(_headerTemplate, _headerCell)',
         '_stampFooterTemplate(_footerTemplate, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
-        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)'
+        '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
       ];
     }
 
@@ -197,38 +211,44 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
-    __stampColumnTemplate(template, cells) {
+    __stampColumnTemplate(template, renderer, cells) {
       cells.forEach(cell => {
-        if (cell._template !== template) {
-          cell._template = template;
+        const model = {item: cell.parentElement._item, index: cell.parentElement.index};
 
+        if (renderer) {
+          cell._renderer = renderer;
+          if (model.item) {
+            renderer.call(this, cell._content, this, model);
+          }
+        } else if (cell._template !== template) {
+          cell._template = template;
           cell._content.innerHTML = '';
           const inst = template.templatizer.createInstance();
           cell._content.appendChild(inst.root);
           cell._instance = inst;
-
-          inst.index = cell.parentElement.index; // TODO: _index
-          inst.item = cell.parentElement._item;
+          if (model.item) {
+            cell._instance.setProperties(model);
+          }
         }
       });
     }
 
-    _stampBodyTemplate(template, cells, splices) {
-      if (template && cells) {
-        this.__stampColumnTemplate(template, cells);
+    _stampBodyTemplate(template, renderer, cells, splices) {
+      if ((template || renderer) && cells) {
+        this.__stampColumnTemplate(template, renderer, cells);
       }
     }
 
     _stampHeaderTemplate(headerTemplate, headerCell) {
       if (headerTemplate && headerCell) {
-        this.__stampColumnTemplate(headerTemplate, [headerCell]);
+        this.__stampColumnTemplate(headerTemplate, null, [headerCell]);
         headerCell.parentElement.hidden = false;
       }
     }
 
     _stampFooterTemplate(footerTemplate, footerCell) {
       if (footerTemplate && footerCell) {
-        this.__stampColumnTemplate(footerTemplate, [footerCell]);
+        this.__stampColumnTemplate(footerTemplate, null, [footerCell]);
         footerCell.parentElement.hidden = false;
       }
     }
