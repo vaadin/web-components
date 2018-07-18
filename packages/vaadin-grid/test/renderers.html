@@ -1,0 +1,76 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>renderers test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../vaadin-grid.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column id="column">
+          <template>[[index]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('renderers', () => {
+      let grid, column;
+
+      beforeEach(() => {
+        grid = fixture('default');
+        column = grid.firstElementChild;
+        grid.items = [{foo: 'bar'}, {foo: 'baz'}];
+      });
+
+      describe('column cells', () => {
+
+        beforeEach(() => {
+          column.renderer = function(root, owner, model) {
+            root.innerHTML = '';
+            const text = document.createTextNode(model.index + ' ' + model.item.foo);
+            root.appendChild(text);
+          };
+
+          flushGrid(grid);
+        });
+
+        it('should have valid content when renderer is set', () => {
+          expect(getCell(grid, 0)._content.innerHTML).to.eql('0 bar');
+          expect(getCell(grid, 1)._content.innerHTML).to.eql('1 baz');
+        });
+
+        it('should fallback to template content when removing renderer', () => {
+          column.renderer = undefined;
+          expect(getCell(grid, 0)._content.innerHTML).to.eql('0');
+          expect(getCell(grid, 1)._content.innerHTML).to.eql('1');
+        });
+
+        it('should pass column as `owner` and `this` to the renderer', () => {
+          column.renderer = function(root, owner, model) {
+            expect(this).to.eql(owner);
+            expect(column).to.eql(owner);
+          };
+        });
+
+      });
+    });
+  </script>
+
+</body>
+
+</html>
