@@ -102,7 +102,17 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * `column` The column element.
          */
-        headRenderer: Function
+        headerRenderer: Function,
+
+        /**
+         * Custom function for rendering the footer content.
+         * Receives arguments `root`, `column`
+         *
+         * `root` The cell content element.
+         *
+         * `column` The column element.
+         */
+        footerRenderer: Function
       };
     }
 
@@ -115,7 +125,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_lastFrozenChanged(_lastFrozen)',
         '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
         '_setHeaderTemplateOrRenderer(_headerTemplate, headerRenderer, _headerCell)',
-        '_stampFooterTemplate(_footerTemplate, _footerCell)',
+        '_setFooterTemplateOrRenderer(_footerTemplate, footerRenderer, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
         '_hiddenChanged(hidden, _headerCell, _footerCell, _cells.*)',
@@ -232,7 +242,7 @@ This program is available under Apache License Version 2.0, available at https:/
         if (renderer) {
           cell._renderer = renderer;
 
-          if (model.item || renderer === this.headerRenderer) {
+          if (model.item || renderer === this.headerRenderer || renderer === this.footerRenderer) {
             renderer.call(this, cell._content, this, model);
           }
         } else if (cell._template !== template) {
@@ -262,9 +272,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _stampFooterTemplate(footerTemplate, footerCell) {
-      if (footerTemplate && footerCell) {
-        this.__setColumnTemplateOrRenderer(footerTemplate, null, [footerCell]);
+    _setFooterTemplateOrRenderer(footerTemplate, footerRenderer, footerCell) {
+      if ((footerTemplate || footerRenderer) && footerCell) {
+        this.__setColumnTemplateOrRenderer(footerTemplate, footerRenderer, [footerCell]);
         footerCell.parentElement.hidden = false;
       }
     }

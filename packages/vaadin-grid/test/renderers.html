@@ -20,7 +20,7 @@
   <test-fixture id="default">
     <template>
       <vaadin-grid>
-        <vaadin-grid-column id="column"></vaadin-grid-column>
+        <vaadin-grid-column></vaadin-grid-column>
       </vaadin-grid>
     </template>
   </test-fixture>
@@ -28,9 +28,10 @@
   <test-fixture id="templates">
     <template>
       <vaadin-grid>
-        <vaadin-grid-column id="column">
+        <vaadin-grid-column>
           <template class="header"></template>
           <template></template>
+          <template class="footer"></template>
         </vaadin-grid-column>
       </vaadin-grid>
     </template>
@@ -39,6 +40,10 @@
   <script>
     function getHeaderCell(grid, index = 0) {
       return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+    }
+
+    function getFooterCell(grid, index = 0) {
+      return grid.$.footer.querySelectorAll('[part~="cell"]')[index];
     }
 
     describe('renderers', () => {
@@ -103,6 +108,24 @@
           expect(() => column._headerTemplate = {}).to.throw(Error);
         });
       });
+
+      describe('footer cell', () => {
+        beforeEach(() => {
+          column.footerRenderer = function(root, column) {
+            root.innerHTML = 'RDR footer';
+          };
+
+          flushGrid(grid);
+        });
+
+        it('should have valid content when renderer is set', () => {
+          expect(getFooterCell(grid)._content.innerHTML).to.eql('RDR footer');
+        });
+
+        it('should throw an error when setting a template if there is already a renderer', () => {
+          expect(() => column._footerTemplate = {}).to.throw(Error);
+        });
+      });
     });
 
     describe('templates', () => {
@@ -125,6 +148,12 @@
       describe('header cell', () => {
         it('should throw an error when setting a renderer if there is already a template', () => {
           expect(() => column.headerRenderer = () => {}).to.throw(Error);
+        });
+      });
+
+      describe('footer cell', () => {
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => column.footerRenderer = () => {}).to.throw(Error);
         });
       });
     });
