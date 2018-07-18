@@ -81,7 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _grid: Object,
 
         /**
-         * Custom function for rendering the content of the cell content.
+         * Custom function for rendering the cell content.
          * Receives arguments `root`, `column`, `model`
          *
          * `root` The cell content element.
@@ -92,7 +92,17 @@ This program is available under Apache License Version 2.0, available at https:/
          *
          * **NOTE:** The renderer callback can be called multiple times.
          */
-        renderer: Function
+        renderer: Function,
+
+        /**
+         * Custom function for rendering the header content.
+         * Receives arguments `root`, `column`, `model`
+         *
+         * `root` The cell content element.
+         *
+         * `column` The column element.
+         */
+        headRenderer: Function
       };
     }
 
@@ -104,7 +114,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
-        '_stampHeaderTemplate(_headerTemplate, _headerCell)',
+        '_setHeaderTemplateOrRenderer(_headerTemplate, headerRenderer, _headerCell)',
         '_stampFooterTemplate(_footerTemplate, _footerCell)',
         '_resizableChanged(resizable, _headerCell)',
         '_reorderStatusChanged(_reorderStatus, _headerCell, _footerCell, _cells.*)',
@@ -221,7 +231,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (renderer) {
           cell._renderer = renderer;
-          if (model.item) {
+
+          if (model.item || renderer === this.headerRenderer) {
             renderer.call(this, cell._content, this, model);
           }
         } else if (cell._template !== template) {
@@ -244,9 +255,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _stampHeaderTemplate(headerTemplate, headerCell) {
-      if (headerTemplate && headerCell) {
-        this.__setColumnTemplateOrRenderer(headerTemplate, null, [headerCell]);
+    _setHeaderTemplateOrRenderer(headerTemplate, headerRenderer, headerCell) {
+      if ((headerTemplate || headerRenderer) && headerCell) {
+        this.__setColumnTemplateOrRenderer(headerTemplate, headerRenderer, [headerCell]);
         headerCell.parentElement.hidden = false;
       }
     }

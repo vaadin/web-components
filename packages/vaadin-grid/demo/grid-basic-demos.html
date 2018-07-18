@@ -122,22 +122,10 @@
         <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
 
         <vaadin-grid aria-label="Content Renderer Function">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1">
-            <template class="header">#</template>
-          </vaadin-grid-column>
-
-          <vaadin-grid-column id="column2">
-            <template class="header">First Name</template>
-          </vaadin-grid-column>
-
-          <vaadin-grid-column id="column3">
-            <template class="header">Last Name</template>
-          </vaadin-grid-column>
-
-          <vaadin-grid-column width="8em" id="column4">
-            <template class="header">Address</template>
-          </vaadin-grid-column>
-
+          <vaadin-grid-column id="column1" width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column id="column2"></vaadin-grid-column>
+          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column id="column4" width="8em"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
@@ -149,23 +137,37 @@
             document.querySelector('#column1').renderer = function(root, column, model) {
               root.innerHTML = model.index;
             };
+            document.querySelector('#column1').headerRenderer = function(root, column, model) {
+              root.innerHTML = '#';
+            };
+
             document.querySelector('#column2').renderer = function(root, column, model) {
               root.innerHTML = model.item.firstName;
             };
+            document.querySelector('#column2').headerRenderer = function(root, column, model) {
+              root.innerHTML = 'First Name';
+            };
+
             document.querySelector('#column3').renderer = function(root, column, model) {
               root.innerHTML = model.item.lastName;
             };
+            document.querySelector('#column3').headerRenderer = function(root, column, model) {
+              root.innerHTML = 'Last Name';
+            };
+
             document.querySelector('#column4').renderer = function(root, column, model) {
               root.innerHTML =
-                '<div style="white-space: normal">' +
-                model.item.address.street + ', ' + model.item.address.city +
-                '</div>';
+              '<div style="white-space: normal">' +
+              model.item.address.street + ', ' + model.item.address.city +
+              '</div>';
+            };
+            document.querySelector('#column4').headerRenderer = function(root, column, model) {
+              root.innerHTML = 'Address';
             };
           });
         </script>
       </template>
     </vaadin-demo-snippet>
-
 
   </template>
   <script>

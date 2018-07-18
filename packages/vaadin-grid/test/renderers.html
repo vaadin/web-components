@@ -29,13 +29,18 @@
     <template>
       <vaadin-grid>
         <vaadin-grid-column id="column">
-          <template>[[index]]</template>
+          <template class="header"></template>
+          <template></template>
         </vaadin-grid-column>
       </vaadin-grid>
     </template>
   </test-fixture>
 
   <script>
+    function getHeaderCell(grid, index = 0) {
+      return grid.$.header.querySelectorAll('[part~="cell"]')[index];
+    }
+
     describe('renderers', () => {
       let grid, column;
 
@@ -80,6 +85,24 @@
           expect(() => column._bodyTemplate = {}).to.throw(Error);
         });
       });
+
+      describe('header cell', () => {
+        beforeEach(() => {
+          column.headerRenderer = function(root, column) {
+            root.innerHTML = 'RDR header';
+          };
+
+          flushGrid(grid);
+        });
+
+        it('should have valid content when renderer is set', () => {
+          expect(getHeaderCell(grid)._content.innerHTML).to.eql('RDR header');
+        });
+
+        it('should throw an error when setting a template if there is already a renderer', () => {
+          expect(() => column._headerTemplate = {}).to.throw(Error);
+        });
+      });
     });
 
     describe('templates', () => {
@@ -96,6 +119,12 @@
       describe('column cells', () => {
         it('should throw an error when setting a renderer if there is already a template', () => {
           expect(() => column.renderer = () => {}).to.throw(Error);
+        });
+      });
+
+      describe('header cell', () => {
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => column.headerRenderer = () => {}).to.throw(Error);
         });
       });
     });
