@@ -93,28 +93,28 @@
         });
 
         it('should substract step value from the current input value on arrow down', () => {
-          timePicker.__inputElement.value = '23:55:55.500';
           timePicker.step = 1.5;
+          timePicker.value = '23:55:55.500';
           arrowDown();
           expect(timePicker.__inputElement.value).to.be.equal('23:55:54.000');
         });
 
         it('should add step value to the current input value on arrow up', () => {
-          timePicker.__inputElement.value = '23:55:55.500';
           timePicker.step = 1.5;
+          timePicker.value = '23:55:55.500';
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('23:55:57.000');
         });
 
         it('should change to the next even value on arrow up', () => {
-          timePicker.__inputElement.value = '23:52';
+          timePicker.value = '23:52';
           timePicker.step = 5 * 60;
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('23:55');
         });
 
         it('should change to the next even value on arrow down', () => {
-          timePicker.__inputElement.value = '23:52';
+          timePicker.value = '23:52';
           timePicker.step = 5 * 60;
           arrowDown();
           expect(timePicker.__inputElement.value).to.be.equal('23:50');
@@ -125,6 +125,42 @@
           arrowDown();
           arrowUp();
           expect(spy.callCount).to.eql(2);
+        });
+
+        describe('with custom parser and formatter', () => {
+          beforeEach(() => {
+            timePicker.i18n.parseTime = text => {
+              const parts = text.split('.');
+              return {
+                hours: parts[0],
+                minutes: parts[1]
+              };
+            };
+            timePicker.i18n.formatTime = time => {
+              return `${time.hours}.${time.minutes}`;
+            };
+          });
+
+          it('should correctly add the step with custom parser and formatter', () => {
+            timePicker.value = '12:0';
+            timePicker.step = 20;
+            for (let inc = 1; inc < 4; inc ++) {
+              expect(timePicker.__inputElement.value).to.be.equal('12.0');
+              arrowUp();
+            }
+            expect(timePicker.__inputElement.value).to.be.equal('12.1');
+          });
+
+          it('should correctly substract the step with custom parser and formatter', () => {
+            timePicker.value = '12:0';
+            timePicker.step = 20;
+            for (let inc = 1; inc < 4; inc ++) {
+              arrowDown();
+              expect(timePicker.__inputElement.value).to.be.equal('11.59');
+            }
+            arrowDown();
+            expect(timePicker.__inputElement.value).to.be.equal('11.58');
+          });
         });
       });
 
