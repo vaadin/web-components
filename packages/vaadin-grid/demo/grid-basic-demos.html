@@ -144,19 +144,19 @@
           window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
             document.querySelector('#column1').renderer = function(root, column, model) {
               root.innerHTML = model.index;
-            }
+            };
             document.querySelector('#column2').renderer = function(root, column, model) {
               root.innerHTML = model.item.firstName;
-            }
+            };
             document.querySelector('#column3').renderer = function(root, column, model) {
               root.innerHTML = model.item.lastName;
-            }
+            };
             document.querySelector('#column4').renderer = function(root, column, model) {
               root.innerHTML =
                 '<div style="white-space: normal">' +
                 model.item.address.street + ', ' + model.item.address.city +
                 '</div>';
-            }
+            };
           });
         </script>
       </template>

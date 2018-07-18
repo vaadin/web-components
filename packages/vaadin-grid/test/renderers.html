@@ -20,6 +20,14 @@
   <test-fixture id="default">
     <template>
       <vaadin-grid>
+        <vaadin-grid-column id="column"></vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="templates">
+    <template>
+      <vaadin-grid>
         <vaadin-grid-column id="column">
           <template>[[index]]</template>
         </vaadin-grid-column>
@@ -38,7 +46,6 @@
       });
 
       describe('column cells', () => {
-
         beforeEach(() => {
           column.renderer = function(root, owner, model) {
             root.innerHTML = '';
@@ -54,12 +61,6 @@
           expect(getCell(grid, 1)._content.innerHTML).to.eql('1 baz');
         });
 
-        it('should fallback to template content when removing renderer', () => {
-          column.renderer = undefined;
-          expect(getCell(grid, 0)._content.innerHTML).to.eql('0');
-          expect(getCell(grid, 1)._content.innerHTML).to.eql('1');
-        });
-
         it('should pass column as `owner` and `this` to the renderer', () => {
           column.renderer = function(root, owner, model) {
             expect(this).to.eql(owner);
@@ -67,6 +68,35 @@
           };
         });
 
+        it('should allow to change the renderer', () => {
+          column.renderer = function(root, owner, model) {
+            root.innerHTML = model.index + ' test';
+          };
+          expect(getCell(grid, 0)._content.innerHTML).to.eql('0 test');
+          expect(getCell(grid, 1)._content.innerHTML).to.eql('1 test');
+        });
+
+        it('should throw an error when setting a template if there is already a renderer', () => {
+          expect(() => column._bodyTemplate = {}).to.throw(Error);
+        });
+      });
+    });
+
+    describe('templates', () => {
+      let grid, column;
+
+      beforeEach(() => {
+        grid = fixture('templates');
+        column = grid.firstElementChild;
+        grid.items = [{foo: 'bar'}, {foo: 'baz'}];
+
+        flushGrid(grid);
+      });
+
+      describe('column cells', () => {
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => column.renderer = () => {}).to.throw(Error);
+        });
       });
     });
   </script>
