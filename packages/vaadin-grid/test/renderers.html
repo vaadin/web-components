@@ -63,7 +63,7 @@
         it('should pass column as `owner` and `this` to the renderer', () => {
           column.renderer = function(root, owner, model) {
             expect(this).to.eql(owner);
-            expect(column).to.eql(owner);
+            expect(owner.localName).to.eql('vaadin-grid-column');
           };
         });
 
