@@ -50,7 +50,7 @@
     <h3>Backdrop and Focus Trap</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay with-backdrop focus-trap style="max-width: 300px">
+        <vaadin-overlay with-backdrop focus-trap style="max-width: 300px;">
           <template>
               <h3>Focus is trapped inside the content block</h3>
               <button>native button</button>
@@ -194,7 +194,7 @@
             overlay.style =
               'top: ' + rect.bottom + 'px;' +
               'left: ' + rect.left + 'px;' +
-              'right: ' + document.documentElement.clientWidth - rect.right + 'px;' +
+              'right: ' + (document.documentElement.clientWidth - rect.right) + 'px;' +
               'align-items: stretch; justify-content: start;';
             overlay.opened = true;
           });
