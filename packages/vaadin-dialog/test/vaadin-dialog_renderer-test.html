@@ -12,28 +12,54 @@
 
 <body>
 
-  <test-fixture id="renderer-function">
+  <test-fixture id="renderer-function-without-template">
+    <template>
+      <vaadin-dialog></vaadin-dialog>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="renderer-function-with-template">
     <template>
       <vaadin-dialog>
         <template>
-          <div>Renderer Function</div>
+          <div>Template content</div>
         </template>
       </vaadin-dialog>
     </template>
   </test-fixture>
 
   <script>
-    describe('renderer function', () => {
+    describe('renderer function without template', () => {
       let dialog, overlay;
 
       beforeEach(() => {
-        dialog = fixture('renderer-function');
+        dialog = fixture('renderer-function-without-template');
+        overlay = dialog.$.overlay;
+      });
+
+      it('should render the content of renderer function when renderer function provided', () => {
+        dialog.renderer = (root, dialog) => {
+          const div = document.createElement('div');
+          div.textContent = 'The content of the dialog';
+          root.appendChild(div);
+        };
+        dialog.opened = true;
+
+        expect(overlay.textContent).to.include('The content of the dialog');
+      });
+    });
+
+    describe('renderer function with template', () => {
+      let dialog, overlay;
+
+      beforeEach(() => {
+        dialog = fixture('renderer-function-with-template');
         overlay = dialog.$.overlay;
       });
 
       it('should default to template if renderer function not provided', () => {
         dialog.opened = true;
-        expect(overlay.textContent).to.include('Renderer Function');
+        expect(overlay.textContent).to.include('Template content');
       });
 
       it('should render the content of renderer function instead of template content when renderer function provided', () => {
@@ -59,7 +85,7 @@
 
         dialog.renderer = null;
 
-        expect(overlay.textContent).to.include('Renderer Function');
+        expect(overlay.textContent).to.include('Template content');
       });
     });
   </script>
