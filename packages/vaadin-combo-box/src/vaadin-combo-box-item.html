@@ -141,12 +141,16 @@ This program is available under Apache License Version 2.0, available at https:/
           };
 
           this.renderer(this.$.content, model, this._comboBox);
-        } else if (!this._itemTemplateInstance) {
+        } else {
           this._ensureTemplatized();
         }
       }
 
       _ensureTemplatized() {
+        if (!this._comboBox) {
+          return;
+        }
+
         this._comboBox._ensureTemplatized();
         if (this._comboBox._TemplateClass) {
           this._itemTemplateInstance = new this._comboBox._TemplateClass({});
