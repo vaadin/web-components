@@ -260,6 +260,9 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `context` The object with the menu context, contains:
              *   - `context.target`  the target of the menu opening event,
              *   - `context.detail` the menu opening event detail.
+             *
+             * **NOTE:** The renderer callback can be called multiple times
+             * with the previous content.
              */
             renderer: {
               type: Function
