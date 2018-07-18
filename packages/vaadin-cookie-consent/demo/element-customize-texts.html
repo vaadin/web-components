@@ -7,13 +7,11 @@
     </style>
 
 
-  <h3>Customize texts</h3>
+  <h3>Custom Values Example</h3>
   All the texts in the dialog can be customized and localized.
-  <p>
-      <button id='showPopup'>Show consent popup</button>
-  </p>
   <vaadin-demo-snippet id='cookie-consent-demo-customizing-texts'>
     <template preserve-content>
+      <vaadin-button id='showPopup'>Show consent popup</vaadin-button>
       <vaadin-cookie-consent 
         message='We are using cookies to make your visit here awesome!' 
         dismiss='Cool!' 
@@ -21,6 +19,14 @@
         learn-more-link='https://vaadin.com/terms-of-service'>
       </vaadin-cookie-consent>
     </template>
+    <script>
+      window.addDemoReadyListener('#cookie-consent-demo-customizing-texts', e => {
+        const element = e.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot;
+        element.querySelector('vaadin-button').addEventListener('click', e => {
+          element.querySelector('vaadin-cookie-consent')._show();
+        });
+      });
+    </script>
   </vaadin-demo-snippet>
 
   </template>
@@ -28,12 +34,6 @@
     class ElementCustomizeTexts extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
       static get is() {
         return 'element-customize-texts';
-      }
-      connectedCallback() {
-        super.connectedCallback();
-        this.$.showPopup.addEventListener('click', e => {
-          this.$['cookie-consent-demo-customizing-texts'].shadowRoot.querySelector('vaadin-cookie-consent')._show();
-        });
       }
     }
     customElements.define(ElementCustomizeTexts.is, ElementCustomizeTexts);

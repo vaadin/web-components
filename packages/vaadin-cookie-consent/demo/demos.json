@@ -2,7 +2,7 @@
   "name": "Vaadin Element",
   "pages": [
   {
-    "name": "Basic Usage",
+    "name": "Basics",
     "url": "element-basic-demos",
     "src": "element-basic-demos.html",
     "meta": {
@@ -13,7 +13,7 @@
   }
   ,
   {
-    "name": "Customize Texts",
+    "name": "Customization",
     "url": "element-customize-texts",
     "src": "element-customize-texts.html",
     "meta": {

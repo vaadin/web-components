@@ -9,25 +9,25 @@
 
     <h3>Basic Usage</h3>
     The popup will be shown once to every user and use a standard text.
-    <p>
-        <button id='showPopup'>Show consent popup</button>
-    </p>
     <vaadin-demo-snippet id='cookie-consent-demo-basic-usage'>
       <template preserve-content>
+        <vaadin-button>Show consent popup</vaadin-button>
         <vaadin-cookie-consent></vaadin-cookie-consent>
       </template>
+      <script>
+        window.addDemoReadyListener('#cookie-consent-demo-basic-usage', e => {
+          const element = e.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot;
+          element.querySelector('vaadin-button').addEventListener('click', e => {
+            element.querySelector('vaadin-cookie-consent')._show();
+          });
+        });
+      </script>
     </vaadin-demo-snippet>
   </template>
   <script>
     class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
       static get is() {
         return 'element-basic-demos';
-      }
-      connectedCallback() {
-        super.connectedCallback();
-        this.$.showPopup.addEventListener('click', e => {
-          this.$['cookie-consent-demo-basic-usage'].shadowRoot.querySelector('vaadin-cookie-consent')._show();
-        });
       }
     }
     customElements.define(ElementBasicDemos.is, ElementBasicDemos);

@@ -7,11 +7,8 @@
     </style>
 
 
-  <h3>Theming</h3>
+  <h3>Styling the Content</h3>
   The visual looks can be changed using CSS.
-  <p>
-      <button id='showPopup'>Show consent popup</button>
-  </p>
   <vaadin-demo-snippet id='cookie-consent-demo-customizing-texts'>
     <template preserve-content>
       <style>
@@ -35,8 +32,23 @@
           color: rgb(255, 81, 0);
         }
       </style>
+      <vaadin-button id='showPopup'>Show consent popup</vaadin-button>
       <vaadin-cookie-consent></vaadin-cookie-consent>
     </template>
+    <script>
+        window.addDemoReadyListener('#cookie-consent-demo-customizing-texts', e => {
+          const element = e.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot;
+          element.querySelector('vaadin-button').addEventListener('click', e => {
+            element.querySelector('vaadin-cookie-consent')._show();
+          });
+          const styles = element.querySelectorAll('style');
+          const css = styles[styles.length - 1].innerText;
+          window.styleTag = document.createElement('style');
+          window.styleTag.innerText = css;
+          document.head.appendChild(window.styleTag);
+
+        });
+    </script>  
   </vaadin-demo-snippet>
 
   </template>
@@ -45,22 +57,12 @@
       static get is() {
         return 'element-theming';
       }
-      connectedCallback() {
-        super.connectedCallback();
-        this.$.showPopup.addEventListener('click', e => {
-          this.$['cookie-consent-demo-customizing-texts'].shadowRoot.querySelector('vaadin-cookie-consent')._show();
-        });
-        const styles = this.$['cookie-consent-demo-customizing-texts'].shadowRoot.querySelectorAll('style');
-        const css = styles[styles.length - 1].innerText;
-        this.styleTag = document.createElement('style');
-        this.styleTag.innerText = css;
-        document.head.appendChild(this.styleTag);
-      }
+
       disconnectedCallback() {
         super.disconnectedCallback();
-        if (this.styleTag) {
-          this.styleTag.parentElement.removeChild(this.styleTag);
-          this.styleTag = undefined;
+        if (window.styleTag) {
+          window.styleTag.parentElement.removeChild(window.styleTag);
+          window.styleTag = undefined;
         }
       }
     }

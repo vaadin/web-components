@@ -8,105 +8,91 @@
       "sourceRange": {
         "file": "src/vaadin-cookie-consent.html",
         "start": {
-          "line": 160,
+          "line": 173,
           "column": 6
         },
         "end": {
-          "line": 160,
+          "line": 173,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-cookie-consent>` is used to show a cookie consent banner the first time a user visits the application.\n\nBy default, the banner is shown attached to the top of the screen and with a predefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.\n\nThe texts, link and position can be configured using attributes/properties, e.g.\n```\n<vaadin-cookie-consent learn-more-link=\"https://mysite.com/cookies.html\"></vaadin-cookie-consent>\n```",
+          "description": "`<vaadin-cookie-consent>` is used to show a cookie consent banner the first\n time a user visits the application.\n\nBy default, the banner is shown attached to the top of the screen and with a\npredefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.\n\nThe texts, link and position can be configured using attributes/properties, e.g.\n```\n<vaadin-cookie-consent learn-more-link='https://mysite.com/cookies.html'></vaadin-cookie-consent>\n```",
           "summary": "",
           "path": "src/vaadin-cookie-consent.html",
           "properties": [
             {
               "name": "message",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The message to show in the popup.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 51,
+                  "line": 55,
                   "column": 12
                 },
                 "end": {
-                  "line": 54,
+                  "line": 58,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"This website uses cookies to ensure you get the best experience.\""
             },
             {
               "name": "dismiss",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The text to show on the dismiss/consent button.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 58,
+                  "line": 62,
                   "column": 12
                 },
                 "end": {
-                  "line": 61,
+                  "line": 65,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"Got it!\""
             },
             {
               "name": "learnMore",
-              "type": "string",
-              "description": "The text to show on the \"learn more\" link.",
+              "type": "string | null | undefined",
+              "description": "The text to show on the 'learn more' link.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 65,
+                  "line": 69,
                   "column": 12
                 },
                 "end": {
-                  "line": 68,
+                  "line": 72,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"Learn more\""
             },
             {
               "name": "learnMoreLink",
-              "type": "string",
-              "description": "The URL the \"learn more\" link should open.",
+              "type": "string | null | undefined",
+              "description": "The URL the 'learn more' link should open.",
               "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 72,
-                  "column": 12
-                },
-                "end": {
-                  "line": 75,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              },
-              "defaultValue": "\"https://cookiesandyou.com/\""
-            },
-            {
-              "name": "_showLearnMore",
-              "type": "boolean",
-              "description": "",
-              "privacy": "protected",
               "sourceRange": {
                 "start": {
                   "line": 76,
@@ -119,47 +105,74 @@
               },
               "metadata": {
                 "polymer": {
-                  "readOnly": true
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"https://cookiesandyou.com/\""
+            },
+            {
+              "name": "_showLearnMore",
+              "type": "boolean | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 80,
+                  "column": 12
+                },
+                "end": {
+                  "line": 83,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true,
+                  "attributeType": "Boolean"
                 }
               }
             },
             {
               "name": "position",
-              "type": "string",
-              "description": "Determines the position of the banner.\n\nPossible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`\nFor `top` and `bottom`, the banner is shown with full width. For the corner positions, it is shown as a smaller popup.",
+              "type": "string | null | undefined",
+              "description": "Determines the position of the banner.\n\nPossible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`\nFor `top` and `bottom`, the banner is shown with full width. For the corner positions,\nit is shown as a smaller popup.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 86,
+                  "line": 91,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 94,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"top\""
             },
             {
               "name": "cookieName",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The name of the cookie to set to remember that the user has consented.\n\nThis rarely needs to be changed.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 103,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"cookieconsent_status\""
             }
@@ -171,11 +184,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 101,
+                  "line": 106,
                   "column": 8
                 },
                 "end": {
-                  "line": 103,
+                  "line": 108,
                   "column": 9
                 }
               },
@@ -189,36 +202,42 @@
             {
               "name": "connectedCallback",
               "description": "",
-              "privacy": "public",
+              "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 104,
+                  "line": 113,
                   "column": 8
                 },
                 "end": {
-                  "line": 133,
+                  "line": 142,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "disconnectedCallback",
               "description": "",
-              "privacy": "public",
+              "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 134,
-                  "column": 8
+                  "line": 147,
+                  "column": 9
                 },
                 "end": {
-                  "line": 140,
+                  "line": 153,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_getPopup",
@@ -226,11 +245,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 154,
                   "column": 8
                 },
                 "end": {
-                  "line": 143,
+                  "line": 156,
                   "column": 9
                 }
               },
@@ -243,16 +262,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 147,
+                  "line": 160,
                   "column": 8
                 },
                 "end": {
-                  "line": 153,
+                  "line": 166,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [],
@@ -265,113 +287,113 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 36,
+              "line": 40,
               "column": 6
             },
             "end": {
-              "line": 154,
+              "line": 167,
               "column": 7
             }
           },
           "privacy": "public",
           "superclass": "HTMLElement",
-          "name": "Vaadin.VaadinCookieConsentElement",
+          "name": "Vaadin.CookieConsentElement",
           "attributes": [
             {
               "name": "message",
               "description": "The message to show in the popup.",
               "sourceRange": {
                 "start": {
-                  "line": 51,
+                  "line": 55,
                   "column": 12
                 },
                 "end": {
-                  "line": 54,
+                  "line": 58,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "dismiss",
               "description": "The text to show on the dismiss/consent button.",
               "sourceRange": {
                 "start": {
-                  "line": 58,
+                  "line": 62,
                   "column": 12
                 },
                 "end": {
-                  "line": 61,
+                  "line": 65,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "learn-more",
-              "description": "The text to show on the \"learn more\" link.",
+              "description": "The text to show on the 'learn more' link.",
               "sourceRange": {
                 "start": {
-                  "line": 65,
+                  "line": 69,
                   "column": 12
                 },
                 "end": {
-                  "line": 68,
+                  "line": 72,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "learn-more-link",
-              "description": "The URL the \"learn more\" link should open.",
+              "description": "The URL the 'learn more' link should open.",
               "sourceRange": {
                 "start": {
-                  "line": 72,
+                  "line": 76,
                   "column": 12
                 },
                 "end": {
-                  "line": 75,
+                  "line": 79,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "position",
-              "description": "Determines the position of the banner.\n\nPossible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`\nFor `top` and `bottom`, the banner is shown with full width. For the corner positions, it is shown as a smaller popup.",
+              "description": "Determines the position of the banner.\n\nPossible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`\nFor `top` and `bottom`, the banner is shown with full width. For the corner positions,\nit is shown as a smaller popup.",
               "sourceRange": {
                 "start": {
-                  "line": 86,
+                  "line": 91,
                   "column": 12
                 },
                 "end": {
-                  "line": 89,
+                  "line": 94,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             },
             {
               "name": "cookie-name",
               "description": "The name of the cookie to set to remember that the user has consented.\n\nThis rarely needs to be changed.",
               "sourceRange": {
                 "start": {
-                  "line": 95,
+                  "line": 100,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 103,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             }
           ],
           "events": [],
@@ -383,137 +405,6 @@
           "tagname": "vaadin-cookie-consent"
         }
       ]
-    }
-  ],
-  "elements": [
-    {
-      "description": "",
-      "summary": "",
-      "path": "demo/element-basic-demos.html",
-      "properties": [],
-      "methods": [
-        {
-          "name": "connectedCallback",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 25,
-              "column": 6
-            },
-            "end": {
-              "line": 30,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        }
-      ],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 21,
-          "column": 4
-        },
-        "end": {
-          "line": 31,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "superclass": "HTMLElement",
-      "name": "ElementBasicDemos",
-      "attributes": [],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "element-basic-demos"
-    },
-    {
-      "description": "",
-      "summary": "",
-      "path": "demo/element-customize-texts.html",
-      "properties": [],
-      "methods": [
-        {
-          "name": "connectedCallback",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 31,
-              "column": 6
-            },
-            "end": {
-              "line": 36,
-              "column": 7
-            }
-          },
-          "metadata": {},
-          "params": []
-        }
-      ],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 27,
-          "column": 4
-        },
-        "end": {
-          "line": 37,
-          "column": 5
-        }
-      },
-      "privacy": "public",
-      "superclass": "HTMLElement",
-      "name": "ElementCustomizeTexts",
-      "attributes": [],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": [],
-      "tagname": "element-customize-texts"
-    }
-  ],
-  "mixins": [
-    {
-      "description": " ",
-      "summary": "",
-      "path": "demo/element-demo.html",
-      "properties": [],
-      "methods": [],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 2,
-          "column": 2
-        },
-        "end": {
-          "line": 9,
-          "column": 3
-        }
-      },
-      "privacy": "public",
-      "name": "ElementDemo",
-      "attributes": [],
-      "events": [],
-      "styling": {
-        "cssVariables": [],
-        "selectors": []
-      },
-      "slots": []
     }
   ]
 }

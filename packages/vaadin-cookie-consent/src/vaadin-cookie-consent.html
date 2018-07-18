@@ -107,6 +107,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _showLink(learnMoreLink) {
           return !!learnMoreLink;
         }
+
+        /**
+         * @protected
+         */
         connectedCallback() {
           super.connectedCallback();
 
@@ -137,6 +141,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             position: this.position
           });
         }
+
+        /**
+         * @protected
+         */
         disconnectedCallback() {
           super.disconnectedCallback();
           var popup = this._getPopup();
