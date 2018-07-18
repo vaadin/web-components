@@ -42,7 +42,7 @@
       afterEach(() => comboBox.opened = false);
 
       it('should use renderer when it is defined', () => {
-        comboBox.renderer = (root, model) => {
+        comboBox.renderer = (root, owner, model) => {
           const textNode = document.createTextNode(model.item);
           root.appendChild(textNode);
         };
@@ -52,8 +52,8 @@
         expect(item.$.content.textContent.trim()).to.equal('foo');
       });
 
-      it('renderer should receive root, model and owner', () => {
-        comboBox.renderer = (root, model, owner) => {
+      it('renderer should receive root, owner and model', () => {
+        comboBox.renderer = (root, owner, model) => {
           expect(root.getAttribute('part')).to.equal('content');
           expect(items.indexOf(model.item)).to.not.equal(-1);
           expect(owner).to.eql(comboBox);
@@ -77,7 +77,7 @@
       });
 
       it('the initial template instance should be used after renderer was assigned and removed', () => {
-        comboBox.renderer = (root, model) => {
+        comboBox.renderer = (root, owner, model) => {
           const textNode = document.createTextNode(model.item);
           root.appendChild(textNode);
         };

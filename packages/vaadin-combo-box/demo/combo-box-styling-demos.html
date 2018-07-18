@@ -67,7 +67,7 @@
           window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
             const comboBox = document.querySelector('#elements-renderer');
             comboBox.items = elementsJson;
-            comboBox.renderer = function(root, model) {
+            comboBox.renderer = function(root, owner, model) {
               // Avoid rendering if rendered content is already for the same item
               if (root._rendered !== model.item.number) {
                 root.innerHTML = '<b>' + model.item.name
