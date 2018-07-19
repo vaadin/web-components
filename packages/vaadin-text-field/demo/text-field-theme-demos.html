@@ -1,0 +1,39 @@
+<dom-module id="text-field-theme-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Text Align</h3>
+    <vaadin-demo-snippet id="text-field-theme-demos-text-align">
+      <template preserve-content>
+        <vaadin-text-field value="left"></vaadin-text-field>
+        <vaadin-text-field value="center" theme="align-center"></vaadin-text-field>
+        <vaadin-text-field value="right" theme="align-right"></vaadin-text-field>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Small Size</h3>
+    <vaadin-demo-snippet id="text-field-theme-demos-sizes">
+      <template preserve-content>
+        <vaadin-text-field theme="small" label="Label" placeholder="Text field"></vaadin-text-field>
+        <vaadin-password-field theme="small" label="Label" placeholder="Password field"></vaadin-password-field>
+        <vaadin-text-area theme="small" label="Label" placeholder="Text area"></vaadin-text-area>
+      </template>
+    </vaadin-demo-snippet>
+
+
+  </template>
+  <script>
+    class TextFieldThemeDemos extends DemoReadyEventEmitter(TextFieldDemo(Polymer.Element)) {
+      static get is() {
+        return 'text-field-theme-demos';
+      }
+    }
+    customElements.define(TextFieldThemeDemos.is, TextFieldThemeDemos);
+  </script>
+</dom-module>

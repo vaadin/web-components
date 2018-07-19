@@ -2,7 +2,7 @@
   "name": "Vaadin Text Field",
   "pages": [
     {
-      "name": "Basics",
+      "name": "Text Field",
       "url": "text-field-basic-demos",
       "src": "text-field-basic-demos.html",
       "meta": {
@@ -43,8 +43,8 @@
     },
     {
       "name": "Password Field",
-      "url": "text-field-password-demos",
-      "src": "text-field-password-demos.html",
+      "url": "password-field-demos",
+      "src": "password-field-demos.html",
       "meta": {
         "title": "Vaadin Password Field Examples",
         "description": "",
@@ -72,11 +72,11 @@
       }
     },
     {
-      "name": "Lumo Theme",
-      "url": "text-field-lumo-theme-demos",
-      "src": "text-field-lumo-theme-demos.html",
+      "name": "Theme Variants",
+      "url": "text-field-theme-demos",
+      "src": "text-field-theme-demos.html",
       "meta": {
-        "title": "Vaadin Text Field Lumo Theme Variations",
+        "title": "Vaadin Text Field Theme Variants",
         "description": "",
         "image": ""
       }
