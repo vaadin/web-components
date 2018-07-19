@@ -94,18 +94,20 @@ This program is available under Apache License Version 2.0, available at https:/
           _itemTemplateInstance: Object,
 
           /**
-           * Custom function for rendering the content of the `<vaadin-combo-box-item>` propagated from `<vaadin-combo-box>`.
+           * Custom function for rendering the content of the `<vaadin-combo-box-item>` propagated from the combo box element.
            */
-          renderer: {
-            type: Function,
-            observer: '_rendererChanged'
-          }
+          renderer: Function,
+
+          /**
+           * Saved instance of a custom renderer function.
+           */
+          _oldRenderer: Function
         };
       }
 
       static get observers() {
         return [
-          '_render(renderer, item.*)',
+          '_render(renderer, index, item.*)',
           '_updateLabel(label, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
@@ -127,21 +129,24 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _rendererChanged(renderer) {
-        Array.from(this.$.content.childNodes).forEach(node => {
-          this.$.content.removeChild(node);
-        });
-      }
+      _render(renderer, index, item) {
+        if (item === undefined || index === undefined) {
+          return;
+        }
 
-      _render(renderer, item) {
+        if (this._oldRenderer !== renderer) {
+          this.$.content.textContent = '';
+        }
+
         if (renderer) {
+          this._oldRenderer = renderer;
           const model = {
-            index: this.index,
-            item: this.item
+            index: index,
+            item: item.value
           };
 
           this.renderer(this.$.content, this._comboBox, model);
-        } else {
+        } else if (this._oldRenderer) {
           this._ensureTemplatized();
         }
       }

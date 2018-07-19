@@ -43,13 +43,13 @@
 
       it('should use renderer when it is defined', () => {
         comboBox.renderer = (root, comboBox, model) => {
-          const textNode = document.createTextNode(model.item);
+          const textNode = document.createTextNode(`${model.item} ${model.index}`);
           root.appendChild(textNode);
         };
         comboBox.opened = true;
 
         const item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        expect(item.$.content.textContent.trim()).to.equal('foo');
+        expect(item.$.content.textContent.trim()).to.equal('foo 0');
       });
 
       it('renderer should receive root, comboBox and model', () => {
