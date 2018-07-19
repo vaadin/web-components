@@ -36,7 +36,7 @@
     "iron-pages": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vlukashov/vaadin-demo-helpers#feature/iframe-renderer",
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^1.3.0",
     "vaadin-tabs": "vaadin/vaadin-tabs#^2.0.0",
     "vaadin-icons": "vaadin/vaadin-icons#^4.1.4"
   }
