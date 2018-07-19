@@ -250,7 +250,27 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String,
               value: 'bottom-start',
               observer: '_positionChanged'
-            }
+            },
+
+            /**
+             * Custom function for rendering the content of the notification.
+             * Receives arguments `root`, `notification`
+             *
+             * `root` the `vaadin-notification-card` container element.
+             *
+             * `notification` the reference to the notification element.
+             *
+             * **NOTE:** The renderer callback can be called multiple times with the previous content.
+             */
+            renderer: {
+              type: Function,
+              observer: '_rendererChanged'
+            },
+
+            /**
+             * The template of the notification card content.
+             */
+            _template: Object
           };
         }
 
@@ -285,64 +305,73 @@ This program is available under Apache License Version 2.0, available at https:/
         _openedChanged(opened) {
           if (opened) {
             this._container.opened = true;
-            if (!this._instance) {
-              const template = this.querySelector('template');
-              if (!template._Templatizer) {
-                template._Templatizer = Polymer.Templatize.templatize(template, this, {
-                  forwardHostProp: function(prop, value) {
-                    if (this._instance) {
-                      this._instance.forwardHostProp(prop, value);
-                    }
-                  }
-                });
-              }
-              this._instance = new template._Templatizer({});
-
-              const templateRoot = template.getRootNode();
-              const isScoped = templateRoot !== document;
-              this._card = this.$['vaadin-notification-card'];
-              this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
-              if (isScoped) {
-
-                if (!this._cardContent.shadowRoot) {
-                  this._cardContent.attachShadow({mode: 'open'});
-                }
-                if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
-                  // Shady DOM
-                  var shadyStyleScope = templateRoot.host && templateRoot.host.localName;
-                  if (shadyStyleScope && shadyStyleScope.indexOf('-') === -1) {
-                    shadyStyleScope = templateRoot.host.getAttribute('is');
-                  }
-
-                  if (shadyStyleScope) {
-                    this._cardContent.setAttribute('is', shadyStyleScope);
-                  }
-                } else {
-                  // Shadow DOM
-                  const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
-                    .reduce((result, style) => result + style.textContent, '')
-                    // The overlay root’s :host styles should not apply inside the overlay
-                    .replace(/:host/g, ':host-nomatch');
-
-                  if (scopeCssText) {
-                    const style = document.createElement('style');
-                    style.textContent = scopeCssText;
-                    this._cardContent.shadowRoot.appendChild(style);
-                  }
-                }
-
-                this._cardContent.shadowRoot.appendChild(this._instance.root);
-              } else {
-                this._card.appendChild(this._instance.root);
-              }
-
-              this._card.setAttribute('aria-label', this._card.textContent.trim());
+            if (!this._instance && !this.renderer) {
+              this._ensureTemplatized();
             }
 
             this._animatedAppendNotificationCard();
           } else if (this._card) {
             this._closeNotificationCard();
           }
+        }
+
+        _ensureTemplatized() {
+          this._template = this.querySelector('template') || this._template;
+
+          if (!this._template) {
+            return;
+          }
+
+          if (!this._template._Templatizer) {
+            this._template._Templatizer = Polymer.Templatize.templatize(this._template, this, {
+              forwardHostProp: function(prop, value) {
+                if (this._instance) {
+                  this._instance.forwardHostProp(prop, value);
+                }
+              }
+            });
+          }
+          this._instance = new this._template._Templatizer({});
+
+          const templateRoot = this._template.getRootNode();
+          const isScoped = templateRoot !== document;
+          this._card = this.$['vaadin-notification-card'];
+          this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
+          if (isScoped) {
+
+            if (!this._cardContent.shadowRoot) {
+              this._cardContent.attachShadow({mode: 'open'});
+            }
+            if (window.ShadyCSS && !window.ShadyCSS.nativeShadow) {
+              // Shady DOM
+              var shadyStyleScope = templateRoot.host && templateRoot.host.localName;
+              if (shadyStyleScope && shadyStyleScope.indexOf('-') === -1) {
+                shadyStyleScope = templateRoot.host.getAttribute('is');
+              }
+
+              if (shadyStyleScope) {
+                this._cardContent.setAttribute('is', shadyStyleScope);
+              }
+            } else {
+              // Shadow DOM
+              const scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
+                .reduce((result, style) => result + style.textContent, '')
+                // The overlay root’s :host styles should not apply inside the overlay
+                .replace(/:host/g, ':host-nomatch');
+
+              if (scopeCssText) {
+                const style = document.createElement('style');
+                style.textContent = scopeCssText;
+                this._cardContent.shadowRoot.appendChild(style);
+              }
+            }
+
+            this._cardContent.shadowRoot.appendChild(this._instance.root);
+          } else {
+            this._card.appendChild(this._instance.root);
+          }
+
+          this._card.setAttribute('aria-label', this._card.textContent.trim());
         }
 
         _animatedAppendNotificationCard() {
@@ -355,7 +384,25 @@ This program is available under Apache License Version 2.0, available at https:/
           this._card.addEventListener('animationend', listener);
         }
 
+        _rendererChanged(renderer) {
+          this._card = this.$['vaadin-notification-card'];
+
+          while (this._card.firstChild) {
+            this._card.removeChild(this._card.firstChild);
+          }
+
+          if (renderer) {
+            this.renderer(this._card, this);
+          } else {
+            this._ensureTemplatized();
+          }
+        }
+
         _appendNotificationCard() {
+          if (!this._card) {
+            return;
+          }
+
           if (!this._container.shadowRoot.querySelector(`slot[name="${this.position}"]`)) {
             window.console.warn(
               `Invalid alignment parameter provided: position=${this.position}`);

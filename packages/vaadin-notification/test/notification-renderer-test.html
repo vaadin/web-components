@@ -1,0 +1,118 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-notification tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-notification.html">
+</head>
+
+<body>
+  <test-fixture id="default">
+    <template>
+      <vaadin-notification></vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="with-template">
+    <template>
+      <vaadin-notification>
+        <template>
+          notification-content
+        </template>
+      </vaadin-notification>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('vaadin-notification', function() {
+      let rendererContent;
+
+      beforeEach(function() {
+        rendererContent = document.createElement('p');
+        rendererContent.innerText = 'renderer-content';
+      });
+
+      describe('without template', () => {
+        let notification;
+
+        beforeEach(() => {
+          notification = fixture('default');
+
+          // Force sync card attaching and removal instead of waiting for the animation
+          sinon.stub(notification, '_animatedAppendNotificationCard', () => notification._appendNotificationCard());
+          sinon.stub(notification, '_animatedRemoveNotificationCard', () => notification._removeNotificationCard());
+
+          notification.open();
+        });
+
+        afterEach(() => {
+          // Close to stop all pending timers.
+          notification.close();
+          // delete singleton reference, so as it's created in next test
+          delete notification.constructor._container;
+        });
+
+        it('should use renderer when it is defined', () => {
+          notification.renderer = root => root.appendChild(rendererContent);
+          expect(notification._card.textContent.trim()).to.equal('renderer-content');
+        });
+
+        it('renderer should receive notification when defined', () => {
+          notification.renderer = (root, notification) => {
+            expect(notification).to.eql(notification);
+          };
+        });
+
+        it('should use only renderer when template was assigned after renderer', done => {
+          notification.renderer = root => root.appendChild(rendererContent);
+          const template = document.createElement('template');
+          template.innerHTML = 'notification-content';
+          notification.appendChild(template);
+          setTimeout(() => {
+            expect(notification._card.textContent.trim()).to.equal('renderer-content');
+            done();
+          });
+        });
+      });
+
+      describe('with template', () => {
+        let notification;
+
+        beforeEach(() => {
+          notification = fixture('with-template');
+
+          // Force sync card attaching and removal instead of waiting for the animation
+          sinon.stub(notification, '_animatedAppendNotificationCard', () => notification._appendNotificationCard());
+          sinon.stub(notification, '_animatedRemoveNotificationCard', () => notification._removeNotificationCard());
+
+          notification.open();
+        });
+
+        afterEach(() => {
+          // Close to stop all pending timers.
+          notification.close();
+          // delete singleton reference, so as it's created in next test
+          delete notification.constructor._container;
+        });
+
+        it('should fallback to render content with Templatizer when renderer is not defined', () => {
+          expect(notification._card.textContent.trim()).to.equal('notification-content');
+        });
+
+        it('renderer should receive empty root when defined after template', () => {
+          notification.renderer = root => expect(root.firstChild).to.be.null;
+        });
+
+        it('the initial template instance should be used after renderer was assigned and removed', () => {
+          notification.renderer = root => root.appendChild(rendererContent);
+          expect(notification._card.textContent.trim()).to.equal('renderer-content');
+          notification.renderer = null;
+          expect(notification._card.textContent.trim()).to.equal('notification-content');
+        });
+      });
+    });
+  </script>
+</body>

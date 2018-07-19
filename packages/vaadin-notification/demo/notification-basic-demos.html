@@ -59,6 +59,29 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Content Renderer Function</h3>
+    <vaadin-demo-snippet id="notification-basic-demos-renderer-notification">
+      <template preserve-content>
+        <vaadin-button on-click="_openNotification">Open notification</vaadin-button>
+        <vaadin-notification duration="0" id="notification"></vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-basic-demos-renderer-notification', function(document) {
+            const notification = document.querySelector('vaadin-notification');
+
+            const paragraph = window.document.createElement('p');
+            paragraph.innerText = 'This content was generated with renderer';
+            notification.renderer = function(root) {
+              root.appendChild(paragraph);
+            };
+
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              notification.open();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Action</h3>
     <p>Use a text button to allow users take action on a process performed by the app.</p>
     <vaadin-demo-snippet id="notification-basic-demos-interaction">
