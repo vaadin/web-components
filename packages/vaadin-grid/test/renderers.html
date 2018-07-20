@@ -29,6 +29,7 @@
   <test-fixture id="templates">
     <template>
       <vaadin-grid>
+        <template class="row-details"></template>
         <vaadin-grid-column>
           <template class="header"></template>
           <template></template>
@@ -91,24 +92,61 @@
           expect(() => column._bodyTemplate = {}).to.throw(Error);
         });
 
-        it('should fire a `cell-activate` event with the appropriate model when cell is clicked', done => {
-          grid.addEventListener('cell-activate', e => {
-            expect(e.detail.model.index).to.eql(0);
-            expect(e.detail.model.item).to.be.ok;
-            done();
+        describe('row details', () => {
+          beforeEach(() => {
+            grid.rowDetailsRenderer = column.renderer;
+            flushGrid(grid);
           });
-          getCell(grid, 0)._content.click();
+
+          it('should have valid content when renderer is set', () => {
+            grid.detailsOpenedItems = grid.items;
+            expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 bar');
+            expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 baz');
+          });
+
+          it('should pass column as `owner` and `this` to the renderer', () => {
+            grid.rowDetailsRenderer = function(root, owner, model) {
+              expect(this).to.eql(owner);
+              expect(owner.localName).to.eql('vaadin-grid');
+            };
+            grid.detailsOpenedItems = grid.items;
+          });
+
+          it('should allow to change the renderer', () => {
+            grid.detailsOpenedItems = grid.items;
+            grid.rowDetailsRenderer = function(root, owner, model) {
+              root.innerHTML = model.index + ' test';
+            };
+            expect(getBodyCellContent(grid, 0, 1).innerHTML).to.eql('0 test');
+            expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 test');
+          });
+
+          it('should throw an error when setting a template if there is already a renderer', () => {
+            expect(() => grid._rowDetailsTemplate = {}).to.throw(Error);
+          });
         });
 
-        it('should fire a `cell-activate` event with the appropriate model when pressin space', done => {
-          grid.addEventListener('cell-activate', e => {
-            expect(e.detail.model.index).to.eql(0);
-            expect(e.detail.model.item).to.be.ok;
-            done();
-          });
-          MockInteractions.keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
-        });
+        describe('cell-activate', () => {
 
+          it('should fire a `cell-activate` event with the appropriate model when cell is clicked', done => {
+            listenOnce(grid, 'cell-activate', e => {
+              expect(e.detail.model.index).to.eql(0);
+              expect(e.detail.model.item).to.be.ok;
+              done();
+            });
+            getCell(grid, 0)._content.click();
+          });
+
+          it('should fire a `cell-activate` event with the appropriate model when pressin space', done => {
+            listenOnce(grid, 'cell-activate', e => {
+              expect(e.detail.model.index).to.eql(0);
+              expect(e.detail.model.item).to.be.ok;
+              done();
+            });
+            MockInteractions.keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
+          });
+
+        });
       });
 
       describe('header cell', () => {
@@ -153,7 +191,7 @@
 
       beforeEach(() => {
         grid = fixture('templates');
-        column = grid.firstElementChild;
+        column = grid.querySelector('vaadin-grid-column');
         grid.items = [{foo: 'bar'}, {foo: 'baz'}];
 
         flushGrid(grid);
@@ -162,6 +200,12 @@
       describe('column cells', () => {
         it('should throw an error when setting a renderer if there is already a template', () => {
           expect(() => column.renderer = () => {}).to.throw(Error);
+        });
+      });
+
+      describe('row details', () => {
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => grid.rowDetailsRenderer = () => {}).to.throw(Error);
         });
       });
 
