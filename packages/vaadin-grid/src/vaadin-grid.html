@@ -536,6 +536,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (cell._renderer) {
             const owner = cell._column || this;
             cell._renderer.call(owner, cell._content, owner, model);
+            cell._model = model;
           } else if (cell._instance) {
             cell._instance.setProperties(model);
           }

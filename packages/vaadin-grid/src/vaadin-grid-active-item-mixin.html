@@ -64,7 +64,7 @@ This program is available under Apache License Version 2.0, available at https:/
         // MSIE bug: flex children receive focus. Make type & attributes check.
         (!this._ie || this._isFocusable(activeElement));
       if (!cellContentHasFocus && !this._isFocusable(e.target)) {
-        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._instance}}));
+        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._model || cell._instance}}));
       }
     }
 
