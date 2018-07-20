@@ -136,9 +136,9 @@
             const column3 = document.querySelector('#column3');
             const column4 = document.querySelector('#column4');
 
-            document.querySelector('iron-ajax').addEventListener('last-response-changed', function(e) {
-               document.querySelector('vaadin-grid').items = e.target.lastResponse.result;
-            })
+            ajax.addEventListener('last-response-changed', function(e) {
+              grid.items = e.target.lastResponse.result;
+            });
 
             column1.renderer = function(root, column, model) {
               root.innerHTML = model.index;
