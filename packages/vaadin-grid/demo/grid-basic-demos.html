@@ -119,10 +119,9 @@
     <vaadin-demo-snippet id='grid-columns-demos-renderer-functions'>
       <template preserve-content>
 
-        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"
-           handle-as="json" last-response="{{users}}"></iron-ajax>
+        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
 
-        <vaadin-grid aria-label="Content Renderer Function" id="grid" items="[[users.result]]">
+        <vaadin-grid aria-label="Content Renderer Function">
           <vaadin-grid-column width="60px" flex-grow="0" id="column1">
             <template class="header">#</template>
           </vaadin-grid-column>
@@ -142,6 +141,11 @@
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
+
+            document.querySelector('iron-ajax').addEventListener('last-response-changed', function(e) {
+               document.querySelector('vaadin-grid').items = e.target.lastResponse.result;
+            })
+
             document.querySelector('#column1').renderer = function(root, column, model) {
               root.innerHTML = model.index;
             };
