@@ -259,6 +259,8 @@ This program is available under Apache License Version 2.0, available at https:/
         let label = item ? this.get(this._itemLabelPath, item) : undefined;
         if (label === undefined) {
           label = item ? item.toString() : '';
+        } else if (label === null) {
+          label = '';
         }
         return label;
       }

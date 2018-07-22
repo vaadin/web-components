@@ -133,6 +133,17 @@
         expect(combobox.value).to.eql('default');
       });
 
+      it('should handle null value for the provided label property', () => {
+        combobox.items = [{
+          custom: null
+        }];
+        combobox.itemLabelPath = 'custom';
+
+        selectItem(0);
+
+        expect(combobox.inputElement.value).to.eql('');
+      });
+
       it('should set the selected item when open', () => {
         combobox.value = 'bar';
 
