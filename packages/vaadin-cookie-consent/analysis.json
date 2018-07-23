@@ -18,7 +18,7 @@
       },
       "elements": [
         {
-          "description": "`<vaadin-cookie-consent>` is used to show a cookie consent banner the first\n time a user visits the application.\n\nBy default, the banner is shown attached to the top of the screen and with a\npredefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.\n\nThe texts, link and position can be configured using attributes/properties, e.g.\n```\n<vaadin-cookie-consent learn-more-link='https://mysite.com/cookies.html'></vaadin-cookie-consent>\n```",
+          "description": "`<vaadin-cookie-consent>` is used to show a cookie consent banner the first\n time a user visits the application.\n\nBy default, the banner is shown attached to the top of the screen and with a\npredefined text, a link to https://cookiesandyou.com/ describing cookies and a consent button.\n\nThe texts, link and position can be configured using attributes/properties, e.g.\n```\n<vaadin-cookie-consent learn-more-link=\"https://mysite.com/cookies.html\"></vaadin-cookie-consent>\n```",
           "summary": "",
           "path": "src/vaadin-cookie-consent.html",
           "properties": [
@@ -226,7 +226,7 @@
               "sourceRange": {
                 "start": {
                   "line": 147,
-                  "column": 9
+                  "column": 8
                 },
                 "end": {
                   "line": 153,
