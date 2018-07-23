@@ -77,6 +77,8 @@ import '@vaadin/vaadin-dialog/vaadin-dialog.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-dialog.html`
@@ -86,6 +88,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-dialog.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-dialog.html`
+
+  Component with Material theme.
 
 - `vaadin-dialog.html`
 
