@@ -27,7 +27,7 @@ module.exports = {
       'macOS 10.12/iphone@10.3',
       'Windows 10/microsoftedge@15',
       'Windows 10/internet explorer@11',
-      'macOS 10.12/safari@11.0',
+      'macOS 10.13/safari@11.1',
       'macOS 9.3.2/iphone@9.3'
     ];
 
@@ -39,7 +39,7 @@ module.exports = {
     const saucelabsPlatformsDesktop = [
       'Windows 10/chrome@65',
       'Windows 10/firefox@59',
-      'macOS 10.12/safari@11.0'
+      'macOS 10.13/safari@11.1'
     ];
 
     const saucelabsPlatforms = [
