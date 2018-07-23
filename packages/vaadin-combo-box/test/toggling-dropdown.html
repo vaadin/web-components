@@ -308,7 +308,7 @@
       });
 
       it('dropdown should not be shown when disabled', () => {
-        combobox.inputElement.dispatchEvent(new CustomEvent('click'));
+        combobox.inputElement.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
         expect(combobox.opened).to.be.false;
       });
     });
@@ -328,7 +328,7 @@
       });
 
       it('dropdown should not be shown when read-only', () => {
-        combobox.inputElement.dispatchEvent(new CustomEvent('click'));
+        combobox.inputElement.dispatchEvent(new CustomEvent('click', {bubbles: true, composed: true}));
         expect(combobox.opened).to.be.false;
       });
     });
