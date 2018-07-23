@@ -32,6 +32,7 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <vaadin-dialog-overlay id="overlay"
+      aria-label$="[[ariaLabel]]"
       on-opened-changed="_onOverlayOpened"
       with-backdrop
       focus-trap>
@@ -120,6 +121,15 @@ This program is available under Apache License Version 2.0, available at https:/
             noCloseOnEsc: {
               type: Boolean,
               value: false
+            },
+
+            /**
+             * Set the aria-label attribute for assistive technologies like
+             * screen readers.
+             */
+            ariaLabel: {
+              type: String,
+              value: ""
             },
 
             _contentTemplate: Object
