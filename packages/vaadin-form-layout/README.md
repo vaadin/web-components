@@ -77,6 +77,8 @@ import '@vaadin/vaadin-form-layout/vaadin-form-layout.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-form-layout.html`
@@ -88,6 +90,11 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-form-item.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-form-layout.html`
+- `theme/material/vaadin-form-item.html`
+
+  Components with Material theme.
 
 - `vaadin-form-layout.html`
 - `vaadin-form-item.html`
