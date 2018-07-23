@@ -100,6 +100,24 @@
             done();
           }, 1);
         });
+
+        it('should not close the items when touching scroll bar', () => {
+          combobox.open();
+          const e = new CustomEvent('focusout', {bubbles: true, composed: true});
+          e.relatedTarget = combobox.$.overlay.$.dropdown.$.overlay;
+          combobox.inputElement.dispatchEvent(e);
+
+          expect(combobox.opened).to.be.true;
+        });
+
+        it('should keep the input focused while scrolling', () => {
+          combobox.open();
+          const e = new CustomEvent('focusout', {bubbles: true, composed: true});
+          e.relatedTarget = combobox.$.overlay.$.dropdown.$.overlay;
+          combobox.inputElement.dispatchEvent(e);
+
+          expect(combobox.inputElement.hasAttribute('focused')).to.be.true;
+        });
       });
     });
   </script>

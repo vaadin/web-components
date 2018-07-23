@@ -200,6 +200,11 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
 
       this.addEventListener('focusout', e => {
+        // Fixes the problem with `focusout` happening when clicking on the scroll bar on Edge
+        if (e.relatedTarget === this.$.overlay.$.dropdown.$.overlay) {
+          e.composedPath()[0].focus();
+          return;
+        }
         if (!this._closeOnBlurIsPrevented) {
           this.close();
         }
