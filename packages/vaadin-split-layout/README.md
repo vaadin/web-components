@@ -92,6 +92,8 @@ import '@vaadin/vaadin-split-layout/vaadin-split-layout.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-split-layout.html`
@@ -101,6 +103,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-split-layout.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-split-layout.html`
+
+  Component with Material theme.
 
 - `vaadin-split-layout.html`
 
