@@ -108,6 +108,8 @@ import '@vaadin/vaadin-upload/vaadin-upload.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-upload.html`
@@ -117,6 +119,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-upload.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-upload.html`
+
+  Component with Material theme.
 
 - `vaadin-upload.html`
 
