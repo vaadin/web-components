@@ -131,7 +131,7 @@ gulp.task('icons', function() {
             // Write the output to font-icons.html
             var output = `<!-- NOTICE: Generated with 'gulp icons' -->
 <link rel="import" href="../polymer/lib/elements/custom-style.html">
-<!--<link rel="import" href="version.html">-->
+<link rel="import" href="version.html">
 
 <custom-style>
   <style>
