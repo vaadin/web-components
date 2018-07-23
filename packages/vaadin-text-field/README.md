@@ -76,6 +76,8 @@ import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-text-field.html`
@@ -89,6 +91,12 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-password-field.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-text-field.html`
+- `theme/material/vaadin-text-area.html`
+- `theme/material/vaadin-password-field.html`
+
+  Components with Material theme.
 
 - `vaadin-text-field.html`
 - `vaadin-text-area.html`
