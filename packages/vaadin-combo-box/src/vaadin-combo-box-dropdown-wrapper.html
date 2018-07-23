@@ -28,7 +28,6 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     </style>
     <vaadin-combo-box-dropdown id="dropdown"
-        opened="{{opened}}"
         hidden="[[_hidden(_items.*, loading)]]"
         position-target="[[positionTarget]]"
         on-template-changed="_templateChanged"
@@ -142,13 +141,19 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       static get observers() {
-        return ['_selectorChanged(_selector)', '_loadingChanged(loading)'];
+        return ['_selectorChanged(_selector)', '_loadingChanged(loading)', '_openedChanged(opened, _items)'];
       }
 
       _fireTouchAction(sourceEvent) {
         this.dispatchEvent(new CustomEvent('vaadin-overlay-touch-action', {
           detail: {sourceEvent: sourceEvent}
         }));
+      }
+
+      _openedChanged(opened, items) {
+        // Do not attach if no items
+        // Do not dettach if opened but user types an invalid search
+        this.$.dropdown.opened = !!(opened && (this.$.dropdown.opened || items && items.length));
       }
 
       ready() {

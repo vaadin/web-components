@@ -266,8 +266,11 @@ This program is available under Apache License Version 2.0, available at https:/
             this.focus();
           }
         }
-      } else if (this._openedWithFocusRing && this.hasAttribute('focused')) {
-        this.focusElement.setAttribute('focus-ring', '');
+      } else {
+        if (this._openedWithFocusRing && this.hasAttribute('focused')) {
+          this.focusElement.setAttribute('focus-ring', '');
+        }
+        this._onClosed();
       }
     }
 

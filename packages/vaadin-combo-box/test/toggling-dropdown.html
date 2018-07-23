@@ -332,6 +332,24 @@
         expect(combobox.opened).to.be.false;
       });
     });
+
+    describe('empty list', () => {
+      it('vaadin-combo-box-overlay should not be attached when filteredItems is empty', () => {
+        combobox.open();
+        expect(combobox.opened).to.be.true;
+        expect(document.querySelector('vaadin-combo-box-overlay')).to.be.ok;
+        combobox.close();
+        expect(combobox.opened).to.be.false;
+        expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
+
+        combobox.filteredItems = [];
+        combobox.open();
+        expect(combobox.opened).to.be.true;
+        expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
+        combobox.close();
+        expect(combobox.opened).to.be.false;
+      });
+    });
   });
 </script>
 
