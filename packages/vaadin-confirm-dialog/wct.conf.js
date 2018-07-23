@@ -17,7 +17,7 @@ module.exports = {
     const saucelabsPlatformsDesktop = [
       'Windows 10/chrome@65',
       'Windows 10/firefox@59',
-      'macOS 10.12/safari@11.0'
+      'macOS 10.13/safari@11.1'
     ];
 
     const saucelabsPlatforms = [
