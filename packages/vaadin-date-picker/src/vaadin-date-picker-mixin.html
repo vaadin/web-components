@@ -433,11 +433,13 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.__userInputOccurred) {
         this.__dispatchChange = true;
       }
+      const inputValue = selectedDate && formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate));
+      this.validate(inputValue);
       this.value = this._formatISO(selectedDate);
       this.__userInputOccurred = false;
       this.__dispatchChange = false;
       this._focusedDate = selectedDate;
-      this._inputValue = selectedDate ? formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate)) : '';
+      this._inputValue = selectedDate ? inputValue : '';
     }
 
     _focusedDateChanged(focusedDate, formatDate) {
@@ -629,8 +631,6 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this._nativeInput && this._nativeInput.selectionStart) {
         this._nativeInput.selectionStart = this._nativeInput.selectionEnd;
       }
-      // reset invalid state on the underlying text field
-      this.invalid = false;
       this.validate();
     }
 
@@ -641,6 +641,8 @@ This program is available under Apache License Version 2.0, available at https:/
      * @return {boolean} True if the value is valid and sets the `invalid` flag appropriately
      */
     validate(value) {
+      // reset invalid state on the underlying text field
+      this.invalid = false;
       value = value !== undefined ? value : this._inputValue;
       return !(this.invalid = !this.checkValidity(value));
     }
