@@ -78,6 +78,8 @@ import '@vaadin/vaadin-tabs/vaadin-tabs.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-tab.html`
@@ -89,6 +91,11 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-tabs.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-tab.html`
+- `theme/material/vaadin-tabs.html`
+
+  Components with Material theme.
 
 - `vaadin-tab.html`
 - `vaadin-tabs.html`
