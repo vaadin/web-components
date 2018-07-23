@@ -105,6 +105,8 @@ import '@vaadin/vaadin-grid/vaadin-grid.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-grid.html`
@@ -114,6 +116,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-grid.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-grid.html`
+
+  Component with Material theme.
 
 - `vaadin-grid.html`
 
