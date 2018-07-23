@@ -77,6 +77,8 @@ import '@vaadin/vaadin-radio-button/vaadin-radio-button.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-radio-button.html`
@@ -88,6 +90,11 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-radio-group.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-radio-button.html`
+- `theme/material/vaadin-radio-group.html`
+
+  Components with Material theme.
 
 - `vaadin-radio-button.html`
 - `vaadin-radio-group.html`
