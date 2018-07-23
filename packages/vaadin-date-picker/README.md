@@ -73,6 +73,8 @@ import '@vaadin/vaadin-date-picker/vaadin-date-picker.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-date-picker.html`
@@ -84,6 +86,11 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-date-picker-light.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-date-picker.html`
+- `theme/material/vaadin-date-picker-light.html`
+
+  Components with Material theme.
 
 - `vaadin-date-picker.html`
 - `vaadin-date-picker-light.html`
