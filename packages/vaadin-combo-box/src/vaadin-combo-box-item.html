@@ -135,7 +135,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (this._oldRenderer !== renderer) {
-          this.$.content.textContent = '';
+          this.$.content.innerHTML = '';
         }
 
         if (renderer) {
@@ -159,7 +159,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._comboBox._ensureTemplatized();
         if (this._comboBox._TemplateClass) {
           this._itemTemplateInstance = new this._comboBox._TemplateClass({});
-          this.$.content.textContent = '';
+          this.$.content.innerHTML = '';
           this.$.content.appendChild(this._itemTemplateInstance.root);
         }
       }
