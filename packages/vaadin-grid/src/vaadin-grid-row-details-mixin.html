@@ -28,6 +28,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _rowDetailsTemplate: Object,
 
+        /**
+         * Custom function for rendering the content of the row details.
+         * Receives arguments `root`, `grid`, `model`
+         *
+         * `root` The cell content element.
+         *
+         * `grid` The grid element.
+         *
+         * `model` An object with the structure `{index: index, item: item}`
+         */
+        rowDetailsRenderer: Function,
+
         _detailsCells: {
           type: Array,
         }
@@ -36,18 +48,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _rowDetailsTemplate, _physicalCountVal)',
-        '_rowDetailsTemplateChanged(_rowDetailsTemplate)'
+        '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _physicalCountVal, _rowDetailsTemplate, rowDetailsRenderer)',
+        '_rowDetailsTemplateChanged(_rowDetailsTemplate, rowDetailsRenderer)'
       ];
     }
 
-    _rowDetailsTemplateChanged(rowDetailsTemplate) {
-      if (rowDetailsTemplate) {
-        var templatizer = new Vaadin.Grid.Templatizer();
-        templatizer._grid = this;
-        templatizer.dataHost = this.dataHost;
-        templatizer.template = rowDetailsTemplate;
-        rowDetailsTemplate.templatizer = templatizer;
+    _rowDetailsTemplateChanged(rowDetailsTemplate, rowDetailsRenderer) {
+      if (rowDetailsTemplate || rowDetailsRenderer) {
+        if (rowDetailsTemplate) {
+          var templatizer = new Vaadin.Grid.Templatizer();
+          templatizer._grid = this;
+          templatizer.dataHost = this.dataHost;
+          templatizer.template = rowDetailsTemplate;
+          rowDetailsTemplate.templatizer = templatizer;
+        }
 
         if (this._columnTree) {
           // Only update the rows if the column tree has already been initialized
@@ -64,8 +78,12 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _detailsOpenedItemsChanged(changeRecord, dataProvider, rowDetailsTemplate, physicalCount) {
-      if (dataProvider === undefined || !rowDetailsTemplate) {
+    _detailsOpenedItemsChanged(changeRecord, dataProvider, physicalCount, rowDetailsTemplate, rowDetailsRenderer) {
+      if (rowDetailsTemplate && rowDetailsRenderer) {
+        throw new Error('You should only use either a renderer or a template for row details');
+      }
+
+      if (dataProvider === undefined || !rowDetailsTemplate && !rowDetailsRenderer) {
         return;
       }
 
@@ -94,12 +112,16 @@ This program is available under Apache License Version 2.0, available at https:/
     _toggleDetailsCell(row, item) {
       const cell = row.querySelector('[part~="details-cell"]');
       const detailsHidden = !this._isDetailsOpened(item);
-      if (cell && (!cell._instance || cell.hidden !== detailsHidden)) {
+      if (cell && (!cell._instance && !cell._renderer || cell.hidden !== detailsHidden)) {
         cell.hidden = detailsHidden;
         if (detailsHidden) {
           row.style.removeProperty('padding-bottom');
         } else {
-          if (!cell._instance) {
+          if (this.rowDetailsRenderer) {
+            cell._renderer = this.rowDetailsRenderer;
+            cell._renderer.call(this, cell._content, this, {index: row.index, item: item});
+            this._updateItem(row, item);
+          } else if (!cell._instance) {
             // Stamp the template
             cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
             cell._content.innerHTML = '';
