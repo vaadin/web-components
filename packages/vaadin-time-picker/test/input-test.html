@@ -169,7 +169,7 @@
           });
 
           it('clock:icon should have the `aria-label` attribute', () => {
-            const icon = timePicker.shadowRoot.querySelector('iron-icon');
+            const icon = timePicker.shadowRoot.querySelector('[part="toggle-button"]');
             expect(icon.getAttribute('aria-label')).to.be.equal(timePicker.i18n.selector);
           });
         });

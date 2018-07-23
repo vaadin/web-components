@@ -1,2 +1,14 @@
 <link rel="import" href="../../../vaadin-combo-box/theme/lumo/vaadin-combo-box-light.html">
 <link rel="import" href="../../../vaadin-text-field/theme/lumo/vaadin-text-field.html">
+<link rel="import" href="../../../vaadin-lumo-styles/mixins/field-button.html">
+<link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+
+<dom-module id="lumo-time-picker" theme-for="vaadin-time-picker">
+  <template>
+    <style include="lumo-field-button">
+      [part~="toggle-button"]::before {
+        content: var(--lumo-icons-clock);
+      }
+    </style>
+  </template>
+</dom-module>
