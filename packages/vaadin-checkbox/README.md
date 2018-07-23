@@ -74,6 +74,8 @@ import '@vaadin/vaadin-checkbox/vaadin-checkbox.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-checkbox.html`
@@ -83,6 +85,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-checkbox.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-checkbox.html`
+
+  Component with Material theme.
 
 - `vaadin-checkbox.html`
 
