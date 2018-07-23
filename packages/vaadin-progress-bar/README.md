@@ -75,6 +75,8 @@ import '@vaadin/vaadin-progress-bar/vaadin-progress-bar.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-progress-bar.html`
@@ -84,6 +86,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-progress-bar.html`
 
   Component with Lumo theme.
+
+- `theme/material/vaadin-progress-bar.html`
+
+  Component with Material theme.
 
 - `vaadin-progress-bar.html`
 
