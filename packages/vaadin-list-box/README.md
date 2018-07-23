@@ -80,6 +80,8 @@ import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 
 Vaadin components use the Lumo theme by default.
 
+To use Material theme, import the correspondent file from material folder.
+
 ## The file structure for Vaadin components
 
 - `src/vaadin-list-box.html`
@@ -89,6 +91,10 @@ Vaadin components use the Lumo theme by default.
 - `theme/lumo/vaadin-list-box.html`
 
   Components with Lumo theme.
+
+- `theme/material/vaadin-list-box.html`
+
+  Components with Material theme.
 
 - `vaadin-list-box.html`
 
