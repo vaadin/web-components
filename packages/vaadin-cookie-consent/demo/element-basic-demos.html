@@ -15,11 +15,15 @@
         <vaadin-cookie-consent></vaadin-cookie-consent>
       </template>
       <script>
-        window.addDemoReadyListener('#cookie-consent-demo-basic-usage', e => {
-          const element = e.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot;
-          element.querySelector('vaadin-button').addEventListener('click', e => {
-            element.querySelector('vaadin-cookie-consent')._show();
-          });
+        window.addDemoReadyListener('#cookie-consent-demo-basic-usage', demoSnippet => {
+          const cookieConsent = demoSnippet.querySelector('vaadin-cookie-consent');
+          demoSnippet
+            .querySelector('vaadin-button')
+            .addEventListener('click', e => cookieConsent._show());
+          const eventListener = window.addEventListener('on-location-change', e => {
+            cookieConsent.remove();
+            window.removeEventListener('on-location-change', eventListener, false);
+          }, false);
         });
       </script>
     </vaadin-demo-snippet>

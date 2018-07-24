@@ -1,6 +1,6 @@
-<dom-module id="element-theming">
+<dom-module id='element-theming'>
   <template>
-    <style include="vaadin-component-demo-shared-styles">
+    <style include='vaadin-component-demo-shared-styles'>
       :host {
         display: block;
       }
@@ -8,8 +8,8 @@
 
 
   <h3>Styling the Content</h3>
-  The visual looks can be changed using CSS.
-  <vaadin-demo-snippet id="cookie-consent-demo-customizing-texts">
+  The visual looks can be changed using CSS. The style tag needs to be on the top level of the document, outside all web components.
+  <vaadin-demo-snippet id='cookie-consent-demo-theming'>
     <template preserve-content>
       <style>
         div.cc-window.cc-banner {
@@ -32,21 +32,27 @@
           color: rgb(255, 81, 0);
         }
       </style>
-      <vaadin-button id="showPopup">Show consent popup</vaadin-button>
+      <vaadin-button>Show consent popup</vaadin-button>
       <vaadin-cookie-consent></vaadin-cookie-consent>
     </template>
     <script>
-        window.addDemoReadyListener('#cookie-consent-demo-customizing-texts', e => {
-          const element = e.querySelector('vaadin-demo-shadow-dom-renderer').shadowRoot;
-          element.querySelector('vaadin-button').addEventListener('click', e => {
-            element.querySelector('vaadin-cookie-consent')._show();
-          });
-          const styles = element.querySelectorAll('style');
-          const css = styles[styles.length - 1].innerText;
+        window.addDemoReadyListener('#cookie-consent-demo-theming', (demoSnippet, templateContent) => {
+          const cookieConsent = demoSnippet.querySelector('vaadin-cookie-consent');
+          demoSnippet
+            .querySelector('vaadin-button')
+            .addEventListener('click', e => cookieConsent._show());
+          const css = templateContent.firstElementChild.innerHTML;
           window.styleTag = document.createElement('style');
           window.styleTag.innerText = css;
           document.head.appendChild(window.styleTag);
-
+          const eventListener = window.addEventListener('on-location-change', e => {
+            cookieConsent.remove();
+            if (window.styleTag) {
+              window.styleTag.parentElement.removeChild(window.styleTag);
+              window.styleTag = undefined;
+            }
+            window.removeEventListener('on-location-change', eventListener, false);
+          }, false);
         });
     </script>
   </vaadin-demo-snippet>
