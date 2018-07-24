@@ -101,29 +101,26 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-grid/vaadin-grid.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-grid.html`
+- The component with the Lumo theme:
 
-  Unstyled component.
+  `theme/lumo/vaadin-grid.html`
 
-- `theme/lumo/vaadin-grid.html`
+- The component with the Material theme:
 
-  Component with Lumo theme.
+  `theme/material/vaadin-grid.html`
 
-- `theme/material/vaadin-grid.html`
+- Alias for `theme/lumo/vaadin-grid.html`:
 
-  Component with Material theme.
+  `vaadin-grid.html`
 
-- `vaadin-grid.html`
-
-  Alias for theme/lumo/vaadin-grid.html
 
 ## Running demos and tests in browser
 
