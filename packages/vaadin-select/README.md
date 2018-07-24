@@ -79,29 +79,26 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-dropdown-menu/vaadin-dropdown-menu.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-dropdown-menu.html`
+- The component with the Lumo theme:
 
-  Unstyled component.
+  `theme/lumo/vaadin-dropdown-menu.html`
 
-- `theme/lumo/vaadin-dropdown-menu.html`
-
-  Component with Lumo theme.
+- The component with the Material theme:
 
 - `theme/material/vaadin-dropdown-menu.html`
 
-  Component with Material theme.
+- Alias for `theme/lumo/vaadin-dropdown-menu.html`:
 
 - `vaadin-dropdown-menu.html`
 
-  Alias for theme/lumo/vaadin-dropdown-menu.html
 
 ## Running demos and tests in browser
 
