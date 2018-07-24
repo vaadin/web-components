@@ -69,34 +69,30 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-date-picker/vaadin-date-picker.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-date-picker.html`
-- `src/vaadin-date-picker-light.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-date-picker.html`  
+  `theme/lumo/vaadin-date-picker-light.html`
 
-- `theme/lumo/vaadin-date-picker.html`
-- `theme/lumo/vaadin-date-picker-light.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-date-picker.html`  
+  `theme/material/vaadin-date-picker-light.html`
 
-- `theme/material/vaadin-date-picker.html`
-- `theme/material/vaadin-date-picker-light.html`
+- Alias for `theme/lumo/vaadin-date-picker.html`  
+  `theme/lumo/vaadin-date-picker-light.html`:
 
-  Components with Material theme.
+  `vaadin-date-picker.html`  
+  `vaadin-date-picker-light.html`
 
-- `vaadin-date-picker.html`
-- `vaadin-date-picker-light.html`
-
-  Alias for theme/lumo/vaadin-date-picker.html
-  theme/lumo/vaadin-date-picker-light.html
 
 ## Running demos and tests in browser
 
