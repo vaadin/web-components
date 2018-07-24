@@ -244,6 +244,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           if (model.item || renderer === this.headerRenderer || renderer === this.footerRenderer) {
             renderer.call(this, cell._content, this, model);
+            cell._model = model;
           }
         } else if (cell._template !== template) {
           cell._template = template;

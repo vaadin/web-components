@@ -49,11 +49,11 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _physicalCountVal, _rowDetailsTemplate, rowDetailsRenderer)',
-        '_rowDetailsTemplateChanged(_rowDetailsTemplate, rowDetailsRenderer)'
+        '_rowDetailsTemplateOrRendererChanged(_rowDetailsTemplate, rowDetailsRenderer)'
       ];
     }
 
-    _rowDetailsTemplateChanged(rowDetailsTemplate, rowDetailsRenderer) {
+    _rowDetailsTemplateOrRendererChanged(rowDetailsTemplate, rowDetailsRenderer) {
       if (rowDetailsTemplate || rowDetailsRenderer) {
         if (rowDetailsTemplate) {
           var templatizer = new Vaadin.Grid.Templatizer();
