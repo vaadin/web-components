@@ -72,39 +72,34 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-text-field/vaadin-text-field.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-text-field.html`
-- `src/vaadin-text-area.html`
-- `src/vaadin-password-field.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-text-field.html`  
+  `theme/lumo/vaadin-text-area.html`  
+  `theme/lumo/vaadin-password-field.html`
 
-- `theme/lumo/vaadin-text-field.html`
-- `theme/lumo/vaadin-text-area.html`
-- `theme/lumo/vaadin-password-field.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-text-field.html`  
+  `theme/material/vaadin-text-area.html`  
+  `theme/material/vaadin-password-field.html`
 
-- `theme/material/vaadin-text-field.html`
-- `theme/material/vaadin-text-area.html`
-- `theme/material/vaadin-password-field.html`
+- Aliases for `theme/lumo/vaadin-text-field.html`  
+  `theme/lumo/vaadin-text-area.html`  
+  `theme/lumo/vaadin-password-field.html`:
 
-  Components with Material theme.
+  `vaadin-text-field.html`  
+  `vaadin-text-area.html`  
+  `vaadin-password-field.html`
 
-- `vaadin-text-field.html`
-- `vaadin-text-area.html`
-- `vaadin-password-field.html`
-
-  Aliases for theme/lumo/vaadin-text-field.html
-  theme/lumo/vaadin-text-area.html
-  theme/lumo/vaadin-password-field.html
 
 ## Running demos and tests in browser
 
