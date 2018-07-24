@@ -77,34 +77,30 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-ordered-layout/vaadin-vertical-layout.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-horizontal-layout.html`
-- `src/vaadin-vertical-layout.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-horizontal-layout.html`  
+  `theme/lumo/vaadin-vertical-layout.html`
 
-- `theme/lumo/vaadin-horizontal-layout.html`
-- `theme/lumo/vaadin-vertical-layout.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-horizontal-layout.html`  
+  `theme/material/vaadin-vertical-layout.html`
 
-- `theme/material/vaadin-horizontal-layout.html`
-- `theme/material/vaadin-vertical-layout.html`
+- Alias for `theme/lumo/vaadin-horizontal-layout.html`  
+  `theme/lumo/vaadin-vertical-layout.html`:
 
-  Components with Material theme.
+  `vaadin-horizontal-layout.html`  
+  `vaadin-vertical-layout.html`
 
-- `vaadin-horizontal-layout.html`
-- `vaadin-vertical-layout.html`
-
-  Alias for theme/lumo/vaadin-horizontal-layout.html
-  theme/lumo/vaadin-vertical-layout.html
 
 ## Running demos and tests in browser
 
