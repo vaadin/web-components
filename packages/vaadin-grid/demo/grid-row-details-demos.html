@@ -84,55 +84,55 @@
     <vaadin-demo-snippet id='grid-row-details-demos-javascript-toggling-renderer'>
       <template preserve-content>
         <style>
-          vaadin-grid {
-            display: block;
-          }
-
           .details {
             padding: 10px 30px;
-            font-size: 14px;
           }
         </style>
 
         <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
 
         <vaadin-grid aria-label="Toggling and Rendering Details Using JavaScrtipt Example" size="200">
-          <vaadin-grid-column width="60px" flex-grow="0">
-            <template class="header">#</template>
-            <template>[[index]]</template>
-          </vaadin-grid-column>
-
-          <vaadin-grid-column>
-            <template class="header">First Name</template>
-            <template>[[item.firstName]]</template>
-          </vaadin-grid-column>
-
-          <vaadin-grid-column>
-            <template class="header">Last Name</template>
-            <template>[[item.lastName]]</template>
-          </vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
           window.addDemoReadyListener('#grid-row-details-demos-javascript-toggling-renderer', function(document) {
-            const grid = document.querySelector('vaadin-grid');
             const ajax = document.querySelector('iron-ajax');
+            const grid = document.querySelector('vaadin-grid');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
             ajax.addEventListener('last-response-changed', function(e) {
-               grid.items = e.target.lastResponse.result;
-            })
-
-            grid.rowDetailsRenderer = function(root, grid, model) {
-              root.innerHTML =
-                '<div class="details">' +
-                  model.item.email + '<br>' + model.item.address.street + '<br>' +
-                  model.item.address.zip + ' ' + model.item.address.city
-                '</div>';
-            };
-
+              grid.items = e.target.lastResponse.result;
+            });
             grid.addEventListener('active-item-changed', function(e) {
               grid.detailsOpenedItems = [e.detail.value];
             });
+
+            grid.rowDetailsRenderer = function(root, grid, model) {
+              root.innerHTML =
+              '<div class="details">' +
+              model.item.email + '<br>' + model.item.address.street + '<br>' +
+              model.item.address.zip + ' ' + model.item.address.city +
+              '</div>';
+            };
+
+            columns[0].renderer = function(root, column, model) {
+              root.innerHTML = model.index;
+            };
+            columns[1].headerRenderer = function(root, column) {
+              root.innerHTML = 'First Name';
+            };
+            columns[1].renderer = function(root, column, model) {
+              root.innerHTML = model.item.firstName;
+            };
+            columns[2].headerRenderer = function(root, column) {
+              root.innerHTML = 'Last Name';
+            };
+            columns[2].renderer = function(root, column, model) {
+              root.innerHTML = model.item.lastName;
+            };
           });
         </script>
       </template>
