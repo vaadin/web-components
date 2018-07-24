@@ -74,34 +74,30 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-tabs/vaadin-tabs.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-tab.html`
-- `src/vaadin-tabs.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-tab.html`  
+  `theme/lumo/vaadin-tabs.html`
 
-- `theme/lumo/vaadin-tab.html`
-- `theme/lumo/vaadin-tabs.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-tab.html`  
+  `theme/material/vaadin-tabs.html`
 
-- `theme/material/vaadin-tab.html`
-- `theme/material/vaadin-tabs.html`
+- Alias for `theme/lumo/vaadin-tab.html`   
+  `theme/lumo/vaadin-tabs.html`:
 
-  Components with Material theme.
+  `vaadin-tab.html`
+  `vaadin-tabs.html`
 
-- `vaadin-tab.html`
-- `vaadin-tabs.html`
-
-  Alias for theme/lumo/vaadin-tab.html
-  theme/lumo/vaadin-tabs.html
 
 ## Running demos and tests in browser
 
