@@ -76,29 +76,26 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-list-box/vaadin-list-box.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-list-box.html`
+- The component with the Lumo theme:
 
-  Unstyled component.
+  `theme/lumo/vaadin-list-box.html`
 
-- `theme/lumo/vaadin-list-box.html`
+- The component with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-list-box.html`
 
-- `theme/material/vaadin-list-box.html`
+- Alias for `theme/lumo/vaadin-list-box.html`:
 
-  Components with Material theme.
+  `vaadin-list-box.html`
 
-- `vaadin-list-box.html`
-
-  Alias for theme/lumo/vaadin-list-box.html
 
 ## Running demos and tests in browser
 
