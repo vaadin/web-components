@@ -32,7 +32,6 @@ This program is available under Apache License Version 2.0, available at https:/
     </style>
 
     <vaadin-dialog-overlay id="overlay"
-      aria-label$="[[ariaLabel]]"
       on-opened-changed="_onOverlayOpened"
       with-backdrop
       focus-trap>
@@ -124,12 +123,13 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-             * Set the aria-label attribute for assistive technologies like
-             * screen readers.
+             * Set the `aria-label` attribute for assistive technologies like
+             * screen readers. An `undefined` value for this property (the
+             * default) means that the `aria-label` attribute is not present at
+             * all.
              */
             ariaLabel: {
-              type: String,
-              value: ''
+              type: String
             },
 
             _contentTemplate: Object
@@ -137,7 +137,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get observers() {
-          return ['_openedChanged(opened)'];
+          return [
+            '_openedChanged(opened)',
+            '_ariaLabelChanged(ariaLabel)',
+          ];
         }
 
         ready() {
@@ -157,6 +160,14 @@ This program is available under Apache License Version 2.0, available at https:/
             this.$.overlay.template = this.querySelector('template');
           }
           this.$.overlay.opened = opened;
+        }
+
+        _ariaLabelChanged(ariaLabel) {
+          if (ariaLabel !== undefined) {
+            this.$.overlay.setAttribute('aria-label', ariaLabel);
+          } else {
+            this.$.overlay.removeAttribute('aria-label', ariaLabel);
+          }
         }
 
         _onOverlayOpened(e) {
