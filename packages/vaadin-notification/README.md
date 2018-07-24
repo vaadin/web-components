@@ -73,29 +73,26 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-notification/vaadin-notification.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-notification.html`
+- The component with the Lumo theme:
 
-  Unstyled component.
+  `theme/lumo/vaadin-notification.html`
 
-- `theme/lumo/vaadin-notification.html`
+- The component with the Material theme:
 
-  Component with Lumo theme.
+  `theme/material/vaadin-notification.html`
 
-- `theme/material/vaadin-notification.html`
-
-  Component with Material theme.
+- Alias for `theme/lumo/vaadin-notification.html`:
 
 - `vaadin-notification.html`
 
-  Alias for theme/lumo/vaadin-notification.html
 
 ## Running demos and tests in browser
 
