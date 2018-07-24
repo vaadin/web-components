@@ -454,11 +454,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      _ensureTemplatized() {
+        this._setTemplateFromNodes(Array.from(this.children));
+      }
+
       /**
        * @event vaadin-overlay-open
        * fired after the `vaadin-overlay` is opened.
        */
       _openedChanged(opened) {
+        if (!this._instance) {
+          this._ensureTemplatized();
+        }
+
         if (opened) {
           this._animatedOpening();
 

@@ -49,6 +49,31 @@
     });
   </script>
 
+  <dom-module id="opened-overlay-view">
+    <template>
+      <vaadin-overlay id="overlay" opened>
+        <template>
+          overlay content
+        </template>
+      </vaadin-overlay>
+    </template>
+  </dom-module>
+  <script>
+    addEventListener('WebComponentsReady', () => {
+      customElements.define('opened-overlay-view', class extends Polymer.Element {
+        static get is() {
+          return 'opened-overlay-view';
+        }
+      });
+    });
+  </script>
+
+  <test-fixture id="openedOverlayView">
+    <template>
+      <opened-overlay-view></opened-overlay-view>
+    </template>
+  </test-fixture>
+
   <test-fixture id="myOverlayView">
     <template>
       <my-overlay-view></my-overlay-view>
@@ -73,6 +98,19 @@
     describe('overlay templating', () => {
       let overlay;
       let externalTemplate;
+
+      describe('template with initially opened overlay', () => {
+        let openedOverlayView, overlay;
+
+        beforeEach(() => {
+          openedOverlayView = fixture('openedOverlayView');
+          overlay = openedOverlayView.$.overlay;
+        });
+
+        it('should use content part shadowRoot for contents when initially opened in component scope', () => {
+          expect(overlay.content).to.be.instanceOf(ShadowRoot);
+        });
+      });
 
       describe('in component scope', () => {
         let myOverlayView;
