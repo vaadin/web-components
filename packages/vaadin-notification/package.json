@@ -24,7 +24,7 @@
   "devDependencies": {
     "bower": "latest",
     "coveralls": "^3.0.1",
-    "eslint": "^4.0.0",
+    "eslint": "^5.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
     "gulp": "latest",
