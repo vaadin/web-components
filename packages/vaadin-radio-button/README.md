@@ -73,34 +73,30 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-radio-button/vaadin-radio-button.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-radio-button.html`
-- `src/vaadin-radio-group.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-radio-button.html`  
+  `theme/lumo/vaadin-radio-group.html`
 
-- `theme/lumo/vaadin-radio-button.html`
-- `theme/lumo/vaadin-radio-group.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-radio-button.html`  
+  `theme/material/vaadin-radio-group.html`
 
-- `theme/material/vaadin-radio-button.html`
-- `theme/material/vaadin-radio-group.html`
+- Alias for `theme/lumo/vaadin-radio-button.html`  
+  `theme/lumo/vaadin-radio-group.html`:
 
-  Components with Material theme.
+  `vaadin-radio-button.html`  
+  `vaadin-radio-group.html`
 
-- `vaadin-radio-button.html`
-- `vaadin-radio-group.html`
-
-  Alias for theme/lumo/vaadin-radio-button.html
-  theme/lumo/vaadin-radio-group.html
 
 ## Running demos and tests in browser
 
