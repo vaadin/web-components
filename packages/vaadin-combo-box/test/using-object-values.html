@@ -133,6 +133,18 @@
         expect(combobox.value).to.eql('default');
       });
 
+      it('should use toString if provided label property is null', () => {
+        combobox.items = [{
+          custom: null
+        }];
+        combobox.items[0].toString = () => 'default';
+        combobox.itemLabelPath = 'custom';
+
+        selectItem(0);
+
+        expect(combobox.inputElement.value).to.eql('default');
+      });
+
       it('should set the selected item when open', () => {
         combobox.value = 'bar';
 
