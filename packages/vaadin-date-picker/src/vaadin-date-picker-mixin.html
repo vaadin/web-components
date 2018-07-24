@@ -305,7 +305,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
     ready() {
       super.ready();
-      this._overlayContent = this.$.overlay.content.querySelector('#overlay-content');
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundFocus = this._focus.bind(this);
       Polymer.Gestures.addListener(this, 'tap', this.open);
@@ -808,6 +807,10 @@ This program is available under Apache License Version 2.0, available at https:/
       if (opened && !_ignoreAnnounce) {
         this._overlayContent.announceFocusedDate();
       }
+    }
+
+    get _overlayContent() {
+      return this.$.overlay.content.querySelector('#overlay-content');
     }
 
     /**
