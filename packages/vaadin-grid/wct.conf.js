@@ -6,8 +6,8 @@ module.exports = {
   verbose: true,
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'macOS 10.12/iphone@11.2',
-      'macOS 9.3.2/iphone@9.3'
+      'iOS Simulator/iphone@11.3',
+      'iOS Simulator/iphone@9.3'
     ];
 
     const saucelabsPlatformsMicrosoft = [
@@ -16,14 +16,20 @@ module.exports = {
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.12/safari@11.0',
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@60'
+      'macOS 10.13/safari@11.1'
     ];
 
     const cronPlatforms = [
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@60'
+      {
+        deviceName: 'Android GoogleAPI Emulator',
+        platformName: 'Android',
+        platformVersion: '7.1',
+        browserName: 'chrome'
+      },
+      'iOS Simulator/ipad@11.3',
+      'iOS Simulator/iphone@10.3',
+      'Windows 10/chrome@latest',
+      'Windows 10/firefox@latest'
     ];
 
     if (env === 'saucelabs:mobile') {

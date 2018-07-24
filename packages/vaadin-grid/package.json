@@ -11,7 +11,7 @@
   },
   "homepage": "https://vaadin.com/components",
   "devDependencies": {
-    "eslint": "^4.0.0",
+    "eslint": "^5.0.0",
     "eslint-config-vaadin": "latest",
     "eslint-plugin-html": "^4.0.0",
     "faker": "^4.1.0",
