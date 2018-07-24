@@ -85,30 +85,26 @@ import '@vaadin/vaadin-combo-box/vaadin-combo-box.js';
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-combo-box.html`
-- `src/vaadin-combo-box-light.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-combo-box.html`  
+  `theme/lumo/vaadin-combo-box-light.html`
 
-- `theme/lumo/vaadin-combo-box.html`
-- `theme/lumo/vaadin-combo-box-light.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-combo-box.html`  
+  `theme/material/vaadin-combo-box-light.html`
 
-- `theme/material/vaadin-combo-box.html`
-- `theme/material/vaadin-combo-box-light.html`
+- Alias for `theme/lumo/vaadin-combo-box.html`  
+  `theme/lumo/vaadin-combo-box-light.html`
 
-  Components with Material theme.
+  `vaadin-combo-box.html`  
+  `vaadin-combo-box-light.html`
 
-- `vaadin-combo-box.html`
-- `vaadin-combo-box-light.html`
-
-  Alias for theme/lumo/vaadin-combo-box.html
-  theme/lumo/vaadin-combo-box-light.html
 
 ## Running demos and tests in browser
 
