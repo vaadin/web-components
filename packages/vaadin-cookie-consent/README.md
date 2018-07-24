@@ -10,6 +10,35 @@
 
 [&lt;vaadin-cookie-consent&gt;](https://vaadin.com/components/vaadin-cookie-consent) is a web component used for showing a cookie consent banner the first time a user visits the application. Cookie Consent is part of the [Vaadin components](https://vaadin.com/components).
 
+
+## Getting Started
+
+### Install Vaadin Cookie Consent in your project
+```
+$ bower install --save vaadin/vaadin-cookie-consent
+```
+
+### Import Vaadin Cookie Consent
+Add html import
+```html
+<link rel="import" href="../../bower_components/vaadin-cookie-consent/vaadin-cookie-consent.html">
+```
+
+### Use Vaadin Cookie Consent
+Create your first Vaadin Cookie Consent
+```html
+<vaadin-cookie-consent></vaadin-cookie-consent>
+```
+
+### Install License Key
+After one day using Vaadin Cookie Consent in a development environment you will see a pop-up that asks you to enter the license key.
+You can get your trial key from [https://vaadin.com/pro/licenses](https://vaadin.com/pro/licenses).
+If the license is valid, it will be saved to the local storage of the browser and you will not see the pop-up again.
+
+- **Trial license** https://vaadin.com/pro/licenses
+
+
+## Customizing Vaadin Cookie Consent
 <!--
 ```
 <custom-element-demo>
@@ -33,11 +62,9 @@
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/screenshot.png" width="100%" alt="Screenshot of vaadin-cookie-consent">](https://vaadin.com/components/vaadin-cookie-consent)
 
 
-## Getting Started
+## The file structure for Vaadin components
 
 Vaadin components use the Lumo theme by default.
-
-## The file structure for Vaadin components
 
 - `src/vaadin-cookie-consent.html`
 
