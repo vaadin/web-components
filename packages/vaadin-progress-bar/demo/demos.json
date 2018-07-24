@@ -9,14 +9,14 @@
       "title": "vaadin-progress-bar Basic Examples",
       "description": "",
       "image": ""
-     }
+    }
   },
   {
-    "name": "Lumo Theme Variations",
+    "name": "Theme Variants",
     "url": "progress-bar-lumo-theme-demos",
     "src": "progress-bar-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-progress-bar Lumo Theme Variations",
+      "title": "vaadin-progress-bar Theme Variants",
       "description": "",
       "image": ""
     }

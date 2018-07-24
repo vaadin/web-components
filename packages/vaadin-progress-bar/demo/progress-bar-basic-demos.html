@@ -20,18 +20,19 @@
     <p><strong>Note: <code>min</code> must be less then <code>max</code>.</strong></p>
     <vaadin-demo-snippet id="progress-bar-basic-demos-progress-bar-with-custom-bounds">
       <template preserve-content>
-        <vaadin-progress-bar id="progress-bar-custom-bounds" value="20" min="10" max="110"></vaadin-progress-bar>
-        <vaadin-button id="update-bar-with-bounds">Update value</vaadin-button>
+        <vaadin-progress-bar id="progress-bar-custom-bounds" min="0" max="100"></vaadin-progress-bar>
+        Progress: <span id="progress-value">0</span> %
 
         <script>
           window.addDemoReadyListener('#progress-bar-basic-demos-progress-bar-with-custom-bounds', function(document) {
-            document.querySelector('#update-bar-with-bounds').addEventListener('click', function() {
-              var progress = document.querySelector('#progress-bar-custom-bounds');
-              progress.value += 10;
-              if (progress.value > progress.max) {
-                progress.value = progress.min;
-              }
-            });
+            var progressBar = document.querySelector('#progress-bar-custom-bounds');
+            var progressValue = document.querySelector('#progress-value');
+            var value = 0;
+
+            setInterval(function() {
+              value = value < 100 ? value + 1 : 0;
+              progressBar.value = progressValue.innerText = value;
+            }, 500);
           });
         </script>
 
