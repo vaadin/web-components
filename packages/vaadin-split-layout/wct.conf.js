@@ -6,7 +6,7 @@ module.exports = {
   verbose: false,
   // MAGI REMOVE START
   plugins: {
-    'istanbul': {
+    istanbul: {
       dir: './coverage',
       reporters: ['text-summary', 'lcov'],
       include: [
@@ -24,20 +24,17 @@ module.exports = {
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'macOS 10.12/iphone@10.3',
-      'macOS 10.12/ipad@11.2',
-      'macOS 9.3.2/iphone@9.3'
+      'iOS Simulator/iphone@11.3',
+      'iOS Simulator/iphone@9.3'
     ];
 
     const saucelabsPlatformsMicrosoft = [
-      'Windows 10/microsoftedge@16',
+      'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@59',
-      'macOS 10.12/safari@11.0'
+      'macOS 10.13/safari@11.1'
     ];
 
     const saucelabsPlatforms = [
@@ -47,9 +44,16 @@ module.exports = {
     ];
 
     const cronPlatforms = [
-      'Android/chrome',
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@59'
+      {
+        deviceName: 'Android GoogleAPI Emulator',
+        platformName: 'Android',
+        platformVersion: '7.1',
+        browserName: 'chrome'
+      },
+      'iOS Simulator/ipad@11.3',
+      'iOS Simulator/iphone@10.3',
+      'Windows 10/chrome@latest',
+      'Windows 10/firefox@latest'
     ];
 
     if (env === 'saucelabs') {
