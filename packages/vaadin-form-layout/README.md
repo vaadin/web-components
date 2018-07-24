@@ -73,34 +73,30 @@ Once installed, import it in your application:
 import '@vaadin/vaadin-form-layout/vaadin-form-layout.js';
 ```
 
-## Getting Started
+## Getting started
 
 Vaadin components use the Lumo theme by default.
 
-To use Material theme, import the correspondent file from material folder.
+To use the Material theme, import the correspondent file from the `theme/material` folder.
 
-## The file structure for Vaadin components
+## Entry points
 
-- `src/vaadin-form-layout.html`
-- `src/vaadin-form-item.html`
+- The components with the Lumo theme:
 
-  Unstyled components.
+  `theme/lumo/vaadin-form-layout.html`  
+  `theme/lumo/vaadin-form-item.html`
 
-- `theme/lumo/vaadin-form-layout.html`
-- `theme/lumo/vaadin-form-item.html`
+- The components with the Material theme:
 
-  Components with Lumo theme.
+  `theme/material/vaadin-form-layout.html`  
+  `theme/material/vaadin-form-item.html`
 
-- `theme/material/vaadin-form-layout.html`
-- `theme/material/vaadin-form-item.html`
+- Alias for `theme/lumo/vaadin-form-layout.html`  
+  `theme/lumo/vaadin-form-item.html`:
 
-  Components with Material theme.
+  `vaadin-form-layout.html`  
+  `vaadin-form-item.html`
 
-- `vaadin-form-layout.html`
-- `vaadin-form-item.html`
-
-  Alias for theme/lumo/vaadin-form-layout.html
-  theme/lumo/vaadin-form-item.html
 
 ## Running demos and tests in browser
 
