@@ -153,6 +153,24 @@
         datepicker.close();
       });
 
+      it('should set proper validity by the time the value-changed event is fired', done => {
+        // Set invalid value.
+        inputValue('foo');
+        expect(datepicker.validate()).to.equal(false);
+
+        const spy = sinon.spy(datepicker, 'validate');
+
+        datepicker.addEventListener('value-changed', () => {
+          expect(spy).to.be.calledOnce;
+          expect(datepicker.invalid).to.equal(false);
+          done();
+        });
+
+        datepicker.open();
+        inputValue('01/01/2000');
+        datepicker.close();
+      });
+
       it('should display the error-message when invalid', () => {
         datepicker.invalid = true;
         datepicker.errorMessage = 'Not cool';
