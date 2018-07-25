@@ -327,7 +327,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _oldTemplate: Object,
 
-          _oldInstanceProps: Object
+          _oldInstanceProps: Object,
+
+          _oldRenderer: Object
         };
       }
 
@@ -772,13 +774,18 @@ This program is available under Apache License Version 2.0, available at https:/
         this._oldInstanceProps = instanceProps;
         this._oldTemplate = template;
 
+        const rendererChanged = this._oldRenderer !== renderer;
+        this._oldRenderer = renderer;
+
         if (template && !ownerOrModelChanged) {
           this._stampOverlayTemplate(template, instanceProps);
         } else if (renderer && !templateOrInstancePropsChanged) {
           this.content = this;
 
-          while (this.content.firstChild) {
-            this.content.removeChild(this.content.firstChild);
+          if (rendererChanged) {
+            while (this.content.firstChild) {
+              this.content.removeChild(this.content.firstChild);
+            }
           }
 
           this.renderer.call(owner, this.content, owner, model);

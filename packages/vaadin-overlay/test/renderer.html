@@ -60,6 +60,24 @@
           };
         });
 
+        it('should clean the root on renderer changed', () => {
+          overlay.renderer = root => root.appendChild(rendererContent);
+          expect(overlay.textContent.trim()).to.equal('renderer-content');
+          overlay.renderer = root => expect(root.firstChild).to.be.null;
+        });
+
+        it('should not clean the root on model or owner changed', () => {
+          overlay.renderer = (root, owner, model) => {
+            if (owner !== undefined || model !== undefined) {
+              expect(root.firstChild).not.to.be.null;
+            }
+            root.appendChild(rendererContent);
+          };
+          const overlayOwner = {};
+          overlay.owner = overlayOwner;
+          overlay.model = renderModel;
+        });
+
         it('should pass owner as this to the renderer', () => {
           overlay.owner = {};
           overlay.model = renderModel;
