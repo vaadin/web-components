@@ -163,7 +163,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _ariaLabelChanged(ariaLabel) {
-          if (ariaLabel !== undefined) {
+          if (ariaLabel !== undefined && ariaLabel !== null) {
             this.$.overlay.setAttribute('aria-label', ariaLabel);
           } else {
             this.$.overlay.removeAttribute('aria-label');
