@@ -9,7 +9,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-combo-box/src/vaadin-combo-box-light.html">
 <link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
-<link rel="import" href="../../vaadin-lumo-styles/icons.html">
 <link rel="import" href="vaadin-time-picker-text-field.html">
 
 <dom-module id="vaadin-time-picker">
@@ -48,8 +47,7 @@ This program is available under Apache License Version 2.0, available at https:/
           role="application"
           aria-live="assertive"
           aria-label$=[[label]]>
-        <iron-icon slot="suffix" role="button" icon="lumo:clock" part="toggle-button" class="toggle-button"
-            aria-label$="[[i18n.selector]]"></iron-icon>
+        <span slot="suffix" part="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
       </vaadin-time-picker-text-field>
     </vaadin-combo-box-light>
   </template>
