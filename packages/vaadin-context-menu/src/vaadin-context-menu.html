@@ -274,7 +274,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
             _boundOpen: Object,
 
-            _templateClass: Object
+            _contentTemplate: Object
           };
         }
 
@@ -282,7 +282,8 @@ This program is available under Apache License Version 2.0, available at https:/
           return [
             '_openedChanged(opened)',
             '_contextChanged(_context, _instance)',
-            '_targetOrOpenOnChanged(listenOn, openOn)'
+            '_targetOrOpenOnChanged(listenOn, openOn)',
+            '_templateOrRendererChanged(_contentTemplate, renderer, _context)'
           ];
         }
 
@@ -295,7 +296,13 @@ This program is available under Apache License Version 2.0, available at https:/
 
         ready() {
           super.ready();
-          this.$.overlay.owner = this;
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            this._setTemplateFromNodes(info.addedNodes);
+          });
+        }
+
+        _setTemplateFromNodes(nodes) {
+          this._contentTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this.template;
         }
 
         // Runs before overlay is fully rendered
@@ -365,7 +372,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened) {
           if (opened) {
-            this.$.overlay.renderer = this.renderer;
             if (!this._instance) {
               this.$.overlay.template = this.querySelector('template');
               this._instance = this.$.overlay._instance;
@@ -377,6 +383,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
           // Has to be set after instance has been created
           this.$.overlay.opened = opened;
+        }
+
+        _templateOrRendererChanged(template, renderer, context) {
+          if (template && renderer) {
+            throw new Error('You should only use either a renderer or a template for context-menu content');
+          }
+
+          if (renderer && context) {
+            this.$.overlay.owner = this;
+            this.$.overlay.renderer = renderer;
+          }
         }
 
         _contextChanged(context, instance) {
