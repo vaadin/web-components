@@ -109,18 +109,9 @@
       });
 
       describe('with template', () => {
-        let renderer;
 
         beforeEach(() => {
           menu = fixture('withTemplate');
-          renderer = sinon.spy((root, contextMenu, context) => {
-            if (root.firstChild) {
-              return;
-            }
-            root.appendChild(document.createTextNode(
-              `Renderer ${context.detail && context.detail.foo} ${context.target.id}`
-            ));
-          });
           target = menu.querySelector('#target');
         });
 
