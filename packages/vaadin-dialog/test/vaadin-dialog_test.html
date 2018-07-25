@@ -75,6 +75,22 @@
         expect(overlay.getAttribute('role')).to.be.eql('dialog');
       });
 
+      it('overlay should have the `aria-label` attribute (if set)', () => {
+        dialog.ariaLabel = 'accessible';
+        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
+      });
+
+      it('overlay should not have the `aria-label` attribute (if not set)', () => {
+        expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
+      it('overlay should get an updated `aria-label` attribute (if changed)', () => {
+        dialog.ariaLabel = 'accessible';
+        expect(overlay.getAttribute('aria-label')).to.be.eql('accessible');
+        dialog.ariaLabel = undefined;
+        expect(overlay.getAttribute('aria-label')).to.be.null;
+      });
+
       it('overlay should close on dettach', () => {
         dialog.parentNode.removeChild(dialog);
         expect(dialog.opened).to.eql(false);
