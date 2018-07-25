@@ -122,12 +122,9 @@
           expect(menu.$.overlay.content.textContent).to.not.contain('Renderer');
         });
 
-        it('should throw an error when setting a renderer if there is already a template', done => {
-          // Asynchronous because of `FlattenedNodesObserver` for template
-          setTimeout(() => {
-            expect(() => menu.renderer = () => {}).to.throw(Error);
-            done();
-          });
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          menu._observer.flush();
+          expect(() => menu.renderer = () => {}).to.throw(Error);
         });
       });
     });
