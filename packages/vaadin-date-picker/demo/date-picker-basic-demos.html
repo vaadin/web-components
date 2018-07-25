@@ -69,11 +69,32 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Min and max dates</h3>
-    <vaadin-demo-snippet id="date-picker-basic-demos-min-and-max-dates">
+    <h3>Date range</h3>
+    <p>Use two date pickers to create a date range selector.</p>
+    <vaadin-demo-snippet id="date-picker-basic-demos-date-range">
       <template preserve-content>
-        <vaadin-date-picker label="June 2017" min="2017-06-01" max="2017-06-30" initial-position="2017-06-01">
-        </vaadin-date-picker>
+        <vaadin-date-picker id="start" label="Start"></vaadin-date-picker>
+        <vaadin-date-picker id="end" label="End"></vaadin-date-picker>
+
+        <script>
+          window.addDemoReadyListener('#date-picker-basic-demos-date-range', function(document) {
+            var start = document.querySelector('#start');
+            var end = document.querySelector('#end');
+
+            start.addEventListener('change', function() {
+              end.min = start.value;
+
+              // Open the second date picker when the user has selected a value
+              if (start.value) {
+                end.open();
+              }
+            });
+
+            end.addEventListener('change', function() {
+              start.max = end.value;
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
