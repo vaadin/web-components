@@ -319,8 +319,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (renderer) {
-            this._overlayElement.owner = this;
-            this._overlayElement.renderer = renderer;
+            this._overlayElement.setProperties({owner: this, renderer: renderer});
 
             if (this._overlayElement.content.firstChild) {
               this._assignMenuElement();
