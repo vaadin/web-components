@@ -7,7 +7,7 @@
     </style>
 
 
-    <h3>Plain date picker</h3>
+    <h3>Date picker</h3>
     <vaadin-demo-snippet id="date-picker-basic-demos-plain-date-picker">
       <template preserve-content>
         <vaadin-date-picker></vaadin-date-picker>
@@ -92,35 +92,6 @@
 
             end.addEventListener('change', function() {
               start.max = end.value;
-            });
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Using as a Form Field</h3>
-    <vaadin-demo-snippet id="date-picker-basic-demos-using-as-a-form-field">
-      <template preserve-content>
-        <iron-form>
-          <form method="post">
-            <vaadin-date-picker name="date" required error-message="This field is required"></vaadin-date-picker>
-            <vaadin-button>Submit</vaadin-button>
-          </form>
-        </iron-form>
-
-        <script>
-          window.addDemoReadyListener('#date-picker-basic-demos-using-as-a-form-field', function(document) {
-            var form = document.querySelector('iron-form');
-
-            form.addEventListener('iron-form-submit', function() {
-              alert('Form submitted with date: ' + form.serializeForm().date);
-              return false;
-            });
-
-            var button = document.querySelector('vaadin-button');
-            button.addEventListener('click', function() {
-              form.submit();
             });
           });
         </script>

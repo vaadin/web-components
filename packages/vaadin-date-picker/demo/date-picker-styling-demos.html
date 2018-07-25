@@ -1,0 +1,61 @@
+<dom-module id="date-picker-styling-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+
+    <h3>Custom Inputs</h3>
+    <vaadin-demo-snippet id="date-picker-styling-demos-custom-inputs">
+      <template preserve-content>
+        <style>
+          .my-input1 input {
+            background: #f5f5f5;
+            border: 2px solid #2196f3;
+            border-radius: 4px;
+            padding: 4px;
+            text-align: center;
+          }
+        </style>
+        <vaadin-date-picker-light class="my-input1">
+          <iron-input>
+            <input placeholder="Date" size="10"/>
+          </iron-input>
+        </vaadin-date-picker-light>
+      </template>
+    </vaadin-demo-snippet>
+
+    <vaadin-demo-snippet id="date-picker-styling-demos-custom-icons">
+      <template preserve-content>
+        <style>
+          .my-input2 input {
+            border: none;
+            font-size: 14px;
+            background: none;
+          }
+        </style>
+        <vaadin-date-picker-light>
+         <div class="my-input2">
+           <iron-icon icon="event"></iron-icon>
+           CHECK-IN:
+           <iron-input>
+             <input size="10"/>
+           </iron-input>
+
+         </div>
+        </vaadin-date-picker-light>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class DatePickerStylingDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
+      static get is() {
+        return 'date-picker-styling-demos';
+      }
+    }
+    customElements.define(DatePickerStylingDemos.is, DatePickerStylingDemos);
+  </script>
+</dom-module>

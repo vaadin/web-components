@@ -2,7 +2,7 @@
   "name": "Vaadin Date Picker",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "date-picker-basic-demos",
     "src": "date-picker-basic-demos.html",
     "meta": {
@@ -13,11 +13,33 @@
   }
   ,
   {
-    "name": "Advanced Usage",
-    "url": "date-picker-advanced-demos",
-    "src": "date-picker-advanced-demos.html",
+    "name": "Localization",
+    "url": "date-picker-localization-demos",
+    "src": "date-picker-localization-demos.html",
     "meta": {
-      "title": "vaadin-date-picker Advanced Usage",
+      "title": "vaadin-date-picker Localization Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Validation",
+    "url": "date-picker-validation-demos",
+    "src": "date-picker-validation-demos.html",
+    "meta": {
+      "title": "vaadin-date-picker Validation Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Styling",
+    "url": "date-picker-styling-demos",
+    "src": "date-picker-styling-demos.html",
+    "meta": {
+      "title": "vaadin-date-picker Styling Usage",
       "description": "",
       "image": ""
      }
