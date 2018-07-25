@@ -245,10 +245,7 @@ This program is available under Apache License Version 2.0, available at https:/
            *
            * **NOTE:** The renderer callback can be called several times with previous content available
            */
-          renderer: {
-            type: Function,
-            observer: '_rendererChanged'
-          },
+          renderer: Function,
 
           /**
            * The template of the overlay content.
@@ -322,15 +319,20 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _originalContentPart: Object,
 
-          _contentNodes: Array
+          _contentNodes: Array,
+
+          _oldOwner: Element,
+
+          _oldModel: Object,
+
+          _oldInstanceProps: Object
         };
       }
 
       static get observers() {
         return [
           '_openedChanged(opened)',
-          '_stampOverlayTemplate(template)',
-          '_render(renderer, owner, model)'
+          '_templateOrRendererChanged(template, renderer, owner, model, instanceProps)'
         ];
       }
 
@@ -682,20 +684,12 @@ This program is available under Apache License Version 2.0, available at https:/
         this.content = undefined;
       }
 
-      _stampOverlayTemplate(template) {
-        if (this.renderer) {
-          return;
-        }
-
+      _stampOverlayTemplate(template, instanceProps) {
         this._removeOldContent();
-
-        if (!template) {
-          return;
-        }
 
         if (!template._Templatizer) {
           template._Templatizer = Polymer.Templatize.templatize(template, this, {
-            instanceProps: this.instanceProps,
+            instanceProps: instanceProps,
             forwardHostProp: function(prop, value) {
               if (this._instance) {
                 this._instance.forwardHostProp(prop, value);
@@ -763,23 +757,28 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _rendererChanged(renderer, oldRenderer) {
-        this.content = this;
-
-        while (this.content.firstChild) {
-          this.content.removeChild(this.content.firstChild);
+      _templateOrRendererChanged(template, renderer, owner, model, instanceProps) {
+        if (template && renderer) {
+          throw new Error('You should only use either a renderer or a template for overlay content');
         }
 
-        if (oldRenderer && !renderer) {
-          // Renderer was removed, restore the template
-          this._stampOverlayTemplate(this.template);
-        }
-      }
+        const ownerOrModelChanged = (this._oldOwner !== owner || this._oldModel !== model);
+        this._oldModel = model;
+        this._oldOwner = owner;
 
-      _render(renderer, owner, model) {
-        if (renderer) {
-          this.renderer.call(this.owner, this.content, this.owner, this.model);
+        if (template && !ownerOrModelChanged) {
+          this._stampOverlayTemplate(template, instanceProps);
+        } else if (renderer && this._oldInstanceProps === instanceProps) {
+          this.content = this;
+
+          while (this.content.firstChild) {
+            this.content.removeChild(this.content.firstChild);
+          }
+
+          this.renderer.call(owner, this.content, owner, model);
         }
+
+        this._oldInstanceProps = instanceProps;
       }
 
       _isFocused(element) {
