@@ -75,6 +75,13 @@
           expect(spy.calledOnce).to.be.true;
         });
 
+        it('should not call renderer on template change', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          overlay.template = null;
+          expect(spy.calledOnce).to.be.true;
+        });
+
         it('should call renderer on model change', () => {
           const spy = sinon.spy();
           overlay.renderer = () => spy();
