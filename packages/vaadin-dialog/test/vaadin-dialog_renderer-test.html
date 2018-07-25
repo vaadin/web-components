@@ -62,30 +62,12 @@
         expect(overlay.textContent).to.include('Template content');
       });
 
-      it('should render the content of renderer function instead of template content when renderer function provided', () => {
-        dialog.renderer = (root, dialog) => {
-          const div = document.createElement('div');
-          div.textContent = 'The content of the dialog';
-          root.appendChild(div);
-        };
-        dialog.opened = true;
-
-        expect(overlay.textContent).to.include('The content of the dialog');
-      });
-
-      it('should fall back to template when renderer function is removed', () => {
-        dialog.renderer = (root, dialog) => {
-          const div = document.createElement('div');
-          div.textContent = 'The content of the dialog';
-          root.appendChild(div);
-        };
-        dialog.opened = true;
-
-        expect(overlay.textContent).to.include('The content of the dialog');
-
-        dialog.renderer = null;
-
-        expect(overlay.textContent).to.include('Template content');
+      it('should throw an error when setting a renderer if there is already a template', done => {
+        // Asynchronous because of `FlattenedNodesObserver` for template
+        setTimeout(() => {
+          expect(() => dialog.renderer = () => {}).to.throw(Error);
+          done();
+        });
       });
     });
   </script>
