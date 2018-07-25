@@ -131,25 +131,12 @@
           expect(menu.$.overlay.content.textContent).to.not.contain('Renderer');
         });
 
-        it('should use renderer if both renderer and template are present', () => {
-          menu.renderer = renderer;
-
-          fire(target, 'vaadin-contextmenu', {foo: 'bar'});
-
-          expect(menu.$.overlay.content.textContent).to.contain('Renderer bar target');
-          expect(menu.$.overlay.content.textContent).to.not.contain('Template');
-        });
-
-        it('should fallback to template if renderer is removed', () => {
-          menu.renderer = renderer;
-          fire(target, 'vaadin-contextmenu', {foo: 'bar'});
-          menu.close();
-
-          menu.renderer = undefined;
-          fire(target, 'vaadin-contextmenu', {foo: 'bar'});
-
-          expect(menu.$.overlay.content.textContent).to.contain('Template bar target');
-          expect(menu.$.overlay.content.textContent).to.not.contain('Renderer');
+        it('should throw an error when setting a renderer if there is already a template', done => {
+          // Asynchronous because of `FlattenedNodesObserver` for template
+          setTimeout(() => {
+            expect(() => menu.renderer = () => {}).to.throw(Error);
+            done();
+          });
         });
       });
     });
