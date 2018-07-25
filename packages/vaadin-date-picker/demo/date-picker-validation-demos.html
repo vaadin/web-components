@@ -50,7 +50,9 @@
                 return new Date(value).getFullYear() === currentYear;
               }
             }
-            customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
+            if (!customElements.get('vaadin-date-picker-current-year')) {
+              customElements.define('vaadin-date-picker-current-year', DatePickerCurrentYearElement);
+            }
           });
         </script>
       </template>
