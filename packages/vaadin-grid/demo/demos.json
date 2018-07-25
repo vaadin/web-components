@@ -2,14 +2,14 @@
   "name": "Vaadin Grid",
   "pages": [
   {
-    "name": "Basic Usage",
+    "name": "Basics",
     "url": "grid-basic-demos",
     "src": "grid-basic-demos.html",
     "meta": {
-      "title": "vaadin-grid – Basic Usage",
+      "title": "vaadin-grid – Basic Examples",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -20,7 +20,7 @@
       "title": "vaadin-grid – Assigning Data",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -31,7 +31,7 @@
       "title": "vaadin-grid – Selection",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -42,18 +42,29 @@
       "title": "vaadin-grid – Column Properties",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Sorting and Filtering",
-    "url": "grid-sorting-filtering-demos",
-    "src": "grid-sorting-filtering-demos.html",
+    "name": "Sorting",
+    "url": "grid-sorting-demos",
+    "src": "grid-sorting-demos.html",
     "meta": {
-      "title": "vaadin-grid – Sorting and Filtering",
+      "title": "vaadin-grid – Sorting",
       "description": "",
       "image": ""
-     }
+    }
+  }
+  ,
+  {
+    "name": "Filtering",
+    "url": "grid-filtering-demos",
+    "src": "grid-filtering-demos.html",
+    "meta": {
+      "title": "vaadin-grid – Filtering",
+      "description": "",
+      "image": ""
+    }
   }
   ,
   {
@@ -64,7 +75,7 @@
       "title": "vaadin-grid – Row Details",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -75,7 +86,7 @@
       "title": "vaadin-grid – CRUD",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -86,7 +97,7 @@
       "title": "vaadin-grid – Pagination",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
@@ -101,11 +112,11 @@
   }
   ,
   {
-    "name": "Lumo Theme Variations",
-    "url": "grid-lumo-theme-demos",
-    "src": "grid-lumo-theme-demos.html",
+    "name": "Theme Variants",
+    "url": "grid-theme-demos",
+    "src": "grid-theme-demos.html",
     "meta": {
-      "title": "vaadin-grid – Lumo Theme Variations",
+      "title": "vaadin-grid – Theme Variants",
       "description": "",
       "image": ""
     }

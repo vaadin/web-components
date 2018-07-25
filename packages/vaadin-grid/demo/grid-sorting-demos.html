@@ -1,0 +1,154 @@
+<dom-module id="grid-sorting-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <style>
+      vaadin-checkbox {
+        margin-bottom: 10px;
+      }
+    </style>
+
+
+    <h3>Sorting</h3>
+    <p>
+      <code>&lt;vaadin-grid-sorter&gt;</code> can be used to define sorting for a column.
+      The users in the example are sorted by last name initially.
+    </p>
+    <p>
+      <b>NOTE: You must explicitly import the <code>vaadin-grid-sorter.html</code> in order to use <code>&lt;vaadin-grid-sorter&gt;</code>.</b>
+    </p>
+
+    <vaadin-demo-snippet id='grid-sorting-demos-sorting'>
+      <template preserve-content>
+        <dom-bind>
+          <template>
+
+            <x-array-data-provider items="{{items}}"></x-array-data-provider>
+
+            <vaadin-checkbox checked="{{multiSort}}">Enable Multi-Sorting</vaadin-checkbox>
+
+            <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort="[[multiSort]]">
+
+              <vaadin-grid-column width="60px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter path="name.first">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.name.first]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter path="name.last" direction="asc">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.name.last]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+        </dom-bind>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Sorting with Data Provider</h3>
+    <p>
+      When the data is fetched from a data provider, the responsibility
+      of providing the correctly ordered data is on the data provider itself.
+      The data provider is asked for fresh sorted data whenever the sorting
+      order is changed on any <code>&lt;vaadin-grid-sorter&gt;</code>.
+    </p>
+    <p>
+      The effective <code>sortOrders</code> array will be included as one of
+      the data provider call options.
+    </p>
+    <p>
+      <b>Hint: </b>When using a data provider, <code>path</code> on the
+      <code>&lt;vaadin-grid-sorter&gt;</code> element can be set to any string,
+      instead of a property on the item object.
+    </p>
+
+    <vaadin-demo-snippet id='grid-sorting-demos-sorting-with-data-provider'>
+      <template preserve-content>
+        <x-remote-sorting-example></x-remote-sorting-example>
+        <dom-module id="x-remote-sorting-example">
+          <template preserve-content>
+            <vaadin-checkbox checked="{{multiSort}}">Enable Multi-Sorting</vaadin-checkbox>
+
+            <vaadin-grid aria-label="Sorting with Data Provider Example" id="grid" multi-sort="[[multiSort]]">
+
+              <vaadin-grid-column width="60px" flex-grow="0">
+                <template class="header">#</template>
+                <template>[[index]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter path="firstName">First Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.firstName]]</template>
+              </vaadin-grid-column>
+
+              <vaadin-grid-column>
+                <template class="header">
+                  <vaadin-grid-sorter path="lastName">Last Name</vaadin-grid-sorter>
+                </template>
+                <template>[[item.lastName]]</template>
+              </vaadin-grid-column>
+
+            </vaadin-grid>
+          </template>
+          <script>
+            window.addDemoReadyListener('#grid-sorting-demos-sorting-with-data-provider', function(document) {
+              Polymer({
+                is: 'x-remote-sorting-example',
+
+                ready: function() {
+                  var grid = this.$.grid;
+
+                  grid.size = 200;
+
+                  grid.dataProvider = function(params, callback) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onload = function() {
+                      callback(JSON.parse(xhr.responseText).result);
+                    };
+
+                    var index = params.page * params.pageSize;
+                    var url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize;
+
+                    // `params.sortOrders` format: [{path: 'lastName', direction: 'asc'}, ...];
+                    params.sortOrders.forEach(function(sort) {
+                      url += '&orders[]=' + sort.path + ' ' + sort.direction;
+                    });
+
+                    xhr.open('GET', url, true);
+                    xhr.send();
+                  };
+                }
+              });
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+
+  </template>
+  <script>
+    class GridSortingDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
+      static get is() {
+        return 'grid-sorting-demos';
+      }
+    }
+    customElements.define(GridSortingDemos.is, GridSortingDemos);
+  </script>
+</dom-module>
