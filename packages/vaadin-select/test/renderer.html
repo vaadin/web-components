@@ -69,16 +69,9 @@
          expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
        });
 
-       it('renderer should receive empty root when defined after template', () => {
-         dropdown.renderer = root => expect(root.firstChild).to.be.null;
-       });
-
-       it('the initial template instance should be used after renderer was assigned and removed', () => {
-         dropdown.renderer = root => root.appendChild(rendererContent);
-         expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('renderer item');
-         dropdown.renderer = null;
-         expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
-       });
+       it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => dropdown.renderer = () => {}).to.throw(Error);
+        });
      });
    });
   </script>
