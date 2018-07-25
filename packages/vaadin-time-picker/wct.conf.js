@@ -23,23 +23,41 @@ module.exports = {
   // MAGI REMOVE END
 
   registerHooks: function(context) {
-    var saucelabsPlatforms = [
-      'macOS 10.12/iphone@10.3',
-      'Windows 10/microsoftedge@15',
-      'Windows 10/internet explorer@11',
-      'macOS 10.12/safari@11.0',
-      'macOS 9.3.2/iphone@9.3'
+    const saucelabsPlatformsMobile = [
+      'iOS Simulator/iphone@11.3',
+      'iOS Simulator/iphone@9.3'
     ];
 
-    var cronPlatforms = [
-      'macOS 10.12/ipad@11.0',
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@59'
+    const saucelabsPlatformsMicrosoft = [
+      'Windows 10/microsoftedge@17',
+      'Windows 10/internet explorer@11'
+    ];
+
+    const saucelabsPlatformsDesktop = [
+      'macOS 10.13/safari@11.1'
+    ];
+
+    const saucelabsPlatforms = [
+      ...saucelabsPlatformsMobile,
+      ...saucelabsPlatformsMicrosoft,
+      ...saucelabsPlatformsDesktop
+    ];
+
+    const cronPlatforms = [
+      {
+        deviceName: 'Android GoogleAPI Emulator',
+        platformName: 'Android',
+        platformVersion: '7.1',
+        browserName: 'chrome'
+      },
+      'iOS Simulator/ipad@11.3',
+      'iOS Simulator/iphone@10.3',
+      'Windows 10/chrome@latest',
+      'Windows 10/firefox@latest'
     ];
 
     if (env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
-
     } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
     }
