@@ -62,12 +62,9 @@
         expect(overlay.textContent).to.include('Template content');
       });
 
-      it('should throw an error when setting a renderer if there is already a template', done => {
-        // Asynchronous because of `FlattenedNodesObserver` for template
-        setTimeout(() => {
-          expect(() => dialog.renderer = () => {}).to.throw(Error);
-          done();
-        });
+      it('should throw an error when setting a renderer if there is already a template', () => {
+        dialog._observer.flush();
+        expect(() => dialog.renderer = () => {}).to.throw(Error);
       });
     });
   </script>
