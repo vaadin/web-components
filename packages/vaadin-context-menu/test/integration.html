@@ -14,30 +14,6 @@
     <script src="common.js"></script>
   </head>
   <body>
-    <dom-module id="context-menu-button">
-      <template>
-        <vaadin-context-menu id="menu">
-          <template>foo</template>
-        </vaadin-context-menu>
-        <button on-click="_showMenu" id="button">Show context menu</button>
-      </template>
-      <script>
-        customElements.whenDefined('vaadin-context-menu').then(() => {
-          class ContextMenuButton extends Polymer.Element {
-            static get is() {
-              return 'context-menu-button';
-            }
-
-            _showMenu(e) {
-              this.$.menu.open(e);
-            }
-          }
-
-          customElements.define(ContextMenuButton.is, ContextMenuButton);
-        });
-      </script>
-    </dom-module>
-
     <test-fixture id="default">
       <template>
         <context-menu-button></context-menu-button>
@@ -45,13 +21,39 @@
     </test-fixture>
 
     <script>
+      customElements.whenDefined('vaadin-context-menu').then(() => {
+        class ContextMenuButton extends Polymer.Element {
+          static get is() {
+            return 'context-menu-button';
+          }
+
+          static get template() {
+            return Polymer.html`
+              <vaadin-context-menu id="menu">
+                <template>foo</template>
+              </vaadin-context-menu>
+              <button on-click="_showMenu" id="button">Show context menu</button>
+            `;
+          }
+
+          _showMenu(e) {
+            this.$.menu.open(e);
+          }
+        }
+
+        customElements.define(ContextMenuButton.is, ContextMenuButton);
+      });
+
       describe('integration', () => {
         let contextMenuButton, menu, button;
 
-        beforeEach(() => {
-          contextMenuButton = fixture('default');
-          menu = contextMenuButton.$.menu;
-          button = contextMenuButton.$.button;
+        beforeEach((done) => {
+          customElements.whenDefined('context-menu-button').then(() => {
+            contextMenuButton = fixture('default');
+            menu = contextMenuButton.$.menu;
+            button = contextMenuButton.$.button;
+            done();
+          });
         });
 
         it('should open context menu on .open(e)', () => {

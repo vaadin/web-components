@@ -19,24 +19,6 @@
 </head>
 
 <body>
-  <script>
-    customElements.whenDefined('vaadin-context-menu').then(() => {
-      class TestWrapper extends Polymer.Element {
-        static get template() {
-          return Polymer.html`
-            <vaadin-context-menu selector="#target" id="menu">
-              <div id="target">Target</div>
-              <template>
-                <div>Menu Content</div>
-              </template>
-            </vaadin-context-menu>
-          `;
-        }
-      }
-      customElements.define('test-wrapper', TestWrapper);
-    });
-  </script>
-
   <test-fixture id="default">
     <template>
       <test-wrapper></test-wrapper>
@@ -48,11 +30,38 @@
       let menu, target;
       const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-      beforeEach(() => {
-        var testWrapper = fixture('default');
-        menu = testWrapper.$.menu;
-        target = Polymer.dom(menu).querySelector('#target');
-        menu._phone = true;
+      function ensureDefined(id, cb) {
+        if (customElements.get(id)) {
+          cb();
+        } else {
+          customElements.whenDefined(id).then(() => cb());
+        }
+      }
+
+      ensureDefined('vaadin-context-menu', () => {
+        class TestWrapper extends Polymer.Element {
+          static get template() {
+            return Polymer.html`
+              <vaadin-context-menu selector="#target" id="menu">
+                <div id="target">Target</div>
+                <template>
+                  <div>Menu Content</div>
+                </template>
+              </vaadin-context-menu>
+            `;
+          }
+        }
+        customElements.define('test-wrapper', TestWrapper);
+      });
+
+      beforeEach(done => {
+        ensureDefined('test-wrapper', () => {
+          var testWrapper = fixture('default');
+          menu = testWrapper.$.menu;
+          target = menu.querySelector('#target');
+          menu._phone = true;
+          done();
+        });
       });
 
       afterEach(() => {
