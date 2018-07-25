@@ -49,11 +49,12 @@
           expect(overlay.textContent.trim()).to.equal('renderer-content');
         });
 
-        it('should receive model and owner when it is defined', () => {
+        it('should receive empty root, model and owner when it is defined', () => {
           const overlayOwner = {};
           overlay.owner = overlayOwner;
           overlay.model = renderModel;
           overlay.renderer = (root, owner, model) => {
+            expect(root.firstChild).to.be.null;
             expect(owner).to.eql(overlayOwner);
             expect(model).to.eql(renderModel);
           };
@@ -67,15 +68,25 @@
           };
         });
 
-        it('should use only renderer when template was assigned after renderer', done => {
-          overlay.renderer = root => root.appendChild(rendererContent);
-          const template = document.createElement('template');
-          template.innerHTML = 'overlay-content';
-          overlay.appendChild(template);
-          setTimeout(() => {
-            expect(overlay.textContent.trim()).to.equal('renderer-content');
-            done();
-          });
+        it('should not call renderer on instanceProps change', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          overlay.instanceProps = {};
+          expect(spy.calledOnce).to.be.true;
+        });
+
+        it('should call renderer on model change', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          overlay.model = {};
+          expect(spy.calledTwice).to.be.true;
+        });
+
+        it('should call renderer on owner change', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          overlay.owner = {};
+          expect(spy.calledTwice).to.be.true;
         });
       });
 
@@ -89,25 +100,25 @@
           expect(overlay.textContent.trim()).to.equal('overlay-content');
         });
 
-        it('renderer should receive empty root when defined after template', () => {
-          overlay.renderer = root => expect(root.firstChild).to.be.null;
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => overlay.renderer = () => {}).to.throw(Error);
         });
 
-        it('the initial template instance should be used after renderer was assigned and removed', () => {
-          overlay.renderer = root => root.appendChild(rendererContent);
-          expect(overlay.textContent.trim()).to.equal('renderer-content');
-          overlay.renderer = null;
-          expect(overlay.textContent.trim()).to.equal('overlay-content');
+        it('should restamp the template on instanceProps change', () => {
+          const lastInstance = overlay._instance;
+          expect(lastInstance).to.be.ok;
+          overlay.instanceProps = {};
+          expect(overlay._instance).to.not.equal(lastInstance);
         });
 
-        it('should not restamp template on model change', () => {
+        it('should not restamp the template on model change', () => {
           const lastInstance = overlay._instance;
           expect(lastInstance).to.be.ok;
           overlay.model = {};
           expect(overlay._instance).to.equal(lastInstance);
         });
 
-        it('should not restamp template on owner change', () => {
+        it('should not restamp the template on owner change', () => {
           const lastInstance = overlay._instance;
           overlay.owner = {};
           expect(overlay._instance).to.equal(lastInstance);
