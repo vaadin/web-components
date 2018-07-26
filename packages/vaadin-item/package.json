@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-item",
-  "version": "2.1.0-alpha3",
+  "version": "2.1.0-beta1",
   "description": "vaadin-item",
   "main": "vaadin-item.html",
   "repository": "vaadin/vaadin-item",
