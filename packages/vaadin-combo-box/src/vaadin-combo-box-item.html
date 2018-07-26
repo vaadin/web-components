@@ -118,14 +118,18 @@ This program is available under Apache License Version 2.0, available at https:/
 
       connectedCallback() {
         super.connectedCallback();
-
-        // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
-        const overlay = this.getRootNode().host.getRootNode().host;
-        const dropdown = overlay.__dataHost;
-        const comboBoxOverlay = dropdown.getRootNode().host;
-        this._comboBox = comboBoxOverlay.getRootNode().host;
         if (!this._itemTemplateInstance) {
-          this._ensureTemplatized();
+          // 2.0 has __dataHost. Might want to consider assigning combobox reference directly to item.
+          const overlay = this.getRootNode().host.getRootNode().host;
+          const dropdown = overlay.__dataHost;
+          const comboBoxOverlay = dropdown.getRootNode().host;
+          this._comboBox = comboBoxOverlay.getRootNode().host;
+          this._comboBox._ensureTemplatized();
+          if (this._comboBox._TemplateClass) {
+            this._itemTemplateInstance = new this._comboBox._TemplateClass({});
+            this.$.content.textContent = '';
+            this.$.content.appendChild(this._itemTemplateInstance.root);
+          }
         }
       }
 
@@ -146,21 +150,6 @@ This program is available under Apache License Version 2.0, available at https:/
           };
 
           this.renderer(this.$.content, this._comboBox, model);
-        } else if (this._oldRenderer) {
-          this._ensureTemplatized();
-        }
-      }
-
-      _ensureTemplatized() {
-        if (!this._comboBox) {
-          return;
-        }
-
-        this._comboBox._ensureTemplatized();
-        if (this._comboBox._TemplateClass) {
-          this._itemTemplateInstance = new this._comboBox._TemplateClass({});
-          this.$.content.innerHTML = '';
-          this.$.content.appendChild(this._itemTemplateInstance.root);
         }
       }
 

@@ -60,6 +60,16 @@
         };
         comboBox.opened = true;
       });
+
+      it('should throw an error and remove template when added after renderer', () => {
+        comboBox.renderer = () => {};
+        const template = document.createElement('template');
+        expect(() => {
+          comboBox.appendChild(template);
+          comboBox._observer.flush();
+        }).to.throw(Error);
+        expect(comboBox._itemTemplate).to.be.not.ok;
+      });
     });
 
     describe('with template', () => {
@@ -76,18 +86,11 @@
         comboBox.opened = true;
       });
 
-      it('the initial template instance should be used after renderer was assigned and removed', () => {
-        comboBox.renderer = (root, comboBox, model) => {
-          const textNode = document.createTextNode(model.item);
-          root.appendChild(textNode);
-        };
-        comboBox.opened = true;
 
-        let item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        expect(item.$.content.textContent.trim()).to.equal('foo');
-        comboBox.renderer = null;
-        item = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
-        expect(item.$.content.textContent.trim()).to.equal('templatizer-content');
+      it('should throw an error and remove renderer when added after template', () => {
+        comboBox._observer.flush();
+        expect(() => comboBox.renderer = () => {}).to.throw(Error);
+        expect(comboBox.renderer).to.be.not.ok;
       });
     });
   </script>

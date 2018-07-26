@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/utils/templatize.html">
 <link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -196,7 +197,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _closeOnBlurIsPrevented: Boolean,
 
-        _previousDocumentPointerEvents: String
+        _previousDocumentPointerEvents: String,
+
+        _itemTemplate: Object
       };
     }
 
@@ -205,6 +208,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
         '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
+        '_templateOrRendererChanged(_itemTemplate, renderer)',
         '_loadingChanged(loading)',
         '_selectedItemChanged(selectedItem)',
         '_toggleElementChanged(_toggleElement)'
@@ -246,6 +250,32 @@ This program is available under Apache License Version 2.0, available at https:/
         e.preventDefault();
         this._clear();
       });
+
+      this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+        this._setTemplateFromNodes(info.addedNodes);
+      });
+    }
+
+    _setTemplateFromNodes(nodes) {
+      this._itemTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._itemTemplate;
+    }
+
+    _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+      if (template !== oldTemplate) {
+        this._itemTemplate = undefined;
+      } else if (renderer !== oldRenderer) {
+        this.renderer = undefined;
+      }
+    }
+
+    _templateOrRendererChanged(template, renderer) {
+      if (template && renderer) {
+        this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
+        throw new Error('You should only use either a renderer or a template for dialog content');
+      }
+
+      this._oldTemplate = template;
+      this._oldRenderer = renderer;
     }
 
     /**
@@ -818,7 +848,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _ensureTemplatized() {
       if (!this._TemplateClass) {
-        const tpl = this.querySelector('template');
+        const tpl = this._itemTemplate || this.querySelector('template');
         if (tpl) {
           this._TemplateClass = Polymer.Templatize.templatize(tpl, this, {
             instanceProps: this._instanceProps,
