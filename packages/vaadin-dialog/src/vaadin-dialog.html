@@ -145,8 +145,11 @@ This program is available under Apache License Version 2.0, available at https:/
              */
             renderer: Function,
 
-            _contentTemplate: Object
+            _contentTemplate: Object,
 
+            _oldTemplate: Object,
+
+            _oldRenderer: Object
           };
         }
 
@@ -170,13 +173,25 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setTemplateFromNodes(nodes) {
-          this._contentTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this.template;
+          this._contentTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._contentTemplate;
+        }
+
+        _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+          if (template !== oldTemplate) {
+            this._contentTemplate = undefined;
+          } else if (renderer !== oldRenderer) {
+            this.renderer = undefined;
+          }
         }
 
         _templateOrRendererChanged(template, renderer) {
           if (template && renderer) {
+            this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
             throw new Error('You should only use either a renderer or a template for dialog content');
           }
+
+          this._oldTemplate = template;
+          this._oldRenderer = renderer;
 
           if (renderer) {
             this.$.overlay.setProperties({owner: this, renderer: renderer});
