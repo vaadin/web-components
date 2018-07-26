@@ -58,6 +58,13 @@
            expect(dropdownMenu).to.eql(dropdown);
          };
        });
+
+       it('should remove template when added after renderer', () => {
+         dropdown.renderer = () => {};
+         const template = document.createElement('template');
+         expect(() => dropdown._contentTemplate = template).to.throw(Error);
+         expect(dropdown._contentTemplate).to.be.not.ok;
+       });
      });
 
      describe('with template', () => {
@@ -71,6 +78,11 @@
 
        it('should throw an error when setting a renderer if there is already a template', () => {
          expect(() => dropdown.renderer = () => {}).to.throw(Error);
+       });
+
+       it('should remove renderer when added after template', () => {
+         expect(() => dropdown.renderer = () => {}).to.throw(Error);
+         expect(dropdown.renderer).to.be.not.ok;
        });
      });
    });
