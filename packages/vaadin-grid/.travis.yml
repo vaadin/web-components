@@ -11,10 +11,6 @@ addons:
   firefox: latest
   chrome: stable
 
-before_script:
-  - npm install -g bower polymer-cli@next
-  - bower install
-
 jobs:
   include:
     - if: type = push
@@ -22,15 +18,11 @@ jobs:
     - if: type = push
       env: TEST_SUITE=desktop POLYMER=2
     - if: type = push
-      env: TEST_SUITE=microsoft POLYMER=2
-    - if: type = push
       env: TEST_SUITE=visual_tests POLYMER=2
     - if: type = push
       env: TEST_SUITE=mobile POLYMER=3
     - if: type = push
       env: TEST_SUITE=desktop POLYMER=3
-    - if: type = push
-      env: TEST_SUITE=microsoft POLYMER=3
     - if: type = pull_request
       env: POLYMER=2
     - if: type = pull_request
@@ -47,7 +39,7 @@ script:
           npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
           gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
         else
-          wct --env saucelabs:$TEST_SUITE --verbose;
+          wct --env saucelabs:$TEST_SUITE;
         fi;
       else
         wct;
@@ -63,7 +55,7 @@ script:
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --npm --env saucelabs:$TEST_SUITE --verbose;
+        wct --npm --env saucelabs:$TEST_SUITE;
       else
         wct --npm;
       fi;
