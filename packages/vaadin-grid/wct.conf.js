@@ -3,7 +3,20 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 
 module.exports = {
   testTimeout: 180 * 1000,
-  verbose: true,
+  plugins: {
+    local: {
+      browserOptions: {
+        chrome: [
+          'headless',
+          'disable-gpu',
+          'no-sandbox'
+        ],
+        firefox: [
+          '-headless'
+        ]
+      }
+    }
+  },
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'iOS Simulator/iphone@11.3',

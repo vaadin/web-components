@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 dist: trusty
 language: node_js
 node_js: 8.11
@@ -47,10 +47,10 @@ script:
           npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
           gemini test test/visual && gemini test test/visual -c .gemini-chrome.yml;
         else
-          wct --env saucelabs:$TEST_SUITE;
+          wct --env saucelabs:$TEST_SUITE --verbose;
         fi;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct;
+        wct;
       fi &&
       if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
         wct --env saucelabs-cron;
@@ -63,9 +63,9 @@ script:
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --module-resolution=node --npm --env saucelabs:$TEST_SUITE;
+        wct --npm --env saucelabs:$TEST_SUITE --verbose;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
+        wct --npm;
       fi;
     fi
 

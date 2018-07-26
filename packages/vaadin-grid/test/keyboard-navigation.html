@@ -81,7 +81,9 @@
     window.top.focus && window.top.focus();
     window.focus();
 
-    if ((window.chrome || window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
+    if ((window.chrome
+      || /HeadlessChrome/.test(window.navigator.userAgent)
+      || window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
       && !window.document.hasFocus()
       && !window.top.document.hasFocus()) {
       // Oh no! Focus kinda works, but no native events are dispatched. Let’s fake them.
