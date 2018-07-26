@@ -15,7 +15,7 @@
         line-height: var(--lumo-line-height-s);
       }
 
-      [part="input-field"]::after {
+      :host(:not([readonly])) [part="input-field"]::after {
         display: none;
       }
 
