@@ -66,15 +66,14 @@
           };
         });
 
-        it('should use only renderer when template was assigned after renderer', done => {
-          notification.renderer = root => root.appendChild(rendererContent);
+        it('should remove template when added after renderer', () => {
+          notification.renderer = () => {};
           const template = document.createElement('template');
-          template.innerHTML = 'notification-content';
-          notification.appendChild(template);
-          setTimeout(() => {
-            expect(notification._card.textContent.trim()).to.equal('renderer-content');
-            done();
-          });
+          expect(() => {
+            notification.appendChild(template);
+            notification._observer.flush();
+          }).to.throw(Error);
+          expect(notification._notificationTemplate).to.be.not.ok;
         });
       });
 
@@ -102,15 +101,14 @@
           expect(notification._card.textContent.trim()).to.equal('notification-content');
         });
 
-        it('renderer should receive empty root when defined after template', () => {
-          notification.renderer = root => expect(root.firstChild).to.be.null;
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          notification._observer.flush();
+          expect(() => notification.renderer = () => {}).to.throw(Error);
         });
 
-        it('the initial template instance should be used after renderer was assigned and removed', () => {
-          notification.renderer = root => root.appendChild(rendererContent);
-          expect(notification._card.textContent.trim()).to.equal('renderer-content');
-          notification.renderer = null;
-          expect(notification._card.textContent.trim()).to.equal('notification-content');
+        it('should remove renderer when added after template', () => {
+          expect(() => notification.renderer = () => {}).to.throw(Error);
+          expect(notification.renderer).to.be.not.ok;
         });
       });
     });
