@@ -4,19 +4,27 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 module.exports = {
   testTimeout: 180 * 1000,
   verbose: true,
+  plugins: {
+    local: {
+      browserOptions: {
+        chrome: [
+          'headless',
+          'disable-gpu',
+          'no-sandbox'
+        ]
+      }
+    }
+  },
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
       'iOS Simulator/iphone@11.3',
       'iOS Simulator/iphone@9.3'
     ];
 
-    const saucelabsPlatformsMicrosoft = [
+    const saucelabsPlatformsDesktop = [
+      'macOS 10.13/safari@11.1',
       'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
-    ];
-
-    const saucelabsPlatformsDesktop = [
-      'macOS 10.13/safari@11.1'
     ];
 
     const cronPlatforms = [
@@ -35,16 +43,12 @@ module.exports = {
     if (env === 'saucelabs:mobile') {
       context.options.plugins.sauce.browsers = saucelabsPlatformsMobile;
 
-    } else if (env === 'saucelabs:microsoft') {
-      context.options.plugins.sauce.browsers = saucelabsPlatformsMicrosoft;
-
     } else if (env === 'saucelabs:desktop') {
       context.options.plugins.sauce.browsers = saucelabsPlatformsDesktop;
 
     } else if (env === 'saucelabs') {
       context.options.plugins.sauce.browsers = [
         ...saucelabsPlatformsMobile,
-        ...saucelabsPlatformsMicrosoft,
         ...saucelabsPlatformsDesktop
       ];
 

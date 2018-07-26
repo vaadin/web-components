@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 dist: trusty
 language: node_js
 node_js: 8.11
@@ -11,18 +11,24 @@ addons:
   firefox: latest
   chrome: stable
 
-before_script:
-  - npm install -g bower polymer-cli@next
-  - bower install
-
-env:
-  - TEST_SUITE=mobile POLYMER=2
-  - TEST_SUITE=microsoft POLYMER=2
-  - TEST_SUITE=desktop POLYMER=2
-  - TEST_SUITE=visual_tests POLYMER=2
-  - TEST_SUITE=mobile POLYMER=3
-  - TEST_SUITE=microsoft POLYMER=3
-  - TEST_SUITE=desktop POLYMER=3
+jobs:
+  include:
+    - if: type = push
+      env: TEST_SUITE=mobile POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=desktop POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=visual_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=mobile POLYMER=3
+    - if: type = push
+      env: TEST_SUITE=desktop POLYMER=3
+    - if: type = pull_request
+      env: POLYMER=2
+    - if: type = pull_request
+      env: POLYMER=3
+    - if: type = cron
+      env: TEST_SUITE=unit_tests POLYMER=2
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
@@ -49,9 +55,9 @@ script:
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --module-resolution=node --npm --env saucelabs:$TEST_SUITE;
+        wct --npm --env saucelabs:$TEST_SUITE;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
+        xvfb-run -s '-screen 0 1024x768x24' wct --npm;
       fi;
     fi
 
