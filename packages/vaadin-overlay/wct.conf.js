@@ -4,9 +4,9 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 module.exports = {
   verbose: true,
   testTimeout: 180 * 1000,
-  // MAGI REMOVE START
   plugins: {
-    'istanbul': {
+    // MAGI REMOVE START
+    istanbul: {
       dir: './coverage',
       reporters: ['text-summary', 'lcov'],
       include: [
@@ -19,9 +19,17 @@ module.exports = {
         }
       }
     },
-    'random-output': true
+    // MAGI REMOVE END
+    local: {
+      browserOptions: {
+        chrome: [
+          'headless',
+          'disable-gpu',
+          'no-sandbox'
+        ]
+      }
+    }
   },
-  // MAGI REMOVE END
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
@@ -29,13 +37,10 @@ module.exports = {
       'iOS Simulator/iphone@9.3'
     ];
 
-    const saucelabsPlatformsMicrosoft = [
+    const saucelabsPlatformsDesktop = [
+      'macOS 10.13/safari@11.1',
       'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
-    ];
-
-    const saucelabsPlatformsDesktop = [
-      'macOS 10.13/safari@11.1'
     ];
 
     const cronPlatforms = [
@@ -55,21 +60,11 @@ module.exports = {
       case 'saucelabs:mobile':
         context.options.plugins.sauce.browsers = saucelabsPlatformsMobile;
         break;
-      case 'saucelabs:microsoft':
-        context.options.plugins.sauce.browsers = saucelabsPlatformsMicrosoft;
-        break;
       case 'saucelabs:desktop':
         context.options.plugins.sauce.browsers = saucelabsPlatformsDesktop;
         break;
-      case 'saucelabs-cron':
+      case 'saucelabs:cron':
         context.options.plugins.sauce.browsers = cronPlatforms;
-        break;
-      case 'saucelabs':
-        context.options.plugins.sauce.browsers = [
-          ...saucelabsPlatformsMobile,
-          ...saucelabsPlatformsMicrosoft,
-          ...saucelabsPlatformsDesktop
-        ];
         break;
     }
   }

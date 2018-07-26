@@ -34,8 +34,7 @@
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "wct-istanbul": "^0.14.3",
-    "wct-random-output": "^0.1.1",
-    "web-component-tester": "^6.1.5",
+    "web-component-tester": "^6.7.0",
     "yargs": "^8.0.0"
   }
 }
