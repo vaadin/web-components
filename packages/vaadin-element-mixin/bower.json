@@ -23,8 +23,8 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#^2.0.0",
-    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^1.1.0-alpha1",
-    "vaadin-development-mode-detector": "vaadin/vaadin-development-mode-detector#^1.1.0-alpha2"
+    "vaadin-usage-statistics": "vaadin/vaadin-usage-statistics#^1.1.0-beta1",
+    "vaadin-development-mode-detector": "vaadin/vaadin-development-mode-detector#^1.1.0-beta1"
   },
   "devDependencies": {
     "iron-test-helpers": "^2.0.0",
