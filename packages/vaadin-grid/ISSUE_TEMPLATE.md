@@ -8,7 +8,7 @@
 <!-- Example: Grid content occasionally gets scrolled. -->
 
 ### Live Demo
-<!-- Example: https://jsbin.com/laxuxah/edit?html,output -->
+<!-- The template, click "Remix This" to edit it: https://glitch.com/edit/#!/kindly-postbox?path=index.html:1:0 -->
 
 ### Steps to reproduce
 <!-- Example
