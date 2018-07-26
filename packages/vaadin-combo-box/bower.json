@@ -35,14 +35,14 @@
     "iron-list": "^2.0.2",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0.0",
-    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.0-alpha2",
-    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-alpha2",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-alpha2",
-    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-alpha3",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-alpha2",
-    "vaadin-item": "vaadin/vaadin-item#^2.1.0-alpha2",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.0"
+    "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.1",
+    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1",
+    "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
+    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta1",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.2"
   },
   "devDependencies": {
     "iron-ajax": "^2.0.0",
@@ -59,8 +59,8 @@
     "paper-input": "^2.0.0",
     "paper-styles": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-alpha2",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0-alpha2"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
   }
 }
