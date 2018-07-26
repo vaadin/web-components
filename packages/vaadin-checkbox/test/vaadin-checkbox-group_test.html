@@ -25,16 +25,30 @@
 
 <test-fixture id="ironForm">
   <template>
-      <iron-form>
-        <form>
-          <vaadin-checkbox-group>
-            <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
-            <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
-            <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
-          </vaadin-checkbox-group>
-        </form>
-      </iron-form>
+    <iron-form>
+      <form>
+        <vaadin-checkbox-group>
+          <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+          <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+          <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </form>
+    </iron-form>
   </template>
+</test-fixture>
+
+<test-fixture id="bind">
+  <template>
+    <dom-bind>
+      <template>
+        <vaadin-checkbox-group id="group" value="{{value}}">
+          <vaadin-checkbox value="a">Checkbox <b>a</b></vaadin-checkbox>
+          <vaadin-checkbox value="b">Checkbox <b>b</b></vaadin-checkbox>
+          <vaadin-checkbox value="c">Checkbox <b>c</b></vaadin-checkbox>
+        </vaadin-checkbox-group>
+      </template>
+    </template>
+  </dom-bind>
 </test-fixture>
 
 <script>
@@ -86,6 +100,25 @@
       vaadinCheckboxGroup.removeChild(checkbox);
       vaadinCheckboxGroup._observer.flush();
       expect(vaadinCheckboxGroup.value).to.not.include('1');
+    });
+
+    it('should create new array instance for checkbox group value when checkbox dynamically added', () => {
+      const value = vaadinCheckboxGroup.value;
+      const checkbox = document.createElement('vaadin-checkbox');
+      checkbox.value = 'new';
+      checkbox.checked = true;
+      vaadinCheckboxGroup.appendChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.not.equal(value);
+    });
+
+    it('should create new array instance for checkbox group value when checkbox dynamically removed', () => {
+      const value = vaadinCheckboxGroup.value;
+      const checkbox = vaadinCheckboxList[0];
+      checkbox.checked = true;
+      vaadinCheckboxGroup.removeChild(checkbox);
+      vaadinCheckboxGroup._observer.flush();
+      expect(vaadinCheckboxGroup.value).to.not.equal(value);
     });
 
     it('should not change checkbox group value if a removed checkbox is checked', () => {
@@ -229,5 +262,60 @@
 
   });
 
+  describe('vaadin-checkbox-group value array mutation methods', () => {
+
+    let bind, vaadinCheckboxGroup, vaadinCheckboxList;
+
+    beforeEach(() => {
+      bind = fixture('bind');
+      vaadinCheckboxGroup = bind.$.group;
+      vaadinCheckboxList = vaadinCheckboxGroup.querySelectorAll('vaadin-checkbox');
+      vaadinCheckboxGroup._observer.flush();
+    });
+
+    it('should notify the value changes from inside', () => {
+      expect(bind.value).to.be.array;
+      expect(bind.value.length).to.equal(0);
+
+      vaadinCheckboxList[0].checked = true;
+
+      expect(bind.value.length).to.equal(1);
+      expect(bind.value[0]).to.equal('a');
+    });
+
+    it('should update checkboxes when a checkbox value is updated using push', () => {
+      bind.push('value', 'a');
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+    });
+
+    it('should update checkboxes when a checkbox value is updated using pop', () => {
+      bind.value = ['a', 'b'];
+      bind.pop('value');
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+      expect(vaadinCheckboxList[1].checked).to.be.false;
+    });
+
+    it('should update checkboxes when a checkbox value is updated using push', () => {
+      bind.value = ['b'];
+      bind.unshift('value', 'a');
+      expect(vaadinCheckboxList[1].checked).to.be.true;
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+    });
+
+    it('should update checkboxes when a checkbox value is updated using unshift', () => {
+      bind.value = ['a', 'b'];
+      bind.shift('value');
+      expect(vaadinCheckboxList[0].checked).to.be.false;
+      expect(vaadinCheckboxList[1].checked).to.be.true;
+    });
+
+    it('should update checkboxes when a checkbox value is updated using splice', () => {
+      bind.value = ['a', 'b'];
+      bind.splice('value', 1, 1, 'c');
+      expect(vaadinCheckboxList[0].checked).to.be.true;
+      expect(vaadinCheckboxList[1].checked).to.be.false;
+      expect(vaadinCheckboxList[2].checked).to.be.true;
+    });
+  });
 </script>
 </body>
