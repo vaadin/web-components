@@ -64,7 +64,7 @@
       describe('notifyResize', () => {
         let grid, scroller;
 
-        window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
+        before(done => ensureDefined('test-component', done));
 
         beforeEach(done => {
           grid = fixture('default').$.grid;

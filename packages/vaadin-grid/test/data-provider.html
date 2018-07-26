@@ -114,7 +114,7 @@
       let container, grid;
       const loadDebounceTime = 100;
 
-      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
+      before(done => ensureDefined('x-grid', done));
 
       beforeEach(() => {
 

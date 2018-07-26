@@ -13,6 +13,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   window.isV2 = () => window['Polymer'] && window['Polymer']['version'] && window['Polymer']['version'].indexOf('2') === 0;
 
+  window.ensureDefined = (id, cb) => {
+    if (customElements.get(id)) {
+      cb();
+    } else {
+      customElements.whenDefined(id).then(() => cb());
+    }
+  };
+
   window.flushGrid = (grid) => {
     grid._observer.flush();
     if (grid._debounceScrolling) {

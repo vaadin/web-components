@@ -53,6 +53,7 @@
     "flushGrid": false,
     "fire": false,
     "isV2": false,
+    "ensureDefined": false,
     "getContainerCell": false,
     "footerTrap": false,
     "wheel": false
