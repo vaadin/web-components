@@ -1,4 +1,4 @@
-<dom-module id="tabs-advanced-demos">
+<dom-module id="tabs-integration-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -6,8 +6,8 @@
       }
     </style>
 
-    <h3>Integration with iron-pages</h3>
-    <vaadin-demo-snippet id='tabs-advanced-demos-integration-iron-pages'>
+    <h3>Content switcher with iron-pages</h3>
+    <vaadin-demo-snippet id='tabs-integration-demos-integration-iron-pages'>
       <template preserve-content>
         <style>
           page {
@@ -33,8 +33,8 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Wrapping 3rd Party Custom Items</h3>
-    <vaadin-demo-snippet id='tabs-advanced-demos-wrapping-custom-items'>
+    <h3>3rd Party Custom Items</h3>
+    <vaadin-demo-snippet id='tabs-integration-demos-wrapping-custom-items'>
       <template preserve-content>
         <style>
           page {
@@ -46,31 +46,31 @@
         <vaadin-tabs>
           <vaadin-tab>
             <my-custom-item>
-              <img src="https://api.adorable.io/avatars/100/peter.png" width="100" height="100" alt="" slot="icon"></img>
-              Peter
-              <span slot="badge">cool guy</span>
+              <img src="https://api.adorable.io/avatars/100/Katie.png" width="100" height="100" alt="" slot="icon"></img>
+              Katie
+              <span slot="badge">cool</span>
             </my-custom-item>
           </vaadin-tab>
           <vaadin-tab>
             <my-custom-item>
               <img src="https://api.adorable.io/avatars/100/John.png" width="100" height="100" alt="" slot="icon"></img>
               John
-              <span slot="badge">smartass</span>
+              <span slot="badge">friendly</span>
             </my-custom-item>
           </vaadin-tab>
           <vaadin-tab aria-label="Settings">
-            <iron-icon icon="vaadin:cog"></iron-icon>
+            <iron-icon icon="lumo:cog"></iron-icon>
           </vaadin-tab>
         </vaadin-tabs>
       </template>
     </vaadin-demo-snippet>
   </template>
   <script>
-    class TabsAdvancedDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
+    class TabsIntegrationDemos extends DemoReadyEventEmitter(TabsDemo(Polymer.Element)) {
       static get is() {
-        return 'tabs-advanced-demos';
+        return 'tabs-integration-demos';
       }
     }
-    customElements.define(TabsAdvancedDemos.is, TabsAdvancedDemos);
+    customElements.define(TabsIntegrationDemos.is, TabsIntegrationDemos);
   </script>
 </dom-module>
