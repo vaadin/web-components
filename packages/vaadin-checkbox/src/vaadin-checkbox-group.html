@@ -108,8 +108,8 @@ This program is available under Apache License Version 2.0, available at https:/
             },
 
             /**
-            * String used for the label element.
-            */
+             * String used for the label element.
+             */
             label: {
               type: String,
               value: '',
@@ -118,6 +118,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
             /**
              * Value of the checkbox group.
+             * Note: toggling the checkboxes modifies the value by creating new
+             * array each time, to override Polymer dirty-checking for arrays.
+             * You can still use Polymer array mutation methods to update the value.
              */
             value: {
               type: Array,
@@ -156,7 +159,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get observers() {
           return [
-            '_valueChanged(value, value.splices)'
+            '_updateValue(value, value.splices)'
           ];
         }
 
@@ -170,9 +173,10 @@ This program is available under Apache License Version 2.0, available at https:/
             this._changeSelectedCheckbox(e.target);
           };
 
-          this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            const addedCheckboxes = this._filterCheckboxes(info.addedNodes);
 
-            this._filterCheckboxes(info.addedNodes).forEach(checkbox => {
+            addedCheckboxes.forEach(checkbox => {
               checkbox.addEventListener('checked-changed', checkedChangedListener);
               if (this.disabled) {
                 checkbox.disabled = true;
@@ -189,9 +193,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             });
 
-            const checkboxWithoutValue = this._filterCheckboxes(info.addedNodes).filter(checkbox => !checkbox
-              .getAttribute('value'));
-            if (checkboxWithoutValue.length) {
+            if (addedCheckboxes.some(checkbox => !checkbox.hasAttribute('value'))) {
               console.warn('Please add value attribute to all checkboxes in checkbox group');
             }
           });
@@ -230,12 +232,16 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _addCheckboxToValue(value) {
-          this.push('value', value);
+          const update = this.value.slice(0);
+          update.push(value);
+          this.value = update;
         }
 
         _removeCheckboxFromValue(value) {
-          const index = this.value.indexOf(value);
-          this.splice('value', index, 1);
+          const update = this.value.slice(0);
+          const index = update.indexOf(value);
+          update.splice(index, 1);
+          this.value = update;
         }
 
         _changeSelectedCheckbox(checkbox) {
@@ -248,22 +254,22 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             this._removeCheckboxFromValue(checkbox.value);
           }
-
         }
 
-        _valueChanged(newV, oldV) {
-          // setting initial value to empty string, skip validation
-          if (newV.length === 0 && oldV === undefined) {
+        _updateValue(value, splices) {
+          // setting initial value to empty array, skip validation
+          if (value.length === 0 && this._oldValue === undefined) {
             return;
           }
+          this._oldValue = value;
           // set a flag to avoid updating loop
           this._updatingValue = true;
           // reflect the value array to checkboxes
           this._checkboxes.forEach(checkbox => {
-            checkbox.checked = newV.indexOf(checkbox.value) > -1;
+            checkbox.checked = value.indexOf(checkbox.value) > -1;
           });
           this._updatingValue = false;
-    
+
           this.validate();
         }
 
@@ -278,7 +284,6 @@ This program is available under Apache License Version 2.0, available at https:/
         _getErrorMessageAriaHidden(invalid, errorMessage) {
           return (!errorMessage || !invalid).toString();
         }
-
       }
 
       customElements.define(CheckboxGroupElement.is, CheckboxGroupElement);
