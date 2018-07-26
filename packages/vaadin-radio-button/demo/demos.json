@@ -2,33 +2,44 @@
   "name": "Vaadin Radio Button",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Radio Button",
     "url": "radio-button-basic-demos",
     "src": "radio-button-basic-demos.html",
     "meta": {
-      "title": "vaadin-radio-button Basic Examples",
+      "title": "vaadin-radio-button Examples",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Vaadin Radio Group",
+    "name": "Radio Group",
     "url": "radio-group-demos",
     "src": "radio-group-demos.html",
     "meta": {
       "title": "vaadin-radio-group Examples",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Lumo Theme Variations",
+    "name": "Validation",
+    "url": "radio-group-validation-demos",
+    "src": "radio-group-validation-demos.html",
+    "meta": {
+      "title": "vaadin-radio-group Validation Examples",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Theme Variants",
     "url": "radio-group-lumo-theme-demos",
     "src": "radio-group-lumo-theme-demos.html",
     "meta": {
-      "title": "vaadin-radio-button Lumo Theme Variations",
+      "title": "vaadin-radio-button Theme Variants",
       "description": "",
       "image": ""
     }
