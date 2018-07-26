@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/templatize.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <dom-module id="vaadin-notification-container">
   <template>
@@ -262,22 +263,60 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * **NOTE:** The renderer callback can be called multiple times with the previous content.
              */
-            renderer: {
-              type: Function,
-              observer: '_rendererChanged'
-            },
+            renderer: Function,
 
             /**
              * The template of the notification card content.
              */
-            _template: Object
+            _notificationTemplate: Object
           };
         }
 
         static get observers() {
           return [
-            '_durationChanged(duration, opened)'
+            '_durationChanged(duration, opened)',
+            '_templateOrRendererChanged(_notificationTemplate, renderer)'
           ];
+        }
+
+        ready() {
+          super.ready();
+
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            this._setTemplateFromNodes(info.addedNodes);
+          });
+        }
+
+        _setTemplateFromNodes(nodes) {
+          this._notificationTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._notificationTemplate;
+        }
+
+        _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
+          if (template !== oldTemplate) {
+            this._notificationTemplate = undefined;
+          } else if (renderer !== oldRenderer) {
+            this.renderer = undefined;
+          }
+        }
+
+        _templateOrRendererChanged(template, renderer) {
+          if (template && renderer) {
+            this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
+            throw new Error('You should only use either a renderer or a template for dialog content');
+          }
+
+          this._oldTemplate = template;
+          this._oldRenderer = renderer;
+
+          if (renderer) {
+            this._card = this.$['vaadin-notification-card'];
+
+            while (this._card.firstChild) {
+              this._card.removeChild(this._card.firstChild);
+            }
+
+            this.renderer(this._card, this);
+          }
         }
 
         /**
@@ -316,14 +355,14 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _ensureTemplatized() {
-          this._template = this.querySelector('template') || this._template;
+          this._notificationTemplate = this.querySelector('template') || this._notificationTemplate;
 
-          if (!this._template) {
+          if (!this._notificationTemplate) {
             return;
           }
 
-          if (!this._template._Templatizer) {
-            this._template._Templatizer = Polymer.Templatize.templatize(this._template, this, {
+          if (!this._notificationTemplate._Templatizer) {
+            this._notificationTemplate._Templatizer = Polymer.Templatize.templatize(this._notificationTemplate, this, {
               forwardHostProp: function(prop, value) {
                 if (this._instance) {
                   this._instance.forwardHostProp(prop, value);
@@ -331,9 +370,9 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             });
           }
-          this._instance = new this._template._Templatizer({});
+          this._instance = new this._notificationTemplate._Templatizer({});
 
-          const templateRoot = this._template.getRootNode();
+          const templateRoot = this._notificationTemplate.getRootNode();
           const isScoped = templateRoot !== document;
           this._card = this.$['vaadin-notification-card'];
           this._cardContent = this._card.shadowRoot.querySelector('[part~="content"]');
@@ -382,20 +421,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this._card.removeAttribute('opening');
           };
           this._card.addEventListener('animationend', listener);
-        }
-
-        _rendererChanged(renderer) {
-          this._card = this.$['vaadin-notification-card'];
-
-          while (this._card.firstChild) {
-            this._card.removeChild(this._card.firstChild);
-          }
-
-          if (renderer) {
-            this.renderer(this._card, this);
-          } else {
-            this._ensureTemplatized();
-          }
         }
 
         _appendNotificationCard() {
