@@ -106,6 +106,16 @@
           expect(menu.renderer.getCall(0).args[2].detail).to.deep.equal({foo: 'one'});
           expect(menu.renderer.getCall(1).args[2].detail).to.deep.equal({foo: 'two'});
         });
+
+        it('should remove template when added after renderer', () => {
+          menu.renderer = () => {};
+          const template = document.createElement('template');
+          expect(() => {
+            menu.appendChild(template);
+            menu._observer.flush();
+          }).to.throw(Error);
+          expect(menu._contentTemplate).to.be.not.ok;
+        });
       });
 
       describe('with template', () => {
@@ -125,6 +135,12 @@
         it('should throw an error when setting a renderer if there is already a template', () => {
           menu._observer.flush();
           expect(() => menu.renderer = () => {}).to.throw(Error);
+        });
+
+        it('should remove renderer when added after template', () => {
+          menu._observer.flush();
+          expect(() => menu.renderer = () => {}).to.throw(Error);
+          expect(menu.renderer).to.be.not.ok;
         });
       });
     });
