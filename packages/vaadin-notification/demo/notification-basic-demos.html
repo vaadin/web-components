@@ -9,25 +9,29 @@
     <h3>Simple Notification</h3>
     <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
       <template preserve-content>
-        <dom-bind id="bind-elm">
-          <template>
-            <vaadin-button on-click="_openNotification">Open notification</vaadin-button>
-            <vaadin-notification duration="0" id="notification">
-              <template>
-                <div>
-                  <b>Notice</b><br>
-                  This notification has HTML content
-                </div>
-              </template>
-            </vaadin-notification>
-          </template>
-        </dom-bind>
+        <vaadin-button>Open notification</vaadin-button>
+        <vaadin-notification duration="0"></vaadin-notification>
         <script>
           window.addDemoReadyListener('#notification-basic-demos-simple-notification', function(document) {
-            const domBind = document.querySelector('#bind-elm');
-            const notification = document.querySelector('#notification');
-            domBind._openNotification = function() {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
               notification.open();
+            });
+
+            notification.renderer = function(root) {
+              const container = window.document.createElement('div');
+              const boldText = window.document.createElement('b');
+              boldText.textContent = 'Notice';
+
+              const br = window.document.createElement('br');
+              const plainText = window.document.createTextNode('The notification has HTML content');
+
+              container.appendChild(boldText);
+              container.appendChild(br);
+              container.appendChild(plainText);
+
+              root.appendChild(container);
             };
           });
         </script>
@@ -37,46 +41,19 @@
     <h3>Position</h3>
     <vaadin-demo-snippet id="notification-basic-demos-position-notification">
       <template preserve-content>
-        <dom-bind id="bind-elm">
-          <template>
-            <vaadin-button on-click="_openNotification">Open notification in the top right corner</vaadin-button>
-            <vaadin-notification duration="4000" position="top-end" id="notification">
-              <template>
-                This notification is shown in the top right corner
-              </template>
-            </vaadin-notification>
-          </template>
-        </dom-bind>
+        <vaadin-button>Open notification in the top right corner</vaadin-button>
+        <vaadin-notification duration="4000" position="top-end"></vaadin-notification>
         <script>
           window.addDemoReadyListener('#notification-basic-demos-position-notification', function(document) {
-            const domBind = document.querySelector('#bind-elm');
-            const notification = document.querySelector('#notification');
-            domBind._openNotification = function() {
-              notification.open();
-            };
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Content Renderer Function</h3>
-    <vaadin-demo-snippet id="notification-basic-demos-renderer-notification">
-      <template preserve-content>
-        <vaadin-button on-click="_openNotification">Open notification</vaadin-button>
-        <vaadin-notification duration="0" id="notification"></vaadin-notification>
-        <script>
-          window.addDemoReadyListener('#notification-basic-demos-renderer-notification', function(document) {
+            const btn = document.querySelector('vaadin-button');
             const notification = document.querySelector('vaadin-notification');
-
-            const paragraph = window.document.createElement('p');
-            paragraph.innerText = 'This content was generated with renderer';
-            notification.renderer = function(root) {
-              root.appendChild(paragraph);
-            };
-
-            document.querySelector('vaadin-button').addEventListener('click', function() {
+            btn.addEventListener('click', function() {
               notification.open();
             });
+
+            notification.renderer = function(root) {
+              root.textContent = 'This notification is shown in the top right corner';
+            };
           });
         </script>
       </template>
@@ -86,26 +63,28 @@
     <p>Use a text button to allow users take action on a process performed by the app.</p>
     <vaadin-demo-snippet id="notification-basic-demos-interaction">
       <template preserve-content>
-        <dom-bind id="bind-elm">
-          <template>
-            <vaadin-button on-click="_open">Open Notification</button>
-            <vaadin-notification id="noti-elm">
-              <template>
-                Can't send message.
-                <vaadin-button on-click="_close" theme="tertiary">Retry</vaadin-button>
-              </template>
-            </vaadin-notification>
-          </template>
-        </dom-bind>
+        <vaadin-button>Open Notification</button>
+        <vaadin-notification></vaadin-notification>
         <script>
           window.addDemoReadyListener('#notification-basic-demos-interaction', function(document) {
-            const domBind = document.querySelector('#bind-elm');
-            const notify = document.querySelector('#noti-elm');
-            domBind._open = function() {
-              notify.open();
-            };
-            domBind._close = function() {
-              notify.close();
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+
+            notification.renderer = function(root, owner) {
+              const plainText = window.document.createTextNode('Can\'t send message.');
+              const retryBtn = window.document.createElement('vaadin-button');
+
+              retryBtn.innerText = 'Retry';
+              retryBtn.setAttribute('theme', 'tertiary');
+              retryBtn.addEventListener('click', function() {
+                owner.close();
+              });
+
+              root.appendChild(plainText);
+              root.appendChild(retryBtn);
             };
           });
         </script>

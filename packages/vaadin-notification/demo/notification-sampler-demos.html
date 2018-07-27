@@ -76,10 +76,13 @@
               },
 
               _show: function() {
-                const template = window.document.createElement('template');
-                template.innerHTML = this.counter++ + ' ' + this.text;
+                const msg = this.counter++ + ' ' + this.text;
+
                 const notify = window.document.createElement('vaadin-notification');
-                notify.appendChild(template);
+                notify.renderer = function(root) {
+                  root.textContent = msg;
+                };
+
                 window.document.body.appendChild(notify);
 
                 notify.position = this.position;
