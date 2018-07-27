@@ -7,7 +7,9 @@
   "description": "vaadin-radio-button",
   "main": [
     "vaadin-radio-button.html",
-    "vaadin-radio-group.html"
+    "vaadin-radio-group.html",
+    "theme/material/vaadin-radio-button.html",
+    "theme/material/vaadin-radio-group.html"
   ],
   "keywords": [
     "Vaadin",
@@ -39,7 +41,7 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-form": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
