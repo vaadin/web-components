@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-list-box",
-  "main": "vaadin-list-box.html",
+  "main": [
+    "vaadin-list-box.html",
+    "theme/material/vaadin-list-box.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-list-box",
@@ -25,7 +28,7 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
-    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta1",
+    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta2",
     "vaadin-list-mixin": "vaadin/vaadin-list-mixin#^2.1.0-beta1",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
