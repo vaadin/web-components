@@ -13,7 +13,10 @@
     "split-panel",
     "split-layout"
   ],
-  "main": "vaadin-split-layout.html",
+  "main": [
+    "vaadin-split-layout.html",
+    "theme/material/vaadin-split-layout.html"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
