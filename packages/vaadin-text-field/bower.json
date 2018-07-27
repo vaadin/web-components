@@ -8,7 +8,10 @@
   "main": [
     "vaadin-text-field.html",
     "vaadin-password-field.html",
-    "vaadin-text-area.html"
+    "vaadin-text-area.html",
+    "theme/material/vaadin-password-field.html",
+    "theme/material/vaadin-text-area.html",
+    "theme/material/vaadin-text-field.html"
   ],
   "keywords": [
     "Vaadin",
@@ -35,7 +38,7 @@
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2"
   },
   "dependencies": {
     "polymer": "^2.0.0",
