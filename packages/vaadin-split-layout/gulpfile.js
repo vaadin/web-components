@@ -5,7 +5,6 @@ const eslint = require('gulp-eslint');
 const htmlExtract = require('gulp-html-extract');
 const lec = require('gulp-line-ending-corrector');
 const stylelint = require('gulp-stylelint');
-const wct = require('web-component-tester').test;
 const find = require('gulp-find');
 const replace = require('gulp-replace');
 const expect = require('gulp-expect-file');
@@ -58,16 +57,6 @@ gulp.task('lint:css', function() {
         {formatter: 'string', console: true}
       ]
     }));
-});
-
-gulp.task('test', ['lint'], function(done) {
-  wct({
-    plugins: {
-      local: {
-        browsers: ['chrome']
-      }
-    }
-  }, done);
 });
 
 gulp.task('version:check', function() {
