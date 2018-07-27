@@ -8,7 +8,7 @@
 <!-- Example: Overlay stays hidden. -->
 
 ### Live Demo
-<!-- Example: https://jsfiddle.net/6r5htd05/62/ -->
+<!-- The template, click "Remix This" to edit it: https://glitch.com/edit/#!/capricious-bug -->
 
 ### Steps to reproduce
 <!-- Example
