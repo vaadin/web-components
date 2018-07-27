@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-split-layout",
-  "version": "4.1.0-beta1",
+  "version": "4.1.0-beta2",
   "description": "Polymer element for partitioning a layout into resizeable areas",
   "main": "vaadin-split-layout.html",
   "repository": "vaadin/vaadin-split-layout",
