@@ -8,7 +8,7 @@
 <!-- Example: Overlay stays hidden. -->
 
 ### Live Demo
-<!-- Example: https://jsbin.com/zayafalamu/edit?html,output -->
+<!-- The template, click "Remix This" to edit it: https://glitch.com/edit/#!/desert-duckling -->
 
 ### Steps to reproduce
 <!-- Example
