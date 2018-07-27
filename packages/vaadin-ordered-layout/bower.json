@@ -8,7 +8,9 @@
   "main": [
     "vaadin-horizontal-layout.html",
     "vaadin-vertical-layout.html",
-    "imports.html"
+    "imports.html",
+    "theme/material/vaadin-horizontal-layout.html",
+    "theme/material/vaadin-vertical-layout.html"
   ],
   "keywords": [
     "Vaadin",
