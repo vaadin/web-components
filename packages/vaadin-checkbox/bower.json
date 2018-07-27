@@ -5,7 +5,11 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-checkbox",
-  "main": "vaadin-checkbox.html",
+  "main": [
+    "vaadin-checkbox.html",
+    "theme/material/vaadin-checkbox-group.html",
+    "theme/material/vaadin-checkbox.html"
+  ],
   "keywords": [
     "Vaadin",
     "checkbox",
@@ -38,6 +42,6 @@
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
     "iron-form": "^2.0.1",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1"
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2"
   }
 }
