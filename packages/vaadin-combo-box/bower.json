@@ -14,7 +14,9 @@
   ],
   "main": [
     "vaadin-combo-box.html",
-    "vaadin-combo-box-light.html"
+    "vaadin-combo-box-light.html",
+    "theme/material/vaadin-combo-box.html",
+    "theme/material/vaadin-combo-box-light.html"
   ],
   "repository": {
     "type": "git",
