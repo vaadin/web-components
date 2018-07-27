@@ -7,7 +7,9 @@
   "description": "vaadin-form-layout",
   "main": [
     "vaadin-form-layout.html",
-    "vaadin-form-item.html"
+    "vaadin-form-item.html",
+    "theme/material/vaadin-form-item.html",
+    "theme/material/vaadin-form-layout.html"
   ],
   "keywords": [
     "Vaadin",
@@ -38,7 +40,7 @@
     "iron-demo-helpers": "^2.0.0",
     "paper-input": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2",
     "webcomponentsjs": "^1.0.1",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
