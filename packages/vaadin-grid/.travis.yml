@@ -3,6 +3,16 @@ dist: trusty
 language: node_js
 node_js: 8.11
 
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - "sudo apt-get -qq update"
+  - "sudo apt-get install -y matchbox-window-manager"
+
+install:
+  - matchbox-window-manager&
+  - sleep 5
+
 cache:
   directories:
     - node_modules
@@ -42,7 +52,7 @@ script:
           wct --env saucelabs:$TEST_SUITE;
         fi;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct;
+        wct;
       fi &&
       if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
         wct --env saucelabs-cron;
@@ -56,7 +66,7 @@ script:
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         wct --npm --env saucelabs:$TEST_SUITE;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct --npm;
+        wct --npm;
       fi;
     fi
 
