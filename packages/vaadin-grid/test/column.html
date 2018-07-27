@@ -54,7 +54,7 @@
     describe('column', () => {
       let container, column, grid;
 
-      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
+      before(done => ensureDefined('x-grid', done));
 
       beforeEach(() => {
         container = fixture('grid');

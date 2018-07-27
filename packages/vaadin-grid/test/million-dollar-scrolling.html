@@ -91,7 +91,7 @@
       let container, grid;
       this.timeout(300000);
 
-      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
+      before(done => ensureDefined('x-grid', done));
 
       [100, 10000, 100000, 1000000].forEach((size) => {
         describe(size + ' items', () => {

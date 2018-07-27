@@ -73,7 +73,7 @@
       let filter;
       let filterWrapper;
 
-      window.HTMLImports && HTMLImports.whenReady && before(done => HTMLImports.whenReady(done));
+      before(done => ensureDefined('filter-wrapper', done));
 
       beforeEach(() => {
 
