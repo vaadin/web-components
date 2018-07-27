@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-notification",
-  "main": "vaadin-notification.html",
+  "main": [
+    "vaadin-notification.html",
+    "theme/material/vaadin-notification.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-notification",
@@ -34,10 +37,10 @@
     "iron-demo-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
-    "vaadin-checkbox": "vaadin/vaadin-checkbox#^2.2.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
+    "vaadin-checkbox": "vaadin/vaadin-checkbox#^2.2.0-beta2",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
-    "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.1.0-beta1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1"
+    "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.1.0-beta2",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2"
   }
 }
