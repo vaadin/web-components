@@ -25,7 +25,7 @@
           Show overlay
         </vaadin-button>
         <script>
-          const overlay1 = document.querySelector('#overlay1');
+          var overlay1 = document.querySelector('#overlay1');
           overlay1.renderer = function(root) {
             root.textContent = 'Overlay Content';
           };
@@ -58,7 +58,7 @@
         </vaadin-button>
 
         <script>
-          const modelessOverlay = document.querySelector('#modeless-overlay');
+          var modelessOverlay = document.querySelector('#modeless-overlay');
           modelessOverlay.renderer = function(root) {
             root.textContent = 'This overlay won\'t disable the main content.';
           };
@@ -79,7 +79,7 @@
           Show overlay with backdrop and focus-trap
         </vaadin-button>
         <script>
-          const overlayFocusTrapBackdrop = document.querySelector('#overlay-focus-trap-backdrop');
+          var overlayFocusTrapBackdrop = document.querySelector('#overlay-focus-trap-backdrop');
           overlayFocusTrapBackdrop.renderer = function(root) {
             root.innerHTML =
             '<h3>Focus is trapped inside the content block</h3>' +
@@ -94,8 +94,8 @@
              '<vaadin-button>vaadin-button</vaadin-button>';
           };
           document.getElementById('button-focus-trap').addEventListener('click', function(event) {
-            const overlay = event.target.previousElementSibling;
-            const field = overlay.content.querySelector('vaadin-text-field');
+            var overlay = event.target.previousElementSibling;
+            var field = overlay.content.querySelector('vaadin-text-field');
 
             overlay.opened = true;
             field.focus();
@@ -115,7 +115,7 @@
           Show scrollable overlay
         </vaadin-button>
         <script>
-          const overlayScrollable = document.querySelector('#overlay-scrollable');
+          var overlayScrollable = document.querySelector('#overlay-scrollable');
           overlayScrollable.renderer = function(root) {
             root.innerHTML =
             '<p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? ' +
@@ -169,7 +169,7 @@
         <vaadin-button id="button-overlay-pointer">Show the overlay next to click</vaadin-button>
         <script>
           document.getElementById('button-overlay-pointer').addEventListener('click', function(event) {
-            const overlay = event.target.previousElementSibling;
+            var overlay = event.target.previousElementSibling;
             overlay.renderer = function(root) {
               root.textContent = 'I am next to the pointer';
             };
@@ -185,11 +185,11 @@
         <vaadin-button id="button-overlay-below">Show the overlay below me</vaadin-button>
         <script>
           document.getElementById('button-overlay-below').addEventListener('click', function(event) {
-            const overlay = event.target.previousElementSibling;
+            var overlay = event.target.previousElementSibling;
             overlay.renderer = function(root) {
               root.textContent = 'I am below the button';
             };
-            const rect = event.target.getBoundingClientRect();
+            var rect = event.target.getBoundingClientRect();
             overlay.style =
               'top: ' + rect.bottom + 'px;' +
               'left: ' + rect.left + 'px;' +
@@ -236,7 +236,7 @@
         <vaadin-button id="button-overlay-animations">Show the overlay with animations</vaadin-button>
         <script>
           document.getElementById('button-overlay-animations').addEventListener('click', function(event) {
-            const overlay = event.target.previousElementSibling;
+            var overlay = event.target.previousElementSibling;
             overlay.renderer = function(root) {
               root.textContent = 'I have an opening and closing animation';
             };
