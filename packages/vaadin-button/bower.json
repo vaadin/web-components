@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-button",
-  "main": "vaadin-button.html",
+  "main": [
+    "vaadin-button.html",
+    "theme/material/vaadin-button.html"
+  ],
   "keywords": [
     "Vaadin",
     "button",
