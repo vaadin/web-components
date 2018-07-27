@@ -20,48 +20,43 @@
     <h3>Show and Hide Overlay</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay id="overlay1">
-          <template>
-            Overlay Content
-          </template>
-        </vaadin-overlay>
-
+        <vaadin-overlay id="overlay1"></vaadin-overlay>
         <vaadin-button onclick="document.querySelector('#overlay1').opened = true">
           Show overlay
         </vaadin-button>
+        <script>
+          const overlay1 = document.querySelector('#overlay1');
+          overlay1.renderer = function(root) {
+            root.textContent = 'Overlay Content';
+          };
+        </script>
       </template>
     </demo-snippet>
 
     <h3>Modeless (Non-Modal) Overlay</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay modeless id="modeless-overlay">
-          <template>
-            This overlay won't disable the main content.
-          </template>
-        </vaadin-overlay>
+        <vaadin-overlay modeless id="modeless-overlay"></vaadin-overlay>
 
         <vaadin-button onclick="document.querySelector('#modeless-overlay').opened = !document.querySelector('#modeless-overlay').opened">
           Toggle the modeless overlay
         </vaadin-button>
+
+        <script>
+          const modelessOverlay = document.querySelector('#modeless-overlay');
+          modelessOverlay.renderer = function(root) {
+            root.textContent = 'This overlay won\'t disable the main content.';
+          };
+        </script>
       </template>
     </demo-snippet>
 
     <h3>Backdrop and Focus Trap</h3>
     <demo-snippet>
       <template>
-        <vaadin-overlay with-backdrop focus-trap style="max-width: 300px;">
+        <vaadin-overlay id="overlay-focus-trap-backdrop" with-backdrop focus-trap style="max-width: 300px;">
           <template>
-              <h3>Focus is trapped inside the content block</h3>
-              <button>native button</button>
-              <button tabindex="-1">button with tabindex="-1"</button>
-              <button disabled>disabled button</button>
-              <vaadin-text-field placeholder="programatically focused"></vaadin-text-field>
-              <button tabindex="2">button with tabindex="2"</button>
-              <button tabindex="0">button with tabindex="0"</button>
-              <button tabindex="1">button with tabindex="1"</button>
-              <input type="text" placeholder="native input"></input>
-              <vaadin-button>vaadin-button</vaadin-button>
+
           </template>
         </vaadin-overlay>
 
@@ -69,6 +64,20 @@
           Show overlay with backdrop and focus-trap
         </vaadin-button>
         <script>
+          const overlayFocusTrapBackdrop = document.querySelector('#overlay-focus-trap-backdrop');
+          overlayFocusTrapBackdrop.renderer = function(root) {
+            root.innerHTML =
+            '<h3>Focus is trapped inside the content block</h3>' +
+             '<button>native button</button>' +
+             '<button tabindex="-1">button with tabindex="-1"</button>' +
+             '<button disabled>disabled button</button>' +
+             '<vaadin-text-field placeholder="programatically focused"></vaadin-text-field>' +
+             '<button tabindex="2">button with tabindex="2"</button>' +
+             '<button tabindex="0">button with tabindex="0"</button>' +
+             '<button tabindex="1">button with tabindex="1"</button>' +
+             '<input type="text" placeholder="native input"></input>' +
+             '<vaadin-button>vaadin-button</vaadin-button>';
+          };
           document.getElementById('button-focus-trap').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
             const field = overlay.content.querySelector('vaadin-text-field');
@@ -85,54 +94,27 @@
       <template>
         <vaadin-overlay id="overlay-scrollable"
             style="max-width: 300px; max-height: 300px;">
-          <template>
-            <p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos totam nulla consequuntur? Iste!</p>
-            <p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo accusamus corrupti atque dolore corrupti?</p>
-            <p>Elit ipsam error fuga voluptatum voluptates distinctio quod? Porro provident laborum et soluta enim nam blanditiis provident nulla eum eaque eius vel earum. Officiis quaerat voluptas quidem perspiciatis omnis ipsa.</p>
-            <p>Adipisicing nisi autem quod blanditiis officia blanditiis, cum. Ratione eius quia explicabo molestias iste maiores quas quod. Quia doloribus quis eius laboriosam cupiditate maxime non dignissimos adipisci unde exercitationem deserunt.</p>
-            <p>Lorem voluptate impedit qui tenetur molestiae nemo. Repellat sit repellat ratione distinctio laborum aut et numquam repellendus et dolorem aliquam molestiae voluptatum voluptas, possimus! Quaerat animi odit consequatur tempore ea.</p>
-          </template>
         </vaadin-overlay>
 
         <vaadin-button onclick="document.getElementById('overlay-scrollable').opened = true">
           Show scrollable overlay
         </vaadin-button>
-      </template>
-    </demo-snippet>
-
-    <h3>Using renderer</h3>
-    <p>
-      By default, the overlay uses the content from its template using Polymer.Templatize.
-      Alternatively, the content can be provided using the renderer callback function.
-    </p>
-    <demo-snippet>
-      <template>
-        <vaadin-overlay id="overlay-renderer"></vaadin-overlay>
-
-        <vaadin-button onclick="document.getElementById('overlay-renderer').opened = true">
-          Show the overlay
-        </vaadin-button>
-
         <script>
-          const overlay = document.querySelector('#overlay-renderer');
-          overlay.renderer = function(root) {
-            // The renderer callback can be called several times, so we should not
-            // add extra content when it is already available
-            if (root.firstChild) {
-              return;
-            }
-
-            const paragraph = document.createElement('p');
-            const btn = document.createElement('vaadin-button');
-
-            paragraph.innerText = 'The content of this overlay was generated with renderer';
-            btn.innerText = 'Close';
-            btn.addEventListener('click', function() {
-              overlay.opened = false;
-            });
-
-            root.appendChild(paragraph);
-            root.appendChild(btn);
+          const overlayScrollable = document.querySelector('#overlay-scrollable');
+          overlayScrollable.renderer = function(root) {
+            root.innerHTML =
+            '<p>Lorem reiciendis doloribus dolor soluta laudantium. Ad delectus molestiae repudiandae repellendus perferendis? ' +
+            'Commodi sequi rem animi eligendi eveniet provident dolore deserunt aperiam. Repellat quos architecto eos ' +
+            'totam nulla consequuntur? Iste!</p><p>Lorem elit numquam commodi eligendi numquam fugiat? Mollitia ' +
+            'culpa architecto ea eius non culpa ullam culpa itaque! Ex voluptates quisquam atque suscipit expedita. Libero quo ' +
+            'accusamus corrupti atque dolore corrupti?</p><p>Elit ipsam error fuga voluptatum voluptates distinctio quod? ' +
+            'Porro provident laborum et soluta enim nam blanditiis provident nulla eum eaque eius vel earum. ' +
+            'Officiis quaerat voluptas quidem perspiciatis omnis ipsa.</p><p>Adipisicing nisi autem quod blanditiis ' +
+            'officia blanditiis, cum. Ratione eius quia explicabo molestias iste maiores quas quod. Quia doloribus ' +
+            'quis eius laboriosam cupiditate maxime non dignissimos adipisci unde exercitationem deserunt.</p>' +
+            '<p>Lorem voluptate impedit qui tenetur molestiae nemo. Repellat sit repellat ratione distinctio ' +
+            'laborum aut et numquam repellendus et dolorem aliquam molestiae voluptatum voluptas, possimus! ' +
+            'Quaerat animi odit consequatur tempore ea.</p>';
           };
         </script>
       </template>
@@ -168,13 +150,14 @@
     </ol>
     <demo-snippet>
       <template>
-        <vaadin-overlay>
-          <template>I am next to the pointer</template>
-        </vaadin-overlay>
+        <vaadin-overlay></vaadin-overlay>
         <vaadin-button id="button-overlay-pointer">Show the overlay next to click</vaadin-button>
         <script>
           document.getElementById('button-overlay-pointer').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
+            overlay.renderer = function(root) {
+              root.textContent = 'I am next to the pointer';
+            };
             overlay.style =
             'left: ' + event.clientX + 'px;' +
             'top: ' + event.clientY + 'px;' +
@@ -183,13 +166,14 @@
           });
         </script>
 
-        <vaadin-overlay>
-          <template>I am below the button</template>
-        </vaadin-overlay>
+        <vaadin-overlay></vaadin-overlay>
         <vaadin-button id="button-overlay-below">Show the overlay below me</vaadin-button>
         <script>
           document.getElementById('button-overlay-below').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
+            overlay.renderer = function(root) {
+              root.textContent = 'I am below the button';
+            };
             const rect = event.target.getBoundingClientRect();
             overlay.style =
               'top: ' + rect.bottom + 'px;' +
@@ -233,13 +217,14 @@
             </style>
           </template>
         </dom-module>
-        <vaadin-overlay class="animations">
-          <template>I have an opening and closing animation</template>
-        </vaadin-overlay>
+        <vaadin-overlay class="animations"></vaadin-overlay>
         <vaadin-button id="button-overlay-animations">Show the overlay with animations</vaadin-button>
         <script>
           document.getElementById('button-overlay-animations').addEventListener('click', function(event) {
             const overlay = event.target.previousElementSibling;
+            overlay.renderer = function(root) {
+              root.textContent = 'I have an opening and closing animation';
+            };
             overlay.opened = true;
           });
         </script>
@@ -275,7 +260,7 @@
       </template>
     </dom-module>
 
-    <h3>Styling the Content from the Parent Component Scope</h3>
+    <h3>Styling the Template Content from the Parent Component Scope</h3>
     <p>
       If the overlay is used inside a component, use the component styles
       for styling the overlay content.
@@ -328,7 +313,7 @@
       </template>
     </demo-snippet>
 
-    <h3>Styling the Content from the Global Scope</h3>
+    <h3>Styling the Template Content from the Global Scope</h3>
     <p>
       If the overlay is used in the global scope, then global styles can
       target the overlay content.
