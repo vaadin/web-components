@@ -38,6 +38,30 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Defining Content with Polymer Templates</h3>
+    <vaadin-demo-snippet id="notification-basic-demos-polymer-template">
+      <template preserve-content>
+        <vaadin-button>Open notification</vaadin-button>
+        <vaadin-notification duration="0" id="notification">
+          <template>
+            <div>
+              <b>Notice</b><br>
+              The content of this notification is defined with polymer template
+            </div>
+          </template>
+        </vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#notification-basic-demos-polymer-template', function(document) {
+            const btn = document.querySelector('vaadin-button');
+            const notification = document.querySelector('vaadin-notification');
+            btn.addEventListener('click', function() {
+              notification.open();
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
     <h3>Position</h3>
     <vaadin-demo-snippet id="notification-basic-demos-position-notification">
       <template preserve-content>
