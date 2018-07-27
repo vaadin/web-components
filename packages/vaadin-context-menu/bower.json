@@ -11,7 +11,10 @@
     "context",
     "menu"
   ],
-  "main": "vaadin-context-menu.html",
+  "main": [
+    "vaadin-context-menu.html",
+    "theme/material/vaadin-context-menu.html"
+  ],
   "license": "Apache-2.0",
   "ignore": [
     "**/.*",
@@ -25,7 +28,7 @@
     "polymer": "^2.0.0",
     "iron-media-query": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
-    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta1",
+    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta2",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.2"
@@ -35,10 +38,10 @@
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
     "test-fixture": "^3.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
     "vaadin-grid": "vaadin/vaadin-grid#^5.1.0-beta1",
-    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta1",
-    "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0-beta1",
+    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta2",
+    "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0-beta2",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
