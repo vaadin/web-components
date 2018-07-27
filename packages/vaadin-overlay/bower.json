@@ -7,7 +7,8 @@
   "description": "vaadin-overlay",
   "main": [
     "vaadin-overlay.html",
-    "src/vaadin-overlay.html"
+    "src/vaadin-overlay.html",
+    "theme/material/vaadin-overlay.html"
   ],
   "keywords": [
     "Vaadin",
@@ -37,8 +38,8 @@
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2",
     "iron-form": "^2.0.0",
     "iron-input": "^2.0.0",
     "paper-button": "^2.0.0",
