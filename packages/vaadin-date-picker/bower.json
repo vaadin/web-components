@@ -15,7 +15,9 @@
   ],
   "main": [
     "vaadin-date-picker.html",
-    "vaadin-date-picker-light.html"
+    "vaadin-date-picker-light.html",
+    "theme/material/vaadin-date-picker-light.html",
+    "theme/material/vaadin-date-picker.html"
   ],
   "repository": {
     "type": "git",
@@ -36,11 +38,11 @@
     "iron-media-query": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
     "polymer": "^2.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
     "vaadin-control-state-mixin": "vaadin/vaadin-control-state-mixin#^2.1.1",
-    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta1",
+    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta2",
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.2"
