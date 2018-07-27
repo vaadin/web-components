@@ -33,6 +33,21 @@
       </template>
     </demo-snippet>
 
+    <h3>Defining Content with Polymer Templates</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="overlay-template">
+          <template>
+            Overlay Content defined with Polymer Template
+          </template>
+        </vaadin-overlay>
+
+        <vaadin-button onclick="document.querySelector('#overlay-template').opened = true">
+          Toggle the overlay
+        </vaadin-button>
+      </template>
+    </demo-snippet>
+
     <h3>Modeless (Non-Modal) Overlay</h3>
     <demo-snippet>
       <template>
