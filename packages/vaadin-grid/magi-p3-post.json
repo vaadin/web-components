@@ -1,0 +1,9 @@
+{
+  "files": ["package.json"],
+  "from": [
+    "\"resolutions\": {"
+  ],
+  "to": [
+    "\"resolutions\": {\n\"@webcomponents/webcomponentsjs\": \"2.0.0\","
+  ]
+}
