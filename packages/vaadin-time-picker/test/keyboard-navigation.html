@@ -195,6 +195,11 @@
           arrowUp();
           expect(spy.callCount).to.eql(0);
         });
+
+        it('should open the overlay on arrow up', () => {
+          arrowUp();
+          expect(document.querySelector('vaadin-combo-box-overlay')).to.be.ok;
+        });
       });
 
       describe('with millisecond step', () => {
@@ -216,6 +221,12 @@
           timePicker.step = 0.9991;
           arrowUp();
           expect(timePicker.__inputElement.value).to.be.equal('00:02:00.000');
+        });
+
+        it('should not open the overlay on arrow up', () => {
+          timePicker.step = 0.5;
+          arrowUp();
+          expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
         });
       });
     });
