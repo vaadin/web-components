@@ -7,10 +7,19 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-grid-scroller.html">
+<link rel="import" href="vaadin-grid-a11y-mixin.html">
+<link rel="import" href="vaadin-grid-active-item-mixin.html">
+<link rel="import" href="vaadin-grid-array-data-provider-mixin.html">
+<link rel="import" href="vaadin-grid-cell-click-mixin.html">
+<link rel="import" href="vaadin-grid-column-resizing-mixin.html">
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
+<link rel="import" href="vaadin-grid-dynamic-columns-mixin.html">
+<link rel="import" href="vaadin-grid-filter-mixin.html">
+<link rel="import" href="vaadin-grid-row-details-mixin.html">
 <link rel="import" href="vaadin-grid-scroll-mixin.html">
+<link rel="import" href="vaadin-grid-selection-mixin.html">
+<link rel="import" href="vaadin-grid-sort-mixin.html">
 <link rel="import" href="vaadin-grid-keyboard-navigation-mixin.html">
-<link rel="import" href="vaadin-grid-combined-mixin.html">
 <link rel="import" href="vaadin-grid-column-reordering-mixin.html">
 <link rel="import" href="vaadin-grid-column.html">
 <link rel="import" href="vaadin-grid-outer-scroller.html">
@@ -211,10 +220,19 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * @memberof Vaadin
      * @mixes Vaadin.ThemableMixin
+     * @mixes Vaadin.Grid.A11yMixin
+     * @mixes Vaadin.Grid.ActiveItemMixin
+     * @mixes Vaadin.Grid.ArrayDataProviderMixin
+     * @mixes Vaadin.Grid.CellClickMixin
+     * @mixes Vaadin.Grid.ColumnResizingMixin
      * @mixes Vaadin.Grid.DataProviderMixin
+     * @mixes Vaadin.Grid.DynamicColumnsMixin
+     * @mixes Vaadin.Grid.FilterMixin
+     * @mixes Vaadin.Grid.RowDetailsMixin
      * @mixes Vaadin.Grid.ScrollMixin
+     * @mixes Vaadin.Grid.SelectionMixin
+     * @mixes Vaadin.Grid.SortMixin
      * @mixes Vaadin.Grid.KeyboardNavigationMixin
-     * @mixes Vaadin.Grid.CombinedMixin
      * @mixes Vaadin.Grid.ColumnReorderingMixin
      * @demo demo/index.html
      */
@@ -222,11 +240,20 @@ This program is available under Apache License Version 2.0, available at https:/
       Vaadin.ElementMixin(
         Vaadin.ThemableMixin(
           Vaadin.Grid.DataProviderMixin(
-            Vaadin.Grid.ScrollMixin(
-              Vaadin.Grid.KeyboardNavigationMixin(
-                Vaadin.Grid.CombinedMixin(
-                  Vaadin.Grid.ColumnReorderingMixin(
-                    Vaadin.Grid.ScrollerElement))))))) {
+            Vaadin.Grid.ArrayDataProviderMixin(
+              Vaadin.Grid.DynamicColumnsMixin(
+                Vaadin.Grid.CellClickMixin(
+                  Vaadin.Grid.ActiveItemMixin(
+                    Vaadin.Grid.ScrollMixin(
+                      Vaadin.Grid.SelectionMixin(
+                        Vaadin.Grid.SortMixin(
+                          Vaadin.Grid.RowDetailsMixin(
+                            Vaadin.Grid.KeyboardNavigationMixin(
+                              Vaadin.Grid.A11yMixin(
+                                Vaadin.Grid.FilterMixin(
+                                  Vaadin.Grid.ColumnReorderingMixin(
+                                    Vaadin.Grid.ColumnResizingMixin(
+                                      Vaadin.Grid.ScrollerElement)))))))))))))))) {
 
       static get is() {
         return 'vaadin-grid';
