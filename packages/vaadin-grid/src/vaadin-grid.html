@@ -10,7 +10,6 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-grid-a11y-mixin.html">
 <link rel="import" href="vaadin-grid-active-item-mixin.html">
 <link rel="import" href="vaadin-grid-array-data-provider-mixin.html">
-<link rel="import" href="vaadin-grid-cell-click-mixin.html">
 <link rel="import" href="vaadin-grid-column-resizing-mixin.html">
 <link rel="import" href="vaadin-grid-data-provider-mixin.html">
 <link rel="import" href="vaadin-grid-dynamic-columns-mixin.html">
@@ -223,7 +222,6 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.Grid.A11yMixin
      * @mixes Vaadin.Grid.ActiveItemMixin
      * @mixes Vaadin.Grid.ArrayDataProviderMixin
-     * @mixes Vaadin.Grid.CellClickMixin
      * @mixes Vaadin.Grid.ColumnResizingMixin
      * @mixes Vaadin.Grid.DataProviderMixin
      * @mixes Vaadin.Grid.DynamicColumnsMixin
@@ -242,18 +240,17 @@ This program is available under Apache License Version 2.0, available at https:/
           Vaadin.Grid.DataProviderMixin(
             Vaadin.Grid.ArrayDataProviderMixin(
               Vaadin.Grid.DynamicColumnsMixin(
-                Vaadin.Grid.CellClickMixin(
-                  Vaadin.Grid.ActiveItemMixin(
-                    Vaadin.Grid.ScrollMixin(
-                      Vaadin.Grid.SelectionMixin(
-                        Vaadin.Grid.SortMixin(
-                          Vaadin.Grid.RowDetailsMixin(
-                            Vaadin.Grid.KeyboardNavigationMixin(
-                              Vaadin.Grid.A11yMixin(
-                                Vaadin.Grid.FilterMixin(
-                                  Vaadin.Grid.ColumnReorderingMixin(
-                                    Vaadin.Grid.ColumnResizingMixin(
-                                      Vaadin.Grid.ScrollerElement)))))))))))))))) {
+                Vaadin.Grid.ActiveItemMixin(
+                  Vaadin.Grid.ScrollMixin(
+                    Vaadin.Grid.SelectionMixin(
+                      Vaadin.Grid.SortMixin(
+                        Vaadin.Grid.RowDetailsMixin(
+                          Vaadin.Grid.KeyboardNavigationMixin(
+                            Vaadin.Grid.A11yMixin(
+                              Vaadin.Grid.FilterMixin(
+                                Vaadin.Grid.ColumnReorderingMixin(
+                                  Vaadin.Grid.ColumnResizingMixin(
+                                    Vaadin.Grid.ScrollerElement))))))))))))))) {
 
       static get is() {
         return 'vaadin-grid';
