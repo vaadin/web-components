@@ -1,0 +1,119 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-chart tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../vaadin-chart.html">
+</head>
+
+<body>
+  <dom-module id="exporting-test">
+    <template>
+      <vaadin-chart id="mychart" additional-options='{ "exporting": { "enabled": true } }'>
+        <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
+      </vaadin-chart>
+    </template>
+
+    <script>
+      HTMLImports.whenReady(() => {
+        class ExportingTestElement extends Polymer.Element {
+          static get is() {
+            return 'exporting-test';
+          }
+        }
+
+        customElements.define(ExportingTestElement.is, ExportingTestElement);
+      });
+    </script>
+  </dom-module>
+  <exporting-test></exporting-test>
+
+  <script>
+    describe('Chart Export', function() {
+      var chart;
+      var chartContainer;
+
+
+      before(function(done) {
+        HTMLImports.whenReady(() => {
+          const el = document.querySelector('exporting-test');
+          chart = el.$.mychart;
+          chartContainer = chart.$.chart;
+          done();
+        });
+      });
+
+      it('should temporarily copy shadow styles to the body before export', function(done) {
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          let beforeExportCalled = false;
+          let styleCopiedToBody = false;
+
+          // Hook into Highcharts events
+          const originalFireEvent = Highcharts.fireEvent;
+          Highcharts.fireEvent = function(context, name) {
+            if (name === 'beforeExport') {
+              beforeExportCalled = true;
+            }
+            originalFireEvent(context, name);
+          };
+
+          // Track style movement into the document body
+          const observer = new MutationObserver(mutations => {
+            styleCopiedToBody = styleCopiedToBody ||
+                mutations.some(e => [].slice.call(e.addedNodes)
+                  .map(e => e.tagName.toLowerCase())
+                  .indexOf('style') >= 0);
+          });
+          observer.observe(document.body, {childList: true});
+
+          // Reveal exporting menu items
+          chartContainer.querySelector('.highcharts-contextbutton').onclick();
+
+          // Simulate a PNG export
+          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[1];
+          pngExportButton.onclick();
+          expect(beforeExportCalled).to.be.true;
+
+          setTimeout(() => {
+            expect(styleCopiedToBody).to.be.true;
+            done();
+          }, 200);
+        });
+      });
+
+      it('should remove shadow styles from body after export', function(done) {
+        Polymer.RenderStatus.beforeNextRender(this, () => {
+          let afterExportCalled = false;
+          let styleRemovedFromBody = false;
+
+          const originalFireEvent = Highcharts.fireEvent;
+          Highcharts.fireEvent = function(context, name) {
+            if (name === 'afterExport') {
+              afterExportCalled = true;
+            }
+            originalFireEvent(context, name);
+          };
+
+          const observer = new MutationObserver(mutations => {
+            styleRemovedFromBody = styleRemovedFromBody ||
+                mutations.some(e => [].slice.call(e.removedNodes)
+                  .map(e => e.tagName.toLowerCase())
+                  .indexOf('style') >= 0);
+          });
+          observer.observe(document.body, {childList: true});
+
+          chartContainer.querySelector('.highcharts-contextbutton').onclick();
+          const pngExportButton = chartContainer.querySelectorAll('.highcharts-menu-item')[1];
+          pngExportButton.onclick();
+          expect(afterExportCalled).to.be.true;
+
+          setTimeout(() => {
+            expect(styleRemovedFromBody).to.be.true;
+            done();
+          }, 200);
+        });
+      });
+    });
+  </script>
+</body>
