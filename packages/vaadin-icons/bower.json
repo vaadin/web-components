@@ -14,7 +14,9 @@
     "svg-icons",
     "vaadin-icons"
   ],
-  "main": "vaadin-icons.html",
+  "main": [
+    "vaadin-icons.html"
+  ],
   "moduleType": [],
   "license": "Apache-2.0",
   "ignore": [
@@ -33,7 +35,7 @@
     "iron-component-page": "^3.0.0",
     "iron-meta": "^2.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta1"
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2"
   },
   "variants": {
     "1.x": {
