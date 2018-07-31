@@ -97,6 +97,11 @@ Vaadin components use the Lumo theme by default.
 1. When in the `vaadin-confirm-dialog` directory, run `polymer test`
 
 
+### Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
+
+
 ## Following the coding style
 
 We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can check if your code is following our standards by running `gulp lint`, which will automatically lint all `.js` files as well as JavaScript snippets inside `.html` files.
