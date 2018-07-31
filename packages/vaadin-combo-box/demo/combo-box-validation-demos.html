@@ -19,16 +19,16 @@
 
         <script>
           window.addDemoReadyListener('#combo-box-validation-demos-using-as-a-form-field', function(document) {
-            var form = document.querySelector('iron-form');
-            var combobox = form.querySelector('vaadin-combo-box');
-            combobox.items = elements;
+            const form = document.querySelector('iron-form');
+            const comboBox = document.querySelector('vaadin-combo-box');
+            const button = document.querySelector('vaadin-button');
+            // NOTE: elements is an array of the form {'Carbon', ...}
+            comboBox.items = elements;
 
             form.addEventListener('iron-form-submit', function() {
               alert('Form submitted with name: ' + form.serializeForm().name);
               return false;
             });
-
-            var button = document.querySelector('vaadin-button');
             button.addEventListener('click', function() {
               form.submit();
             });

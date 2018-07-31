@@ -10,10 +10,10 @@
 
     <vaadin-demo-snippet id="combo-box-basic-combo-box">
       <template preserve-content>
-        <vaadin-combo-box id="demo1" label="Element"></vaadin-combo-box>
+        <vaadin-combo-box label="Element"></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-combo-box', function(document) {
-            document.querySelector('#demo1').items = ['Hydrogen', 'Helium', 'Lithium'];
+            document.querySelector('vaadin-combo-box').items = ['Hydrogen', 'Helium', 'Lithium'];
           });
         </script>
       </template>
@@ -24,16 +24,17 @@
 
     <vaadin-demo-snippet id="combo-box-basic-demos-configuring-the-combo-box">
       <template preserve-content>
-        <vaadin-combo-box id="demo2-1" label="Element"></vaadin-combo-box>
-        <vaadin-combo-box id="demo2-2" label="Disabled" disabled></vaadin-combo-box>
-        <vaadin-combo-box id="demo2-3" label="Read-only" value="Carbon" readonly></vaadin-combo-box>
+        <vaadin-combo-box label="Element"></vaadin-combo-box>
+        <vaadin-combo-box label="Disabled" disabled></vaadin-combo-box>
+        <vaadin-combo-box label="Read-only" readonly></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-configuring-the-combo-box', function(document) {
-            var combobox1 = document.querySelector('#demo2-1');
-            var combobox2 = document.querySelector('#demo2-2');
-            var combobox3 = document.querySelector('#demo2-3');
-            combobox1.items = combobox2.items = combobox3.items = elements;
-            combobox1.value = combobox2.value = combobox3.value = 'Carbon';
+            const combos = document.querySelectorAll('vaadin-combo-box');
+            combos.forEach(function(comboBox) {
+              // NOTE: elements is an array of the form {'Carbon', ...}
+              comboBox.items = elements;
+              comboBox.value = 'Carbon';
+            });
           });
         </script>
       </template>
@@ -44,27 +45,27 @@
     <p>Allow the user to set any value for the field in addition to selecting a value from the dropdown menu.</p>
     <vaadin-demo-snippet id="combo-box-basic-demos-allow-custom-values">
       <template preserve-content>
-        <vaadin-combo-box id="demo2" label="Element" allow-custom-value></vaadin-combo-box>
-        <p>Selected value: <span id="selected-value2"></span></p>
+        <vaadin-combo-box label="Element" allow-custom-value></vaadin-combo-box>
+        <p>Selected value: <span></span></p>
 
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-allow-custom-values', function(document) {
-            var combobox = document.querySelector('#demo2');
-            combobox.items = elements;
+            const comboBox = document.querySelector('vaadin-combo-box');
+            const span = document.querySelector('span');
 
-            combobox.addEventListener('value-changed', function() {
-              document.querySelector('#selected-value2').innerHTML = combobox.value;
+            comboBox.addEventListener('value-changed', function() {
+              span.textContent = comboBox.value;
             });
-
-            combobox.addEventListener('custom-value-set', function(e) {
+            comboBox.addEventListener('custom-value-set', function(e) {
               // Prevents setting the value property automatically.
               e.preventDefault();
 
-              combobox.value = e.detail;
-              document.querySelector('#selected-value2').innerHTML = 'custom value "' + e.detail + '" set!';
+              comboBox.value = e.detail;
+              span.textContent = 'custom value "' + e.detail + '" set!';
             });
 
-            combobox.value = 'Carbon';
+            comboBox.items = elements;
+            comboBox.value = 'Carbon';
           });
         </script>
 

@@ -6,11 +6,38 @@
       }
     </style>
 
+    <h3>Customizing Item</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-renderer">
+      <template preserve-content>
+        <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
+        </vaadin-combo-box>
+        <script>
+        window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
+          const comboBox = document.querySelector('vaadin-combo-box');
+          // NOTE: elementsJson is an Array of `{name: 'Hydrogen', symbol: 'H', number: 1}` Objects
+          comboBox.items = elementsJson;
+          comboBox.renderer = function(root, owner, model) {
+            // Avoid rendering if content was already rendered for the same item
+            if (root._rendered !== model.item.number) {
+              root.innerHTML =
+                '<b>' + model.item.name + ', <sub>' + model.item.number + '</sub>' + model.item.symbol + '</b>' +
+                '<br> array index: ' + model.index;
 
-    <h3>Customizing Item Template</h3>
+              root._rendered = model.item.number;
+            }
+          };
+        });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Customizing Item with Template</h3>
+    <p>
+      The content can be provided declaratively using templates
+    </p>
     <vaadin-demo-snippet id="combo-box-styling-demos-custom-item-template">
       <template preserve-content>
-        <vaadin-combo-box id="elements-template-box" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
+        <vaadin-combo-box label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
           <template>
             <b>[[item.name]], <sub>[[item.number]]</sub>[[item.symbol]]</b><br>
             array index: [[index]]
@@ -18,10 +45,7 @@
         </vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-custom-item-template', function(document) {
-            var elementsTemplateBox = document.querySelector('#elements-template-box');
-            // elementsJson is an Array of Objects. Item object format:
-            //   {name: 'Hydrogen', symbol: 'H', number: 1}
-            elementsTemplateBox.items = elementsJson;
+            document.querySelector('vaadin-combo-box').items = elementsJson;
           });
         </script>
       </template>
@@ -39,7 +63,7 @@
             padding: 2px;
           }
         </style>
-        <vaadin-combo-box-light id="demo2">
+        <vaadin-combo-box-light>
           <vaadin-text-field label="Custom Icons">
             <paper-icon-button slot="suffix" icon="remove-circle" class="clear-button"></paper-icon-button>
             <paper-icon-button slot="suffix" icon="search" class="toggle-button"></paper-icon-button>
@@ -47,39 +71,13 @@
         </vaadin-combo-box-light>
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-configuring-icons', function(document) {
-            var combobox = document.querySelector('#demo2');
-            // Array of String values.
-            combobox.items = elements;
+            // NOTE: elements is an array of the form {'Carbon', ...}
+            document.querySelector('vaadin-combo-box').items = elements;
           });
         </script>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Content Renderer Function</h3>
-    <p>
-      The content can be provided using the renderer callback function.
-    </p>
-    <vaadin-demo-snippet id="combo-box-styling-demos-renderer">
-      <template preserve-content>
-        <vaadin-combo-box id="elements-renderer" label="Element" item-label-path="name" item-value-path="symbol" style="width: 240px;">
-        </vaadin-combo-box>
-        <script>
-          window.addDemoReadyListener('#combo-box-styling-demos-renderer', function(document) {
-            const comboBox = document.querySelector('#elements-renderer');
-            comboBox.items = elementsJson;
-            comboBox.renderer = function(root, owner, model) {
-              // Avoid rendering if rendered content is already for the same item
-              if (root._rendered !== model.item.number) {
-                root.innerHTML = '<b>' + model.item.name
-                  + ', <sub>' + model.item.number + '</sub>'
-                  + model.item.symbol + '</b><br> array index: ' + model.index;
-                root._rendered = model.item.number;
-              }
-            };
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
 
     <h3>Replacing the Input</h3>
     <p>
@@ -88,16 +86,14 @@
     </p>
     <vaadin-demo-snippet id="combo-box-styling-demos-replacing-the-input-with-an-iron-input">
       <template preserve-content>
-        <vaadin-combo-box-light id="demo3" attr-for-value="bind-value">
+        <vaadin-combo-box-light attr-for-value="bind-value">
           <iron-input>
             <input>
           </iron-input>
         </vaadin-combo-box-light>
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-replacing-the-input-with-an-iron-input', function(document) {
-            var combobox = document.querySelector('#demo3');
-            // Array of String values.
-            combobox.items = elements;
+            document.querySelector('vaadin-combo-box').items = elements;
           });
         </script>
       </template>
@@ -107,7 +103,7 @@
     <h3>Using Focused and Selected Flags</h3>
     <vaadin-demo-snippet id="combo-box-styling-demos-focused-and-selected-flags">
       <template preserve-content>
-        <vaadin-combo-box id="elements-selected-box" label="Element" value="Carbon">
+        <vaadin-combo-box label="Element" value="Carbon">
           <template>
             <style>
               span[focused] {
@@ -124,8 +120,7 @@
 
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-focused-and-selected-flags', function(document) {
-            var elementsSelectedBox = document.querySelector('#elements-selected-box');
-            elementsSelectedBox.items = elements;
+            document.querySelector('vaadin-combo-box').items = elements;
           });
         </script>
       </template>

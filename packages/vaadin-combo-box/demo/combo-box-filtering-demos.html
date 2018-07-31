@@ -10,14 +10,26 @@
     <h3>Filtering with a Remote Data Source</h3>
     <vaadin-demo-snippet id="combo-box-filtering-demos-remote-data-source">
       <template preserve-content>
-        <dom-bind>
-          <template>
-            <iron-ajax url="https://api.stackexchange.com/2.2/search/advanced?body=vaadin-combo-box&tagged=vaadin&title=[[filter]]&site=stackoverflow" last-response="{{response}}" auto></iron-ajax>
 
-            <vaadin-combo-box filtered-items="[[response.items]]" filter="{{filter}}" item-value-path="question_id" item-label-path="title">
-            </vaadin-combo-box>
-          </template>
-        </dom-bind>
+        <iron-ajax auto></iron-ajax>
+        <vaadin-combo-box item-value-path="question_id" item-label-path="title"></vaadin-combo-box>
+
+        <script>
+          window.addDemoReadyListener('#combo-box-filtering-demos-remote-data-source', function(document) {
+            const API_URL = 'https://api.stackexchange.com/2.2/search/advanced?body=vaadin-combo-box&tagged=vaadin&site=stackoverflow&title=';
+            const ajax = document.querySelector('iron-ajax');
+            const comboBox = document.querySelector('vaadin-combo-box');
+
+            ajax.addEventListener('last-response-changed', function(e) {
+              comboBox.filteredItems = e.target.lastResponse.items;
+            });
+            comboBox.addEventListener('filter-changed', function(e) {
+              ajax.url = API_URL + comboBox.filter;
+            });
+
+            ajax.url = API_URL;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -26,33 +38,21 @@
     <p>Example uses case-sensitive starts-with filtering</p>
     <vaadin-demo-snippet id="combo-box-filtering-demos-custom-filtering">
       <template preserve-content>
-        <custom-filter></custom-filter>
-        <dom-module id="custom-filter">
-          <template preserve-content>
-            <vaadin-combo-box filtered-items="[[items]]" on-filter-changed="_filterChanged">
-            </vaadin-combo-box>
-          </template>
-          <script>
-            window.addDemoReadyListener('#combo-box-filtering-demos-custom-filtering', function(document) {
-              if (!customElements.get('custom-filter')) {
-                Polymer({
-                  is: 'custom-filter',
+        <vaadin-combo-box></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-filtering-demos-custom-filtering', function(document) {
+            const comboBox = document.querySelector('vaadin-combo-box');
 
-                  properties: {
-                    items: Array,
-                  },
+            // NOTE: elements is an array of the form {'Carbon', ...}
+            comboBox.filteredItems = elements;
 
-                  _filterChanged: function(e) {
-                    // case-sensitive starts-with filtering
-                    this.items = elements.filter(function(el) {
-                      return el.indexOf(e.detail.value) === 0;
-                    });
-                  }
-                });
-              }
+            comboBox.addEventListener('filter-changed', function(e) {
+              comboBox.filteredItems = elements.filter(function(item) {
+                return item.indexOf(e.detail.value) === 0;
+              });
             });
-          </script>
-        </dom-module>
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
