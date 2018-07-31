@@ -51,7 +51,7 @@ If the license is valid, it will be saved to the local storage of the browser an
 ```
 -->
 ```html
-<vaadin-cookie-consent 
+<vaadin-cookie-consent
   message="We are using cookies to make your visit here awesome!"
   dismiss="Accept"
   learn-more="Why?"
@@ -98,6 +98,11 @@ Vaadin components use the Lumo theme by default.
 ## Running tests from the command line
 
 1. When in the `vaadin-cookie-consent` directory, run `polymer test`
+
+
+### Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
 
 
 ## Following the coding style
