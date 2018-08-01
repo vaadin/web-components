@@ -293,10 +293,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           const stepResolution = this.__validDayDivisor(this.step) && this.step || 60;
 
-          if (!this.step || stepResolution >= 15 * 60) {
-            return;
-          }
-
           if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'down')) {
             this.__onArrowPressWithStep(-stepResolution);
           } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'up')) {
@@ -487,7 +483,7 @@ This program is available under Apache License Version 2.0, available at https:/
          * Focusable element used by vaadin-control-state-mixin
          */
         get focusElement() {
-          return this.__inputElement || this;
+          return this.__inputElement;
         }
 
         /**

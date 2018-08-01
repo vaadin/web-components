@@ -28,6 +28,21 @@
         expect(timePicker.step).to.be.equal(undefined);
       });
 
+      it('should have dropdown items if step is undefined', () => {
+        timePicker.step = undefined;
+        expect(timePicker.__dropdownItems.length).to.be.equal(24);
+      });
+
+      it('should have dropdown items if step is bigger or equal than 15min', () => {
+        timePicker.step = 15 * 60;
+        expect(timePicker.__dropdownItems.length).to.be.equal(96);
+      });
+
+      it('should not have dropdown items if step is lesser than 15min', () => {
+        timePicker.step = 15 * 60 - 1;
+        expect(timePicker.__dropdownItems.length).to.be.equal(0);
+      });
+
       it('should allow setting valid step property value', () => {
         timePicker.step = 0.5;
         expect(timePicker.step).to.be.equal(0.5);
