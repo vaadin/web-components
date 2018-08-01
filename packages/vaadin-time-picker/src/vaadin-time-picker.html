@@ -297,8 +297,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this.__onArrowPressWithStep(-stepResolution);
           } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'up')) {
             this.__onArrowPressWithStep(stepResolution);
-          } else if (Polymer.IronA11yKeysBehavior.keyboardEventMatchesKeys(e, 'esc')) {
-            this.__memoValue = this.value && this.__validateTime(this.i18n.parseTime(this.value));
           }
         }
 
