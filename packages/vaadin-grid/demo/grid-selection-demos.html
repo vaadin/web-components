@@ -26,9 +26,9 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Selection using Active Item Example" id="grid" size="200">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-selection-demos-selection-using-active-item', function(document) {
@@ -42,31 +42,29 @@
             const dataProvider = document.querySelector('x-data-provider');
             grid.dataProvider = dataProvider.dataProvider;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.name.first;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.last;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
           });
@@ -86,10 +84,10 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Selection using Active Item Example" id="grid" size="200">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
-          <vaadin-grid-column id="column4"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-selection-demos-selection-using-templates', function(document) {
@@ -98,24 +96,21 @@
             const dataProvider = document.querySelector('x-data-provider');
             grid.dataProvider = dataProvider.dataProvider;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
-            const column4 = document.querySelector('#column4');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.name.first;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.last;
             };
 
-            column4.renderer = function(root, column, model) {
+            columns[3].renderer = function(root, column, model) {
               root.innerHTML = '';
 
               const checkBox = window.document.createElement('vaadin-checkbox');
@@ -129,15 +124,15 @@
               root.appendChild(checkBox);
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
           });
@@ -205,9 +200,9 @@
 
         <vaadin-grid aria-label="Multi-Selection Example" size="200">
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-selection-demos-multi-selection-column', function(document) {
@@ -216,31 +211,29 @@
             const dataProvider = document.querySelector('x-array-data-provider');
             grid.items = dataProvider.items;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.name.first;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.last;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
           });
@@ -365,10 +358,10 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Space Key Action Example" size="200">
-          <vaadin-grid-column id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
-          <vaadin-grid-column id="column4"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-selection-demos-space-key-action-and-click-to-activate', function(document) {
@@ -377,16 +370,13 @@
             const dataProvider = document.querySelector('x-data-provider');
             grid.dataProvider = dataProvider.dataProvider;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
-            const column4 = document.querySelector('#column4');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = 'Space activates';
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBtn = window.document.createElement('button');
               alertBtn.textContent = 'Button';
@@ -399,7 +389,7 @@
               root.appendChild(textNode);
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div';
@@ -412,7 +402,7 @@
               root.appendChild(textNode);
             };
 
-            column4.renderer = function(root, column, model) {
+            columns[3].renderer = function(root, column, model) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div with preventDefault';
@@ -427,19 +417,19 @@
 
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = 'Only text contents';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'Button first child';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Div first child';
             };
 
-            column4.headerRenderer = function(root) {
+            columns[3].headerRenderer = function(root) {
               root.textContent = 'preventDefault for click';
             };
 

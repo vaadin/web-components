@@ -29,9 +29,9 @@
         <x-array-data-provider></x-array-data-provider>
         <vaadin-checkbox>Enable Multi-Sorting</vaadin-checkbox>
         <vaadin-grid aria-label="Sorting Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-sorting-filtering-demos-sorting', function(document) {
@@ -45,34 +45,32 @@
             const dataProvider = document.querySelector('x-array-data-provider');
             grid.items = dataProvider.items;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.name.first;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.last;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               const sorter = window.document.createElement('vaadin-grid-sorter');
               sorter.setAttribute('path', 'name.first');
               sorter.textContent = 'First Name';
               root.appendChild(sorter);
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               const sorter = window.document.createElement('vaadin-grid-sorter');
               sorter.setAttribute('path', 'name.last');
               sorter.setAttribute('direction', 'asc');
@@ -106,9 +104,9 @@
       <template preserve-content>
         <vaadin-checkbox>Enable Multi-Sorting</vaadin-checkbox>
         <vaadin-grid aria-label="Sorting Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-sorting-filtering-demos-sorting-with-data-provider', function(document) {
@@ -137,34 +135,32 @@
               xhr.send();
             };
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.firstName;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.lastName;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               const sorter = window.document.createElement('vaadin-grid-sorter');
               sorter.setAttribute('path', 'firstName');
               sorter.textContent = 'First Name';
               root.appendChild(sorter);
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               const sorter = window.document.createElement('vaadin-grid-sorter');
               sorter.setAttribute('path', 'lastName');
               sorter.textContent = 'Last Name';

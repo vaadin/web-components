@@ -11,38 +11,36 @@
     <vaadin-demo-snippet id='grid-data-demos-assigning-array-data'>
       <template preserve-content>
         <vaadin-grid aria-label="Array Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-assigning-array-data', function(document) {
             const grid = document.querySelector('vaadin-grid');
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.firstName;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.lastName;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
 
@@ -73,9 +71,9 @@
         <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-dynamic-array-data', function(document) {
@@ -95,31 +93,29 @@
               grid.items = newItemsArray;
             });
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.firstName;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.lastName;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
 
@@ -151,9 +147,9 @@
         <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example" height-by-rows>
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-dynamic-height', function(document) {
@@ -173,31 +169,29 @@
               grid.items = newItemsArray;
             });
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.firstName;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.lastName;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
 
@@ -229,9 +223,9 @@
     <vaadin-demo-snippet id='grid-data-demos-assigning-remotefunction-data'>
       <template preserve-content>
         <vaadin-grid aria-label="Remote Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-assigning-remotefunction-data', function(document) {
@@ -248,31 +242,29 @@
               xhr.send();
             };
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = document.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.firstName;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.lastName;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            column2.headerRenderer = function(root) {
+            columns[1].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
 
-            column3.headerRenderer = function(root) {
+            columns[2].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
           });
