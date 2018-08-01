@@ -19,64 +19,78 @@
     </p>
     <vaadin-demo-snippet id='grid-columns-demos-column-grouping'>
       <template preserve-content>
-        <dom-bind>
-          <template>
+        <x-data-provider></x-data-provider>
+        
+        <vaadin-grid aria-label="Column Grouping Example" size="200">
+          <vaadin-grid-column width="30px" flex-grow="0" id="column1"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" id="column2"></vaadin-grid-column>
 
-            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+          <vaadin-grid-column-group id="group1">
+            <vaadin-grid-column width="calc(25% - 20px)" id="column3"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column4"></vaadin-grid-column>
+          </vaadin-grid-column-group>
 
-            <vaadin-grid aria-label="Column Grouping Example" data-provider="[[dataProvider]]" size="200">
+          <vaadin-grid-column-group id="group2">
+            <vaadin-grid-column width="calc(25% - 20px)" id="column5"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column6"></vaadin-grid-column>
+            <vaadin-grid-column width="200px" id="column7"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-columns-demos-column-grouping', function(document) {
+            const grid = document.querySelector('vaadin-grid');
 
-              <vaadin-grid-column width="30px" flex-grow="0">
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="60px" flex-grow="0">
-                <template class="header">
-                  <div aria-label="Picture"></div>
-                </template>
-                <template>
-                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column-group>
-                <template class="header">Name</template>
-
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">First</template>
-                  <template>[[item.name.first]]</template>
-                </vaadin-grid-column>
-
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">Last</template>
-                  <template>[[item.name.last]]</template>
-                </vaadin-grid-column>
-              </vaadin-grid-column-group>
+            const dataProvider = document.querySelector('x-data-provider');
+            grid.dataProvider = dataProvider.dataProvider;
 
 
-              <vaadin-grid-column-group>
-                <template class="header">Location</template>
+            ['index', 'thumbnail', 'First', 'Last', 'City', 'State', 'Street'].forEach(function(columnName, index) {
+              const columnID = index + 1;
+              const column = document.querySelector('#column' + columnID);
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">City</template>
-                  <template>[[item.location.city]]</template>
-                </vaadin-grid-column>
+              column.headerRenderer = function(root, column, model) {
+                root.innerHTML = '';
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">State</template>
-                  <template>[[item.location.state]]</template>
-                </vaadin-grid-column>
+                if (columnID === 1) {
+                  root.textContent = '#';
+                } else if (columnID === 2) {
+                  root.innerHTML = '<div aria-label="Picture"></div>';
+                } else {
+                  root.textContent = columnName;
+                }
+              };
 
-                <vaadin-grid-column width="200px">
-                  <template class="header">Street</template>
-                  <template><p style="white-space: normal">[[item.location.street]]</p></template>
-                </vaadin-grid-column>
-              </vaadin-grid-column-group>
+              column.renderer = function(root, column, model) {
+                root.innerHTML = '';
 
-            </vaadin-grid>
-          </template>
-        </dom-bind>
+                const propName = columnName.toLowerCase();
+                if (columnID === 1) {
+                  root.textContent = model[propName];
+                } else if (columnID === 2) {
+                  root.innerHTML =
+                    '<iron-image width="30" height="30" sizing="cover" alt="' +
+                    model.item.name.first +
+                    model.item.name.last +
+                    '" src="' + model.item.picture[propName] + '"></iron-image>';
+                } else if (columnID < 5) {
+                  root.textContent = model.item.name[propName];
+                } else {
+                  root.textContent = model.item.location[propName];
+                }
+              };
+            });
+
+            const group1 = document.querySelector('#group1');
+            const group2 = document.querySelector('#group2');
+            group1.headerRenderer = function(root, column, model) {
+              root.textContent = 'Name';
+            };
+            group2.headerRenderer = function(root, column, model) {
+              root.textContent = 'Location';
+            };
+
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -92,45 +106,80 @@
     </p>
     <vaadin-demo-snippet id='grid-columns-demos-freezing-columns'>
       <template preserve-content>
-        <dom-bind>
-          <template>
-            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <vaadin-checkbox checked="{{frozen}}">Freeze First Two Columns</vaadin-checkbox>
+        <x-data-provider></x-data-provider>
 
-            <vaadin-grid aria-label="Freezing Columns Example" data-provider="[[dataProvider]]" size="200">
+        <vaadin-checkbox>Freeze First Two Columns</vaadin-checkbox>
 
-              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
+        <vaadin-grid aria-label="Freezing Columns Example" size="200">
+          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" id="column2"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column4"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column5"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-columns-demos-freezing-columns', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            const checkBox = document.querySelector('vaadin-checkbox');
 
-              <vaadin-grid-column width="60px" flex-grow="0" frozen="[[frozen]]">
-                <template class="header">
-                  <div aria-label="Picture"></div>
-                </template>
-                <template>
-                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-                </template>
-              </vaadin-grid-column>
+            checkBox.addEventListener('checked-changed', function(event) {
+              column1.frozen = column2.frozen = event.detail.value;
+            });
 
-              <vaadin-grid-column width="33%">
-                <template class="header">First Name</template>
-                <template>[[item.name.first]]</template>
-              </vaadin-grid-column>
+            const column1 = document.querySelector('#column1');
+            const column2 = document.querySelector('#column2');
+            const column3 = document.querySelector('#column3');
+            const column4 = document.querySelector('#column4');
+            const column5 = document.querySelector('#column5');
 
-              <vaadin-grid-column width="33%">
-                <template class="header">Last Name</template>
-                <template>[[item.name.last]]</template>
-              </vaadin-grid-column>
+            column1.headerRenderer = function(root, column, model) {
+              root.textContent = '#';
+            };
 
-              <vaadin-grid-column width="33%">
-                <template class="header">Email</template>
-                <template>[[item.email]]</template>
-              </vaadin-grid-column>
+            column2.headerRenderer = function(root, column, model) {
+              root.innerHTML = '<div aria-label="Picture"></div>';
+            };
 
-            </vaadin-grid>
-          </template>
-        </dom-bind>
+            column3.headerRenderer = function(root, column, model) {
+              root.textContent = 'First Name';
+            };
+
+            column4.headerRenderer = function(root, column, model) {
+              root.textContent = 'Last Name';
+            };
+
+            column5.headerRenderer = function(root, column, model) {
+              root.textContent = 'Email';
+            };
+
+            column1.renderer = function(root, column, model) {
+              root.textContent = model.index;
+            };
+
+            column2.renderer = function(root, column, model) {
+              root.innerHTML =
+                '<iron-image width="30" height="30" sizing="cover" alt="' +
+                model.item.name.first +
+                model.item.name.last +
+                '" src="' + model.item.picture.thumbnail + '"></iron-image>';
+            };
+
+            column3.renderer = function(root, column, model) {
+              root.textContent = model.item.name.first;
+            };
+
+            column4.renderer = function(root, column, model) {
+              root.textContent = model.item.name.last;
+            };
+
+            column5.renderer = function(root, column, model) {
+              root.textContent = model.item.email;
+            };
+
+            const dataProvider = document.querySelector('x-data-provider');
+            grid.dataProvider = dataProvider.dataProvider;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -139,52 +188,82 @@
     <p>
       Applying <code>hidden</code> on a column or column group will hide it.
     </p>
-    <p>
-      <b>Hint:</b> Using <code>hidden</code> together with <code>&lt;iron-media-query&gt;</code>
-      is an easy way to create a responsive grid.
-    </p>
     <vaadin-demo-snippet id='grid-columns-demos-hiding-columns'>
       <template preserve-content>
-        <dom-bind>
-          <template>
-            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-            <vaadin-checkbox checked="{{hidden}}">Hide First Two Columns</vaadin-checkbox>
-            <iron-media-query query-matches="{{hidden}}" query="(max-width: 700px)"></iron-media-query>
+        <x-data-provider></x-data-provider>
 
-            <vaadin-grid aria-label="Hiding Columns Example" data-provider="[[dataProvider]]" size="200">
+        <vaadin-checkbox>Hide First Two Columns</vaadin-checkbox>
 
-              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
+        <vaadin-grid aria-label="Hiding Columns Example" size="200">
+          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" id="column2"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column4"></vaadin-grid-column>
+          <vaadin-grid-column width="33%" id="column5"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-columns-demos-hiding-columns', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            const checkBox = document.querySelector('vaadin-checkbox');
 
-              <vaadin-grid-column width="60px" flex-grow="0" hidden="[[hidden]]">
-                <template class="header">
-                  <div aria-label="Picture"></div>
-                </template>
-                <template>
-                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-                </template>
-              </vaadin-grid-column>
+            checkBox.addEventListener('checked-changed', function(event) {
+              column1.hidden = column2.hidden = event.detail.value;
+            });
 
-              <vaadin-grid-column width="33%">
-                <template class="header">First Name</template>
-                <template>[[item.name.first]]</template>
-              </vaadin-grid-column>
+            const column1 = document.querySelector('#column1');
+            const column2 = document.querySelector('#column2');
+            const column3 = document.querySelector('#column3');
+            const column4 = document.querySelector('#column4');
+            const column5 = document.querySelector('#column5');
 
-              <vaadin-grid-column width="33%">
-                <template class="header">Last Name</template>
-                <template>[[item.name.last]]</template>
-              </vaadin-grid-column>
+            column1.headerRenderer = function(root, column, model) {
+              root.textContent = '#';
+            };
 
-              <vaadin-grid-column width="33%">
-                <template class="header">Email</template>
-                <template>[[item.email]]</template>
-              </vaadin-grid-column>
+            column2.headerRenderer = function(root, column, model) {
+              root.innerHTML = '<div aria-label="Picture"></div>';
+            };
 
-            </vaadin-grid>
-          </template>
-        </dom-bind>
+            column3.headerRenderer = function(root, column, model) {
+              root.textContent = 'First Name';
+            };
+
+            column4.headerRenderer = function(root, column, model) {
+              root.textContent = 'Last Name';
+            };
+
+            column5.headerRenderer = function(root, column, model) {
+              root.textContent = 'Email';
+            };
+
+            column1.renderer = function(root, column, model) {
+              root.textContent = model.index;
+            };
+
+            column2.renderer = function(root, column, model) {
+              root.innerHTML =
+                '<iron-image width="30" height="30" sizing="cover" alt="' +
+                model.item.name.first +
+                model.item.name.last +
+                '" src="' + model.item.picture.thumbnail + '"></iron-image>';
+            };
+
+            column3.renderer = function(root, column, model) {
+              root.textContent = model.item.name.first;
+            };
+
+            column4.renderer = function(root, column, model) {
+              root.textContent = model.item.name.last;
+            };
+
+            column5.renderer = function(root, column, model) {
+              root.textContent = model.item.email;
+            };
+
+            const dataProvider = document.querySelector('x-data-provider');
+            grid.dataProvider = dataProvider.dataProvider;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -203,62 +282,77 @@
     </p>
     <vaadin-demo-snippet id='grid-columns-demos-reordering-and-resizing-columns'>
       <template preserve-content>
-        <dom-bind>
-          <template>
-            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
+        <x-data-provider></x-data-provider>
 
-            <vaadin-grid aria-label="Reordering and Resizing Columns Example" data-provider="[[dataProvider]]" size="200" column-reordering-allowed>
+        <vaadin-grid aria-label="Reordering and Resizing Columns Example" size="200" column-reordering-allowed>
+          <vaadin-grid-column width="30px" flex-grow="0" id="column1" resizable></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" id="column2" resizable></vaadin-grid-column>
 
-              <vaadin-grid-column width="30px" flex-grow="0" resizable>
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
+          <vaadin-grid-column-group id="group1" resizable>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column3"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column4"></vaadin-grid-column>
+          </vaadin-grid-column-group>
 
-              <vaadin-grid-column width="60px" flex-grow="0" resizable>
-                <template class="header">
-                  <div aria-label="Picture"></div>
-                </template>
-                <template>
-                  <iron-image width="30" height="30" sizing="cover" alt="[[item.name.first]] [[item.name.last]]" src="[[item.picture.thumbnail]]"></iron-image>
-                </template>
-              </vaadin-grid-column>
+          <vaadin-grid-column-group id="group2" resizable>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column5"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" id="column6"></vaadin-grid-column>
+            <vaadin-grid-column width="200px" id="column7"></vaadin-grid-column>
+          </vaadin-grid-column-group>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-columns-demos-reordering-and-resizing-columns', function(document) {
+            const grid = document.querySelector('vaadin-grid');
 
-              <vaadin-grid-column-group resizable>
-                <template class="header">Name</template>
+            const dataProvider = document.querySelector('x-data-provider');
+            grid.dataProvider = dataProvider.dataProvider;
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">First</template>
-                  <template>[[item.name.first]]</template>
-                </vaadin-grid-column>
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">Last</template>
-                  <template>[[item.name.last]]</template>
-                </vaadin-grid-column>
-              </vaadin-grid-column-group>
+            ['index', 'thumbnail', 'First', 'Last', 'City', 'State', 'Street'].forEach(function(columnName, index) {
+              const columnID = index + 1;
+              const column = document.querySelector('#column' + columnID);
 
-              <vaadin-grid-column-group resizable>
-                <template class="header">Location</template>
+              column.headerRenderer = function(root, column, model) {
+                root.innerHTML = '';
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">City</template>
-                  <template>[[item.location.city]]</template>
-                </vaadin-grid-column>
+                if (columnID === 1) {
+                  root.textContent = '#';
+                } else if (columnID === 2) {
+                  root.innerHTML = '<div aria-label="Picture"></div>';
+                } else {
+                  root.textContent = columnName;
+                }
+              };
 
-                <vaadin-grid-column width="calc(25% - 20px)">
-                  <template class="header">State</template>
-                  <template>[[item.location.state]]</template>
-                </vaadin-grid-column>
+              column.renderer = function(root, column, model) {
+                root.innerHTML = '';
 
-                <vaadin-grid-column width="200px" resizable>
-                  <template class="header">Street</template>
-                  <template>[[item.location.street]]</template>
-                </vaadin-grid-column>
-              </vaadin-grid-column-group>
+                const propName = columnName.toLowerCase();
+                if (columnID === 1) {
+                  root.textContent = model[propName];
+                } else if (columnID === 2) {
+                  root.innerHTML =
+                    '<iron-image width="30" height="30" sizing="cover" alt="' +
+                    model.item.name.first +
+                    model.item.name.last +
+                    '" src="' + model.item.picture[propName] + '"></iron-image>';
+                } else if (columnID < 5) {
+                  root.textContent = model.item.name[propName];
+                } else {
+                  root.textContent = model.item.location[propName];
+                }
+              };
+            });
 
-            </vaadin-grid>
-          </template>
-        </dom-bind>
+            const group1 = document.querySelector('#group1');
+            const group2 = document.querySelector('#group2');
+            group1.headerRenderer = function(root, column, model) {
+              root.textContent = 'Name';
+            };
+            group2.headerRenderer = function(root, column, model) {
+              root.textContent = 'Location';
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 

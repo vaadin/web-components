@@ -6,8 +6,66 @@
       }
     </style>
 
+    <h3>Content Renderer Function</h3>
+    <vaadin-demo-snippet id='grid-columns-demos-renderer-functions'>
+      <template preserve-content>
+        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
 
-    <h3>Basic Binding</h3>
+        <vaadin-grid aria-label="Content Renderer Function">
+          <vaadin-grid-column id="column1" width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column id="column2"></vaadin-grid-column>
+          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column id="column4" width="8em"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
+            const ajax = document.querySelector('iron-ajax');
+            const grid = document.querySelector('vaadin-grid');
+            const column1 = document.querySelector('#column1');
+            const column2 = document.querySelector('#column2');
+            const column3 = document.querySelector('#column3');
+            const column4 = document.querySelector('#column4');
+
+            ajax.addEventListener('last-response-changed', function(e) {
+              grid.items = e.target.lastResponse.result;
+            });
+
+            column1.renderer = function(root, column, model) {
+              root.innerHTML = model.index;
+            };
+            column1.headerRenderer = column1.footerRenderer = function(root, column) {
+              root.innerHTML = '#';
+            };
+
+            column2.renderer = function(root, column, model) {
+              root.innerHTML = model.item.firstName;
+            };
+            column2.headerRenderer = column2.footerRenderer = function(root, column) {
+              root.innerHTML = 'First Name';
+            };
+
+            column3.renderer = function(root, column, model) {
+              root.innerHTML = model.item.lastName;
+            };
+            column3.headerRenderer = column3.footerRenderer = function(root, column) {
+              root.innerHTML = 'Last Name';
+            };
+
+            column4.renderer = function(root, column, model) {
+              root.innerHTML =
+                '<div style="white-space: normal">' +
+                model.item.address.street + ', ' + model.item.address.city +
+                '</div>';
+            };
+            column4.headerRenderer = column4.footerRenderer = function(root, column) {
+              root.innerHTML = 'Address';
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Defining Content with Polymer Templates</h3>
     <p>
       Cells contents can be defined using <code>&lt;template&gt;</code> elements.
       Inside templates, variables like <code>[[index]]</code> and <code>[[item.prop]]</code>
@@ -86,7 +144,6 @@
             <vaadin-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</vaadin-checkbox>
 
             <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
-
               <vaadin-grid-column>
                 <template class="header">First Name</template>
                 <template>
@@ -105,73 +162,9 @@
                 <template class="header">Email</template>
                 <template>[[item.firstName]].[[item.lastName]]@example.com</template>
               </vaadin-grid-column>
-
             </vaadin-grid>
           </template>
         </dom-bind>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Content Renderer Function</h3>
-    <p>
-      Renderer functions can be used to programatically set the content of cells.
-    </p>
-    <vaadin-demo-snippet id='grid-columns-demos-renderer-functions'>
-      <template preserve-content>
-
-        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
-
-        <vaadin-grid aria-label="Content Renderer Function">
-          <vaadin-grid-column id="column1" width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
-          <vaadin-grid-column id="column4" width="8em"></vaadin-grid-column>
-        </vaadin-grid>
-        <script>
-          window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-            const grid = document.querySelector('vaadin-grid');
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
-            const column4 = document.querySelector('#column4');
-
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            column1.renderer = function(root, column, model) {
-              root.innerHTML = model.index;
-            };
-            column1.headerRenderer = column1.footerRenderer = function(root, column) {
-              root.innerHTML = '#';
-            };
-
-            column2.renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            column2.headerRenderer = column2.footerRenderer = function(root, column) {
-              root.innerHTML = 'First Name';
-            };
-
-            column3.renderer = function(root, column, model) {
-              root.innerHTML = model.item.lastName;
-            };
-            column3.headerRenderer = column3.footerRenderer = function(root, column) {
-              root.innerHTML = 'Last Name';
-            };
-
-            column4.renderer = function(root, column, model) {
-              root.innerHTML =
-                '<div style="white-space: normal">' +
-                model.item.address.street + ', ' + model.item.address.city +
-                '</div>';
-            };
-            column4.headerRenderer = column4.footerRenderer = function(root, column) {
-              root.innerHTML = 'Address';
-            };
-          });
-        </script>
       </template>
     </vaadin-demo-snippet>
 

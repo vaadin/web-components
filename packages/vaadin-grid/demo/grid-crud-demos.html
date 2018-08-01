@@ -15,129 +15,189 @@
 
     <h3>Create, Read, Update and Delete</h3>
     <p>
-      Column <code>&lt;template&gt;</code> elements and data binding can be used to implement inline editing.
+      Grid renderers and JavaScript functions can be used to implement inline editing.
     </p>
     <p>
       <b>Note:</b> Remember to call <code>grid.clearCache()</code> to show updated data.
     </p>
     <vaadin-demo-snippet id='grid-crud-demos-crud'>
       <template preserve-content>
-        <x-crud></x-crud>
-        <dom-module id="x-crud">
-          <template preserve-content>
-            <style>
-              vaadin-grid vaadin-text-field {
-                width: 100%;
+        <style>
+          vaadin-grid vaadin-text-field {
+            width: 100%;
+          }
+        </style>
+        <x-array-data-provider></x-array-data-provider>
+
+        <div style="margin-bottom: 20px">
+          <vaadin-text-field id="firstname" label="First Name"></vaadin-text-field>
+          <vaadin-text-field id="lastname" label="Last Name"></vaadin-text-field>
+          <vaadin-button id="add-btn">Add</vaadin-button>
+        </div>
+
+        <vaadin-grid theme="compact">
+          <vaadin-grid-column resizable id="column1"></vaadin-grid-column>
+          <vaadin-grid-column resizable id="column2"></vaadin-grid-column>
+          <vaadin-grid-column width="12em" resizable id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="14em" id="column4"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-crud-demos-crud', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            const firstname = document.querySelector('#firstname');
+            const lastname = document.querySelector('#lastname');
+
+            const addBtn = document.querySelector('#add-btn');
+
+            addBtn.addEventListener('click', function() {
+              if (firstname.value !== '' && lastname.value !== '') {
+                grid.items.unshift({name: {first: firstname.value, last: lastname.value}});
+                grid.clearCache();
+
+                firstname.value = '';
+                lastname.value = '';
+              } else {
+                alert('First Name and Last Name required');
               }
-            </style>
-            <x-array-data-provider items="{{items}}" size="200"></x-array-data-provider>
-
-            <div style="margin-bottom: 20px">
-              <vaadin-text-field id="firstname" label="First Name"></vaadin-text-field>
-              <vaadin-text-field id="lastname" label="Last Name"></vaadin-text-field>
-              <vaadin-button on-click="_add">Add</vaadin-button>
-            </div>
-
-            <vaadin-grid theme="compact" id="grid" items="[[items]]">
-
-              <vaadin-grid-column resizable>
-                <template class="header">First Name</template>
-                <template>
-                  <vaadin-text-field id="first-[[index]]" value="[[item.name.first]]" on-input="_storeFirst" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column resizable>
-                <template class="header">Last Name</template>
-                <template>
-                  <vaadin-text-field id="last-[[index]]" value="[[item.name.last]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="12em" resizable>
-                <template class="header">Email</template>
-                <template>
-                  <div>[[item.name.first]].[[item.name.last]]@example.com</div>
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="14em">
-                <template>
-                  <div style="text-align: right;">
-                    <vaadin-button id="edit-button" hidden="[[editing]]" on-click="_edit" focus-target$="[[!editing]]" theme="icon" aria-label="Edit"><iron-icon icon="lumo:edit"></iron-icon></vaadin-button>
-                    <vaadin-button hidden="[[editing]]" on-click="_remove" theme="icon error" aria-label="Delete"><iron-icon icon="lumo:cross"></iron-icon></vaadin-button>
-                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_save" focus-target$="[[editing]]" theme="primary">Save</vaadin-button>
-                    <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
-                  </div>
-                </template>
-              </vaadin-grid-column>
-
-            </vaadin-grid>
-          </template>
-          <script>
-            window.addDemoReadyListener('#grid-crud-demos-crud', function(document) {
-              Polymer({
-                is: 'x-crud',
-
-                properties: {
-                  editing: Object
-                },
-
-                ready: function() {
-                  this.editing = null;
-                },
-
-                _isEditing: function(editing, item) {
-                  return item === editing;
-                },
-
-                _edit: function(e) {
-                  var item = e.model.item;
-                  this.editing = item;
-
-                  this.$.grid.querySelector('#first-' + e.model.index).focus();
-                },
-
-                _save: function(e) {
-                  var item = e.model.item;
-                  item.name.first = this.$.grid.querySelector('#first-' + e.model.index).value;
-                  item.name.last = this.$.grid.querySelector('#last-' + e.model.index).value;
-
-                  this.editing = null;
-
-                  this.$.grid.clearCache();
-                  this.$.grid.querySelector('#edit-button').focus();
-                },
-
-                _cancel: function() {
-                  this.editing = null;
-
-                  this.$.grid.clearCache();
-                  this.$.grid.querySelector('#edit-button').focus();
-                },
-
-                _add: function(e) {
-                  if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
-                    this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
-                    this.$.grid.clearCache();
-
-                    this.$.firstname.value = '';
-                    this.$.lastname.value = '';
-                  } else {
-                    alert('First Name and Last Name required');
-                  }
-                },
-
-                _remove: function(e) {
-                  var index = this.items.indexOf(e.model.item);
-                  this.items.splice(index, 1);
-
-                  this.$.grid.clearCache();
-                }
-              });
             });
-          </script>
-        </dom-module>
+
+            const column1 = document.querySelector('#column1');
+            const column2 = document.querySelector('#column2');
+            const column3 = document.querySelector('#column3');
+            const column4 = document.querySelector('#column4');
+
+            column1.headerRenderer = function(root) {
+              root.textContent = 'First Name';
+            };
+
+            column1.renderer = function(root, column, model) {
+              root.innerHTML = '';
+
+              const textField = new Vaadin.TextFieldElement();
+              textField.setAttribute('id', 'first-' + model.index);
+              textField.setAttribute('value', model.item.name.first);
+              textField.setAttribute('readonly', true);
+              root.appendChild(textField);
+            };
+
+            column2.headerRenderer = function(root) {
+              root.textContent = 'Last Name';
+            };
+
+            column2.renderer = function(root, column, model) {
+              root.innerHTML = '';
+
+              const textField = new Vaadin.TextFieldElement();
+              textField.setAttribute('id', 'last-' + model.index);
+              textField.setAttribute('value', model.item.name.last);
+              textField.setAttribute('readonly', true);
+              root.appendChild(textField);
+            };
+
+            column3.headerRenderer = function(root) {
+              root.textContent = 'Email';
+            };
+
+            column3.renderer = function(root, column, model) {
+              root.innerHTML = '<div>' + model.item.name.first + '.' + model.item.name.last + '@example.com</div>';
+            };
+
+            column4.renderer = function(root, column, model) {
+              root.innerHTML = '';
+
+              const wrapper = window.document.createElement('div');
+              wrapper.style.textAlign = 'right';
+
+              const editBtn = new Vaadin.ButtonElement();
+              editBtn.style.marginRight = '5px';
+              editBtn.addEventListener('click', function() {
+                grid.querySelector('#first-' + model.index).focus();
+                updateTextFieldsVisibility(model.index, true);
+                updateButtonsVisibility(wrapper, true);
+              });
+              editBtn.setAttribute('focus-target', true);
+              editBtn.setAttribute('theme', 'icon');
+              editBtn.setAttribute('aria-label', 'Edit');
+              editBtn.innerHTML = '<iron-icon icon="lumo:edit"></iron-icon>';
+
+              const deleteBtn = new Vaadin.ButtonElement();
+              deleteBtn.addEventListener('click', function(event) {
+                var index = grid.items.indexOf(model.item);
+                grid.items.splice(index, 1);
+
+                grid.clearCache();
+              });
+              deleteBtn.setAttribute('theme', 'icon error');
+              deleteBtn.setAttribute('aria-label', 'Delete');
+              deleteBtn.innerHTML = '<iron-icon icon="lumo:cross"></iron-icon>';
+
+              const saveBtn = new Vaadin.ButtonElement();
+              saveBtn.style.marginRight = '5px';
+              saveBtn.setAttribute('hidden', true);
+              saveBtn.addEventListener('click', function() {
+                model.item.name.first = grid.querySelector('#first-' + model.index).value;
+                model.item.name.last = grid.querySelector('#last-' + model.index).value;
+
+                updateTextFieldsVisibility(model.index, false);
+                updateButtonsVisibility(wrapper, false);
+                grid.clearCache();
+                editBtn.focus();
+              });
+              saveBtn.setAttribute('theme', 'primary');
+              saveBtn.setAttribute('focus-target', false);
+              saveBtn.textContent = 'Save';
+
+              const cancelBtn = new Vaadin.ButtonElement();
+              cancelBtn.setAttribute('hidden', true);
+              cancelBtn.addEventListener('click', function(event) {
+                updateTextFieldsVisibility(model.index, false);
+                updateButtonsVisibility(wrapper, false);
+                grid.clearCache();
+                editBtn.focus();
+              });
+              cancelBtn.textContent = 'Cancel';
+
+              wrapper.appendChild(editBtn);
+              wrapper.appendChild(deleteBtn);
+              wrapper.appendChild(saveBtn);
+              wrapper.appendChild(cancelBtn);
+
+              root.appendChild(wrapper);
+            };
+
+            function updateTextFieldsVisibility(index, editing) {
+              if (editing) {
+                grid.querySelector('#first-' + index).removeAttribute('readonly');
+                grid.querySelector('#last-' + index).removeAttribute('readonly');
+              } else {
+                grid.querySelector('#first-' + index).setAttribute('readonly', true);
+                grid.querySelector('#last-' + index).setAttribute('readonly', true);
+              }
+            }
+
+            function updateButtonsVisibility(wrapper, editing) {
+              if (editing) {
+                wrapper.querySelectorAll('[theme~="icon"]').forEach(function(btn) {
+                  btn.setAttribute('hidden', true);
+                });
+                wrapper.querySelectorAll('vaadin-button:not([theme~="icon"])').forEach(function(btn) {
+                  btn.removeAttribute('hidden');
+                });
+              } else {
+                wrapper.querySelectorAll('[theme~="icon"]').forEach(function(btn) {
+                  btn.removeAttribute('hidden');
+                });
+                wrapper.querySelectorAll('vaadin-button:not([theme~="icon"])').forEach(function(btn) {
+                  btn.setAttribute('hidden', true);
+                });
+              }
+            }
+
+            const dataProvider = document.querySelector('x-array-data-provider');
+            dataProvider.size = 200;
+            grid.items = dataProvider.items;
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
