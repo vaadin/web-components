@@ -22,7 +22,7 @@
 
               const listBox = new Vaadin.ListBoxElement();
 
-              ['First', 'Second'].map(function(name) {
+              ['First', 'Second'].forEach(function(name) {
                 const item = new Vaadin.ItemElement();
                 item.textContent = name + ' menu item';
                 listBox.appendChild(item);
@@ -69,7 +69,7 @@
 
               const listBox = new Vaadin.ListBoxElement();
 
-              ['First', 'Second'].map(function(name) {
+              ['First', 'Second'].forEach(function(name) {
                 const item = new Vaadin.ItemElement();
                 item.textContent = name + ' menu item';
                 listBox.appendChild(item);

@@ -12,15 +12,16 @@
       <template preserve-content>
         <vaadin-context-menu>
           <vaadin-grid>
-            <vaadin-grid-column id="column-name"></vaadin-grid-column>
-            <vaadin-grid-column id="column-surname"></vaadin-grid-column>
-            <vaadin-grid-column id="column-effort"></vaadin-grid-column>
+            <vaadin-grid-column name="Name"></vaadin-grid-column>
+            <vaadin-grid-column name="Surname"></vaadin-grid-column>
+            <vaadin-grid-column name="Effort"></vaadin-grid-column>
           </vaadin-grid>
         </vaadin-context-menu>
         <script>
           window.addDemoReadyListener('#context-menu-grid-demos-using-with-vaadin-grid', function(document) {
             const contextMenu = document.querySelector('vaadin-context-menu');
             const grid = contextMenu.querySelector('vaadin-grid');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
             contextMenu.renderer = function(root, contextMenu, context) {
               root.innerHTML = '';
@@ -54,9 +55,9 @@
 
             grid.items = getItems();
 
-            ['Name', 'Surname', 'Effort'].forEach(function(columnName) {
-              const lowCaseColumnName = columnName.toLowerCase();
-              const column = grid.querySelector('#column-' + lowCaseColumnName);
+            columns.forEach(function(column) {
+              const columnName = column.getAttribute('name');
+              const propertyName = columnName.toLowerCase();
 
               column.renderer = function(root, column, context) {
                 root.innerHTML = '';
@@ -64,7 +65,7 @@
                 const contentWrapper = window.document.createElement('div');
                 contentWrapper.className = 'body-content';
                 contentWrapper.setAttribute('data-index', context.index);
-                contentWrapper.textContent = context.item[lowCaseColumnName];
+                contentWrapper.textContent = context.item[propertyName];
 
                 root.appendChild(contentWrapper);
               };
