@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 dist: trusty
 language: node_js
 node_js: 8.11
@@ -7,17 +7,28 @@ cache:
   directories:
     - node_modules
 
-addons:
-  firefox: latest
-  chrome: stable
-
-env:
-  - TEST_SUITE=mobile POLYMER=2
-  - TEST_SUITE=microsoft POLYMER=2
-  - TEST_SUITE=desktop POLYMER=2
-  - TEST_SUITE=mobile POLYMER=3
-  - TEST_SUITE=microsoft POLYMER=3
-  - TEST_SUITE=desktop POLYMER=3
+jobs:
+  include:
+    - if: type = push
+      env: TEST_SUITE=mobile POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=desktop POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=mobile POLYMER=3
+    - if: type = push
+      env: TEST_SUITE=desktop POLYMER=3
+    - if: type = pull_request
+      env: POLYMER=2
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = pull_request
+      env: POLYMER=3
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = cron
+      env: TEST_SUITE=cron
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
@@ -45,7 +56,7 @@ script:
 
   - if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
       npm install &&
-      wct --env saucelabs-cron;
+      wct --env saucelabs:$TEST_SUITE;
     fi
 
 after_success:
