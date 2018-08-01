@@ -11,6 +11,35 @@
     <vaadin-demo-snippet id="context-menu-basic-demos-basic-usage">
       <template preserve-content>
         <vaadin-context-menu>
+          <p>This paragraph has the context menu provided in the above template.</p>
+          <p>Another paragraph with the context menu that can be opened with <b>right click</b> or with <b>long touch.</b></p>
+        </vaadin-context-menu>
+        <script>
+          window.addDemoReadyListener('#context-menu-basic-demos-basic-usage', function(document) {
+            const contextMenu = document.querySelector('vaadin-context-menu');
+            contextMenu.renderer = function(root) {
+              root.innerHTML = '';
+
+              const listBox = new Vaadin.ListBoxElement();
+
+              ['First', 'Second'].map(function(name) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = name + ' menu item';
+                listBox.appendChild(item);
+              });
+
+              root.appendChild(listBox);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Defining Content with Polymer Templates</h3>
+    <vaadin-demo-snippet id="context-menu-basic-demos-basic-usage">
+      <template preserve-content>
+        <vaadin-context-menu>
           <template>
             <vaadin-list-box>
               <vaadin-item>First menu item</vaadin-item>
@@ -25,30 +54,27 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Content Renderer Function</h3>
-    <vaadin-demo-snippet id="context-menu-basic-demos-using-renderer">
+    <h3>Filtering Menu Targets</h3>
+    <vaadin-demo-snippet id="context-menu-basic-demos-filtering-menu-targets">
       <template preserve-content>
-        <vaadin-context-menu id="contextMenuWithRenderer">
-          <p>
-            This paragraph has the context menu provided in the renderer callback.
-            Use <b>right click</b> to open the context menu.
-          </p>
+        <vaadin-context-menu selector=".has-menu">
+          <p class="has-menu">This paragraph opens the context menu.</p>
+          <p>This paragraph does not open the context menu.</p>
         </vaadin-context-menu>
         <script>
-          window.addDemoReadyListener('#context-menu-basic-demos-using-renderer', function(document) {
-            var contextMenuWithRenderer = document.querySelector('#contextMenuWithRenderer');
-            contextMenuWithRenderer.renderer = function(root, contextMenu, context) {
-              if (root.firstChild) {
-                // The menu content was already rendered.
-                return;
-              }
+          window.addDemoReadyListener('#context-menu-basic-demos-filtering-menu-targets', function(document) {
+            const contextMenu = document.querySelector('vaadin-context-menu');
+            contextMenu.renderer = function(root) {
+              root.innerHTML = '';
 
-              var listBox = window.document.createElement('vaadin-list-box');
-              ['First menu item', 'Second menu item'].forEach(function(itemText) {
-                var item = window.document.createElement('vaadin-item');
-                item.textContent = itemText;
+              const listBox = new Vaadin.ListBoxElement();
+
+              ['First', 'Second'].map(function(name) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = name + ' menu item';
                 listBox.appendChild(item);
               });
+
               root.appendChild(listBox);
             };
           });
@@ -57,40 +83,32 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Filtering Menu Targets</h3>
-    <vaadin-demo-snippet id="context-menu-basic-demos-filtering-menu-targets">
-      <template preserve-content>
-        <vaadin-context-menu selector=".has-menu">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>First menu item</vaadin-item>
-              <vaadin-item>Second menu item</vaadin-item>
-            </vaadin-list-box>
-          </template>
-
-          <p class="has-menu">This paragraph opens the context menu.</p>
-          <p>This paragraph does not open the context menu.</p>
-        </vaadin-context-menu>
-      </template>
-    </vaadin-demo-snippet>
-
-
     <h3>Accessing the Menu Target</h3>
     <vaadin-demo-snippet id="context-menu-basic-demos-accessing-the-menu-target">
       <template preserve-content>
         <vaadin-context-menu selector="li">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>The menu target: [[target.textContent]]</vaadin-item>
-            </vaadin-list-box>
-          </template>
-
           <ul>
             <li>Spanish</li>
             <li>Finnish</li>
             <li>English</li>
           </ul>
         </vaadin-context-menu>
+        <script>
+          window.addDemoReadyListener('#context-menu-basic-demos-accessing-the-menu-target', function(document) {
+            const contextMenu = document.querySelector('vaadin-context-menu');
+            contextMenu.renderer = function(root, contextMenu, context) {
+              root.innerHTML = '';
+
+              const listBox = new Vaadin.ListBoxElement();
+
+              const item = new Vaadin.ItemElement();
+              item.textContent = 'The menu target: ' + context.target.textContent;
+              listBox.appendChild(item);
+
+              root.appendChild(listBox);
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -98,53 +116,58 @@
     <h3>Use Menu Item Events to Create Clickable Commands</h3>
     <vaadin-demo-snippet id="context-menu-basic-demos-menu-item-events">
       <template preserve-content>
-        <dom-module id="my-list-view">
-          <template preserve-content>
-            <vaadin-context-menu selector="li">
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item on-click="_appendItem">Append item</vaadin-item>
-                  <vaadin-item list-item="[[target]]" on-click="_removeItem">Remove item</vaadin-item>
-                </vaadin-list-box>
-              </template>
+        <vaadin-context-menu selector="li" renderer="[[_renderer]]">
+          <ul></ul>
+        </vaadin-context-menu>
+        <script>
+          window.addDemoReadyListener('#context-menu-basic-demos-menu-item-events', function(document) {
+            const items = ['Item #1', 'Item #2', 'Item #3'];
+            const contextMenu = document.querySelector('vaadin-context-menu');
 
-              <ul>
-                <template is="dom-repeat" items="[[items]]">
-                  <li index="[[index]]">[[item]]</li>
-                </template>
-              </ul>
-            </vaadin-context-menu>
-          </template>
+            contextMenu.renderer = function(root, contextMenu, context) {
+              // Needed for proper event target detection
+              // And to prevent recreation of the content
+              root.innerHTML = '';
 
-          <script>
-            window.addDemoReadyListener('#context-menu-basic-demos-menu-item-events', function(document) {
-              Polymer({
-                is: 'my-list-view',
+              const listBox = window.document.createElement('vaadin-list-box');
 
-                properties: {
-                  items: {
-                    type: Array,
-                    value: function() {
-                      return ['Item #1', 'Item #2', 'Item #3'];
-                    }
-                  }
-                },
-
-                _appendItem: function() {
-                  this.push('items', 'New item');
-                },
-
-                _removeItem(e) {
-                  const menuItem = e.target; // `<vaadin-item>`
-                  const listItem = menuItem.listItem; // `<li>`
-                  this.splice('items', listItem.index, 1);
-                }
+              const appendItem = window.document.createElement('vaadin-item');
+              appendItem.addEventListener('click', function() {
+                items.push('New item');
+                updateList();
               });
-            });
-          </script>
-        </dom-module>
+              appendItem.textContent = 'Append item';
 
-        <my-list-view></my-list-view>
+              const removeItem = window.document.createElement('vaadin-item');
+              removeItem.addEventListener('click', function() {
+                const targetItemIndex = items.indexOf(context.target.innerText);
+                items.splice(targetItemIndex, 1);
+                updateList();
+              });
+              removeItem.textContent = 'Remove item';
+
+              [appendItem, removeItem].forEach(function(el) {
+                listBox.appendChild(el);
+              });
+
+              root.appendChild(listBox);
+            };
+
+            function updateList() {
+              const listElement = document.querySelector('ul');
+              listElement.innerHTML = '';
+
+              items.forEach(function(item, index) {
+                const li = window.document.createElement('li');
+                li.setAttribute('index', index);
+                li.textContent = item;
+                listElement.appendChild(li);
+              });
+            }
+
+            updateList();
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 

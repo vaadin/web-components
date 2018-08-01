@@ -10,82 +10,71 @@
     <h3>Using with Vaadin Grid</h3>
     <vaadin-demo-snippet id="context-menu-grid-demos-using-with-vaadin-grid">
       <template preserve-content>
-        <dom-module id="my-grid-view">
-          <template preserve-content>
+        <vaadin-context-menu>
+          <vaadin-grid>
+            <vaadin-grid-column id="column-name"></vaadin-grid-column>
+            <vaadin-grid-column id="column-surname"></vaadin-grid-column>
+            <vaadin-grid-column id="column-effort"></vaadin-grid-column>
+          </vaadin-grid>
+        </vaadin-context-menu>
+        <script>
+          window.addDemoReadyListener('#context-menu-grid-demos-using-with-vaadin-grid', function(document) {
+            const contextMenu = document.querySelector('vaadin-context-menu');
+            const grid = contextMenu.querySelector('vaadin-grid');
 
-            <vaadin-context-menu>
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item on-click="_add">Add</vaadin-item>
-                  <template is="dom-if" if="[[_isGridBody(target)]]">
-                    <vaadin-item content="[[target]]" on-click="_remove">Remove</vaadin-item>
-                  </template>
-                </vaadin-list-box>
-              </template>
+            contextMenu.renderer = function(root, contextMenu, context) {
+              root.innerHTML = '';
 
-              <vaadin-grid id="grid" items="[[items]]">
+              const listBox = window.document.createElement('vaadin-list-box');
 
-                <vaadin-grid-column>
-                  <template class="header">Name</template>
-                  <template>
-                    <div class="body-content" data-index$="[[index]]">[[item.name]]</div>
-                  </template>
-                </vaadin-grid-column>
+              const addItem = window.document.createElement('vaadin-item');
+              addItem.textContent = 'Add';
+              addItem.addEventListener('click', function() {
+                const newItemsArray = grid.items.slice(0);
+                newItemsArray.unshift(getNewItem());
+                grid.items = newItemsArray;
+              });
+              listBox.appendChild(addItem);
 
-                <vaadin-grid-column>
-                  <template class="header">Surname</template>
-                  <template>
-                    <div class="body-content" data-index$="[[index]]">[[item.surname]]</div>
-                  </template>
-                </vaadin-grid-column>
-
-                <vaadin-grid-column>
-                  <template class="header">Effort</template>
-                  <template>
-                    <div class="body-content" data-index$="[[index]]">[[item.effort]]</div>
-                  </template>
-                </vaadin-grid-column>
-
-              </vaadin-grid>
-
-            </vaadin-context-menu>
-          </template>
-
-          <script>
-
-            window.addDemoReadyListener('#context-menu-grid-demos-using-with-vaadin-grid', function(document) {
-              if (!customElements.get('my-grid-view')) {
-                Polymer({
-                  is: 'my-grid-view',
-
-                  properties: {
-                    items: {
-                      type: Array,
-                      value: function() {
-                        return getItems();
-                      }
-                    }
-                  },
-
-                  _isGridBody: function(target) {
-                    return target.classList.contains('body-content');
-                  },
-
-                  _add: function() {
-                    this.unshift('items', getNewItem());
-                  },
-
-                  _remove: function(e) {
-                    const index = parseInt(e.target.content.getAttribute('data-index'));
-                    this.splice('items', index, 1);
-                  }
+              // If user clicks on the cell
+              if (!context.target.querySelector('.body-content')) {
+                const removeItem = window.document.createElement('vaadin-item');
+                removeItem.textContent = 'Remove';
+                removeItem.addEventListener('click', function() {
+                  const index = parseInt(context.target.getAttribute('data-index'));
+                  const newItemsArray = grid.items.slice(0);
+                  newItemsArray.splice(index, 1);
+                  grid.items = newItemsArray;
                 });
+                listBox.appendChild(removeItem);
               }
-            });
-          </script>
-        </dom-module>
 
-        <my-grid-view></my-grid-view>
+              root.appendChild(listBox);
+            };
+
+            grid.items = getItems();
+
+            ['Name', 'Surname', 'Effort'].forEach(function(columnName) {
+              const lowCaseColumnName = columnName.toLowerCase();
+              const column = grid.querySelector('#column-' + lowCaseColumnName);
+
+              column.renderer = function(root, column, context) {
+                root.innerHTML = '';
+
+                const contentWrapper = window.document.createElement('div');
+                contentWrapper.className = 'body-content';
+                contentWrapper.setAttribute('data-index', context.index);
+                contentWrapper.textContent = context.item[lowCaseColumnName];
+
+                root.appendChild(contentWrapper);
+              };
+
+              column.headerRenderer = function(root) {
+                root.innerHTML = columnName;
+              };
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
