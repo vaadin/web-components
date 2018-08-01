@@ -9,7 +9,127 @@
     <h3>Simple Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-simple-dialog">
       <template preserve-content>
-        <vaadin-dialog aria-label="simple">
+        <vaadin-dialog aria-label="simple"></vaadin-dialog>
+        <vaadin-button>Show dialog</vaadin-button>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-simple-dialog', function(document) {
+            const dialog = document.querySelector('vaadin-dialog');
+            dialog.renderer = function(root, dialog) {
+              root.textContent = 'This simple dialog will close by pressing the Esc key, or by a mouse click anywhere outside the dialog area';
+            };
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              dialog.opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Confirmation Dialog</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-confirm-dialog">
+      <template preserve-content>
+        <dom-bind id="dialog-example">
+          <template>
+            <vaadin-dialog no-close-on-esc no-close-on-outside-click></vaadin-dialog>
+            <vaadin-button on-click="openDialog">Show Confirmation Dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-confirm-dialog', function(document) {
+            const dialog = document.querySelector('vaadin-dialog');
+            dialog.renderer = function(root, dialog) {
+              const div = window.document.createElement('div');
+              div.textContent = 'Are you sure?';
+
+              const br = window.document.createElement('br');
+
+              const okButton = window.document.createElement('vaadin-button');
+              okButton.setAttribute('theme', 'primary');
+              okButton.textContent = 'OK';
+              okButton.setAttribute('style', 'margin-right: 1em');
+              okButton.addEventListener('click', function() {
+                dialog.opened = false;
+              });
+
+              const cancelButton = window.document.createElement('vaadin-button');
+              cancelButton.textContent = 'Cancel';
+              cancelButton.addEventListener('click', function() {
+                dialog.opened = false;
+              });
+
+              root.appendChild(div);
+              root.appendChild(br);
+              root.appendChild(okButton);
+              root.appendChild(cancelButton);
+            };
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              dialog.opened = true;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Scrollable Dialog</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-scrollable-dialog">
+      <template preserve-content>
+        <dom-bind id="scrollable-dialog-example">
+          <template>
+            <iron-ajax auto></iron-ajax>
+            <vaadin-dialog no-close-on-outside-click></vaadin-dialog>
+            <vaadin-button>Show dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-scrollable-dialog', function(document) {
+            const API_URL = 'https://baconipsum.com/api/?type=all-meat&paras=20';
+            const ajax = document.querySelector('iron-ajax');
+            ajax.url = API_URL;
+
+            const dialog = document.querySelector('vaadin-dialog');
+            dialog.renderer = function(root, dialog) {
+              const section = window.document.createElement('section');
+              section.setAttribute('style', 'display: flex; flex-direction: column; max-height: calc(100vh - 80px);');
+
+              const header = window.document.createElement('header');
+              header.textContent = 'Alice in Wornderland';
+
+              const main = window.document.createElement('main');
+              ajax.addEventListener('last-response-changed', function(e) {
+                e.target.lastResponse.forEach(function(paragraph) {
+                  const p = window.document.createElement('p');
+                  p.textContent = paragraph;
+                  main.appendChild(p);
+                });
+              });
+              main.style = 'overflow-y: scroll;';
+
+              const footer = window.document.createElement('footer');
+              const btn = window.document.createElement('vaadin-button');
+              btn.textContent = 'Close';
+              btn.addEventListener('click', function() {
+                dialog.opened = false;
+              });
+              footer.appendChild(btn);
+
+              section.appendChild(header);
+              section.appendChild(main);
+              section.appendChild(footer);
+              root.appendChild(section);
+
+              document.querySelector('vaadin-button').addEventListener('click', function() {
+                dialog.opened = true;
+              });
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Defining Content with Polymer Templates</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-polymer-templates">
+      <template preserve-content>
+        <vaadin-dialog aria-label="polymer templates">
           <template>
             <div>This simple dialog will close by pressing the Esc key,</div>
             <div> or by a mouse click anywhere outside the dialog area</div>
@@ -17,7 +137,7 @@
         </vaadin-dialog>
         <vaadin-button>Show dialog</vaadin-button>
         <script>
-          window.addDemoReadyListener('#dialog-basic-demos-simple-dialog', function(document) {
+          window.addDemoReadyListener('#dialog-basic-demos-polymer-templates', function(document) {
             document.querySelector('vaadin-button').addEventListener('click', function() {
               document.querySelector('vaadin-dialog').opened = true;
             });
@@ -26,39 +146,7 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Content Renderer Function</h3>
-    <vaadin-demo-snippet id="dialog-renderer-function-demo">
-      <template preserve-content>
-        <vaadin-dialog id="dialog-renderer"></vaadin-dialog>
-        <vaadin-button id="dialog-renderer-button">Show dialog</vaadin-button>
-        <script>
-          window.addDemoReadyListener('#dialog-renderer-function-demo', function(document) {
-            const dialog = document.getElementById('dialog-renderer');
-
-            dialog.renderer = function(root, dialog) {
-              if (root.firstChild) {
-                return;
-              }
-              const paragraph = window.document.createElement('p');
-              const btn = window.document.createElement('vaadin-button');
-              paragraph.innerText = 'The content of this overlay was generated with renderer';
-              btn.innerText = 'Close';
-              btn.addEventListener('click', function() {
-                dialog.opened = false;
-              });
-              root.appendChild(paragraph);
-              root.appendChild(btn);
-            };
-
-            document.getElementById('dialog-renderer-button').addEventListener('click', function() {
-              dialog.opened = true;
-            });
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Styling the Content</h3>
+    <h3>Styling Template Content</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-styled-dialog">
       <template preserve-content>
         <style>
@@ -87,6 +175,7 @@
       </template>
     </vaadin-demo-snippet>
 
+<<<<<<< HEAD
     <h3>Confirmation Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-confirm-dialog">
       <template preserve-content>
@@ -168,6 +257,8 @@
       </template>
     </vaadin-demo-snippet>
 
+=======
+>>>>>>> Update demos to prefer renderers [skip ci] (#94)
   </template>
   <script>
     class DialogBasicDemos extends DemoReadyEventEmitter(DialogDemo(Polymer.Element)) {
