@@ -2,25 +2,47 @@
   "name": "Vaadin Upload",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "upload-basic-demos",
     "src": "upload-basic-demos.html",
     "meta": {
       "title": "vaadin-upload Basic Examples",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Advanced Usage",
-    "url": "upload-advanced-demos",
-    "src": "upload-advanced-demos.html",
+    "name": "Limit Files",
+    "url": "upload-limit-files-demos",
+    "src": "upload-limit-files-demos.html",
     "meta": {
-      "title": "vaadin-upload Advanced Examples",
+      "title": "vaadin-upload Limit Files Examples",
       "description": "",
       "image": ""
-     }
+    }
+  }
+  ,
+  {
+    "name": "Customize Upload Events",
+    "url": "upload-customize-upload-events-demos",
+    "src": "upload-customize-upload-events-demos.html",
+    "meta": {
+      "title": "vaadin-upload Customize Upload Events Examples",
+      "description": "",
+      "image": ""
+    }
+  }
+  ,
+  {
+    "name": "Styling",
+    "url": "upload-styling-demos",
+    "src": "upload-styling-demos.html",
+    "meta": {
+      "title": "vaadin-upload Styling Examples",
+      "description": "",
+      "image": ""
+    }
   }
   ,
   {
@@ -31,7 +53,7 @@
       "title": "vaadin-upload I18n Examples",
       "description": "",
       "image": ""
-     }
+    }
   }
   ]
 }
