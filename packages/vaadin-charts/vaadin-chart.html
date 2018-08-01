@@ -1248,7 +1248,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                       }
 
                       // Strip off host selectors that target individual instances
-                      effectiveCss = effectiveCss.replace(/:host\(.+\)/g, match => {
+                      effectiveCss = effectiveCss.replace(/:host\(.+?\)/g, match => {
                         const selector = match.substr(6, match.length - 7);
                         const matchesFn = self.matches || self.msMatchesSelector;
                         return matchesFn.call(self, selector) ? '' : match;

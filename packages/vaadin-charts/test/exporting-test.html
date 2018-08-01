@@ -8,9 +8,44 @@
 </head>
 
 <body>
-  <dom-module id="exporting-test">
+  <dom-module id="exporting-test" theme-for="vaadin-chart">
     <template>
-      <vaadin-chart id="mychart" additional-options='{ "exporting": { "enabled": true } }'>
+      <style include="vaadin-chart-default-theme">
+
+        /* Ensure exporting works with complex selectors */
+        .highcharts-color-0 {
+          stroke: red;
+          fill: red;
+        }
+
+        :host(#mychart) .highcharts-color-0 {
+          stroke: blue;
+          fill: blue;
+        }
+
+        :host(.myclass .dummyclass) .highcharts-color-0 {
+          stroke: blue;
+          fill: blue;
+        }
+
+        :host(.ColumnLineAndPie) g.highcharts-markers > .highcharts-point {
+          fill: white;
+        }
+
+        /* stylelint-disable-next-line */
+        :host(.GaugeWithDualAxes) .kmh .highcharts-tick, :host(.GaugeWithDualAxes) .kmh .highcharts-axis-line {
+          stroke: #339;
+          stroke-width: 2;
+        }
+
+        :host(.GaugeWithDualAxes) .kmh .highcharts-tick,
+        :host(.GaugeWithDualAxes) .kmh .highcharts-axis-line {
+          stroke: #339;
+          stroke-width: 2;
+        }
+      </style>
+
+      <vaadin-chart id="mychart" class$="myclass dummyclass" additional-options='{ "exporting": { "enabled": true } }'>
         <vaadin-chart-series values="[19,12,9,24,5]"></vaadin-chart-series>
       </vaadin-chart>
     </template>
