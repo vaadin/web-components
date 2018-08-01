@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-confirm-dialog",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "vaadin-confirm-dialog",
   "main": "vaadin-confirm-dialog.html",
   "repository": "vaadin/vaadin-confirm-dialog",
