@@ -9,6 +9,32 @@
     <h3>Basic Usage</h3>
     <vaadin-demo-snippet id="dropdown-menu-list-box-basic">
       <template preserve-content>
+        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+        <script>
+          window.addDemoReadyListener('#dropdown-menu-list-box-basic', function(document) {
+            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              // create the <vaadin-list-box>
+              const listBox = new Vaadin.ListBoxElement();
+              // append 3 <vaadin-item> elements
+              ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = name;
+                listBox.appendChild(item);
+              });
+              // update the content
+              root.appendChild(listBox);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Defining Content with Polymer Templates</h3>
+    <p>
+      The content can be provided using the HTML template.
+    </p>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-polymer-template">
+      <template preserve-content>
         <vaadin-dropdown-menu>
           <template>
             <vaadin-list-box>
@@ -21,22 +47,61 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Content Renderer Function</h3>
-    <p>
-      The content can be provided using the renderer callback function.
-    </p>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-renderer">
+    <h3>Configuring the Dropdown</h3>
+    <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
       <template preserve-content>
-        <vaadin-dropdown-menu></vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Label" placeholder="Placeholder"></vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Disabled" disabled></vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Read-only" readonly value="Option one"></vaadin-dropdown-menu>
+        <vaadin-dropdown-menu label="Required" required></vaadin-dropdown-menu>
         <script>
-          window.addDemoReadyListener('#dropdown-menu-list-box-renderer', function(document) {
-            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
-              const listBox = window.document.createElement('vaadin-list-box');
-              ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
-                const item = window.document.createElement('vaadin-item');
-                item.innerText = name;
+          window.addDemoReadyListener('#dropdown-menu-list-box-configuring', function(document) {
+            const appendItems = function(listBox, items) {
+              items.forEach(function(row) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = row.textContent;
+                if (row.value) {
+                  item.setAttribute('value', row.value);
+                }
                 listBox.appendChild(item);
               });
+            };
+
+            document.querySelector('vaadin-dropdown-menu[placeholder]').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+              appendItems(listBox, [{textContent: 'Option one'}, {textContent: 'Option two'}]);
+              root.appendChild(listBox);
+            };
+
+            document.querySelector('vaadin-dropdown-menu[disabled]').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+              appendItems(listBox, [{textContent: 'Option one'}]);
+              root.appendChild(listBox);
+            };
+
+            document.querySelector('vaadin-dropdown-menu[readonly]').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+              appendItems(listBox, [{textContent: 'Option one'}]);
+              root.appendChild(listBox);
+            };
+
+            document.querySelector('vaadin-dropdown-menu[required]').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+              // un-selectable <vaadin-item> to highlight required state
+              const select = new Vaadin.ItemElement();
+              select.textContent = 'Select an option';
+              select.setAttribute('disabled', '');
+              select.setAttribute('value', '');
+              listBox.appendChild(select);
+              // <hr> divider
+              const divider = window.document.createElement('hr');
+              listBox.appendChild(divider);
+              appendItems(listBox, [
+                {value: '1', textContent: 'Option one'},
+                {value: '2', textContent: 'Option one'},
+                {value: '3', textContent: 'Option three'},
+                {value: '4', textContent: 'Option four'}
+              ]);
               root.appendChild(listBox);
             };
           });
@@ -44,70 +109,33 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Configuring the Dropdown</h3>
-    <vaadin-demo-snippet id="dropdown-menu-list-box-configuring">
-      <template preserve-content>
-        <vaadin-dropdown-menu label="Label" placeholder="Placeholder">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item value="1">Option one</vaadin-item>
-              <vaadin-item value="2">Option two</vaadin-item>
-              <vaadin-item value="3">Option three</vaadin-item>
-              <vaadin-item value="4">Option four</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-dropdown-menu>
-
-        <vaadin-dropdown-menu label="Disabled" disabled>
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>Option one</vaadin-item>
-              <vaadin-item>Option two</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-dropdown-menu>
-
-        <vaadin-dropdown-menu label="Read-only" readonly value="Option one">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item>Option one</vaadin-item>
-              <vaadin-item>Option two</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-dropdown-menu>
-
-        <vaadin-dropdown-menu label="Required" required>
-          <template>
-            <vaadin-list-box>
-              <vaadin-item value="" disabled>Select an option</vaadin-item>
-              <hr>
-              <vaadin-item value="1">Option one</vaadin-item>
-              <vaadin-item value="2">Option two</vaadin-item>
-              <vaadin-item value="3">Option three</vaadin-item>
-              <vaadin-item value="4">Option four</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-dropdown-menu>
-      </template>
-    </vaadin-demo-snippet>
-
-
     <h3>Customize the Label of Selected Value</h3>
     <p>
         By setting the <code>label</code> attribute of inner vaadin-items you will be able to change the visual representation of the selected value in the input part.
     </p>
     <vaadin-demo-snippet id="dropdown-menu-list-box-custom-label">
       <template preserve-content>
-        <vaadin-dropdown-menu placeholder="Language">
-          <template>
-            <vaadin-list-box>
-              <vaadin-item label="">Other</vaadin-item>
-              <vaadin-item label="ES">Spanish</vaadin-item>
-              <vaadin-item label="FI">Finnish</vaadin-item>
-              <vaadin-item label="EN">English</vaadin-item>
-            </vaadin-list-box>
-          </template>
-        </vaadin-dropdown-menu>
+        <vaadin-dropdown-menu placeholder="Language"></vaadin-dropdown-menu>
+        <script>
+          window.addDemoReadyListener('#dropdown-menu-list-box-custom-label', function(document) {
+            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+              const items = [
+                {label: '', textContent: 'Other'},
+                {label: 'ES', textContent: 'Spanish'},
+                {label: 'FI', textContent: 'Finnish'},
+                {label: 'EN', textContent: 'English'}
+              ];
+              items.forEach(function(row) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = row.textContent;
+                item.setAttribute('label', row.label);
+                listBox.appendChild(item);
+              });
+              root.appendChild(listBox);
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 

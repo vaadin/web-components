@@ -11,18 +11,7 @@
       <template preserve-content>
         <iron-form>
           <form method="post">
-            <vaadin-dropdown-menu name="title" label="Title" error-message="Please choose the option closes to your profession." required>
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item value="">Select your title</vaadin-item>
-                  <hr>
-                  <vaadin-item value="sales">Account manager</vaadin-item>
-                  <vaadin-item value="design">Designer</vaadin-item>
-                  <vaadin-item value="marketing">Marketing manager</vaadin-item>
-                  <vaadin-item value="dev">Developer</vaadin-item>
-                </vaadin-list-box>
-              </template>
-            </vaadin-dropdown-menu>
+            <vaadin-dropdown-menu name="title" label="Title" error-message="Please choose the option closes to your profession." required></vaadin-dropdown-menu>
             <vaadin-button>Submit</vaadin-button>
           </form>
         </iron-form>
@@ -40,6 +29,36 @@
             button.addEventListener('click', function() {
               form.submit();
             });
+
+            const items = [
+              {value: 'sales', textContent: 'Account manager'},
+              {value: 'design', textContent: 'Designer'},
+              {value: 'marketing', textContent: 'Marketing manager'},
+              {value: 'dev', textContent: 'Developer'},
+            ];
+
+            document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              const listBox = new Vaadin.ListBoxElement();
+
+              const select = new Vaadin.ItemElement();
+              select.textContent = 'Select your title';
+              select.setAttribute('value', '');
+              listBox.appendChild(select);
+
+              const divider = window.document.createElement('hr');
+              listBox.appendChild(divider);
+
+              items.forEach(function(row) {
+                const item = new Vaadin.ItemElement();
+                item.textContent = row.textContent;
+                if (row.value) {
+                  item.setAttribute('value', row.value);
+                }
+                listBox.appendChild(item);
+              });
+
+              root.appendChild(listBox);
+            };
           });
         </script>
       </template>
