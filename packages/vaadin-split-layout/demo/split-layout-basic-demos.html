@@ -43,43 +43,6 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Split Layout Element Height</h3>
-
-    <h4>Using Fixed Height</h4>
-    <vaadin-demo-snippet id="split-layout-basic-demos-split-layout-element-height">
-      <template preserve-content>
-        <vaadin-split-layout style="height: 200px;">
-          <div>First content element</div>
-          <div>Second content element</div>
-        </vaadin-split-layout>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h4>Using Relative Height</h4>
-    <vaadin-demo-snippet id="split-layout-basic-demos-split-layout-element-height">
-      <template preserve-content>
-        <div style="height: 200px;">
-          <vaadin-split-layout style="height: 100%;">
-            <div>First</div>
-            <div>Second</div>
-          </vaadin-split-layout>
-        </div>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h4>Using Flexbox Layout</h4>
-    <vaadin-demo-snippet id="split-layout-basic-demos-split-layout-element-height">
-      <template preserve-content>
-        <div style="height: 160px; display: flex;">
-          <vaadin-split-layout style="flex: 1;">
-            <div>First</div>
-            <div>Second</div>
-          </vaadin-split-layout>
-        </div>
-      </template>
-    </vaadin-demo-snippet>
-
-
     <h3>Initial Splitter Position</h3>
     <vaadin-demo-snippet id="split-layout-basic-demos-initial-splitter-position">
       <template preserve-content>
@@ -101,32 +64,6 @@
       </template>
     </vaadin-demo-snippet>
 
-
-    <h3>Resize Notification for the Nested Elements</h3>
-    <vaadin-demo-snippet id="split-layout-basic-demos-resize-notification-for-the-nested-elements">
-      <template preserve-content>
-        <vaadin-split-layout>
-          <div>First</div>
-          <custom-resizable>Second</custom-resizable>
-        </vaadin-split-layout>
-        <script>
-        window.addDemoReadyListener('#split-layout-basic-demos-resize-notification-for-the-nested-elements', function(document) {
-          Polymer({
-            is: 'custom-resizable',
-            behaviors: [
-              Polymer.IronResizableBehavior
-            ],
-            listeners: {
-              'iron-resize': '_onIronResize'
-            },
-            _onIronResize: function() {
-              console.log('Resized');
-            }
-          });
-        });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
 
   </template>
   <script>

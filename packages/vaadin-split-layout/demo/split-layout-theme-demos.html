@@ -1,4 +1,4 @@
-<dom-module id="split-layout-lumo-theme-demos">
+<dom-module id="split-layout-theme-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,7 +7,7 @@
     </style>
 
     <h3>Small</h3>
-    <vaadin-demo-snippet id="split-layout-lumo-theme-demos-small">
+    <vaadin-demo-snippet id="split-layout-theme-demos-small">
       <template preserve-content>
         <style>
           vaadin-split-layout {
@@ -31,7 +31,7 @@
     </vaadin-demo-snippet>
 
     <h3>Minimal</h3>
-    <vaadin-demo-snippet id="split-layout-lumo-theme-demos-minimal">
+    <vaadin-demo-snippet id="split-layout-theme-demos-minimal">
       <template preserve-content>
         <style>
           vaadin-split-layout {
@@ -56,11 +56,11 @@
 
   </template>
   <script>
-    class SplitLayoutLumoThemeDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
+    class SplitLayoutThemeDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
       static get is() {
-        return 'split-layout-lumo-theme-demos';
+        return 'split-layout-theme-demos';
       }
     }
-    customElements.define(SplitLayoutLumoThemeDemos.is, SplitLayoutLumoThemeDemos);
+    customElements.define(SplitLayoutThemeDemos.is, SplitLayoutThemeDemos);
   </script>
 </dom-module>

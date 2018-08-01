@@ -2,14 +2,25 @@
   "name": "Vaadin Split Layout",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "split-layout-basic-demos",
     "src": "split-layout-basic-demos.html",
     "meta": {
       "title": "vaadin-split-layout Basic Examples",
       "description": "",
       "image": ""
-     }
+    }
+  }
+  ,
+  {
+    "name": "Height",
+    "url": "split-layout-height-demos",
+    "src": "split-layout-height-demos.html",
+    "meta": {
+      "title": "vaadin-split-layout Height Examples",
+      "description": "",
+      "image": ""
+    }
   }
   ,
   {
@@ -20,18 +31,18 @@
       "title": "vaadin-split-layout Integration",
       "description": "",
       "image": ""
-     }
+    }
   }
   ,
   {
-    "name": "Lumo Theme Variations",
-    "url": "split-layout-lumo-theme-demos",
-    "src": "split-layout-lumo-theme-demos.html",
+    "name": "Theme Variants",
+    "url": "split-layout-theme-demos",
+    "src": "split-layout-theme-demos.html",
     "meta": {
-      "title": "vaadin-split-layout Lumo Theme Variations",
+      "title": "vaadin-split-layout Theme Variants",
       "description": "",
       "image": ""
-     }
+    }
   }
   ]
 }
