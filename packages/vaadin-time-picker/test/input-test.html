@@ -29,6 +29,20 @@
         timePicker = fixture('default');
       });
 
+      describe('element', () => {
+        it('should have a valid localName', () => {
+          expect(timePicker.localName).to.be.equal('vaadin-time-picker');
+        });
+
+        it('should be registered in Vaadin namespace', () => {
+          expect(Vaadin.TimePickerElement.is).to.be.equal('vaadin-time-picker');
+        });
+
+        it('should have a valid version', () => {
+          expect(Vaadin.TimePickerElement.version).to.be.ok;
+        });
+      });
+
       it('vaadin-time-picker-text-field should exist', () => {
         expect(timePicker.__inputElement.localName).to.be.equal('vaadin-time-picker-text-field');
       });

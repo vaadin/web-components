@@ -29,6 +29,10 @@
         MockInteractions.pressAndReleaseKeyOn(getInput(), 40);
       }
 
+      function escape() {
+        MockInteractions.pressAndReleaseKeyOn(timePicker.__dropdownElement, 27);
+      }
+
       function getInput() {
         return timePicker.__inputElement;
       }
@@ -227,6 +231,14 @@
           timePicker.step = 0.5;
           arrowUp();
           expect(document.querySelector('vaadin-combo-box-overlay')).not.to.be.ok;
+        });
+
+        it('should not change value on escape', () => {
+          timePicker.step = 0.5;
+          arrowUp();
+          expect(timePicker.__inputElement.value).to.be.equal('00:00:00.500');
+          escape();
+          expect(timePicker.__inputElement.value).to.be.equal('');
         });
       });
     });
