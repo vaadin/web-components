@@ -46,7 +46,7 @@
           <template>
             <div>
               <b>Notice</b><br>
-              The content of this notification is defined with polymer template
+              The content of this notification is defined with Polymer template
             </div>
           </template>
         </vaadin-notification>
@@ -101,7 +101,7 @@
               const plainText = window.document.createTextNode('Can\'t send message.');
               const retryBtn = window.document.createElement('vaadin-button');
 
-              retryBtn.innerText = 'Retry';
+              retryBtn.textContent = 'Retry';
               retryBtn.setAttribute('theme', 'tertiary');
               retryBtn.addEventListener('click', function() {
                 owner.close();
