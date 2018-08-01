@@ -22,26 +22,6 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
-    "bower": "latest",
-    "coveralls": "^3.0.1",
-    "eslint": "^5.0.0",
-    "eslint-config-vaadin": "latest",
-    "eslint-plugin-html": "^4.0.0",
-    "gulp": "latest",
-    "gulp-clip-empty-files": "^0.1.2",
-    "gulp-eslint": "^4.0.0",
-    "gulp-expect-file": "0.0.7",
-    "gulp-find": "0.0.10",
-    "gulp-git": "^2.4.2",
-    "gulp-grep-contents": "0.0.1",
-    "gulp-html-extract": "^0.3.0",
-    "gulp-line-ending-corrector": "^1.0.2",
-    "gulp-replace": "^0.6.1",
-    "gulp-stylelint": "^7.0.0",
-    "stylelint": "^9.0.0",
-    "stylelint-config-vaadin": "latest",
-    "wct-istanbul": "^0.14.3",
-    "web-component-tester": "^6.1.5",
-    "yargs": "latest"
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
   }
 }
