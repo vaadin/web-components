@@ -1,11 +1,14 @@
 <link rel="import" href="../vaadin-development-mode-detector/vaadin-development-mode-detector.html">
 
 <script>
-/**
- * @namespace Vaadin
- */
-window.Vaadin = window.Vaadin || {};
+if (!window.Vaadin) {
+  window['Vaadin'] = {};
+}
 
+/**
+ * Array of Vaadin custom element classes that have been finalized.
+ */
+window.Vaadin.registrations = window.Vaadin.registrations || [];
 
 /**
  * @polymerMixin
@@ -14,6 +17,15 @@ window.Vaadin = window.Vaadin || {};
 Vaadin.ElementMixin = superClass => {
   try {
     return class VaadinElementMixin extends superClass {
+      /** @protected */
+      static _finalizeClass() {
+        super._finalizeClass();
+
+        // Registers a class prototype for telemetry purposes.
+        if (this.is) {
+          window.Vaadin.registrations.push(this);
+        }
+      }
     };
   } finally {
     // This is run every time a new class is declared, not every time an instance is created

@@ -88,6 +88,11 @@
         expect(window.Vaadin.developmentMode).to.exist;
       });
 
+      it('should store the class entry in registrations', function() {
+        expect(window.Vaadin.registrations).to.be.array;
+        expect(window.Vaadin.registrations[0].is).to.equal('test-foo');
+      });
+
       it('should load usage statistics only on localhost', function() {
         expect(window.Vaadin.developmentModeCallback).to.exist;
         expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
