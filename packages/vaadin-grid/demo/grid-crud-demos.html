@@ -50,12 +50,10 @@
             const addBtn = document.querySelector('#add-btn');
 
             addBtn.addEventListener('click', function() {
-              if (firstname.value !== '' && lastname.value !== '') {
+              if (firstname.value && lastname.value) {
                 grid.items.unshift({name: {first: firstname.value, last: lastname.value}});
                 grid.clearCache();
-
-                firstname.value = '';
-                lastname.value = '';
+                firstname.value = lastname.value = '';
               } else {
                 alert('First Name and Last Name required');
               }
@@ -66,100 +64,84 @@
             columns[0].headerRenderer = function(root) {
               root.textContent = 'First Name';
             };
-
             columns[0].renderer = function(root, column, model) {
-              root.innerHTML = '';
-
-              const textField = new Vaadin.TextFieldElement();
+              let textField = root.firstElementChild;
+              if (!textField) {
+                textField = new Vaadin.TextFieldElement();
+                root.appendChild(textField);
+              }
               textField.setAttribute('id', 'first-' + model.index);
-              textField.setAttribute('value', model.item.name.first);
-              textField.setAttribute('readonly', true);
-              root.appendChild(textField);
+              textField.value = model.item.name.first;
+              textField.readonly = true;
             };
 
             columns[1].headerRenderer = function(root) {
               root.textContent = 'Last Name';
             };
-
             columns[1].renderer = function(root, column, model) {
-              root.innerHTML = '';
-
-              const textField = new Vaadin.TextFieldElement();
+              let textField = root.firstElementChild;
+              if (!textField) {
+                textField = new Vaadin.TextFieldElement();
+                root.appendChild(textField);
+              }
               textField.setAttribute('id', 'last-' + model.index);
-              textField.setAttribute('value', model.item.name.last);
-              textField.setAttribute('readonly', true);
-              root.appendChild(textField);
+              textField.value = model.item.name.last;
+              textField.readonly = true;
             };
 
             columns[2].headerRenderer = function(root) {
               root.textContent = 'Email';
             };
-
             columns[2].renderer = function(root, column, model) {
-              root.innerHTML = '<div>' + model.item.name.first + '.' + model.item.name.last + '@example.com</div>';
+              root.textContent = model.item.name.first + '.' + model.item.name.last + '@example.com';
             };
 
             columns[3].renderer = function(root, column, model) {
-              root.innerHTML = '';
+              let wrapper = root.firstElementChild;
+              if (!wrapper) {
+                root.innerHTML =
+                  '<div style="text-align: right">' +
+                    '<vaadin-button aria-label="Edit" theme="icon" focus-target>' +
+                      '<iron-icon icon="lumo:edit"></iron-icon>' +
+                    '</vaadin-button>' +
+                    '<vaadin-button aria-label="Delete" theme="icon error" style="margin-left: 5px">' +
+                      '<iron-icon icon="lumo:cross"></iron-icon>' +
+                    '</vaadin-button>' +
+                    '<vaadin-button aria-label="Save" theme="primary" focus-target hidden>Save</vaadin-button>' +
+                    '<vaadin-button aria-label="Cancel" hidden style="margin-left: 5px">Cancel</vaadin-button>' +
+                  '</div>';
+                wrapper = root.firstElementChild;
 
-              const wrapper = window.document.createElement('div');
-              wrapper.style.textAlign = 'right';
+                const buttons = wrapper.querySelectorAll('vaadin-button')
+                buttons[0].addEventListener('click', function() {
+                  grid.querySelector('#first-' + wrapper._model.index).focus();
+                  updateTextFieldsVisibility(wrapper._model.index, true);
+                  updateButtonsVisibility(wrapper, true);
+                });
+                buttons[1].addEventListener('click', function(event) {
+                  var index = grid.items.indexOf(wrapper._model.item);
+                  grid.items.splice(index, 1);
+                  grid.clearCache();
+                });
+                buttons[2].addEventListener('click', function() {
+                  model.item.name.first = grid.querySelector('#first-' + wrapper._model.index).value;
+                  model.item.name.last = grid.querySelector('#last-' + wrapper._model.index).value;
 
-              const editBtn = new Vaadin.ButtonElement();
-              editBtn.style.marginRight = '5px';
-              editBtn.addEventListener('click', function() {
-                grid.querySelector('#first-' + model.index).focus();
-                updateTextFieldsVisibility(model.index, true);
-                updateButtonsVisibility(wrapper, true);
-              });
-              editBtn.setAttribute('focus-target', true);
-              editBtn.setAttribute('theme', 'icon');
-              editBtn.setAttribute('aria-label', 'Edit');
-              editBtn.innerHTML = '<iron-icon icon="lumo:edit"></iron-icon>';
+                  updateTextFieldsVisibility(wrapper._model.index, false);
+                  updateButtonsVisibility(wrapper, false);
+                  grid.clearCache();
+                  buttons[0].focus();
+                });
+                buttons[3].addEventListener('click', function(event) {
+                  updateTextFieldsVisibility(wrapper._model.index, false);
+                  updateButtonsVisibility(wrapper, false);
+                  grid.clearCache();
+                  buttons[0].focus();
+                });
+              }
 
-              const deleteBtn = new Vaadin.ButtonElement();
-              deleteBtn.addEventListener('click', function(event) {
-                var index = grid.items.indexOf(model.item);
-                grid.items.splice(index, 1);
-
-                grid.clearCache();
-              });
-              deleteBtn.setAttribute('theme', 'icon error');
-              deleteBtn.setAttribute('aria-label', 'Delete');
-              deleteBtn.innerHTML = '<iron-icon icon="lumo:cross"></iron-icon>';
-
-              const saveBtn = new Vaadin.ButtonElement();
-              saveBtn.style.marginRight = '5px';
-              saveBtn.setAttribute('hidden', true);
-              saveBtn.addEventListener('click', function() {
-                model.item.name.first = grid.querySelector('#first-' + model.index).value;
-                model.item.name.last = grid.querySelector('#last-' + model.index).value;
-
-                updateTextFieldsVisibility(model.index, false);
-                updateButtonsVisibility(wrapper, false);
-                grid.clearCache();
-                editBtn.focus();
-              });
-              saveBtn.setAttribute('theme', 'primary');
-              saveBtn.setAttribute('focus-target', false);
-              saveBtn.textContent = 'Save';
-
-              const cancelBtn = new Vaadin.ButtonElement();
-              cancelBtn.setAttribute('hidden', true);
-              cancelBtn.addEventListener('click', function(event) {
-                updateTextFieldsVisibility(model.index, false);
-                updateButtonsVisibility(wrapper, false);
-                grid.clearCache();
-                editBtn.focus();
-              });
-              cancelBtn.textContent = 'Cancel';
-
-              wrapper.appendChild(editBtn);
-              wrapper.appendChild(deleteBtn);
-              wrapper.appendChild(saveBtn);
-              wrapper.appendChild(cancelBtn);
-
-              root.appendChild(wrapper);
+              wrapper._model = model;
+              console.log(model, root, root._model);
             };
 
             function updateTextFieldsVisibility(index, editing) {
