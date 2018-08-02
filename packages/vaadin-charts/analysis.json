@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 143,
+                  "line": 142,
                   "column": 12
                 },
                 "end": {
-                  "line": 146,
+                  "line": 145,
                   "column": 13
                 }
               },
@@ -43,55 +43,17 @@
               "defaultValue": "[]"
             },
             {
-              "name": "valueLabels",
-              "type": "ChartLabelsMapper",
-              "description": "Labels for the series values. Acceptable input are:\n- An array e.g `'[\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\"]'`. This maps to corresponding values by position.\n- A mapping object e.g `'{10: \"Mon\", 20: \"Tue\", 30: \"Wed\"}'`. This maps to specific values.\n- A function e.g `'e => e + \"km\"'`. This is evaluated against every value to generate its label.\n\nAny data point not covered (e.g value not present in the mapping object\nor mapping array shorter than the list of values), results in the actual value being used as the label.",
-              "privacy": "public",
-              "sourceRange": {
-                "start": {
-                  "line": 157,
-                  "column": 12
-                },
-                "end": {
-                  "line": 160,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
-              "name": "__labelsMapper",
-              "type": "ChartLabelsMapper",
-              "description": "Internal valueLabels representation so that the original property/attribute set\non valueLabels can be preserved.",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 166,
-                  "column": 12
-                },
-                "end": {
-                  "line": 169,
-                  "column": 13
-                }
-              },
-              "metadata": {
-                "polymer": {}
-              }
-            },
-            {
               "name": "valueMin",
               "type": "number",
               "description": "Value-axis minimum-value.\n Sets the value to a series bound by 'unit' property.\n Otherwise sets the value to the first series.\n Undefined by default (determined from data).",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 181,
+                  "line": 157,
                   "column": 13
                 }
               },
@@ -108,11 +70,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 191,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -129,11 +91,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 174,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 178,
                   "column": 13
                 }
               },
@@ -150,11 +112,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 187,
                   "column": 13
                 }
               },
@@ -171,11 +133,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 196,
                   "column": 12
                 },
                 "end": {
-                  "line": 224,
+                  "line": 200,
                   "column": 13
                 }
               },
@@ -192,11 +154,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 230,
+                  "line": 206,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 210,
                   "column": 13
                 }
               },
@@ -213,11 +175,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 220,
                   "column": 13
                 }
               },
@@ -234,11 +196,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 254,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -255,11 +217,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 236,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 240,
                   "column": 13
                 }
               },
@@ -276,11 +238,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 247,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 249,
                   "column": 13
                 }
               },
@@ -295,11 +257,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 278,
+                  "line": 254,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 257,
                   "column": 13
                 }
               },
@@ -315,11 +277,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 294,
+                  "line": 269,
                   "column": 8
                 },
                 "end": {
-                  "line": 299,
+                  "line": 274,
                   "column": 9
                 }
               },
@@ -332,11 +294,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 305,
+                  "line": 280,
                   "column": 8
                 },
                 "end": {
-                  "line": 310,
+                  "line": 285,
                   "column": 9
                 }
               },
@@ -354,61 +316,16 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 312,
+                  "line": 287,
                   "column": 8
                 },
                 "end": {
-                  "line": 316,
+                  "line": 291,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": []
-            },
-            {
-              "name": "_deserializeValue",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 319,
-                  "column": 8
-                },
-                "end": {
-                  "line": 325,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "type"
-                }
-              ]
-            },
-            {
-              "name": "_serializeValue",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 328,
-                  "column": 8
-                },
-                "end": {
-                  "line": 333,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "value"
-                }
-              ]
             },
             {
               "name": "__additionalOptionsObserver",
@@ -416,11 +333,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 335,
+                  "line": 293,
                   "column": 8
                 },
                 "end": {
-                  "line": 339,
+                  "line": 297,
                   "column": 9
                 }
               },
@@ -428,61 +345,16 @@
               "params": []
             },
             {
-              "name": "__labelsObserver",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 341,
-                  "column": 8
-                },
-                "end": {
-                  "line": 352,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "changeRecord"
-                },
-                {
-                  "name": "values"
-                }
-              ]
-            },
-            {
-              "name": "__computeData",
-              "description": "",
-              "privacy": "private",
-              "sourceRange": {
-                "start": {
-                  "line": 354,
-                  "column": 8
-                },
-                "end": {
-                  "line": 356,
-                  "column": 9
-                }
-              },
-              "metadata": {},
-              "params": [
-                {
-                  "name": "values"
-                }
-              ]
-            },
-            {
               "name": "__valueMinObserver",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 358,
+                  "line": 299,
                   "column": 8
                 },
                 "end": {
-                  "line": 373,
+                  "line": 314,
                   "column": 9
                 }
               },
@@ -495,11 +367,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 375,
+                  "line": 316,
                   "column": 8
                 },
                 "end": {
-                  "line": 390,
+                  "line": 331,
                   "column": 9
                 }
               },
@@ -512,11 +384,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 392,
+                  "line": 333,
                   "column": 8
                 },
                 "end": {
-                  "line": 398,
+                  "line": 339,
                   "column": 9
                 }
               },
@@ -529,11 +401,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 400,
+                  "line": 341,
                   "column": 8
                 },
                 "end": {
-                  "line": 406,
+                  "line": 347,
                   "column": 9
                 }
               },
@@ -546,11 +418,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 408,
+                  "line": 349,
                   "column": 8
                 },
                 "end": {
-                  "line": 416,
+                  "line": 357,
                   "column": 9
                 }
               },
@@ -563,11 +435,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 418,
+                  "line": 359,
                   "column": 8
                 },
                 "end": {
-                  "line": 425,
+                  "line": 366,
                   "column": 9
                 }
               },
@@ -580,11 +452,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 427,
+                  "line": 368,
                   "column": 8
                 },
                 "end": {
-                  "line": 434,
+                  "line": 375,
                   "column": 9
                 }
               },
@@ -597,11 +469,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 436,
+                  "line": 377,
                   "column": 8
                 },
                 "end": {
-                  "line": 451,
+                  "line": 392,
                   "column": 9
                 }
               },
@@ -614,11 +486,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 453,
+                  "line": 394,
                   "column": 8
                 },
                 "end": {
-                  "line": 455,
+                  "line": 396,
                   "column": 9
                 }
               },
@@ -631,11 +503,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 457,
+                  "line": 398,
                   "column": 8
                 },
                 "end": {
-                  "line": 463,
+                  "line": 404,
                   "column": 9
                 }
               },
@@ -648,11 +520,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 465,
+                  "line": 406,
                   "column": 8
                 },
                 "end": {
-                  "line": 475,
+                  "line": 416,
                   "column": 9
                 }
               },
@@ -665,11 +537,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 495,
+                  "line": 436,
                   "column": 8
                 },
                 "end": {
-                  "line": 497,
+                  "line": 438,
                   "column": 9
                 }
               },
@@ -694,11 +566,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 74,
+              "line": 73,
               "column": 6
             },
             "end": {
-              "line": 498,
+              "line": 439,
               "column": 7
             }
           },
@@ -711,11 +583,11 @@
               "description": "An array of data used by the series.\nFormat depends on the chart type and can be:\n  - An array of numerical values `[y0, y1, y2, y3,...]`\n  - An array of arrays with 2 values (`x`, `y`) `[ [x0, y0], [x1, y1], [x2, y2], ... ]`\n  - An array of objects, each one describing one point `[ {x: x0, y: y0, name: 'Point0', color: '#FF0000'}, {...}, ...]`\n\n See more in [API Site](https://api.highcharts.com/highcharts/series)\n\nNote that you should always use [Polymer API](https://www.polymer-project.org/2.0/docs/devguide/model-data#array-mutation)\nto mutate the values array in order to make the component aware of the\nchange and be able to synchronize it.",
               "sourceRange": {
                 "start": {
-                  "line": 143,
+                  "line": 142,
                   "column": 12
                 },
                 "end": {
-                  "line": 146,
+                  "line": 145,
                   "column": 13
                 }
               },
@@ -723,31 +595,15 @@
               "type": "Array"
             },
             {
-              "name": "value-labels",
-              "description": "Labels for the series values. Acceptable input are:\n- An array e.g `'[\"Mon\", \"Tue\", \"Wed\", \"Thur\", \"Fri\"]'`. This maps to corresponding values by position.\n- A mapping object e.g `'{10: \"Mon\", 20: \"Tue\", 30: \"Wed\"}'`. This maps to specific values.\n- A function e.g `'e => e + \"km\"'`. This is evaluated against every value to generate its label.\n\nAny data point not covered (e.g value not present in the mapping object\nor mapping array shorter than the list of values), results in the actual value being used as the label.",
-              "sourceRange": {
-                "start": {
-                  "line": 157,
-                  "column": 12
-                },
-                "end": {
-                  "line": 160,
-                  "column": 13
-                }
-              },
-              "metadata": {},
-              "type": "ChartLabelsMapper"
-            },
-            {
               "name": "value-min",
               "description": "Value-axis minimum-value.\n Sets the value to a series bound by 'unit' property.\n Otherwise sets the value to the first series.\n Undefined by default (determined from data).",
               "sourceRange": {
                 "start": {
-                  "line": 177,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 181,
+                  "line": 157,
                   "column": 13
                 }
               },
@@ -759,11 +615,11 @@
               "description": "Value-axis maximum-value.\n See the 'valueMin'",
               "sourceRange": {
                 "start": {
-                  "line": 187,
+                  "line": 163,
                   "column": 12
                 },
                 "end": {
-                  "line": 191,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -775,11 +631,11 @@
               "description": "A string with the type of the series.\n Defaults to `'line'` in case no type is set for the chart.\nNote that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type on `<vaadin-chart>`.",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 174,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 178,
                   "column": 13
                 }
               },
@@ -791,11 +647,11 @@
               "description": "The name of the series as shown in the legend, tooltip etc.",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 187,
                   "column": 13
                 }
               },
@@ -807,11 +663,11 @@
               "description": "Shows/hides data-point markers for line-like series.\nAcceptable input are:\n - `shown`: markers are always visible\n - `hidden`: markers are always hidden\n - `auto`: markers are visible for widespread data and hidden, when data is dense *(default)*",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 196,
                   "column": 12
                 },
                 "end": {
-                  "line": 224,
+                  "line": 200,
                   "column": 13
                 }
               },
@@ -823,11 +679,11 @@
               "description": "Used to connect the series to an axis; if multiple series have the same “unit”, they will share axis.\nDisplayed as a title for the axis.\nIf no unit is defined, then series will be connected to the first axis.",
               "sourceRange": {
                 "start": {
-                  "line": 230,
+                  "line": 206,
                   "column": 12
                 },
                 "end": {
-                  "line": 234,
+                  "line": 210,
                   "column": 13
                 }
               },
@@ -839,11 +695,11 @@
               "description": "Used to group series in a different stacks.\n\"stacking\" property should be specified either for each series or in plotOptions.\nIt is recommended to place series in a single stack, when they belong to the same yAxis.",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 216,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 220,
                   "column": 13
                 }
               },
@@ -855,11 +711,11 @@
               "description": "The height of the neck, the lower part of the funnel.\nA number defines pixel width, a percentage string defines a percentage of the plot area height. Defaults to 30%.\nNote that this property only applies for \"funnel\" charts.",
               "sourceRange": {
                 "start": {
-                  "line": 250,
+                  "line": 226,
                   "column": 12
                 },
                 "end": {
-                  "line": 254,
+                  "line": 230,
                   "column": 13
                 }
               },
@@ -871,11 +727,11 @@
               "description": "The width of the neck, the lower part of the funnel.\nA number defines pixel width, a percentage string defines a percentage of the plot area width. Defaults to 30%.\nNote that this property only applies for \"funnel\" charts.",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 236,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 240,
                   "column": 13
                 }
               },
@@ -887,11 +743,11 @@
               "description": "Object with the configured options defined and used to create a series.",
               "sourceRange": {
                 "start": {
-                  "line": 271,
+                  "line": 247,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 249,
                   "column": 13
                 }
               },
@@ -903,11 +759,11 @@
               "description": "Represents additional JSON configuration.",
               "sourceRange": {
                 "start": {
-                  "line": 278,
+                  "line": 254,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 257,
                   "column": 13
                 }
               },
@@ -2885,157 +2741,6 @@
         },
         "end": {
           "line": 27,
-          "column": 1
-        }
-      },
-      "privacy": "public"
-    },
-    {
-      "description": "",
-      "summary": "",
-      "path": "chart-labels-mapper.js",
-      "properties": [],
-      "methods": [
-        {
-          "name": "__isFunction",
-          "description": "",
-          "privacy": "private",
-          "sourceRange": {
-            "start": {
-              "line": 26,
-              "column": 2
-            },
-            "end": {
-              "line": 28,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            }
-          ]
-        },
-        {
-          "name": "__isObject",
-          "description": "",
-          "privacy": "private",
-          "sourceRange": {
-            "start": {
-              "line": 30,
-              "column": 2
-            },
-            "end": {
-              "line": 32,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "item"
-            }
-          ]
-        },
-        {
-          "name": "__tryPassFunction",
-          "description": "",
-          "privacy": "private",
-          "sourceRange": {
-            "start": {
-              "line": 34,
-              "column": 2
-            },
-            "end": {
-              "line": 41,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            }
-          ]
-        },
-        {
-          "name": "__tryPassArrayOrObject",
-          "description": "",
-          "privacy": "private",
-          "sourceRange": {
-            "start": {
-              "line": 43,
-              "column": 2
-            },
-            "end": {
-              "line": 53,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            }
-          ]
-        },
-        {
-          "name": "__assignMapper",
-          "description": "",
-          "privacy": "private",
-          "sourceRange": {
-            "start": {
-              "line": 55,
-              "column": 2
-            },
-            "end": {
-              "line": 58,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "value"
-            },
-            {
-              "name": "type"
-            }
-          ]
-        },
-        {
-          "name": "map",
-          "description": "",
-          "privacy": "public",
-          "sourceRange": {
-            "start": {
-              "line": 60,
-              "column": 2
-            },
-            "end": {
-              "line": 92,
-              "column": 3
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "values"
-            }
-          ]
-        }
-      ],
-      "staticMethods": [],
-      "demos": [],
-      "metadata": {},
-      "sourceRange": {
-        "start": {
-          "line": 4,
-          "column": 41
-        },
-        "end": {
-          "line": 93,
           "column": 1
         }
       },

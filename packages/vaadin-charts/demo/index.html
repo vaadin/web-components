@@ -22,7 +22,7 @@
       <template>
         <vaadin-chart title="Custom Title" no-legend subtitle="Custom Subtitle" categories="[2010, 2011, 2012, 2013, 2014]" tooltip
                       additional-options='{"yAxis": [{"id": "Rainfall (mm)", "title": {"text": "Rainfall (mm)"}},{"id": "Temperature", "opposite": true, "title": {"text": "Temperature"}}],"credits": {"enabled": true, "text": "Vaadin Ltd", "href": "https://vaadin.com/elements"}}'>
-          <vaadin-chart-series type="column" title="Tokyo" values="[19,12,9,24,5]" unit="Rainfall (mm)" value-labels='["Mon", "Tue", "Wed", "Thur", "Fri"]'></vaadin-chart-series>
+          <vaadin-chart-series type="column" title="Tokyo" values="[19,12,9,24,5]" unit="Rainfall (mm)"></vaadin-chart-series>
           <vaadin-chart-series title="Miami" values="[9,2,29,4,35]" markers="hidden" unit="Temperature"></vaadin-chart-series>
           <vaadin-chart-series title="Rio" values="[39,22,9,14,5]" value-min="-10"></vaadin-chart-series>
         </vaadin-chart>

@@ -8,7 +8,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 -->
 
 <link rel="import" href="../polymer/polymer-element.html">
-<script src="chart-labels-mapper.js"></script>
 <script src="chart-deep-merger.js"></script>
 
 <dom-module id="vaadin-chart-series">
@@ -18,7 +17,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     }
 
     {
-      const {ChartLabelsMapper, ChartDeepMerger} = Vaadin.Charts;
+      const {ChartDeepMerger} = Vaadin.Charts;
 
       /**
        * `<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.
@@ -89,7 +88,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
 
           if (this.values) {
-            options.data = this.__computeData(this.values, this.__labelsMapper);
+            options.data = this.values;
           }
 
           if (this.markers) {
@@ -144,29 +143,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             values: {
               type: Array,
               value: () => []
-            },
-
-            /**
-             * Labels for the series values. Acceptable input are:
-             * - An array e.g `'["Mon", "Tue", "Wed", "Thur", "Fri"]'`. This maps to corresponding values by position.
-             * - A mapping object e.g `'{10: "Mon", 20: "Tue", 30: "Wed"}'`. This maps to specific values.
-             * - A function e.g `'e => e + "km"'`. This is evaluated against every value to generate its label.
-             *
-             * Any data point not covered (e.g value not present in the mapping object
-             * or mapping array shorter than the list of values), results in the actual value being used as the label.
-             */
-            valueLabels: {
-              type: ChartLabelsMapper,
-              reflectToAttribute: true
-            },
-
-            /*
-             * Internal valueLabels representation so that the original property/attribute set
-             * on valueLabels can be preserved.
-             */
-            __labelsMapper: {
-              type: ChartLabelsMapper,
-              value: () => new ChartLabelsMapper([])
             },
 
             /**
@@ -286,7 +262,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         static get observers() {
           return [
             '__valuesObserver(values.splices)',
-            '__labelsObserver(valueLabels.*, values)',
             '__additionalOptionsObserver(additionalOptions.*)'
           ];
         }
@@ -312,48 +287,14 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         __valuesObserver() {
           if (this.__hasSeriesConfig()) {
-            this._series.setData(this.__computeData(this.values, this.__labelsMapper));
+            this._series.setData(this.values);
           }
-        }
-
-        /** @private */
-        _deserializeValue(value, type) {
-          if (type == ChartLabelsMapper) {
-            return new ChartLabelsMapper(value).mapper;
-          }
-
-          return super._deserializeValue(value, type);
-        }
-
-        /** @private */
-        _serializeValue(value) {
-          if (value instanceof ChartLabelsMapper) {
-            return value.type === 'function' ? value.mapper.toString() : super._serializeValue(value.mapper);
-          }
-          return super._serializeValue(value);
         }
 
         __additionalOptionsObserver() {
           if (this.__hasSeriesConfig()) {
             this._series.update(this.additionalOptions);
           }
-        }
-
-        __labelsObserver(changeRecord, values) {
-          const currentLabels = this.valueLabels || [];
-          if (currentLabels instanceof ChartLabelsMapper) {
-            this.__labelsMapper = currentLabels;
-          } else {
-            this.__labelsMapper = new ChartLabelsMapper(currentLabels);
-          }
-
-          if (this.__hasSeriesConfig()) {
-            this._series.setData(this.__computeData(values));
-          }
-        }
-
-        __computeData(values) {
-          return this.__labelsMapper.map(values);
         }
 
         __valueMinObserver() {

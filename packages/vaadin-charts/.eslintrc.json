@@ -12,7 +12,6 @@
     "Polymer": false,
     "Vaadin": false,
     "Highcharts": false,
-    "ChartLabelsMapper": false,
     "ChartDeepMerger": false
   }
 }
