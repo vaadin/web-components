@@ -22,18 +22,18 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Column Grouping Example" size="200">
-          <vaadin-grid-column width="30px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column width="60px" flex-grow="0" id="column2"></vaadin-grid-column>
+          <vaadin-grid-column width="30px" flex-grow="0" name="index"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" name="thumbnail"></vaadin-grid-column>
 
           <vaadin-grid-column-group class="group">
-            <vaadin-grid-column width="calc(25% - 20px)" id="column3"></vaadin-grid-column>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column4"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="First"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="Last"></vaadin-grid-column>
           </vaadin-grid-column-group>
 
           <vaadin-grid-column-group class="group">
-            <vaadin-grid-column width="calc(25% - 20px)" id="column5"></vaadin-grid-column>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column6"></vaadin-grid-column>
-            <vaadin-grid-column width="200px" id="column7"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="City"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="State"></vaadin-grid-column>
+            <vaadin-grid-column width="200px" name="Street"></vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid>
         <script>
@@ -43,36 +43,34 @@
             const dataProvider = document.querySelector('x-data-provider');
             grid.dataProvider = dataProvider.dataProvider;
 
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
-            ['index', 'thumbnail', 'First', 'Last', 'City', 'State', 'Street'].forEach(function(columnName, index) {
-              const columnID = index + 1;
-              const column = document.querySelector('#column' + columnID);
-
+            columns.forEach(function(column, index) {
               column.headerRenderer = function(root, column, model) {
                 root.innerHTML = '';
 
-                if (columnID === 1) {
+                if (index === 0) {
                   root.textContent = '#';
-                } else if (columnID === 2) {
+                } else if (index === 1) {
                   root.innerHTML = '<div aria-label="Picture"></div>';
                 } else {
-                  root.textContent = columnName;
+                  root.textContent = column.getAttribute('name');
                 }
               };
 
               column.renderer = function(root, column, model) {
                 root.innerHTML = '';
 
-                const propName = columnName.toLowerCase();
-                if (columnID === 1) {
+                const propName = column.getAttribute('name').toLowerCase();
+                if (index === 0) {
                   root.textContent = model[propName];
-                } else if (columnID === 2) {
+                } else if (index === 1) {
                   root.innerHTML =
-                    '<iron-image width="30" height="30" sizing="cover" alt="' +
-                    model.item.name.first +
-                    model.item.name.last +
-                    '" src="' + model.item.picture[propName] + '"></iron-image>';
-                } else if (columnID < 5) {
+                    '<iron-image width="30" height="30" sizing="cover" ' +
+                      'alt="' + model.item.name.first + model.item.name.last + '"' +
+                      'src="' + model.item.picture.thumbnail + '">' +
+                    '</iron-image>';
+                } else if (index < 4) {
                   root.textContent = model.item.name[propName];
                 } else {
                   root.textContent = model.item.location[propName];
@@ -149,10 +147,10 @@
 
             columns[1].renderer = function(root, column, model) {
               root.innerHTML =
-                '<iron-image width="30" height="30" sizing="cover" alt="' +
-                model.item.name.first +
-                model.item.name.last +
-                '" src="' + model.item.picture.thumbnail + '"></iron-image>';
+                '<iron-image width="30" height="30" sizing="cover" ' +
+                  'alt="' + model.item.name.first + model.item.name.last + '"' +
+                  'src="' + model.item.picture.thumbnail + '">' +
+                '</iron-image>';
             };
 
             columns[2].renderer = function(root, column, model) {
@@ -229,10 +227,10 @@
 
             columns[1].renderer = function(root, column, model) {
               root.innerHTML =
-                '<iron-image width="30" height="30" sizing="cover" alt="' +
-                model.item.name.first +
-                model.item.name.last +
-                '" src="' + model.item.picture.thumbnail + '"></iron-image>';
+                '<iron-image width="30" height="30" sizing="cover" ' +
+                  'alt="' + model.item.name.first + model.item.name.last + '"' +
+                  'src="' + model.item.picture.thumbnail + '">' +
+                '</iron-image>';
             };
 
             columns[2].renderer = function(root, column, model) {
@@ -272,18 +270,18 @@
         <x-data-provider></x-data-provider>
 
         <vaadin-grid aria-label="Reordering and Resizing Columns Example" size="200" column-reordering-allowed>
-          <vaadin-grid-column width="30px" flex-grow="0" id="column1" resizable></vaadin-grid-column>
-          <vaadin-grid-column width="60px" flex-grow="0" id="column2" resizable></vaadin-grid-column>
+          <vaadin-grid-column width="30px" flex-grow="0" name="index" resizable></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" name="thumbnail" resizable></vaadin-grid-column>
 
           <vaadin-grid-column-group id="group1" resizable>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column3"></vaadin-grid-column>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column4"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="First"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="Last"></vaadin-grid-column>
           </vaadin-grid-column-group>
 
           <vaadin-grid-column-group id="group2" resizable>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column5"></vaadin-grid-column>
-            <vaadin-grid-column width="calc(25% - 20px)" id="column6"></vaadin-grid-column>
-            <vaadin-grid-column width="200px" id="column7"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="City"></vaadin-grid-column>
+            <vaadin-grid-column width="calc(25% - 20px)" name="State"></vaadin-grid-column>
+            <vaadin-grid-column width="200px" name="Street"></vaadin-grid-column>
           </vaadin-grid-column-group>
         </vaadin-grid>
         <script>
@@ -293,36 +291,34 @@
             const dataProvider = document.querySelector('x-data-provider');
             grid.dataProvider = dataProvider.dataProvider;
 
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
-            ['index', 'thumbnail', 'First', 'Last', 'City', 'State', 'Street'].forEach(function(columnName, index) {
-              const columnID = index + 1;
-              const column = document.querySelector('#column' + columnID);
-
+            columns.forEach(function(column, index) {
               column.headerRenderer = function(root, column, model) {
                 root.innerHTML = '';
 
-                if (columnID === 1) {
+                if (index === 0) {
                   root.textContent = '#';
-                } else if (columnID === 2) {
+                } else if (index === 1) {
                   root.innerHTML = '<div aria-label="Picture"></div>';
                 } else {
-                  root.textContent = columnName;
+                  root.textContent = column.getAttribute('name');
                 }
               };
 
               column.renderer = function(root, column, model) {
                 root.innerHTML = '';
 
-                const propName = columnName.toLowerCase();
-                if (columnID === 1) {
+                const propName = column.getAttribute('name').toLowerCase();
+                if (index === 0) {
                   root.textContent = model[propName];
-                } else if (columnID === 2) {
+                } else if (index === 1) {
                   root.innerHTML =
-                    '<iron-image width="30" height="30" sizing="cover" alt="' +
-                    model.item.name.first +
-                    model.item.name.last +
-                    '" src="' + model.item.picture[propName] + '"></iron-image>';
-                } else if (columnID < 5) {
+                    '<iron-image width="30" height="30" sizing="cover" ' +
+                      'alt="' + model.item.name.first + model.item.name.last + '"' +
+                      'src="' + model.item.picture.thumbnail + '">' +
+                    '</iron-image>';
+                } else if (index < 4) {
                   root.textContent = model.item.name[propName];
                 } else {
                   root.textContent = model.item.location[propName];

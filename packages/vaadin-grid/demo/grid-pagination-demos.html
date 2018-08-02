@@ -54,9 +54,9 @@
         <x-array-data-provider></x-array-data-provider>
 
         <vaadin-grid page-size="10" height-by-rows>
-          <vaadin-grid-column id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column width="200px" id="column3"></vaadin-grid-column>
+          <vaadin-grid-column name="First"></vaadin-grid-column>
+          <vaadin-grid-column name="Last"></vaadin-grid-column>
+          <vaadin-grid-column width="200px" name="Email"></vaadin-grid-column>
         </vaadin-grid>
 
         <div id="pages"></div>
@@ -66,26 +66,23 @@
             const grid = document.querySelector('vaadin-grid');
             let pages;
 
-            const column1 = document.querySelector('#column1');
-            const column2 = document.querySelector('#column2');
-            const column3 = document.querySelector('#column3');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
-            ['First Name', 'Last Name', 'Email'].forEach(function(header, index) {
-              const columnID = index + 1;
-              document.querySelector('#column' + columnID).headerRenderer = function(root) {
-                root.textContent = header;
+            columns.forEach(function(column, index) {
+              column.headerRenderer = function(root) {
+                root.textContent = column.getAttribute('name');
               };
             });
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.item.name.first;
             };
 
-            column2.renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, model) {
               root.textContent = model.item.name.last;
             };
 
-            column3.renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.first + '.' + model.item.name.last + '@example.com';
             };
 

@@ -185,27 +185,30 @@
       <template preserve-content>
         <x-array-data-provider></x-array-data-provider>
         <vaadin-grid aria-label="Filtering Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column name="First"></vaadin-grid-column>
+          <vaadin-grid-column name="Last"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-sorting-filtering-demos-filtering', function(document) {
             const grid = document.querySelector('vaadin-grid');
-            const column1 = document.querySelector('#column1');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            ['First', 'Last'].forEach(function(propName, index) {
+            columns.forEach(function(column, index) {
               // Start from second column
-              const columnID = index + 2;
-              const column = document.querySelector('#column' + columnID);
+              if (index === 0) {
+                return;
+              }
+
+              const propName = column.getAttribute('name');
 
               column.renderer = function(root, column, model) {
                 root.textContent = model.item.name[propName.toLowerCase()];
@@ -255,14 +258,14 @@
     <vaadin-demo-snippet id='grid-filtering-demos-filtering-with-data-provider'>
       <template preserve-content>
         <vaadin-grid aria-label="Filtering with Data Provider Example">
-          <vaadin-grid-column width="60px" flex-grow="0" id="column1"></vaadin-grid-column>
-          <vaadin-grid-column id="column2"></vaadin-grid-column>
-          <vaadin-grid-column id="column3"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column name="First"></vaadin-grid-column>
+          <vaadin-grid-column name="Last"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-sorting-filtering-demos-filtering-with-data-provider', function(document) {
             const grid = document.querySelector('vaadin-grid');
-            const column1 = document.querySelector('#column1');
+            const columns = grid.querySelectorAll('vaadin-grid-column');
 
             grid.size = 200;
 
@@ -290,18 +293,21 @@
               xhr.send();
             };
 
-            column1.renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, model) {
               root.textContent = model.index;
             };
 
-            column1.headerRenderer = function(root) {
+            columns[0].headerRenderer = function(root) {
               root.textContent = '#';
             };
 
-            ['First', 'Last'].forEach(function(propName, index) {
+            columns.forEach(function(column, index) {
               // Start from second column
-              const columnID = index + 2;
-              const column = document.querySelector('#column' + columnID);
+              if (index === 0) {
+                return;
+              }
+
+              const propName = column.getAttribute('name');
 
               column.renderer = function(root, column, model) {
                 root.textContent = model.item[propName.toLowerCase() + 'Name'];
