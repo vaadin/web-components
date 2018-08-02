@@ -26,6 +26,10 @@
           vaadin-grid vaadin-text-field {
             width: 100%;
           }
+
+          vaadin-grid vaadin-button {
+            margin-left: 5px;
+          }
         </style>
         <x-array-data-provider></x-array-data-provider>
 
@@ -70,8 +74,8 @@
                 textField = new Vaadin.TextFieldElement();
                 root.appendChild(textField);
               }
-              textField.setAttribute('id', 'first-' + model.index);
               textField.value = model.item.name.first;
+              textField.setAttribute('focus-target', true);
               textField.readonly = true;
             };
 
@@ -84,8 +88,8 @@
                 textField = new Vaadin.TextFieldElement();
                 root.appendChild(textField);
               }
-              textField.setAttribute('id', 'last-' + model.index);
               textField.value = model.item.name.last;
+              textField.setAttribute('focus-target', true);
               textField.readonly = true;
             };
 
@@ -104,72 +108,59 @@
                     '<vaadin-button aria-label="Edit" theme="icon" focus-target>' +
                       '<iron-icon icon="lumo:edit"></iron-icon>' +
                     '</vaadin-button>' +
-                    '<vaadin-button aria-label="Delete" theme="icon error" style="margin-left: 5px">' +
+                    '<vaadin-button aria-label="Delete" theme="icon error">' +
                       '<iron-icon icon="lumo:cross"></iron-icon>' +
                     '</vaadin-button>' +
                     '<vaadin-button aria-label="Save" theme="primary" focus-target hidden>Save</vaadin-button>' +
-                    '<vaadin-button aria-label="Cancel" hidden style="margin-left: 5px">Cancel</vaadin-button>' +
+                    '<vaadin-button aria-label="Cancel" hidden>Cancel</vaadin-button>' +
                   '</div>';
                 wrapper = root.firstElementChild;
 
-                const buttons = wrapper.querySelectorAll('vaadin-button')
+                const buttons = wrapper.querySelectorAll('vaadin-button');
+                // EDIT
                 buttons[0].addEventListener('click', function() {
-                  grid.querySelector('#first-' + wrapper._model.index).focus();
-                  updateTextFieldsVisibility(wrapper._model.index, true);
-                  updateButtonsVisibility(wrapper, true);
+                  updateTextFieldsVisibility(wrapper.idx, true);
+                  updateButtonsVisibility(buttons, wrapper.idx, true);
+                  getTextField(columns[0], wrapper.idx).focus();
                 });
+                // DELETE
                 buttons[1].addEventListener('click', function(event) {
-                  var index = grid.items.indexOf(wrapper._model.item);
-                  grid.items.splice(index, 1);
+                  grid.items.splice(wrapper.idx, 1);
                   grid.clearCache();
                 });
+                // SAVE
                 buttons[2].addEventListener('click', function() {
-                  model.item.name.first = grid.querySelector('#first-' + wrapper._model.index).value;
-                  model.item.name.last = grid.querySelector('#last-' + wrapper._model.index).value;
-
-                  updateTextFieldsVisibility(wrapper._model.index, false);
-                  updateButtonsVisibility(wrapper, false);
-                  grid.clearCache();
-                  buttons[0].focus();
+                  grid.items[wrapper.idx].name.first = getTextField(columns[0], wrapper.idx).value;
+                  grid.items[wrapper.idx].name.last = getTextField(columns[1], wrapper.idx).value;
+                  buttons[3].click();
                 });
+                // CANCEL
                 buttons[3].addEventListener('click', function(event) {
-                  updateTextFieldsVisibility(wrapper._model.index, false);
-                  updateButtonsVisibility(wrapper, false);
+                  updateTextFieldsVisibility(wrapper.idx, false);
+                  updateButtonsVisibility(buttons, wrapper.idx, false);
                   grid.clearCache();
                   buttons[0].focus();
                 });
               }
 
-              wrapper._model = model;
-              console.log(model, root, root._model);
+              // We reuse rendered content, but maintain a property with the index for actions
+              wrapper.idx = model.index;
             };
 
-            function updateTextFieldsVisibility(index, editing) {
-              if (editing) {
-                grid.querySelector('#first-' + index).removeAttribute('readonly');
-                grid.querySelector('#last-' + index).removeAttribute('readonly');
-              } else {
-                grid.querySelector('#first-' + index).setAttribute('readonly', true);
-                grid.querySelector('#last-' + index).setAttribute('readonly', true);
-              }
+            // Returns the vaadin-text-element for a given column and row
+            function getTextField(column, index) {
+              const cell = column._allCells.filter(cell => cell._model && cell._model.index === index)[0];
+              return cell._content.firstElementChild;
             }
 
-            function updateButtonsVisibility(wrapper, editing) {
-              if (editing) {
-                wrapper.querySelectorAll('[theme~="icon"]').forEach(function(btn) {
-                  btn.setAttribute('hidden', true);
-                });
-                wrapper.querySelectorAll('vaadin-button:not([theme~="icon"])').forEach(function(btn) {
-                  btn.removeAttribute('hidden');
-                });
-              } else {
-                wrapper.querySelectorAll('[theme~="icon"]').forEach(function(btn) {
-                  btn.removeAttribute('hidden');
-                });
-                wrapper.querySelectorAll('vaadin-button:not([theme~="icon"])').forEach(function(btn) {
-                  btn.setAttribute('hidden', true);
-                });
-              }
+            function updateTextFieldsVisibility(index, editing) {
+              getTextField(columns[0], index).readonly = !editing;
+              getTextField(columns[1], index).readonly = !editing;
+            }
+
+            function updateButtonsVisibility(buttons, index, editing) {
+              buttons[0].hidden = buttons[1].hidden = editing;
+              buttons[2].hidden = buttons[3].hidden = !editing;
             }
 
             const dataProvider = document.querySelector('x-array-data-provider');
