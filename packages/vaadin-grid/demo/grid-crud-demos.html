@@ -149,7 +149,9 @@
 
             // Returns the vaadin-text-element for a given column and row
             function getTextField(column, index) {
-              const cell = column._allCells.filter(cell => cell._model && cell._model.index === index)[0];
+              const cell = column._allCells.filter(function(cell) {
+                return cell._model && cell._model.index === index;
+              })[0];
               return cell._content.firstElementChild;
             }
 
