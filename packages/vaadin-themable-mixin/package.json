@@ -20,16 +20,6 @@
     "test": "wct"
   },
   "devDependencies": {
-    "bower": "latest",
-    "eslint": "^5.0.0",
-    "eslint-config-vaadin": "latest",
-    "eslint-plugin-html": "^4.0.0",
-    "gulp": "latest",
-    "gulp-eslint": "^4.0.0",
-    "gulp-html-extract": "^0.3.0",
-    "gulp-stylelint": "^7.0.0",
-    "stylelint": "^9.0.0",
-    "stylelint-config-vaadin": "latest",
-    "web-component-tester": "^6.0.0"
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
   }
 }
