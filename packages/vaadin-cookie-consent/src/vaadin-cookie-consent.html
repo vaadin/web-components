@@ -125,7 +125,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                 background: '#000'
               },
               button: {
-                background: '#0090C0'
+                // Cannot use a lumo color 'as is' due to
+                // https://github.com/vaadin/vaadin-lumo-styles/issues/22
+                // var(--lumo-primary-color) at 0.95 opacity
+                background: 'rgba(22, 118, 243, 0.95)',
+                hover: 'rgba(22, 118, 243, 1)'
               }
             },
             showLink: this._showLearnMore,

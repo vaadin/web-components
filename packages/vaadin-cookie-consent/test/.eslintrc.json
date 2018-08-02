@@ -8,5 +8,12 @@
     "expect": false,
     "gemini": false,
     "sinon": false
-  }
+  },
+  "overrides": [{
+    "files": ["accessibility-test.html-script-*"],
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2017
+    }
+  }]
 }

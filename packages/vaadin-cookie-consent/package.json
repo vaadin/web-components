@@ -22,6 +22,7 @@
     "preversion": "gulp version:update"
   },
   "devDependencies": {
+    "axe-core": "^3.0.3",
     "bower": "latest",
     "eslint": "^4.13.0",
     "eslint-config-vaadin": "latest",
@@ -37,6 +38,7 @@
     "gulp-replace": "^0.6.1",
     "gulp-stylelint": "^7.0.0",
     "polymer-cli": "^1.6.0",
+    "pwa-helpers": "^0.8.3",
     "stylelint": "^9.0.0",
     "stylelint-config-vaadin": "latest",
     "web-component-tester": "^6.1.5",
