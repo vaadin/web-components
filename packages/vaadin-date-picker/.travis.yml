@@ -18,7 +18,7 @@ env:
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
-      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
+      npm -q i && npm i -q --no-save -g bower polymer-cli && bower -q i &&
       gulp lint version:check &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
