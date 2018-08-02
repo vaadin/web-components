@@ -58,7 +58,7 @@ gulp.task('lint:css', function() {
 });
 gulp.task('version:check', function() {
   const expectedVersion = new RegExp('^' + require('./package.json').version + '$');
-  return gulp.src(['src/*.html'])
+  return gulp.src(['src/**/*.html'])
     .pipe(htmlExtract({sel: 'script'}))
     .pipe(find(/static get version.*\n.*/))
     .pipe(clip()) // Remove non-matching files
@@ -78,7 +78,7 @@ gulp.task('version:update', ['version:check'], function() {
   if (!newversion) {
     throw new 'New version must be given as a npm_package_version environment variable.';
   }
-  return gulp.src(['src/*.html'])
+  return gulp.src(['src/**/*.html'])
     .pipe(replace(oldversion, newversion))
     .pipe(gulp.dest('src'))
     .pipe(git.add());
