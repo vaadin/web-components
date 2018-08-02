@@ -26,6 +26,12 @@
         </vaadin-button>
         <script>
           var overlay1 = document.querySelector('#overlay1');
+          var btn = document.querySelector('vaadin-button');
+
+          btn.addEventListener('click', function() {
+            overlay1.opened = true;
+          });
+
           overlay1.renderer = function(root) {
             root.textContent = 'Overlay Content';
           };
@@ -59,6 +65,13 @@
 
         <script>
           var modelessOverlay = document.querySelector('#modeless-overlay');
+
+          var btnModeless = document.querySelector('vaadin-button');
+
+          btnModeless.addEventListener('click', function() {
+            modelessOverlay.opened = true;
+          });
+
           modelessOverlay.renderer = function(root) {
             root.textContent = 'This overlay won\'t disable the main content.';
           };
@@ -70,9 +83,6 @@
     <demo-snippet>
       <template>
         <vaadin-overlay id="overlay-focus-trap-backdrop" with-backdrop focus-trap style="max-width: 300px;">
-          <template>
-
-          </template>
         </vaadin-overlay>
 
         <vaadin-button id="button-focus-trap">
@@ -82,16 +92,16 @@
           var overlayFocusTrapBackdrop = document.querySelector('#overlay-focus-trap-backdrop');
           overlayFocusTrapBackdrop.renderer = function(root) {
             root.innerHTML =
-            '<h3>Focus is trapped inside the content block</h3>' +
-             '<button>native button</button>' +
-             '<button tabindex="-1">button with tabindex="-1"</button>' +
-             '<button disabled>disabled button</button>' +
-             '<vaadin-text-field placeholder="programatically focused"></vaadin-text-field>' +
-             '<button tabindex="2">button with tabindex="2"</button>' +
-             '<button tabindex="0">button with tabindex="0"</button>' +
-             '<button tabindex="1">button with tabindex="1"</button>' +
-             '<input type="text" placeholder="native input"></input>' +
-             '<vaadin-button>vaadin-button</vaadin-button>';
+              '<h3>Focus is trapped inside the content block</h3>' +
+              '<button>native button</button>' +
+              '<button tabindex="-1">button with tabindex="-1"</button>' +
+              '<button disabled>disabled button</button>' +
+              '<vaadin-text-field placeholder="programatically focused"></vaadin-text-field>' +
+              '<button tabindex="2">button with tabindex="2"</button>' +
+              '<button tabindex="0">button with tabindex="0"</button>' +
+              '<button tabindex="1">button with tabindex="1"</button>' +
+              '<input type="text" placeholder="native input"></input>' +
+              '<vaadin-button>vaadin-button</vaadin-button>';
           };
           document.getElementById('button-focus-trap').addEventListener('click', function(event) {
             var overlay = event.target.previousElementSibling;
