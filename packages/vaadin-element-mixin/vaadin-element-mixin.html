@@ -8,7 +8,15 @@ if (!window.Vaadin) {
 /**
  * Array of Vaadin custom element classes that have been finalized.
  */
-window.Vaadin.registrations = window.Vaadin.registrations || [];
+window['Vaadin'].registrations = window.Vaadin.registrations || [];
+
+// Use the hack to prevent polymer-modulizer from converting to exports
+window['Vaadin'].developmentModeCallback = window.Vaadin.developmentModeCallback || {};
+window['Vaadin'].developmentModeCallback['vaadin-usage-statistics'] = function() {
+  if (window.Vaadin.usageStatistics) {
+    window.Vaadin.usageStatistics();
+  }
+};
 
 /**
  * @polymerMixin
@@ -29,8 +37,8 @@ Vaadin.ElementMixin = superClass => {
     };
   } finally {
     // This is run every time a new class is declared, not every time an instance is created
-    if (window.Vaadin.usageStatistics) {
-      window.Vaadin.usageStatistics();
+    if (window.Vaadin.developmentModeCallback) {
+      window.Vaadin.developmentModeCallback['vaadin-usage-statistics']();
     }
   }
 };
