@@ -71,9 +71,46 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="renderers">
+    <template>
+      <vaadin-grid></vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('accessibility', () => {
-      let grid;
+      let grid, cols;
+
+      function initGridRenderer(withGroup) {
+        grid = fixture('renderers');
+        const col1 = new Vaadin.GridColumnElement();
+        const col2 = new Vaadin.GridColumnElement();
+        if (withGroup) {
+          const grp = new Vaadin.GridColumnGroupElement();
+          grp.headerRenderer = (root, col) => root.textContent = 'Group header';
+          grp.footerRenderer = (root, col) => root.textContent = 'Group footer';
+          grp.appendChild(col1);
+          grp.appendChild(col2);
+          grid.appendChild(grp);
+        } else {
+          grid.appendChild(col1);
+          grid.appendChild(col2);
+        }
+
+        col1.headerRenderer = col2.headerRenderer = (root, col) => root.textContent = 'header';
+        col1.footerRenderer = col2.footerRenderer = (root, col) => root.textContent = 'footer';
+        col1.renderer = (root, col, model) => root.textContent = model.index;
+        col2.renderer = (root, col, model) => root.textContent = model.item;
+        grid.items = ['foo', 'bar'];
+        flushGrid(grid);
+      }
+
+      function initRendererFixture(fixtureName) {
+        initGridRenderer(fixtureName == 'group');
+        if (fixtureName == 'details') {
+          grid.rowDetailsRenderer = (root, grid) => root.textContent = 'details';
+        }
+      }
 
       function initFixture(fixtureName) {
         grid = fixture(fixtureName);
@@ -88,240 +125,248 @@
         return unique;
       }
 
-      describe('structural roles', () => {
-        beforeEach(() => initFixture('default'));
+      ['template', 'renderer'].forEach(type => {
 
-        it('should have role grid on table', () => {
-          expect(grid.$.table.getAttribute('role')).to.equal('grid');
-        });
+        describe(`${type} fixture default`, () => {
 
-        it('should have role rowgroup on row groups', () => {
-          expect(grid.$.header.getAttribute('role')).to.equal('rowgroup');
-          expect(grid.$.items.getAttribute('role')).to.equal('rowgroup');
-          expect(grid.$.footer.getAttribute('role')).to.equal('rowgroup');
-        });
-
-        it('should have role row on rows', () => {
-          expect(grid.$.header.children[0].getAttribute('role')).to.equal('row');
-          expect(grid.$.items.children[0].getAttribute('role')).to.equal('row');
-          expect(grid.$.items.children[1].getAttribute('role')).to.equal('row');
-          expect(grid.$.footer.children[0].getAttribute('role')).to.equal('row');
-        });
-
-        it('should have role columnheader on header cells', () => {
-          expect(grid.$.header.children[0].children[0].getAttribute('role')).to.equal('columnheader');
-          expect(grid.$.header.children[0].children[1].getAttribute('role')).to.equal('columnheader');
-        });
-
-        it('should have role gridcell on body cells', () => {
-          expect(grid.$.items.children[0].children[0].getAttribute('role')).to.equal('gridcell');
-          expect(grid.$.items.children[0].children[1].getAttribute('role')).to.equal('gridcell');
-        });
-      });
-
-      describe('size', () => {
-        beforeEach(() => initFixture('default'));
-
-        it('should have aria-rowcount on the table', () => {
-          // 2 item rows + header row + footer row = 4 in total
-          expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('4');
-        });
-
-        it('should update aria-rowcount on after size change', () => {
-          grid.items = Array(...new Array(10)).map(() => 'foo');
-
-          // 10 item rows + header row + footer row = 12 in total
-          expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
-        });
-      });
-
-      describe('column count', () => {
-        beforeEach(() => initFixture('details'));
-
-        it('should have aria-colcount on the table', () => {
-          expect(grid.$.table.getAttribute('aria-colcount')).to.equal('2');
-        });
-
-        it('should update aria-colcount when column is added', done => {
-          const template = document.createElement('template');
-          template.innerHTML = '[[item]]';
-          const column = document.createElement('vaadin-grid-column');
-          column.appendChild(template);
-          grid.appendChild(column);
-
-          setTimeout(() => {
-            expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
-            done();
-          });
-        });
-      });
-
-      describe('row numbers', () => {
-        beforeEach(() => initFixture('group'));
-
-        function setANumberOfItems(grid, number) {
-          grid.items = Array.apply(null, new Array(number)).map((v, i) => `item ${i}`);
-          flushGrid(grid);
-        }
-
-        it('should have aria-rowindex on rows', () => {
-          Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
-            expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
-          });
-        });
-
-        it('should update aria-rowindex on size change', () => {
-          setANumberOfItems(grid, 100);
-          expect(
-            Array.from(grid.$.items.children)
-              .slice(0, 5) // assuming at least five body rows are visible
-              .map(row => row.getAttribute('aria-rowindex'))
-          ).to.eql(['3', '4', '5', '6', '7']);
-          expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
-        });
-
-        it('should update aria-rowindex on scroll', () => {
-          setANumberOfItems(grid, 1000);
-          // scroll to end
-          grid._accessIronListAPI(() => grid.scrollToIndex(1000));
-
-          const ariaRowindexValues = Array.from(grid.$.items.children)
-            .map(row => row.getAttribute('aria-rowindex'));
-          expect(ariaRowindexValues).to.include.members(['1000', '1001', '1002']);
-          expect(ariaRowindexValues).to.not.include.members(['3', '4', '1003']);
-        });
-      });
-
-      describe('selection', () => {
-        beforeEach(() => initFixture('default'));
-
-        it('should have aria-multiselectable on table', () => {
-          expect(grid.$.table.getAttribute('aria-multiselectable')).to.equal('true');
-        });
-
-        it('should have aria-selected defined on body rows', () => {
-          expect(uniqueAttrValues(
-            grid.$.items.querySelectorAll('tr'),
-            'aria-selected'
-          )).to.eql(['false']);
-        });
-
-        it('should have aria-selected defined on body cells', () => {
-          expect(uniqueAttrValues(
-            grid.$.items.querySelectorAll('td'),
-            'aria-selected'
-          )).to.eql(['false']);
-        });
-
-        it('should set aria-selected true for selected items', () => {
-          grid.selectedItems = grid.items.slice(1);
-
-          expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
-          expect(uniqueAttrValues(
-            grid.$.items.children[0].children,
-            'aria-selected'
-          )).to.eql(['false']);
-          expect(grid.$.items.children[1].getAttribute('aria-selected')).to.equal('true');
-          expect(uniqueAttrValues(
-            grid.$.items.children[1].children,
-            'aria-selected'
-          )).to.eql(['true']);
-        });
-
-        it('should set aria-selected false for deselected items', () => {
-          grid.selectedItems = grid.items.slice(1);
-          grid.selectedItems = [];
-
-          expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
-          expect(uniqueAttrValues(
-            grid.$.items.children[0].children,
-            'aria-selected'
-          )).to.eql(['false']);
-          expect(grid.$.items.children[1].getAttribute('aria-selected')).to.equal('false');
-          expect(uniqueAttrValues(
-            grid.$.items.children[1].children,
-            'aria-selected'
-          )).to.eql(['false']);
-        });
-      });
-
-      describe('column groups', () => {
-        beforeEach(() => initFixture('group'));
-
-        it('should have aria-colspan on group header cell', () => {
-          expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
-        });
-      });
-
-      describe('row details', () => {
-        describe('not in use', () => {
-          beforeEach(() => initFixture('default'));
-
-          it('should not have aria-expanded on body cells', () => {
-            expect(uniqueAttrValues(
-              grid.$.items.querySelectorAll('td'),
-              'aria-expanded'
-            )).to.eql([null]);
+          beforeEach(() => {
+            type === 'template' ? initFixture('default') : initRendererFixture('default');
           });
 
-          it('should not have aria-controls on body cells', () => {
-            expect(uniqueAttrValues(
-              grid.$.items.querySelectorAll('td'),
-              'aria-controls'
-            )).to.eql([null]);
-          });
-        });
+          describe('structural roles', () => {
+            it('should have role grid on table', () => {
+              expect(grid.$.table.getAttribute('role')).to.equal('grid');
+            });
 
-        describe('in use', () => {
-          beforeEach(() => initFixture('details'));
+            it('should have role rowgroup on row groups', () => {
+              expect(grid.$.header.getAttribute('role')).to.equal('rowgroup');
+              expect(grid.$.items.getAttribute('role')).to.equal('rowgroup');
+              expect(grid.$.footer.getAttribute('role')).to.equal('rowgroup');
+            });
 
-          it('should have aria-expanded false on body cells', () => {
-            expect(uniqueAttrValues(
-              grid.$.items.querySelectorAll('td'),
-              'aria-expanded'
-            )).to.eql(['false']);
-          });
+            it('should have role row on rows', () => {
+              expect(grid.$.header.children[0].getAttribute('role')).to.equal('row');
+              expect(grid.$.items.children[0].getAttribute('role')).to.equal('row');
+              expect(grid.$.items.children[1].getAttribute('role')).to.equal('row');
+              expect(grid.$.footer.children[0].getAttribute('role')).to.equal('row');
+            });
 
-          it('should have aria-controls referencing detail cell id on body cells', () => {
-            Array.from(grid.$.items.children).forEach(row => {
-              const detailsCell = row.querySelector('td[part~="details-cell"]');
+            it('should have role columnheader on header cells', () => {
+              expect(grid.$.header.children[0].children[0].getAttribute('role')).to.equal('columnheader');
+              expect(grid.$.header.children[0].children[1].getAttribute('role')).to.equal('columnheader');
+            });
 
-              expect(detailsCell.id).to.be.ok;
-              expect(detailsCell.getAttribute('aria-controls')).to.equal(null);
-              expect(uniqueAttrValues(
-                row.querySelectorAll('td:not([part~="details-cell"])'),
-                'aria-controls'
-              )).to.eql([detailsCell.id]);
+            it('should have role gridcell on body cells', () => {
+              expect(grid.$.items.children[0].children[0].getAttribute('role')).to.equal('gridcell');
+              expect(grid.$.items.children[0].children[1].getAttribute('role')).to.equal('gridcell');
             });
           });
 
-          it('should set aria-expended true on cells after row details opened', () => {
-            grid.openItemDetails(grid.items[0]);
+          describe('size', () => {
+            it('should have aria-rowcount on the table', () => {
+              // 2 item rows + header row + footer row = 4 in total
+              expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('4');
+            });
 
-            expect(uniqueAttrValues(
-              grid.$.items.children[0].children,
-              'aria-expanded'
-            )).to.eql(['true']);
+            it('should update aria-rowcount on after size change', () => {
+              grid.items = Array(...new Array(10)).map(() => 'foo');
 
-            expect(uniqueAttrValues(
-              grid.$.items.children[1].children,
-              'aria-expanded'
-            )).to.eql(['false']);
+              // 10 item rows + header row + footer row = 12 in total
+              expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('12');
+            });
           });
 
-          it('should set aria-expanded false on cells after row details closed', () => {
-            grid.openItemDetails(grid.items[0]);
-            grid.closeItemDetails(grid.items[0]);
+          describe('selection', () => {
+            it('should have aria-multiselectable on table', () => {
+              expect(grid.$.table.getAttribute('aria-multiselectable')).to.equal('true');
+            });
 
-            expect(uniqueAttrValues(
-              grid.$.items.children[0].children,
-              'aria-expanded'
-            )).to.eql(['false']);
+            it('should have aria-selected defined on body rows', () => {
+              expect(uniqueAttrValues(
+                grid.$.items.querySelectorAll('tr'),
+                'aria-selected'
+              )).to.eql(['false']);
+            });
 
-            expect(uniqueAttrValues(
-              grid.$.items.children[1].children,
-              'aria-expanded'
-            )).to.eql(['false']);
+            it('should have aria-selected defined on body cells', () => {
+              expect(uniqueAttrValues(
+                grid.$.items.querySelectorAll('td'),
+                'aria-selected'
+              )).to.eql(['false']);
+            });
+
+            it('should set aria-selected true for selected items', () => {
+              grid.selectedItems = grid.items.slice(1);
+
+              expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
+              expect(uniqueAttrValues(
+                grid.$.items.children[0].children,
+                'aria-selected'
+              )).to.eql(['false']);
+              expect(grid.$.items.children[1].getAttribute('aria-selected')).to.equal('true');
+              expect(uniqueAttrValues(
+                grid.$.items.children[1].children,
+                'aria-selected'
+              )).to.eql(['true']);
+            });
+
+            it('should set aria-selected false for deselected items', () => {
+              grid.selectedItems = grid.items.slice(1);
+              grid.selectedItems = [];
+
+              expect(grid.$.items.children[0].getAttribute('aria-selected')).to.equal('false');
+              expect(uniqueAttrValues(
+                grid.$.items.children[0].children,
+                'aria-selected'
+              )).to.eql(['false']);
+              expect(grid.$.items.children[1].getAttribute('aria-selected')).to.equal('false');
+              expect(uniqueAttrValues(
+                grid.$.items.children[1].children,
+                'aria-selected'
+              )).to.eql(['false']);
+            });
+          });
+
+          describe('row details not in use', () => {
+            it('should not have aria-expanded on body cells', () => {
+              expect(uniqueAttrValues(
+                grid.$.items.querySelectorAll('td'),
+                'aria-expanded'
+              )).to.eql([null]);
+            });
+
+            it('should not have aria-controls on body cells', () => {
+              expect(uniqueAttrValues(
+                grid.$.items.querySelectorAll('td'),
+                'aria-controls'
+              )).to.eql([null]);
+            });
+          });
+        });
+
+        describe(`${type} fixture details`, () => {
+
+          beforeEach(() => {
+            type === 'template' ? initFixture('details') : initRendererFixture('details');
+          });
+
+          describe('column count', () => {
+            beforeEach(() => initFixture('details'));
+
+            it('should have aria-colcount on the table', () => {
+              expect(grid.$.table.getAttribute('aria-colcount')).to.equal('2');
+            });
+
+            it('should update aria-colcount when column is added', done => {
+              const template = document.createElement('template');
+              template.innerHTML = '[[item]]';
+              const column = document.createElement('vaadin-grid-column');
+              column.appendChild(template);
+              grid.appendChild(column);
+
+              setTimeout(() => {
+                expect(grid.$.table.getAttribute('aria-colcount')).to.equal('3');
+                done();
+              });
+            });
+          });
+
+          describe('row details in use', () => {
+            it('should have aria-expanded false on body cells', () => {
+              expect(uniqueAttrValues(
+                grid.$.items.querySelectorAll('td'),
+                'aria-expanded'
+              )).to.eql(['false']);
+            });
+
+            it('should have aria-controls referencing detail cell id on body cells', () => {
+              Array.from(grid.$.items.children).forEach(row => {
+                const detailsCell = row.querySelector('td[part~="details-cell"]');
+
+                expect(detailsCell.id).to.be.ok;
+                expect(detailsCell.getAttribute('aria-controls')).to.equal(null);
+                expect(uniqueAttrValues(
+                  row.querySelectorAll('td:not([part~="details-cell"])'),
+                  'aria-controls'
+                )).to.eql([detailsCell.id]);
+              });
+            });
+
+            it('should set aria-expended true on cells after row details opened', () => {
+              grid.openItemDetails(grid.items[0]);
+
+              expect(uniqueAttrValues(
+                grid.$.items.children[0].children,
+                'aria-expanded'
+              )).to.eql(['true']);
+
+              expect(uniqueAttrValues(
+                grid.$.items.children[1].children,
+                'aria-expanded'
+              )).to.eql(['false']);
+            });
+
+            it('should set aria-expanded false on cells after row details closed', () => {
+              grid.openItemDetails(grid.items[0]);
+              grid.closeItemDetails(grid.items[0]);
+
+              expect(uniqueAttrValues(
+                grid.$.items.children[0].children,
+                'aria-expanded'
+              )).to.eql(['false']);
+
+              expect(uniqueAttrValues(
+                grid.$.items.children[1].children,
+                'aria-expanded'
+              )).to.eql(['false']);
+            });
+          });
+        });
+
+        describe(`${type} fixture group`, () => {
+
+          beforeEach(() => {
+            type === 'template' ? initFixture('group') : initRendererFixture('group');
+          });
+
+          describe('row numbers', () => {
+            function setANumberOfItems(grid, number) {
+              grid.items = Array.apply(null, new Array(number)).map((v, i) => `item ${i}`);
+              flushGrid(grid);
+            }
+
+            it('should have aria-rowindex on rows', () => {
+              Array.from(grid.$.table.querySelectorAll('tr')).forEach((row, index) => {
+                expect(row.getAttribute('aria-rowindex')).to.equal((index + 1).toString());
+              });
+            });
+
+            it('should update aria-rowindex on size change', () => {
+              setANumberOfItems(grid, 100);
+              expect(
+                Array.from(grid.$.items.children)
+                  .slice(0, 5) // assuming at least five body rows are visible
+                  .map(row => row.getAttribute('aria-rowindex'))
+              ).to.eql(['3', '4', '5', '6', '7']);
+              expect(grid.$.footer.children[0].getAttribute('aria-rowindex')).to.equal('103');
+            });
+
+            it('should update aria-rowindex on scroll', () => {
+              setANumberOfItems(grid, 1000);
+              // scroll to end
+              grid._accessIronListAPI(() => grid.scrollToIndex(1000));
+
+              const ariaRowindexValues = Array.from(grid.$.items.children)
+                .map(row => row.getAttribute('aria-rowindex'));
+              expect(ariaRowindexValues).to.include.members(['1000', '1001', '1002']);
+              expect(ariaRowindexValues).to.not.include.members(['3', '4', '1003']);
+            });
+          });
+
+          describe('column groups', () => {
+            it('should have aria-colspan on group header cell', () => {
+              expect(grid.$.header.children[0].children[0].getAttribute('aria-colspan')).to.equal('2');
+            });
           });
         });
       });
