@@ -195,7 +195,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _updateLabelAttribute() {
           const label = this.shadowRoot.querySelector('[part~="label"]');
           if (label.firstElementChild.assignedNodes().length === 0) {
-            label.setAttribute('empty', true);
+            label.setAttribute('empty', '');
           } else {
             label.removeAttribute('empty');
           }
