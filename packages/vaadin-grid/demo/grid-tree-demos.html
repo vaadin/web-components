@@ -8,74 +8,143 @@
 
     <h3>Assigning Tree Data Using Data Provider</h3>
     <p>
-      Use <code>&lt;vaadin-grid-tree-toggle&gt;</code> in the column body
-      template to make a tree UI inside a grid. Make sure you have bindings
-      for the <code>expanded</code>, <code>level</code>, and <code>leaf</code>
-      properties.
+      Use <code>&lt;vaadin-grid-tree-toggle&gt;</code> in the cell content
+      to make a tree UI inside a grid. You need to update the <code>expanded</code>,
+      <code>level</code>, and <code>leaf</code> properties in your renderer.
     </p>
     <p>
       <strong>NOTE: You must explicitly import the <code>vaadin-grid-tree-toggle.html</code>
       file in order to use <code>&lt;vaadin-grid-tree-toggle&gt;</code>.</strong>
     </p>
+    <vaadin-demo-snippet id="grid-tree-demos-renderer-data-provider">
+      <template preserve-content>
+            <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
+              <vaadin-grid-column></vaadin-grid-column>
+              <vaadin-grid-column width="8em" flex-grow="0"></vaadin-grid-column>
+            </vaadin-grid>
+          <script>
+            window.addDemoReadyListener('#grid-tree-demos-renderer-data-provider', function(document) {
+              const grid = document.querySelector('vaadin-grid');
+              const columns = grid.querySelectorAll('vaadin-grid-column');
+
+              columns[0].headerRenderer = function(root, col) {
+                root.textContent = 'Name';
+              }
+              columns[0].renderer = function(root, col, model) {
+                let toggler = root.firstElementChild;
+                if (!toggler) {
+                  toggler = new Vaadin.GridTreeToggleElement();
+                  toggler.addEventListener('expanded-changed', function(e) {
+                    grid[toggler.expanded ? 'expandItem' : 'collapseItem'](toggler.item);
+                  });
+                  root.appendChild(toggler);
+                }
+
+                toggler.item = model.item;
+                toggler.leaf = !model.item.hasChildren;
+                toggler.expanded = model.expanded;
+                toggler.level = model.level;
+                toggler.textContent = model.item.name;
+              };
+
+              columns[1].headerRenderer = function(root, col) {
+                root.textContent = 'Size';
+              };
+              columns[1].renderer = function(root, col, model) {
+                root.textContent = model.item.size;
+              };
+
+              grid.dataProvider = function(params, callback) {
+                // If the data request concerns a tree sub-level, `params` has an additional
+                // `parentItem` property that refers to the sub-level's parent item
+                const parentUuid = params.parentItem ? params.parentItem.uuid : null;
+
+                // Demo helper API that fetches filesystem data
+                Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
+                  // Here `fsItems` is an array consisting of items with the following structure:
+                  // {
+                  //   hasChildren: false
+                  //   name: "foo.txt",
+                  //   size: "1 MB",
+                  //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
+                  //   parentUuid: null
+                  // }
+                  // This demo uses the `hasChildren` flag as an indicator of the item having child items.
+                  // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
+                  // the template above.
+
+                  // Slice out only the requested items
+                  const startIndex = params.page * params.pageSize;
+                  const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
+                  // Inform grid of the requested tree level's full size
+                  const treeLevelSize = fsItems.length;
+                  callback(pageItems, treeLevelSize);
+                });
+              };
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Rendering Tree Using Templates</h3>
+    <p>
+      Use <code>&lt;vaadin-grid-tree-toggle&gt;</code> in the column body
+      template to make a tree UI inside a grid. Make sure you have bindings
+      for the <code>expanded</code>, <code>level</code>, and <code>leaf</code>
+      properties.
+    </p>
     <vaadin-demo-snippet id="grid-tree-demos-data-provider">
       <template preserve-content>
-        <x-tree-data-provider-example></x-tree-data-provider-example>
-        <dom-module id="x-tree-data-provider-example">
-          <template preserve-content>
-            <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
+          <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
+            <vaadin-grid-column>
+              <template class="header">Name</template>
+              <template>
+                <vaadin-grid-tree-toggle
+                    leaf="[[!item.hasChildren]]"
+                    expanded="{{expanded}}"
+                    level="[[level]]">
+                  [[item.name]]
+                </vaadin-grid-tree-toggle>
+              </template>
+            </vaadin-grid-column>
 
-              <vaadin-grid-column>
-                <template class="header">Name</template>
-                <template>
-                  <vaadin-grid-tree-toggle
-                      leaf="[[!item.hasChildren]]"
-                      expanded="{{expanded}}"
-                      level="[[level]]">
-                    [[item.name]]
-                  </vaadin-grid-tree-toggle>
-                </template>
-              </vaadin-grid-column>
+            <vaadin-grid-column width="8em" flex-grow="0">
+              <template class="header">Size</template>
+              <template>[[item.size]]</template>
+            </vaadin-grid-column>
 
-              <vaadin-grid-column width="8em" flex-grow="0">
-                <template class="header">Size</template>
-                <template>[[item.size]]</template>
-              </vaadin-grid-column>
-
-            </vaadin-grid>
-          </template>
+          </vaadin-grid>
           <script>
             window.addDemoReadyListener('#grid-tree-demos-data-provider', function(document) {
-              Polymer({
-                is: 'x-tree-data-provider-example',
+              const grid = document.querySelector('vaadin-grid');
+              grid.dataProvider = function(params, callback) {
+                // If the data request concerns a tree sub-level, `params` has an additional
+                // `parentItem` property that refers to the sub-level's parent item
+                const parentUuid = params.parentItem ? params.parentItem.uuid : null;
 
-                _dataProvider: function(params, callback) {
-                  // If the data request concerns a tree sub-level, `params` has an additional
-                  // `parentItem` property that refers to the sub-level's parent item
-                  const parentUuid = params.parentItem ? params.parentItem.uuid : null;
+                // Demo helper API that fetches filesystem data
+                Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
+                  // Here `fsItems` is an array consisting of items with the following structure:
+                  // {
+                  //   hasChildren: false
+                  //   name: "foo.txt",
+                  //   size: "1 MB",
+                  //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
+                  //   parentUuid: null
+                  // }
+                  // This demo uses the `hasChildren` flag as an indicator of the item having child items.
+                  // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
+                  // the template above.
 
-                  // Demo helper API that fetches filesystem data
-                  Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
-                    // Here `fsItems` is an array consisting of items with the following structure:
-                    // {
-                    //   hasChildren: false
-                    //   name: "foo.txt",
-                    //   size: "1 MB",
-                    //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
-                    //   parentUuid: null
-                    // }
-                    // This demo uses the `hasChildren` flag as an indicator of the item having child items.
-                    // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
-                    // the template above.
-
-                    // Slice out only the requested items
-                    const startIndex = params.page * params.pageSize;
-                    const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
-                    // Inform grid of the requested tree level's full size
-                    const treeLevelSize = fsItems.length;
-                    callback(pageItems, treeLevelSize);
-                  });
-                }
-              });
+                  // Slice out only the requested items
+                  const startIndex = params.page * params.pageSize;
+                  const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
+                  // Inform grid of the requested tree level's full size
+                  const treeLevelSize = fsItems.length;
+                  callback(pageItems, treeLevelSize);
+                });
+              };
             });
           </script>
         </dom-module>
