@@ -34,6 +34,11 @@
         padding-right: calc(var(--lumo-space-l) + var(--lumo-border-radius) / 4);
       }
 
+      /* Workaround to display checkmark in IE11 when list-box is not used in dropdown-menu */
+      [part="items"] ::slotted(vaadin-item)::before {
+        display: var(--_lumo-item-selected-icon-display);
+      }
+
       /* Hovered item */
       /* TODO a workaround until we have "focus-follows-mouse". After that, use the hover style for focus-ring as well */
 
