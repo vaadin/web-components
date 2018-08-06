@@ -534,8 +534,6 @@ This program is available under Apache License Version 2.0, available at https:/
         Array.from(row.children).forEach(cell => {
           const model = {item, index: row.index};
           if (cell._renderer) {
-            const owner = cell._column || this;
-            cell._renderer.call(owner, cell._content, owner, model);
             cell._model = model;
           } else if (cell._instance) {
             cell._instance.setProperties(model);
@@ -545,6 +543,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
         this._toggleRowExpanded(row, this._isExpanded(item));
         this._updateRowLevel(row, this._getIndexLevel(row.index));
+
         if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
           this._toggleDetailsCell(row, item);
         }
@@ -556,6 +555,14 @@ This program is available under Apache License Version 2.0, available at https:/
             this._updateScrollerSize();
           }
         );
+
+        // Call renderer at the end, after level, expanded, etc have been set.
+        Array.from(row.children).forEach(cell => {
+          if (cell._model) {
+            const owner = this._column || this;
+            cell._renderer.call(owner, cell._content, owner, cell._model);
+          }
+        });
       }
 
       _toggleRowDetailsOpened(row, detailsOpened) {
@@ -584,6 +591,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (cell._instance) {
             cell._instance.__level__ = level;
             cell._instance.level = level;
+          } else if (cell._model) {
+            cell._model.level = level;
           }
         });
         this._a11yUpdateRowLevel(row, level);
@@ -594,6 +603,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (cell._instance) {
             cell._instance.__expanded__ = expanded;
             cell._instance.expanded = expanded;
+          } else if (cell._model) {
+            cell._model.expanded = expanded;
           }
         });
         this._toggleAttribute('expanded', expanded, row);
