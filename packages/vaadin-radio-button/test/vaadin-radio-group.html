@@ -33,6 +33,31 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="with-initial-checked">
+    <template>
+      <vaadin-radio-group>
+        <vaadin-radio-button>Button <b>1</b></vaadin-radio-button>
+        <vaadin-radio-button value="1" checked>Button <b>2</b></vaadin-radio-button>
+        <vaadin-radio-button value="2" checked>Button <b>3</b></vaadin-radio-button>
+        <vaadin-radio-button>Button <b>4</b></vaadin-radio-button>
+      </vaadin-radio-group>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="with-dom-repeat">
+    <template>
+      <dom-bind>
+        <template>
+          <vaadin-radio-group id="group">
+            <template is="dom-repeat" items="[[buttons]]">
+              <vaadin-radio-button value$="[[item.value]]" checked$="[[item.checked]]">[[item.label]]</vaadin-radio-button>
+            </template>
+          </vaadin-radio-group>
+        </template>
+      </dom-bind>
+    </template>
+  </test-fixture>
+
   <script>
     describe('vaadin-radio-group', () => {
 
@@ -336,6 +361,67 @@
           expect(visible(errorElement)).to.be.true;
           done();
         }, 100);
+      });
+    });
+
+    describe('radio-group-with-initial-checked-button', () => {
+
+      let vaadinRadioButtonGroup, vaadinRadioButtonList;
+
+      beforeEach(() => {
+        vaadinRadioButtonGroup = fixture('with-initial-checked');
+        vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
+
+        vaadinRadioButtonGroup._observer.flush();
+      });
+
+      it('should reflect the value of initially checked radio button in radio group value', () => {
+        expect(vaadinRadioButtonGroup.value).to.be.equal('2');
+      });
+
+      it('should set the last initially checked button value as the radio group value', () => {
+        expect(vaadinRadioButtonList[1].checked).to.be.false;
+        expect(vaadinRadioButtonList[2].checked).to.be.true;
+        expect(vaadinRadioButtonGroup.value).to.be.equal('2');
+      });
+
+      it('should remove reset the value of radio group if the checked radio button is removed', () => {
+        const radioButton = vaadinRadioButtonList[2];
+        vaadinRadioButtonGroup.removeChild(radioButton);
+        vaadinRadioButtonGroup._observer.flush();
+        expect(vaadinRadioButtonGroup.value).to.not.be.equal('2');
+      });
+    });
+
+    describe('radio-group-with-dom-repeat', () => {
+
+      let domBind, vaadinRadioButtonGroup, vaadinRadioButtonList;
+
+      beforeEach(() => {
+        domBind = fixture('with-dom-repeat');
+        domBind.buttons = [{value: '3', checked: true, label: 'Button 3'}];
+        vaadinRadioButtonGroup = domBind.$.group;
+      });
+
+      it('should set the last button in the DOM as the radio group value', done => {
+        const buttons = [
+          {value: '1', checked: true, label: 'Button 1'},
+          {value: '2', checked: true, label: 'Button 2'}
+        ];
+
+        // Add new buttons (1 and 2) before button 3 in the buttons array
+        domBind.splice('buttons', 0, 0, ...buttons);
+
+        flush(() => {
+          vaadinRadioButtonList = vaadinRadioButtonGroup.querySelectorAll('vaadin-radio-button');
+
+          expect(vaadinRadioButtonGroup.value).to.be.equal('3');
+          expect(vaadinRadioButtonList[0].checked).to.be.false;
+          expect(vaadinRadioButtonList[1].checked).to.be.false;
+          expect(vaadinRadioButtonList[2].checked).to.be.true;
+
+          done();
+        });
       });
     });
   </script>
