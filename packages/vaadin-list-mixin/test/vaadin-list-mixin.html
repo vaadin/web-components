@@ -182,6 +182,14 @@
           expect(list.items[2]).to.be.equal(e4);
           expect(list.items[3]).to.be.equal(e2);
         });
+
+        it('should call updateStyles() on the added items', () => {
+          const item = document.createElement('test-item-element');
+          const spy = sinon.spy(item, 'updateStyles');
+          list.appendChild(item);
+          list._observer.flush();
+          expect(spy).to.be.calledOnce;
+        });
       });
 
       describe('selection', () => {
