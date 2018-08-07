@@ -111,17 +111,20 @@
             };
 
             columns[3].renderer = function(root, column, model) {
-              root.innerHTML = '';
-
-              const checkBox = window.document.createElement('vaadin-checkbox');
-              checkBox.addEventListener('checked-changed', function(event) {
-                if (event.detail.value) {
-                  grid.selectItem(model.item);
-                } else {
-                  grid.deselectItem(model.item);
-                }
-              });
-              root.appendChild(checkBox);
+              let checkBox = root.firstElementChild;
+              if (!checkBox) {
+                checkBox = window.document.createElement('vaadin-checkbox');
+                root.appendChild(checkBox);
+                checkBox.addEventListener('checked-changed', function(event) {
+                  if (event.detail.value) {
+                    grid.selectItem(checkBox.item);
+                  } else {
+                    grid.deselectItem(checkBox.item);
+                  }
+                });
+              }
+              checkBox.item = model.item;
+              checkBox.checked = model.selected;
             };
 
             columns[0].headerRenderer = function(root) {
