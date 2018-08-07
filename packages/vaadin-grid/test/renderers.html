@@ -68,10 +68,15 @@
           flushGrid(grid);
         });
 
-        it('should have valid content and model when renderer is set', () => {
+        it('should have valid content when renderer is set', () => {
           expect(getCell(grid, 0)._content.innerHTML).to.eql('0 bar');
-          expect(getCell(grid, 1)._model).to.be.ok;
           expect(getCell(grid, 1)._content.innerHTML).to.eql('1 baz');
+        });
+
+        it('should be able to get model from cell parentElement', () => {
+          const model = grid.__getRowModel(getCell(grid, 0).parentElement);
+          expect(model).to.ok;
+          expect(model.item.foo).to.be.eql('bar');
         });
 
         it('should pass column as `owner` and `this` to the renderer', () => {

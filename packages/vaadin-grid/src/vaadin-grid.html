@@ -531,18 +531,21 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _updateItem(row, item) {
         row._item = item;
+        const model = this.__getRowModel(row);
+
+        this._toggleRowSelected(row, model.selected);
+        this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
+        this._toggleRowExpanded(row, model.expanded);
+        this._updateRowLevel(row, model.level);
+
         Array.from(row.children).forEach(cell => {
-          const model = {item, index: row.index};
           if (cell._renderer) {
-            cell._model = model;
+            const owner = cell._column || this;
+            cell._renderer.call(owner, cell._content, owner, model);
           } else if (cell._instance) {
             cell._instance.setProperties(model);
           }
         });
-        this._toggleRowSelected(row, this._isSelected(item));
-        this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
-        this._toggleRowExpanded(row, this._isExpanded(item));
-        this._updateRowLevel(row, this._getIndexLevel(row.index));
 
         if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
           this._toggleDetailsCell(row, item);
@@ -555,14 +558,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this._updateScrollerSize();
           }
         );
-
-        // Call renderer at the end, after level, expanded, etc have been set.
-        Array.from(row.children).forEach(cell => {
-          if (cell._model) {
-            const owner = this._column || this;
-            cell._renderer.call(owner, cell._content, owner, cell._model);
-          }
-        });
       }
 
       _toggleRowDetailsOpened(row, detailsOpened) {
@@ -591,8 +586,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (cell._instance) {
             cell._instance.__level__ = level;
             cell._instance.level = level;
-          } else if (cell._model) {
-            cell._model.level = level;
           }
         });
         this._a11yUpdateRowLevel(row, level);
@@ -603,8 +596,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (cell._instance) {
             cell._instance.__expanded__ = expanded;
             cell._instance.expanded = expanded;
-          } else if (cell._model) {
-            cell._model.expanded = expanded;
           }
         });
         this._toggleAttribute('expanded', expanded, row);
@@ -648,6 +639,26 @@ This program is available under Apache License Version 2.0, available at https:/
           } else {
             node.removeAttribute(name);
           }
+        }
+      }
+
+      ready() {
+        super.ready();
+
+        if (document.doctype === null) {
+          console.warn(
+            '<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+          );
+        }
+      }
+
+      __getRowModel(row) {
+        return {
+          index: row.index,
+          item: row._item,
+          level: this._getIndexLevel(row.index),
+          expanded: this._isExpanded(row._item),
+          selected: this._isSelected(row._item)
         }
       }
     }

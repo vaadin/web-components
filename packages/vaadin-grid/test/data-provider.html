@@ -295,11 +295,11 @@
 
             it('should assign expanded property', () => {
               const cell = getContainerCell(grid.$.items, 0, 0);
-              let expanded = cell._model ? cell._model.expanded : cell._instance.expanded;
-              expect(expanded).to.be.false;
+              let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.expanded).to.be.false;
               expandIndex(grid, 0);
-              expanded = cell._model ? cell._model.expanded : cell._instance.expanded;
-              expect(expanded).to.be.true;
+              model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.expanded).to.be.true;
             });
 
             it('should assign level instance property', () => {
@@ -307,16 +307,16 @@
               expandIndex(grid, 1);
 
               let cell = getContainerCell(grid.$.items, 0, 0);
-              let level = cell._model ? cell._model.level : cell._instance.level;
-              expect(level).to.equal(0);
+              let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(0);
 
               cell = getContainerCell(grid.$.items, 1, 0);
-              level = cell._model ? cell._model.level : cell._instance.level;
-              expect(level).to.equal(1);
+              model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(1);
 
               cell = getContainerCell(grid.$.items, 2, 0);
-              level = cell._model ? cell._model.level : cell._instance.level;
-              expect(level).to.equal(2);
+              model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(2);
             });
 
             it('should have right subcache length', () => {
@@ -324,8 +324,8 @@
               flushGrid(grid);
 
               const cell = getContainerCell(grid.$.items, 10, 0);
-              const level = cell._model ? cell._model.level : cell._instance.level;
-              expect(level).to.equal(1);
+              const model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(1);
             });
 
             it('should toggle expanded attribute on the row', () => {
@@ -358,13 +358,13 @@
               expandIndex(grid, 0);
 
               let cell = getContainerCell(grid.$.items, 1, 0);
-              let level = cell._model ? cell._model.level : cell._instance.level;
-              expect(level).to.equal(1);
+              let model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(1);
 
-              cell = getContainerCell(grid.$.items, 1, 0);
-              level = cell._model ? cell._model.level : cell._instance.level;
               grid.clearCache();
-              expect(level).to.equal(1);
+              cell = getContainerCell(grid.$.items, 1, 0);
+              model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
+              expect(model.level).to.equal(1);
             });
 
             describe('before async request completes', () => {

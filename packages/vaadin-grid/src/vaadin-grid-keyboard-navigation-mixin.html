@@ -419,7 +419,9 @@ This program is available under Apache License Version 2.0, available at https:/
         cell._content.firstElementChild.click();
         this._toggleAttribute('navigating', wasNavigating, this);
       } else {
-        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {model: cell._model || cell._instance}}));
+        this.dispatchEvent(new CustomEvent('cell-activate', {detail: {
+          model: this.__getRowModel(cell.parentElement)
+        }}));
       }
     }
 
