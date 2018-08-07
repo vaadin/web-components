@@ -254,15 +254,14 @@
       });
 
       it('should set empty attribute on part label when the label was removed', () => {
-        // Flush to check declaratively added label
-        vaadinCheckbox._observer.flush();
-
         while (vaadinCheckbox.firstChild) {
           vaadinCheckbox.removeChild(vaadinCheckbox.firstChild);
         }
 
-        // Flush to check removed label
-        vaadinCheckbox._observer.flush();
+        // Workaround for not using timeouts
+        const evt = new CustomEvent('slotchange');
+        vaadinCheckbox.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
+
         expect(label.hasAttribute('empty')).to.be.true;
       });
     });
@@ -284,7 +283,11 @@
         paragraph.textContent = 'Added label';
 
         vaadinCheckbox.appendChild(paragraph);
-        vaadinCheckbox._observer.flush();
+
+        // Workaround for not using timeouts
+        const evt = new CustomEvent('slotchange');
+        vaadinCheckbox.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
+
         expect(label.hasAttribute('empty')).to.be.false;
       });
     });
