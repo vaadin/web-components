@@ -19,11 +19,11 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _a11yGetHeaderRowCount(_columnTree) {
-      return _columnTree.filter(level => level.some(col => col._headerTemplate)).length;
+      return _columnTree.filter(level => level.some(col => col._headerTemplate || col.headerRenderer)).length;
     }
 
     _a11yGetFooterRowCount(_columnTree) {
-      return _columnTree.filter(level => level.some(col => col._headerTemplate)).length;
+      return _columnTree.filter(level => level.some(col => col._headerTemplate || col.headerRenderer)).length;
     }
 
     _a11yUpdateGridSize(size, _columnTree) {
