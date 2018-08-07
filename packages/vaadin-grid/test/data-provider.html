@@ -137,7 +137,6 @@
 
         describe(`set manually ${type}`, () => {
           it('should request data only once for empty grid', () => {
-            console.log(grid);
             grid.dataProvider = sinon.spy(infiniteDataProvider);
             grid.size = 10;
             grid.dataProvider.reset();
@@ -666,8 +665,6 @@
         });
       });
     });
-
-
 
   </script>
 

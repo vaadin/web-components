@@ -29,11 +29,11 @@
 
               columns[0].headerRenderer = function(root, col) {
                 root.textContent = 'Name';
-              }
+              };
               columns[0].renderer = function(root, col, model) {
                 let toggler = root.firstElementChild;
                 if (!toggler) {
-                  toggler = new Vaadin.GridTreeToggleElement();
+                  toggler = window.document.createElement('vaadin-grid-tree-toggle');
                   toggler.addEventListener('expanded-changed', function(e) {
                     grid[toggler.expanded ? 'expandItem' : 'collapseItem'](toggler.item);
                   });
