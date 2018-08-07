@@ -2,9 +2,8 @@
 
 [![Available in Vaadin_Directory](https://img.shields.io/vaadin-directory/v/vaadinvaadin-board.svg)](https://vaadin.com/directory/component/vaadinvaadin-board)
 
-[Vaadin Charts](https://vaadin.com/charts) is a [Polymer 2](http://polymer-project.org) element to create flexible responsive layouts and build nice looking dashboard.
+[Vaadin Charts](https://vaadin.com/charts) is a Web Component to create flexible responsive layouts and build nice looking dashboard.
 Vaadin Board key feature is how it effectively reorders the widgets on different screen sizes, maximizing the use of space and looking stunning.
-Vaadin Board is using [Polymer 2](https://github.com/polymer/polymer/tree/2.0-preview).
 
 [<img src="https://raw.githubusercontent.com/vaadin/vaadin-board/master/screenshot.png" alt="Screenshot of vaadin-board">](https://vaadin.com/components/vaadin-board)
 

@@ -25,7 +25,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * and build nice looking dashboards.
        *
        * A Vaadin Board is built using `<vaadin-board-row>` elements containing your child elements.
-       * Each board row consists of four columns, and can contain up to four elements. Using column spans 
+       * Each board row consists of four columns, and can contain up to four elements. Using column spans
        * you can tune the layout to your liking.
        *
        * ```html
@@ -40,6 +40,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * ```
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class BoardElement extends Vaadin.ElementMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
@@ -48,7 +49,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         static get version() {
-          return '2.0.0';
+          return '2.1.0-alpha1';
         }
 
         constructor() {
@@ -61,7 +62,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Redraws the board and all rows inside it, if necessary.
-         * 
+         *
          * In most cases, board will redraw itself if your reconfigure it. If you dynamically change CSS
          * which affects this element, then you need to call this method.
          **/
@@ -70,6 +71,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
       }
+
       customElements.define(BoardElement.is, BoardElement);
 
       /**

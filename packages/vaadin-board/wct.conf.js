@@ -1,53 +1,28 @@
-// To add more device use Platform generator from here:
-// https://wiki.saucelabs.com/display/DOCS/Platform+Configurator#/
-// and check that the configuration is available at https://saucelabs.com/beta/manual
+var envIndex = process.argv.indexOf('--env') + 1;
+var env = envIndex ? process.argv[envIndex] : undefined;
+
 module.exports = {
-  verbose: false,
-  testTimeout: 6 * 60 * 1000,
-  suites: ['test'],
-  plugins: {
-    sauce: {
-      'disabled': true,
-      'browsers': [
-        {
-          'browserName': 'MicrosoftEdge',
-          'platform': 'Windows 10',
-          'version': '16'
-        },
-        {
-          'browserName': 'Internet Explorer',
-          'platform': 'Windows 7',
-          'version': '11'
-        },
-        {
-          'browserName': 'Chrome',
-          'platform': 'Windows 10',
-          'version': '55.0'
-        },
-        {
-          'browserName': 'Firefox',
-          'platform': 'Windows 10',
-          'version': '50.0'
-        },
-        {
-          'browserName': 'safari',
-          'platform': 'OS X 10.11',
-          'version': '10.0'
-        },
-        {
-          'browserName': 'safari',
-          'platform': 'OS X 10.11',
-          'version': '9.0'
-        },
-        {
-          'browserName': 'safari',
-          'appiumVersion': '1.6.3',
-          'deviceName': 'iPad Simulator',
-          'deviceOrientation': 'portrait',
-          'platformName': 'iOS',
-          'platformVersion': '10.2'
-        }
-      ]
+  registerHooks: function(context) {
+    var saucelabsPlatforms = [
+      'macOS 10.12/ipad@10.3',
+      'macOS 10.12/ipad@11.2',
+      'Windows 10/microsoftedge@16',
+      'Windows 10/internet explorer@11',
+      'macOS 10.13/safari@11.1',
+      'Windows 10/firefox@59',
+      'Windows 10/chrome@65'
+    ];
+
+    var cronPlatforms = [
+      'Android/chrome',
+      'Windows 10/chrome@65',
+      'Windows 10/firefox@59'
+    ];
+
+    if (env === 'saucelabs') {
+      context.options.plugins.sauce.browsers = saucelabsPlatforms;
+    } else if (env === 'saucelabs-cron') {
+      context.options.plugins.sauce.browsers = cronPlatforms;
     }
   }
 };

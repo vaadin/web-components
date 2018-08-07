@@ -2,9 +2,8 @@
 
 # \<vaadin-board\>
 
-Polymer element to create flexible responsive layouts and build nice looking dashboard.
+A Web component to create flexible responsive layouts and build nice looking dashboard.
 Vaadin Board key feature is how it effectively reorders the widgets on different screen sizes, maximizing the use of space and looking stunning.
-Vaadin Board is using [Polymer 2](https://github.com/polymer/polymer/tree/2.0-preview).
 
 ## License
 

@@ -3,7 +3,7 @@
 Copyright (c) 2017 Vaadin Ltd.
 This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
 -->
-<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
 
@@ -34,7 +34,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `<vaadin-board-row>` is a Polymer element that together with `vaadin-board` element allows to create flexible responsive layouts and build nice looking dashboard.
        *
        * Each row can contain up to four elements (fewer if colspan is used) and is automatically responsive. The row changes between `large`, `medium` and `small` modes depending on the available width and the set breakpoints. In `large` mode, typically all content is shown side-by-side, in `medium` half of the content is side by side and in `small` mode, content is laid out vertically.
-       * 
+       *
        * The breakpoints can be set using custom CSS properties. By default the breakpoints are `small: <600px`, `medium: < 960px`, `large >= 960px`.
        *
        *
@@ -59,6 +59,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * `--vaadin-board-width-medium` | Determines the width where mode changes from `medium` to `large` | `960px`
        *
        * @memberof Vaadin
+       * @mixes Vaadin.ElementMixin
        * @demo demo/index.html
        */
       class BoardRowElement extends Vaadin.ElementMixin(Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element)) {
@@ -78,6 +79,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._oldBreakpoints = {'smallSize': 600, 'mediumSize': 960};
           this._oldFlexBasis = [];
         }
+
         ready() {
           super.ready();
           this.addEventListener('iron-resize', this._onIronResize, true);
@@ -93,6 +95,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             }));
           });
         }
+
         connectedCallback() {
           super.connectedCallback();
           Polymer.RenderStatus.afterNextRender(this, this._onIronResize);
@@ -116,6 +119,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.classList.add(this._LARGE_VIEWPORT_CLASSNAME);
           }
         }
+
         /**
          * Calculates flex basis based on colSpan, width and breakpoints.
          * @param {Number} colSpan colspan value of the row
@@ -173,6 +177,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
           return returnBoardCols;
         }
+
         /**
          * If there is not enough space in the row.
          * Extra items are dropped from DOM.
@@ -203,7 +208,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Redraws the row, if necessary.
-         * 
+         *
          * In most cases, a board row will redraw itself if your reconfigure it. If you dynamically change CSS which affects the row, then you need to call this method.
          */
         redraw() {
@@ -244,7 +249,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /**
          * Measure the breakpoints in pixels.
-         * 
+         *
          * The breakpoints for `small` and `medium` can be given in any unit: `px`, `em`, `in` etc.
          * We need to know them in `px` so that they are comparable with the actual size.
          *
@@ -272,6 +277,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             return breakpoints;
         }
       }
+
       customElements.define(BoardRowElement.is, BoardRowElement);
 
       /**

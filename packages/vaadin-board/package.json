@@ -1,17 +1,25 @@
 {
-  "name": "vaadin-board",
-  "version": "2.0.0",
+  "name": "@vaadin/vaadin-board",
+  "version": "2.1.0-alpha1",
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
+  "main": "vaadin-board.html",
+  "repository": "vaadin/vaadin-board",
+  "keywords": [
+    "Vaadin",
+    "Board",
+    "dashboard",
+    "responsive",
+    "layout",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
   "author": "Vaadin Ltd",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vaadin/vaadin-board.git"
-  },
   "bugs": {
     "url": "https://github.com/vaadin/vaadin-board/issues"
   },
-  "homepage": "https://github.com/vaadin/vaadin-board#readme",
+  "homepage": "https://vaadin.com/components",
   "devDependencies": {
     "eslint": "^3.15.0",
     "eslint-config-vaadin": "^0.1.0",

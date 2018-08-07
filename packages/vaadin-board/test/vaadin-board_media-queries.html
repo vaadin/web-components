@@ -7,18 +7,27 @@
 
     <title>vaadin-board test</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="../../test-fixture/test-fixture.html">
   </head>
   <body>
     <test-fixture id="board-in-app-layout">
       <template>
-        <iframe id="app-iframe" src="board-in-app-layout.html"></iframe>
+        <iframe id="app-iframe" width="641"></iframe>
       </template>
     </test-fixture>
     <script>
       suite('vaadin-board', function () {
+        if (location.href.indexOf('@vaadin') > -1 &&
+          navigator.platform === 'MacIntel' &&
+          navigator.userAgent.indexOf('Safari') > -1 &&
+          parseFloat((/Version\/([0-9.]+)/.exec(navigator.userAgent) || [])[1]) < 11.1) {
+          // NOTE(platosha): app-layout elements ES modules (Polymer 3)
+          // are broken in Safari older than v11.1, skipping the test.
+          // See: https://github.com/PolymerElements/app-layout/issues/511
+          return;
+        }
 
         test('Row has right layout after media query hides menu', function (done) {
           var isIpad = navigator.userAgent.toLowerCase().indexOf("ipad") != -1;
@@ -40,15 +49,17 @@
               iframe.width = 640;
               setTimeout(finalSizeCheck, 500);
             };
-            var setInitialSize = function () {
-              setTimeout(function () {
-                //a size bigger than 640 will show menu
-                iframe.width = 641;
-                setTimeout(initialSizeCheck, 500);
-              }, 500)
+            var waitThenCheck = function () {
+              setTimeout(initialSizeCheck, 500);
             };
-
-            iframe.contentWindow.addEventListener('WebComponentsReady', setInitialSize);
+            iframe.addEventListener('load', function() {
+              if (iframe.contentWindow.customElements.get('board-in-app-layout-component')) {
+                waitThenCheck();
+              } else {
+                iframe.contentWindow.customElements.whenDefined('board-in-app-layout-component').then(waitThenCheck);
+              }
+            });
+            iframe.src = "board-in-app-layout.html";
           }
           else{
             done();
