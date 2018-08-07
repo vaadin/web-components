@@ -533,23 +533,27 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         const model = this.__getRowModel(row);
 
-        this._toggleRowSelected(row, model.selected);
-        this._toggleRowDetailsOpened(row, this._rowDetailsTemplate && this._isDetailsOpened(item));
-        this._toggleRowExpanded(row, model.expanded);
-        this._updateRowLevel(row, model.level);
+        this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
+        this._toggleAttribute('selected', model.selected, row);
+        this._a11yUpdateRowSelected(row, model.selected);
+        this._a11yUpdateRowLevel(row, model.level);
+        this._toggleAttribute('expanded', model.expanded, row);
+        if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
+          this._toggleDetailsCell(row, item);
+        }
 
         Array.from(row.children).forEach(cell => {
           if (cell._renderer) {
             const owner = cell._column || this;
             cell._renderer.call(owner, cell._content, owner, model);
           } else if (cell._instance) {
+            cell._instance.__detailsOpened__ = model.detailsOpened;
+            cell._instance.__selected__ = model.selected;
+            cell._instance.__level__ = model.level;
+            cell._instance.__expanded__ = model.expanded;
             cell._instance.setProperties(model);
           }
         });
-
-        if (this._rowDetailsTemplate || this.rowDetailsRenderer) {
-          this._toggleDetailsCell(row, item);
-        }
 
         this._debouncerUpdateHeights = Polymer.Debouncer.debounce(this._debouncerUpdateHeights,
           Polymer.Async.timeOut.after(1), () => {
@@ -558,47 +562,6 @@ This program is available under Apache License Version 2.0, available at https:/
             this._updateScrollerSize();
           }
         );
-      }
-
-      _toggleRowDetailsOpened(row, detailsOpened) {
-        Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.__detailsOpened__ = detailsOpened;
-            cell._instance.detailsOpened = detailsOpened;
-          }
-        });
-        this._a11yUpdateRowDetailsOpened(row, detailsOpened);
-      }
-
-      _toggleRowSelected(row, selected) {
-        Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.__selected__ = selected;
-            cell._instance.selected = selected;
-          }
-        });
-        this._toggleAttribute('selected', selected, row);
-        this._a11yUpdateRowSelected(row, selected);
-      }
-
-      _updateRowLevel(row, level) {
-        Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.__level__ = level;
-            cell._instance.level = level;
-          }
-        });
-        this._a11yUpdateRowLevel(row, level);
-      }
-
-      _toggleRowExpanded(row, expanded) {
-        Array.from(row.children).forEach(cell => {
-          if (cell._instance) {
-            cell._instance.__expanded__ = expanded;
-            cell._instance.expanded = expanded;
-          }
-        });
-        this._toggleAttribute('expanded', expanded, row);
       }
 
       _resizeHandler() {
@@ -658,7 +621,9 @@ This program is available under Apache License Version 2.0, available at https:/
           item: row._item,
           level: this._getIndexLevel(row.index),
           expanded: this._isExpanded(row._item),
-          selected: this._isSelected(row._item)
+          selected: this._isSelected(row._item),
+          detailsOpened:
+            (this._rowDetailsTemplate || this.rowDetailsRenderer) && this._isDetailsOpened(row._item)
         };
       }
     }
