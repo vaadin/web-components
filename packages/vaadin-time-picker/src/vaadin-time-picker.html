@@ -25,6 +25,11 @@ This program is available under Apache License Version 2.0, available at https:/
       [part~="toggle-button"] {
         cursor: pointer;
       }
+
+      .input {
+        width: 100%;
+        min-width: 0;
+      }
     </style>
     <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[__dropdownItems]]"
         disabled="[[disabled]]" readonly="[[readonly]]">
