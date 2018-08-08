@@ -72,28 +72,86 @@
 
     describe('selection', () => {
 
+      function configureFixturedGrid() {
+        grid.dataProvider = infiniteDataProvider;
+        cachedItems = grid._cache.items;
+        grid.selectedItems = [cachedItems[0]];
+        flushGrid(grid);
+        rows = getRows(grid.$.items);
+      }
+
+      beforeEach(() => {
+        grid = fixture('default-renderer');
+        const cols = grid.children;
+        cols[0].renderer = root => root.textContent = 'foo';
+        cols[1].renderer = root => root.textContent = 'bar';
+
+        configureFixturedGrid();
+      });
+
+      it('should set selected attribute', () => {
+        expect(rows[0].hasAttribute('selected')).to.be.true;
+        expect(rows[1].hasAttribute('selected')).to.be.false;
+      });
+
+      it('should deselect an equaling item', () => {
+        grid.itemIdPath = 'value';
+        const cells = getRowCells(rows[0]);
+        grid.selectedItems = [rows[0]._item];
+        grid.deselectItem({value: 'foo0'});
+        expect(grid.selectedItems).to.be.empty;
+      });
+
+      describe('selectedItems', () => {
+        it('should reflect changes', () => {
+          grid.push('selectedItems', cachedItems[1]);
+          expect(rows[1].hasAttribute('selected')).to.be.true;
+        });
+
+        it('should notify', done => {
+          grid.addEventListener('selected-items-changed', () => done());
+          grid.selectedItems = [cachedItems[1]];
+        });
+      });
+
+      describe('select functions', () => {
+        it('should select item', () => {
+          expect(grid._isSelected(cachedItems[1])).to.be.false;
+          grid.selectItem(cachedItems[1]);
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+        });
+
+        it('should deselect item', () => {
+          expect(grid._isSelected(cachedItems[0])).to.be.true;
+          grid.deselectItem(cachedItems[0]);
+          expect(grid._isSelected(cachedItems[0])).to.be.false;
+        });
+
+        it('should select multiple rows', () => {
+          grid.selectItem(cachedItems[1]);
+          grid.selectItem(cachedItems[2]);
+          expect(grid._isSelected(cachedItems[1])).to.be.true;
+          expect(grid._isSelected(cachedItems[2])).to.be.true;
+        });
+      });
       ['renderer', 'template'].forEach(type => {
 
         describe(type, () => {
 
           beforeEach(() => {
-            grid = fixture(`default-${type}`);
-            if (type == 'renderer') {
-              const cols = grid.children;
-              cols[0].renderer = root => root.textContent = 'foo';
-              cols[1].renderer = root => root.textContent = 'bar';
+            if (type == 'template') {
+              grid = fixture('default-template');
+              configureFixturedGrid();
             }
-
-            grid.dataProvider = infiniteDataProvider;
-            cachedItems = grid._cache.items;
-            grid.selectedItems = [cachedItems[0]];
-            flushGrid(grid);
-            rows = getRows(grid.$.items);
           });
 
-          it('should set selected attribute', () => {
-            expect(rows[0].hasAttribute('selected')).to.be.true;
-            expect(rows[1].hasAttribute('selected')).to.be.false;
+          (type == 'template' ? it : it.skip)('should reflect cell instance value', () => {
+            if (type == 'template') {
+              const cells = getRowCells(rows[0]);
+              cells[0]._instance.selected = false;
+              expect(cells[0]._instance.selected).to.be.false;
+              expect(grid.selectedItems).to.be.empty;
+            }
           });
 
           it('should bind to cells', () => {
@@ -111,15 +169,6 @@
             expect(model.selected).to.be.false;
           });
 
-          it('should reflect cell instance value', () => {
-            const cells = getRowCells(rows[0]);
-            if (type == 'template') {
-              cells[0]._instance.selected = false;
-              expect(cells[0]._instance.selected).to.be.false;
-              expect(grid.selectedItems).to.be.empty;
-            }
-          });
-
           it('should select an equaling item', () => {
             grid.itemIdPath = 'value';
             const cells = getRowCells(rows[0]);
@@ -127,47 +176,6 @@
             const cell = cells[0];
             const model = cell._instance ? cell._instance : grid.__getRowModel(cell.parentElement);
             expect(model.selected).to.be.true;
-          });
-
-          it('should deselect an equaling item', () => {
-            grid.itemIdPath = 'value';
-            const cells = getRowCells(rows[0]);
-            grid.selectedItems = [rows[0]._item];
-            grid.deselectItem({value: 'foo0'});
-            expect(grid.selectedItems).to.be.empty;
-          });
-
-          describe('selectedItems', () => {
-            it('should reflect changes', () => {
-              grid.push('selectedItems', cachedItems[1]);
-              expect(rows[1].hasAttribute('selected')).to.be.true;
-            });
-
-            it('should notify', done => {
-              grid.addEventListener('selected-items-changed', () => done());
-              grid.selectedItems = [cachedItems[1]];
-            });
-          });
-
-          describe('select functions', () => {
-            it('should select item', () => {
-              expect(grid._isSelected(cachedItems[1])).to.be.false;
-              grid.selectItem(cachedItems[1]);
-              expect(grid._isSelected(cachedItems[1])).to.be.true;
-            });
-
-            it('should deselect item', () => {
-              expect(grid._isSelected(cachedItems[0])).to.be.true;
-              grid.deselectItem(cachedItems[0]);
-              expect(grid._isSelected(cachedItems[0])).to.be.false;
-            });
-
-            it('should select multiple rows', () => {
-              grid.selectItem(cachedItems[1]);
-              grid.selectItem(cachedItems[2]);
-              expect(grid._isSelected(cachedItems[1])).to.be.true;
-              expect(grid._isSelected(cachedItems[2])).to.be.true;
-            });
           });
         });
       });
