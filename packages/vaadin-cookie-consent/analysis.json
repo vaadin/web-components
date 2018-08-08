@@ -8,12 +8,12 @@
       "sourceRange": {
         "file": "src/vaadin-cookie-consent.html",
         "start": {
-          "line": 173,
+          "line": 179,
           "column": 6
         },
         "end": {
-          "line": 173,
-          "column": 42
+          "line": 179,
+          "column": 64
         }
       },
       "elements": [
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 55,
+                  "line": 57,
                   "column": 12
                 },
                 "end": {
-                  "line": 58,
+                  "line": 60,
                   "column": 13
                 }
               },
@@ -51,11 +51,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 62,
+                  "line": 64,
                   "column": 12
                 },
                 "end": {
-                  "line": 65,
+                  "line": 67,
                   "column": 13
                 }
               },
@@ -73,11 +73,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 69,
+                  "line": 71,
                   "column": 12
                 },
                 "end": {
-                  "line": 72,
+                  "line": 74,
                   "column": 13
                 }
               },
@@ -95,11 +95,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 78,
                   "column": 12
                 },
                 "end": {
-                  "line": 79,
+                  "line": 81,
                   "column": 13
                 }
               },
@@ -117,11 +117,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 82,
                   "column": 12
                 },
                 "end": {
-                  "line": 83,
+                  "line": 85,
                   "column": 13
                 }
               },
@@ -139,11 +139,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 93,
                   "column": 12
                 },
                 "end": {
-                  "line": 94,
+                  "line": 96,
                   "column": 13
                 }
               },
@@ -161,11 +161,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 102,
                   "column": 12
                 },
                 "end": {
-                  "line": 103,
+                  "line": 105,
                   "column": 13
                 }
               },
@@ -184,11 +184,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 106,
+                  "line": 108,
                   "column": 8
                 },
                 "end": {
-                  "line": 108,
+                  "line": 110,
                   "column": 9
                 }
               },
@@ -205,11 +205,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 113,
+                  "line": 115,
                   "column": 8
                 },
                 "end": {
-                  "line": 142,
+                  "line": 148,
                   "column": 9
                 }
               },
@@ -225,11 +225,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 147,
+                  "line": 153,
                   "column": 8
                 },
                 "end": {
-                  "line": 153,
+                  "line": 159,
                   "column": 9
                 }
               },
@@ -245,11 +245,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 154,
+                  "line": 160,
                   "column": 8
                 },
                 "end": {
-                  "line": 156,
+                  "line": 162,
                   "column": 9
                 }
               },
@@ -262,11 +262,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 160,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 166,
+                  "line": 172,
                   "column": 9
                 }
               },
@@ -277,7 +277,85 @@
               }
             }
           ],
-          "staticMethods": [],
+          "staticMethods": [
+            {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 4
+                },
+                "end": {
+                  "line": 67,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                },
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
           "demos": [
             {
               "url": "demo/index.html",
@@ -287,11 +365,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 40,
+              "line": 42,
               "column": 6
             },
             "end": {
-              "line": 167,
+              "line": 173,
               "column": 7
             }
           },
@@ -304,11 +382,11 @@
               "description": "The message to show in the popup.",
               "sourceRange": {
                 "start": {
-                  "line": 55,
+                  "line": 57,
                   "column": 12
                 },
                 "end": {
-                  "line": 58,
+                  "line": 60,
                   "column": 13
                 }
               },
@@ -320,11 +398,11 @@
               "description": "The text to show on the dismiss/consent button.",
               "sourceRange": {
                 "start": {
-                  "line": 62,
+                  "line": 64,
                   "column": 12
                 },
                 "end": {
-                  "line": 65,
+                  "line": 67,
                   "column": 13
                 }
               },
@@ -336,11 +414,11 @@
               "description": "The text to show on the 'learn more' link.",
               "sourceRange": {
                 "start": {
-                  "line": 69,
+                  "line": 71,
                   "column": 12
                 },
                 "end": {
-                  "line": 72,
+                  "line": 74,
                   "column": 13
                 }
               },
@@ -352,11 +430,11 @@
               "description": "The URL the 'learn more' link should open.",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 78,
                   "column": 12
                 },
                 "end": {
-                  "line": 79,
+                  "line": 81,
                   "column": 13
                 }
               },
@@ -368,11 +446,11 @@
               "description": "Determines the position of the banner.\n\nPossible values are: `top`, `bottom`, `top-left`, `top-right`, `bottom-left`, `bottom-right`\nFor `top` and `bottom`, the banner is shown with full width. For the corner positions,\nit is shown as a smaller popup.",
               "sourceRange": {
                 "start": {
-                  "line": 91,
+                  "line": 93,
                   "column": 12
                 },
                 "end": {
-                  "line": 94,
+                  "line": 96,
                   "column": 13
                 }
               },
@@ -384,11 +462,11 @@
               "description": "The name of the cookie to set to remember that the user has consented.\n\nThis rarely needs to be changed.",
               "sourceRange": {
                 "start": {
-                  "line": 100,
+                  "line": 102,
                   "column": 12
                 },
                 "end": {
-                  "line": 103,
+                  "line": 105,
                   "column": 13
                 }
               },
@@ -402,7 +480,11 @@
             "selectors": []
           },
           "slots": [],
-          "tagname": "vaadin-cookie-consent"
+          "tagname": "vaadin-cookie-consent",
+          "mixins": [
+            "Vaadin.ElementMixin",
+            "Vaadin.ThemableMixin"
+          ]
         }
       ]
     }

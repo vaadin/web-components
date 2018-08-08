@@ -87,6 +87,8 @@ Vaadin components use the Lumo theme by default.
 
 1. When in the `vaadin-cookie-consent` directory, run `npm install` and then `bower install` to install dependencies.
 
+1. Make sure you have [polymer-cli](https://www.npmjs.com/package/polymer-cli) installed globally: `npm i -g polymer-cli`.
+
 1. Run `polymer serve --open`, browser will automatically open the component API documentation.
 
 1. You can also open demo or in-browser tests by adding **demo** or **test** to the URL, for example:
@@ -112,12 +114,11 @@ We are using [ESLint](http://eslint.org/) for linting JavaScript code. You can c
 
 ## Contributing
 
-  - Make sure your code is compliant with our code linters: `gulp lint`
-  - Check that tests are passing: `polymer test`
-  - [Submit a pull request](https://www.digitalocean.com/community/tutorials/how-to-create-a-pull-request-on-github) with detailed title and description
-  - Wait for response from one of Vaadin components team members
+  To contribute to the component, please read [the guideline](https://github.com/vaadin/vaadin-core/blob/master/CONTRIBUTING.md) first.
 
 
 ## License
 
 Commercial Vaadin Add-on License version 3 (CVALv3). For license terms, see LICENSE.
+
+Vaadin collects development time usage statistics to improve this product. For details and to opt-out, see https://github.com/vaadin/vaadin-usage-statistics.
