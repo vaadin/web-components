@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-notification.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-notification)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-notification)](https://www.npmjs.com/package/@vaadin/vaadin-notification)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-notification)](https://github.com/vaadin/vaadin-notification/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-notification)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-notification.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-notification)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-notification/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-notification?branch=master)
