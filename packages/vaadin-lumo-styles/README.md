@@ -1,4 +1,5 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-lumo-styles.svg)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-lumo-styles)](https://www.npmjs.com/package/@vaadin/vaadin-lumo-styles)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-lumo-styles)](https://github.com/vaadin/vaadin-lumo-styles/releases)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 
