@@ -181,15 +181,22 @@ This program is available under Apache License Version 2.0, available at https:/
               }
             };
 
-            this._filterRadioButtons(info.addedNodes).forEach(button => {
+            // reverse() is used to set the last checked radio button value to radio group value
+            this._filterRadioButtons(info.addedNodes).reverse().forEach(button => {
               button.addEventListener('checked-changed', checkedChangedListener);
               if (this.disabled) {
                 button.disabled = true;
+              }
+              if (button.checked) {
+                this._changeSelectedButton(button);
               }
             });
 
             this._filterRadioButtons(info.removedNodes).forEach(button => {
               button.removeEventListener('checked-changed', checkedChangedListener);
+              if (button.checked) {
+                this.value = undefined;
+              }
             });
 
           });
