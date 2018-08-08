@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-dropdown-menu.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-dropdown-menu)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-dropdown-menu)](https://www.npmjs.com/package/@vaadin/vaadin-dropdown-menu)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-dropdown-menu)](https://github.com/vaadin/vaadin-dropdown-menu/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dropdown-menu)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-dropdown-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dropdown-menu)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-dropdown-menu/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-dropdown-menu?branch=master)
