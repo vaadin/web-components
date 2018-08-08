@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-dialog.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-dialog)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-dialog)](https://www.npmjs.com/package/@vaadin/vaadin-dialog)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-dialog)](https://github.com/vaadin/vaadin-dialog/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-dialog)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-dialog.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-dialog)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-dialog/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-dialog?branch=master)
