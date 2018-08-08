@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-progress-bar.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-progress-bar)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-progress-bar)](https://www.npmjs.com/package/@vaadin/vaadin-progress-bar)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-progress-bar)](https://github.com/vaadin/vaadin-progress-bar/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-progress-bar)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-progress-bar.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-progress-bar)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-progress-bar/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-progress-bar?branch=master)
