@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-tabs.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-tabs)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-tabs)](https://www.npmjs.com/package/@vaadin/vaadin-tabs)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-tabs)](https://github.com/vaadin/vaadin-tabs/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://webcomponents.org/element/vaadin/vaadin-tabs)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-tabs.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-tabs)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-tabs/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-tabs?branch=master)
