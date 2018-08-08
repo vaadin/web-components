@@ -42,7 +42,26 @@
     "iron-iconset-svg": "polymerelements/iron-iconset-svg#^2.1.0"
   },
   "devDependencies": {
-    "vaadin-core": "vaadin-core#^10.0.0",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
+    "vaadin-checkbox": "vaadin/vaadin-checkbox#^2.2.0-beta2",
+    "vaadin-combo-box": "vaadin/vaadin-combo-box#^4.1.0-beta2",
+    "vaadin-context-menu": "vaadin/vaadin-context-menu#^4.1.0-beta2",
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#^3.2.0-beta2",
+    "vaadin-dialog": "vaadin/vaadin-dialog#^2.1.0-beta2",
+    "vaadin-dropdown-menu": "vaadin/vaadin-dropdown-menu#^1.1.0-beta2",
+    "vaadin-form-layout": "vaadin/vaadin-form-layout#^2.1.0-beta2",
+    "vaadin-grid": "vaadin/vaadin-grid#^5.1.0-beta2",
+    "vaadin-item": "vaadin/vaadin-item#^2.1.0-beta2",
+    "vaadin-list-box": "vaadin/vaadin-list-box#^1.1.0-beta2",
+    "vaadin-notification": "vaadin/vaadin-notification#^1.1.0-beta2",
+    "vaadin-ordered-layout": "vaadin/vaadin-ordered-layout#^1.1.0-beta2",
+    "vaadin-progress-bar": "vaadin/vaadin-progress-bar#^1.1.0-beta2",
+    "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.1.0-beta2",
+    "vaadin-split-layout": "vaadin/vaadin-split-layout#^4.1.0-beta2",
+    "vaadin-tabs": "vaadin/vaadin-tabs#^2.1.0-beta2",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2",
+    "vaadin-upload": "vaadin/vaadin-upload#^4.2.0-beta2",
+    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta2",
     "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles",
     "iron-ajax": "^2.1.0"
   }
