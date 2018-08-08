@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-checkbox.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-checkbox)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-checkbox)](https://www.npmjs.com/package/@vaadin/vaadin-checkbox)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-checkbox)](https://github.com/vaadin/vaadin-checkbox/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-checkbox)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-checkbox.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-checkbox)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-checkbox/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-checkbox?branch=master)
