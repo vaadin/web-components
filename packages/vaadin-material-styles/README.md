@@ -1,4 +1,5 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-material-styles.svg)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-material-styles)](https://www.npmjs.com/package/@vaadin/vaadin-material-styles)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-material-styles)](https://github.com/vaadin/vaadin-material-styles/releases)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Material Theme for Vaadin components
