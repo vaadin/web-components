@@ -14,6 +14,7 @@
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
   <link rel="import" href="../vaadin-upload.html">
+  <link rel="import" href="../../polymer/lib/utils/gestures.html">
 </head>
 
 <body>
@@ -69,6 +70,17 @@
             upload.$.addFiles.dispatchEvent(e);
             expect(clickSpy).to.be.calledOnce;
             expect(e.defaultPrevented).to.be.true;
+          });
+
+          it('should invoke Polymer.Getstures.resetMouseCanceller before open file dialog', () => {
+            // NOTE(platosha): With ES modules we can’t put a spy on the actual
+            // Polymer.Gestures.resetMouseCanceller. Have to use a separate
+            // wrapper method for testing.
+            const spy = sinon.spy(upload, '__resetMouseCanceller');
+
+            const e = new CustomEvent('touchend', {cancelable: true});
+            upload.$.addFiles.dispatchEvent(e);
+            expect(spy).to.be.calledOnce;
           });
 
           it('should reset input.value before dialog', () => {

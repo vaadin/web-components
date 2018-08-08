@@ -5,6 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/gestures.html">
 <link rel="import" href="../../polymer/lib/elements/dom-repeat.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
@@ -740,7 +741,15 @@ This program is available under Apache License Version 2.0, available at https:/
         _onAddFilesTouchEnd(e) {
           // Cancel the event to avoid the following click event
           e.preventDefault();
+          // FIXME(platosha): workaround for Polymer Gestures mouseCanceller
+          // cancelling the following synthetic click. See also:
+          // https://github.com/Polymer/polymer/issues/5289
+          this.__resetMouseCanceller();
           this._onAddFilesClick();
+        }
+
+        __resetMouseCanceller() {
+          Polymer.Gestures.resetMouseCanceller();
         }
 
         _onAddFilesClick() {
