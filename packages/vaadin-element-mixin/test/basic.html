@@ -45,39 +45,8 @@
   <script>
     describe('basic functionality', function() {
 
-      let called = 0;
-
-      beforeEach(function(done) {
-
-        // `maybeGatherAndSend` is called each time a class extending `element-mixin` is
-        // created. Overriding it so as we track number of times it's called
-        if (window.Vaadin.UsageStatistics) {
-          window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => called ++;
-        } else {
-          // First time `vaadin-usage-statistics` is loaded asynchronously, we need
-          // a property observer to modify the class.
-          Object.defineProperty(window.Vaadin, 'UsageStatistics', {
-            get() {
-              return this._val;
-            },
-            set(val) {
-              this._val = val;
-              window.Vaadin.UsageStatistics.prototype.maybeGatherAndSend = () => {
-                called ++;
-                // first time
-                done();
-              };
-            }
-          });
-        }
-
-        // This will trigger asynchronously import of `vaadin-usage-statistics`
+      beforeEach(() => {
         fixture('default');
-
-        if (window.Vaadin.UsageStatistics) {
-          // second and sucessive times
-          setTimeout(done, 100);
-        }
       });
 
       it('should define window.Vaadin', function() {
@@ -88,14 +57,19 @@
         expect(window.Vaadin.developmentMode).to.exist;
       });
 
+      it('should store the class entry in registrations', function() {
+        expect(window.Vaadin.registrations).to.be.array;
+        expect(window.Vaadin.registrations[0].is).to.equal('test-foo');
+      });
+
       it('should load usage statistics only on localhost', function() {
         expect(window.Vaadin.developmentModeCallback).to.exist;
         expect(window.Vaadin.developmentModeCallback['vaadin-usage-statistics']).to.exist;
       });
 
       it('should be possible to exclude development mode detector', function() {
-        const ref = window.Vaadin.runIfDevelopmentMode;
-        window.Vaadin.runIfDevelopmentMode = undefined;
+        const ref = window.Vaadin.developmentModeCallback;
+        window.Vaadin.developmentModeCallback = undefined;
         class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
             return 'test-bar';
@@ -104,30 +78,30 @@
         // Everything is ok as long as defining the TestBar class does not fail
         expect(TestBar.is).to.equal('test-bar');
 
-        window.Vaadin.runIfDevelopmentMode = ref;
+        window.Vaadin.developmentModeCallback = ref;
       });
 
       it('should load usage statistics once per class', function() {
-        called = 0;
+        const spy = sinon.spy(window.Vaadin.developmentModeCallback, 'vaadin-usage-statistics');
 
         class TestBar extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
             return 'test-bar';
           }
         }
-        expect(called).to.equal(1);
+        expect(spy).to.be.calledOnce;
         customElements.define(TestBar.is, TestBar);
-        expect(called).to.equal(1);
+        expect(spy).to.be.calledOnce;
         const elem = document.createElement('test-bar');
         document.body.appendChild(elem);
-        expect(called).to.equal(1);
+        expect(spy).to.be.calledOnce;
         class TestBar2 extends Vaadin.ElementMixin(Polymer.Element) {
           static get is() {
             return 'test-bar2';
           }
         }
         customElements.define(TestBar2.is, TestBar2);
-        expect(called).to.equal(2);
+        expect(spy).to.be.calledTwice;
       });
 
 
