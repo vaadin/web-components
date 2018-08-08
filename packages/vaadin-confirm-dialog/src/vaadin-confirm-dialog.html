@@ -20,7 +20,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         display: none;
       }
     </style>
-    <vaadin-dialog id="dialog" opened="{{opened}}" no-close-on-outside-click no-close-on-esc>
+    <vaadin-dialog
+      id="dialog"
+      opened="{{opened}}"
+      aria-label="[[_getAriaLabel(header)]]"
+      no-close-on-outside-click
+      no-close-on-esc>
       <template>
         <div part="header">
           <slot name="header">
@@ -101,7 +106,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
              * Set the confirmation dialog title.
              */
             header: {
-              type: String
+              type: String,
+              value: ''
             },
             /**
              * Set the message or confirmation question.
@@ -217,6 +223,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         _reject() {
           this.dispatchEvent(new CustomEvent('reject'));
           this.opened = false;
+        }
+
+        _getAriaLabel(header) {
+          return header || 'confirmation';
         }
       }
 
