@@ -125,6 +125,22 @@
         });
       });
 
+      it('should not misalign on reattach', done => {
+        init('default-content', () => {
+          scrollToEnd(grid);
+
+          const parentNode = grid.parentNode;
+          parentNode.removeChild(grid);
+          parentNode.offsetHeight;
+          parentNode.appendChild(grid);
+
+          setTimeout(() => {
+            expect(header.getBoundingClientRect().top).to.be.closeTo(grid.getBoundingClientRect().top, 1);
+            done();
+          });
+        });
+      });
+
       it('should update height when hiding columns', done => {
         init('two-columns-uneven-content', () => {
           grid.querySelectorAll('vaadin-grid-column')[0].hidden = true;
