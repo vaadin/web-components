@@ -12,7 +12,7 @@ addons:
   chrome: stable
 
 env:
-  - POLYMER=2
+  - POLYMER=2 TEST_SUITE=unit_tests
   - POLYMER=3
 
 script:
