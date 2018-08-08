@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-split-layout.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-split-layout)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-split-layout)](https://www.npmjs.com/package/@vaadin/vaadin-split-layout)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-split-layout)](https://github.com/vaadin/vaadin-split-layout/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-split-layout)
 [![Build status](https://travis-ci.org/vaadin/vaadin-split-layout.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-split-layout)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-split-layout/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-split-layout?branch=master)
