@@ -138,13 +138,17 @@
             getCell(grid, 0)._content.click();
           });
 
-          it('should fire a `cell-activate` event with the appropriate model when pressin space', done => {
-            listenOnce(grid, 'cell-activate', e => {
-              expect(e.detail.model.index).to.eql(0);
-              expect(e.detail.model.item).to.be.ok;
+          it('should fire a `cell-activate` event with the appropriate model when pressing space', done => {
+            if (!grid._ios) {
+              listenOnce(grid, 'cell-activate', e => {
+                expect(e.detail.model.index).to.eql(0);
+                expect(e.detail.model.item).to.be.ok;
+                done();
+              });
+              MockInteractions.keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
+            } else {
               done();
-            });
-            MockInteractions.keyDownOn(getCell(grid, 0) || grid.shadowRoot.activeElement, 32, [], ' ');
+            }
           });
 
         });
