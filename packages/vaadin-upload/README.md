@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-upload.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-upload)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-upload)](https://www.npmjs.com/package/@vaadin/vaadin-upload)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-upload)](https://github.com/vaadin/vaadin-upload/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-upload)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-upload.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-upload)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-upload/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-upload?branch=master)
