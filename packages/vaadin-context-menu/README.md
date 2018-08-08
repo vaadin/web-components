@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-context-menu.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-context-menu)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-context-menu)](https://www.npmjs.com/package/@vaadin/vaadin-context-menu)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-context-menu)](https://github.com/vaadin/vaadin-context-menu/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-context-menu)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-context-menu.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-context-menu)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-context-menu/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-context-menu?branch=master)
