@@ -40,9 +40,9 @@
         </div>
 
         <vaadin-grid theme="compact">
-          <vaadin-grid-column resizable></vaadin-grid-column>
-          <vaadin-grid-column resizable></vaadin-grid-column>
-          <vaadin-grid-column width="12em" resizable></vaadin-grid-column>
+          <vaadin-grid-column name="First Name" resizable></vaadin-grid-column>
+          <vaadin-grid-column name="Last Name" resizable></vaadin-grid-column>
+          <vaadin-grid-column name="E-Mail" width="12em" resizable></vaadin-grid-column>
           <vaadin-grid-column width="14em"></vaadin-grid-column>
         </vaadin-grid>
         <script>
@@ -65,37 +65,27 @@
 
             const columns = document.querySelectorAll('vaadin-grid-column');
 
-            columns[0].headerRenderer = function(root) {
-              root.textContent = 'First Name';
-            };
-            columns[0].renderer = function(root, column, model) {
-              let textField = root.firstElementChild;
-              if (!textField) {
-                textField = new Vaadin.TextFieldElement();
-                root.appendChild(textField);
-              }
-              textField.value = model.item.name.first;
-              textField.setAttribute('focus-target', true);
-              textField.readonly = true;
+            columns[0].headerRenderer =
+            columns[1].headerRenderer =
+            columns[2].headerRenderer = function(root, column) {
+              root.textContent = column.getAttribute('name');
             };
 
-            columns[1].headerRenderer = function(root) {
-              root.textContent = 'Last Name';
-            };
+            columns[0].renderer =
             columns[1].renderer = function(root, column, model) {
               let textField = root.firstElementChild;
               if (!textField) {
-                textField = new Vaadin.TextFieldElement();
+                textField = window.document.createElement('vaadin-text-field');
                 root.appendChild(textField);
               }
-              textField.value = model.item.name.last;
-              textField.setAttribute('focus-target', true);
+              const property = column == columns[0] ? 'first' : 'last';
+              // set an id so as we can find it in the dom when clicking on action buttons.
+              textField.id = property + model.index;
+              textField.value = model.item.name[property];
               textField.readonly = true;
+              textField.setAttribute('focus-target', true);
             };
 
-            columns[2].headerRenderer = function(root) {
-              root.textContent = 'Email';
-            };
             columns[2].renderer = function(root, column, model) {
               root.textContent = model.item.name.first + '.' + model.item.name.last + '@example.com';
             };
@@ -121,7 +111,7 @@
                 buttons[0].addEventListener('click', function() {
                   updateTextFieldsVisibility(wrapper.idx, true);
                   updateButtonsVisibility(buttons, wrapper.idx, true);
-                  getTextField(columns[0], wrapper.idx).focus();
+                  grid.querySelector('#first' + wrapper.idx).focus();
                 });
                 // DELETE
                 buttons[1].addEventListener('click', function(event) {
@@ -130,8 +120,8 @@
                 });
                 // SAVE
                 buttons[2].addEventListener('click', function() {
-                  grid.items[wrapper.idx].name.first = getTextField(columns[0], wrapper.idx).value;
-                  grid.items[wrapper.idx].name.last = getTextField(columns[1], wrapper.idx).value;
+                  grid.items[wrapper.idx].name.first = grid.querySelector('#first' + wrapper.idx).value;
+                  grid.items[wrapper.idx].name.last = grid.querySelector('#last' + wrapper.idx).value;
                   buttons[3].click();
                 });
                 // CANCEL
@@ -147,17 +137,9 @@
               wrapper.idx = model.index;
             };
 
-            // Returns the vaadin-text-element for a given column and row
-            function getTextField(column, index) {
-              const cell = column._allCells.filter(function(cell) {
-                return cell._model && cell._model.index === index;
-              })[0];
-              return cell._content.firstElementChild;
-            }
-
             function updateTextFieldsVisibility(index, editing) {
-              getTextField(columns[0], index).readonly = !editing;
-              getTextField(columns[1], index).readonly = !editing;
+              grid.querySelector('#first' + index).readonly = !editing;
+              grid.querySelector('#last' + index).readonly = !editing;
             }
 
             function updateButtonsVisibility(buttons, index, editing) {
