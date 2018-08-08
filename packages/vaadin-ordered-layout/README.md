@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-ordered-layout.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-ordered-layout)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-ordered-layout)](https://www.npmjs.com/package/@vaadin/vaadin-ordered-layout)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-ordered-layout)](https://github.com/vaadin/vaadin-ordered-layout/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-ordered-layout)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-ordered-layout.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-ordered-layout)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-ordered-layout/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-ordered-layout?branch=master)
