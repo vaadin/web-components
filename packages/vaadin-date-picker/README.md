@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-date-picker.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-date-picker)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-date-picker)](https://www.npmjs.com/package/@vaadin/vaadin-date-picker)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-date-picker)](https://github.com/vaadin/vaadin-date-picker/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-date-picker)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-date-picker.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-date-picker)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-date-picker/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-date-picker?branch=master)
