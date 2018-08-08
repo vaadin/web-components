@@ -49,6 +49,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="empty">
+    <template>
+      <vaadin-checkbox></vaadin-checkbox>
+    </template>
+  </test-fixture>
+
   <test-fixture id="iron-form-checkbox">
     <template>
       <x-checkbox></x-checkbox>
@@ -245,6 +251,44 @@
         expect(vaadinCheckbox.checked).to.be.false;
         expect(vaadinCheckbox.indeterminate).to.be.false;
         expect(vaadinCheckbox.getAttribute('aria-checked')).to.be.eql('false');
+      });
+
+      it('should set empty attribute on part label when the label was removed', () => {
+        while (vaadinCheckbox.firstChild) {
+          vaadinCheckbox.removeChild(vaadinCheckbox.firstChild);
+        }
+
+        // Workaround for not using timeouts
+        const evt = new CustomEvent('slotchange');
+        vaadinCheckbox.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
+
+        expect(label.hasAttribute('empty')).to.be.true;
+      });
+    });
+
+    describe('empty vaadin-checkbox label', () => {
+      let vaadinCheckbox, label;
+
+      beforeEach(() => {
+        vaadinCheckbox = fixture('empty');
+        label = vaadinCheckbox.shadowRoot.querySelector('[part="label"]');
+      });
+
+      it('should set empty attribute on part label when there is no label', () => {
+        expect(label.hasAttribute('empty')).to.be.true;
+      });
+
+      it('should remove empty attribute from part label when the label is added', () => {
+        const paragraph = document.createElement('p');
+        paragraph.textContent = 'Added label';
+
+        vaadinCheckbox.appendChild(paragraph);
+
+        // Workaround for not using timeouts
+        const evt = new CustomEvent('slotchange');
+        vaadinCheckbox.shadowRoot.querySelector('[part="label"]').querySelector('slot').dispatchEvent(evt);
+
+        expect(label.hasAttribute('empty')).to.be.false;
       });
     });
 

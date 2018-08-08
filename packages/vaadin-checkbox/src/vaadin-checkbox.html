@@ -84,14 +84,15 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * The following state attributes are available for styling:
        *
-       * Attribute    | Description
-       * -------------|------------
-       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.
-       * `disabled`   | Set when the checkbox is disabled.
-       * `focus-ring` | Set when the checkbox is focused using the keyboard.
-       * `focused`    | Set when the checkbox is focused.
-       * `indeterminate` | Set when the checkbox is in indeterminate mode.
-       * `checked` | Set when the checkbox is checked.
+       * Attribute    | Description | Part name
+       * -------------|-------------|--------------
+       * `active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`
+       * `disabled`   | Set when the checkbox is disabled. | `:host`
+       * `focus-ring` | Set when the checkbox is focused using the keyboard. | `:host`
+       * `focused`    | Set when the checkbox is focused. | `:host`
+       * `indeterminate` | Set when the checkbox is in indeterminate mode. | `:host`
+       * `checked` | Set when the checkbox is checked. | `:host`
+       * `empty` | Set when there is no label provided. | `label`
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -185,6 +186,20 @@ This program is available under Apache License Version 2.0, available at https:/
           const attrName = this.getAttribute('name');
           if (attrName) {
             this.name = attrName;
+          }
+
+          this.shadowRoot.querySelector('[part~="label"]').querySelector('slot')
+            .addEventListener('slotchange', this._updateLabelAttribute.bind(this));
+
+          this._updateLabelAttribute();
+        }
+
+        _updateLabelAttribute() {
+          const label = this.shadowRoot.querySelector('[part~="label"]');
+          if (label.firstElementChild.assignedNodes().length === 0) {
+            label.setAttribute('empty', '');
+          } else {
+            label.removeAttribute('empty');
           }
         }
 
