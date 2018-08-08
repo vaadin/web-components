@@ -1,4 +1,5 @@
-[![npm version](https://badge.fury.io/js/%40vaadin%2Fvaadin-radio-button.svg)](https://badge.fury.io/js/%40vaadin%2Fvaadin-radio-button)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-radio-button)](https://www.npmjs.com/package/@vaadin/vaadin-radio-button)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-radio-button)](https://github.com/vaadin/vaadin-radio-button/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-radio-button)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-radio-button.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-radio-button)
 [![Coverage Status](https://coveralls.io/repos/github/vaadin/vaadin-radio-button/badge.svg?branch=master)](https://coveralls.io/github/vaadin/vaadin-radio-button?branch=master)
