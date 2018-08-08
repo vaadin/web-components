@@ -1,4 +1,5 @@
-![Bower version](https://img.shields.io/bower/v/vaadin-control-state-mixin.svg)
+[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-control-state-mixin)](https://www.npmjs.com/package/@vaadin/vaadin-control-state-mixin)
+[![Bower version](https://badgen.net/github/release/vaadin/vaadin-control-state-mixin)](https://github.com/vaadin/vaadin-control-state-mixin/releases)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-control-state-mixin.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-control-state-mixin)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin/web-components?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
