@@ -3,7 +3,7 @@
 
 # &lt;vaadin-overlay&gt;
 
-&lt;vaadin-overlay&gt; is a [Polymer 2](http://polymer-project.org) element meant for internal use in Vaadin components.
+&lt;vaadin-overlay&gt; is a Web Component meant for internal use in Vaadin components.
 
 
 ## License
