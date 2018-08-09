@@ -630,7 +630,7 @@
 
         it('should clear loading attribute from rows when data received', () => {
           container.dataProvider = (params, callback) => {
-            callback([...Array(25).fill({})]);
+            callback([{}]);
           };
           expect(getRows(grid.$.items)[0].hasAttribute('loading')).to.be.false;
         });
