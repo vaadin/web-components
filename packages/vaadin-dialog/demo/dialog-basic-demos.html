@@ -28,12 +28,8 @@
     <h3>Confirmation Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-confirm-dialog">
       <template preserve-content>
-        <dom-bind id="dialog-example">
-          <template>
-            <vaadin-dialog no-close-on-esc no-close-on-outside-click></vaadin-dialog>
-            <vaadin-button on-click="openDialog">Show Confirmation Dialog</vaadin-button>
-          </template>
-        </dom-bind>
+        <vaadin-dialog no-close-on-esc no-close-on-outside-click></vaadin-dialog>
+        <vaadin-button>Show Confirmation Dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-confirm-dialog', function(document) {
             const dialog = document.querySelector('vaadin-dialog');
@@ -73,13 +69,9 @@
     <h3>Scrollable Dialog</h3>
     <vaadin-demo-snippet id="dialog-basic-demos-scrollable-dialog">
       <template preserve-content>
-        <dom-bind id="scrollable-dialog-example">
-          <template>
-            <iron-ajax auto></iron-ajax>
-            <vaadin-dialog no-close-on-outside-click></vaadin-dialog>
-            <vaadin-button>Show dialog</vaadin-button>
-          </template>
-        </dom-bind>
+        <iron-ajax auto></iron-ajax>
+        <vaadin-dialog no-close-on-outside-click></vaadin-dialog>
+        <vaadin-button>Show dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-scrollable-dialog', function(document) {
             const API_URL = 'https://baconipsum.com/api/?type=all-meat&paras=20';
@@ -102,7 +94,7 @@
                   main.appendChild(p);
                 });
               });
-              main.style = 'overflow-y: scroll;';
+              main.setAttribute('style', 'overflow-y: scroll');
 
               const footer = window.document.createElement('footer');
               const btn = window.document.createElement('vaadin-button');
