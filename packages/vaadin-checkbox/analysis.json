@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-checkbox-group.html",
         "start": {
-          "line": 288,
+          "line": 293,
           "column": 6
         },
         "end": {
-          "line": 288,
+          "line": 293,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-checkbox>` is a Polymer 2 element for customized checkboxes.\n\n```html\n<vaadin-checkbox>\n  Make my profile visible\n</vaadin-checkbox>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|----------------\n`checkbox`        | The checkbox element\n`label`           | The label content element\n\nThe following state attributes are available for styling:\n\nAttribute    | Description\n-------------|------------\n`active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard.\n`disabled`   | Set when the checkbox is disabled.\n`focus-ring` | Set when the checkbox is focused using the keyboard.\n`focused`    | Set when the checkbox is focused.\n`indeterminate` | Set when the checkbox is in indeterminate mode.\n`checked` | Set when the checkbox is checked.\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-checkbox>` is a Web Component for customized checkboxes.\n\n```html\n<vaadin-checkbox>\n  Make my profile visible\n</vaadin-checkbox>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|----------------\n`checkbox`        | The checkbox element\n`label`           | The label content element\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|--------------\n`active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`\n`disabled`   | Set when the checkbox is disabled. | `:host`\n`focus-ring` | Set when the checkbox is focused using the keyboard. | `:host`\n`focused`    | Set when the checkbox is focused. | `:host`\n`indeterminate` | Set when the checkbox is in indeterminate mode. | `:host`\n`checked` | Set when the checkbox is checked. | `:host`\n`empty` | Set when there is no label provided. | `label`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-checkbox.html",
           "properties": [
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 239,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 241,
+                  "line": 256,
                   "column": 9
                 }
               },
@@ -143,11 +143,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 167,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -164,11 +164,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 130,
                   "column": 13
                 }
               },
@@ -188,11 +188,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 136,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 141,
                   "column": 13
                 }
               },
@@ -211,11 +211,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 148,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -233,11 +233,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 150,
+                  "line": 151,
                   "column": 12
                 },
                 "end": {
-                  "line": 152,
+                  "line": 153,
                   "column": 13
                 }
               },
@@ -255,11 +255,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 173,
+                  "line": 174,
                   "column": 8
                 },
                 "end": {
-                  "line": 188,
+                  "line": 194,
                   "column": 9
                 }
               },
@@ -276,11 +276,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 123,
+                  "line": 137,
                   "column": 4
                 },
                 "end": {
-                  "line": 128,
+                  "line": 142,
                   "column": 5
                 }
               },
@@ -298,11 +298,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 133,
+                  "line": 147,
                   "column": 4
                 },
                 "end": {
-                  "line": 144,
+                  "line": 158,
                   "column": 5
                 }
               },
@@ -320,11 +320,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 146,
+                  "line": 160,
                   "column": 4
                 },
                 "end": {
-                  "line": 160,
+                  "line": 174,
                   "column": 5
                 }
               },
@@ -346,11 +346,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 162,
+                  "line": 176,
                   "column": 4
                 },
                 "end": {
-                  "line": 164,
+                  "line": 178,
                   "column": 5
                 }
               },
@@ -372,11 +372,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 166,
+                  "line": 180,
                   "column": 4
                 },
                 "end": {
-                  "line": 168,
+                  "line": 182,
                   "column": 5
                 }
               },
@@ -394,11 +394,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 179,
+                  "line": 193,
                   "column": 4
                 },
                 "end": {
-                  "line": 186,
+                  "line": 200,
                   "column": 5
                 }
               },
@@ -420,11 +420,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 192,
+                  "line": 206,
                   "column": 4
                 },
                 "end": {
-                  "line": 199,
+                  "line": 213,
                   "column": 5
                 }
               },
@@ -442,11 +442,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 206,
+                  "line": 220,
                   "column": 4
                 },
                 "end": {
-                  "line": 209,
+                  "line": 223,
                   "column": 5
                 }
               },
@@ -464,11 +464,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 211,
+                  "line": 225,
                   "column": 4
                 },
                 "end": {
-                  "line": 224,
+                  "line": 238,
                   "column": 5
                 }
               },
@@ -490,11 +490,11 @@
               "sourceRange": {
                 "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
                 "start": {
-                  "line": 226,
+                  "line": 240,
                   "column": 4
                 },
                 "end": {
-                  "line": 242,
+                  "line": 256,
                   "column": 5
                 }
               },
@@ -586,16 +586,36 @@
               "inheritedFrom": "Polymer.GestureEventListeners"
             },
             {
+              "name": "_updateLabelAttribute",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 196,
+                  "column": 8
+                },
+                "end": {
+                  "line": 203,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
               "name": "_checkedChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 190,
+                  "line": 205,
                   "column": 8
                 },
                 "end": {
-                  "line": 196,
+                  "line": 211,
                   "column": 9
                 }
               },
@@ -615,11 +635,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 213,
                   "column": 8
                 },
                 "end": {
-                  "line": 204,
+                  "line": 219,
                   "column": 9
                 }
               },
@@ -639,11 +659,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 206,
+                  "line": 221,
                   "column": 8
                 },
                 "end": {
-                  "line": 237,
+                  "line": 252,
                   "column": 9
                 }
               },
@@ -659,11 +679,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 247,
+                  "line": 262,
                   "column": 8
                 },
                 "end": {
-                  "line": 258,
+                  "line": 273,
                   "column": 9
                 }
               },
@@ -680,11 +700,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 260,
+                  "line": 275,
                   "column": 8
                 },
                 "end": {
-                  "line": 277,
+                  "line": 292,
                   "column": 9
                 }
               },
@@ -704,11 +724,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 279,
+                  "line": 294,
                   "column": 8
                 },
                 "end": {
-                  "line": 282,
+                  "line": 297,
                   "column": 9
                 }
               },
@@ -807,11 +827,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 104,
+              "line": 105,
               "column": 6
             },
             "end": {
-              "line": 289,
+              "line": 304,
               "column": 7
             }
           },
@@ -860,11 +880,11 @@
               "description": "True if the checkbox is checked.",
               "sourceRange": {
                 "start": {
-                  "line": 123,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 129,
+                  "line": 130,
                   "column": 13
                 }
               },
@@ -876,11 +896,11 @@
               "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
               "sourceRange": {
                 "start": {
-                  "line": 135,
+                  "line": 136,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 141,
                   "column": 13
                 }
               },
@@ -892,11 +912,11 @@
               "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
               "sourceRange": {
                 "start": {
-                  "line": 145,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 148,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -964,11 +984,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 218,
                   "column": 8
                 },
                 "end": {
-                  "line": 218,
+                  "line": 220,
                   "column": 9
                 }
               },
@@ -1026,15 +1046,15 @@
             {
               "name": "value",
               "type": "Array | null | undefined",
-              "description": "Value of the checkbox group.",
+              "description": "Value of the checkbox group.\nNote: toggling the checkboxes modifies the value by creating new\narray each time, to override Polymer dirty-checking for arrays.\nYou can still use Polymer array mutation methods to update the value.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 125,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -1053,11 +1073,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 133,
                   "column": 12
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 13
                 }
               },
@@ -1075,11 +1095,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 141,
                   "column": 12
                 },
                 "end": {
-                  "line": 141,
+                  "line": 144,
                   "column": 13
                 }
               },
@@ -1096,11 +1116,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 146,
+                  "line": 149,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 154,
                   "column": 13
                 }
               },
@@ -1120,11 +1140,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 165,
+                  "line": 168,
                   "column": 8
                 },
                 "end": {
-                  "line": 197,
+                  "line": 199,
                   "column": 9
                 }
               },
@@ -1140,11 +1160,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 199,
+                  "line": 201,
                   "column": 8
                 },
                 "end": {
-                  "line": 203,
+                  "line": 205,
                   "column": 9
                 }
               },
@@ -1160,11 +1180,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 211,
+                  "line": 213,
                   "column": 8
                 },
                 "end": {
-                  "line": 214,
+                  "line": 216,
                   "column": 9
                 }
               },
@@ -1181,11 +1201,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 220,
+                  "line": 222,
                   "column": 8
                 },
                 "end": {
-                  "line": 223,
+                  "line": 225,
                   "column": 9
                 }
               },
@@ -1202,11 +1222,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 225,
+                  "line": 227,
                   "column": 8
                 },
                 "end": {
-                  "line": 229,
+                  "line": 231,
                   "column": 9
                 }
               },
@@ -1226,11 +1246,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 231,
+                  "line": 233,
                   "column": 8
                 },
                 "end": {
-                  "line": 233,
+                  "line": 237,
                   "column": 9
                 }
               },
@@ -1250,11 +1270,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 235,
+                  "line": 239,
                   "column": 8
                 },
                 "end": {
-                  "line": 238,
+                  "line": 244,
                   "column": 9
                 }
               },
@@ -1274,11 +1294,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 240,
+                  "line": 246,
                   "column": 8
                 },
                 "end": {
-                  "line": 251,
+                  "line": 256,
                   "column": 9
                 }
               },
@@ -1293,26 +1313,26 @@
               }
             },
             {
-              "name": "_valueChanged",
+              "name": "_updateValue",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 258,
                   "column": 8
                 },
                 "end": {
-                  "line": 267,
+                  "line": 273,
                   "column": 9
                 }
               },
               "metadata": {},
               "params": [
                 {
-                  "name": "newV"
+                  "name": "value"
                 },
                 {
-                  "name": "oldV"
+                  "name": "splices"
                 }
               ],
               "return": {
@@ -1325,11 +1345,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 269,
+                  "line": 275,
                   "column": 8
                 },
                 "end": {
-                  "line": 275,
+                  "line": 281,
                   "column": 9
                 }
               },
@@ -1349,11 +1369,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 277,
+                  "line": 283,
                   "column": 8
                 },
                 "end": {
-                  "line": 279,
+                  "line": 285,
                   "column": 9
                 }
               },
@@ -1460,7 +1480,7 @@
               "column": 6
             },
             "end": {
-              "line": 281,
+              "line": 286,
               "column": 7
             }
           },
@@ -1502,14 +1522,14 @@
             },
             {
               "name": "value",
-              "description": "Value of the checkbox group.",
+              "description": "Value of the checkbox group.\nNote: toggling the checkboxes modifies the value by creating new\narray each time, to override Polymer dirty-checking for arrays.\nYou can still use Polymer array mutation methods to update the value.",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 125,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -1521,11 +1541,11 @@
               "description": "Error to show when the input value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 133,
                   "column": 12
                 },
                 "end": {
-                  "line": 133,
+                  "line": 136,
                   "column": 13
                 }
               },
@@ -1537,11 +1557,11 @@
               "description": "Specifies that the user must fill in a value.",
               "sourceRange": {
                 "start": {
-                  "line": 138,
+                  "line": 141,
                   "column": 12
                 },
                 "end": {
-                  "line": 141,
+                  "line": 144,
                   "column": 13
                 }
               },
@@ -1553,11 +1573,11 @@
               "description": "This property is set to true when the control value is invalid.",
               "sourceRange": {
                 "start": {
-                  "line": 146,
+                  "line": 149,
                   "column": 12
                 },
                 "end": {
-                  "line": 151,
+                  "line": 154,
                   "column": 13
                 }
               },
