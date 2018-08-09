@@ -30,8 +30,5 @@
     "iron-test-helpers": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.0.0"
-  },
-  "resolutions": {
-    "polymer": "5f5d2c2"
   }
 }
