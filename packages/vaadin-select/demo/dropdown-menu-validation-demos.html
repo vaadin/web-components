@@ -38,9 +38,9 @@
             ];
 
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
 
-              const select = new Vaadin.ItemElement();
+              const select = window.document.createElement('vaadin-item');
               select.textContent = 'Select your title';
               select.setAttribute('value', '');
               listBox.appendChild(select);
@@ -49,7 +49,7 @@
               listBox.appendChild(divider);
 
               items.forEach(function(row) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = row.textContent;
                 if (row.value) {
                   item.setAttribute('value', row.value);

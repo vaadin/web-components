@@ -14,10 +14,10 @@
           window.addDemoReadyListener('#dropdown-menu-list-box-basic', function(document) {
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
               // create the <vaadin-list-box>
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               // append 3 <vaadin-item> elements
               ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = name;
                 listBox.appendChild(item);
               });
@@ -58,7 +58,7 @@
           window.addDemoReadyListener('#dropdown-menu-list-box-configuring', function(document) {
             const appendItems = function(listBox, items) {
               items.forEach(function(row) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = row.textContent;
                 if (row.value) {
                   item.setAttribute('value', row.value);
@@ -68,27 +68,27 @@
             };
 
             document.querySelector('vaadin-dropdown-menu[placeholder]').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}, {textContent: 'Option two'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[disabled]').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[readonly]').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[required]').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               // un-selectable <vaadin-item> to highlight required state
-              const select = new Vaadin.ItemElement();
+              const select = window.document.createElement('vaadin-item');
               select.textContent = 'Select an option';
               select.setAttribute('disabled', '');
               select.setAttribute('value', '');
@@ -119,7 +119,7 @@
         <script>
           window.addDemoReadyListener('#dropdown-menu-list-box-custom-label', function(document) {
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
               const items = [
                 {label: '', textContent: 'Other'},
                 {label: 'ES', textContent: 'Spanish'},
@@ -127,7 +127,7 @@
                 {label: 'EN', textContent: 'English'}
               ];
               items.forEach(function(row) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = row.textContent;
                 item.setAttribute('label', row.label);
                 listBox.appendChild(item);
