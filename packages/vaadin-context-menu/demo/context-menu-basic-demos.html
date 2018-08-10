@@ -20,10 +20,10 @@
             contextMenu.renderer = function(root) {
               root.innerHTML = '';
 
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
 
               ['First', 'Second'].forEach(function(name) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = name + ' menu item';
                 listBox.appendChild(item);
               });
@@ -67,10 +67,10 @@
             contextMenu.renderer = function(root) {
               root.innerHTML = '';
 
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
 
               ['First', 'Second'].forEach(function(name) {
-                const item = new Vaadin.ItemElement();
+                const item = window.document.createElement('vaadin-item');
                 item.textContent = name + ' menu item';
                 listBox.appendChild(item);
               });
@@ -99,9 +99,9 @@
             contextMenu.renderer = function(root, contextMenu, context) {
               root.innerHTML = '';
 
-              const listBox = new Vaadin.ListBoxElement();
+              const listBox = window.document.createElement('vaadin-list-box');
 
-              const item = new Vaadin.ItemElement();
+              const item = window.document.createElement('vaadin-item');
               item.textContent = 'The menu target: ' + context.target.textContent;
               listBox.appendChild(item);
 
