@@ -137,18 +137,37 @@ This program is available under Apache License Version 2.0, available at https:/
     };
 
     /**
-     * `<vaadin-overlay>` is a Web Component for creating overlays.
+     *
+     * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
+     * can be populated in two ways: imperatively by using renderer callback function and
+     * declaratively by using Polymer's Templates.
+     *
+     * ### Rendering
+     *
+     * By default, the overlay uses the content provided by using the renderer callback function.
+     *
+     * The renderer function provides `root`, `owner`, `model` arguments when applicable.
+     * Generate DOM content by using `model` object properties if needed, append it to the `root`
+     * element and control the state of the host element by accessing `owner`. Before generating new
+     * content, users are able to check if there is already content in `root` for reusing it.
      *
      * ```html
-     * <vaadin-overlay>
-     *   <template>Overlay content</template>
-     * </vaadin-overlay>
+     * <vaadin-overlay id="overlay"></vaadin-overlay>
      * ```
+     * ```js
+     * const overlay = document.querySelector('#overlay');
+     * overlay.renderer = function(root) {
+     *  root.textContent = "Overlay content";
+     * };
+     * ```
+     *
+     * **NOTE:** when the renderer property is defined, the `<template>` content is not used.
      *
      * ### Templating
      *
-     * By default, the overlay finds the child template and uses that.
-     * You can also set a custom template using the `template` property.
+     * Alternatively, the content can be provided with Polymer Template.
+     * Overlay finds the first child template and uses that in case renderer callback function
+     * is not provided. You can also set a custom template using the `template` property.
      *
      * After the content from the template is stamped, the `content` property
      * points to the content container.
@@ -158,24 +177,15 @@ This program is available under Apache License Version 2.0, available at https:/
      * from the parent scope propagate to the content.  You can also pass
      * custom `instanceProps` object using the `instanceProps` property.
      *
-     * Note when using `instanceProps`: because of the Polymer limitation,
+     * ```html
+     * <vaadin-overlay>
+     *   <template>Overlay content</template>
+     * </vaadin-overlay>
+     * ```
+     *
+     * **NOTE:** when using `instanceProps`: because of the Polymer limitation,
      * every template can only be templatized once, so it is important
      * to set `instanceProps` before the `template` is assigned to the overlay.
-     *
-     * ### Rendering
-     *
-     * By default, the overlay uses the content from its template using Polymer.Templatize.
-     * Alternatively, the content can be provided using the renderer callback function.
-     *
-     * The renderer function provides `root`, `owner`, `model` arguments where applicable,
-     * so users are able to check if there is already content in `root`. Generate content using
-     * properties from `model` object if needed, append it to `root` and control the state
-     * of the host element by accessing `owner`.
-     *
-     * **NOTE:** when the renderer property is defined, the `<template>` content is not used.
-     *
-     * **NOTE:** renderer function could be called several times, so it is a good practise to
-     * check the existing content.
      *
      * ### Styling
      *
