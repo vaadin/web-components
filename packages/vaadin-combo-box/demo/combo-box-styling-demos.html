@@ -17,14 +17,9 @@
           // NOTE: elementsJson is an Array of `{name: 'Hydrogen', symbol: 'H', number: 1}` Objects
           comboBox.items = elementsJson;
           comboBox.renderer = function(root, owner, model) {
-            // Avoid rendering if content was already rendered for the same item
-            if (root._rendered !== model.item.number) {
-              root.innerHTML =
-                '<b>' + model.item.name + ', <sub>' + model.item.number + '</sub>' + model.item.symbol + '</b>' +
-                '<br> array index: ' + model.index;
-
-              root._rendered = model.item.number;
-            }
+            root.innerHTML =
+              '<b>' + model.item.name + ', <sub>' + model.item.number + '</sub>' + model.item.symbol + '</b>' +
+              '<br> array index: ' + model.index;
           };
         });
         </script>
@@ -72,7 +67,7 @@
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-configuring-icons', function(document) {
             // NOTE: elements is an array of the form {'Carbon', ...}
-            document.querySelector('vaadin-combo-box').items = elements;
+            document.querySelector('vaadin-combo-box-light').items = elements;
           });
         </script>
       </template>
@@ -93,7 +88,7 @@
         </vaadin-combo-box-light>
         <script>
           window.addDemoReadyListener('#combo-box-styling-demos-replacing-the-input-with-an-iron-input', function(document) {
-            document.querySelector('vaadin-combo-box').items = elements;
+            document.querySelector('vaadin-combo-box-light').items = elements;
           });
         </script>
       </template>
