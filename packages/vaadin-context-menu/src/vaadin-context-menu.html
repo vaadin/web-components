@@ -60,9 +60,8 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        * ```js
        * const contextMenu = document.querySelector('#contextMenu');
-       * contextMenu.renderer = (root, context, contextMenu) => {
+       * contextMenu.renderer = (root, contextMenu, context) => {
        *   if (root.firstChild) {
-       *     // The menu already has a content (probably was reopened).
        *     return;
        *   }
        *
