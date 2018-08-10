@@ -18,24 +18,24 @@
       },
       "elements": [
         {
-          "description": "`<vaadin-item>` is a Polymer 2 element providing layout for items in tabs and menus.\n\n```\n  <vaadin-item>\n    Item content\n  </vaadin-item>\n```\n\n### Selectable\n\n`<vaadin-item>` has the `selected` property and the corresponding state attribute.\nCurrently, the component sets the `selected` to false, when `disabled` property is set to true.\nBut other than that, the `<vaadin-item>` does not switch selection by itself.\nIn general, it is the wrapper component, like `<vaadin-list-box>`, which should update\nthe `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`content` | The element that wraps the slot\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled item | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the item is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host",
+          "description": "`<vaadin-item>` is a Web Component providing layout for items in tabs and menus.\n\n```\n  <vaadin-item>\n    Item content\n  </vaadin-item>\n```\n\n### Selectable\n\n`<vaadin-item>` has the `selected` property and the corresponding state attribute.\nCurrently, the component sets the `selected` to false, when `disabled` property is set to true.\nBut other than that, the `<vaadin-item>` does not switch selection by itself.\nIn general, it is the wrapper component, like `<vaadin-list-box>`, which should update\nthe `selected` property on the items, e. g. on mousedown or when Enter / Spacebar is pressed.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`content` | The element that wraps the slot\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled` | Set to a disabled item | :host\n`focused` | Set when the element is focused | :host\n`focus-ring` | Set when the element is keyboard focused | :host\n`selected` | Set when the item is selected | :host\n`active` | Set when mousedown or enter/spacebar pressed | :host",
           "summary": "",
           "path": "src/vaadin-item.html",
           "properties": [
             {
               "name": "value",
-              "type": "string",
-              "description": "Submittable string value. The default value is the trimmed text content of the element.",
+              "type": "?",
+              "description": "",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 59,
-                  "column": 6
+                  "line": 66,
+                  "column": 4
                 },
                 "end": {
-                  "line": 59,
-                  "column": 17
+                  "line": 68,
+                  "column": 5
                 }
               },
               "metadata": {
@@ -53,11 +53,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 24,
+                  "line": 28,
                   "column": 8
                 },
                 "end": {
-                  "line": 26,
+                  "line": 30,
                   "column": 9
                 }
               },
@@ -69,23 +69,24 @@
             },
             {
               "name": "disabled",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 8
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_disabledChanged\""
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -93,23 +94,24 @@
             },
             {
               "name": "selected",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_selectedChanged\""
+                  "observer": "\"_selectedChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false",
@@ -117,22 +119,24 @@
             },
             {
               "name": "_value",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 48,
+                  "line": 52,
                   "column": 8
                 },
                 "end": {
-                  "line": 48,
+                  "line": 52,
                   "column": 22
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "inheritedFrom": "Vaadin.ItemMixin"
             }
@@ -145,16 +149,19 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 70,
+                  "line": 74,
                   "column": 4
                 },
                 "end": {
-                  "line": 90,
+                  "line": 94,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -164,16 +171,19 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 95,
+                  "line": 99,
                   "column": 4
                 },
                 "end": {
-                  "line": 104,
+                  "line": 108,
                   "column": 5
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -183,11 +193,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 106,
+                  "line": 110,
                   "column": 4
                 },
                 "end": {
-                  "line": 108,
+                  "line": 112,
                   "column": 5
                 }
               },
@@ -197,6 +207,9 @@
                   "name": "selected"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -206,11 +219,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 110,
+                  "line": 114,
                   "column": 4
                 },
                 "end": {
-                  "line": 118,
+                  "line": 122,
                   "column": 5
                 }
               },
@@ -220,6 +233,9 @@
                   "name": "disabled"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -229,11 +245,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 120,
+                  "line": 124,
                   "column": 4
                 },
                 "end": {
-                  "line": 131,
+                  "line": 135,
                   "column": 5
                 }
               },
@@ -243,6 +259,9 @@
                   "name": "focused"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -252,11 +271,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 133,
+                  "line": 137,
                   "column": 4
                 },
                 "end": {
-                  "line": 139,
+                  "line": 143,
                   "column": 5
                 }
               },
@@ -266,6 +285,9 @@
                   "name": "active"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -275,11 +297,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 141,
+                  "line": 145,
                   "column": 4
                 },
                 "end": {
-                  "line": 146,
+                  "line": 150,
                   "column": 5
                 }
               },
@@ -289,6 +311,9 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -298,11 +323,11 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 148,
+                  "line": 152,
                   "column": 4
                 },
                 "end": {
-                  "line": 153,
+                  "line": 157,
                   "column": 5
                 }
               },
@@ -312,22 +337,73 @@
                   "name": "event"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
           "staticMethods": [
             {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
               "name": "_includeStyle",
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 61,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -335,8 +411,14 @@
               "params": [
                 {
                   "name": "moduleName"
+                },
+                {
+                  "name": "template"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -362,16 +444,16 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 8
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 9
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ItemMixin"
             },
             {
@@ -380,16 +462,16 @@
               "sourceRange": {
                 "file": "vaadin-item-mixin.html",
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 9
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ItemMixin"
             }
           ],
@@ -403,7 +485,6 @@
               "description": "",
               "name": "",
               "range": {
-                "file": "src/vaadin-item.html",
                 "start": {
                   "line": 22,
                   "column": 6
@@ -430,17 +511,17 @@
           "properties": [
             {
               "name": "value",
-              "type": "string",
-              "description": "Submittable string value. The default value is the trimmed text content of the element.",
+              "type": "?",
+              "description": "",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 59,
-                  "column": 6
+                  "line": 66,
+                  "column": 4
                 },
                 "end": {
-                  "line": 59,
-                  "column": 17
+                  "line": 68,
+                  "column": 5
                 }
               },
               "metadata": {
@@ -456,11 +537,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 24,
+                  "line": 28,
                   "column": 8
                 },
                 "end": {
-                  "line": 26,
+                  "line": 30,
                   "column": 9
                 }
               },
@@ -471,65 +552,69 @@
             },
             {
               "name": "disabled",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the user cannot interact with this element.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 8
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_disabledChanged\""
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "selected",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "If true, the item is in selected state.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 9
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_selectedChanged\""
+                  "observer": "\"_selectedChanged\"",
+                  "attributeType": "Boolean"
                 }
               },
               "defaultValue": "false"
             },
             {
               "name": "_value",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 48,
+                  "line": 52,
                   "column": 8
                 },
                 "end": {
-                  "line": 48,
+                  "line": 52,
                   "column": 22
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             }
           ],
@@ -540,16 +625,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 70,
+                  "line": 74,
                   "column": 4
                 },
                 "end": {
-                  "line": 90,
+                  "line": 94,
                   "column": 5
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "disconnectedCallback",
@@ -557,24 +645,7 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 95,
-                  "column": 4
-                },
-                "end": {
-                  "line": 104,
-                  "column": 5
-                }
-              },
-              "metadata": {},
-              "params": []
-            },
-            {
-              "name": "_selectedChanged",
-              "description": "",
-              "privacy": "protected",
-              "sourceRange": {
-                "start": {
-                  "line": 106,
+                  "line": 99,
                   "column": 4
                 },
                 "end": {
@@ -583,14 +654,13 @@
                 }
               },
               "metadata": {},
-              "params": [
-                {
-                  "name": "selected"
-                }
-              ]
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
-              "name": "_disabledChanged",
+              "name": "_selectedChanged",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
@@ -599,7 +669,31 @@
                   "column": 4
                 },
                 "end": {
-                  "line": 118,
+                  "line": 112,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "selected"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_disabledChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 114,
+                  "column": 4
+                },
+                "end": {
+                  "line": 122,
                   "column": 5
                 }
               },
@@ -608,7 +702,10 @@
                 {
                   "name": "disabled"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setFocused",
@@ -616,11 +713,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 120,
+                  "line": 124,
                   "column": 4
                 },
                 "end": {
-                  "line": 131,
+                  "line": 135,
                   "column": 5
                 }
               },
@@ -629,7 +726,10 @@
                 {
                   "name": "focused"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setActive",
@@ -637,11 +737,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 137,
                   "column": 4
                 },
                 "end": {
-                  "line": 139,
+                  "line": 143,
                   "column": 5
                 }
               },
@@ -650,7 +750,10 @@
                 {
                   "name": "active"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onKeydown",
@@ -658,11 +761,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 145,
                   "column": 4
                 },
                 "end": {
-                  "line": 146,
+                  "line": 150,
                   "column": 5
                 }
               },
@@ -671,7 +774,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onKeyup",
@@ -679,11 +785,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 148,
+                  "line": 152,
                   "column": 4
                 },
                 "end": {
-                  "line": 153,
+                  "line": 157,
                   "column": 5
                 }
               },
@@ -692,7 +798,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [],
@@ -700,11 +809,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 15,
+              "line": 19,
               "column": 2
             },
             "end": {
-              "line": 154,
+              "line": 158,
               "column": 3
             }
           },
@@ -716,32 +825,32 @@
               "description": "If true, the user cannot interact with this element.",
               "sourceRange": {
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 8
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 9
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             },
             {
               "name": "selected",
               "description": "If true, the item is in selected state.",
               "sourceRange": {
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 9
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             }
           ],
           "events": [],
