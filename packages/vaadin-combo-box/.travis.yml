@@ -11,10 +11,26 @@ addons:
   firefox: latest
   chrome: stable
 
-env:
-  - POLYMER=2 TEST_SUITE=unit_tests
-  - POLYMER=2 TEST_SUITE=visual_tests
-  - POLYMER=3
+jobs:
+  include:
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=visual_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=3
+    - if: type = pull_request
+      env: POLYMER=2
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = pull_request
+      env: POLYMER=3
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = cron
+      env: TEST_SUITE=unit_tests POLYMER=2
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
