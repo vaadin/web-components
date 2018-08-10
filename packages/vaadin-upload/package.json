@@ -1,7 +1,7 @@
 {
   "name": "@vaadin/vaadin-upload",
   "version": "4.2.0-beta2",
-  "description": "Polymer Element for uploading files",
+  "description": "Web Component for uploading files with drag and drop support",
   "main": "vaadin-upload.html",
   "repository": "vaadin/vaadin-upload",
   "keywords": [

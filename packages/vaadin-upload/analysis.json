@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-upload.html",
         "start": {
-          "line": 903,
+          "line": 912,
           "column": 6
         },
         "end": {
-          "line": 903,
+          "line": 912,
           "column": 50
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`row` | File container\n`info` | Container for file status icon, file name, status and error messages\n`done-icon` | File done status icon\n`warning-icon` | File warning status icon\n`meta` | Container for file name, status and error messages\n`name` | File name\n`error` | Error message, shown when error happens\n`status` | Status message\n`commands` | Container for file command icons\n`start-button` | Start file upload button\n`retry-button` | Retry file upload button\n`clear-button` | Clear file button\n`progress`| Progress bar\n\nThe following state attributes are available for styling:\n\nAttribute | Description | Part name\n---|---|---\n`error` | An error has happened during uploading | `progress`\n`indeterminate` | Uploading is in progress, but the progress value is unknown | `progress`\n`uploading` | Uploading is in progress | `progress`\n`complete` | Uploading has finished successfully | `progress`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-upload-file>` element represents a file in the file list of `<vaadin-upload>`.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`row` | File container\n`info` | Container for file status icon, file name, status and error messages\n`done-icon` | File done status icon\n`warning-icon` | File warning status icon\n`meta` | Container for file name, status and error messages\n`name` | File name\n`error` | Error message, shown when error happens\n`status` | Status message\n`commands` | Container for file command icons\n`start-button` | Start file upload button\n`retry-button` | Retry file upload button\n`clear-button` | Clear file button\n`progress`| Progress bar\n\nThe following state attributes are available for styling:\n\nAttribute | Description | Part name\n---|---|---\n`error` | An error has happened during uploading | `:host`\n`indeterminate` | Uploading is in progress, but the progress value is unknown | `:host`\n`uploading` | Uploading is in progress | `:host`\n`complete` | Uploading has finished successfully | `:host`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-upload-file.html",
           "properties": [
@@ -51,11 +51,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 110,
+                  "line": 114,
                   "column": 8
                 },
                 "end": {
-                  "line": 114,
+                  "line": 118,
                   "column": 9
                 }
               },
@@ -75,11 +75,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 116,
+                  "line": 120,
                   "column": 8
                 },
                 "end": {
-                  "line": 124,
+                  "line": 128,
                   "column": 9
                 }
               },
@@ -95,11 +95,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 126,
+                  "line": 130,
                   "column": 8
                 },
                 "end": {
-                  "line": 128,
+                  "line": 132,
                   "column": 9
                 }
               },
@@ -116,11 +116,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 130,
+                  "line": 134,
                   "column": 8
                 },
                 "end": {
-                  "line": 139,
+                  "line": 143,
                   "column": 9
                 }
               },
@@ -130,9 +130,84 @@
                   "name": "e"
                 }
               ]
+            },
+            {
+              "name": "_toggleHostAttribute",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 145,
+                  "column": 8
+                },
+                "end": {
+                  "line": 155,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "attributeName"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [
+            {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
             {
               "name": "_includeStyle",
               "description": "",
@@ -140,11 +215,11 @@
               "sourceRange": {
                 "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 61,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -152,6 +227,9 @@
               "params": [
                 {
                   "name": "moduleName"
+                },
+                {
+                  "name": "template"
                 }
               ],
               "return": {
@@ -173,7 +251,7 @@
               "column": 6
             },
             "end": {
-              "line": 178,
+              "line": 194,
               "column": 7
             }
           },
@@ -235,7 +313,7 @@
           ]
         },
         {
-          "description": "`<vaadin-upload>` is a Polymer 2 element for uploading multiple files with drag and drop support.\n\nExample:\n\n```\n<vaadin-upload></vaadin-upload>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`primary-buttons` | Upload container\n`upload-button` | Upload button\n`drop-label` | Label for drop indicator\n`drop-label-icon` | Icon for drop indicator\n`file-list` | File list container\n\nThe following state attributes are available for styling:\n\nAttribute | Description | Part name\n---|---|---\n`nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`\n`dragover` | A file is being dragged over the element | `:host`\n`dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-upload>` is a Web Component for uploading multiple files with drag and drop support.\n\nExample:\n\n```\n<vaadin-upload></vaadin-upload>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n---|---\n`primary-buttons` | Upload container\n`upload-button` | Upload button\n`drop-label` | Label for drop indicator\n`drop-label-icon` | Icon for drop indicator\n`file-list` | File list container\n\nThe following state attributes are available for styling:\n\nAttribute | Description | Part name\n---|---|---\n`nodrop` | Set when drag and drop is disabled (e. g., on touch devices) | `:host`\n`dragover` | A file is being dragged over the element | `:host`\n`dragover-valid` | A dragged file is valid with `maxFiles` and `accept` criteria | `:host`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-upload.html",
           "properties": [
@@ -246,11 +324,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 118,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -267,11 +345,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 134,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 137,
                   "column": 13
                 }
               },
@@ -289,11 +367,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 142,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 145,
                   "column": 13
                 }
               },
@@ -311,11 +389,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 157,
                   "column": 13
                 }
               },
@@ -333,11 +411,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 163,
+                  "line": 164,
                   "column": 12
                 },
                 "end": {
-                  "line": 166,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -355,11 +433,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 168,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 172,
+                  "line": 173,
                   "column": 13
                 }
               },
@@ -378,11 +456,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 196,
+                  "line": 197,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -401,11 +479,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 208,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 212,
                   "column": 13
                 }
               },
@@ -422,11 +500,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 217,
                   "column": 12
                 },
                 "end": {
-                  "line": 222,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -446,11 +524,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 233,
                   "column": 12
                 },
                 "end": {
-                  "line": 235,
+                  "line": 236,
                   "column": 13
                 }
               },
@@ -468,11 +546,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 243,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -489,11 +567,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 252,
+                  "line": 253,
                   "column": 12
                 },
                 "end": {
-                  "line": 256,
+                  "line": 257,
                   "column": 13
                 }
               },
@@ -512,11 +590,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 261,
+                  "line": 262,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 265,
                   "column": 13
                 }
               },
@@ -534,11 +612,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 271,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -556,11 +634,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 278,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 282,
                   "column": 13
                 }
               },
@@ -578,11 +656,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 287,
+                  "line": 288,
                   "column": 12
                 },
                 "end": {
-                  "line": 287,
+                  "line": 288,
                   "column": 27
                 }
               },
@@ -599,11 +677,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 342,
+                  "line": 343,
                   "column": 12
                 },
                 "end": {
-                  "line": 382,
+                  "line": 383,
                   "column": 13
                 }
               },
@@ -612,7 +690,7 @@
                   "attributeType": "Object"
                 }
               },
-              "defaultValue": "{\"dropFiles\":{\"one\":\"Drop file here\",\"many\":\"Drop files here\"},\"addFiles\":{\"one\":\"Select File...\",\"many\":\"Upload Files...\"},\"cancel\":\"Cancel\",\"error\":{\"tooManyFiles\":\"Too Many Files.\",\"fileIsTooBig\":\"File is Too Big.\",\"incorrectFileType\":\"Incorrect File Type.\"},\"uploading\":{\"status\":{\"connecting\":\"Connecting...\",\"stalled\":\"Stalled.\",\"processing\":\"Processing File...\",\"held\":\"Queued\"},\"remainingTime\":{\"prefix\":\"remaining time: \",\"unknown\":\"unknown remaining time\"},\"error\":{\"serverUnavailable\":\"Server Unavailable\",\"unexpectedServerError\":\"Unexpected Server Error\",\"forbidden\":\"Forbidden\"}},\"units\":{\"size\":[\"B\",\"kB\",\"MB\",\"GB\",\"TB\",\"PB\",\"EB\",\"ZB\",\"YB\"]}}"
+              "defaultValue": "{\"dropFiles\":{\"one\":\"Drop file here\",\"many\":\"Drop files here\"},\"addFiles\":{\"one\":\"Upload File...\",\"many\":\"Upload Files...\"},\"cancel\":\"Cancel\",\"error\":{\"tooManyFiles\":\"Too Many Files.\",\"fileIsTooBig\":\"File is Too Big.\",\"incorrectFileType\":\"Incorrect File Type.\"},\"uploading\":{\"status\":{\"connecting\":\"Connecting...\",\"stalled\":\"Stalled.\",\"processing\":\"Processing File...\",\"held\":\"Queued\"},\"remainingTime\":{\"prefix\":\"remaining time: \",\"unknown\":\"unknown remaining time\"},\"error\":{\"serverUnavailable\":\"Server Unavailable\",\"unexpectedServerError\":\"Unexpected Server Error\",\"forbidden\":\"Forbidden\"}},\"units\":{\"size\":[\"B\",\"kB\",\"MB\",\"GB\",\"TB\",\"PB\",\"EB\",\"ZB\",\"YB\"]}}"
             }
           ],
           "methods": [
@@ -622,11 +700,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 386,
+                  "line": 387,
                   "column": 8
                 },
                 "end": {
-                  "line": 395,
+                  "line": 396,
                   "column": 9
                 }
               },
@@ -642,11 +720,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 397,
+                  "line": 398,
                   "column": 8
                 },
                 "end": {
-                  "line": 408,
+                  "line": 409,
                   "column": 9
                 }
               },
@@ -663,11 +741,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 410,
+                  "line": 411,
                   "column": 8
                 },
                 "end": {
-                  "line": 420,
+                  "line": 421,
                   "column": 9
                 }
               },
@@ -684,11 +762,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 422,
+                  "line": 423,
                   "column": 8
                 },
                 "end": {
-                  "line": 438,
+                  "line": 439,
                   "column": 9
                 }
               },
@@ -708,11 +786,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 440,
+                  "line": 441,
                   "column": 8
                 },
                 "end": {
-                  "line": 447,
+                  "line": 448,
                   "column": 9
                 }
               },
@@ -729,11 +807,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 449,
+                  "line": 450,
                   "column": 8
                 },
                 "end": {
-                  "line": 451,
+                  "line": 452,
                   "column": 9
                 }
               },
@@ -753,11 +831,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 453,
+                  "line": 454,
                   "column": 8
                 },
                 "end": {
-                  "line": 460,
+                  "line": 461,
                   "column": 9
                 }
               },
@@ -777,11 +855,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 462,
+                  "line": 463,
                   "column": 8
                 },
                 "end": {
-                  "line": 467,
+                  "line": 468,
                   "column": 9
                 }
               },
@@ -801,11 +879,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 469,
+                  "line": 470,
                   "column": 8
                 },
                 "end": {
-                  "line": 475,
+                  "line": 476,
                   "column": 9
                 }
               },
@@ -825,11 +903,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 478,
+                  "line": 479,
                   "column": 8
                 },
                 "end": {
-                  "line": 480,
+                  "line": 481,
                   "column": 9
                 }
               },
@@ -842,11 +920,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 482,
+                  "line": 483,
                   "column": 8
                 },
                 "end": {
-                  "line": 497,
+                  "line": 498,
                   "column": 9
                 }
               },
@@ -866,11 +944,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 499,
+                  "line": 500,
                   "column": 8
                 },
                 "end": {
-                  "line": 508,
+                  "line": 509,
                   "column": 9
                 }
               },
@@ -899,11 +977,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 515,
+                  "line": 516,
                   "column": 8
                 },
                 "end": {
-                  "line": 519,
+                  "line": 520,
                   "column": 9
                 }
               },
@@ -923,11 +1001,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 521,
+                  "line": 522,
                   "column": 8
                 },
                 "end": {
-                  "line": 646,
+                  "line": 647,
                   "column": 9
                 }
               },
@@ -947,11 +1025,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 648,
+                  "line": 649,
                   "column": 8
                 },
                 "end": {
-                  "line": 658,
+                  "line": 659,
                   "column": 9
                 }
               },
@@ -971,11 +1049,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 660,
+                  "line": 661,
                   "column": 8
                 },
                 "end": {
-                  "line": 674,
+                  "line": 675,
                   "column": 9
                 }
               },
@@ -995,11 +1073,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 676,
+                  "line": 677,
                   "column": 8
                 },
                 "end": {
-                  "line": 683,
+                  "line": 684,
                   "column": 9
                 }
               },
@@ -1019,11 +1097,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 685,
+                  "line": 686,
                   "column": 8
                 },
                 "end": {
-                  "line": 687,
+                  "line": 688,
                   "column": 9
                 }
               },
@@ -1043,11 +1121,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 694,
+                  "line": 695,
                   "column": 8
                 },
                 "end": {
-                  "line": 729,
+                  "line": 730,
                   "column": 9
                 }
               },
@@ -1069,11 +1147,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 735,
+                  "line": 736,
                   "column": 8
                 },
                 "end": {
-                  "line": 737,
+                  "line": 738,
                   "column": 9
                 }
               },
@@ -1095,11 +1173,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 739,
+                  "line": 740,
                   "column": 8
                 },
                 "end": {
-                  "line": 743,
+                  "line": 748,
                   "column": 9
                 }
               },
@@ -1114,16 +1192,36 @@
               }
             },
             {
+              "name": "__resetMouseCanceller",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 750,
+                  "column": 8
+                },
+                "end": {
+                  "line": 752,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
               "name": "_onAddFilesClick",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 745,
+                  "line": 754,
                   "column": 8
                 },
                 "end": {
-                  "line": 752,
+                  "line": 761,
                   "column": 9
                 }
               },
@@ -1139,11 +1237,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 754,
+                  "line": 763,
                   "column": 8
                 },
                 "end": {
-                  "line": 756,
+                  "line": 765,
                   "column": 9
                 }
               },
@@ -1163,11 +1261,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 758,
+                  "line": 767,
                   "column": 8
                 },
                 "end": {
-                  "line": 760,
+                  "line": 769,
                   "column": 9
                 }
               },
@@ -1187,11 +1285,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 762,
+                  "line": 771,
                   "column": 8
                 },
                 "end": {
-                  "line": 764,
+                  "line": 773,
                   "column": 9
                 }
               },
@@ -1211,11 +1309,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 766,
+                  "line": 775,
                   "column": 8
                 },
                 "end": {
-                  "line": 768,
+                  "line": 777,
                   "column": 9
                 }
               },
@@ -1235,11 +1333,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 770,
+                  "line": 779,
                   "column": 8
                 },
                 "end": {
-                  "line": 773,
+                  "line": 782,
                   "column": 9
                 }
               },
@@ -1259,11 +1357,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 775,
+                  "line": 784,
                   "column": 8
                 },
                 "end": {
-                  "line": 777,
+                  "line": 786,
                   "column": 9
                 }
               },
@@ -1283,11 +1381,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 779,
+                  "line": 788,
                   "column": 8
                 },
                 "end": {
-                  "line": 781,
+                  "line": 790,
                   "column": 9
                 }
               },
@@ -1307,11 +1405,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 783,
+                  "line": 792,
                   "column": 8
                 },
                 "end": {
-                  "line": 785,
+                  "line": 794,
                   "column": 9
                 }
               },
@@ -1331,11 +1429,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 787,
+                  "line": 796,
                   "column": 8
                 },
                 "end": {
-                  "line": 789,
+                  "line": 798,
                   "column": 9
                 }
               },
@@ -1345,17 +1443,65 @@
           ],
           "staticMethods": [
             {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
               "name": "_includeStyle",
               "description": "",
               "privacy": "private",
               "sourceRange": {
                 "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 61,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -1363,6 +1509,9 @@
               "params": [
                 {
                   "name": "moduleName"
+                },
+                {
+                  "name": "template"
                 }
               ],
               "return": {
@@ -1380,11 +1529,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 97,
+              "line": 98,
               "column": 6
             },
             "end": {
-              "line": 896,
+              "line": 905,
               "column": 7
             }
           },
@@ -1397,11 +1546,11 @@
               "description": "Define whether the element supports dropping files on it for uploading.\nBy default it's enabled in desktop and disabled in touch devices\nbecause mobile devices do not support drag events in general. Setting\nit false means that drop is enabled even in touch-devices, and true\ndisables drop in all devices.",
               "sourceRange": {
                 "start": {
-                  "line": 117,
+                  "line": 118,
                   "column": 12
                 },
                 "end": {
-                  "line": 127,
+                  "line": 128,
                   "column": 13
                 }
               },
@@ -1413,11 +1562,11 @@
               "description": "The server URL. The default value is an empty string, which means that\n_window.location_ will be used.",
               "sourceRange": {
                 "start": {
-                  "line": 133,
+                  "line": 134,
                   "column": 12
                 },
                 "end": {
-                  "line": 136,
+                  "line": 137,
                   "column": 13
                 }
               },
@@ -1429,11 +1578,11 @@
               "description": "HTTP Method used to send the files. Only POST and PUT are allowed.",
               "sourceRange": {
                 "start": {
-                  "line": 141,
+                  "line": 142,
                   "column": 12
                 },
                 "end": {
-                  "line": 144,
+                  "line": 145,
                   "column": 13
                 }
               },
@@ -1445,11 +1594,11 @@
               "description": "Key-Value map to send to the server. If you set this property as an\nattribute, use a valid JSON string, for example:\n```\n<vaadin-upload headers='{\"X-Foo\": \"Bar\"}'></vaadin-upload>\n```",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 154,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 157,
                   "column": 13
                 }
               },
@@ -1461,11 +1610,11 @@
               "description": "Max time in milliseconds for the entire upload process, if exceeded the\nrequest will be aborted. Zero means that there is no timeout.",
               "sourceRange": {
                 "start": {
-                  "line": 163,
+                  "line": 164,
                   "column": 12
                 },
                 "end": {
-                  "line": 166,
+                  "line": 167,
                   "column": 13
                 }
               },
@@ -1477,11 +1626,11 @@
               "description": "The array of files being processed, or already uploaded.\n\nEach element is a [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)\nobject with a number of extra properties  to track the upload process:\n- `uploadTarget`: The target URL used to upload this file.\n- `elapsed`: Elapsed time since the upload started.\n- `elapsedStr`: Human-readable elapsed time.\n- `remaining`: Number of seconds remaining for the upload to finish.\n- `remainingStr`: Human-readable remaining time for the upload to finish.\n- `progress`: Percentage of the file already uploaded.\n- `speed`: Upload speed in kB/s.\n- `size`: File size in bytes.\n- `totalStr`: Human-readable total size of the file.\n- `loaded`: Bytes transferred so far.\n- `loadedStr`: Human-readable uploaded size at the moment.\n- `status`: Status of the upload process.\n- `error`: Error message in case the upload failed.\n- `abort`: True if the file was canceled by the user.\n- `complete`: True when the file was transferred to the server.\n- `uploading`: True while transferring data to the server.",
               "sourceRange": {
                 "start": {
-                  "line": 196,
+                  "line": 197,
                   "column": 12
                 },
                 "end": {
-                  "line": 202,
+                  "line": 203,
                   "column": 13
                 }
               },
@@ -1493,11 +1642,11 @@
               "description": "Limit of files to upload, by default it is unlimited. If the value is\nset to one, native file browser will prevent selecting multiple files.",
               "sourceRange": {
                 "start": {
-                  "line": 208,
+                  "line": 209,
                   "column": 12
                 },
                 "end": {
-                  "line": 211,
+                  "line": 212,
                   "column": 13
                 }
               },
@@ -1509,11 +1658,11 @@
               "description": "Specifies if the maximum number of files have been uploaded",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 217,
                   "column": 12
                 },
                 "end": {
-                  "line": 222,
+                  "line": 223,
                   "column": 13
                 }
               },
@@ -1525,11 +1674,11 @@
               "description": "Specifies the types of files that the server accepts.\nSyntax: a comma-separated list of MIME type patterns (wildcards are\nallowed) or file extensions.\nNotice that MIME types are widely supported, while file extensions\nare only implemented in certain browsers, so avoid using it.\nExample: accept=\"video/*,image/tiff\" or accept=\".pdf,audio/mp3\"",
               "sourceRange": {
                 "start": {
-                  "line": 232,
+                  "line": 233,
                   "column": 12
                 },
                 "end": {
-                  "line": 235,
+                  "line": 236,
                   "column": 13
                 }
               },
@@ -1541,11 +1690,11 @@
               "description": "Specifies the maximum file size in bytes allowed to upload.\nNotice that it is a client-side constraint, which will be checked before\nsending the request. Obviously you need to do the same validation in\nthe server-side and be sure that they are aligned.",
               "sourceRange": {
                 "start": {
-                  "line": 243,
+                  "line": 244,
                   "column": 12
                 },
                 "end": {
-                  "line": 246,
+                  "line": 247,
                   "column": 13
                 }
               },
@@ -1557,11 +1706,11 @@
               "description": "Specifies the 'name' property at Content-Disposition",
               "sourceRange": {
                 "start": {
-                  "line": 261,
+                  "line": 262,
                   "column": 12
                 },
                 "end": {
-                  "line": 264,
+                  "line": 265,
                   "column": 13
                 }
               },
@@ -1573,11 +1722,11 @@
               "description": "Prevents upload(s) from immediately uploading upon adding file(s).\nWhen set, you must manually trigger uploads using the `uploadFiles` method",
               "sourceRange": {
                 "start": {
-                  "line": 270,
+                  "line": 271,
                   "column": 12
                 },
                 "end": {
-                  "line": 273,
+                  "line": 274,
                   "column": 13
                 }
               },
@@ -1589,11 +1738,11 @@
               "description": "Set the withCredentials flag on the request.",
               "sourceRange": {
                 "start": {
-                  "line": 278,
+                  "line": 279,
                   "column": 12
                 },
                 "end": {
-                  "line": 281,
+                  "line": 282,
                   "column": 13
                 }
               },
@@ -1605,11 +1754,11 @@
               "description": "Pass-through to input's capture attribute. Allows user to trigger device inputs\nsuch as camera or microphone immediately.",
               "sourceRange": {
                 "start": {
-                  "line": 287,
+                  "line": 288,
                   "column": 12
                 },
                 "end": {
-                  "line": 287,
+                  "line": 288,
                   "column": 27
                 }
               },
@@ -1621,11 +1770,11 @@
               "description": "The object used to localize this component.\nFor changing the default localization, change the entire\n_i18n_ object or just the property you want to modify.\n\nThe object has the following JSON structure and default values:\n\n            {\n              dropFiles: {\n              one: 'Drop file here\n              many: 'Drop files here\n              },\n              addFiles: {\n              one: 'Select File...',\n              many: 'Upload Files...'\n              },\n              cancel: 'Cancel',\n              error: {\n              tooManyFiles: 'Too Many Files.',\n              fileIsTooBig: 'File is Too Big.',\n              incorrectFileType: 'Incorrect File Type.'\n              },\n              uploading: {\n              status: {\n                connecting: 'Connecting...',\n                stalled: 'Stalled.',\n                processing: 'Processing File...',\n                held: 'Queued'\n              },\n              remainingTime: {\n                prefix: 'remaining time: ',\n                unknown: 'unknown remaining time'\n              },\n              error: {\n                serverUnavailable: 'Server Unavailable',\n                unexpectedServerError: 'Unexpected Server Error',\n                forbidden: 'Forbidden'\n              }\n              },\n              units: {\n              size: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']\n              },\n              formatSize: function(bytes) {\n              // returns the size followed by the best suitable unit\n              },\n              formatTime: function(seconds, [secs, mins, hours]) {\n              // returns a 'HH:MM:SS' string\n              }\n            }",
               "sourceRange": {
                 "start": {
-                  "line": 342,
+                  "line": 343,
                   "column": 12
                 },
                 "end": {
-                  "line": 382,
+                  "line": 383,
                   "column": 13
                 }
               },
@@ -1717,11 +1866,11 @@
               "name": "add-button",
               "range": {
                 "start": {
-                  "line": 33,
+                  "line": 34,
                   "column": 8
                 },
                 "end": {
-                  "line": 37,
+                  "line": 38,
                   "column": 15
                 }
               }
@@ -1731,11 +1880,11 @@
               "name": "drop-label-icon",
               "range": {
                 "start": {
-                  "line": 40,
+                  "line": 41,
                   "column": 8
                 },
                 "end": {
-                  "line": 42,
+                  "line": 43,
                   "column": 15
                 }
               }
@@ -1745,11 +1894,11 @@
               "name": "drop-label",
               "range": {
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 8
                 },
                 "end": {
-                  "line": 45,
+                  "line": 46,
                   "column": 15
                 }
               }
@@ -1759,11 +1908,11 @@
               "name": "file-list",
               "range": {
                 "start": {
-                  "line": 48,
+                  "line": 49,
                   "column": 4
                 },
                 "end": {
-                  "line": 54,
+                  "line": 55,
                   "column": 11
                 }
               }
@@ -1773,11 +1922,11 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 4
                 },
                 "end": {
-                  "line": 55,
+                  "line": 56,
                   "column": 17
                 }
               }
