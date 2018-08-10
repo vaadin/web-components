@@ -30,13 +30,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
         /**
          * Custom function for rendering the content of the row details.
-         * Receives arguments `root`, `grid`, `model`
+         * Receives three arguments:
          *
-         * `root` The cell content element.
+         * - `root` The row details content DOM element. Append your content to it.
+         * - `grid` The `<vaadin-grid>` element.
+         * - `model` The object with the properties related with
+         *   the rendered item, contains:
+         *   - `model.index` The index of the item.
+         *   - `model.item` The item.
          *
-         * `grid` The grid element.
-         *
-         * `model` An object with the structure `{index: index, item: item}`
+         * **NOTE:** The renderer callback can be called multiple times
+         * with the previous content.
          */
         rowDetailsRenderer: Function,
 
