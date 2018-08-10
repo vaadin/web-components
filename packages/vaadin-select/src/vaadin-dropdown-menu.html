@@ -91,7 +91,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```
        * ```js
        * const dropdownMenu = document.querySelector('#dropdown-menu');
-       * dropdownMenu.renderer = (root, dropdownMenu) => {
+       * dropdownMenu.renderer = function(root, dropdownMenu) {
        *   const listBox = document.createElement('vaadin-list-box');
        *   // append 3 <vaadin-item> elements
        *   ['Jose', 'Manolo', 'Pedro'].forEach(function(name) {
@@ -392,7 +392,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-       /** @protected */
+        /** @protected */
         get focusElement() {
           return this._inputElement ||
             (this._inputElement = this.shadowRoot.querySelector('vaadin-dropdown-menu-text-field'));
