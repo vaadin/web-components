@@ -8,76 +8,82 @@
       "sourceRange": {
         "file": "src/vaadin-split-layout.html",
         "start": {
-          "line": 338,
+          "line": 344,
           "column": 6
         },
         "end": {
-          "line": 338,
+          "line": 344,
           "column": 42
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-split-layout>` is a Polymer element implementing a split layout for two\ncontent elements with a draggable splitter between them.\n\n```html\n<vaadin-split-layout>\n  <div>First content element</div>\n  <div>Second content element</div>\n</vaadin-split-layout>\n```\n\n### Horizontal and Vertical Layouts\n\nBy default, the split's orientation is horizontal, meaning that the content elements are\npositioned side by side in a flex container with a horizontal layout.\n\nYou can change the split mode to vertical by setting the `orientation` attribute to `\"vertical\"`:\n\n```html\n<vaadin-split-layout orientation=\"vertical\">\n  <div>Content on the top</div>\n  <div>Content on the bottom</div>\n</vaadin-split-layout>\n```\n\n### Layouts Combination\n\nFor the layout contents, we usually use `<div>` elements in the examples,\nalthough you can use any other elements as well.\n\nFor instance, in order to have a nested vertical split layout inside a\nhorizontal one, you can include `<vaadin-split-layout>` as a content element\ninside another split layout:\n\n```html\n<vaadin-split-layout>\n  <div>First content element</div>\n  <vaadin-split-layout orientation=\"vertical\">\n    <div>Second content element</div>\n    <div>Third content element</div>\n  </vaadin-split-layout>\n</vaadin-split-layout>\n```\n\nYou can also trigger the vertical mode in JavaScript by setting the property:\n`splitLayout.orientation = \"vertical\";`.\n\n### Split Layout Element Height\n\n`<vaadin-split-layout>` element itself is a flex container. It does not inherit\nthe parent height by default, but rather sets its height depending on the\ncontent.\n\nYou can use CSS to set the fixed height for the split layout, as usual with any\nblock element:\n\n```html\n<vaadin-split-layout style=\"height: 200px;\">\n  <div>First content element</div>\n  <div>Second content element</div>\n</vaadin-split-layout>\n```\n\nIt is possible to define percentage height as well. Note that you have to set\nthe parent height in order to make percentages work correctly. In the following\nexample, the `<body>` is resized to fill the entire viewport, and the\n`<vaadin-split-layout>` element is set to take 100% height of the `<body>`:\n\n```html\n<body style=\"height: 100vh; margin: 0;\">\n  <vaadin-split-layout style=\"height: 100%;\">\n    <div>First</div>\n    <div>Second</div>\n  </vaadin-split-layout>\n</body>\n```\n\nAlternatively, you can use a flexbox layout to make `<vaadin-split-layout>`\nfill up the parent:\n\n```html\n<body style=\"height: 100vh; margin: 0; display: flex;\">\n  <vaadin-split-layout style=\"flex: 1;\">\n    <div>First</div>\n    <div>Second</div>\n  </vaadin-split-layout>\n</body>\n```\n\n### Initial Splitter Position\n\nThe initial splitter position is determined from the sizes of the content elements\ninside the split layout. Therefore, changing `width` on the content elements\naffects the initial splitter position for the horizontal layouts, while `height`\naffects the vertical ones.\n\nNote that when the total size of the content elements does not fit the layout,\nthe content elements are scaled proportionally.\n\nWhen setting initial sizes with relative units, such as percentages, it is\nrecommended to assign the size for both content elements:\n\n```html\n<vaadin-split-layout>\n  <div style=\"width: 75%;\">Three fourths</div>\n  <div style=\"width: 25%;\">One fourth</div>\n</vaadin-split-layout>\n```\n\n### Size Limits\n\nThe `min-width`/`min-height`, and `max-width`/`max-height` CSS size values\nfor the content elements are respected and used to limit the splitter position\nwhen it is dragged.\n\nIt is preferred to set the limits only for a single content element, in order\nto avoid size conflicts:\n\n```html\n<vaadin-split-layout>\n  <div style=\"min-width: 50px; max-width: 150px;\">First</div>\n  <div>Second</div>\n</vaadin-split-layout>\n```\n\n### Resize Notification\n\nThis element implements `IronResizableBehavior` to notify the nested resizables\nwhen the splitter is dragged. In order to define a resizable and receive that\nnotification in a nested element, include `IronResizableBehavior` and listen\nfor the `iron-resize` event.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description | Theme for Element\n----------------|----------------|----------------\n`splitter` | Split element | vaadin-split-layout\n`handle` | The handle of the splitter | vaadin-split-layout\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "description": "`<vaadin-split-layout>` is a Web Component implementing a split layout for two\ncontent elements with a draggable splitter between them.\n\n```html\n<vaadin-split-layout>\n  <div>First content element</div>\n  <div>Second content element</div>\n</vaadin-split-layout>\n```\n\n### Horizontal and Vertical Layouts\n\nBy default, the split's orientation is horizontal, meaning that the content elements are\npositioned side by side in a flex container with a horizontal layout.\n\nYou can change the split mode to vertical by setting the `orientation` attribute to `\"vertical\"`:\n\n```html\n<vaadin-split-layout orientation=\"vertical\">\n  <div>Content on the top</div>\n  <div>Content on the bottom</div>\n</vaadin-split-layout>\n```\n\n### Layouts Combination\n\nFor the layout contents, we usually use `<div>` elements in the examples,\nalthough you can use any other elements as well.\n\nFor instance, in order to have a nested vertical split layout inside a\nhorizontal one, you can include `<vaadin-split-layout>` as a content element\ninside another split layout:\n\n```html\n<vaadin-split-layout>\n  <div>First content element</div>\n  <vaadin-split-layout orientation=\"vertical\">\n    <div>Second content element</div>\n    <div>Third content element</div>\n  </vaadin-split-layout>\n</vaadin-split-layout>\n```\n\nYou can also trigger the vertical mode in JavaScript by setting the property:\n`splitLayout.orientation = \"vertical\";`.\n\n### Split Layout Element Height\n\n`<vaadin-split-layout>` element itself is a flex container. It does not inherit\nthe parent height by default, but rather sets its height depending on the\ncontent.\n\nYou can use CSS to set the fixed height for the split layout, as usual with any\nblock element:\n\n```html\n<vaadin-split-layout style=\"height: 200px;\">\n  <div>First content element</div>\n  <div>Second content element</div>\n</vaadin-split-layout>\n```\n\nIt is possible to define percentage height as well. Note that you have to set\nthe parent height in order to make percentages work correctly. In the following\nexample, the `<body>` is resized to fill the entire viewport, and the\n`<vaadin-split-layout>` element is set to take 100% height of the `<body>`:\n\n```html\n<body style=\"height: 100vh; margin: 0;\">\n  <vaadin-split-layout style=\"height: 100%;\">\n    <div>First</div>\n    <div>Second</div>\n  </vaadin-split-layout>\n</body>\n```\n\nAlternatively, you can use a flexbox layout to make `<vaadin-split-layout>`\nfill up the parent:\n\n```html\n<body style=\"height: 100vh; margin: 0; display: flex;\">\n  <vaadin-split-layout style=\"flex: 1;\">\n    <div>First</div>\n    <div>Second</div>\n  </vaadin-split-layout>\n</body>\n```\n\n### Initial Splitter Position\n\nThe initial splitter position is determined from the sizes of the content elements\ninside the split layout. Therefore, changing `width` on the content elements\naffects the initial splitter position for the horizontal layouts, while `height`\naffects the vertical ones.\n\nNote that when the total size of the content elements does not fit the layout,\nthe content elements are scaled proportionally.\n\nWhen setting initial sizes with relative units, such as percentages, it is\nrecommended to assign the size for both content elements:\n\n```html\n<vaadin-split-layout>\n  <div style=\"width: 75%;\">Three fourths</div>\n  <div style=\"width: 25%;\">One fourth</div>\n</vaadin-split-layout>\n```\n\n### Size Limits\n\nThe `min-width`/`min-height`, and `max-width`/`max-height` CSS size values\nfor the content elements are respected and used to limit the splitter position\nwhen it is dragged.\n\nIt is preferred to set the limits only for a single content element, in order\nto avoid size conflicts:\n\n```html\n<vaadin-split-layout>\n  <div style=\"min-width: 50px; max-width: 150px;\">First</div>\n  <div>Second</div>\n</vaadin-split-layout>\n```\n\n### Resize Notification\n\nThis element implements `IronResizableBehavior` to notify the nested resizables\nwhen the splitter is dragged. In order to define a resizable and receive that\nnotification in a nested element, include `IronResizableBehavior` and listen\nfor the `iron-resize` event.\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description | Theme for Element\n----------------|----------------|----------------\n`splitter` | Split element | vaadin-split-layout\n`handle` | The handle of the splitter | vaadin-split-layout\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
           "summary": "",
           "path": "src/vaadin-split-layout.html",
           "properties": [
             {
               "name": "orientation",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "The split layout's orientation. Possible values are: `horizontal|vertical`.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 241,
+                  "line": 247,
                   "column": 13
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               },
               "defaultValue": "\"horizontal\""
             },
             {
               "name": "_previousPrimaryPointerEvents",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 243,
+                  "line": 249,
                   "column": 12
                 },
                 "end": {
-                  "line": 243,
+                  "line": 249,
                   "column": 49
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             },
             {
               "name": "_previousSecondaryPointerEvents",
-              "type": "string",
+              "type": "string | null | undefined",
               "description": "",
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 244,
+                  "line": 250,
                   "column": 12
                 },
                 "end": {
-                  "line": 244,
+                  "line": 250,
                   "column": 51
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "String"
+                }
               }
             }
           ],
@@ -87,7 +93,7 @@
               "description": "Add the event listener to the node if it is a gestures event.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "file": "../../polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
                   "line": 55,
                   "column": 6
@@ -125,7 +131,7 @@
               "description": "Remove the event listener to the node if it is a gestures event.",
               "privacy": "protected",
               "sourceRange": {
-                "file": "../bower_components/polymer/lib/mixins/gesture-event-listeners.html",
+                "file": "../../polymer/lib/mixins/gesture-event-listeners.html",
                 "start": {
                   "line": 69,
                   "column": 6
@@ -164,16 +170,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 248,
+                  "line": 254,
                   "column": 8
                 },
                 "end": {
-                  "line": 251,
+                  "line": 257,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_processChildren",
@@ -181,16 +190,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 253,
+                  "line": 259,
                   "column": 8
                 },
                 "end": {
-                  "line": 265,
+                  "line": 271,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setFlexBasis",
@@ -198,11 +210,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 267,
+                  "line": 273,
                   "column": 8
                 },
                 "end": {
-                  "line": 274,
+                  "line": 280,
                   "column": 9
                 }
               },
@@ -217,7 +229,10 @@
                 {
                   "name": "containerSize"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_setPointerEventsNone",
@@ -225,11 +240,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 276,
+                  "line": 282,
                   "column": 8
                 },
                 "end": {
-                  "line": 283,
+                  "line": 289,
                   "column": 9
                 }
               },
@@ -238,7 +253,10 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_restorePointerEvents",
@@ -246,16 +264,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 285,
+                  "line": 291,
                   "column": 8
                 },
                 "end": {
-                  "line": 288,
+                  "line": 294,
                   "column": 9
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_onHandleTrack",
@@ -263,11 +284,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 290,
+                  "line": 296,
                   "column": 8
                 },
                 "end": {
-                  "line": 317,
+                  "line": 323,
                   "column": 9
                 }
               },
@@ -276,22 +297,73 @@
                 {
                   "name": "event"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             }
           ],
           "staticMethods": [
+            {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
             {
               "name": "_includeStyle",
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 61,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -299,8 +371,14 @@
               "params": [
                 {
                   "name": "moduleName"
+                },
+                {
+                  "name": "template"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -313,11 +391,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 218,
+              "line": 224,
               "column": 6
             },
             "end": {
-              "line": 331,
+              "line": 337,
               "column": 7
             }
           },
@@ -330,29 +408,29 @@
               "description": "The split layout's orientation. Possible values are: `horizontal|vertical`.",
               "sourceRange": {
                 "start": {
-                  "line": 237,
+                  "line": 243,
                   "column": 12
                 },
                 "end": {
-                  "line": 241,
+                  "line": 247,
                   "column": 13
                 }
               },
               "metadata": {},
-              "type": "string"
+              "type": "string | null | undefined"
             }
           ],
           "events": [
             {
               "type": "CustomEvent",
               "name": "iron-resize",
-              "description": "iron-resize",
+              "description": "Fired when the splitter is dragged. Non-bubbling. Fired for the splitter\nelement and any nested elements with `IronResizableBehavior`.",
               "metadata": {}
             },
             {
               "type": "CustomEvent",
               "name": "splitter-dragend",
-              "description": "splitter-dragend",
+              "description": "Fired after dragging the splitter have ended.",
               "metadata": {}
             }
           ],
@@ -365,13 +443,12 @@
               "description": "",
               "name": "primary",
               "range": {
-                "file": "src/vaadin-split-layout.html",
                 "start": {
-                  "line": 61,
+                  "line": 62,
                   "column": 4
                 },
                 "end": {
-                  "line": 61,
+                  "line": 62,
                   "column": 45
                 }
               }
@@ -380,14 +457,27 @@
               "description": "",
               "name": "secondary",
               "range": {
-                "file": "src/vaadin-split-layout.html",
                 "start": {
-                  "line": 65,
+                  "line": 66,
                   "column": 4
                 },
                 "end": {
-                  "line": 65,
+                  "line": 66,
                   "column": 49
+                }
+              }
+            },
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "start": {
+                  "line": 70,
+                  "column": 6
+                },
+                "end": {
+                  "line": 70,
+                  "column": 19
                 }
               }
             }
