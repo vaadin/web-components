@@ -50,15 +50,15 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * Custom function for rendering the content of the `<vaadin-combo-box-item>`.
-         * Receives arguments `root`, `comboBox`, `model`
+         * Custom function for rendering the content of every item.
+         * Receives three arguments:
          *
-         * `root` the `<vaadin-combo-box-item>` internal container element
-         *
-         * `comboBox` the reference to the combo box element
-         *
-         * `model` Object with properties that could be required during the rendering process.
-         * Object is in the format { index: 'the item index', item: 'the item object' }
+         * - `root` The `<vaadin-combo-box-item>` internal container DOM element.
+         * - `comboBox` The reference to the `<vaadin-combo-box>` element.
+         * - `model` The object with the properties related with the rendered
+         *   item, contains:
+         *   - `model.index` The index of the rendered item.
+         *   - `model.item` The item.
          *
          * **NOTE:** The renderer callback can be called multiple times with the previous content.
          */
