@@ -1,4 +1,4 @@
-![Build Status](https://travis-ci.org/vaadin/vaadin-board.svg?branch=master)
+[![Build Status](https://travis-ci.org/vaadin/vaadin-board.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-board)
 
 # \<vaadin-board\>
 
