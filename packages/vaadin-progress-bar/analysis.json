@@ -8,62 +8,64 @@
       "sourceRange": {
         "file": "src/vaadin-progress-bar.html",
         "start": {
-          "line": 94,
+          "line": 96,
           "column": 6
         },
         "end": {
-          "line": 94,
+          "line": 96,
           "column": 60
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-progress-bar>` is a Polymer 2 progress bar.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`bar` | Progress-bar's background\n`value` | Progress-bar's foreground\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)\n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar | :host",
+          "description": "`<vaadin-progress-bar>` is a Web Component for progress bars.\n\n```html\n<vaadin-progress-bar min=\"0\" max=\"1\" value=\"0.5\">\n</vaadin-progress-bar>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`bar` | Progress-bar's background\n`value` | Progress-bar's foreground\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)\n\nThe following custom properties are available:\n\nCustom property | Description | Default\n----------------|-------------|-------------\n`--vaadin-progress-value` | current progress value (between 0 and 1) | 0\n\nThe following state attributes are available for styling:\n\nAttribute       | Description | Part name\n----------------|-------------|------------\n`indeterminate` | Set to an indeterminate progress bar | :host",
           "summary": "",
           "path": "src/vaadin-progress-bar.html",
           "properties": [
             {
               "name": "value",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Current progress value.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 18,
+                  "line": 23,
                   "column": 10
                 },
                 "end": {
-                  "line": 21,
+                  "line": 26,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_valueChanged\""
+                  "observer": "\"_valueChanged\"",
+                  "attributeType": "Number"
                 }
               },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
               "name": "min",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Minimum bound of the progress bar.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 25,
+                  "line": 30,
                   "column": 10
                 },
                 "end": {
-                  "line": 29,
+                  "line": 34,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_minChanged\""
+                  "observer": "\"_minChanged\"",
+                  "attributeType": "Number"
                 }
               },
               "defaultValue": "0",
@@ -71,23 +73,24 @@
             },
             {
               "name": "max",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Maximum bound of the progress bar.",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 33,
+                  "line": 38,
                   "column": 10
                 },
                 "end": {
-                  "line": 37,
+                  "line": 42,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_maxChanged\""
+                  "observer": "\"_maxChanged\"",
+                  "attributeType": "Number"
                 }
               },
               "defaultValue": "1",
@@ -95,22 +98,24 @@
             },
             {
               "name": "indeterminate",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "privacy": "public",
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 47,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 51,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false",
               "inheritedFrom": "Vaadin.ProgressMixin"
@@ -124,16 +129,19 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 56,
+                  "line": 61,
                   "column": 6
                 },
                 "end": {
-                  "line": 60,
+                  "line": 65,
                   "column": 7
                 }
               },
               "metadata": {},
               "params": [],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -143,11 +151,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 62,
+                  "line": 67,
                   "column": 6
                 },
                 "end": {
-                  "line": 70,
+                  "line": 75,
                   "column": 7
                 }
               },
@@ -163,6 +171,9 @@
                   "name": "max"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -172,11 +183,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 72,
+                  "line": 77,
                   "column": 6
                 },
                 "end": {
-                  "line": 74,
+                  "line": 79,
                   "column": 7
                 }
               },
@@ -189,6 +200,9 @@
                   "name": "oldV"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -198,11 +212,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 76,
+                  "line": 81,
                   "column": 6
                 },
                 "end": {
-                  "line": 78,
+                  "line": 83,
                   "column": 7
                 }
               },
@@ -215,6 +229,9 @@
                   "name": "oldV"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -224,11 +241,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 80,
+                  "line": 85,
                   "column": 6
                 },
                 "end": {
-                  "line": 82,
+                  "line": 87,
                   "column": 7
                 }
               },
@@ -241,6 +258,9 @@
                   "name": "oldV"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -250,11 +270,11 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 87,
+                  "line": 92,
                   "column": 6
                 },
                 "end": {
-                  "line": 101,
+                  "line": 106,
                   "column": 7
                 }
               },
@@ -275,17 +295,65 @@
           ],
           "staticMethods": [
             {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
               "name": "_includeStyle",
               "description": "",
               "privacy": "private",
               "sourceRange": {
-                "file": "../bower_components/vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
                 "start": {
-                  "line": 46,
+                  "line": 61,
                   "column": 4
                 },
                 "end": {
-                  "line": 50,
+                  "line": 67,
                   "column": 5
                 }
               },
@@ -293,8 +361,14 @@
               "params": [
                 {
                   "name": "moduleName"
+                },
+                {
+                  "name": "template"
                 }
               ],
+              "return": {
+                "type": "void"
+              },
               "inheritedFrom": "Vaadin.ThemableMixin"
             }
           ],
@@ -307,11 +381,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 79,
+              "line": 81,
               "column": 6
             },
             "end": {
-              "line": 87,
+              "line": 89,
               "column": 7
             }
           },
@@ -325,16 +399,16 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 18,
+                  "line": 23,
                   "column": 10
                 },
                 "end": {
-                  "line": 21,
+                  "line": 26,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number",
+              "type": "number | null | undefined",
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -343,16 +417,16 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 25,
+                  "line": 30,
                   "column": 10
                 },
                 "end": {
-                  "line": 29,
+                  "line": 34,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number",
+              "type": "number | null | undefined",
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -361,16 +435,16 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 33,
+                  "line": 38,
                   "column": 10
                 },
                 "end": {
-                  "line": 37,
+                  "line": 42,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number",
+              "type": "number | null | undefined",
               "inheritedFrom": "Vaadin.ProgressMixin"
             },
             {
@@ -379,16 +453,16 @@
               "sourceRange": {
                 "file": "vaadin-progress-mixin.html",
                 "start": {
-                  "line": 42,
+                  "line": 47,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 51,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "inheritedFrom": "Vaadin.ProgressMixin"
             }
           ],
@@ -413,86 +487,91 @@
           "properties": [
             {
               "name": "value",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Current progress value.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 18,
+                  "line": 23,
                   "column": 10
                 },
                 "end": {
-                  "line": 21,
+                  "line": 26,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_valueChanged\""
+                  "observer": "\"_valueChanged\"",
+                  "attributeType": "Number"
                 }
               }
             },
             {
               "name": "min",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Minimum bound of the progress bar.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 25,
+                  "line": 30,
                   "column": 10
                 },
                 "end": {
-                  "line": 29,
+                  "line": 34,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_minChanged\""
+                  "observer": "\"_minChanged\"",
+                  "attributeType": "Number"
                 }
               },
               "defaultValue": "0"
             },
             {
               "name": "max",
-              "type": "number",
+              "type": "number | null | undefined",
               "description": "Maximum bound of the progress bar.",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 33,
+                  "line": 38,
                   "column": 10
                 },
                 "end": {
-                  "line": 37,
+                  "line": 42,
                   "column": 11
                 }
               },
               "metadata": {
                 "polymer": {
-                  "observer": "\"_maxChanged\""
+                  "observer": "\"_maxChanged\"",
+                  "attributeType": "Number"
                 }
               },
               "defaultValue": "1"
             },
             {
               "name": "indeterminate",
-              "type": "boolean",
+              "type": "boolean | null | undefined",
               "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 42,
+                  "line": 47,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 51,
                   "column": 11
                 }
               },
               "metadata": {
-                "polymer": {}
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
               },
               "defaultValue": "false"
             }
@@ -504,16 +583,19 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 56,
+                  "line": 61,
                   "column": 6
                 },
                 "end": {
-                  "line": 60,
+                  "line": 65,
                   "column": 7
                 }
               },
               "metadata": {},
-              "params": []
+              "params": [],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_normalizedValueChanged",
@@ -521,11 +603,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 62,
+                  "line": 67,
                   "column": 6
                 },
                 "end": {
-                  "line": 70,
+                  "line": 75,
                   "column": 7
                 }
               },
@@ -540,7 +622,10 @@
                 {
                   "name": "max"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_valueChanged",
@@ -548,11 +633,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 72,
+                  "line": 77,
                   "column": 6
                 },
                 "end": {
-                  "line": 74,
+                  "line": 79,
                   "column": 7
                 }
               },
@@ -564,7 +649,10 @@
                 {
                   "name": "oldV"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_minChanged",
@@ -572,11 +660,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 76,
+                  "line": 81,
                   "column": 6
                 },
                 "end": {
-                  "line": 78,
+                  "line": 83,
                   "column": 7
                 }
               },
@@ -588,7 +676,10 @@
                 {
                   "name": "oldV"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_maxChanged",
@@ -596,11 +687,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 80,
+                  "line": 85,
                   "column": 6
                 },
                 "end": {
-                  "line": 82,
+                  "line": 87,
                   "column": 7
                 }
               },
@@ -612,7 +703,10 @@
                 {
                   "name": "oldV"
                 }
-              ]
+              ],
+              "return": {
+                "type": "void"
+              }
             },
             {
               "name": "_normalizeValue",
@@ -620,11 +714,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 87,
+                  "line": 92,
                   "column": 6
                 },
                 "end": {
-                  "line": 101,
+                  "line": 106,
                   "column": 7
                 }
               },
@@ -647,11 +741,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 11,
+              "line": 16,
               "column": 2
             },
             "end": {
-              "line": 102,
+              "line": 107,
               "column": 5
             }
           },
@@ -663,64 +757,64 @@
               "description": "Current progress value.",
               "sourceRange": {
                 "start": {
-                  "line": 18,
+                  "line": 23,
                   "column": 10
                 },
                 "end": {
-                  "line": 21,
+                  "line": 26,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "min",
               "description": "Minimum bound of the progress bar.",
               "sourceRange": {
                 "start": {
-                  "line": 25,
+                  "line": 30,
                   "column": 10
                 },
                 "end": {
-                  "line": 29,
+                  "line": 34,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "max",
               "description": "Maximum bound of the progress bar.",
               "sourceRange": {
                 "start": {
-                  "line": 33,
+                  "line": 38,
                   "column": 10
                 },
                 "end": {
-                  "line": 37,
+                  "line": 42,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "number"
+              "type": "number | null | undefined"
             },
             {
               "name": "indeterminate",
               "description": "Indeterminate state of the progress bar.\nThis property takes precedence over other state properties (min, max, value).",
               "sourceRange": {
                 "start": {
-                  "line": 42,
+                  "line": 47,
                   "column": 10
                 },
                 "end": {
-                  "line": 46,
+                  "line": 51,
                   "column": 11
                 }
               },
               "metadata": {},
-              "type": "boolean"
+              "type": "boolean | null | undefined"
             }
           ],
           "events": [],
