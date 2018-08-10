@@ -121,10 +121,33 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * This element can be used within an `iron-form`.
        *
+       * ### Item rendering
+       *
+       * `<vaadin-combo-box>` supports using custom renderer callback function for defining the
+       * content of `<vaadin-combo-box-item>`.
+       *
+       * The renderer function provides `root`, `comboBox`, `model` arguments when applicable.
+       * Generate DOM content by using `model` object properties if needed, append it to the `root`
+       * element and control the state of the host element by accessing `comboBox`. Before generating new
+       * content, users are able to check if there is already content in `root` for reusing it.
+       *
+       * ```html
+       * <vaadin-combo-box id="combo-box"></vaadin-combo-box>
+       * ```
+       * ```js
+       * const comboBox = document.querySelector('#combo-box');
+       * comboBox.items = [{'label': 'Hydrogen', 'value': 'H'}];
+       * comboBox.renderer = function(root, comboBox, model) {
+       *   root.innerHTML = model.index + ': ' +
+       *                    model.item.label + ' ' +
+       *                    '<b>' + model.item.value + '</b>';
+       * };
+       * ```
+       *
        * ### Item Template
        *
-       * `<vaadin-combo-box>` supports using custom item template provided in the light
-       * DOM:
+       * Alternatively, the content of the `<vaadin-combo-box-item>` can be populated by using
+       * custom item template provided in the light DOM:
        *
        * ```html
        * <vaadin-combo-box items='[{"label": "Hydrogen", "value": "H"}]'>
