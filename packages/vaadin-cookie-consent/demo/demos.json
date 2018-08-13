@@ -11,27 +11,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Customization",
-    "url": "element-customize-texts",
-    "src": "element-customize-texts.html",
-    "meta": {
-      "title": "vaadin-cookie-consent Customize Texts",
-      "description": "",
-      "image": ""
-     }
-  }
-  ,
-  {
-    "name": "Theming",
-    "url": "element-theming",
-    "src": "element-theming.html",
-    "meta": {
-      "title": "vaadin-cookie-consent Theming",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }
