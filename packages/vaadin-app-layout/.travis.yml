@@ -12,7 +12,8 @@ addons:
   chrome: stable
 
 env:
-  - POLYMER=2
+  - POLYMER=2 TEST_SUITE=unit_tests
+  - POLYMER=3
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
@@ -24,8 +25,19 @@ script:
       else
         xvfb-run -s '-screen 0 1024x768x24' wct;
       fi &&
-      if [[ "$TRAVIS_EVENT_TYPE" = "cron" ]]; then
+      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
         wct --env saucelabs-cron;
+      fi;
+    fi
+  - if [[ "$POLYMER" = "3" ]]; then
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
+      rm -rf node_modules &&
+      magi p3-convert --out . --import-style=name &&
+      yarn install --flat &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        wct --module-resolution=node --npm --env saucelabs;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
       fi;
     fi
 

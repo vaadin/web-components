@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-app-layout",
-  "main": "vaadin-app-layout.html",
+  "main": [
+    "vaadin-app-layout.html",
+    "theme/material/vaadin-app-layout.html"
+  ],
   "keywords": [
     "Vaadin",
     "vaadin-app-layout",
@@ -26,18 +29,17 @@
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.0",
-    "vaadin-license-checker": "vaadin/license-checker#^2.0.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0"    
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
+    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-alpha1"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
-    "iron-pages": "^2.0.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^1.3.0",
-    "vaadin-tabs": "vaadin/vaadin-tabs#^2.0.0",
-    "vaadin-icons": "vaadin/vaadin-icons#^4.1.4"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
+    "vaadin-tabs": "vaadin/vaadin-tabs#^2.1.0-beta2",
+    "vaadin-icons": "vaadin/vaadin-icons#^4.2.0-beta2"
   }
 }

@@ -11,16 +11,5 @@
       "image": ""
      }
   }
-  ,
-  {
-    "name": "Advanced Usage",
-    "url": "element-advanced-demos",
-    "src": "element-advanced-demos.html",
-    "meta": {
-      "title": "vaadin-app-layout Advanced Examples",
-      "description": "",
-      "image": ""
-     }
-  }
   ]
 }

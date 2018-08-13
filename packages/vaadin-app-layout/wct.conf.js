@@ -24,21 +24,16 @@ module.exports = {
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
-      'macOS 10.12/iphone@10.3',
-      'Windows 10/microsoftedge@15',
-      'Windows 10/internet explorer@11',
-      'macOS 10.13/safari@11.1',
-      'macOS 9.3.2/iphone@9.3'
+      'iOS Simulator/iphone@11.3',
+      'iOS Simulator/iphone@9.3'
     ];
 
     const saucelabsPlatformsMicrosoft = [
-      'Windows 10/microsoftedge@16',
+      'Windows 10/microsoftedge@17',
       'Windows 10/internet explorer@11'
     ];
 
     const saucelabsPlatformsDesktop = [
-      'Windows 10/chrome@65',
-      'Windows 10/firefox@59',
       'macOS 10.13/safari@11.1'
     ];
 
@@ -49,18 +44,27 @@ module.exports = {
     ];
 
     const cronPlatforms = [
-      'Android/chrome',
-      'macOS 10.12/ipad@11.0',
-      'Windows 10/chrome@59',
-      'Windows 10/firefox@54'
+      {
+        deviceName: 'Android GoogleAPI Emulator',
+        platformName: 'Android',
+        platformVersion: '7.1',
+        browserName: 'chrome'
+      },
+      'iOS Simulator/ipad@11.3',
+      'iOS Simulator/iphone@10.3',
+      'Windows 10/chrome@latest',
+      'Windows 10/firefox@latest'
     ];
 
     if (env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
     } else if (env === 'saucelabs-cron') {
       context.options.plugins.sauce.browsers = cronPlatforms;
+      // MAGI REMOVE START
+      context.options.plugins.istanbul.thresholds.global.statements = 0;
     } else {
       context.options.plugins.istanbul.thresholds.global.statements = 0;
+      // MAGI REMOVE END
     }
   }
 };
