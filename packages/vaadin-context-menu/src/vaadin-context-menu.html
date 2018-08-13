@@ -61,15 +61,18 @@ This program is available under Apache License Version 2.0, available at https:/
        * ```js
        * const contextMenu = document.querySelector('#contextMenu');
        * contextMenu.renderer = (root, contextMenu, context) => {
-       *   if (root.firstChild) {
-       *     return;
+       *   let listBox = root.firstElementChild;
+       *   if (!listBox) {
+       *     listBox = document.createElement('vaadin-list-box');
+       *     root.appendChild(listBox);
        *   }
        *
-       *   const listBox = document.createElement('vaadin-list-box');
-       *   const item = document.createElement('vaadin-item');
-       *   item.textContent = 'Context menu item';
-       *   listBox.appendChild(item);
-       *   root.appendChild(listBox);
+       *   let item = listBox.querySelector('vaadin-item');
+       *   if (!item) {
+       *     item = document.createElement('vaadin-item');
+       *     listBox.appendChild(item);
+       *   }
+       *   item.textContent = 'Content of the selector: ' + context.target.textContent;
        * };
        * ```
        *
