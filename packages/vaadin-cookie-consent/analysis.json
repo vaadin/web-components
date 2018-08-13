@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-cookie-consent.html",
         "start": {
-          "line": 179,
+          "line": 185,
           "column": 6
         },
         "end": {
-          "line": 179,
+          "line": 185,
           "column": 64
         }
       },
@@ -175,6 +175,27 @@
                 }
               },
               "defaultValue": "\"cookieconsent_status\""
+            },
+            {
+              "name": "_css",
+              "type": "Object | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 106,
+                  "column": 12
+                },
+                "end": {
+                  "line": 108,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Object"
+                }
+              }
             }
           ],
           "methods": [
@@ -184,11 +205,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 111,
                   "column": 8
                 },
                 "end": {
-                  "line": 110,
+                  "line": 113,
                   "column": 9
                 }
               },
@@ -205,11 +226,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 115,
+                  "line": 118,
                   "column": 8
                 },
                 "end": {
-                  "line": 148,
+                  "line": 151,
                   "column": 9
                 }
               },
@@ -225,11 +246,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 153,
+                  "line": 156,
                   "column": 8
                 },
                 "end": {
-                  "line": 159,
+                  "line": 165,
                   "column": 9
                 }
               },
@@ -245,11 +266,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 160,
+                  "line": 166,
                   "column": 8
                 },
                 "end": {
-                  "line": 162,
+                  "line": 168,
                   "column": 9
                 }
               },
@@ -262,11 +283,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 172,
                   "column": 8
                 },
                 "end": {
-                  "line": 172,
+                  "line": 178,
                   "column": 9
                 }
               },
@@ -369,7 +390,7 @@
               "column": 6
             },
             "end": {
-              "line": 173,
+              "line": 179,
               "column": 7
             }
           },
