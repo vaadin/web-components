@@ -5,7 +5,7 @@ module.exports = {
   testTimeout: 180 * 1000,
   verbose: false,
   plugins: {
-    local: {
+    'local': {
       browserOptions: {
         chrome: [
           'headless',
