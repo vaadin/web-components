@@ -185,6 +185,19 @@
       expect(vaadinCheckboxGroup.shadowRoot.querySelector('label').innerText).to.be.equal('foo');
     });
 
+    it('should not add extra checked changed listener on reattaching of the group', () => {
+      const container = vaadinCheckboxGroup.parentElement;
+
+      container.removeChild(vaadinCheckboxGroup);
+      container.appendChild(vaadinCheckboxGroup);
+
+      vaadinCheckboxGroup._observer.flush();
+      const observerSpy = sinon.spy(vaadinCheckboxGroup, '_changeSelectedCheckbox');
+      vaadinCheckboxList[0].checked = true;
+
+      expect(observerSpy.calledOnce).to.be.true;
+    });
+
   });
 
   describe('vaadin-checkbox-group validation', () => {
