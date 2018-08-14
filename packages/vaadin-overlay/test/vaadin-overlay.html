@@ -161,6 +161,23 @@
           overlay2.opened = false;
           expect(document.body.style.pointerEvents).to.eql('');
         });
+
+        it('should disable pointer-events in first overlay when second opens', () => {
+          const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
+          overlay1.opened = true;
+          overlay2.opened = true;
+
+          expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('none');
+        });
+
+        it('should restore pointer-events in first overlay when second closes', () => {
+          const overlay1Part = overlay1.shadowRoot.querySelector('[part="overlay"]');
+          overlay1.opened = true;
+          overlay2.opened = true;
+          overlay2.opened = false;
+
+          expect(getComputedStyle(overlay1Part).pointerEvents).to.equal('auto');
+        });
       });
 
       it('should close on esc', () => {
