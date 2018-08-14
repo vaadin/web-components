@@ -45,6 +45,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="withButton">
+    <template>
+      <test-element>
+        <button>Clickable</button>
+      </test-element>
+    </template>
+  </test-fixture>
+
   <script>
     function spaceDown(target) {
       MockInteractions.keyDownOn(target, 32, [], ' ');
@@ -204,6 +212,18 @@
         });
       });
 
+      describe('with clickable child', () => {
+        beforeEach(() => item = fixture('withButton'));
+
+        it('should not set active attribute if keydown was prevented', () => {
+          const button = item.querySelector('button');
+          button.addEventListener('keydown', e => {
+            e.preventDefault();
+          });
+          spaceDown(button);
+          expect(item.hasAttribute('active')).to.be.false;
+        });
+      });
     });
   </script>
 </body>
