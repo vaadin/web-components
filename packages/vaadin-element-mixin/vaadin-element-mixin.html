@@ -34,6 +34,14 @@ Vaadin.ElementMixin = superClass => {
           window.Vaadin.registrations.push(this);
         }
       }
+      ready() {
+        super.ready();
+        if (document.doctype === null) {
+          console.warn(
+            'Vaadin components require the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
+          );
+        }
+      }
     };
   } finally {
     // This is run every time a new class is declared, not every time an instance is created
