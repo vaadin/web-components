@@ -40,6 +40,7 @@
     "iron-test-helpers": "^2.0.0",
     "vaadin-button": "vaadin/vaadin-button#^2.1.0",
     "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1",
+    "vaadin-radio-button": "vaadin/vaadin-radio-button#^1.1.0",
     "iron-form": "^2.0.0",
     "iron-input": "^2.0.0",
     "webcomponentsjs": "webcomponents/webcomponentsjs#1.2.0",
