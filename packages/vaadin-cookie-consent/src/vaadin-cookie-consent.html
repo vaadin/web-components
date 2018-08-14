@@ -149,6 +149,13 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             },
             position: this.position
           });
+
+          const popup = this._getPopup();
+          if (popup) {
+            // NVDA announces a popup appearance only if the role is alert
+            popup.setAttribute('role', 'alert');
+          }
+
         }
 
         /**
