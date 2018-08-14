@@ -169,13 +169,13 @@ This program is available under Apache License Version 2.0, available at https:/
           };
         }
 
-        /**
-         * @private
-         */
-        connectedCallback() {
-          super.connectedCallback();
-          this._observer = new Polymer.FlattenedNodesObserver(this, (info) => {
-            var checkedChangedListener = (e) => {
+        ready() {
+          super.ready();
+
+          this._addActiveListeners();
+
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            const checkedChangedListener = e => {
               if (e.target.checked) {
                 this._changeSelectedButton(e.target);
               }
@@ -198,14 +198,7 @@ This program is available under Apache License Version 2.0, available at https:/
                 this.value = undefined;
               }
             });
-
           });
-        }
-
-        ready() {
-          super.ready();
-
-          this._addActiveListeners();
 
           if (this._radioButtons.length) {
             this._setFocusable(0);
