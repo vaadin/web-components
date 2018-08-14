@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -19,8 +20,8 @@
       </template>
 
       <script>
-        HTMLImports.whenReady(() => {
-          class ChartEventsElement extends Polymer.Element {
+        addEventListener('WebComponentsReady', () => {
+          customElements.define('chart-events', class extends Polymer.Element {
 
             constructor() {
               super();
@@ -44,11 +45,8 @@
             __pointUpdate() {
               this.pointUpdate++;
             }
-          }
-
-          customElements.define(ChartEventsElement.is, ChartEventsElement);
+          });
         });
-
       </script>
     </dom-module>
     <chart-events></chart-events>
@@ -60,7 +58,7 @@
       let element;
 
       before(function(done) {
-        HTMLImports.whenReady(() => {
+        customElements.whenDefined('chart-events').then(() => {
           element = document.querySelector('chart-events');
           chart = element.$.mychart;
           timelineChart = element.$.timeline;

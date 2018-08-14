@@ -4,7 +4,7 @@
 
 # Vaadin Charts
 
-[Vaadin Charts](https://vaadin.com/charts) is a [Polymer 2](http://polymer-project.org) element providing &lt;vaadin-chart&gt; for creating high quality charts, part of [Vaadin Elements](https://vaadin.com/elements).
+[Vaadin Charts](https://vaadin.com/charts) is a Web component providing &lt;vaadin-chart&gt; for creating high quality charts, part of [Vaadin Elements](https://vaadin.com/elements).
 
 ## Relevant links
 

@@ -1,4 +1,10 @@
+/**
+ * @namespace Vaadin
+ */
 window.Vaadin = window.Vaadin || {};
+/**
+ * @namespace Vaadin.Charts
+ */
 Vaadin.Charts = Vaadin.Charts || {};
 /** @private */
 // eslint-disable-next-line no-unused-vars

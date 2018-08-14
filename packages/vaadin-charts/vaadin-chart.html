@@ -11,11 +11,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../polymer/lib/utils/render-status.html">
 <link rel="import" href="../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../vaadin-license-checker/vaadin-license-checker.html">
 <link rel="import" href="../vaadin-element-mixin/vaadin-element-mixin.html">
 
 <link rel="import" href="vaadin-chart-default-theme.html">
+<script src="chart-deep-merger.js"></script>
 
+<!-- MAGI REMOVE START -->
 <script src="../highcharts/js/highstock.js"></script>
 <!-- For some chart types, an error is raised if accessibility is added after highcharts-3d module -->
 <script src="../highcharts/js/modules/accessibility.js"></script>
@@ -29,7 +30,22 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <script src="../highcharts/js/modules/solid-gauge.js"></script>
 <script src="../highcharts/js/modules/treemap.js"></script>
 <script src="../highcharts/js/modules/no-data-to-display.js"></script>
-<script src="chart-deep-merger.js"></script>
+<!-- MAGI REMOVE END -->
+<!-- MAGI ADD START
+<script src="../highcharts/js/es-modules/masters/highstock.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/accessibility.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/highcharts-more.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/highcharts-3d.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/data.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/drilldown.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/exporting.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/funnel.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/heatmap.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/solid-gauge.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/treemap.src.js"></script>
+<script src="../highcharts/js/es-modules/masters/modules/no-data-to-display.src.js"></script>
+MAGI ADD END -->
+
 <script src="chart-exporting.js"></script>
 <script src="chart-3d-stacking.js"></script>
 
@@ -56,9 +72,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    {
-      const {ChartDeepMerger} = Vaadin.Charts;
-
+    (() => {
       /**
        * `<vaadin-chart>` is a Polymer 2 element for creating high quality charts.
        *
@@ -524,7 +538,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
         get options() {
           const options = Object.assign({}, this._baseConfig);
-          ChartDeepMerger.__deepMerge(options, this.additionalOptions);
+          Vaadin.Charts.ChartDeepMerger.__deepMerge(options, this.additionalOptions);
 
           if (this.type) {
             options.chart = options.chart || {};
@@ -1070,7 +1084,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             this._jsonConfigurationBuffer = {};
           }
 
-          const configCopy = ChartDeepMerger.__deepMerge({}, jsonConfiguration);
+          const configCopy = Vaadin.Charts.ChartDeepMerger.__deepMerge({}, jsonConfiguration);
           this.__inflateFunctions(configCopy);
           this._jsonConfigurationBuffer = this.__makeConfigurationBuffer(this._jsonConfigurationBuffer, configCopy);
 
@@ -1241,7 +1255,10 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                   // the 'after print' event.
                   if (!this.tempBodyStyle) {
                     let effectiveCss = '';
-                    if (window.ShadyCSS.nativeShadow) {
+                    // eslint-disable-next-line no-undef
+                    const isNativeShadowDom = typeof nativeShadow !== 'undefined' ? nativeShadow : window.ShadyCSS.nativeShadow;
+
+                    if (isNativeShadowDom) {
                       const shadowStyles = self.shadowRoot.querySelectorAll('style');
                       for (let i = 0; i < shadowStyles.length; i++) {
                         effectiveCss = effectiveCss + shadowStyles[i].textContent;
@@ -1254,9 +1271,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
                         return matchesFn.call(self, selector) ? '' : match;
                       });
                     } else {
-                      const ScopingShim = window.ShadyCSS.ScopingShim;
-                      effectiveCss = ScopingShim.styleAstToString(
-                        ScopingShim._styleInfoForNode(self)._getStyleRules());
+                      // eslint-disable-next-line no-undef
+                      const Shim = typeof ScopingShim !== 'undefined' ? ScopingShim.prototype : window.ShadyCSS.ScopingShim;
+
+                      effectiveCss = Shim.styleAstToString(
+                        Shim._styleInfoForNode(self)._getStyleRules());
 
                       // Remove the style scopes added by ShadyCSS
                       // e.g. '.vaadin-chart-1 .highcharts-container.vaadin-chart'
@@ -1684,14 +1703,16 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       customElements.define(ChartElement.is, ChartElement);
 
+      window.Vaadin = window.Vaadin || {};
+
       /**
        * @namespace Vaadin
        */
       window.Vaadin.ChartElement = ChartElement;
+
       if (window.Vaadin.runIfDevelopmentMode) {
         window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', ChartElement);
       }
-
-    }
+    })();
   </script>
 </dom-module>

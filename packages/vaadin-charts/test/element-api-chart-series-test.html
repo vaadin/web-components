@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -16,8 +18,8 @@
     </template>
 
     <script>
-      HTMLImports.whenReady(() => {
-        class ChartSeriesApiDemoElement extends Polymer.Element {
+      addEventListener('WebComponentsReady', () => {
+        customElements.define('chart-series-api-demo', class extends Polymer.Element {
           static get is() {
             return 'chart-series-api-demo';
           }
@@ -62,9 +64,7 @@
           changeValuesDense() {
             this.values = Array.apply(null, Array(200)).map(Number.prototype.valueOf, 10);
           }
-        }
-
-        customElements.define(ChartSeriesApiDemoElement.is, ChartSeriesApiDemoElement);
+        });
       });
     </script>
   </dom-module>
@@ -126,15 +126,13 @@
       let element;
 
       beforeEach(function(done) {
-        HTMLImports.whenReady(() => {
-          element = fixture('default');
-          chart = element.$.mychart;
-          chartContainer = chart.$.chart;
-          series = element.$.myseries;
-          setTimeout(function() {
-            done();
-          }, 100);
-        });
+        element = fixture('default');
+        chart = element.$.mychart;
+        chartContainer = chart.$.chart;
+        series = element.$.myseries;
+        setTimeout(function() {
+          done();
+        }, 100);
       });
 
       it('should be defined', function() {
@@ -419,6 +417,30 @@
           expect(yAxisValuesChart.configuration.yAxis).to.have.length(2);
           const secondAxis = yAxisValuesChart.configuration.yAxis[1];
           expect(secondAxis.paddedTicks.slice(-1)[0]).to.be.closeTo(10, 5);
+          done();
+        }, 150);
+      });
+
+      it('should be available initially to set stack with default stacking in plotOptions', function(done) {
+        const stackChart = fixture('stack');
+        setTimeout(function() {
+          expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(20);
+          expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(10);
+          expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
+          expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
+          done();
+        }, 150);
+      });
+
+      it('should be available to change stack with default stacking in plotOptions', function(done) {
+        const stackChart = fixture('stack');
+        stackChart.children[2].stack = '0';
+        stackChart.children[3].stack = '0';
+        setTimeout(function() {
+          expect(stackChart.configuration.series[0].data[3].stackY).to.be.equal(40);
+          expect(stackChart.configuration.series[1].data[3].stackY).to.be.equal(30);
+          expect(stackChart.configuration.series[2].data[3].stackY).to.be.equal(20);
+          expect(stackChart.configuration.series[3].data[3].stackY).to.be.equal(10);
           done();
         }, 150);
       });

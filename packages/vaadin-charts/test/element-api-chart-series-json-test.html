@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -17,8 +18,8 @@
     </template>
 
     <script>
-      HTMLImports.whenReady(() => {
-        class ChartSeriesWithJsonApiElement extends Polymer.Element {
+      addEventListener('WebComponentsReady', () => {
+        customElements.define('chart-series-with-json-api', class extends Polymer.Element {
           static get is() {
             return 'chart-series-with-json-api';
           }
@@ -31,11 +32,8 @@
               }]
             });
           }
-        }
-
-        customElements.define(ChartSeriesWithJsonApiElement.is, ChartSeriesWithJsonApiElement);
+        });
       });
-
     </script>
   </dom-module>
   <chart-series-with-json-api></chart-series-with-json-api>
@@ -46,7 +44,7 @@
       let element;
 
       before(function(done) {
-        HTMLImports.whenReady(() => {
+        customElements.whenDefined('chart-series-with-json-api').then(() => {
           element = document.querySelector('chart-series-with-json-api');
           chart = element.$.mychart;
           done();
@@ -54,14 +52,14 @@
       });
 
       it('should have 1 series', function(done) {
-        setTimeout(function() {
+        Polymer.RenderStatus.afterNextRender(chart.$.chart, () => {
           expect(chart.configuration.series.length).to.be.equal(1);
           done();
-        }, 20);
+        });
       });
 
       it('should have 1 series with merged options', function(done) {
-        setTimeout(function() {
+        Polymer.RenderStatus.afterNextRender(chart.$.chart, () => {
           const series = chart.configuration.series[0];
           const values = series.data.map(({y}) => y);
 

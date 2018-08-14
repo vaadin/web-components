@@ -1,7 +1,7 @@
 sudo: true
 dist: trusty
 language: node_js
-node_js: 8.1
+node_js: 8.11
 
 cache:
   directories:
@@ -9,15 +9,9 @@ cache:
 
 addons:
   ssh_known_hosts: app.fi
-
-addons:
   sauce_connect:
     username: $SAUCE_USERNAME
     access_key: $SAUCE_ACCESS_KEY
-
-install:
-  - npm install
-  - bower install
 
 deploy:
   - provider: script
@@ -26,20 +20,35 @@ deploy:
     on:
       branch: master
 
-before_script:
-  - gulp lint version:check
-  - polymer lint --rules polymer-2 --input *.html
-  - xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-quick
+env:
+  - POLYMER=2 TEST_SUITE="unit_tests"
+  - POLYMER=3
 
 script:
-  - if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-      npm i gemini@^4.0.0 gemini-sauce gemini-polyserve;
-      gemini test test/visual;
-      gemini test test/visual -c .gemini-ie.yml;
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs;
+  - if [[ "$POLYMER" = "2" ]]; then
+      npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
+      gulp lint version:check &&
+      polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs-quick;
+      fi &&
+      if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
+        xvfb-run -s '-screen 0 1024x768x24' wct --env saucelabs-cron;
+      fi;
     fi
-  - if [ "$TRAVIS_EVENT_TYPE" = "cron" ]; then
-      xvfb-run -s '-screen 0 1024x768x24' polymer test --env saucelabs-cron;
+  - if [[ "$POLYMER" = "3" ]]; then
+      npm --no-save -q install -g yarn bower magi-cli web-component-tester polymer-modulizer &&
+      rm -rf node_modules &&
+      magi p3-convert --out . --import-style=name &&
+      node post-modulize-processor.js &&
+      yarn install --flat &&
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm --env saucelabs;
+      else
+        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm --env saucelabs-quick;
+      fi;
     fi
 
 before_deploy:

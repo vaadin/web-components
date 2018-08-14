@@ -7,8 +7,11 @@ See the file LICENSE.md distributed with this software for more information abou
 See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete license.
 -->
 
+<!-- MAGI ADD START
+<script src="../highcharts/es-modules/masters/highstock.src.js"></script>
+MAGI ADD END -->
+
 <link rel="import" href="../polymer/polymer-element.html">
-<script src="chart-deep-merger.js"></script>
 
 <dom-module id="vaadin-chart-series">
   <script>
@@ -16,9 +19,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       throw new Error(`Unexpected Polymer version ${Polymer.version} is used, expected v2.0.0 or later.`);
     }
 
-    {
-      const {ChartDeepMerger} = Vaadin.Charts;
-
+    (() => {
       /**
        * `<vaadin-chart-series>` is a Polymer 2 element for creating series for Vaadin Charts.
        *
@@ -77,7 +78,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         get options() {
-          const options = ChartDeepMerger.__deepMerge({}, this.additionalOptions);
+          const options = Vaadin.Charts.ChartDeepMerger.__deepMerge({}, this.additionalOptions);
 
           if (this.type) {
             options.type = this.type;
@@ -279,9 +280,6 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
          * @param series Object of type `Highcharts.Series`
          */
         setSeries(series) {
-          if (!(series instanceof Highcharts.Series)) {
-            throw new TypeError('series should be Highcharts.Series');
-          }
           this._series = series;
         }
 
@@ -393,7 +391,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         __hasSeriesConfig() {
-          return this._series instanceof Highcharts.Series;
+          return !!this._series;
         }
 
         __isMarkersValid() {
@@ -441,11 +439,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
       customElements.define(ChartSeriesElement.is, ChartSeriesElement);
 
+      window.Vaadin = window.Vaadin || {};
+
       /**
        * @namespace Vaadin
        */
-      window.Vaadin = window.Vaadin || {};
-      Vaadin.ChartSeriesElement = ChartSeriesElement;
-    }
+      window.Vaadin.ChartSeriesElement = ChartSeriesElement;
+    })();
   </script>
 </dom-module>

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../polymer/lib/utils/flush.html">
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -20,23 +23,24 @@
   <script>
     describe('High-level API for gauge series', function() {
       var element;
+      var chartContainer;
 
       beforeEach(done => {
         element = fixture('default');
-        Polymer.flush();
+        chartContainer = element.$.chart;
         setTimeout(() => {
           done();
         }, 100);
       });
 
       it('should have one gauge series', done => {
-        setTimeout(() => {
-          const series = element.$.chart.querySelectorAll('.highcharts-data-labels.highcharts-gauge-series');
+        Polymer.RenderStatus.afterNextRender(chartContainer, () => {
+          const series = chartContainer.querySelectorAll('.highcharts-data-labels.highcharts-gauge-series');
           expect(series).to.have.length(1);
           const text = Array.from(series).map(node => node.textContent);
           expect(text).to.be.deep.equal(['80']);
           done();
-        }, 50);
+        });
       });
     });
   </script>

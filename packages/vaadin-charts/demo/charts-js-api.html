@@ -1,0 +1,58 @@
+<dom-module id="charts-js-api">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Using configuration property and JS API</h3>
+    <vaadin-demo-snippet id="charts-js-api-example">
+      <template preserve-content>
+        <js-api-demo></js-api-demo>
+        <dom-module id="js-api-demo">
+          <template preserve-content>
+            <vaadin-chart id="mychart"></vaadin-chart>
+          </template>
+
+          <script>
+            window.addDemoReadyListener('#charts-js-api-example', function() {
+              class JSApiDemoElement extends Polymer.Element {
+                static get is() {
+                  return 'js-api-demo';
+                }
+                connectedCallback() {
+                  super.connectedCallback();
+                  Polymer.RenderStatus.beforeNextRender(this, () => {
+                    var configuration = this.$.mychart.configuration;
+                    configuration.setTitle({
+                      text: 'The chart title'
+                    });
+                    // By default there is one x axis, it is referenced by configuration.xAxis[0].
+                    configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+                    configuration.addSeries({
+                      type: 'column',
+                      data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+                    });
+                  });
+                }
+              }
+              if (!customElements.get(JSApiDemoElement.is)) {
+                customElements.define(JSApiDemoElement.is, JSApiDemoElement);
+              }
+            });
+          </script>
+        </dom-module>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class ChartsJsApi extends DemoReadyEventEmitter(ChartsDemo(Polymer.Element)) {
+      static get is() {
+        return 'charts-js-api';
+      }
+    }
+    customElements.define(ChartsJsApi.is, ChartsJsApi);
+  </script>
+</dom-module>

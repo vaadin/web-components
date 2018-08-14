@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -21,8 +22,8 @@
     </template>
 
     <script>
-      HTMLImports.whenReady(() => {
-        class StyleDemoElement extends Polymer.Element {
+      addEventListener('WebComponentsReady', () => {
+        customElements.define('chart-style-demo', class extends Polymer.Element {
           static get is() {
             return 'chart-style-demo';
           }
@@ -51,9 +52,7 @@
               });
             });
           }
-        }
-
-        customElements.define(StyleDemoElement.is, StyleDemoElement);
+        });
       });
     </script>
   </dom-module>
@@ -66,7 +65,7 @@
 
 
       before(function(done) {
-        HTMLImports.whenReady(() => {
+        customElements.whenDefined('chart-style-demo').then(() => {
           const el = document.querySelector('chart-style-demo');
           chart = el.$.mychart;
           chartContainer = chart.$.chart;
@@ -75,7 +74,7 @@
       });
 
       it('first series should have a green fill', function(done) {
-        setTimeout(function() {
+        Polymer.RenderStatus.afterNextRender(chartContainer, () => {
           const rects = chartContainer.querySelectorAll('.highcharts-legend-item > rect');
           expect(rects).to.have.lengthOf(2);
           // Safari for iOS is returning the color in hexa format, so we need to test for both values
@@ -85,7 +84,7 @@
       });
 
       it('second series should have the highcharts-color-1 default fill', function(done) {
-        setTimeout(function() {
+        Polymer.RenderStatus.afterNextRender(chartContainer, () => {
           const rects = chartContainer.querySelectorAll('.highcharts-legend-item > rect');
           expect(rects).to.have.lengthOf(2);
           // Safari for iOS is returning the color in hexa format, so we need to test for both values

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-chart.html">
 </head>
 
@@ -28,7 +30,10 @@
 
       it('should have no title', done => {
         setTimeout(() => {
-          expect(element.$.chart.querySelector('.highcharts-title').textContent).to.be.empty;
+          const title = element.$.chart.querySelector('.highcharts-title');
+          if (title) {
+            expect(title.textContent).to.be.empty;
+          }
           done();
         }, 50);
       });

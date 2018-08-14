@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../vaadin-grid/vaadin-grid.html">
   <link rel="import" href="../vaadin-chart.html">
 </head>
@@ -30,8 +32,8 @@
     </template>
 
     <script>
-      HTMLImports.whenReady(() => {
-        class ChartInGridTestElement extends Polymer.Element {
+      addEventListener('WebComponentsReady', () => {
+        customElements.define('chart-in-grid', class extends Polymer.Element {
           static get is() {
             return 'chart-in-grid';
           }
@@ -44,9 +46,7 @@
               }
             };
           }
-        }
-
-        customElements.define(ChartInGridTestElement.is, ChartInGridTestElement);
+        });
       });
     </script>
   </dom-module>
@@ -58,7 +58,7 @@
       var timelineChartContainer;
 
       before(function(done) {
-        HTMLImports.whenReady(() => {
+        customElements.whenDefined('chart-in-grid').then(() => {
           const mygrid = document.querySelector('chart-in-grid').$.mygrid;
 
           const chart = mygrid.querySelector('#chart');
@@ -72,7 +72,7 @@
       });
 
       it('chart container should be in the shadow root', function(done) {
-        setTimeout(function() {
+        Polymer.RenderStatus.afterNextRender(chartContainer, () => {
           expect(chartContainer.parentNode).to.not.be.null;
           expect(timelineChartContainer.parentNode).to.not.be.null;
           done();
