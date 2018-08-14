@@ -163,11 +163,10 @@ This program is available under Apache License Version 2.0, available at https:/
           ];
         }
 
-        /**
-         * @private
-         */
-        connectedCallback() {
-          super.connectedCallback();
+        ready() {
+          super.ready();
+
+          this.setAttribute('role', 'checkboxgroup');
 
           const checkedChangedListener = (e) => {
             this._changeSelectedCheckbox(e.target);
@@ -197,12 +196,6 @@ This program is available under Apache License Version 2.0, available at https:/
               console.warn('Please add value attribute to all checkboxes in checkbox group');
             }
           });
-        }
-
-        ready() {
-          super.ready();
-
-          this.setAttribute('role', 'checkboxgroup');
         }
 
         /**

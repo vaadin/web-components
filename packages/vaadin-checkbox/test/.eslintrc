@@ -5,6 +5,7 @@
     "beforeEach": false,
     "fixture": false,
     "it": false,
+    "sinon": false,
     "expect": false,
     "gemini": false,
     "MockInteractions": false

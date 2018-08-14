@@ -185,6 +185,19 @@
       expect(vaadinCheckboxGroup.shadowRoot.querySelector('label').innerText).to.be.equal('foo');
     });
 
+    it('should be possible to uncheck the checkbox on reattaching of the group', () => {
+      const container = vaadinCheckboxGroup.parentElement;
+
+      container.removeChild(vaadinCheckboxGroup);
+      container.appendChild(vaadinCheckboxGroup);
+
+      vaadinCheckboxGroup._observer.flush();
+      vaadinCheckboxList[0].checked = true;
+      vaadinCheckboxList[0].checked = false;
+
+      expect(vaadinCheckboxList[0].checked).to.be.false;
+    });
+
   });
 
   describe('vaadin-checkbox-group validation', () => {
