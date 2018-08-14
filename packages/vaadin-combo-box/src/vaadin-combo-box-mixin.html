@@ -484,7 +484,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // Ensure metrics are up-to-date
       this.$.overlay.updateViewportBoundaries();
       Polymer.Async.microTask.run(() => this.$.overlay.adjustScrollPosition());
-      setTimeout(() => this.$.overlay.$.dropdown.notifyResize(), 1);
+      setTimeout(() => this._resizeDropdown(), 1);
 
 
       // _detectAndDispatchChange() should not consider value changes done before opening
@@ -595,6 +595,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _resizeDropdown() {
+      this.$.overlay.$.dropdown.notifyResize();
+    }
+
     _updateHasValue(hasValue) {
       if (hasValue) {
         this.setAttribute('has-value', '');
@@ -695,15 +699,9 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.indexOfLabel(this.filter) :
           this._indexOfValue(this.value, this.filteredItems);
 
-        // async needed to reposition correctly after filtering
-        // (especially when aligned on top of input)
-        setTimeout(() => {
-          this.$.overlay.$.dropdown.notifyResize();
-          this.$.overlay.updateViewportBoundaries();
-          this.$.overlay.ensureItemsRendered();
-          this.$.overlay._selector.notifyResize();
-          Polymer.flush && Polymer.flush();
-        }, 1);
+        if (this.opened) {
+          this._repositionOverlay();
+        }
       }
     }
 
@@ -722,7 +720,21 @@ This program is available under Apache License Version 2.0, available at https:/
     _setOverlayItems(items) {
       this.$.overlay.set('_items', items);
 
-      this.$.overlay.$.dropdown.notifyResize();
+      if (this.opened) {
+        this._resizeDropdown();
+      }
+    }
+
+    _repositionOverlay() {
+      // async needed to reposition correctly after filtering
+      // (especially when aligned on top of input)
+      setTimeout(() => {
+        this._resizeDropdown();
+        this.$.overlay.updateViewportBoundaries();
+        this.$.overlay.ensureItemsRendered();
+        this.$.overlay._selector.notifyResize();
+        Polymer.flush && Polymer.flush();
+      }, 1);
     }
 
     _indexOfValue(value, items) {
