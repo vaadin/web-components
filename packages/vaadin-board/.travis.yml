@@ -42,8 +42,3 @@ script:
         xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
       fi;
     fi
-
-notifications:
-  flowdock:
-    on_failure: change
-    secure: W4ZVIYWhKGnFzchvSFhYfpyxPW0AeJklw+Rx9JNuFW5ymPnSoN4ztAgql3f9rZb9G8MTcYzZJzrSM0ODVVbn/scgPQHkgJhJ7hoBwMamQFClNu+8sPMZwlBs9Oyawq5RWQBqk+000NKxjWIU2E6yMioAIvtfee2Mod0CfDIlzUlFCIih38xaJ6JYJCa/F6rWl8wSUuKs83GoL6qDjXUFxS+jKtDbZcL/kYGJiK4uPGUt9ZMoqMMD4XiOEmNXsf1Qj9xmmPhpoJtnkrj+q79Tdu+e0FKid0sbJwvO1A3kW0FuVztSv/P8GH0E3ILMBBA6msv+P1YP01pLxH+4pTr3UEttdkINKbK2uSu2xC0D0Ztne1UwxuiSZXynGxuMuZwR/2ekMp8T9LLF50MxIlj7ysQy2AbUrfZhLCIAInzaIdyK4iVGS1XVKnR0VoHD33TQ4JfMw9chO1YHBJVXRPuTJ5yzjv3Cw+QiwHMEhqUyvkPPwprK5AI2Pc/CZzKad52r9hE7FiChsvpYSxTBEpBFGWHWhqyqgyKOCZ7p6nxI442bLkwfx8xyIQTtJUucg2UaeFFjykX0iETg31XVc2SvUpeA5DifUGsRtu+np/E/DuNEkB81xN8iMgMxfwAQYIM/POt2tGWAkiyHPMRj3o+ZTQSD44PwnBLDF5QQGbHx2Kw=

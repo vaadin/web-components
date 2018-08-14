@@ -1,5 +1,9 @@
 {
   "name": "vaadin-board",
+  "homepage": "https://vaadin.com/components",
+  "authors": [
+    "Vaadin Ltd"
+  ],
   "description": "Polymer element to create flexible responsive layouts and build nice looking dashboard.",
   "main": "vaadin-board.html",
   "license": "https://raw.githubusercontent.com/vaadin/vaadin-board/master/LICENSE.txt",

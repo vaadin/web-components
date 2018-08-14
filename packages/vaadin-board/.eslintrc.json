@@ -1,6 +1,5 @@
 {
     "extends": ["vaadin", "eslint:recommended"],
-    "ecmaVersion": 6,
     "env": {
         "browser": true,
         "node": true,

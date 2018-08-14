@@ -6,30 +6,18 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>vaadin-board tests</title>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="test-suites.js"></script>
 </head>
 
 <body>
-<script>
-    const suites = [
-        'vaadin-board_boardcols_test.html',
-        'vaadin-board_light_dom_test.html',
-        'vaadin-board_media-queries.html',
-        'vaadin-board_redraw_test.html',
-        'vaadin-board_size_test.html',
-        'vaadin-board_slot_test.html',
-        'vaadin-board_style.html',
-        'vaadin-board_test.html',
-        'vaadin-board_update_size_or_breakpoints_test.html',
-        'vaadin-board-template_test.html'
-    ];
-
+  <script>
     WCT.loadSuites(
-      suites
+      window.VaadinElementSuites
         .reduce(function(suites, suite) {
           return suites.concat([suite, `${suite}?wc-shadydom=true`]);
         }, [])
     );
-</script>
+  </script>
 </body>
 
 </html>
