@@ -70,6 +70,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="hidden">
+    <template>
+      <div hidden>
+        <vaadin-form-layout></vaadin-form-layout>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     function getParsedWidth(el) {
       const width = el.style.getPropertyValue('width');
@@ -428,6 +436,37 @@
         expect(layoutRect.width).to.be.below(containerRect.width);
       });
 
+    });
+
+    describe('hidden', function() {
+      let container, layout;
+
+      beforeEach(() => {
+        container = fixture('hidden');
+        layout = container.querySelector('vaadin-form-layout');
+      });
+
+      it('should update steps on show after hidden', done => {
+        const spy = sinon.spy(layout, '_selectResponsiveStep');
+        layout.addEventListener('animationend', e => {
+          expect(spy.called).to.be.true;
+          done();
+        });
+
+        container.hidden = false;
+      });
+
+      it('should not update steps on custom animation name', done => {
+        const spy = sinon.spy(layout, '_selectResponsiveStep');
+        layout.addEventListener('animationend', e => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+
+        const ev = new Event('animationend');
+        ev.animationName = 'foo';
+        layout.dispatchEvent(ev);
+      });
     });
   </script>
 </body>
