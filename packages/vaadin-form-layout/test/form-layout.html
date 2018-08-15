@@ -455,6 +455,18 @@
 
         container.hidden = false;
       });
+
+      it('should not update steps on custom animation name', done => {
+        const spy = sinon.spy(layout, '_selectResponsiveStep');
+        layout.addEventListener('animationend', e => {
+          expect(spy.called).to.be.false;
+          done();
+        });
+
+        const ev = new Event('animationend');
+        ev.animationName = 'foo';
+        layout.dispatchEvent(ev);
+      });
     });
   </script>
 </body>

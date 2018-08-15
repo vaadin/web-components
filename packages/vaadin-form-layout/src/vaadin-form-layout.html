@@ -14,9 +14,8 @@ This program is available under Apache License Version 2.0, available at https:/
     <style>
       :host {
         display: block;
-
         max-width: 100%;
-
+        animation: 1ms vaadin-form-layout-appear;
         /* CSS API for host */
         --vaadin-form-layout-column-spacing: 2em; /* (default) */
       }
@@ -25,10 +24,6 @@ This program is available under Apache License Version 2.0, available at https:/
         to {
           opacity: 1;
         }
-      }
-
-      :host {
-        animation: 1ms vaadin-form-layout-appear;
       }
 
       :host([hidden]) {
