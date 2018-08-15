@@ -65,6 +65,10 @@
         --_lumo-item-selected-icon-display: block;
       }
 
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+
       [part~="overlay"] {
         min-width: var(--vaadin-dropdown-menu-text-field-width);
       }
