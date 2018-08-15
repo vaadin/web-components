@@ -15,32 +15,23 @@
 <body>
   <test-fixture id="dropdown">
     <style>
-      #scrollable-container {
-        width: 300px;
-        height: 300px;
-        overflow: scroll;
-      }
-
       #container {
-        height: 400px;
-        width: 400px;
+        height: 150%;
         padding-left: 50px;
         padding-top: 50px;
       }
     </style>
     <template>
-      <div id="scrollable-container">
-        <div id="container">
-          <vaadin-dropdown-menu>
-            <template>
-              <vaadin-list-box>
-                <vaadin-item>Option 1</vaadin-item>
-                <vaadin-item>Option 2</vaadin-item>
-                <vaadin-item>Option 3</vaadin-item>
-              </vaadin-list-box>
-            </template>
-          </vaadin-dropdown-menu>
-        </div>
+      <div id="container">
+        <vaadin-dropdown-menu>
+          <template>
+            <vaadin-list-box>
+              <vaadin-item>Option 1</vaadin-item>
+              <vaadin-item>Option 2</vaadin-item>
+              <vaadin-item>Option 3</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
       </div>
     </template>
   </test-fixture>
@@ -50,34 +41,48 @@
       MockInteractions.keyDownOn(target, 13, [], 'Enter');
     }
 
+    function scrollWindow(value, scrollLeft) {
+      window.scroll(scrollLeft || 0, 150);
+      window.dispatchEvent(new CustomEvent('scroll', {bubbles: true}));
+    }
+
     describe('scrollable-viewport', () => {
-      var scrollableContainer, container, dropdown, input;
+      var container, dropdown, input;
 
       beforeEach(done => {
-        scrollableContainer = fixture('dropdown');
-        container = scrollableContainer.querySelector('[id="container"]');
+        container = fixture('dropdown');
         dropdown = container.querySelector('vaadin-dropdown-menu');
         input = dropdown._inputElement;
+
+        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+        // Position the input in the lower part of the viewport
+        container.style.paddingTop = viewportHeight / 2 + 'px';
+        document.documentElement.scrollTop = 0;
+
         flush(done);
+      });
+
+      it('should toggle bottom-aligned attribute dependening on the part of the viewport', () => {
+        Enter(input);
+        expect(dropdown._overlayElement.hasAttribute('bottom-aligned')).to.be.true;
+        scrollWindow(150);
+        expect(dropdown._overlayElement.hasAttribute('bottom-aligned')).to.be.false;
       });
 
       it('should update the position on scrolling', () => {
         Enter(input);
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(input.getBoundingClientRect().bottom);
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
 
-        scrollableContainer.scrollTop = 40;
-        scrollableContainer.scrollLeft = 40;
+        scrollWindow(40, 40);
 
-        window.dispatchEvent(new CustomEvent('scroll', {bubbles: true}));
-
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(input.getBoundingClientRect().bottom);
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
       });
 
       it('should update the position on iron-resize event', () => {
         Enter(input);
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(input.getBoundingClientRect().bottom);
         expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
 
         container.style.paddingTop = '200px';
