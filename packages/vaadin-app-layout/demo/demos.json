@@ -2,7 +2,7 @@
   "name": "Vaadin App Layout",
   "pages": [
   {
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "element-basic-demos",
     "src": "element-basic-demos.html",
     "meta": {

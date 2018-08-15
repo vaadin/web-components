@@ -1,0 +1,27 @@
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
+
+
+<dom-module id="material-app-layout" theme-for="vaadin-app-layout">
+  <template>
+    <style>
+      :host {
+        background-color: var(--material-base-color);
+        font-family: var(--material-font-family);
+        font-size: var(--material-button-font-size);
+        color: var(--material-secondary-text-color);
+      }
+
+      [part="navbar"] {
+        background-color: var(--material-base-color);
+        padding: 0 1em;
+      }
+
+      @media (min-width: 700px) {
+        [part="branding"] {
+          padding-left: 1em;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

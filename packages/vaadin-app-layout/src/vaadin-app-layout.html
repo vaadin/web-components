@@ -12,8 +12,12 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <style>
       :host {
-        display: block;
+        display: flex;
+        flex-direction: column-reverse;
         height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
         position: fixed;
         bottom: var(--vaadin-app-layout-viewport-bottom);
         /* CSS API for host */
@@ -23,20 +27,56 @@ This program is available under Apache License Version 2.0, available at https:/
       :host([hidden]) {
         display: none !important;
       }
+
+      [part="branding"] {
+        display: none;
+      }
+
+      [part="navbar"] {
+        flex: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      [part="menu"] {
+        width: auto;
+        overflow: hidden;
+      }
+
+      [part="content"] {
+        flex: auto;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      @media (min-width: 700px) {
+        :host {
+          flex-direction: column;
+        }
+
+        [part="branding"] {
+          display: flex;
+          position: absolute;
+          left: 0;
+          flex-basis: 0;
+        }
+      }
     </style>
     
-    <div id="container" part="container">
-      <div part="navbar">
-        <div part="branding">
-          <slot name="branding"></slot>
-        </div>
-        <div part="menu">
-          <slot name="menu"></slot>
-        </div>
+    <div part="navbar">
+      <div part="branding">
+        <slot name="branding"></slot>
       </div>
-      <div id="content" part="content">
-        <slot></slot>
+      <div part="menu">
+        <slot name="menu"></slot>
       </div>
+      <div part="secondary">
+        <slot name="secondary"></slot>
+      </div>
+    </div>
+    <div part="content">
+      <slot></slot>
     </div>
 
   </template>

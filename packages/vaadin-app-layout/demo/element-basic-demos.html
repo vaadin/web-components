@@ -7,23 +7,32 @@
     </style>
 
 
-    <h3>Basic example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example" iframe-src="/components/vaadin-app-layout/demo/iframe.html">
+    <h3>Basic Usage</h3>
+    <vaadin-demo-snippet id="element-basic-demos-sample-example" iframe-src="iframe-lumo-styled.html">
       <template preserve-content>
+        <style>
+          .content {
+            padding: 5px;
+          }
+
+          h3 {
+            text-align: center;
+          }
+        </style>
         <vaadin-app-layout>
           <iron-icon slot="branding" icon="vaadin:vaadin-h"></iron-icon>  
 
-          <vaadin-tabs slot="menu">
+          <vaadin-tabs slot="menu" theme="minimal">
             <vaadin-tab>Page 1</vaadin-tab>
             <vaadin-tab>Page 2</vaadin-tab>
             <vaadin-tab>Page 3</vaadin-tab>
             <vaadin-tab>Page 4</vaadin-tab>
           </vaadin-tabs>
-      
-          <h3>Page title</h3>
-          <p>
-            Page content
-          </p>
+          
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
         </vaadin-app-layout>
       </template>
       <script>
@@ -37,26 +46,35 @@
       </script>
     </vaadin-demo-snippet>
 
-    <h3>Mobile example</h3>
-    <vaadin-demo-snippet id="element-basic-demos-mobile-example" iframe-src="/components/vaadin-app-layout/demo/iframe.html">
+    <h3>Material Theme</h3>
+    <vaadin-demo-snippet id="element-basic-demos-material-example" iframe-src="iframe-material-styled.html">
       <template preserve-content>
+        <style>
+          .content {
+            padding: 5px;
+          }
+
+          h3 {
+            text-align: center;
+          }
+        </style>
         <vaadin-app-layout>
           <iron-icon slot="branding" icon="vaadin:vaadin-h"></iron-icon>
-          <div slot="menu">
-          <vaadin-tabs>
+          <vaadin-tabs slot="menu" >
             <vaadin-tab>Page 1</vaadin-tab>
             <vaadin-tab>Page 2</vaadin-tab>
             <vaadin-tab>Page 3</vaadin-tab>
             <vaadin-tab>Page 4</vaadin-tab>
           </vaadin-tabs>
-        </div>
-      
-          <h3>Page title</h3>
-          <p>Page content</p>
+
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
         </vaadin-app-layout>
       </template>
       <script>
-        window.addDemoReadyListener('#element-basic-demos-mobile-example', function(document) {
+        window.addDemoReadyListener('#element-basic-demos-material-example', function(document) {
           var renderer = document.querySelector('vaadin-demo-iframe-renderer');
           var frame = renderer.$.demo;
           frame.style.height = '600px';
