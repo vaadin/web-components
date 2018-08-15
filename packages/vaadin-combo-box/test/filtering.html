@@ -345,6 +345,27 @@
         comboBox = fixture('configured');
         expect(comboBox._focusedIndex).to.eql(1);
       });
+
+      it('should not notify resize the dropdown if not opened', () => {
+        const resizeSpy = sinon.spy(comboBox.$.overlay.$.dropdown, 'notifyResize');
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+
+        expect(resizeSpy).to.not.have.been.called;
+      });
+
+      it('should not re-position the overlay if not opened', () => {
+        const repositionSpy = sinon.spy(comboBox, '_repositionOverlay');
+        comboBox.filteredItems = ['foo', 'bar', 'baz'];
+
+        expect(repositionSpy).to.not.have.been.called;
+      });
+
+      it('should not perform measurements when loading changes if not opened', () => {
+        const measureSpy = sinon.spy(comboBox.inputElement, 'getBoundingClientRect');
+        comboBox.loading = true;
+
+        expect(measureSpy).to.not.have.been.called;
+      });
     });
 
     describe('setting items when opened', () => {

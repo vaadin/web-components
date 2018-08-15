@@ -141,10 +141,18 @@
       });
 
       it('should notify resize on items change', () => {
+        comboBox.opened = true;
         const spy = sinon.spy();
         comboBox.$.overlay.$.dropdown.notifyResize = spy;
         comboBox.items = [1, 2, 3];
         expect(spy.called).to.be.true;
+      });
+
+      it('should not notify resize when not opened', () => {
+        const spy = sinon.spy();
+        comboBox.$.overlay.$.dropdown.notifyResize = spy;
+        comboBox.items = [1, 2, 3];
+        expect(spy.called).to.be.false;
       });
 
       it('should reposition on scroll', () => {
