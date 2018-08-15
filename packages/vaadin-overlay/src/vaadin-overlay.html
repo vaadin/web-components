@@ -541,10 +541,17 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       /**
+       * Returns all attached overlays.
+       */
+      static get __attachedInstances() {
+        return Array.from(document.body.children).filter(el => el instanceof Vaadin.OverlayElement);
+      }
+
+      /**
        * returns true if this is the last one in the opened overlays stack
        */
       get _last() {
-        return this == Array.from(document.body.children).filter(e => e instanceof Vaadin.OverlayElement).pop();
+        return this === Vaadin.OverlayElement.__attachedInstances.pop();
       }
 
       _modelessChanged(modeless) {
@@ -569,6 +576,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this._previousDocumentPointerEvents = document.body.style.pointerEvents;
           document.body.style.pointerEvents = 'none';
         }
+
+        // Disable pointer events in other attached overlays
+        Vaadin.OverlayElement.__attachedInstances.forEach(el => {
+          if (el !== this) {
+            el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
+          }
+        });
       }
 
       _exitModalState() {
@@ -581,6 +595,21 @@ This program is available under Apache License Version 2.0, available at https:/
           // Restore body pointer-events
           document.body.style.pointerEvents = this._previousDocumentPointerEvents;
           delete this._previousDocumentPointerEvents;
+        }
+
+        // Restore pointer events in the previous overlay(s) in reverse order
+        const instances = Vaadin.OverlayElement.__attachedInstances.reverse();
+        let el;
+        while (el = instances.pop()) {
+          if (el === this) {
+            // Skip the current instance
+            continue;
+          }
+          el.shadowRoot.querySelector('[part="overlay"]').style.removeProperty('pointer-events');
+          if (!el.modeless) {
+            // Stop after the last modal
+            break;
+          }
         }
       }
 
