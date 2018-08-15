@@ -21,6 +21,16 @@ This program is available under Apache License Version 2.0, available at https:/
         --vaadin-form-layout-column-spacing: 2em; /* (default) */
       }
 
+      @keyframes vaadin-form-layout-appear {
+        to {
+          opacity: 1;
+        }
+      }
+
+      :host {
+        animation: 1ms vaadin-form-layout-appear;
+      }
+
       :host([hidden]) {
         display: none !important;
       }
@@ -271,6 +281,7 @@ This program is available under Apache License Version 2.0, available at https:/
           super.ready();
 
           this.addEventListener('iron-resize', this._selectResponsiveStep);
+          this.addEventListener('animationend', this.__onAnimationEnd);
         }
 
         connectedCallback() {
@@ -352,6 +363,12 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           this._selectResponsiveStep();
+        }
+
+        __onAnimationEnd(e) {
+          if (e.animationName.indexOf('vaadin-form-layout-appear') === 0) {
+            this._selectResponsiveStep();
+          }
         }
 
         _selectResponsiveStep() {

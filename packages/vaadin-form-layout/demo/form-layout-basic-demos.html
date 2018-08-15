@@ -85,6 +85,34 @@
       </template>
     </vaadin-demo-snippet>
 
+
+    <p>Responsive when un-hidding</p>
+    <vaadin-demo-snippet id='form-layout-basic-demos-hide-show'>
+      <template preserve-content>
+        <button>Show/Hide</button>
+        <div hidden>
+          <vaadin-form-layout id="form">
+            <h3>Column 1</h3>
+            <h3>Column 2</h3>
+          </vaadin-form-layout>
+        </div>
+        <script>
+        window.addDemoReadyListener('#form-layout-basic-demos-hide-show', function(document) {
+          const button = document.querySelector('button');
+          const elem = document.querySelector('div');
+          button.addEventListener('click', function(e) {
+            const hidden = elem.hasAttribute('hidden');
+            if (hidden) {
+              elem.removeAttribute('hidden');
+            } else {
+              elem.setAttribute('hidden', true);
+            }
+          });
+        });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class FormLayoutBasicDemos extends DemoReadyEventEmitter(FormLayoutDemo(Polymer.Element)) {
