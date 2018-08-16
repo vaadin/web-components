@@ -43,5 +43,8 @@
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
     "vaadin-grid": "vaadin/vaadin-grid#5.1.0-beta2"
+  },
+  "resolutions": {
+    "vaadin-element-mixin": "^2.0.0"
   }
 }

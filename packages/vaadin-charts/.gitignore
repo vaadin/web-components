@@ -1,6 +1,7 @@
-.DS_Store
 bower_components
 node_modules
-build
-.idea/
 package-lock.json
+yarn.lock
+build
+.DS_Store
+.idea/

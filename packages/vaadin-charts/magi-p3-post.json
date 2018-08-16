@@ -1,9 +1,0 @@
-{
-  "files": ["vaadin-chart*.js"],
-  "from": [
-    "import 'highcharts/es-modules/masters/highstock.src.js'",
-    "window.Highcharts"],
-  "to": [
-    "import Highcharts from 'highcharts/es-modules/masters/highstock.src.js'",
-    "Highcharts"]
-}

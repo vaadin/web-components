@@ -6,32 +6,17 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <title>vaadin-chart tests</title>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="test-suites.js"></script>
 </head>
 
 <body>
   <script>
-    WCT.loadSuites([
-      'chart-in-grid-test.html',
-      'custom-property-test.html',
-      'empty-chart-test.html',
-      'element-api-chart-test.html',
-      'element-api-chart-gauge-test.html',
-      'element-api-chart-series-dom-repeat-test.html',
-      'element-api-chart-series-test.html',
-      'element-api-chart-series-json-test.html',
-      'element-dom-api-test.html',
-      'element-height-test.html',
-      'element-events-test.html',
-      'exporting-test.html',
-      'js-api-chart-test.html',
-      'js-json-api-chart-test.html',
-      'js-private-api-chart-test.html',
-      'style-test.html',
-      'element-json-merge-test.html',
-      'theme-test.html'
-    ].reduce(function(suites, suite) {
-      return suites.concat([suite, `${suite}?wc-shadydom=true`]);
-    }, []));
+    WCT.loadSuites(
+      window.VaadinChartsSuites
+        .reduce(function(suites, suite) {
+          return suites.concat([suite, `${suite}?wc-shadydom=true`]);
+        }, [])
+    );
   </script>
 </body>
 
