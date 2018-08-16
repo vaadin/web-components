@@ -59,6 +59,11 @@
         transform: scale(0.75);
       }
 
+      :host([required]) [part="label"]::after {
+        content: " *";
+        color: inherit;
+      }
+
       :host([invalid]) [part="label"] {
         color: var(--material-error-text-color);
       }
