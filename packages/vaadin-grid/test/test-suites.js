@@ -10,7 +10,6 @@ window.VaadinGridSuites = [
   'column-resizing.html',
   'column.html',
   'data-provider.html',
-  'doctype.html',
   'dynamic-item-size.html',
   'filtering.html',
   'frozen-columns.html',
