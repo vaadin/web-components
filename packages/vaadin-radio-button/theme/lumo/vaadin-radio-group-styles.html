@@ -52,7 +52,26 @@
         box-sizing: border-box;
       }
 
-      :host([invalid]) [part="label"] {
+      :host([required]) [part="label"] {
+        padding-right: 1em;
+      }
+
+      [part="label"]::after {
+        content: var(--lumo-required-field-indicator, "•");
+        transition: opacity 0.2s;
+        opacity: 0;
+        color: var(--lumo-primary-text-color);
+        position: absolute;
+        right: 0;
+        width: 1em;
+        text-align: center;
+      }
+
+      :host([required]:not([has-value])) [part="label"]::after {
+        opacity: 1;
+      }
+
+      :host([invalid]) [part="label"]::after {
         color: var(--lumo-error-text-color);
       }
 
