@@ -20,10 +20,27 @@
     describe('sample test', function() {
       var element, ccWindow;
 
-      beforeEach(function() {
+      beforeEach(function(done) {
+        // delete the cookie so that the popup opens every time as in the first time
+        document.cookie =
+          'basictestcookie=; ' +
+          'path=/; ' +
+          `domain=${window.location.hostname}; ` +
+          'expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
         element = fixture('default');
-        expect(element).to.be.defined;
-        ccWindow = document.querySelector('.cc-window');
+
+        // Some test browsers do not support cookies (iOS 9)
+        // For those trigger the popup explicitly.
+        element._show();
+
+        // By default the cookie consent dialog has a 20 ms delay after it
+        // is initialized and before it starts the fade-in animation. The
+        // fade-in animation by default takes another 1 second.
+        setTimeout(() => {
+          ccWindow = document.querySelector('.cc-window');
+          done();
+        }, 100);
       });
 
       it('should be in the DOM by default', function() {
@@ -31,8 +48,57 @@
       });
 
       it('should be visible by default', function() {
-        expect(getComputedStyle(ccWindow).display).to.be.equal('flex');
+        expect(ccWindow.classList.contains('cc-invisible')).to.be.false;
+        expect(getComputedStyle(ccWindow).opacity).to.be.greaterThan(0);
       });
+
+      it('should be closable with keyboard', function(done) {
+        const event = createSpaceKeydownEvent();
+        if (!event) {
+          // skip the test if cannot reliably create a synthetic keyboard event
+          this.skip();
+        }
+
+        ccWindow.querySelector('.cc-dismiss').dispatchEvent(event);
+
+        setTimeout(() => {
+          expect(ccWindow.classList.contains('cc-invisible')).to.be.true;
+          expect(getComputedStyle(ccWindow).opacity).to.be.lessThan(1);
+          done();
+        }, 100);
+      });
+
+      function createSpaceKeydownEvent() {
+        let event;
+        if (typeof KeyboardEvent === 'function') {
+          event = new KeyboardEvent('keydown', {
+            code: 'Space',
+            key: ' ',
+            keyCode: 32,
+            which: 32,
+          });
+        } else {
+          // IE 11
+          event = document.createEvent('KeyboardEvent');
+          event.initKeyboardEvent(
+            'keydown', // eventType
+            true, // canBubble
+            true, // cancelable
+            window, // viewArg
+            'Spacebar', // keyArg
+            0, // locationArg
+            '', // modifiersListArg
+            false, // repeat
+            undefined // locale
+          );
+        }
+
+        // Return an event object only if vaild.
+        // Otherwise the test using it should be skipped.
+        if (event.keyCode === 32 || event.which === 32) {
+          return event;
+        }
+      }
 
     });
   </script>

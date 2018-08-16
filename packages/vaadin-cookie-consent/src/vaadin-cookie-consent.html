@@ -156,6 +156,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
             popup.setAttribute('role', 'alert');
           }
 
+          // In order to make an `<a>` element act as a button, setting
+          // `role="button"` is not enough: https://developer.mozilla.org/en-US
+          // /docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_button_role
+          const dismissButton = popup.querySelector('a.cc-btn');
+          dismissButton.addEventListener('keydown', (event) => {
+            const SPACE = 32;
+            const ENTER = 13;
+            const key = event.keyCode || event.which;
+            if (key === SPACE || key === ENTER) {
+              dismissButton.click();
+            }
+          });
         }
 
         /**
