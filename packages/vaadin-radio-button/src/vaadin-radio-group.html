@@ -206,7 +206,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('role', 'radiogroup');
 
-          this.addEventListener('focusout', e => this.validate());
+          // Need to check e.composed as a workaround for https://bugzilla.mozilla.org/show_bug.cgi?id=1472887
+          // otherwise FF runs validation on keyboard focus
+          this.addEventListener('focusout', e => e.composed && this.validate());
 
           const uniqueId = RadioGroupElement._uniqueId = 1 + RadioGroupElement._uniqueId || 0;
           this._errorId = `${this.constructor.is}-error-${uniqueId}`;
