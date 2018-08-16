@@ -473,7 +473,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setPosition() {
-          const inputRect = this.focusElement.getBoundingClientRect();
+          const inputRect = this._inputElement.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
           const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
           const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
 
