@@ -61,5 +61,8 @@
     "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles",
     "iron-icons": "polymerelements/iron-icons#^2.0.1",
     "mock-http-request": "abuinitski/MockHttpRequest#npm_fix"
+  },
+  "resolutions": {
+    "vaadin-element-mixin": "^2.0.0"
   }
 }
