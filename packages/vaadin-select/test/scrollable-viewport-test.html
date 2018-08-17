@@ -16,16 +16,17 @@
   <test-fixture id="dropdown">
     <style>
       #scrollable-container {
-        width: 300px;
-        height: 300px;
-        overflow: scroll;
+        height: 100%;
+        overflow: auto;
+        padding-left: 50px;
+        padding-top: 50px;
       }
 
       #container {
-        height: 400px;
-        width: 400px;
+        height: 150%;
         padding-left: 50px;
         padding-top: 50px;
+        box-sizing: border-box;
       }
     </style>
     <template>
@@ -50,41 +51,62 @@
       MockInteractions.keyDownOn(target, 13, [], 'Enter');
     }
 
+    function scrollContainer(container, value, scrollLeft) {
+      if (scrollLeft) {
+        container.scrollLeft = scrollLeft;
+      }
+      container.scrollTop = value;
+      window.dispatchEvent(new CustomEvent('scroll', {bubbles: true}));
+    }
+
     describe('scrollable-viewport', () => {
-      var scrollableContainer, container, dropdown, input;
+      var scrollableContainer, container, dropdown, input, inputFieldBlock;
 
       beforeEach(done => {
         scrollableContainer = fixture('dropdown');
-        container = scrollableContainer.querySelector('[id="container"]');
+        container = scrollableContainer.querySelector('#container');
         dropdown = container.querySelector('vaadin-dropdown-menu');
+
+        // Input without label and indents
         input = dropdown._inputElement;
+        inputFieldBlock = input.shadowRoot.querySelector('[part~="input-field"]');
+
+        const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+        // Position the input in the lower part of the viewport
+        container.style.paddingTop = viewportHeight / 2 + 'px';
+        scrollableContainer.scrollTop = 0;
+
         flush(done);
+      });
+
+      it('should toggle bottom-aligned attribute dependening on the part of the viewport', () => {
+        Enter(input);
+        expect(dropdown._overlayElement.hasAttribute('bottom-aligned')).to.be.true;
+        scrollContainer(scrollableContainer, 150);
+        expect(dropdown._overlayElement.hasAttribute('bottom-aligned')).to.be.false;
       });
 
       it('should update the position on scrolling', () => {
         Enter(input);
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
-        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
+        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
 
-        scrollableContainer.scrollTop = 40;
-        scrollableContainer.scrollLeft = 40;
+        scrollContainer(scrollableContainer, 40, 40);
 
-        window.dispatchEvent(new CustomEvent('scroll', {bubbles: true}));
-
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
-        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
+        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
       });
 
       it('should update the position on iron-resize event', () => {
         Enter(input);
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
-        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+        expect(dropdown._overlayElement.getBoundingClientRect().bottom).to.be.equal(inputFieldBlock.getBoundingClientRect().bottom);
+        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
 
         container.style.paddingTop = '200px';
         dropdown.dispatchEvent(new CustomEvent('iron-resize', {bubbles: true}));
 
-        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
-        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+        expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(inputFieldBlock.getBoundingClientRect().top);
+        expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
       });
     });
   </script>

@@ -473,11 +473,20 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _setPosition() {
-          const inputRect = this.focusElement.getBoundingClientRect();
+          const inputRect = this._inputElement.shadowRoot.querySelector('[part~="input-field"]').getBoundingClientRect();
+          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
+          const bottomAlign = inputRect.top > (viewportHeight - inputRect.height) / 2;
 
           this._overlayElement.style.left = inputRect.left + 'px';
-          this._overlayElement.style.top = (inputRect.top <= window.innerHeight - inputRect.top ? inputRect.top :
-            this._overlayElement.style.top = inputRect.bottom - this._overlayElement.$.overlay.offsetHeight) + 'px';
+          if (bottomAlign) {
+            this._overlayElement.setAttribute('bottom-aligned', '');
+            this._overlayElement.style.removeProperty('top');
+            this._overlayElement.style.bottom = (viewportHeight - inputRect.bottom) + 'px';
+          } else {
+            this._overlayElement.removeAttribute('bottom-aligned');
+            this._overlayElement.style.removeProperty('bottom');
+            this._overlayElement.style.top = inputRect.top + 'px';
+          }
 
           this._overlayElement.updateStyles({'--vaadin-dropdown-menu-text-field-width': inputRect.width + 'px'});
         }

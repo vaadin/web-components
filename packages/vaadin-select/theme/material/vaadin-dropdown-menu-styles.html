@@ -59,6 +59,10 @@
 <dom-module id="material-dropdown-menu-overlay" theme-for="vaadin-dropdown-menu-overlay">
   <template>
     <style include="material-menu-overlay">
+      :host([bottom-aligned]) {
+        justify-content: flex-end;
+      }
+
       [part="overlay"] {
         min-width: var(--vaadin-dropdown-menu-text-field-width);
       }

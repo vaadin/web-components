@@ -450,9 +450,10 @@
         });
 
         it('should open the overlay on top left corner by default on input click', () => {
+          const inputFieldBlock = input.shadowRoot.querySelector('[part~="input-field"]');
           Enter(input);
-          expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(input.getBoundingClientRect().top);
-          expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(input.getBoundingClientRect().left);
+          expect(dropdown._overlayElement.getBoundingClientRect().top).to.be.equal(inputFieldBlock.getBoundingClientRect().top);
+          expect(dropdown._overlayElement.getBoundingClientRect().left).to.be.equal(inputFieldBlock.getBoundingClientRect().left);
         });
 
         it('should store the text-field width in the custom CSS property on overlay opening', () => {
