@@ -127,6 +127,10 @@
         MockInteractions.keyUpOn(vaadinRadioButton, 32);
         expect(vaadinRadioButton.hasAttribute('active')).to.be.false;
       });
+
+      it('should have input as focusElement', () => {
+        expect(vaadinRadioButton.focusElement).to.be.eql(nativeRadio);
+      });
     });
 
     describe('iron-form-radio-button', () => {
