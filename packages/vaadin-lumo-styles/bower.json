@@ -64,5 +64,8 @@
     "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta2",
     "elements-demo-resources": "vaadin/elements-demo-resources#new-menu-and-styles",
     "iron-ajax": "^2.1.0"
+  },
+  "resolutions": {
+    "vaadin-element-mixin": "^2.0.0"
   }
 }
