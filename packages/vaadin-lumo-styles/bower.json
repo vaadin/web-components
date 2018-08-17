@@ -66,6 +66,8 @@
     "iron-ajax": "^2.1.0"
   },
   "resolutions": {
-    "vaadin-element-mixin": "^2.0.0"
+    "vaadin-element-mixin": "^2.0.0",
+    "vaadin-development-mode-detector": "^2.0.0",
+    "vaadin-usage-statistics": "^2.0.1"
   }
 }
