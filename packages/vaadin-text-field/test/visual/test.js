@@ -52,6 +52,13 @@ gemini.suite('vaadin-text-field', function(rootSuite) {
         .capture('password-field');
     });
 
+    gemini.suite('text-field-integration-${theme}', function(suite) {
+      suite
+        .setUrl('vaadin-text-field/integration.html')
+        .setCaptureElements('#integration')
+        .capture('integration');
+    });
+
     gemini.suite(`password-field-rtl-${theme}`, function(suite) {
       suite
         .setUrl(`vaadin-password-field/rtl.html?theme=${theme}`)
