@@ -13,68 +13,39 @@ gemini.suite('vaadin-checkbox', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
-  // Lumo theme
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default-tests')
-      .capture('default')
-      .capture('focus-ring', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('vaadin-checkbox').setAttribute('focus-ring', '');
+
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default')
+        .capture('focus-ring', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('vaadin-checkbox').setAttribute('focus-ring', '');
+          });
+        })
+        .capture('checked', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('vaadin-checkbox').checked = true;
+          });
         });
-      })
-      .capture('checked', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('vaadin-checkbox').checked = true;
-        });
-      });
-  });
+    });
 
-  gemini.suite('group-tests', (suite) => {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#group-tests')
-      .capture('default');
-  });
+    gemini.suite(`group-tests-${theme}`, (suite) => {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#group-tests')
+        .capture('default');
+    });
 
-  gemini.suite('validation-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#validation-tests')
-      .capture('error');
-  });
+    gemini.suite(`validation-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#validation-tests')
+        .capture('error');
+    });
 
-  // Material theme
-  gemini.suite('material-default-tests', function(suite) {
-    suite
-      .setUrl('material.html')
-      .setCaptureElements('#default-tests')
-      .capture('default')
-      .capture('focus-ring', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('vaadin-checkbox').setAttribute('focus-ring', '');
-        });
-      })
-      .capture('checked', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('vaadin-checkbox').checked = true;
-        });
-      });
-  });
-
-  gemini.suite('material-group-tests', (suite) => {
-    suite
-      .setUrl('material.html')
-      .setCaptureElements('#group-tests')
-      .capture('default');
-  });
-
-  gemini.suite('material-validation-tests', function(suite) {
-    suite
-      .setUrl('material.html')
-      .setCaptureElements('#validation-tests')
-      .capture('error');
   });
 
 });
