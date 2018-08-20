@@ -14,20 +14,13 @@ gemini.suite('vaadin-dropdown-menu', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  // Lumo theme
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('dropdown-menu.html')
-      .setCaptureElements('#dropdown-menu')
-      .capture('dropdown-menu');
-  });
-
-  // Material theme
-  gemini.suite('material-default-tests', function(suite) {
-    suite
-      .setUrl('dropdown-menu.html')
-      .setCaptureElements('#dropdown-menu')
-      .capture('dropdown-menu');
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`dropdown-menu.html?theme=${theme}`)
+        .setCaptureElements('#dropdown-menu')
+        .capture('dropdown-menu');
+    });
   });
 
 });
