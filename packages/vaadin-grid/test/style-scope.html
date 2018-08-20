@@ -102,8 +102,16 @@
         let wrapper;
         let content;
         let slider;
+        let interval;
+        const clearTestInterval = () => {
+          if (interval) {
+            clearInterval(interval);
+            interval = undefined;
+          }
+        };
 
         beforeEach(() => {
+          clearTestInterval();
           component = fixture('default');
 
           flushGrid(component.$.grid);
@@ -114,8 +122,15 @@
           slider = component.$$('paper-slider');
         });
 
-        it('should target cell content', () => {
-          expect(window.getComputedStyle(wrapper).color).to.equal('rgb(0, 255, 0)');
+        it('should target cell content', done => {
+          // Timing this test on P3 + iOS 9 Safari is too difficult.
+          // Let's wait for the condition and let the test timeout if it's never met instead.
+          interval = setInterval(() => {
+            if (window.getComputedStyle(wrapper).color === 'rgb(0, 255, 0)') {
+              clearTestInterval();
+              done();
+            }
+          }, 1);
         });
 
         it('should target cell wrapper', () => {
