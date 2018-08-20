@@ -34,8 +34,8 @@
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-meta": "^2.0.0",
-    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
-    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.0-beta2"
+    "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.2",
+    "vaadin-text-field": "vaadin/vaadin-text-field#^2.1.1"
   },
   "variants": {
     "1.x": {
