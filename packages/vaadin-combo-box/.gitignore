@@ -4,4 +4,4 @@ bower-*.json
 package-lock.json
 yarn.lock
 coverage
-
+analysis.json

@@ -14,34 +14,36 @@ gemini.suite('vaadin-combo-box', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default-tests')
-      .capture('default');
-  });
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default');
+    });
 
-  gemini.suite('icons', function(suite) {
-    suite
-      .setUrl('icons.html')
-      .setCaptureElements('#icons-tests')
-      .capture('default');
-  });
+    gemini.suite(`icons-${theme}`, function(suite) {
+      suite
+        .setUrl(`icons.html?theme=${theme}`)
+        .setCaptureElements('#icons-tests')
+        .capture('default');
+    });
 
-  gemini.suite('dropdown', function(suite) {
-    suite
-      .setUrl('dropdown.html')
-      .setCaptureElements('#dropdown-tests')
-      .capture('default', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('#plain').open();
+    gemini.suite(`dropdown-${theme}`, function(suite) {
+      suite
+        .setUrl(`dropdown.html?theme=${theme}`)
+        .setCaptureElements('#dropdown-tests')
+        .capture('default', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('#plain').open();
+          });
+        })
+        .capture('template', function(actions) {
+          actions.executeJS(function(window) {
+            window.document.querySelector('#template').open();
+          });
         });
-      })
-      .capture('template', function(actions) {
-        actions.executeJS(function(window) {
-          window.document.querySelector('#template').open();
-        });
-      });
+    });
   });
 
 });
