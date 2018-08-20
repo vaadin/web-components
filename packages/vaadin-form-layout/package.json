@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-form-layout",
-  "version": "2.1.0-beta2",
+  "version": "2.1.0",
   "description": "Polymer element providing configurable responsive layout for form elements",
   "main": "vaadin-form-layout.html",
   "repository": "vaadin/vaadin-form-layout",
