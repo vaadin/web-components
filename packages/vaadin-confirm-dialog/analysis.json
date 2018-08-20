@@ -8,17 +8,17 @@
       "sourceRange": {
         "file": "src/vaadin-confirm-dialog.html",
         "start": {
-          "line": 227,
+          "line": 263,
           "column": 6
         },
         "end": {
-          "line": 227,
+          "line": 263,
           "column": 64
         }
       },
       "elements": [
         {
-          "description": "`<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.\n\n```\n<vaadin-confirm-dialog on-confirm=\"_doConfirm\">\n Sample confirmation question\n</vaadin-confirm-dialog>\n```",
+          "description": "`<vaadin-confirm-dialog>` is a Web Component for showing alerts and asking for user confirmation.\n\n```\n<vaadin-confirm-dialog on-confirm=\"_doConfirm\">\n Sample confirmation question\n</vaadin-confirm-dialog>\n```\n\n### Styling\n\nThe following Shadow DOM parts are available for styling the dialog parts:\n\nPart name  | Description\n-----------|---------------------------------------------------------|\n`header`   | Header of the confirmation dialog\n`message`  | Container for the message of the dialog\n`footer`   | Container for the buttons\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)\n\n### Custom content\n\nThe following parts are available for replacement:\n\nSlot name         | Description\n------------------|---------------------------------------------------------|\n`header`          | Header of the confirmation dialog\n`message`         | Container for the message of the dialog\n`cancel-button`   | Container for the Cancel button\n`reject-button`   | Container for the Reject button\n`confirm-button`  | Container for the Confirm button\n\nSee examples of setting custom buttons into slots in the live demos.",
           "summary": "",
           "path": "src/vaadin-confirm-dialog.html",
           "properties": [
@@ -29,11 +29,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 129,
                   "column": 13
                 }
               },
@@ -53,11 +53,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 133,
                   "column": 12
                 },
                 "end": {
-                  "line": 104,
+                  "line": 136,
                   "column": 13
                 }
               },
@@ -65,7 +65,8 @@
                 "polymer": {
                   "attributeType": "String"
                 }
-              }
+              },
+              "defaultValue": "\"\""
             },
             {
               "name": "message",
@@ -74,11 +75,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 110,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -95,11 +96,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 114,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -117,11 +118,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -139,11 +140,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 160,
                   "column": 12
                 },
                 "end": {
-                  "line": 133,
+                  "line": 165,
                   "column": 13
                 }
               },
@@ -162,11 +163,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -184,11 +185,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 176,
                   "column": 12
                 },
                 "end": {
-                  "line": 147,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -206,11 +207,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 151,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 188,
                   "column": 13
                 }
               },
@@ -229,11 +230,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 160,
+                  "line": 192,
                   "column": 12
                 },
                 "end": {
-                  "line": 163,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -251,11 +252,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 167,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 170,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -274,11 +275,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 174,
+                  "line": 206,
                   "column": 8
                 },
                 "end": {
-                  "line": 177,
+                  "line": 209,
                   "column": 9
                 }
               },
@@ -294,11 +295,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 179,
+                  "line": 211,
                   "column": 8
                 },
                 "end": {
-                  "line": 184,
+                  "line": 216,
                   "column": 9
                 }
               },
@@ -314,11 +315,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 186,
+                  "line": 218,
                   "column": 8
                 },
                 "end": {
-                  "line": 192,
+                  "line": 224,
                   "column": 9
                 }
               },
@@ -338,11 +339,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 198,
+                  "line": 230,
                   "column": 8
                 },
                 "end": {
-                  "line": 201,
+                  "line": 233,
                   "column": 9
                 }
               },
@@ -358,11 +359,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 207,
+                  "line": 239,
                   "column": 8
                 },
                 "end": {
-                  "line": 210,
+                  "line": 242,
                   "column": 9
                 }
               },
@@ -378,11 +379,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 216,
+                  "line": 248,
                   "column": 8
                 },
                 "end": {
-                  "line": 219,
+                  "line": 251,
                   "column": 9
                 }
               },
@@ -391,6 +392,27 @@
               "return": {
                 "type": "void"
               }
+            },
+            {
+              "name": "_getAriaLabel",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 253,
+                  "column": 8
+                },
+                "end": {
+                  "line": 255,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "header"
+                }
+              ]
             }
           ],
           "staticMethods": [
@@ -481,11 +503,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 80,
+              "line": 111,
               "column": 6
             },
             "end": {
-              "line": 220,
+              "line": 256,
               "column": 7
             }
           },
@@ -498,11 +520,11 @@
               "description": "True if the overlay is currently displayed.",
               "sourceRange": {
                 "start": {
-                  "line": 93,
+                  "line": 124,
                   "column": 12
                 },
                 "end": {
-                  "line": 98,
+                  "line": 129,
                   "column": 13
                 }
               },
@@ -514,11 +536,11 @@
               "description": "Set the confirmation dialog title.",
               "sourceRange": {
                 "start": {
-                  "line": 102,
+                  "line": 133,
                   "column": 12
                 },
                 "end": {
-                  "line": 104,
+                  "line": 136,
                   "column": 13
                 }
               },
@@ -530,11 +552,11 @@
               "description": "Set the message or confirmation question.",
               "sourceRange": {
                 "start": {
-                  "line": 108,
+                  "line": 140,
                   "column": 12
                 },
                 "end": {
-                  "line": 110,
+                  "line": 142,
                   "column": 13
                 }
               },
@@ -546,11 +568,11 @@
               "description": "Text displayed on confirm-button.",
               "sourceRange": {
                 "start": {
-                  "line": 114,
+                  "line": 146,
                   "column": 12
                 },
                 "end": {
-                  "line": 117,
+                  "line": 149,
                   "column": 13
                 }
               },
@@ -562,11 +584,11 @@
               "description": "Theme for a confirm-button.",
               "sourceRange": {
                 "start": {
-                  "line": 121,
+                  "line": 153,
                   "column": 12
                 },
                 "end": {
-                  "line": 124,
+                  "line": 156,
                   "column": 13
                 }
               },
@@ -578,11 +600,11 @@
               "description": "Whether to show cancel button or not.",
               "sourceRange": {
                 "start": {
-                  "line": 128,
+                  "line": 160,
                   "column": 12
                 },
                 "end": {
-                  "line": 133,
+                  "line": 165,
                   "column": 13
                 }
               },
@@ -594,11 +616,11 @@
               "description": "Text displayed on reject-button.",
               "sourceRange": {
                 "start": {
-                  "line": 137,
+                  "line": 169,
                   "column": 12
                 },
                 "end": {
-                  "line": 140,
+                  "line": 172,
                   "column": 13
                 }
               },
@@ -610,11 +632,11 @@
               "description": "Theme for a reject-button.",
               "sourceRange": {
                 "start": {
-                  "line": 144,
+                  "line": 176,
                   "column": 12
                 },
                 "end": {
-                  "line": 147,
+                  "line": 179,
                   "column": 13
                 }
               },
@@ -626,11 +648,11 @@
               "description": "Whether to show cancel button or not.",
               "sourceRange": {
                 "start": {
-                  "line": 151,
+                  "line": 183,
                   "column": 12
                 },
                 "end": {
-                  "line": 156,
+                  "line": 188,
                   "column": 13
                 }
               },
@@ -642,11 +664,11 @@
               "description": "Text displayed on cancel-button.",
               "sourceRange": {
                 "start": {
-                  "line": 160,
+                  "line": 192,
                   "column": 12
                 },
                 "end": {
-                  "line": 163,
+                  "line": 195,
                   "column": 13
                 }
               },
@@ -658,11 +680,11 @@
               "description": "Theme for a cancel-button.",
               "sourceRange": {
                 "start": {
-                  "line": 167,
+                  "line": 199,
                   "column": 12
                 },
                 "end": {
-                  "line": 170,
+                  "line": 202,
                   "column": 13
                 }
               },
@@ -718,11 +740,11 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 59,
+                  "line": 64,
                   "column": 6
                 },
                 "end": {
-                  "line": 59,
+                  "line": 64,
                   "column": 19
                 }
               }

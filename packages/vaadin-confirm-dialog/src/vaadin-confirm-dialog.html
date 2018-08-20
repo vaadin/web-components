@@ -78,6 +78,32 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * </vaadin-confirm-dialog>
        * ```
        *
+       * ### Styling
+       *
+       * The following Shadow DOM parts are available for styling the dialog parts:
+       *
+       * Part name  | Description
+       * -----------|---------------------------------------------------------|
+       * `header`   | Header of the confirmation dialog
+       * `message`  | Container for the message of the dialog
+       * `footer`   | Container for the buttons
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * ### Custom content
+       *
+       * The following parts are available for replacement:
+       *
+       * Slot name         | Description
+       * ------------------|---------------------------------------------------------|
+       * `header`          | Header of the confirmation dialog
+       * `message`         | Container for the message of the dialog
+       * `cancel-button`   | Container for the Cancel button
+       * `reject-button`   | Container for the Reject button
+       * `confirm-button`  | Container for the Confirm button
+       *
+       * See examples of setting custom buttons into slots in the live demos.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
