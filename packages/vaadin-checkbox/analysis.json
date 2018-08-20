@@ -1,0 +1,1610 @@
+{
+  "schema_version": "1.0.0",
+  "namespaces": [
+    {
+      "name": "Vaadin",
+      "description": "",
+      "summary": "",
+      "sourceRange": {
+        "file": "src/vaadin-checkbox-group.html",
+        "start": {
+          "line": 286,
+          "column": 6
+        },
+        "end": {
+          "line": 286,
+          "column": 42
+        }
+      },
+      "elements": [
+        {
+          "description": "`<vaadin-checkbox>` is a Web Component for customized checkboxes.\n\n```html\n<vaadin-checkbox>\n  Make my profile visible\n</vaadin-checkbox>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name         | Description\n------------------|----------------\n`checkbox`        | The checkbox element\n`label`           | The label content element\n\nThe following state attributes are available for styling:\n\nAttribute    | Description | Part name\n-------------|-------------|--------------\n`active`     | Set when the checkbox is pressed down, either with mouse, touch or the keyboard. | `:host`\n`disabled`   | Set when the checkbox is disabled. | `:host`\n`focus-ring` | Set when the checkbox is focused using the keyboard. | `:host`\n`focused`    | Set when the checkbox is focused. | `:host`\n`indeterminate` | Set when the checkbox is in indeterminate mode. | `:host`\n`checked` | Set when the checkbox is checked. | `:host`\n`empty` | Set when there is no label provided. | `label`\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "summary": "",
+          "path": "src/vaadin-checkbox.html",
+          "properties": [
+            {
+              "name": "focusElement",
+              "type": "?",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 254,
+                  "column": 8
+                },
+                "end": {
+                  "line": 256,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
+              "name": "autofocus",
+              "type": "boolean | null | undefined",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 8
+                },
+                "end": {
+                  "line": 57,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_previousTabIndex",
+              "type": "number | null | undefined",
+              "description": "Stores the previous value of tabindex attribute of the disabled element",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 62,
+                  "column": 8
+                },
+                "end": {
+                  "line": 64,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Number"
+                }
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "disabled",
+              "type": "boolean | null | undefined",
+              "description": "If true, the user cannot interact with this element.",
+              "privacy": "public",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 69,
+                  "column": 8
+                },
+                "end": {
+                  "line": 73,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
+                }
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_isShiftTabbing",
+              "type": "boolean | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 75,
+                  "column": 8
+                },
+                "end": {
+                  "line": 77,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "name",
+              "type": "?",
+              "description": "",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 166,
+                  "column": 8
+                },
+                "end": {
+                  "line": 168,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": false
+                }
+              }
+            },
+            {
+              "name": "checked",
+              "type": "boolean | null | undefined",
+              "description": "True if the checkbox is checked.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 124,
+                  "column": 12
+                },
+                "end": {
+                  "line": 130,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_checkedChanged\"",
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            },
+            {
+              "name": "indeterminate",
+              "type": "boolean | null | undefined",
+              "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 141,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "observer": "\"_indeterminateChanged\"",
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "value",
+              "type": "string | null | undefined",
+              "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 146,
+                  "column": 12
+                },
+                "end": {
+                  "line": 149,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"on\""
+            },
+            {
+              "name": "_nativeCheckbox",
+              "type": "Object | null | undefined",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 151,
+                  "column": 12
+                },
+                "end": {
+                  "line": 153,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Object"
+                }
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 174,
+                  "column": 8
+                },
+                "end": {
+                  "line": 194,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "connectedCallback",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 137,
+                  "column": 4
+                },
+                "end": {
+                  "line": 142,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "disconnectedCallback",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 147,
+                  "column": 4
+                },
+                "end": {
+                  "line": 158,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_setFocused",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 160,
+                  "column": 4
+                },
+                "end": {
+                  "line": 174,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "focused"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_bodyKeydownListener",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 176,
+                  "column": 4
+                },
+                "end": {
+                  "line": 178,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_bodyKeyupListener",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 180,
+                  "column": 4
+                },
+                "end": {
+                  "line": 182,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_focus",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 193,
+                  "column": 4
+                },
+                "end": {
+                  "line": 200,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "focus",
+              "description": "Moving the focus from the host element causes firing of the blur event what leads to problems in IE.",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 206,
+                  "column": 4
+                },
+                "end": {
+                  "line": 213,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "blur",
+              "description": "Native bluring in the host element does nothing because it does not have the focus.\nIn chrome it works, but not in FF.",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 220,
+                  "column": 4
+                },
+                "end": {
+                  "line": 223,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_disabledChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 225,
+                  "column": 4
+                },
+                "end": {
+                  "line": 238,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "disabled"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_tabindexChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 240,
+                  "column": 4
+                },
+                "end": {
+                  "line": 256,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "tabindex"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "_addEventListenerToNode",
+              "description": "Add the event listener to the node if it is a gestures event.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 55,
+                  "column": 6
+                },
+                "end": {
+                  "line": 59,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "!Node",
+                  "description": "Node to add event listener to"
+                },
+                {
+                  "name": "eventName",
+                  "type": "string",
+                  "description": "Name of event"
+                },
+                {
+                  "name": "handler",
+                  "type": "function (!Event): void",
+                  "description": "Listener function to add"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
+              "name": "_removeEventListenerFromNode",
+              "description": "Remove the event listener to the node if it is a gestures event.",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../polymer/lib/mixins/gesture-event-listeners.html",
+                "start": {
+                  "line": 69,
+                  "column": 6
+                },
+                "end": {
+                  "line": 73,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "node",
+                  "type": "!Node",
+                  "description": "Node to remove event listener from"
+                },
+                {
+                  "name": "eventName",
+                  "type": "string",
+                  "description": "Name of event"
+                },
+                {
+                  "name": "handler",
+                  "type": "function (!Event): void",
+                  "description": "Listener function to remove"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Polymer.GestureEventListeners"
+            },
+            {
+              "name": "_updateLabelAttribute",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 196,
+                  "column": 8
+                },
+                "end": {
+                  "line": 203,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_checkedChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 205,
+                  "column": 8
+                },
+                "end": {
+                  "line": 211,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "checked"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_indeterminateChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 213,
+                  "column": 8
+                },
+                "end": {
+                  "line": 219,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "indeterminate"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_addActiveListeners",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 221,
+                  "column": 8
+                },
+                "end": {
+                  "line": 252,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "__interactionsAllowed",
+              "description": "True if users' interactions (mouse or keyboard)\nshould toggle the checkbox",
+              "privacy": "private",
+              "sourceRange": {
+                "start": {
+                  "line": 262,
+                  "column": 8
+                },
+                "end": {
+                  "line": 273,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "name": "_handleClick",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 275,
+                  "column": 8
+                },
+                "end": {
+                  "line": 292,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "e"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_toggleChecked",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 294,
+                  "column": 8
+                },
+                "end": {
+                  "line": 297,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            }
+          ],
+          "staticMethods": [
+            {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 4
+                },
+                "end": {
+                  "line": 67,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                },
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 105,
+              "column": 6
+            },
+            "end": {
+              "line": 304,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.CheckboxElement",
+          "attributes": [
+            {
+              "name": "autofocus",
+              "description": "Specify that this control should have input focus when the page loads.",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 55,
+                  "column": 8
+                },
+                "end": {
+                  "line": 57,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "disabled",
+              "description": "If true, the user cannot interact with this element.",
+              "sourceRange": {
+                "file": "../../vaadin-control-state-mixin/vaadin-control-state-mixin.html",
+                "start": {
+                  "line": 69,
+                  "column": 8
+                },
+                "end": {
+                  "line": 73,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined",
+              "inheritedFrom": "Vaadin.ControlStateMixin"
+            },
+            {
+              "name": "checked",
+              "description": "True if the checkbox is checked.",
+              "sourceRange": {
+                "start": {
+                  "line": 124,
+                  "column": 12
+                },
+                "end": {
+                  "line": 130,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "indeterminate",
+              "description": "Indeterminate state of the checkbox when it's neither checked nor unchecked, but undetermined.\nhttps://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/checkbox#Indeterminate_state_checkboxes",
+              "sourceRange": {
+                "start": {
+                  "line": 136,
+                  "column": 12
+                },
+                "end": {
+                  "line": 141,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "value",
+              "description": "The value given to the data submitted with the checkbox's name to the server when the control is inside a form.",
+              "sourceRange": {
+                "start": {
+                  "line": 146,
+                  "column": 12
+                },
+                "end": {
+                  "line": 149,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            }
+          ],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "change",
+              "description": "Fired when the user commits a value change.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "checked-changed",
+              "description": "Fired when the `checked` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "indeterminate-changed",
+              "description": "Fired when the `indeterminate` property changes.",
+              "metadata": {}
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "start": {
+                  "line": 67,
+                  "column": 8
+                },
+                "end": {
+                  "line": 67,
+                  "column": 21
+                }
+              }
+            }
+          ],
+          "tagname": "vaadin-checkbox",
+          "mixins": [
+            "Vaadin.ElementMixin",
+            "Vaadin.ControlStateMixin",
+            "Vaadin.ThemableMixin",
+            "Polymer.GestureEventListeners"
+          ]
+        },
+        {
+          "description": "`<vaadin-checkbox-group>` is a Polymer element for grouping vaadin-checkboxes.\n\n```html\n<vaadin-checkbox-group label=\"Preferred language of contact:\">\n <vaadin-checkbox value=\"en\">English</vaadin-checkbox>\n <vaadin-checkbox value=\"fr\">Français</vaadin-checkbox>\n <vaadin-checkbox value=\"de\">Deutsch</vaadin-checkbox>\n</vaadin-checkbox-group>\n```\n\n### Styling\n\nThe following shadow DOM parts are available for styling:\n\nPart name | Description\n----------------|----------------\n`label` | The label element\n`group-field` | The element that wraps checkboxes\n`error-message` | The error message element\n\nThe following state attributes are available for styling:\n\nAttribute  | Description | Part name\n-----------|-------------|------------\n`disabled`   | Set when the checkbox group and its children are disabled. | :host\n`has-label` | Set when the element has a label | :host\n`required` | Set when the element is required | :host\n`invalid` | Set when the element is invalid | :host\n\nSee [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)",
+          "summary": "",
+          "path": "src/vaadin-checkbox-group.html",
+          "properties": [
+            {
+              "name": "_checkboxes",
+              "type": "?",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 211,
+                  "column": 8
+                },
+                "end": {
+                  "line": 213,
+                  "column": 9
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "readOnly": true
+                }
+              }
+            },
+            {
+              "name": "disabled",
+              "type": "boolean | null | undefined",
+              "description": "The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 103,
+                  "column": 12
+                },
+                "end": {
+                  "line": 107,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_disabledChanged\"",
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "label",
+              "type": "string | null | undefined",
+              "description": "String used for the label element.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 112,
+                  "column": 12
+                },
+                "end": {
+                  "line": 116,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "observer": "\"_labelChanged\"",
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "value",
+              "type": "Array | null | undefined",
+              "description": "Value of the checkbox group.\nNote: toggling the checkboxes modifies the value by creating new\narray each time, to override Polymer dirty-checking for arrays.\nYou can still use Polymer array mutation methods to update the value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 124,
+                  "column": 12
+                },
+                "end": {
+                  "line": 128,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Array"
+                }
+              },
+              "defaultValue": "[]"
+            },
+            {
+              "name": "errorMessage",
+              "type": "string | null | undefined",
+              "description": "Error to show when the input value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 133,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "String"
+                }
+              },
+              "defaultValue": "\"\""
+            },
+            {
+              "name": "required",
+              "type": "boolean | null | undefined",
+              "description": "Specifies that the user must fill in a value.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 141,
+                  "column": 12
+                },
+                "end": {
+                  "line": 144,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "attributeType": "Boolean"
+                }
+              }
+            },
+            {
+              "name": "invalid",
+              "type": "boolean | null | undefined",
+              "description": "This property is set to true when the control value is invalid.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 149,
+                  "column": 12
+                },
+                "end": {
+                  "line": 154,
+                  "column": 13
+                }
+              },
+              "metadata": {
+                "polymer": {
+                  "notify": true,
+                  "attributeType": "Boolean"
+                }
+              },
+              "defaultValue": "false"
+            }
+          ],
+          "methods": [
+            {
+              "name": "ready",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 165,
+                  "column": 8
+                },
+                "end": {
+                  "line": 198,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "validate",
+              "description": "Returns true if `value` is valid.\n`<iron-form>` uses this to check the validity or all its elements.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 206,
+                  "column": 8
+                },
+                "end": {
+                  "line": 209,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "boolean",
+                "desc": "True if the value is valid."
+              }
+            },
+            {
+              "name": "_filterCheckboxes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 215,
+                  "column": 8
+                },
+                "end": {
+                  "line": 218,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "nodes"
+                }
+              ]
+            },
+            {
+              "name": "_disabledChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 220,
+                  "column": 8
+                },
+                "end": {
+                  "line": 224,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "disabled"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_addCheckboxToValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 226,
+                  "column": 8
+                },
+                "end": {
+                  "line": 230,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_removeCheckboxFromValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 232,
+                  "column": 8
+                },
+                "end": {
+                  "line": 237,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_changeSelectedCheckbox",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 239,
+                  "column": 8
+                },
+                "end": {
+                  "line": 249,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "checkbox"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_updateValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 251,
+                  "column": 8
+                },
+                "end": {
+                  "line": 266,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                },
+                {
+                  "name": "splices"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_labelChanged",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 268,
+                  "column": 8
+                },
+                "end": {
+                  "line": 274,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "label"
+                }
+              ],
+              "return": {
+                "type": "void"
+              }
+            },
+            {
+              "name": "_getErrorMessageAriaHidden",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 276,
+                  "column": 8
+                },
+                "end": {
+                  "line": 278,
+                  "column": 9
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "invalid"
+                },
+                {
+                  "name": "errorMessage"
+                }
+              ]
+            }
+          ],
+          "staticMethods": [
+            {
+              "name": "finalize",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 15,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeMatchingThemes",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 33,
+                  "column": 4
+                },
+                "end": {
+                  "line": 58,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            },
+            {
+              "name": "_includeStyle",
+              "description": "",
+              "privacy": "private",
+              "sourceRange": {
+                "file": "../../vaadin-themable-mixin/vaadin-themable-mixin.html",
+                "start": {
+                  "line": 61,
+                  "column": 4
+                },
+                "end": {
+                  "line": 67,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "moduleName"
+                },
+                {
+                  "name": "template"
+                }
+              ],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ThemableMixin"
+            }
+          ],
+          "demos": [
+            {
+              "url": "demo/index.html",
+              "description": ""
+            }
+          ],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 93,
+              "column": 6
+            },
+            "end": {
+              "line": 279,
+              "column": 7
+            }
+          },
+          "privacy": "public",
+          "superclass": "HTMLElement",
+          "name": "Vaadin.CheckboxGroupElement",
+          "attributes": [
+            {
+              "name": "disabled",
+              "description": "The current disabled state of the checkbox group. True if group and all internal checkboxes are disabled.",
+              "sourceRange": {
+                "start": {
+                  "line": 103,
+                  "column": 12
+                },
+                "end": {
+                  "line": 107,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "label",
+              "description": "String used for the label element.",
+              "sourceRange": {
+                "start": {
+                  "line": 112,
+                  "column": 12
+                },
+                "end": {
+                  "line": 116,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "value",
+              "description": "Value of the checkbox group.\nNote: toggling the checkboxes modifies the value by creating new\narray each time, to override Polymer dirty-checking for arrays.\nYou can still use Polymer array mutation methods to update the value.",
+              "sourceRange": {
+                "start": {
+                  "line": 124,
+                  "column": 12
+                },
+                "end": {
+                  "line": 128,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "Array | null | undefined"
+            },
+            {
+              "name": "error-message",
+              "description": "Error to show when the input value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 133,
+                  "column": 12
+                },
+                "end": {
+                  "line": 136,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "string | null | undefined"
+            },
+            {
+              "name": "required",
+              "description": "Specifies that the user must fill in a value.",
+              "sourceRange": {
+                "start": {
+                  "line": 141,
+                  "column": 12
+                },
+                "end": {
+                  "line": 144,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            },
+            {
+              "name": "invalid",
+              "description": "This property is set to true when the control value is invalid.",
+              "sourceRange": {
+                "start": {
+                  "line": 149,
+                  "column": 12
+                },
+                "end": {
+                  "line": 154,
+                  "column": 13
+                }
+              },
+              "metadata": {},
+              "type": "boolean | null | undefined"
+            }
+          ],
+          "events": [
+            {
+              "type": "CustomEvent",
+              "name": "value-changed",
+              "description": "Fired when the `value` property changes.",
+              "metadata": {}
+            },
+            {
+              "type": "CustomEvent",
+              "name": "invalid-changed",
+              "description": "Fired when the `invalid` property changes.",
+              "metadata": {}
+            }
+          ],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": [
+            {
+              "description": "",
+              "name": "",
+              "range": {
+                "start": {
+                  "line": 50,
+                  "column": 8
+                },
+                "end": {
+                  "line": 50,
+                  "column": 31
+                }
+              }
+            }
+          ],
+          "tagname": "vaadin-checkbox-group",
+          "mixins": [
+            "Vaadin.ThemableMixin"
+          ]
+        }
+      ]
+    }
+  ]
+}
