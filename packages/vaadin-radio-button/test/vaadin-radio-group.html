@@ -61,8 +61,8 @@
   <script>
     describe('vaadin-radio-group', () => {
 
-      function blur(e) {
-        e.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: true}));
+      function blur(e, composed = true) {
+        e.dispatchEvent(new CustomEvent('focusout', {bubbles: true, composed: composed}));
       }
 
       function visible(e) {
@@ -333,6 +333,12 @@
         blur(vaadinRadioButtonGroup);
         expect(vaadinRadioButtonGroup.checkValidity()).to.be.false;
         expect(vaadinRadioButtonGroup.invalid).to.be.true;
+      });
+
+      it('should not run validation if focusout is not composed', () => {
+        vaadinRadioButtonGroup.required = true;
+        blur(vaadinRadioButtonGroup, false);
+        expect(vaadinRadioButtonGroup.invalid).to.be.false;
       });
 
       it('error should have appropriate aria attributes and id', () => {
