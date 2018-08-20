@@ -66,9 +66,12 @@
 
       ready() {
         super.ready();
-        this._substituteImg('cookie-consent-demo-basic-usage', 'images/basic-usage.png');
-        this._substituteImg('cookie-consent-demo-customizing-texts', 'images/customization.png');
-        this._substituteImg('cookie-consent-demo-theming', 'images/theming.png');
+        this._substituteImg('cookie-consent-demo-basic-usage',
+          'https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/demo/images/basic-usage.png');
+        this._substituteImg('cookie-consent-demo-customizing-texts',
+          'https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/demo/images/customization.png');
+        this._substituteImg('cookie-consent-demo-theming',
+          'https://raw.githubusercontent.com/vaadin/vaadin-cookie-consent/master/demo/images/theming.png');
       }
 
       _substituteImg(demoId, imgSrc) {
