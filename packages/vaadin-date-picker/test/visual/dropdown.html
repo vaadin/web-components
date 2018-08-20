@@ -27,7 +27,10 @@
     </template>
   </dom-module>
 
-  <link href="../../vaadin-date-picker.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-date-picker.html">`);
+  </script>
 </head>
 
 <body style="height: 100vh;">
@@ -50,6 +53,13 @@
     window.addEventListener('WebComponentsReady', function() {
       var datepicker = document.querySelector('vaadin-date-picker#weeks');
       datepicker.set('i18n.firstDayOfWeek', 1);
+
+      [].forEach.call(document.querySelectorAll('vaadin-date-picker'), function(d) {
+        d.$.input.addEventListener('focus', function(e) {
+          // Make sure the input doesn't have a blinking caret that might fail the test
+          e.target.blur();
+        });
+      });
     });
 
     function closeDatePickers() {
