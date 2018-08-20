@@ -417,6 +417,28 @@
           ],
           "staticMethods": [
             {
+              "name": "_finalizeClass",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "file": "../../vaadin-element-mixin/vaadin-element-mixin.html",
+                "start": {
+                  "line": 28,
+                  "column": 6
+                },
+                "end": {
+                  "line": 35,
+                  "column": 7
+                }
+              },
+              "metadata": {},
+              "params": [],
+              "return": {
+                "type": "void"
+              },
+              "inheritedFrom": "Vaadin.ElementMixin"
+            },
+            {
               "name": "finalize",
               "description": "",
               "privacy": "protected",
