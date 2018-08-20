@@ -1,6 +1,6 @@
 {
   "name": "@vaadin/vaadin-icons",
-  "version": "4.2.0-beta2",
+  "version": "4.2.0",
   "description": "Collection of 600+ unique icons designed for web applications",
   "main": "vaadin-icons.html",
   "repository": "vaadin/vaadin-icons",
