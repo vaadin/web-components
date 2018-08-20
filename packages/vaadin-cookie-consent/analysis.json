@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-cookie-consent.html",
         "start": {
-          "line": 185,
+          "line": 204,
           "column": 6
         },
         "end": {
-          "line": 185,
+          "line": 204,
           "column": 64
         }
       },
@@ -230,7 +230,7 @@
                   "column": 8
                 },
                 "end": {
-                  "line": 151,
+                  "line": 170,
                   "column": 9
                 }
               },
@@ -246,11 +246,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 156,
+                  "line": 175,
                   "column": 8
                 },
                 "end": {
-                  "line": 165,
+                  "line": 184,
                   "column": 9
                 }
               },
@@ -266,11 +266,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 166,
+                  "line": 185,
                   "column": 8
                 },
                 "end": {
-                  "line": 168,
+                  "line": 187,
                   "column": 9
                 }
               },
@@ -283,11 +283,11 @@
               "privacy": "protected",
               "sourceRange": {
                 "start": {
-                  "line": 172,
+                  "line": 191,
                   "column": 8
                 },
                 "end": {
-                  "line": 178,
+                  "line": 197,
                   "column": 9
                 }
               },
@@ -390,7 +390,7 @@
               "column": 6
             },
             "end": {
-              "line": 179,
+              "line": 198,
               "column": 7
             }
           },
