@@ -5,7 +5,10 @@
     "Vaadin Ltd"
   ],
   "description": "vaadin-themable-mixin",
-  "main": "vaadin-themable-mixin.html",
+  "main": [
+    "vaadin-themable-mixin.html",
+    "vaadin-theme-property-mixin.html"
+  ],
   "keywords": [
     "Vaadin",
     "web-components",
