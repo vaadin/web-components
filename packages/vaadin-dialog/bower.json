@@ -27,17 +27,17 @@
   ],
   "dependencies": {
     "polymer": "^2.0.0",
-    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.0-beta2",
+    "vaadin-overlay": "vaadin/vaadin-overlay#^3.1.1",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
-    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
+    "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0",
     "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
     "iron-demo-helpers": "^2.0.0",
     "iron-test-helpers": "^2.0.0",
-    "vaadin-button": "vaadin/vaadin-button#^2.1.0-beta2",
+    "vaadin-button": "vaadin/vaadin-button#^2.1.0",
     "webcomponentsjs": "^1.0.0",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1"
