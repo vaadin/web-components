@@ -305,14 +305,14 @@
       });
 
       it('should realign on iron-resize', done => {
+        sinon.stub(datepicker, '_boundUpdateAlignmentAndPosition', () => {
+          if (!done._called) {
+            done._called = true;
+            done();
+          }
+        });
         open(datepicker, () => {
-          sinon.stub(datepicker, '_updateAlignmentAndPosition', () => {
-            if (!done._called) {
-              done._called = true;
-              done();
-            }
-          });
-          datepicker.fire('iron-resize', undefined, {bubbles: false});
+          datepicker.dispatchEvent(new CustomEvent('iron-resize', {bubbles: false}));
         });
       });
 

@@ -277,12 +277,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _noInput: {
           type: Boolean,
-          computed: '_isNoInput(_fullscreen, i18n, i18n.*, _ios)'
+          computed: '_isNoInput(_fullscreen, _ios, i18n, i18n.*)'
         },
 
         _ios: {
           type: Boolean,
           value: navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/)
+        },
+
+        _webkitOverflowScroll: {
+          type: Boolean,
+          value: document.createElement('div').style.webkitOverflowScrolling === ''
         },
 
         _ignoreAnnounce: {
@@ -307,6 +312,7 @@ This program is available under Apache License Version 2.0, available at https:/
       super.ready();
       this._boundOnScroll = this._onScroll.bind(this);
       this._boundFocus = this._focus.bind(this);
+      this._boundUpdateAlignmentAndPosition = this._updateAlignmentAndPosition.bind(this);
       Polymer.Gestures.addListener(this, 'tap', this.open);
       this.addEventListener('touchend', this._preventDefault.bind(this));
       this.addEventListener('keydown', this._onKeydown.bind(this));
@@ -388,8 +394,8 @@ This program is available under Apache License Version 2.0, available at https:/
       return date;
     }
 
-    _isNoInput() {
-      return !this._inputElement || this._fullscreen || !this.i18n.parseDate || this._ios;
+    _isNoInput(fullscreen, ios, i18n) {
+      return !this._inputElement || fullscreen || ios || !i18n.parseDate;
     }
 
     _formatISO(date) {
@@ -491,13 +497,13 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateAlignmentAndPosition() {
-      const bottomAlign = this._inputElement.getBoundingClientRect().top > window.innerHeight / 2;
-      const rightAlign = this._inputElement.getBoundingClientRect().left + this.clientWidth / 2 > window.innerWidth / 2;
+      const inputRect = this._inputElement.getBoundingClientRect();
+
+      const bottomAlign = inputRect.top > window.innerHeight / 2;
+      const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
 
       const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
       const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-
-      const inputRect = this._inputElement.getBoundingClientRect();
 
       if (!this._fullscreen) {
         if (rightAlign) {
@@ -553,10 +559,9 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreFocusedDateChange = false;
 
       window.addEventListener('scroll', this._boundOnScroll, true);
-      this.listen(this, 'iron-resize', '_updateAlignmentAndPosition');
+      this.addEventListener('iron-resize', this._boundUpdateAlignmentAndPosition);
 
-      // Checking if the browser supports webkitOverflowScrolling
-      if (document.createElement('div').style.webkitOverflowScrolling === '') {
+      if (this._webkitOverflowScroll) {
         this._touchPrevented = this._preventWebkitOverflowScrollingTouch(this.parentElement);
       }
 
@@ -598,7 +603,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._ignoreAnnounce = true;
 
       window.removeEventListener('scroll', this._boundOnScroll, true);
-      this.unlisten(this, 'iron-resize', '_updateAlignmentAndPosition');
+      this.removeEventListener('iron-resize', this._boundUpdateAlignmentAndPosition);
 
       if (this._touchPrevented) {
         this._touchPrevented.forEach(prevented =>
