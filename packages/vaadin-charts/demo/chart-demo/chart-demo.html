@@ -1,0 +1,57 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="../common/demo-plus-sources-area.html">
+<link rel="import" href="../../vaadin-chart.html">
+<link rel="import" href="../../../iron-ajax/iron-ajax.html">
+<link rel="import" href="../../../vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../common/demo-styles.html">
+<dom-module id="chart-demo">
+  <template>
+    <style>
+      :host {
+        height: 100%;
+      }
+    </style>
+  </template>
+
+  <script>
+    class ChartDemo extends Polymer.Element {
+      static get is() {
+        return 'chart-demo';
+      }
+
+      static get properties() {
+        return {
+          demo: String,
+          category: String,
+          htmlValue: String
+        };
+      }
+
+      constructor() {
+        super();
+        this.__initialized = false;
+      }
+
+      loadDemoContent() {
+        if (!this.__initialized) {
+          var resolvedDemoUrl = this.resolveUrl('../demos/' + (this.category ? this.category + '/' : '') + this.demo + '.html');
+          Polymer.importHref(resolvedDemoUrl, (result) => {
+            const template = result.target.import.querySelector('template');
+            const demoContent = document.importNode(template.content, true);
+            const demoPlusSourcesArea = document.createElement('demo-plus-sources-area');
+            while (demoContent.childNodes.length > 0) {
+              demoPlusSourcesArea.appendChild(demoContent.childNodes[0]);
+            }
+
+            this.shadowRoot.appendChild(demoPlusSourcesArea);
+
+            this.__initialized = true;
+          });
+        }
+      }
+
+    }
+
+    window.customElements.define(ChartDemo.is, ChartDemo);
+  </script>
+</dom-module>

@@ -1,0 +1,62 @@
+<template preserve-content>
+  <dom-module id="polygon" theme-for="vaadin-chart">
+    <template>
+      <style include="vaadin-chart-default-theme">
+        :host([theme~="polygon"]) .targetSeries {
+          fill: rgba(97, 181, 236, 0.5);
+          stroke: rgba(97, 181, 236, 0.5);
+        }
+      </style>
+    </template>
+  </dom-module>
+  <dom-bind>
+    <template preserve-content>
+      <vaadin-chart
+          title="Height vs Weight"
+          subtitle="Polygon series in Highcharts"
+          tooltip
+          theme="polygon"
+          additional-options='{
+            "xAxis": {
+              "gridLineWidth": 1,
+              "title": {
+                "enabled": true,
+                "text": "Height (cm)"
+              },
+              "startOnTick": true,
+              "endOnTick": true,
+              "showLastLabel": true
+            },
+            "legend": {
+              "layout": "vertical",
+              "align": "right",
+              "verticalAlign": "middle"
+            }
+          }'>
+          <vaadin-chart-series
+            title="Target"
+            type="polygon"
+            unit="Weight (kg)"
+            values="[[153, 42], [149, 46], [149, 55], [152, 60], [159, 70], [170, 77], [180, 70], [180, 60], [173, 52], [166, 45]]"
+            additional-options='{
+              "className": "targetSeries",
+              "enableMouseTracking": false
+            }'>
+          </vaadin-chart-series>
+          <vaadin-chart-series
+            title="Observations"
+            type="scatter"
+            unit="Weight (kg)"
+            values="[[data]]"
+            additional-options='{
+              "tooltip": {
+                "headerFormat": "<b>{series.name}</b><br>",
+                "pointFormat": "{point.x} cm, {point.y} kg"
+              }
+          }'>
+        </vaadin-chart-series>
+      </vaadin-chart>
+      <iron-ajax url="./demo/data/height-weight.json" last-response="{{data}}" auto></iron-ajax>
+    </template>
+  </dom-bind>
+</template>

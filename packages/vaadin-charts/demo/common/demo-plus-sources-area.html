@@ -1,0 +1,189 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="../../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../../vaadin-split-layout/vaadin-split-layout.html">
+<link rel="import" href="../../../vaadin-icons/vaadin-icons.html">
+
+<link rel="import" href="demo-area.html">
+<link rel="import" href="demo-snippet.html">
+
+<dom-module id="demo-plus-sources-area">
+  <template>
+    <style>
+      :host {
+        display: flex;
+        height: 100%;
+        background-color: white;
+
+        --vaadin-split-layout-splitter: {
+          background-color: #1B2021;
+        };
+      }
+
+      :host(.hiddensplitter) {
+        --vaadin-split-layout-splitter: {
+          display: none;
+          opacity: 0;
+        }
+      }
+
+      #container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+      }
+
+      .nav-panel {
+        background-color: #1B2021;
+        color: #808F8F;
+        font: 400 13px "Open Sans", Verdana, sans-serif;
+        text-transform: uppercase;
+      }
+
+      .nav-panel__tabs__button {
+        border-bottom: 1px solid transparent;
+        border-radius: 0;
+        padding: 0;
+        padding-bottom: 6px;
+        margin: 0;
+        margin-left: 24px;
+        min-width: auto;
+        color: #00B2EF;
+        font-family: "Open Sans", Verdana, sans-serif;
+        -webkit-font-smoothing: auto;
+      }
+
+      .nav-panel__tabs__button[active] {
+        border-bottom: 1px solid var(--app-primary-color);
+        color: #fff;
+      }
+
+      #header {
+        padding-left: 36px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        display: inline-block;
+      }
+
+      #javabutton {
+        display: none;
+      }
+
+      #closebutton {
+        float: right;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        color: #00B2EF;
+      }
+
+      #layout {
+          flex-grow: 1;
+          height: 100%;
+      }
+
+    </style>
+    <div id="container">
+      <div class="nav-panel">
+        <span id="header">Source:</span>
+        <paper-button id="htmlbutton" class="nav-panel__tabs__button" on-click="showSource" noink toggles
+          source-type="html">HTML</paper-button>
+        <paper-button id="javabutton" class="nav-panel__tabs__button" on-click="showSource" noink toggles
+          source-type="java">Java</paper-button>
+        <paper-button style="display:none;" id="closebutton" on-click="_close" noink
+          icon="vaadin:close-circle-o">
+          <iron-icon icon="vaadin:eye-slash" style="padding-right:8px;"></iron-icon> Hide source
+        </paper-button>
+      </div>
+      <vaadin-split-layout id="layout" orientation="vertical">
+        <demo-area id="example" header="[[header]]">
+          <slot></slot>
+        </demo-area>
+      </vaadin-split-layout>
+    </div>
+  </template>
+
+  <script>
+
+    class DemoPlusSourcesArea extends Polymer.Element {
+      static get is() {
+        return 'demo-plus-sources-area';
+      }
+
+      static get properties() {
+        return {
+          sourceLayout: {
+            value: undefined,
+            type: Object
+          },
+          sourceType: {
+            value: 'html',
+            type: String
+          },
+          header: {
+            value: '',
+            type: String
+          },
+          htmlSource: {
+            value: 'No HTML source',
+            type: String
+          },
+          javaSource: {
+            value: 'No Java source',
+            type: String
+          }
+        };
+      }
+
+      ready() {
+        super.ready();
+        this.htmlSource = this.innerHTML;
+        this.classList.add('hiddensplitter');
+        this.updateStyles();
+      }
+
+      _close() {
+        if (this.sourceLayout) {
+          this.$.layout.removeChild(this.sourceLayout);
+          this.sourceLayout = undefined;
+          this.$.example.updateSize();
+        }
+        this.$.closebutton.style.display = 'none';
+        this.classList.add('hiddensplitter');
+        this.updateStyles();
+        this._clearButtonsActive();
+      }
+
+      _createSourceElement() {
+        this.sourceLayout = document.createElement('demo-snippet');
+        this.sourceLayout.style.height = '100%';
+      }
+
+      _clearButtonsActive() {
+        this.$.htmlbutton.removeAttribute('active');
+        this.$.javabutton.removeAttribute('active');
+      }
+
+      showSource(e) {
+        this.classList.remove('hiddensplitter');
+        this.updateStyles();
+        this._clearButtonsActive();
+        this.$.closebutton.style.display = '';
+        if (this.sourceLayout) {
+          this.$.layout.removeChild(this.sourceLayout);
+        }
+        this._createSourceElement();
+        const sourceType = e.target.getAttribute('source-type');
+        if (sourceType === 'html') {
+          this.sourceLayout.setAttribute('source', this.htmlSource);
+        } else {
+          this.sourceLayout.setAttribute('source', this.javaSource);
+        }
+        var exampleArea = this.$.layout.querySelector('demo-area');
+        this.$.layout.insertBefore(this.sourceLayout, exampleArea);
+        this.$.layout.updateStyles();
+        this.$.example.updateSize();
+      }
+    }
+    customElements.define(DemoPlusSourcesArea.is, DemoPlusSourcesArea);
+  </script>
+</dom-module>

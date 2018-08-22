@@ -1,0 +1,134 @@
+<dom-module id="demo-styles" theme-for="vaadin-chart">
+  <template>
+    <style include="vaadin-chart-default-theme">
+
+        /* ERROR-BAR */
+        :host([theme~="error-bar"]) .highcharts-tooltip .rainfallSeriesName {
+          fill: #7cb5ec;
+          font-weight: bold;
+        }
+
+        /* GAUGE */
+        :host([theme~="speedometer"]) .highcharts-plot-band.band-0 {
+          stroke: #55BF3B;
+          fill: #55BF3B;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-plot-band.band-1 {
+          stroke: #DDDF0D;
+          fill: #DDDF0D;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-plot-band.band-2 {
+          stroke: #DF5353;
+          fill: #DF5353;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-plot-band {
+          fill-opacity: 1;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-tick {
+          stroke: #666;
+          stroke-width: 2;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-minor-tick {
+          stroke: #666;
+          stroke-width: 1;
+        }
+
+        :host([theme~="speedometer"]) .highcharts-grid-line,
+        :host([theme~="speedometer"]) .highcharts-minor-grid-line {
+          stroke: none;
+        }
+
+        /* GAUGE-DUAL */
+        :host([theme~="speedometer-dual"]) .highcharts-yaxis .highcharts-axis-line {
+          stroke-width: 2;
+        }
+
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-axis-line,
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-tick,
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-minor-tick {
+          stroke: #339;
+        }
+
+        :host([theme~="speedometer-dual"]) .mph .highcharts-axis-line,
+        :host([theme~="speedometer-dual"]) .mph .highcharts-tick,
+        :host([theme~="speedometer-dual"]) .mph .highcharts-minor-tick {
+          stroke: #933;
+        }
+
+        :host([theme~="speedometer-dual"]) .highcharts-grid-line,
+        :host([theme~="speedometer-dual"]) .highcharts-minor-grid-line {
+          stroke: none;
+        }
+
+        :host([theme~="speedometer-dual"]) .highcharts-pivot {
+          fill: #000;
+          stroke: #000;
+        }
+
+        /* POLYGON */
+        :host([theme~="polygon"]) .targetSeries {
+          fill: rgba(97, 181, 236, 0.5);
+          stroke: rgba(97, 181, 236, 0.5);
+        }
+
+        /* SCATTER */
+        :host([theme~="scatter"]) .femaleSeries,
+        :host([theme~="scatter"]) .femaleSeries .highcharts-point {
+          fill: rgba(223, 83, 83, .5);
+          stroke: rgba(223, 83, 83, .5);
+        }
+
+        :host([theme~="scatter"]) .maleSeries,
+        :host([theme~="scatter"]) .maleSeries .highcharts-point {
+          fill: rgba(119, 152, 191, .5);
+          stroke: rgba(119, 152, 191, .5);
+        }
+
+        :host([theme~="scatter"]) .highcharts-legend-box {
+          fill: #FFF;
+          stroke-width: 1px;
+          stroke: #000;
+        }
+
+        /* SOLID-GAUGE */
+        :host([theme~="solidgauge"]) .highcharts-yaxis-grid .highcharts-grid-line {
+          display: none;
+        }
+
+        /* SPIDERWEB */
+        :host([theme~="spiderweb"]) .highcharts-xaxis .highcharts-axis-line {
+          stroke-width: 0;
+        }
+
+        :host([theme~="spiderweb"]) .highcharts-xaxis-grid .highcharts-grid-line {
+          stroke-width: 1px;
+        }
+
+        /* WATERFALL */
+        :host([theme~="waterfall"]) .highcharts-data-labels text {
+          fill: black;
+        }
+
+        :host([theme~="waterfall"]) .highcharts-waterfall-series .highcharts-point {
+          fill: lightgreen;
+        }
+
+        :host([theme~="waterfall"]) .highcharts-waterfall-series .highcharts-negative {
+          fill: lightcoral;
+        }
+
+        :host([theme~="waterfall"]) .highcharts-waterfall-series .highcharts-sum {
+          fill: lightblue;
+        }
+
+        :host([theme~="waterfall"]) .highcharts-waterfall-series .highcharts-intermediate-sum {
+          fill: lightgoldenrodyellow;
+        }
+    </style>
+  </template>
+</dom-module>

@@ -1,0 +1,519 @@
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-lumo-styles/color.html">
+<link rel="import" href="../../vaadin-lumo-styles/typography.html">
+<link rel="import" href="../../app-route/app-location.html">
+<link rel="import" href="../../app-route/app-route.html">
+<link rel="import" href="../../iron-pages/iron-pages.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../paper-icon-button/paper-icon-button.html">
+<link rel="import" href="my-icons.html">
+<link rel="import" href="demo-menu.html">
+<link rel="import" href="common/header-bar.html">
+<link rel="import" href="chart-demo/chart-demo.html">
+<link rel="import" href="404/404.html">
+
+<dom-module id="charts-demo-app">
+  <template>
+    <style include="lumo-typography lumo-color">
+       :host {
+        --water: #00B4F0;
+        --charcoal: #33383A;
+        --app-primary-color: var(--water);
+        --app-secondary-color: #e5e8e8;
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        width: 100%;
+      }
+
+      #logoandname {
+        display: none;
+        margin-bottom: 20px;
+      }
+
+      .drawer-list {
+        margin: 0 20px;
+      }
+
+      .drawer-list a {
+        display: block;
+        padding: 8px 16px;
+        text-decoration: none;
+      }
+
+      .drawer-list a.iron-selected {
+        background: var(--app-primary-color);
+      }
+
+      .drawer-list a.iron-selected .menu-item-description {
+        color: white;
+      }
+
+      .menu-item-header {
+        display: block;
+        color: white;
+        line-height: 24px;
+      }
+
+      .menu-item-description {
+        display: block;
+        color: #808080;
+        line-height: 20px;
+        font-size: 12px;
+      }
+
+      #iron-pages {
+        height: 100%;
+      }
+
+      #sideMenu {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        transform: translateX(-100%);
+        position: absolute;
+        overflow-x: hidden;
+        z-index: 2;
+        border-right: 1px solid white;
+        background-color: var(--charcoal);
+        flex-shrink: 0;
+        color: white;
+        -webkit-transition: -webkit-transform 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;
+        visibility: hidden;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      #sideMenu.open {
+        transform: translateX(0);
+        visibility: visible;
+      }
+
+      #logo {
+        display: block;
+        width: 70px;
+        height: 70px;
+        margin: 24px auto;
+      }
+
+      #productname {
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        text-align: center;
+      }
+
+      #closeMenu {
+        padding: 16px;
+        width: 50px;
+        height: 50px;
+      }
+
+      #content {
+        height: 100%;
+        width: 100%;
+        flex-grow: 1;
+        -webkit-transition: -webkit-transform 0.3s ease-in-out;
+        transition: padding 0.3s ease-in-out;
+        padding-top: 50px;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      #curtain {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 0;
+        transition: opacity 0.5s ease-in-out;
+        background-color: black;
+        opacity: 0;
+        z-index: 1;
+      }
+
+      #curtain.open {
+        opacity: 0.5;
+        width: 100%;
+      }
+
+      #header {
+        transition: all 0.3s ease-in-out;
+      }
+
+      #menuTree {
+        overflow-y: auto;
+      }
+
+      #resourcelinks {
+        list-style: none;
+        display: flex;
+        margin: 14px 0;
+        padding: 0;
+        justify-content: center;
+      }
+
+      #resourcelinks a {
+        text-transform: uppercase;
+        color: #0B98C7;
+        padding: 0 5px;
+        text-decoration: none;
+        font-size: 12px;
+      }
+
+      #githubsource {
+        background: #404549;
+        width: 100%;
+        padding: 15px 0;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #githubsource a {
+        color: #e5e8e8;
+        font-size: 12px;
+        text-decoration: none;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+      }
+
+      #githublogo {
+        fill: #8b8e91;
+        --iron-icon-width: 24px;
+        --iron-icon-height: 24px;
+        padding-right: 10px;
+      }
+
+      .resourcelinks__item + *::before {
+        content: '•';
+        color: #fff;
+        vertical-align: middle;
+      }
+
+      @media screen and (max-width: 799px) {
+        #sideMenu {
+          transform: translateX(-100%);
+        }
+
+        #header {
+          transform: translateY(0);
+        }
+      }
+
+      @media screen and (min-width: 800px) {
+        #sideMenu {
+          transform: translateX(-300px);
+          width: 300px;
+        }
+      }
+
+      @media screen and (min-width: 1100px) {
+        /* differentiate tablet and desktop */
+        #content {
+          padding-left: 300px;
+          padding-top: 0;
+        }
+
+        #sideMenu {
+          transform: translateX(0);
+          visibility: visible;
+        }
+
+        #curtain.open {
+          display: none;
+        }
+
+        #header {
+          transform: translateY(-100%);
+        }
+
+        #closeMenu {
+          display: none;
+        }
+
+        #logoandname {
+          display: block;
+        }
+      }
+    </style>
+
+    <app-location route="{{route}}" use-hash-as-path></app-location>
+    <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+    <div id="curtain" on-click="_closeMenu"></div>
+    <div id="sideMenu" on-transitionend="_sideMenuTransitionend">
+      <div id="menuHeader">
+        <div id="logoandname">
+          <img id="logo" src="./demo/images/charts-logo.svg">
+          <div id="productname">Vaadin Charts</div>
+        </div>
+        <paper-icon-button id="closeMenu" icon="vaadin:close" on-click="_closeMenu"></paper-icon-button>
+      </div>
+      <div id="menuTree">
+        <demo-menu id="menu" categories="[[categories]]" category="[[category]]" page="[[page]]">
+        </demo-menu>
+      </div>
+      <div id="externalresource">
+        <ul id="resourcelinks">
+          <li class="resourcelinks__item"><a href="https://vaadin.com/charts">Home Page</a></li>
+          <li class="resourcelinks__item" style="display: none"><a href="#">Javadoc</a></li>
+          <li class="resourcelinks__item"><a href="https://vaadin.com/docs/-/part/charts/charts-overview.html">Manual</a></li>
+        </ul>
+        <div id="githubsource">
+          <a href="https://github.com/vaadin/vaadin-charts-demo">
+            <iron-icon id="githublogo" icon="my-logos:github"></iron-icon>
+            <span>Source code on Github</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <header-bar id="header" demo=[[page]] on-open-menu="_openMenu"></header-bar>
+
+    <!-- Main content -->
+    <div id="content">
+      <iron-pages id="iron-pages" selected="[[page]]" attr-for-selected="demo" role="main">
+        <template is="dom-repeat" id="categories" items="[[categories]]" as="category">
+          <template is="dom-if" if="{{_isSubMenu(category)}}">
+            <template is="dom-repeat" items="[[category.demos]]" as="demo">
+              <chart-demo id="[[demo.component]]" category="[[category.name]]" demo="[[demo.component]]"></chart-demo>
+            </template>
+          </template>
+          <template is="dom-if" if="{{!_isSubMenu(category)}}">
+            <chart-demo id="[[category.component]]" demo="[[category.component]]"></chart-demo>
+          </template>
+        </template>
+        <my-view404 demo="404"></my-view404>
+      </iron-pages>
+    </div>
+  </template>
+
+  <script>
+    class MyApp extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+      static get is() {
+        return 'charts-demo-app';
+      }
+
+      ready() {
+        super.ready();
+        this.removeAttribute('unresolved');
+      }
+
+      static get properties() {
+        return {
+          category: {
+            type: String,
+            reflectToAttribute: true,
+            value: ''
+          },
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+            value: ''
+          },
+          categories: {
+            type: Array,
+            value: [
+              {
+                component: 'area',
+                caption: 'Area'
+              },
+              {
+                component: 'area-range',
+                caption: 'Area Range'
+              },
+              {
+                component: 'area-spline',
+                caption: 'Area Spline'
+              },
+              {
+                component: 'area-spline-range',
+                caption: 'Area Spline Range'
+              },
+              {
+                component: 'bar',
+                caption: 'Bar Chart'
+              },
+              {
+                component: 'box-plot',
+                caption: 'Box Plot'
+              },
+              {
+                component: 'bubble',
+                caption: 'Bubble'
+              },
+              {
+                component: 'candlestick',
+                caption: 'Candlestick'
+              },
+              {
+                component: 'column',
+                caption: 'Column'
+              },
+              {
+                component: 'column-range',
+                caption: 'Column Range'
+              },
+              {
+                component: 'error-bar',
+                caption: 'Error Bar'
+              },
+              {
+                component: 'flags',
+                caption: 'Flags'
+              },
+              {
+                component: 'funnel',
+                caption: 'Funnel'
+              },
+              {
+                component: 'gauge',
+                caption: 'Gauge'
+              },
+              {
+                component: 'gauge-dual',
+                caption: 'Gauge with Dual Axes'
+              },
+              {
+                component: 'heat-map',
+                caption: 'Heat Map'
+              },
+              {
+                component: 'line',
+                caption: 'Line'
+              },
+              {
+                component: 'ohlc',
+                caption: 'OHLC'
+              },
+              {
+                component: 'pie',
+                caption: 'Pie'
+              },
+              {
+                component: 'polar',
+                caption: 'Polar'
+              },
+              {
+                component: 'polygon',
+                caption: 'Polygon'
+              },
+              {
+                component: 'pyramid',
+                caption: 'Pyramid'
+              },
+              {
+                component: 'scatter',
+                caption: 'Scatter'
+              },
+              {
+                component: 'solid-gauge',
+                caption: 'Solid Gauge'
+              },
+              {
+                component: 'spiderweb',
+                caption: 'Spiderweb'
+              },
+              {
+                component: 'spline',
+                caption: 'Spline'
+              },
+              {
+                component: 'treemap',
+                caption: 'Tree Map'
+              },
+              {
+                component: 'waterfall',
+                caption: 'Waterfall'
+              },
+              {
+                component: 'windrose',
+                caption: 'Wind Rose'
+              }
+            ]
+          }
+        };
+      }
+
+      static get observers() {
+        return [
+          '_routePageChanged(routeData.category,routeData.page)',
+        ];
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+
+        // If it is the first load and the it is at root path, defaults to the first chart
+        // Change the route and create an event, so app-route will listen and react
+        if (this.route.path === '/' || this.route.path === '') {
+          window.history.pushState({}, '', '#/area');
+          window.dispatchEvent(new CustomEvent('location-changed'));
+        }
+      }
+
+      _sideMenuTransitionend(el) {
+        // 0.3s is set for #sideMenu transition
+        this.debounce('_notifyResize', this.notifyResize, 300);
+      }
+
+      _routePageChanged(category, page) {
+        // Polymer 2.0 will call with `undefined` on initialization.
+        // Ignore until we are properly called with a string.
+        if (page === undefined) {
+          return;
+        }
+        // If no page was found in the route data, page will be an empty string.
+        // Deault to 'column_and_bar/bar-with-negative-stack' in that case.
+        this.category = category || '';
+        this.page = page || 'area';
+        this.$.menu.updateSelection();
+      }
+
+      _pageChanged(page) {
+        // Load page import on demand. Show 404 page if fails
+        if (page && page !== '404') {
+          // For the first load, it needs to wait for the components to load
+          Polymer.RenderStatus.beforeNextRender(this, () => {
+            const chartDemo = this.shadowRoot.querySelector('#' + page);
+            if (chartDemo) {
+              chartDemo.loadDemoContent();
+            } else {
+              this._showPage404();
+            }
+          });
+        }
+        this._closeMenu();
+      }
+
+      _showPage404() {
+        this.page = '404';
+      }
+
+      _openMenu() {
+        this.$.curtain.classList.add('open');
+        this.$.sideMenu.classList.add('open');
+      }
+
+      _closeMenu() {
+        this.$.curtain.classList.remove('open');
+        this.$.sideMenu.classList.remove('open');
+      }
+
+      _isSubMenu(category) {
+        return typeof category.demos !== 'undefined';
+      }
+    }
+
+    window.customElements.define(MyApp.is, MyApp);
+  </script>
+</dom-module>

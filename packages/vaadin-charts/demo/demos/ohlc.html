@@ -1,0 +1,23 @@
+<template preserve-content>
+  <dom-bind>
+    <template preserve-content>
+      <vaadin-chart
+          title="AAPL Stock Price"
+          timeline>
+        <vaadin-chart-series
+          type="ohlc"
+          title="AAPL Stock Price"
+          values="[[data]]"
+          additional-options='{
+            "dataGrouping": {
+              "units": [
+                ["week", [1]],
+                ["month", [1, 2, 3, 4, 6]]
+              ]
+            }
+        }'></vaadin-chart-series>
+      </vaadin-chart>
+      <iron-ajax url="./demo/data/aapl-date-ohlc.json" last-response="{{data}}" auto></iron-ajax>
+    </template>
+  </dom-bind>
+</template>

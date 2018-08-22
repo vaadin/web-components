@@ -1,0 +1,59 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+<link rel="import" href="../../../paper-button/paper-button.html">
+
+<dom-module id="demo-area">
+  <template>
+    <style>
+       :host {
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        background-image: url("../images/empty-background.png");
+        background-repeat: repeat;
+        background-size: 8px 8px;
+      }
+
+    </style>
+    <slot id="content"></slot>
+  </template>
+
+  <script>
+    class DemoArea extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+      static get is() {
+        return 'demo-area';
+      }
+      static get properties() {
+        return {
+          header: {
+            value: '',
+            type: String
+          }
+        };
+      }
+
+      ready() {
+        this.addEventListener('iron-resize', this._onIronResize);
+        super.ready();
+      }
+
+      updateSize() {
+        var demo = this.querySelector('vaadin-chart');
+        if (demo) {
+          demo.__reflow();
+        }
+      }
+
+      _onIronResize() {
+        this.debounce('updateSizeDebounce', this.updateSize, 300);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+    }
+    customElements.define(DemoArea.is, DemoArea);
+  </script>
+</dom-module>

@@ -1,0 +1,29 @@
+<template preserve-content>
+  <dom-bind>
+    <template preserve-content>
+      <vaadin-chart
+          title="AAPL Stock Price"
+          tooltip
+          timeline
+          additional-options='{
+            "rangeSelector": {
+              "selected": 4
+            }
+          }'>
+        <vaadin-chart-series type="candlestick"
+          title="AAPL Stock Price"
+          additional-options='{
+            "dataGrouping": {
+              "units": [
+                ["week", [1]],
+                ["month", [1, 2, 3, 4, 6]]
+              ]
+            }
+          }'
+          values="[[data]]">
+        </vaadin-chart-series>
+      </vaadin-chart>
+      <iron-ajax url="./demo/data/aapl-date-ohlc.json" last-response="{{data}}" auto></iron-ajax>
+    </template>
+  </dom-bind>
+</template>

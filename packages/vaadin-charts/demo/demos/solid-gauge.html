@@ -1,0 +1,50 @@
+<template preserve-content>
+  <dom-module id="solidgauge" theme-for="vaadin-chart">
+    <template>
+      <style include="vaadin-chart-default-theme">
+        :host([theme~="solidgauge"]) .highcharts-yaxis-grid .highcharts-grid-line {
+          display: none;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <vaadin-chart
+      title="Speed"
+      type="solidgauge"
+      theme="solidgauge"
+      tooltip
+      additional-options='{
+        "pane": {
+          "center": ["50%","85%"],
+          "startAngle": -90,
+          "endAngle": 90,
+          "background": {
+            "innerRadius": "60%",
+            "outerRadius": "100%",
+            "shape":"arc"
+          }
+        },
+        "yAxis": {
+          "min": 0,
+          "max": 200,
+          "minorTickInterval": null,
+          "tickAmount": 2,
+          "title": {
+            "y":-70
+          },
+          "labels": {
+            "y":16
+          }
+        }
+      }'>
+    <vaadin-chart-series
+      title="Speed"
+      values='[{"y": 80, "colorIndex": 2}]'
+      additional-options='{
+        "dataLabels": {
+          "format": "&lt;div style=\"text-align:center\"&gt;&lt;span style=\"font-size:25px;color:black\"&gt;{y}&lt;/span&gt;&lt;br/&gt;&lt;span style=\"font-size:12px;color:silver\"&gt;km/h&lt;/span&gt;&lt;/div&gt;"
+        }
+      }'>
+    </vaadin-chart-series>
+  </vaadin-chart>
+</template>

@@ -1,0 +1,94 @@
+<link rel="import" href="../../../polymer/polymer-element.html">
+
+<dom-module id="demo-snippet">
+  <template>
+    <style>
+      :host {
+        display: block;
+        box-shadow: none;
+        margin-bottom: 0;
+        background-color: #1B2021;
+        border-top: 1px solid #fff;
+        color: var(--app-secondary-color);
+        font: 400 13px "Open Sans", Verdana, sans-serif;
+      }
+
+      .code-container {
+        margin: 0;
+        font-size: 13px;
+        overflow: auto;
+        position: relative;
+        padding: 8px 20px;
+        box-sizing: border-box;
+        height: 100%;
+      }
+
+      pre {
+        margin: 0;
+      }
+    </style>
+
+    <div class="code-container">
+      <code><pre id="code">[[_markdown]]</pre></code>
+    </div>
+  </template>
+
+  <script>
+    class DemoSnippet extends Polymer.Element {
+      static get is() {
+        return 'demo-snippet';
+      }
+      static get properties() {
+        return {
+          source: {
+            value: 'No source',
+            type: String
+          }
+        };
+      }
+      ready() {
+        super.ready();
+
+        var snippet = this.source;
+
+        // avoid &quot; in HTML attribute values
+        snippet = snippet.replace(/="[^"]+"/g, (match) => {
+          if (match.indexOf('&quot;') > -1) {
+            match = match.replace(/"/g, `'`).replace(/&quot;/g, `"`);
+          }
+          return match;
+        });
+
+        // Boolean properties are displayed as checked="", so remove the ="" bit.
+        snippet = snippet.replace(/=""/g, '');
+        this._markdown = this._unindent(snippet);
+
+        // Remove any leading/trailing new lines.
+        this._markdown = this._markdown.replace(/^\n*|\n*$/g, '');
+      }
+
+      // From https://github.com/PolymerElements/marked-element.
+      _unindent(text) {
+        if (!text) {
+          return text;
+        }
+        var lines = text.replace(/\t/g, '  ').split('\n');
+        var indent = lines.reduce(function(prev, line) {
+          if (/^\s*$/.test(line)) {
+            return prev; // Completely ignore blank lines.
+          }
+          var lineIndent = line.match(/^(\s*)/)[0].length;
+          if (prev === null) {
+            return lineIndent;
+          }
+          return lineIndent < prev ? lineIndent : prev;
+        }, null);
+        return lines.map(function(l) {
+          return l.substr(indent);
+        }).join('\n');
+      }
+    }
+    customElements.define(DemoSnippet.is, DemoSnippet);
+  </script>
+
+</dom-module>

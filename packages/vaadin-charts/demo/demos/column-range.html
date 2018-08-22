@@ -1,0 +1,21 @@
+<template preserve-content>
+  <dom-bind>
+    <template preserve-content>
+      <vaadin-chart type="columnrange"
+          title="Temperature variation by day"
+          timeline
+          additional-options='{
+            "rangeSelector": {
+              "selected": 2
+            },
+            "tooltip": {
+              "valueSuffix": "°C"
+            }
+          }'>
+        <vaadin-chart-series title="Temperatures" values="[[data]]">
+        </vaadin-chart-series>
+      </vaadin-chart>
+      <iron-ajax url="./demo/data/temperature-date-min-max.json" last-response="{{data}}" auto></iron-ajax>
+    </template>
+  </dom-bind>
+</template>

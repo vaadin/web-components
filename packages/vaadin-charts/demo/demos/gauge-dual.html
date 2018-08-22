@@ -1,0 +1,82 @@
+<template preserve-content>
+  <dom-module id="speedometer-theme" theme-for="vaadin-chart">
+    <template>
+      <style include="vaadin-chart-default-theme">
+        :host([theme~="speedometer-dual"]) .highcharts-yaxis .highcharts-axis-line {
+          stroke-width: 2;
+        }
+
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-axis-line,
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-tick,
+        :host([theme~="speedometer-dual"]) .kmh .highcharts-minor-tick {
+          stroke: #339;
+        }
+
+        :host([theme~="speedometer-dual"]) .mph .highcharts-axis-line,
+        :host([theme~="speedometer-dual"]) .mph .highcharts-tick,
+        :host([theme~="speedometer-dual"]) .mph .highcharts-minor-tick {
+          stroke: #933;
+        }
+
+        :host([theme~="speedometer-dual"]) .highcharts-grid-line,
+        :host([theme~="speedometer-dual"]) .highcharts-minor-grid-line {
+          stroke: none;
+        }
+
+        :host([theme~="speedometer-dual"]) .highcharts-pivot {
+          fill: #000;
+          stroke: #000;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <vaadin-chart type="gauge"
+      title="Speedometer with Dual Axes"
+      theme="speedometer-dual"
+      tooltip
+      additional-options='{
+        "pane": {
+          "startAngle": -150,
+          "endAngle": 150
+        },
+        "yAxis": [
+          {
+            "className": "kmh",
+            "min": 0,
+            "max": 200,
+            "offset": -25,
+            "labels": {
+              "distance": -20,
+              "rotation": "auto"
+            },
+            "tickLength": 5,
+            "minorTickLength": 5,
+            "endOfTick": false
+          }, {
+            "className": "mph",
+            "min": 0,
+            "max": 124,
+            "offset": -20,
+            "labels": {
+              "distance": 12,
+              "rotation": "auto"
+            },
+            "tickPosition": "outside",
+            "minorTickPosition": "outside",
+            "tickLength": 5,
+            "minorTickLength": 5,
+            "endOnTick": false
+          }
+        ]
+      }'>
+    <vaadin-chart-series title="Speed" values="[89]"
+      additional-options='{
+        "dataLabels": {
+          "format": "{point.y} km/h"
+        },
+        "tooltip": {
+          "valueSuffix": " km/h"
+        }
+      }'></vaadin-chart-series>
+  </vaadin-chart>
+</template>
