@@ -13,12 +13,13 @@ gemini.suite('vaadin-item', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
-
-  gemini.suite('vaadin-item', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default-tests')
-      .capture('default');
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`vaadin-item-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default');
+    });
   });
 
 });
