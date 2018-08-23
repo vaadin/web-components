@@ -66,9 +66,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
 
       /**
-<<<<<<< HEAD
-       * `<vaadin-dialog>` is a Web Component for customized modal dialogs.
-=======
        *
        * `<vaadin-dialog>` is a Web Component for creating customized modal dialogs. The content of the
        * dialog can be populated in two ways: imperatively by using renderer callback function and
@@ -98,7 +95,6 @@ This program is available under Apache License Version 2.0, available at https:/
        * Alternatively, the content can be provided with Polymer's Template.
        * Dialog finds the first child template and uses that in case renderer callback function
        * is not provided. You can also set a custom template using the `template` property.
->>>>>>> Move the renderer docs section upper
        *
        * ```html
        * <vaadin-dialog opened>
@@ -165,7 +161,9 @@ This program is available under Apache License Version 2.0, available at https:/
               type: String
             },
 
-            _contentTemplate: Object
+            _contentTemplate: Object,
+
+            /**
              * Custom function for rendering the content of the dialog.
              * Receives two arguments:
              *
@@ -175,8 +173,6 @@ This program is available under Apache License Version 2.0, available at https:/
              * **NOTE:** The renderer callback can be called multiple times with the previous content.
              */
             renderer: Function,
-
-            _contentTemplate: Object,
 
             _oldTemplate: Object,
 
