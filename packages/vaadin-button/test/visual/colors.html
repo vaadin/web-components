@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../vaadin-button.html">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-button.html">`);
+  </script>
 
   <custom-style>
     <style include="lumo-typography lumo-color">
@@ -59,6 +62,16 @@
   </vaadin-button>
 
   <vaadin-button theme="tertiary error">
+    <span>Button</span>
+  </vaadin-button>
+
+  <br>Material variations:
+
+  <vaadin-button theme="outlined">
+    <span>Button</span>
+  </vaadin-button>
+
+  <vaadin-button theme="contained">
     <span>Button</span>
   </vaadin-button>
 

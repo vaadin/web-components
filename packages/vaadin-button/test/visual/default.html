@@ -4,12 +4,15 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-button.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-button.html">`);
+  </script>
 </head>
 
 <body>
 
-  <form style="display: inline-block">
+  <form style="display: inline-block;">
     <fieldset id="default-tests">
 
       <vaadin-button disabled>
