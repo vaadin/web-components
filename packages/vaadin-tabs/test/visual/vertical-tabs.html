@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <title>Vertical nav visual tests</title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="common.html">
+
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tab.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-tabs.html">`);
+  </script>
 </head>
 
 <body>
