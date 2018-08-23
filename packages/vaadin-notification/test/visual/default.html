@@ -14,13 +14,16 @@
       </style>
     </template>
   </dom-module>
-  <link href="../../vaadin-notification.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-notification.html">`);
+  </script>
 </head>
 
 <body style="height: 100vh;">
   <vaadin-notification opened duration="0" position="top-stretch">
     <template>
-      top-strech
+      top-stretch
     </template>
   </vaadin-notification>
 
