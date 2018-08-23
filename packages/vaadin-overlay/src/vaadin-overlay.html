@@ -602,14 +602,14 @@ This program is available under Apache License Version 2.0, available at https:/
        * Returns all attached overlays.
        */
       static get __attachedInstances() {
-        return Array.from(document.body.children).filter(el => el instanceof Vaadin.OverlayElement);
+        return Array.from(document.body.children).filter(el => el instanceof OverlayElement);
       }
 
       /**
        * returns true if this is the last one in the opened overlays stack
        */
       get _last() {
-        return this === Vaadin.OverlayElement.__attachedInstances.pop();
+        return this === OverlayElement.__attachedInstances.pop();
       }
 
       _modelessChanged(modeless) {
@@ -636,7 +636,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // Disable pointer events in other attached overlays
-        Vaadin.OverlayElement.__attachedInstances.forEach(el => {
+        OverlayElement.__attachedInstances.forEach(el => {
           if (el !== this) {
             el.shadowRoot.querySelector('[part="overlay"]').style.pointerEvents = 'none';
           }
@@ -656,7 +656,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         // Restore pointer events in the previous overlay(s) in reverse order
-        const instances = Vaadin.OverlayElement.__attachedInstances.reverse();
+        const instances = OverlayElement.__attachedInstances.reverse();
         let el;
         while (el = instances.pop()) {
           if (el === this) {
