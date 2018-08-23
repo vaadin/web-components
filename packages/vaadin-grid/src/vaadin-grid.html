@@ -654,16 +654,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      ready() {
-        super.ready();
-
-        if (document.doctype === null) {
-          console.warn(
-            '<vaadin-grid> requires the "standards mode" declaration. Please add <!DOCTYPE html> to the HTML document.'
-          );
-        }
-      }
-
       __getRowModel(row) {
         return {
           index: row.index,
