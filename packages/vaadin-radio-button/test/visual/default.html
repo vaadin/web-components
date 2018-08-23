@@ -4,13 +4,16 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-radio-button.html" rel="import">
-  <link href="../../vaadin-radio-group.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-button.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-radio-group.html">`);
+  </script>
 </head>
 
 <body>
 
-  <div id="default-tests" style="padding: 6px">
+  <div id="default-tests" style="padding: 6px;">
     <vaadin-radio-group label="Foo">
       <vaadin-radio-button checked>1</vaadin-radio-button>
       <vaadin-radio-button disabled>2</vaadin-radio-button>
