@@ -1,0 +1,32 @@
+{
+  "name": "@vaadin/vaadin-crud",
+  "version": "0.1.0",
+  "description": "vaadin-crud",
+  "main": "vaadin-crud.html",
+  "repository": "vaadin/vaadin-crud",
+  "keywords": [
+    "Vaadin",
+    "vaadin-crud",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-crud/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-crud.html",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "test": "wct",
+    "preversion": "gulp version:update"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+  }
+}
