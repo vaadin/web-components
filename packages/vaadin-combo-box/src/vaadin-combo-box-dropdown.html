@@ -205,10 +205,10 @@ This program is available under Apache License Version 2.0, available at https:/
         return this.alignedAbove ? -overlayRect.height : targetRect.height;
       }
 
-      _shouldAlignAbove() {
+      _shouldAlignAbove(targetRect) {
         const spaceBelow = (
           window.innerHeight -
-          this.positionTarget.getBoundingClientRect().bottom -
+          targetRect.bottom -
           Math.min(document.body.scrollTop, 0)
         ) / window.innerHeight;
 
@@ -225,7 +225,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         const targetRect = this.positionTarget.getBoundingClientRect();
-        this.alignedAbove = this._shouldAlignAbove();
+        this.alignedAbove = this._shouldAlignAbove(targetRect);
 
         const overlayRect = this.$.overlay.getBoundingClientRect();
         this._translateX = targetRect.left - overlayRect.left + (this._translateX || 0);

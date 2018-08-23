@@ -100,6 +100,11 @@ This program is available under Apache License Version 2.0, available at https:/
         };
       }
 
+      constructor() {
+        super();
+        this._boundInputValueChanged = this._inputValueChanged.bind(this);
+      }
+
       ready() {
         super.ready();
         this._toggleElement = this.querySelector('.toggle-button');
@@ -115,13 +120,13 @@ This program is available under Apache License Version 2.0, available at https:/
         const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
         this._setInputElement(this.querySelector(cssSelector));
         this._revertInputValue();
-        this.listen(this.inputElement, 'input', '_inputValueChanged');
+        this.inputElement.addEventListener('input', this._boundInputValueChanged);
         this._preventInputBlur();
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        this.unlisten(this.inputElement, 'input', '_inputValueChanged');
+        this.inputElement.removeEventListener('input', this._boundInputValueChanged);
         this._restoreInputBlur();
       }
 

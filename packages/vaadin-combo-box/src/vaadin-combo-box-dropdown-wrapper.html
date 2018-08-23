@@ -122,7 +122,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _focusedIndex: {
             type: Number,
-            notify: true,
             value: -1,
             observer: '_focusedIndexChanged'
           },
@@ -206,11 +205,13 @@ This program is available under Apache License Version 2.0, available at https:/
           window.ShadyCSS.getComputedStyleValue(this, '--vaadin-combo-box-overlay-max-height') :
           getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height')) || '65vh';
 
+        const maxHeight = this._maxOverlayHeight(targetRect);
+
         // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
-        this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
+        this.$.dropdown.$.overlay.style.maxHeight = maxHeight;
 
         // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-        this._selector.style.maxHeight = this._maxOverlayHeight(targetRect);
+        this._selector.style.maxHeight = maxHeight;
 
         this.updateViewportBoundaries();
       }
