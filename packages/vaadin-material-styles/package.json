@@ -19,6 +19,15 @@
     "url": "https://github.com/vaadin/vaadin-material-styles/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "color.js",
+    "font-icons.js",
+    "font-roboto.js",
+    "shadow.js",
+    "typography.js",
+    "version.js",
+    "mixins"
+  ],
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"
