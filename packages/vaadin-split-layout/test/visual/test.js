@@ -13,19 +13,20 @@ gemini.suite('vaadin-split-layout', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default')
+        .capture('default');
+    });
 
-  gemini.suite('default', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default')
-      .capture('default');
-  });
-
-  gemini.suite('customized', function(suite) {
-    suite
-      .setUrl('customized.html')
-      .setCaptureElements('#customized')
-      .capture('customized');
+    gemini.suite(`customized-${theme}`, function(suite) {
+      suite
+        .setUrl(`customized.html?theme=${theme}`)
+        .setCaptureElements('#customized')
+        .capture('customized');
+    });
   });
 
 });
