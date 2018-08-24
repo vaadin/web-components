@@ -46,7 +46,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 role$="[[_getAriaRole(index)]]"
                 aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
                 focused="[[_isItemFocused(_focusedIndex,index)]]"
-                touch-device$="[[touchDevice]]"
                 tabindex="-1">
               </vaadin-combo-box-item>
             </template>
@@ -59,6 +58,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <script>
   (function() {
+    'use strict';
+
+    const TOUCH_DEVICE = (() => {
+      try {
+        document.createEvent('TouchEvent');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })();
+
     /**
      * Element for internal use only.
      *
@@ -77,15 +87,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           touchDevice: {
             type: Boolean,
-            reflectToAttribute: true,
-            value: () => {
-              try {
-                document.createEvent('TouchEvent');
-                return true;
-              } catch (e) {
-                return false;
-              }
-            }
+            value: TOUCH_DEVICE
           },
 
           opened: Boolean,

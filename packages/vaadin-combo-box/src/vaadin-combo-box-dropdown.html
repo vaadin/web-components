@@ -69,22 +69,6 @@ This program is available under Apache License Version 2.0, available at https:/
           },
 
           /**
-           * True if the device supports touch events.
-           */
-          touchDevice: {
-            type: Boolean,
-            reflectToAttribute: true,
-            value: () => {
-              try {
-                document.createEvent('TouchEvent');
-                return true;
-              } catch (e) {
-                return false;
-              }
-            }
-          },
-
-          /**
            * The element to position/align the dropdown by.
            */
           positionTarget: {
