@@ -36,6 +36,20 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * <vaadin-cookie-consent learn-more-link="https://mysite.com/cookies.html"></vaadin-cookie-consent>
        * ```
        *
+       * ### Styling
+       *
+       * To change the look of the cookie consent banner, a `style` node should be attached
+       * to the document's head with the following style names overridden:
+       *
+       * Style name      | Description
+       * ----------------|-------------------------------------------------------|
+       * `cc-window`     | Banner container
+       * `cc-message`    | Message container
+       * `cc-compliance` | Dismiss cookie button container
+       * `cc-dismiss`    | Dismiss cookie button
+       * `cc-btn`        | Dismiss cookie button
+       * `cc-link`       | Learn more link element
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ThemableMixin
