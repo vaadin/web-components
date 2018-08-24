@@ -2,8 +2,7 @@ module.exports = {
   files: [
     'src/vaadin-chart.js',
     'theme/vaadin-chart-default-theme.js',
-    'test/exporting-test.html',
-    'package.json'
+    'test/exporting-test.html'
   ],
 
   from: [
@@ -19,9 +18,7 @@ module.exports = {
     '  then delete this comment!\n' +
     '*/',
 
-    /import '..\/vaadin-chart.js';/g,
-
-    `"resolutions": {`
+    /import '..\/vaadin-chart.js';/g
   ],
 
   to: [
@@ -38,12 +35,6 @@ module.exports = {
     ``,
 
     `import Highcharts from 'highcharts/js/es-modules/masters/highstock.src.js';
-     import '../vaadin-chart.js';`,
-
-    `"resolutions": {
-      "@webcomponents/webcomponentsjs": "2.0.4",
-      "@vaadin/vaadin-element-mixin": "1.1.2",
-      "@vaadin/vaadin-usage-statistics": "1.1.0-beta1",
-      "@vaadin/vaadin-development-mode-detector": "1.1.0-beta1",`
+     import '../vaadin-chart.js';`
   ]
 };

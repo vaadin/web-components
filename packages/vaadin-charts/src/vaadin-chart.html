@@ -12,6 +12,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 <link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
 <!-- MAGI REMOVE START -->
 <script src="../../highcharts/js/highstock.js"></script>
@@ -1702,8 +1703,10 @@ MAGI ADD END -->
        */
       window.Vaadin.ChartElement = ChartElement;
 
-      if (window.Vaadin.runIfDevelopmentMode) {
-        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', ChartElement);
+      const licenseChecker = window.Vaadin.developmentModeCallback
+        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
+      if (typeof licenseChecker === 'function') {
+        licenseChecker(ChartElement);
       }
     })();
   </script>

@@ -33,8 +33,8 @@
     "highcharts": "6.1.0",
     "polymer": "^2.0.0",
     "vaadin-themable-mixin": "vaadin/vaadin-themable-mixin#^1.2.1",
-    "vaadin-license-checker": "vaadin/license-checker#2.1.0-alpha1",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.2"
+    "vaadin-license-checker": "vaadin/license-checker#2.1.0-alpha2",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
@@ -42,7 +42,7 @@
     "webcomponentsjs": "1.2.4",
     "web-component-tester": "^6.1.5",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.1",
-    "vaadin-grid": "vaadin/vaadin-grid#5.1.0-beta2",
+    "vaadin-grid": "vaadin/vaadin-grid#^5.1.0",
     "app-route": "PolymerElements/app-route#^2.0.0",
     "app-menu": "^2.0.0",
     "iron-icon": "^2.1.0",
@@ -52,12 +52,7 @@
     "iron-media-query": "2.0.0",
     "iron-pages": "2.0.0",
     "paper-button": "2.0.0",
-    "vaadin-split-layout": "^4.1.0-beta2",
-    "vaadin-icons": "^4.2.0-beta2"
-  },
-  "resolutions": {
-    "vaadin-element-mixin": "^1.1.2",
-    "vaadin-usage-statistics": "^1.1.0-beta1",
-    "vaadin-development-mode-detector": "^1.1.0-beta1"
+    "vaadin-split-layout": "^4.1.0",
+    "vaadin-icons": "^4.2.0"
   }
 }
