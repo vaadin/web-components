@@ -10,8 +10,8 @@
   "dependencies": {
     "polymer": "^2.0.0",
     "iron-resizable-behavior": "^2.0.0",
-    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-alpha1",
-    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^1.1.0"
+    "vaadin-license-checker": "vaadin/license-checker#^2.1.0-alpha2",
+    "vaadin-element-mixin": "vaadin/vaadin-element-mixin#^2.0.0"
   },
   "devDependencies": {
     "app-layout": "PolymerElements/app-layout#v2.0.0",
@@ -19,7 +19,7 @@
     "webcomponentsjs": "^1.0.0",
     "vaadin-demo-helpers": "vaadin/vaadin-demo-helpers#^2.0.0",
     "iron-icon": "^2.0.1",
-    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
+    "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0",
     "iron-component-page": "PolymerElements/iron-component-page#^3.0.1"
   }
 }
