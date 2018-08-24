@@ -10,7 +10,8 @@
     <h3>Sample example</h3>
     <vaadin-demo-snippet id="element-basic-demos-sample-example">
       <template preserve-content>
-        <vaadin-crud>Foobar</vaadin-crud>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]]>Foobar</vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 

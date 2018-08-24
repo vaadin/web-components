@@ -7,26 +7,42 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
+<link rel="import" href="../../vaadin-button/vaadin-button.html">
 
 <dom-module id="vaadin-crud">
   <template>
     <style>
       :host {
         display: inline-block;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
       }
 
       :host([hidden]) {
         display: none !important;
       }
+
+      :host ::slotted(vaadin-grid) {
+      }
+
+      vaadin-button {
+        width: 40px;
+      }
+
     </style>
-    <slot></slot>
+    <slot name="grid"></slot>
+    <vaadin-button>New</vaadin-button>
   </template>
 
   <script>
     (function() {
 
       /**
-       * `<vaadin-crud>` is a Polymer 2 element.
+       * `<vaadin-crud>`A Web component for crud operations
        *
        * ```
        * <vaadin-crud></vaadin-crud>
@@ -41,13 +57,41 @@ This program is available under Apache License Version 2.0, available at https:/
         static get is() {
           return 'vaadin-crud';
         }
+
         static get version() {
           return '0.1.0';
         }
 
         static get properties() {
           return {
+            _grid: HTMLElement,
+            editor: HTMLElement,
+            items: Object,
+            dataProvider: Function
           };
+        }
+
+        static get observers() {
+          return ['__onGridChange(_grid)',
+                  '__onEditorChange(editor)',
+                  '__onItemsChange(items)',
+                  '__onDataProviderChange(dataprovider)'];
+        }
+
+        connectedCallback() {
+          super.connectedCallback();
+        }
+
+        __onGridChange(grid, old) {
+        }
+
+        __onEditorChange(editor) {
+        }
+
+        __onItemsChange(items) {
+        }
+
+        __onDataProviderChange(dataProvider) {
         }
       }
 
