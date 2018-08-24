@@ -1,4 +1,4 @@
-sudo: true
+sudo: false
 dist: trusty
 language: node_js
 node_js: 8.11
@@ -11,9 +11,24 @@ addons:
   firefox: latest
   chrome: stable
 
-env:
-  - POLYMER=2 TEST_SUITE=unit_tests
-  - POLYMER=3
+jobs:
+  include:
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=2
+    - if: type = push
+      env: TEST_SUITE=unit_tests POLYMER=3
+    - if: type = pull_request
+      env: POLYMER=2
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = pull_request
+      env: POLYMER=3
+      addons:
+        firefox: latest
+        chrome: stable
+    - if: type = cron
+      env: TEST_SUITE=unit_tests POLYMER=2
 
 script:
   - if [[ "$POLYMER" = "2" ]]; then
@@ -23,7 +38,7 @@ script:
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
         wct --env saucelabs;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct;
+        wct;
       fi &&
       if [[ "$TRAVIS_EVENT_TYPE" = "cron" && "$TEST_SUITE" = "unit_tests" ]]; then
         wct --env saucelabs-cron;
@@ -35,8 +50,8 @@ script:
       magi p3-convert --out . --import-style=name &&
       yarn install --flat &&
       if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
-        wct --module-resolution=node --npm --env saucelabs;
+        wct --npm --env saucelabs;
       else
-        xvfb-run -s '-screen 0 1024x768x24' wct --module-resolution=node --npm;
+        wct --npm;
       fi;
     fi
