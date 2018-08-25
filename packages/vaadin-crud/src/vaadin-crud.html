@@ -67,7 +67,11 @@ This program is available under Apache License Version 2.0, available at https:/
             _grid: HTMLElement,
             editor: HTMLElement,
             items: Object,
-            dataProvider: Function
+            dataProvider: Function,
+            listExcludeRegex: {
+              type: RegExp,
+              value: /^_|password/i
+            }
           };
         }
 
@@ -133,6 +137,9 @@ This program is available under Apache License Version 2.0, available at https:/
         __createColumns(parent, object, path) {
           if (typeof object === 'object') {
             Object.keys(object).forEach(prop => {
+              if (this.listExcludeRegex && this.listExcludeRegex.test(prop)) {
+                return;
+              }
               const newPath = (path ? `${path}.` : '') + prop;
               if (typeof object[prop] === 'object') {
                 let group = this.__createGroup(parent, newPath, object[prop]);
