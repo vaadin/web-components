@@ -34,7 +34,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
     </style>
-    <slot name="grid"></slot>
+    <slot name="grid">
+      <vaadin-crud-grid id="grid" excluded="[[excludedRegex]]"></vaadin-crud-grid>
+    </slot>
     <vaadin-button>New</vaadin-button>
   </template>
 
@@ -68,7 +70,7 @@ This program is available under Apache License Version 2.0, available at https:/
             editor: HTMLElement,
             items: Object,
             dataProvider: Function,
-            listExcludeRegex: {
+            excludedRegex: {
               type: RegExp,
               value: /^_|password/i
             }
@@ -80,16 +82,6 @@ This program is available under Apache License Version 2.0, available at https:/
                   '__onEditorChange(editor)',
                   '__onItemsChange(items)',
                   '__onDataProviderChange(dataprovider)'];
-        }
-
-        connectedCallback() {
-          super.connectedCallback();
-          if (!this._grid) {
-            const grid = document.createElement('vaadin-grid');
-            const col = document.createElement('vaadin-grid-column');
-            grid.appendChild(col);
-            this._grid = grid;
-          }
         }
 
         __onGridChange(grid, old) {
@@ -105,62 +97,10 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onItemsChange(items) {
-          if (this._grid) {
-            this._grid.innerHTML = '';
-            this.__createColumns(this._grid, items && items[0]);
-            this._grid.items = items;
-          }
+          (this._grid || this.$.grid).items = items;
         }
 
         __onDataProviderChange(dataProvider) {
-        }
-
-        __camelize(path) {
-          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
-        }
-
-        __createColumn(parent, path) {
-          let col = document.createElement('vaadin-grid-column');
-          let tpl = document.createElement('template');
-          if (path) {
-            tpl.classList = ['header'];
-            tpl.innerHTML = this.__camelize(path.replace(/^.*\./, ''));
-            col.appendChild(tpl);
-          }
-          this._grid.appendChild(col);
-          tpl = document.createElement('template');
-          tpl.innerHTML = `[[item${path ? '.' + path : ''}]]`;
-          col.appendChild(tpl);
-          parent.appendChild(col);
-        }
-
-        __createColumns(parent, object, path) {
-          if (typeof object === 'object') {
-            Object.keys(object).forEach(prop => {
-              if (this.listExcludeRegex && this.listExcludeRegex.test(prop)) {
-                return;
-              }
-              const newPath = (path ? `${path}.` : '') + prop;
-              if (typeof object[prop] === 'object') {
-                let group = this.__createGroup(parent, newPath, object[prop]);
-                this.__createColumns(group, object[prop], newPath);
-              } else {
-                this.__createColumn(parent, newPath);
-              }
-            });
-          } else {
-            this.__createColumn(parent, '');
-          }
-        }
-
-        __createGroup(parent, path, object) {
-          let grp = document.createElement('vaadin-grid-column-group');
-          let tpl = document.createElement('template');
-          tpl.classList = ['header'];
-          tpl.innerHTML = this.__camelize(path.replace(/^.*\./, ''));
-          grp.appendChild(tpl);
-          parent.appendChild(grp);
-          return grp;
         }
 
       }

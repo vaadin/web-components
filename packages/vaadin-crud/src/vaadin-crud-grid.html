@@ -1,0 +1,97 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
+<link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
+
+  <script>
+    (function() {
+
+      /**
+       * @memberof Vaadin
+       */
+      class VaadinCrudGrid extends Vaadin.GridElement {
+        static get is() {
+          return 'vaadin-crud-grid';
+        }
+
+        static get version() {
+          return '0.1.0';
+        }
+
+        static get properties() {
+          return {
+            excluded: {
+              type: RegExp,
+              value: /^_|password/i
+            }
+          };
+        }
+
+        static get observers() {
+          return ['__onItemsChange(items)',
+                  '__onDataProviderChange(dataprovider)'];
+        }
+
+        __onItemsChange(items) {
+          this.innerHTML = '';
+          this.__createColumns(this, items && items[0]);
+        }
+
+        __onDataProviderChange(dataProvider) {
+        }
+
+        __camelize(path) {
+          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
+        }
+
+        __createColumn(parent, path) {
+          let col = document.createElement('vaadin-grid-column');
+          col.innerHTML = `<template>[[item${path ? '.' + path : ''}]]</template>`;
+          if (path) {
+            col.innerHTML += `<template class="header">${this.__camelize(path.replace(/^.*\./, ''))}</template>`;
+          }
+          parent.appendChild(col);
+          return col;
+        }
+
+        __createColumns(parent, object, path) {
+          if (typeof object === 'object') {
+            Object.keys(object).forEach(prop => {
+              if (this.excluded && this.excluded.test(prop)) {
+                return;
+              }
+              const newPath = (path ? `${path}.` : '') + prop;
+              if (typeof object[prop] === 'object') {
+                let group = this.__createGroup(parent, newPath, object[prop]);
+                this.__createColumns(group, object[prop], newPath);
+              } else {
+                this.__createColumn(parent, newPath);
+              }
+            });
+          } else {
+            this.__createColumn(parent, '');
+          }
+        }
+
+        __createGroup(parent, path, object) {
+          let grp = document.createElement('vaadin-grid-column-group');
+          grp.innerHTML = `<template class="header">${this.__camelize(path.replace(/^.*\./, ''))}</template>`;
+          parent.appendChild(grp);
+          return grp;
+        }
+      }
+
+      customElements.define(VaadinCrudGrid.is, VaadinCrudGrid);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.CrudGridElement = VaadinCrudGrid;
+    })();
+  </script>
