@@ -20,13 +20,9 @@
   },
   "homepage": "https://vaadin.com/components",
   "files": [
-    "color.js",
-    "font-icons.js",
-    "font-roboto.js",
-    "shadow.js",
-    "typography.js",
-    "version.js",
-    "mixins"
+    "*.js",
+    "mixins/*.js",
+    "!wdio.conf.js"
   ],
   "scripts": {
     "test": "wct",
