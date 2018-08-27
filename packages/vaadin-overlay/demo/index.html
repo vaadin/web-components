@@ -62,26 +62,26 @@
           Show overlay with current time
         </vaadin-button>
         <script>
-          var overlay = document.querySelector('#manual-renderer');
-          var btn = document.querySelector('#btn-manual-renderer');
+          var dynamicOverlay = document.querySelector('#manual-renderer');
+          var dynamicOverlayBtn = document.querySelector('#btn-manual-renderer');
 
-          btn.addEventListener('click', function() {
-            overlay.opened = true;
+          dynamicOverlayBtn.addEventListener('click', function() {
+            dynamicOverlay.opened = true;
           });
 
           let interval;
-          overlay.addEventListener('vaadin-overlay-open', function() {
-            overlay.render();
+          dynamicOverlay.addEventListener('vaadin-overlay-open', function() {
+            dynamicOverlay.render();
             interval = setInterval(function() {
-              overlay.render();
+              dynamicOverlay.render();
             }, 1000);
           });
 
-          overlay.addEventListener('vaadin-overlay-close', function() {
+          dynamicOverlay.addEventListener('vaadin-overlay-close', function() {
             clearInterval(interval);
           });
 
-          overlay.renderer = function(root) {
+          dynamicOverlay.renderer = function(root) {
             const date = new Date();
             root.textContent = 'Current time: ' +
                                 pad(date.getHours()) + ':' +

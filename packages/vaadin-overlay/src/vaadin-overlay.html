@@ -786,7 +786,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
 
-        this.renderer.call(this.owner, this, this.owner, this.model);
+        this.renderer.call(this.owner, this.content, this.owner, this.model);
       }
 
       _templateOrRendererChanged(template, renderer, owner, model, instanceProps) {
@@ -817,7 +817,7 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
-          this.renderer.call(owner, this.content, owner, model);
+          this.render();
         }
       }
 
