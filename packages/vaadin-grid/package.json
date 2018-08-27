@@ -10,6 +10,12 @@
     "url": "https://github.com/vaadin/vaadin-grid/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "all-imports.js",
+    "src",
+    "theme"
+  ],
   "devDependencies": {
     "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
   },
