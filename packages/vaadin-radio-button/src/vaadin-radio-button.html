@@ -159,6 +159,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
           this.setAttribute('role', 'radio');
 
+          this.addEventListener('click', this._handleClick.bind(this));
+
           this._addActiveListeners();
 
           const attrName = this.getAttribute('name');
@@ -200,6 +202,13 @@ This program is available under Apache License Version 2.0, available at https:/
               this.removeAttribute('active');
             }
           });
+        }
+
+        _handleClick(e) {
+          if (!this.disabled) {
+            e.preventDefault();
+            this.checked = true;
+          }
         }
 
         /** @protected */

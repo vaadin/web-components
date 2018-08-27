@@ -131,6 +131,17 @@
       it('should have input as focusElement', () => {
         expect(vaadinRadioButton.focusElement).to.be.eql(nativeRadio);
       });
+
+      it('should set checked on host click', () => {
+        vaadinRadioButton.click();
+        expect(vaadinRadioButton.checked).to.be.true;
+      });
+
+      it('should not set checked on host click when disabled', () => {
+        vaadinRadioButton.disabled = true;
+        vaadinRadioButton.click();
+        expect(vaadinRadioButton.checked).to.be.false;
+      });
     });
 
     describe('iron-form-radio-button', () => {
