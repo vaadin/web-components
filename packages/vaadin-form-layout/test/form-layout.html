@@ -78,6 +78,23 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="mutation">
+    <template>
+      <div>
+        <vaadin-form-layout>
+          <vaadin-form-item>
+            <label slot="label">Address</label>
+            <input class="full-width">
+          </vaadin-form-item>
+          <vaadin-form-item>
+            <label slot="label">First Name</label>
+            <input class="full-width" value="Jane">
+          </vaadin-form-item>
+        </vaadin-form-layout>
+      </div>
+    </template>
+  </test-fixture>
+
   <script>
     function getParsedWidth(el) {
       const width = el.style.getPropertyValue('width');
@@ -466,6 +483,28 @@
         const ev = new Event('animationend');
         ev.animationName = 'foo';
         layout.dispatchEvent(ev);
+      });
+    });
+
+    describe('mutations', function() {
+      let container, layout;
+
+      beforeEach(() => {
+        container = fixture('mutation');
+        layout = container.querySelector('vaadin-form-layout');
+      });
+
+      function estimateEffectiveColspan(el) {
+        return parseFloat(getParsedWidth(el).percentage) / (100 / 2);
+      }
+
+      it('should update layout after updating a colspan attribute', done => {
+        expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(1, .1);
+        layout.children[0].setAttribute('colspan', 2);
+        setTimeout(() => {
+          expect(estimateEffectiveColspan(layout.children[0])).to.be.closeTo(2, .1);
+          done();
+        });
       });
     });
   </script>
