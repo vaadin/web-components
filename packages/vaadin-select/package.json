@@ -17,6 +17,11 @@
     "url": "https://github.com/vaadin/vaadin-dropdown-menu/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"
