@@ -18,6 +18,11 @@
     "url": "https://github.com/vaadin/vaadin-lumo-styles/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "*.js",
+    "mixins/*.js",
+    "!wdio.conf.js"
+  ],
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"
