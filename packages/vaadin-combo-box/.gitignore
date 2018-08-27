@@ -1,7 +1,6 @@
-bower_components*
+bower_components
 node_modules
-bower-*.json
 package-lock.json
 yarn.lock
 coverage
-
+analysis.json
