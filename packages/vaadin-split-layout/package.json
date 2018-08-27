@@ -17,6 +17,11 @@
     "url": "https://github.com/vaadin/vaadin-split-layout/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
   "devDependencies": {
     "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
   },
