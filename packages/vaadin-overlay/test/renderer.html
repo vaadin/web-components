@@ -120,6 +120,13 @@
           expect(() => overlay.template = template).to.throw(Error);
           expect(overlay.template).to.be.not.ok;
         });
+
+        it('should be possible to manually invoke renderer', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          overlay.render();
+          expect(spy.calledTwice).to.be.true;
+        });
       });
 
       describe('with template', () => {
