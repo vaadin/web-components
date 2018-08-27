@@ -330,7 +330,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _templateOrRendererChanged(template, renderer) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
-            throw new Error('You should only use either a renderer or a template for dialog content');
+            throw new Error('You should only use either a renderer or a template for notification content');
           }
 
           this._oldTemplate = template;
