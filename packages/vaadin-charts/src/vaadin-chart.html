@@ -77,6 +77,8 @@ MAGI ADD END -->
        *
        * ### Quick Start
        *
+       * #### Polymer 2 App
+       *
        * 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)
        * ```
        * mkdir my-app
@@ -86,7 +88,7 @@ MAGI ADD END -->
        * ```
        * 1. Install Vaadin Charts
        * ```
-       * bower install --save vaadin-charts#6.1.0
+       * bower install --save vaadin-charts#6.2.0-alpha1
        * ```
        * 1. Import `<vaadin-chart>` to your app
        * Edit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag
@@ -102,6 +104,35 @@ MAGI ADD END -->
        * ```
        * polymer serve --open
        * ```
+       *
+       * #### Polymer 3 App
+       *
+       * * 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/3.0/docs/tools/polymer-cli)
+       * ```
+       * mkdir my-app
+       * cd my-app
+       * polymer init
+       * select `polymer-3-application`
+       * ```
+       * 1. Install Vaadin Charts
+       * ```
+       * npm i @vaadin/vaadin-charts@6.2.0-alpha1 --save
+       * ```
+       * 1. Import `<vaadin-chart>` to your app
+       * Edit the file `src/my-app/my-app.js` and add the following snipped on the top, after the first `import` declaration
+       * ```js
+       * import '@vaadin/vaadin-charts';
+       * ```
+       * 1. Add your first `<vaadin-chart>`
+       * Also in `my-app.js`, at the template getter, add the following snippet after the `</h2>` closing tag
+       * ```html
+       * <vaadin-chart></vaadin-chart>
+       * ```
+       * 1. Run your app with:
+       * ```
+       * polymer serve --npm --open
+       * ```
+       *
        * Congratulations! You have your first Vaadin Chart setup.
        *
        * ### Basic use

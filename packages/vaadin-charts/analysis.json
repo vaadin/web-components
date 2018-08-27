@@ -8,11 +8,11 @@
       "sourceRange": {
         "file": "src/vaadin-chart.html",
         "start": {
-          "line": 1702,
+          "line": 1734,
           "column": 6
         },
         "end": {
-          "line": 1702,
+          "line": 1734,
           "column": 48
         }
       },
@@ -508,11 +508,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 421,
+                  "line": 434,
                   "column": 8
                 },
                 "end": {
-                  "line": 421,
+                  "line": 434,
                   "column": 23
                 }
               },
@@ -531,11 +531,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 423,
+                  "line": 436,
                   "column": 8
                 },
                 "end": {
-                  "line": 423,
+                  "line": 436,
                   "column": 25
                 }
               },
@@ -554,11 +554,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 425,
+                  "line": 438,
                   "column": 8
                 },
                 "end": {
-                  "line": 425,
+                  "line": 438,
                   "column": 22
                 }
               },
@@ -577,11 +577,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 427,
+                  "line": 440,
                   "column": 8
                 },
                 "end": {
-                  "line": 427,
+                  "line": 440,
                   "column": 24
                 }
               },
@@ -600,11 +600,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 429,
+                  "line": 442,
                   "column": 8
                 },
                 "end": {
-                  "line": 429,
+                  "line": 442,
                   "column": 18
                 }
               },
@@ -623,11 +623,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 431,
+                  "line": 444,
                   "column": 8
                 },
                 "end": {
-                  "line": 431,
+                  "line": 444,
                   "column": 15
                 }
               },
@@ -1173,11 +1173,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 540,
+                  "line": 552,
                   "column": 6
                 },
                 "end": {
-                  "line": 546,
+                  "line": 558,
                   "column": 7
                 }
               },
@@ -1195,11 +1195,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 446,
+                  "line": 459,
                   "column": 6
                 },
                 "end": {
-                  "line": 480,
+                  "line": 492,
                   "column": 7
                 }
               },
@@ -1528,11 +1528,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 412,
+                  "line": 413,
                   "column": 8
                 },
                 "end": {
-                  "line": 419,
+                  "line": 420,
                   "column": 9
                 }
               },
@@ -1552,6 +1552,11 @@
                   "name": "value",
                   "type": "?string",
                   "description": "New attribute value"
+                },
+                {
+                  "name": "namespace",
+                  "type": "?string",
+                  "description": "Attribute namespace."
                 }
               ],
               "return": {
@@ -1566,11 +1571,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 433,
+                  "line": 434,
                   "column": 8
                 },
                 "end": {
-                  "line": 440,
+                  "line": 441,
                   "column": 9
                 }
               },
@@ -1604,11 +1609,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 452,
+                  "line": 453,
                   "column": 8
                 },
                 "end": {
-                  "line": 458,
+                  "line": 459,
                   "column": 9
                 }
               },
@@ -1642,11 +1647,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 473,
+                  "line": 474,
                   "column": 8
                 },
                 "end": {
-                  "line": 480,
+                  "line": 481,
                   "column": 9
                 }
               },
@@ -1680,11 +1685,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 493,
+                  "line": 494,
                   "column": 8
                 },
                 "end": {
-                  "line": 500,
+                  "line": 501,
                   "column": 9
                 }
               },
@@ -1709,11 +1714,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/properties-changed.html",
                 "start": {
-                  "line": 514,
+                  "line": 515,
                   "column": 8
                 },
                 "end": {
-                  "line": 523,
+                  "line": 524,
                   "column": 9
                 }
               },
@@ -2242,11 +2247,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 558,
+                  "line": 570,
                   "column": 6
                 },
                 "end": {
-                  "line": 567,
+                  "line": 579,
                   "column": 7
                 }
               },
@@ -2967,11 +2972,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 527,
+                  "line": 539,
                   "column": 6
                 },
                 "end": {
-                  "line": 532,
+                  "line": 544,
                   "column": 7
                 }
               },
@@ -3009,11 +3014,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 581,
+                  "line": 593,
                   "column": 6
                 },
                 "end": {
-                  "line": 597,
+                  "line": 609,
                   "column": 7
                 }
               },
@@ -3038,11 +3043,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 620,
+                  "line": 632,
                   "column": 6
                 },
                 "end": {
-                  "line": 624,
+                  "line": 636,
                   "column": 7
                 }
               },
@@ -3066,11 +3071,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 641,
+                  "line": 653,
                   "column": 6
                 },
                 "end": {
-                  "line": 646,
+                  "line": 658,
                   "column": 7
                 }
               },
@@ -3442,11 +3447,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 657,
+                  "line": 669,
                   "column": 6
                 },
                 "end": {
-                  "line": 660,
+                  "line": 672,
                   "column": 7
                 }
               },
@@ -4109,16 +4114,16 @@
             },
             {
               "name": "_parseBindings",
-              "description": "Called to parse text in a template (either attribute values or\ntextContent) into binding metadata.\n\nAny overrides of this method should return an array of binding part\nmetadata  representing one or more bindings found in the provided text\nand any \"literal\" text in between.  Any non-literal parts will be passed\nto `_evaluateBinding` when any dependencies change.  The only required\nfields of each \"part\" in the returned array are as follows:\n\n- `dependencies` - Array containing trigger metadata for each property\n  that should trigger the binding to update\n- `literal` - String containing text if the part represents a literal;\n  in this case no `dependencies` are needed\n\nAdditional metadata for use by `_evaluateBinding` may be provided in\neach part object as needed.\n\nThe default implementation handles the following types of bindings\n(one or more may be intermixed with literal strings):\n- Property binding: `[[prop]]`\n- Path binding: `[[object.prop]]`\n- Negated property or path bindings: `[[!prop]]` or `[[!object.prop]]`\n- Two-way property or path bindings (supports negation):\n  `{{prop}}`, `{{object.prop}}`, `{{!prop}}` or `{{!object.prop}}`\n- Inline computed method (supports negation):\n  `[[compute(a, 'literal', b)]]`, `[[!compute(a, 'literal', b)]]`",
+              "description": "Called to parse text in a template (either attribute values or\ntextContent) into binding metadata.\n\nAny overrides of this method should return an array of binding part\nmetadata  representing one or more bindings found in the provided text\nand any \"literal\" text in between.  Any non-literal parts will be passed\nto `_evaluateBinding` when any dependencies change.  The only required\nfields of each \"part\" in the returned array are as follows:\n\n- `dependencies` - Array containing trigger metadata for each property\n  that should trigger the binding to update\n- `literal` - String containing text if the part represents a literal;\n  in this case no `dependencies` are needed\n\nAdditional metadata for use by `_evaluateBinding` may be provided in\neach part object as needed.\n\nThe default implementation handles the following types of bindings\n(one or more may be intermixed with literal strings):\n- Property binding: `[[prop]]`\n- Path binding: `[[object.prop]]`\n- Negated property or path bindings: `[[!prop]]` or `[[!object.prop]]`\n- Two-way property or path bindings (supports negation):\n  `{{prop}}`, `{{object.prop}}`, `{{!prop}}` or `{{!object.prop}}`\n- Inline computed method (supports negation):\n  `[[compute(a, 'literal', b)]]`, `[[!compute(a, 'literal', b)]]`\n\nThe default implementation uses a regular expression for best\nperformance. However, the regular expression uses a white-list of\nallowed characters in a data-binding, which causes problems for\ndata-bindings that do use characters not in this white-list.\n\nInstead of updating the white-list with all allowed characters,\nthere is a StrictBindingParser (see lib/mixins/strict-binding-parser)\nthat uses a state machine instead. This state machine is able to handle\nall characters. However, it is slightly less performant, therefore we\nextracted it into a separate optional mixin.",
               "privacy": "protected",
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/property-effects.html",
                 "start": {
-                  "line": 2636,
+                  "line": 2647,
                   "column": 6
                 },
                 "end": {
-                  "line": 2701,
+                  "line": 2712,
                   "column": 7
                 }
               },
@@ -4148,11 +4153,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/property-effects.html",
                 "start": {
-                  "line": 2717,
+                  "line": 2728,
                   "column": 6
                 },
                 "end": {
-                  "line": 2734,
+                  "line": 2745,
                   "column": 7
                 }
               },
@@ -4279,11 +4284,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 490,
+                  "line": 502,
                   "column": 6
                 },
                 "end": {
-                  "line": 492,
+                  "line": 504,
                   "column": 7
                 }
               },
@@ -4313,11 +4318,11 @@
               "sourceRange": {
                 "file": "../../polymer/lib/mixins/element-mixin.html",
                 "start": {
-                  "line": 503,
+                  "line": 515,
                   "column": 6
                 },
                 "end": {
-                  "line": 514,
+                  "line": 526,
                   "column": 7
                 }
               },
@@ -4558,7 +4563,7 @@
           "tagname": "vaadin-chart-series"
         },
         {
-          "description": "`<vaadin-chart>` is a Web Component for creating high quality charts.\n\n### Quick Start\n\n1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-2-application`\n```\n1. Install Vaadin Charts\n```\nbower install --save vaadin-charts#6.1.0\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag\n```html\n<link rel=\"import\" href=\"../../bower_components/vaadin-charts/vaadin-chart.html\">\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.html` add the following snippet before the `</template>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with:\n```\npolymer serve --open\n```\nCongratulations! You have your first Vaadin Chart setup.\n\n### Basic use\n\nNow that we covered the basic steps to create an empty chart, let us show how you can configure it.\n\nThere are two ways of configuring your `<vaadin-chart>` element: **HTML API**, **JS API** and **JSON API**.\nNote that you can make use of all APIs in your element.\n\n#### Configuring your chart using HTML API\n\n`vaadin-chart` has a set of attributes to make it easier for you to customize your chart.\nUsing as a base the project created with in Quick Start:\n\n```html\n <vaadin-chart title=\"The chart title\" subtitle=\"The chart subtitle\">\n   <vaadin-chart-series\n         type=\"column\"\n         title=\"The series title\"\n         values=\"[10,20,30]\">\n   </vaadin-chart-series>\n </vaadin-chart>\n```\n\n> Note that while you can set type for each series individually, for some types, such as `'bar'`, `'gauge'` and `'solidgauge'`, you\n> have to set it as the default series type on `<vaadin-chart>` in order to work properly.\n\n#### Configuring your chart using JS API\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data\n```\ninitChartWithJSApi() {\n    Polymer.RenderStatus.beforeNextRender(this, () => {\n       const configuration = this.$.mychart.configuration;\n       configuration.setTitle({ text: 'The chart title' });\n       // By default there is one x axis, it is referenced by configuration.xAxis[0].\n       configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);\n       configuration.addSeries({\n           type: 'column',\n           data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n       });\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\n\n#### Configuring your chart using JS JSON API\n\nJS JSON API is a simple alternative to the JS API.\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data\n```\ninitChartWithJSJSONApi() {\n    this.$.mychart.update({\n      title: {\n        text: 'The chart title'\n      },\n      subtitle: {\n        text: 'Subtitle'\n      },\n      xAxis: {\n        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']\n      },\n      series: [{\n        type: 'column',\n        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n      }]\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSJSONApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\nIt should be noted that chart style customization cannot be done via the JS or JSON API.\nStyling properties in the JSON configuration will be ignored. The following section discusses chart styling.\n\n\n### CSS Styling\nChart appearance is primarily controlled by CSS style rules.\nA comprehensive list of the supported style classes can be found at\nhttps://www.highcharts.com/docs/chart-design-and-style/style-by-css\n\n\n### Steps for styling a chart\n\n1. Create a theme file (for example `shared-styles.html`). The theme's dom-module must declare `theme-for=vaadin-chart`.\n2. Import `vaadin-chart-default-theme.html` and declare `include=\"vaadin-chart-default-theme\"`\non the theme module's style tag to customize Chart's default theme. If there are multiple theme\nmodules *only one* of them should declare this `include`.\n3. Specify the desired CSS rules in the theme file.\n4. If multiple charts are present, each one can be specifically targeted using the host selector e.g `:host(.my-chart-class)`.\n5. Import the theme file.\n\n\n### Example: Two Charts with a Red Title but only one with a Blue Subtitle\n\n```\n<link rel=\"import\" href=\"shared-styles.html\">\n...\n<vaadin-chart title=\"Red Title\" subtitle=\"Not Styled\">\n  <vaadin-chart-series values=\"[19,12,9,24,5]\"></vaadin-chart-series>\n</vaadin-chart>\n\n<vaadin-chart class=\"blue-subtitle\" title=\"Red Title\" subtitle=\"Blue Subtitle\">\n  <vaadin-chart-series values=\"[19,12,9,24,5]\"></vaadin-chart-series>\n</vaadin-chart>\n```\n\nshared-styles.html\n\n```\n<link rel=\"import\" href=\"../bower_components/vaadin-charts/theme/vaadin-chart-default-theme.html\">\n\n<dom-module id=\"css-style-example\" theme-for=\"vaadin-chart\">\n   <template>\n     <style include=\"vaadin-chart-default-theme\">\n       .highcharts-title {\n         fill: red;\n         font-size: xx-large;\n       }\n\n       :host(.blue-subtitle) .highcharts-subtitle {\n         fill: blue;\n       }\n     </style>\n   </template>\n</dom-module>\n```\n\n### Setting colors\n\nAlthough charts can be styled as described above, there is a simpler way for setting colors.\nColors can be set using CSS custom properties `--vaadin-charts-color-{n}` (where `n` goes from `0 - 9`).\n\nFor example `--vaadin-charts-color-0` sets the color of the first series on a chart.\n\n### Validating your License\nAfter one day using Vaadin Charts in a development environment you will see a pop-up that asks you\nto validate your license by signing in to vaadin.com.",
+          "description": "`<vaadin-chart>` is a Web Component for creating high quality charts.\n\n### Quick Start\n\n#### Polymer 2 App\n\n1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/2.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-2-application`\n```\n1. Install Vaadin Charts\n```\nbower install --save vaadin-charts#6.2.0-alpha1\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.html` and add the following snipped before the `<dom-module>` tag\n```html\n<link rel=\"import\" href=\"../../bower_components/vaadin-charts/vaadin-chart.html\">\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.html` add the following snippet before the `</template>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with:\n```\npolymer serve --open\n```\n\n#### Polymer 3 App\n\n* 1. Create a Polymer application using [Polymer CLI](https://www.polymer-project.org/3.0/docs/tools/polymer-cli)\n```\nmkdir my-app\ncd my-app\npolymer init\nselect `polymer-3-application`\n```\n1. Install Vaadin Charts\n```\nnpm i @vaadin/vaadin-charts@6.2.0-alpha1 --save\n```\n1. Import `<vaadin-chart>` to your app\nEdit the file `src/my-app/my-app.js` and add the following snipped on the top, after the first `import` declaration\n```js\nimport '@vaadin/vaadin-charts';\n```\n1. Add your first `<vaadin-chart>`\nAlso in `my-app.js`, at the template getter, add the following snippet after the `</h2>` closing tag\n```html\n<vaadin-chart></vaadin-chart>\n```\n1. Run your app with:\n```\npolymer serve --npm --open\n```\n\nCongratulations! You have your first Vaadin Chart setup.\n\n### Basic use\n\nNow that we covered the basic steps to create an empty chart, let us show how you can configure it.\n\nThere are two ways of configuring your `<vaadin-chart>` element: **HTML API**, **JS API** and **JSON API**.\nNote that you can make use of all APIs in your element.\n\n#### Configuring your chart using HTML API\n\n`vaadin-chart` has a set of attributes to make it easier for you to customize your chart.\nUsing as a base the project created with in Quick Start:\n\n```html\n <vaadin-chart title=\"The chart title\" subtitle=\"The chart subtitle\">\n   <vaadin-chart-series\n         type=\"column\"\n         title=\"The series title\"\n         values=\"[10,20,30]\">\n   </vaadin-chart-series>\n </vaadin-chart>\n```\n\n> Note that while you can set type for each series individually, for some types, such as `'bar'`, `'gauge'` and `'solidgauge'`, you\n> have to set it as the default series type on `<vaadin-chart>` in order to work properly.\n\n#### Configuring your chart using JS API\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `configuration` property (JS Api) to set chart title, categories and data\n```\ninitChartWithJSApi() {\n    Polymer.RenderStatus.beforeNextRender(this, () => {\n       const configuration = this.$.mychart.configuration;\n       configuration.setTitle({ text: 'The chart title' });\n       // By default there is one x axis, it is referenced by configuration.xAxis[0].\n       configuration.xAxis[0].setCategories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);\n       configuration.addSeries({\n           type: 'column',\n           data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n       });\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\n\n#### Configuring your chart using JS JSON API\n\nJS JSON API is a simple alternative to the JS API.\n\nUsing as a base the project created with in Quick Start\n\nDo the following changes in `my-app.html`\n\n1. Set and id for the `<vaadin-chart>` in the template\n```html\n    <vaadin-chart id=\"mychart\"></vaadin-chart>\n```\n1. Add a function that uses `update` method (JS JSON Api) to set chart title, categories and data\n```\ninitChartWithJSJSONApi() {\n    this.$.mychart.update({\n      title: {\n        text: 'The chart title'\n      },\n      subtitle: {\n        text: 'Subtitle'\n      },\n      xAxis: {\n        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']\n      },\n      series: [{\n        type: 'column',\n        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]\n      }]\n    });\n}\n```\n1. Call that function from connectedCallback (when the element is added to a document)\n```\nconnectedCallback() {\n    super.connectedCallback();\n    this.initChartWithJSJSONApi();\n}\n```\n1. And finally run your app with:\n```\npolymer serve --open\n```\n\nIt should be noted that chart style customization cannot be done via the JS or JSON API.\nStyling properties in the JSON configuration will be ignored. The following section discusses chart styling.\n\n\n### CSS Styling\nChart appearance is primarily controlled by CSS style rules.\nA comprehensive list of the supported style classes can be found at\nhttps://www.highcharts.com/docs/chart-design-and-style/style-by-css\n\n\n### Steps for styling a chart\n\n1. Create a theme file (for example `shared-styles.html`). The theme's dom-module must declare `theme-for=vaadin-chart`.\n2. Import `vaadin-chart-default-theme.html` and declare `include=\"vaadin-chart-default-theme\"`\non the theme module's style tag to customize Chart's default theme. If there are multiple theme\nmodules *only one* of them should declare this `include`.\n3. Specify the desired CSS rules in the theme file.\n4. If multiple charts are present, each one can be specifically targeted using the host selector e.g `:host(.my-chart-class)`.\n5. Import the theme file.\n\n\n### Example: Two Charts with a Red Title but only one with a Blue Subtitle\n\n```\n<link rel=\"import\" href=\"shared-styles.html\">\n...\n<vaadin-chart title=\"Red Title\" subtitle=\"Not Styled\">\n  <vaadin-chart-series values=\"[19,12,9,24,5]\"></vaadin-chart-series>\n</vaadin-chart>\n\n<vaadin-chart class=\"blue-subtitle\" title=\"Red Title\" subtitle=\"Blue Subtitle\">\n  <vaadin-chart-series values=\"[19,12,9,24,5]\"></vaadin-chart-series>\n</vaadin-chart>\n```\n\nshared-styles.html\n\n```\n<link rel=\"import\" href=\"../bower_components/vaadin-charts/theme/vaadin-chart-default-theme.html\">\n\n<dom-module id=\"css-style-example\" theme-for=\"vaadin-chart\">\n   <template>\n     <style include=\"vaadin-chart-default-theme\">\n       .highcharts-title {\n         fill: red;\n         font-size: xx-large;\n       }\n\n       :host(.blue-subtitle) .highcharts-subtitle {\n         fill: blue;\n       }\n     </style>\n   </template>\n</dom-module>\n```\n\n### Setting colors\n\nAlthough charts can be styled as described above, there is a simpler way for setting colors.\nColors can be set using CSS custom properties `--vaadin-charts-color-{n}` (where `n` goes from `0 - 9`).\n\nFor example `--vaadin-charts-color-0` sets the color of the first series on a chart.\n\n### Validating your License\nAfter one day using Vaadin Charts in a development environment you will see a pop-up that asks you\nto validate your license by signing in to vaadin.com.",
           "summary": "",
           "path": "src/vaadin-chart.html",
           "properties": [
@@ -4569,11 +4574,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 536,
+                  "line": 568,
                   "column": 8
                 },
                 "end": {
-                  "line": 636,
+                  "line": 668,
                   "column": 9
                 }
               },
@@ -4590,11 +4595,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 641,
+                  "line": 673,
                   "column": 8
                 },
                 "end": {
-                  "line": 731,
+                  "line": 763,
                   "column": 9
                 }
               },
@@ -4611,11 +4616,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 736,
+                  "line": 768,
                   "column": 8
                 },
                 "end": {
-                  "line": 795,
+                  "line": 827,
                   "column": 9
                 }
               },
@@ -4632,11 +4637,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 800,
+                  "line": 832,
                   "column": 8
                 },
                 "end": {
-                  "line": 859,
+                  "line": 891,
                   "column": 9
                 }
               },
@@ -4653,11 +4658,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 861,
+                  "line": 893,
                   "column": 8
                 },
                 "end": {
-                  "line": 871,
+                  "line": 903,
                   "column": 9
                 }
               },
@@ -4674,11 +4679,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 873,
+                  "line": 905,
                   "column": 8
                 },
                 "end": {
-                  "line": 883,
+                  "line": 915,
                   "column": 9
                 }
               },
@@ -4695,11 +4700,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 315,
+                  "line": 347,
                   "column": 12
                 },
                 "end": {
-                  "line": 315,
+                  "line": 347,
                   "column": 33
                 }
               },
@@ -4716,11 +4721,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 322,
+                  "line": 354,
                   "column": 12
                 },
                 "end": {
-                  "line": 326,
+                  "line": 358,
                   "column": 13
                 }
               },
@@ -4738,11 +4743,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 331,
+                  "line": 363,
                   "column": 12
                 },
                 "end": {
-                  "line": 335,
+                  "line": 367,
                   "column": 13
                 }
               },
@@ -4760,11 +4765,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 340,
+                  "line": 372,
                   "column": 12
                 },
                 "end": {
-                  "line": 344,
+                  "line": 376,
                   "column": 13
                 }
               },
@@ -4782,11 +4787,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 354,
+                  "line": 386,
                   "column": 12
                 },
                 "end": {
-                  "line": 358,
+                  "line": 390,
                   "column": 13
                 }
               },
@@ -4804,11 +4809,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 364,
+                  "line": 396,
                   "column": 12
                 },
                 "end": {
-                  "line": 368,
+                  "line": 400,
                   "column": 13
                 }
               },
@@ -4826,11 +4831,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 408,
                   "column": 12
                 },
                 "end": {
-                  "line": 380,
+                  "line": 412,
                   "column": 13
                 }
               },
@@ -4848,11 +4853,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 385,
+                  "line": 417,
                   "column": 12
                 },
                 "end": {
-                  "line": 388,
+                  "line": 420,
                   "column": 13
                 }
               },
@@ -4869,11 +4874,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 393,
+                  "line": 425,
                   "column": 12
                 },
                 "end": {
-                  "line": 397,
+                  "line": 429,
                   "column": 13
                 }
               },
@@ -4891,11 +4896,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 402,
+                  "line": 434,
                   "column": 12
                 },
                 "end": {
-                  "line": 406,
+                  "line": 438,
                   "column": 13
                 }
               },
@@ -4913,11 +4918,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 412,
+                  "line": 444,
                   "column": 12
                 },
                 "end": {
-                  "line": 416,
+                  "line": 448,
                   "column": 13
                 }
               },
@@ -4935,11 +4940,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 421,
+                  "line": 453,
                   "column": 12
                 },
                 "end": {
-                  "line": 425,
+                  "line": 457,
                   "column": 13
                 }
               },
@@ -4957,11 +4962,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 435,
+                  "line": 467,
                   "column": 12
                 },
                 "end": {
-                  "line": 439,
+                  "line": 471,
                   "column": 13
                 }
               },
@@ -4979,11 +4984,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 444,
+                  "line": 476,
                   "column": 12
                 },
                 "end": {
-                  "line": 449,
+                  "line": 481,
                   "column": 13
                 }
               },
@@ -5002,11 +5007,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 454,
+                  "line": 486,
                   "column": 12
                 },
                 "end": {
-                  "line": 457,
+                  "line": 489,
                   "column": 13
                 }
               },
@@ -5023,11 +5028,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 463,
+                  "line": 495,
                   "column": 12
                 },
                 "end": {
-                  "line": 467,
+                  "line": 499,
                   "column": 13
                 }
               },
@@ -5046,11 +5051,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 515,
+                  "line": 547,
                   "column": 8
                 },
                 "end": {
-                  "line": 534,
+                  "line": 566,
                   "column": 9
                 }
               },
@@ -5066,11 +5071,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 885,
+                  "line": 917,
                   "column": 8
                 },
                 "end": {
-                  "line": 892,
+                  "line": 924,
                   "column": 9
                 }
               },
@@ -5086,11 +5091,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 894,
+                  "line": 926,
                   "column": 8
                 },
                 "end": {
-                  "line": 901,
+                  "line": 933,
                   "column": 9
                 }
               },
@@ -5106,11 +5111,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 903,
+                  "line": 935,
                   "column": 8
                 },
                 "end": {
-                  "line": 910,
+                  "line": 942,
                   "column": 9
                 }
               },
@@ -5126,11 +5131,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 912,
+                  "line": 944,
                   "column": 8
                 },
                 "end": {
-                  "line": 914,
+                  "line": 946,
                   "column": 9
                 }
               },
@@ -5147,11 +5152,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 916,
+                  "line": 948,
                   "column": 8
                 },
                 "end": {
-                  "line": 949,
+                  "line": 981,
                   "column": 9
                 }
               },
@@ -5171,11 +5176,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 951,
+                  "line": 983,
                   "column": 8
                 },
                 "end": {
-                  "line": 957,
+                  "line": 989,
                   "column": 9
                 }
               },
@@ -5201,11 +5206,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 959,
+                  "line": 991,
                   "column": 8
                 },
                 "end": {
-                  "line": 961,
+                  "line": 993,
                   "column": 9
                 }
               },
@@ -5222,11 +5227,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 963,
+                  "line": 995,
                   "column": 8
                 },
                 "end": {
-                  "line": 979,
+                  "line": 1011,
                   "column": 9
                 }
               },
@@ -5246,11 +5251,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 981,
+                  "line": 1013,
                   "column": 8
                 },
                 "end": {
-                  "line": 990,
+                  "line": 1022,
                   "column": 9
                 }
               },
@@ -5270,11 +5275,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 993,
+                  "line": 1025,
                   "column": 8
                 },
                 "end": {
-                  "line": 997,
+                  "line": 1029,
                   "column": 9
                 }
               },
@@ -5290,11 +5295,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1005,
+                  "line": 1037,
                   "column": 8
                 },
                 "end": {
-                  "line": 1012,
+                  "line": 1044,
                   "column": 9
                 }
               },
@@ -5318,11 +5323,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1020,
+                  "line": 1052,
                   "column": 8
                 },
                 "end": {
-                  "line": 1025,
+                  "line": 1057,
                   "column": 9
                 }
               },
@@ -5346,11 +5351,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1032,
+                  "line": 1064,
                   "column": 8
                 },
                 "end": {
-                  "line": 1042,
+                  "line": 1074,
                   "column": 9
                 }
               },
@@ -5372,11 +5377,11 @@
               "privacy": "public",
               "sourceRange": {
                 "start": {
-                  "line": 1079,
+                  "line": 1111,
                   "column": 8
                 },
                 "end": {
-                  "line": 1117,
+                  "line": 1149,
                   "column": 9
                 }
               },
@@ -5403,11 +5408,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1119,
+                  "line": 1151,
                   "column": 8
                 },
                 "end": {
-                  "line": 1128,
+                  "line": 1160,
                   "column": 9
                 }
               },
@@ -5427,11 +5432,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1130,
+                  "line": 1162,
                   "column": 8
                 },
                 "end": {
-                  "line": 1145,
+                  "line": 1177,
                   "column": 9
                 }
               },
@@ -5457,11 +5462,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1147,
+                  "line": 1179,
                   "column": 8
                 },
                 "end": {
-                  "line": 1163,
+                  "line": 1195,
                   "column": 9
                 }
               },
@@ -5481,11 +5486,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1165,
+                  "line": 1197,
                   "column": 8
                 },
                 "end": {
-                  "line": 1171,
+                  "line": 1203,
                   "column": 9
                 }
               },
@@ -5505,11 +5510,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1173,
+                  "line": 1205,
                   "column": 8
                 },
                 "end": {
-                  "line": 1175,
+                  "line": 1207,
                   "column": 9
                 }
               },
@@ -5529,11 +5534,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1177,
+                  "line": 1209,
                   "column": 8
                 },
                 "end": {
-                  "line": 1179,
+                  "line": 1211,
                   "column": 9
                 }
               },
@@ -5553,11 +5558,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1181,
+                  "line": 1213,
                   "column": 8
                 },
                 "end": {
-                  "line": 1183,
+                  "line": 1215,
                   "column": 9
                 }
               },
@@ -5577,11 +5582,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1185,
+                  "line": 1217,
                   "column": 8
                 },
                 "end": {
-                  "line": 1201,
+                  "line": 1233,
                   "column": 9
                 }
               },
@@ -5604,11 +5609,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1203,
+                  "line": 1235,
                   "column": 8
                 },
                 "end": {
-                  "line": 1315,
+                  "line": 1347,
                   "column": 9
                 }
               },
@@ -5637,11 +5642,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1317,
+                  "line": 1349,
                   "column": 8
                 },
                 "end": {
-                  "line": 1327,
+                  "line": 1359,
                   "column": 9
                 }
               },
@@ -5661,11 +5666,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1329,
+                  "line": 1361,
                   "column": 8
                 },
                 "end": {
-                  "line": 1335,
+                  "line": 1367,
                   "column": 9
                 }
               },
@@ -5685,11 +5690,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1337,
+                  "line": 1369,
                   "column": 8
                 },
                 "end": {
-                  "line": 1350,
+                  "line": 1382,
                   "column": 9
                 }
               },
@@ -5712,11 +5717,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1352,
+                  "line": 1384,
                   "column": 8
                 },
                 "end": {
-                  "line": 1360,
+                  "line": 1392,
                   "column": 9
                 }
               },
@@ -5736,11 +5741,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1362,
+                  "line": 1394,
                   "column": 8
                 },
                 "end": {
-                  "line": 1369,
+                  "line": 1401,
                   "column": 9
                 }
               },
@@ -5760,11 +5765,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1371,
+                  "line": 1403,
                   "column": 8
                 },
                 "end": {
-                  "line": 1379,
+                  "line": 1411,
                   "column": 9
                 }
               },
@@ -5780,11 +5785,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1381,
+                  "line": 1413,
                   "column": 8
                 },
                 "end": {
-                  "line": 1394,
+                  "line": 1426,
                   "column": 9
                 }
               },
@@ -5800,11 +5805,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1396,
+                  "line": 1428,
                   "column": 8
                 },
                 "end": {
-                  "line": 1409,
+                  "line": 1441,
                   "column": 9
                 }
               },
@@ -5820,11 +5825,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1411,
+                  "line": 1443,
                   "column": 8
                 },
                 "end": {
-                  "line": 1422,
+                  "line": 1454,
                   "column": 9
                 }
               },
@@ -5837,11 +5842,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1424,
+                  "line": 1456,
                   "column": 8
                 },
                 "end": {
-                  "line": 1428,
+                  "line": 1460,
                   "column": 9
                 }
               },
@@ -5854,11 +5859,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1430,
+                  "line": 1462,
                   "column": 8
                 },
                 "end": {
-                  "line": 1451,
+                  "line": 1483,
                   "column": 9
                 }
               },
@@ -5874,11 +5879,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1453,
+                  "line": 1485,
                   "column": 8
                 },
                 "end": {
-                  "line": 1463,
+                  "line": 1495,
                   "column": 9
                 }
               },
@@ -5898,11 +5903,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1465,
+                  "line": 1497,
                   "column": 8
                 },
                 "end": {
-                  "line": 1473,
+                  "line": 1505,
                   "column": 9
                 }
               },
@@ -5922,11 +5927,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1475,
+                  "line": 1507,
                   "column": 8
                 },
                 "end": {
-                  "line": 1481,
+                  "line": 1513,
                   "column": 9
                 }
               },
@@ -5946,11 +5951,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1483,
+                  "line": 1515,
                   "column": 8
                 },
                 "end": {
-                  "line": 1495,
+                  "line": 1527,
                   "column": 9
                 }
               },
@@ -5970,11 +5975,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1497,
+                  "line": 1529,
                   "column": 8
                 },
                 "end": {
-                  "line": 1509,
+                  "line": 1541,
                   "column": 9
                 }
               },
@@ -5994,11 +5999,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1511,
+                  "line": 1543,
                   "column": 8
                 },
                 "end": {
-                  "line": 1515,
+                  "line": 1547,
                   "column": 9
                 }
               },
@@ -6014,11 +6019,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1517,
+                  "line": 1549,
                   "column": 8
                 },
                 "end": {
-                  "line": 1523,
+                  "line": 1555,
                   "column": 9
                 }
               },
@@ -6031,11 +6036,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1525,
+                  "line": 1557,
                   "column": 8
                 },
                 "end": {
-                  "line": 1542,
+                  "line": 1574,
                   "column": 9
                 }
               },
@@ -6051,11 +6056,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1544,
+                  "line": 1576,
                   "column": 8
                 },
                 "end": {
-                  "line": 1573,
+                  "line": 1605,
                   "column": 9
                 }
               },
@@ -6071,11 +6076,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1575,
+                  "line": 1607,
                   "column": 8
                 },
                 "end": {
-                  "line": 1585,
+                  "line": 1617,
                   "column": 9
                 }
               },
@@ -6091,11 +6096,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1587,
+                  "line": 1619,
                   "column": 8
                 },
                 "end": {
-                  "line": 1599,
+                  "line": 1631,
                   "column": 9
                 }
               },
@@ -6111,11 +6116,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1601,
+                  "line": 1633,
                   "column": 8
                 },
                 "end": {
-                  "line": 1609,
+                  "line": 1641,
                   "column": 9
                 }
               },
@@ -6135,11 +6140,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1611,
+                  "line": 1643,
                   "column": 8
                 },
                 "end": {
-                  "line": 1620,
+                  "line": 1652,
                   "column": 9
                 }
               },
@@ -6162,11 +6167,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1622,
+                  "line": 1654,
                   "column": 8
                 },
                 "end": {
-                  "line": 1655,
+                  "line": 1687,
                   "column": 9
                 }
               },
@@ -6192,11 +6197,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1657,
+                  "line": 1689,
                   "column": 8
                 },
                 "end": {
-                  "line": 1666,
+                  "line": 1698,
                   "column": 9
                 }
               },
@@ -6222,11 +6227,11 @@
               "privacy": "private",
               "sourceRange": {
                 "start": {
-                  "line": 1671,
+                  "line": 1703,
                   "column": 8
                 },
                 "end": {
-                  "line": 1692,
+                  "line": 1724,
                   "column": 9
                 }
               },
@@ -6247,11 +6252,11 @@
           "metadata": {},
           "sourceRange": {
             "start": {
-              "line": 282,
+              "line": 314,
               "column": 6
             },
             "end": {
-              "line": 1693,
+              "line": 1725,
               "column": 7
             }
           },
@@ -6264,11 +6269,11 @@
               "description": "Configuration object that exposes the JS Api to configure the chart.\n\nMost important methods are:\n- `addSeries (Object options, [Boolean redraw], [Mixed animation])`\n- `addAxis (Object options, [Boolean isX], [Boolean redraw], [Mixed animation])`\n- `setTitle (Object title, object subtitle, Boolean redraw)`\n\nMost important properties are:\n- `configuration.series`: An array of the chart's series. Detailed API for Series object is\n    available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Series)\n- `configuration.xAxis`: An array of the chart's x axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)\n- `configuration.yAxis`: An array of the chart's y axes. Detailed API for Axis object is\n    available in [API Site](http://api.highcharts.com/class-reference/Highcharts.Axis)\n- `configuration.title`: The chart title.\n\nFor detailed documentation of available API check the [API site](http://api.highcharts.com/class-reference/classes.list)",
               "sourceRange": {
                 "start": {
-                  "line": 315,
+                  "line": 347,
                   "column": 12
                 },
                 "end": {
-                  "line": 315,
+                  "line": 347,
                   "column": 33
                 }
               },
@@ -6280,11 +6285,11 @@
               "description": "If categories are present names are used instead of numbers for the category axis.\nThe format of categories can be an `Array` with a list of categories, such as `['2010', '2011', '2012']`\nor a mapping `Object`, like `{0:'1',9:'Target (10)', 15: 'Max'}`.",
               "sourceRange": {
                 "start": {
-                  "line": 322,
+                  "line": 354,
                   "column": 12
                 },
                 "end": {
-                  "line": 326,
+                  "line": 358,
                   "column": 13
                 }
               },
@@ -6296,11 +6301,11 @@
               "description": "Category-axis maximum value. Defaults to `undefined`.",
               "sourceRange": {
                 "start": {
-                  "line": 331,
+                  "line": 363,
                   "column": 12
                 },
                 "end": {
-                  "line": 335,
+                  "line": 367,
                   "column": 13
                 }
               },
@@ -6312,11 +6317,11 @@
               "description": "Category-axis minimum value. Defaults to `undefined`.",
               "sourceRange": {
                 "start": {
-                  "line": 340,
+                  "line": 372,
                   "column": 12
                 },
                 "end": {
-                  "line": 344,
+                  "line": 376,
                   "column": 13
                 }
               },
@@ -6328,11 +6333,11 @@
               "description": "The position of the category axis. Acceptable values are `left`, `right`, `top` and `bottom`\nexcept for bar charts which only accept `left` and `right`.\nWith the default value, charts appear as though they have `category-position=\"bottom\"`\nexcept for bar charts that appear as though they have `category-position=\"left\"`.\n\nDefaults to `undefined`",
               "sourceRange": {
                 "start": {
-                  "line": 354,
+                  "line": 386,
                   "column": 12
                 },
                 "end": {
-                  "line": 358,
+                  "line": 390,
                   "column": 13
                 }
               },
@@ -6344,11 +6349,11 @@
               "description": "Specifies whether to hide legend or show.\nLegend configuration can be set up via additionalOptions property",
               "sourceRange": {
                 "start": {
-                  "line": 364,
+                  "line": 396,
                   "column": 12
                 },
                 "end": {
-                  "line": 368,
+                  "line": 400,
                   "column": 13
                 }
               },
@@ -6360,11 +6365,11 @@
               "description": "Specifies how series are stacked on top of each other.\nPossible values are null, \"normal\" or \"percent\".\nIf \"stack\" property is not defined on the vaadin-chart-series elements, then series will be put into\nthe default stack.",
               "sourceRange": {
                 "start": {
-                  "line": 376,
+                  "line": 408,
                   "column": 12
                 },
                 "end": {
-                  "line": 380,
+                  "line": 412,
                   "column": 13
                 }
               },
@@ -6376,11 +6381,11 @@
               "description": "Specifies whether the chart is a normal chart or a timeline chart.",
               "sourceRange": {
                 "start": {
-                  "line": 385,
+                  "line": 417,
                   "column": 12
                 },
                 "end": {
-                  "line": 388,
+                  "line": 420,
                   "column": 13
                 }
               },
@@ -6392,11 +6397,11 @@
               "description": "Represents the title of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 393,
+                  "line": 425,
                   "column": 12
                 },
                 "end": {
-                  "line": 397,
+                  "line": 429,
                   "column": 13
                 }
               },
@@ -6408,11 +6413,11 @@
               "description": "Whether or not to show tooltip when hovering data points.",
               "sourceRange": {
                 "start": {
-                  "line": 402,
+                  "line": 434,
                   "column": 12
                 },
                 "end": {
-                  "line": 406,
+                  "line": 438,
                   "column": 13
                 }
               },
@@ -6424,11 +6429,11 @@
               "description": "Sets the default series type of the chart.\nNote that `'bar'`, `'gauge'` and `'solidgauge'` should be set as default series type.",
               "sourceRange": {
                 "start": {
-                  "line": 412,
+                  "line": 444,
                   "column": 12
                 },
                 "end": {
-                  "line": 416,
+                  "line": 448,
                   "column": 13
                 }
               },
@@ -6440,11 +6445,11 @@
               "description": "Represents the subtitle of the chart.",
               "sourceRange": {
                 "start": {
-                  "line": 421,
+                  "line": 453,
                   "column": 12
                 },
                 "end": {
-                  "line": 425,
+                  "line": 457,
                   "column": 13
                 }
               },
@@ -6456,11 +6461,11 @@
               "description": "Specifies whether to show chart in 3 or in 2 dimensions.\nSome display angles are added by default to the \"chart.options3d\" (`{alpha: 15, beta: 15, depth: 50}`).\n3D display options can be modified via `additionalOptions`.\nThe thickness of a Pie chart can be set on `additionalOptions` through `plotOptions.pie.depth`.\n3D is supported by Bar, Column, Pie and Scatter3D charts.\nMore info available at [Highcharts](https://www.highcharts.com/docs/chart-concepts/3d-charts).",
               "sourceRange": {
                 "start": {
-                  "line": 435,
+                  "line": 467,
                   "column": 12
                 },
                 "end": {
-                  "line": 439,
+                  "line": 471,
                   "column": 13
                 }
               },
@@ -6472,11 +6477,11 @@
               "description": "Specifies the message displayed on a chart without displayable data.",
               "sourceRange": {
                 "start": {
-                  "line": 444,
+                  "line": 476,
                   "column": 12
                 },
                 "end": {
-                  "line": 449,
+                  "line": 481,
                   "column": 13
                 }
               },
@@ -6488,11 +6493,11 @@
               "description": "Represents additional JSON configuration.",
               "sourceRange": {
                 "start": {
-                  "line": 454,
+                  "line": 486,
                   "column": 12
                 },
                 "end": {
-                  "line": 457,
+                  "line": 489,
                   "column": 13
                 }
               },
@@ -6504,11 +6509,11 @@
               "description": "When present, cartesian charts like line, spline, area and column are transformed\ninto the polar coordinate system.",
               "sourceRange": {
                 "start": {
-                  "line": 463,
+                  "line": 495,
                   "column": 12
                 },
                 "end": {
-                  "line": 467,
+                  "line": 499,
                   "column": 13
                 }
               },
@@ -6708,11 +6713,11 @@
               "name": "",
               "range": {
                 "start": {
-                  "line": 64,
+                  "line": 65,
                   "column": 4
                 },
                 "end": {
-                  "line": 64,
+                  "line": 65,
                   "column": 27
                 }
               }
