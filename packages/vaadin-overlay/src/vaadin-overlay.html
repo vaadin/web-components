@@ -778,6 +778,17 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      /**
+       * Manually invoke existing renderer.
+       */
+      render() {
+        if (!this.renderer) {
+          return;
+        }
+
+        this.renderer.call(this.owner, this, this.owner, this.model);
+      }
+
       _templateOrRendererChanged(template, renderer, owner, model, instanceProps) {
         if (template && renderer) {
           this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
