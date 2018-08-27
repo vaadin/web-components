@@ -161,6 +161,18 @@
         dropdown.value = 'foo';
         dropdown.opened = false;
       });
+
+      it('should assign menu element if template was attached after DOM is ready', () => {
+        const template = document.createElement('template');
+        template.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item>test item</vaadin-item>
+          </vaadin-list-box>`;
+
+        dropdown.appendChild(template);
+        dropdown._observer && dropdown._observer.flush();
+        expect(dropdown._menuElement).not.to.be.undefined;
+      });
     });
 
     describe('vaadin-dropdown-menu menu-element', () => {
