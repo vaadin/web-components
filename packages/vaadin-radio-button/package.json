@@ -18,6 +18,11 @@
     "url": "https://github.com/vaadin/vaadin-radio-button/issues"
   },
   "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
   "scripts": {
     "test": "wct",
     "preversion": "gulp version:update"
