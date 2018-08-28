@@ -33,6 +33,32 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Providing custom editor</h3>
+    <vaadin-demo-snippet id="element-basic-demos-sample-example">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]]>
+          <vaadin-form-layout slot="form">
+            <vaadin-text-field path="name.first"label="First Name"></vaadin-text-field>
+            <vaadin-text-field path="name.last" label="Last Name"></vaadin-text-field>
+            <br>
+            <vaadin-text-field path="details.email"label="Email"></vaadin-text-field>
+            <vaadin-password-field path="password" label="Password"></vaadin-password-field>
+            <br>
+            <vaadin-dropdown-menu path="role" label="Role">
+              <template>
+                <vaadin-list-box>
+                  <vaadin-item>admin</vaadin-item>
+                  <vaadin-item>operator</vaadin-item>
+                  <vaadin-item>user</vaadin-item>
+                </vaadin-list-box>
+              </template>
+            </vaadin-dropdown-menu>
+          </vaadin-form-layout>
+        </vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
