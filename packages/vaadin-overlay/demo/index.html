@@ -54,6 +54,49 @@
       </template>
     </demo-snippet>
 
+    <h3>Dynamically Updated Content of the Overlay</h3>
+    <demo-snippet>
+      <template>
+        <vaadin-overlay id="manual-renderer"></vaadin-overlay>
+        <vaadin-button id="btn-manual-renderer">
+          Show overlay with current time
+        </vaadin-button>
+        <script>
+          var dynamicOverlay = document.querySelector('#manual-renderer');
+          var dynamicOverlayBtn = document.querySelector('#btn-manual-renderer');
+
+          dynamicOverlayBtn.addEventListener('click', function() {
+            dynamicOverlay.opened = true;
+          });
+
+          let interval;
+          dynamicOverlay.addEventListener('vaadin-overlay-open', function() {
+            dynamicOverlay.render();
+            interval = setInterval(function() {
+              dynamicOverlay.render();
+            }, 1000);
+          });
+
+          dynamicOverlay.addEventListener('vaadin-overlay-close', function() {
+            clearInterval(interval);
+          });
+
+          dynamicOverlay.renderer = function(root) {
+            const date = new Date();
+            root.textContent = 'Current time: ' +
+                                pad(date.getHours()) + ':' +
+                                pad(date.getMinutes()) + ':' +
+                                pad(date.getSeconds());
+          };
+
+          const pad = function(n) {
+            n = parseInt(n || 0);
+            return n < 10 ? '0' + n : n;
+          };
+        </script>
+      </template>
+    </demo-snippet>
+
     <h3>Modeless (Non-Modal) Overlay</h3>
     <demo-snippet>
       <template>
