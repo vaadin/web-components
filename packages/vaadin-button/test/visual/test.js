@@ -13,47 +13,48 @@ gemini.suite('vaadin-button', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
 
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('body')
-      .capture('default');
-  });
+    gemini.suite(`colors-${theme}`, function(suite) {
+      suite
+        .setUrl(`colors.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
 
-  gemini.suite('colors', function(suite) {
-    suite
-      .setUrl('colors.html')
-      .setCaptureElements('body')
-      .capture('default');
-  });
+    gemini.suite(`icons-${theme}`, function(suite) {
+      suite
+        .setUrl(`icons.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
 
-  gemini.suite('icons', function(suite) {
-    suite
-      .setUrl('icons.html')
-      .setCaptureElements('body')
-      .capture('default');
-  });
+    gemini.suite(`sizing-${theme}`, function(suite) {
+      suite
+        .setUrl(`sizing.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
 
-  gemini.suite('sizing', function(suite) {
-    suite
-      .setUrl('sizing.html')
-      .setCaptureElements('body')
-      .capture('default');
-  });
+    gemini.suite(`truncation-expansion-${theme}`, function(suite) {
+      suite
+        .setUrl(`truncation-expansion.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
 
-  gemini.suite('truncation-expansion', function(suite) {
-    suite
-      .setUrl('truncation-expansion.html')
-      .setCaptureElements('body')
-      .capture('default');
-  });
-
-  gemini.suite('types', function(suite) {
-    suite
-      .setUrl('types.html')
-      .setCaptureElements('body')
-      .capture('default');
+    gemini.suite(`types-${theme}`, function(suite) {
+      suite
+        .setUrl(`types.html?theme=${theme}`)
+        .setCaptureElements('body')
+        .capture('default');
+    });
   });
 
 });
