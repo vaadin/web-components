@@ -335,8 +335,17 @@ This program is available under Apache License Version 2.0, available at https:/
           this.focusElement.addEventListener('click', e => this.opened = !this.readonly);
           this.focusElement.addEventListener('keydown', e => this._onKeyDown(e));
 
-          const template = this.querySelector('template');
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => this._setTemplateFromNodes(info.addedNodes));
+          this._observer.flush();
+        }
+
+        _setTemplateFromNodes(nodes) {
+          const template = Array.from(nodes).filter(node => node.localName && node.localName === 'template')[0] || this._contentTemplate;
           this._overlayElement.template = this._contentTemplate = template;
+          this._setForwardHostProps();
+        }
+
+        _setForwardHostProps() {
           if (this._overlayElement.content) {
             const origForwardHostProp = this._overlayElement._instance && this._overlayElement._instance.forwardHostProp;
 
