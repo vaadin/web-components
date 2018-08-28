@@ -187,6 +187,41 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __delete() {
         }
+
+        /** Utility to convert json paths and hyphenized works to calitalized labels */
+        static capitalize(s) {
+          return s.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
+        }
+
+        /** Utility method for getting nested values in JSON objects */
+        static getPropertyByPath(o, s) {
+          s = s.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+          const a = s.replace(/^\./, '').split('.');
+          for (let i = 0, l = a.length; i < l; i++) {
+            const k = a[i];
+            if (k in o) {
+              o = o[k];
+            } else {
+              return;
+            }
+          }
+          return o;
+        }
+
+        /** Utility method for setting nested values in JSON objects */
+        static setPropertyByPath(o, s, v) {
+          s = s.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+          const a = s.replace(/^\./, '').split('.');
+          for (let i = 0, l = a.length; i < l; i++) {
+            const k = a[i];
+            if (i === l - 1) {
+              o[k] = v;
+              return;
+            }
+            !(k in o) && (o[k] = {});
+            o = o[k];
+          }
+        }
       }
 
       customElements.define(VaadinCrud.is, VaadinCrud);
@@ -194,7 +229,7 @@ This program is available under Apache License Version 2.0, available at https:/
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.VaadinCrud = VaadinCrud;
+      window.Vaadin.CrudElement = VaadinCrud;
     })();
   </script>
 </dom-module>

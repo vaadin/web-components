@@ -46,15 +46,11 @@ This program is available under Apache License Version 2.0, available at https:/
         __onDataProviderChange(dataProvider) {
         }
 
-        __camelize(path) {
-          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
-        }
-
         __createColumn(parent, path) {
           let col = document.createElement('vaadin-grid-column');
           col.innerHTML = `<template>[[item${path ? '.' + path : ''}]]</template>`;
           if (path) {
-            col.innerHTML += `<template class="header">${this.__camelize(path.replace(/^.*\./, ''))}</template>`;
+            col.innerHTML += `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
           }
           parent.appendChild(col);
           return col;
@@ -81,7 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __createGroup(parent, path, object) {
           let grp = document.createElement('vaadin-grid-column-group');
-          grp.innerHTML = `<template class="header">${this.__camelize(path.replace(/^.*\./, ''))}</template>`;
+          grp.innerHTML = `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
           parent.appendChild(grp);
           return grp;
         }

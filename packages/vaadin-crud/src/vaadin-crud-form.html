@@ -39,21 +39,6 @@ This program is available under Apache License Version 2.0, available at https:/
           return ['__onItemChange(item)'];
         }
 
-        _byString(o, s) {
-          s = s.replace(/\[["']?(\w+)["']?\]/g, '.$1'); // convert indexes to properties
-          s = s.replace(/^\./, '');           // strip a leading dot
-          var a = s.split('.');
-          for (var i = 0, n = a.length; i < n; ++i) {
-            var k = a[i];
-            if (k in o) {
-              o = o[k];
-            } else {
-              return;
-            }
-          }
-          return o;
-        }
-
         configure(object) {
           this.innerHTML = '';
           this.__fields = [];
@@ -66,17 +51,13 @@ This program is available under Apache License Version 2.0, available at https:/
             this.configure(item);
           }
           this.__fields.forEach(field => {
-            field.value = this._byString(item, field.path);
+            field.value = Vaadin.CrudElement.getPropertyByPath(item, field.path);
           });
-        }
-
-        __camelize(path) {
-          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
         }
 
         __createField(parent, path, type) {
           let field = document.createElement('vaadin-text-field');
-          field.label = this.__camelize((path || '').replace(/^.*\./, ''));
+          field.label = Vaadin.CrudElement.capitalize(path);
           field.path = path;
           parent.appendChild(field);
           this.__fields.push(field);
