@@ -30,7 +30,7 @@
                 };
                 selectAll.checked = options.every(isChecked);
                 selectAll.indeterminate = options.some(isChecked) && !options.every(isChecked);
-              }
+              };
 
               options.forEach(function(option) {
                 option.addEventListener('change', syncState);
