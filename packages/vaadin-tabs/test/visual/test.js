@@ -14,26 +14,27 @@ gemini.suite('vaadin-tabs', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`horizontal-tabs-${theme}`, (suite) => {
+      suite
+        .setUrl(`horizontal-tabs.html?theme=${theme}`)
+        .setCaptureElements('#horizontal-tabs')
+        .capture('horizontal-tabs');
+    });
 
-  gemini.suite('horizontal-tabs', (suite) => {
-    suite
-      .setUrl('horizontal-tabs.html')
-      .setCaptureElements('#horizontal-tabs')
-      .capture('horizontal-tabs');
-  });
+    gemini.suite(`vertical-tabs-${theme}`, (suite) => {
+      suite
+        .setUrl(`vertical-tabs.html?theme=${theme}`)
+        .setCaptureElements('#vertical-tabs')
+        .capture('vertical-tabs');
+    });
 
-  gemini.suite('vertical-tabs', (suite) => {
-    suite
-      .setUrl('vertical-tabs.html')
-      .setCaptureElements('#vertical-tabs')
-      .capture('vertical-tabs');
-  });
-
-  gemini.suite('scrollable-tabs', (suite) => {
-    suite
-      .setUrl('scrollable-tabs.html')
-      .setCaptureElements('#scrollable-tabs')
-      .capture('scrollable-tabs');
+    gemini.suite(`scrollable-tabs-${theme}`, (suite) => {
+      suite
+        .setUrl(`scrollable-tabs.html?theme=${theme}`)
+        .setCaptureElements('#scrollable-tabs')
+        .capture('scrollable-tabs');
+    });
   });
 
 });
