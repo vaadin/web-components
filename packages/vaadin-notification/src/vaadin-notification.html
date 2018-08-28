@@ -319,6 +319,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this._notificationTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._notificationTemplate;
         }
 
+        /**
+         * Manually invoke existing renderer.
+         */
+        render() {
+          this.renderer(this._card, this);
+        }
+
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
           if (template !== oldTemplate) {
             this._notificationTemplate = undefined;
@@ -343,7 +350,7 @@ This program is available under Apache License Version 2.0, available at https:/
               this._card.removeChild(this._card.firstChild);
             }
 
-            this.renderer(this._card, this);
+            this.render();
           }
         }
 
