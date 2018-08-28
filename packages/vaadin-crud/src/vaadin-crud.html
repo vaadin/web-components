@@ -11,6 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-grid/vaadin-grid-column.html">
 <link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
 <link rel="import" href="../../vaadin-button/vaadin-button.html">
+<link rel="import" href="../../vaadin-dialog/vaadin-dialog.html">
 
 <dom-module id="vaadin-crud">
   <template>
@@ -22,22 +23,39 @@ This program is available under Apache License Version 2.0, available at https:/
         flex: 1;
       }
 
-      :host([hidden]) {
+      :host([hidden]),
+      #form-slot,
+      #editor {
         display: none !important;
       }
 
       :host ::slotted(vaadin-grid) {
       }
 
-      vaadin-button {
+      vaadin-button.new {
         width: 40px;
       }
-
     </style>
-    <slot name="grid">
-      <vaadin-crud-grid id="grid" excluded="[[excludedRegex]]"></vaadin-crud-grid>
+
+    <slot name="grid" id="grid-slot">
+      <vaadin-crud-grid id="grid"></vaadin-crud-grid>
     </slot>
-    <vaadin-button>New</vaadin-button>
+    <slot name="form" id="form-slot">
+      <vaadin-crud-form id="form"></vaadin-crud-form>
+    </slot>
+
+    <div id="editor">
+      <div id="buttons" style="margin-top: 30px; display: flex; min-width: 100%;">
+        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
+        <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
+        <div style="flex: 1"></div>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" disabled="[[!_new]]">Delete</vaadin-button>
+      </div>
+    </div>
+
+    <vaadin-button class="new" on-click="__new">New</vaadin-button>
+
+    <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
   </template>
 
   <script>
@@ -67,42 +85,102 @@ This program is available under Apache License Version 2.0, available at https:/
         static get properties() {
           return {
             _grid: HTMLElement,
-            editor: HTMLElement,
+            _form: HTMLElement,
             items: Object,
-            dataProvider: Function,
-            excludedRegex: {
-              type: RegExp,
-              value: /^_|password/i
-            }
+            item: Object,
+            dataProvider: Function
           };
         }
 
         static get observers() {
           return ['__onGridChange(_grid)',
-                  '__onEditorChange(editor)',
+                  '__onFormChange(_form)',
                   '__onItemsChange(items)',
+                  '__onItemChange(item)',
                   '__onDataProviderChange(dataprovider)'];
         }
 
+        constructor() {
+          super();
+          this._observer = new Polymer.FlattenedNodesObserver(this, info => {
+            this.__onDomChange(info.addedNodes);
+          });
+        }
+
+        ready() {
+          super.ready();
+          this.__activeListener = e => this.__onActiveItemChange(e);
+          this.__changeListener = e => this.__onEditChange(e);
+          window.e = this;
+        }
+
+        __onDomChange(nodes) {
+          nodes.forEach(node => {
+            if (node instanceof Vaadin.GridElement) {
+              this._grid = node;
+            }
+            if (node.getAttribute && node.getAttribute('slot') === 'form') {
+              this._form = node;
+            }
+          });
+        }
+
+        __onActiveItemChange(e) {
+          this.item = e.detail.value;
+        }
+
+        __onEditChange(e) {
+          this._dirty = true;
+        }
+
         __onGridChange(grid, old) {
-          if (old && old.parentElement) {
-            old.parentElement.removeChild(old);
+          if (old) {
+            old.removeEventListener('active-item-changed', this.__activeListener);
           }
-          this.appendChild(grid);
-          grid.setAttribute('slot', 'grid');
+          if (grid != this.$.grid) {
+            grid.setAttribute('slot', 'grid');
+          }
+          grid.addEventListener('active-item-changed', this.__activeListener);
           this.__onItemsChange(this.items)
         }
 
-        __onEditorChange(editor) {
-        }
-
-        __onItemsChange(items) {
-          (this._grid || this.$.grid).items = items;
+        __onFormChange(form, old) {
+          if (old && old.parentElement) {
+            old.parentElement && old.parentElement.removeChild(old);
+            old.removeEventListener('change', this.__changeListener);
+          }
+          this.$.editor.insertBefore(form, this.$.buttons);
+          form.addEventListener('change', this.__changeListener);
+          this.$.dialog.$.overlay.appendChild(this.$.editor);
         }
 
         __onDataProviderChange(dataProvider) {
         }
 
+        __onItemsChange(items) {
+          this._grid = this._grid || this.$.grid;
+          this._grid.items = items;
+        }
+
+        __onItemChange(item) {
+          this._form = this._form || this.$.form;
+          this._form.item = item;
+          this._dirty = false;
+          this.$.dialog.opened = true;
+        }
+
+        __new() {
+        }
+
+        __save() {
+        }
+
+        __cancel() {
+          this.$.dialog.opened = false;
+        }
+
+        __delete() {
+        }
       }
 
       customElements.define(VaadinCrud.is, VaadinCrud);
