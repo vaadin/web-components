@@ -35,23 +35,24 @@ gemini.suite('vaadin-form-layout', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
-
-  [
-    'basic',
-    'single-column',
-    'responsive-steps',
-    'colspan',
-    'br',
-    'css-properties',
-    'styling'
-  ].forEach(testName => {
-    gemini.suite(testName, function(suite) {
-      suite
-        .setUrl(`${testName}.html`)
-        .setCaptureElements('#capture')
-        .capture('default')
-        .capture('20em', setBodyWidth('20em'))
-        .capture('10em', setBodyWidth('10em'));
+  ['lumo', 'material'].forEach(theme => {
+    [
+      'basic',
+      'single-column',
+      'responsive-steps',
+      'colspan',
+      'br',
+      'css-properties',
+      'styling'
+    ].forEach(testName => {
+      gemini.suite(`${testName}-${theme}`, function(suite) {
+        suite
+          .setUrl(`${testName}.html?theme=${theme}`)
+          .setCaptureElements('#capture')
+          .capture('default')
+          .capture('20em', setBodyWidth('20em'))
+          .capture('10em', setBodyWidth('10em'));
+      });
     });
   });
 });
