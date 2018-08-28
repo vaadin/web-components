@@ -75,6 +75,12 @@
           }).to.throw(Error);
           expect(notification._notificationTemplate).to.be.not.ok;
         });
+
+        it('should be possible to manually invoke renderer', () => {
+          notification.renderer = sinon.spy();
+          notification.render();
+          expect(notification.renderer.calledTwice).to.be.true;
+        });
       });
 
       describe('with template', () => {
