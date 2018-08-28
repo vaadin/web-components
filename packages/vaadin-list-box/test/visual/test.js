@@ -13,12 +13,13 @@ gemini.suite('vaadin-list-box', function(rootSuite) {
   rootSuite
     .before(wait)
     .after(goToAboutBlank);
-
-  gemini.suite('list-box', function(suite) {
-    suite
-      .setUrl('list-box.html')
-      .setCaptureElements('#list-box-tests')
-      .capture('list-box');
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`list-box-${theme}`, function(suite) {
+      suite
+        .setUrl(`list-box.html?theme=${theme}`)
+        .setCaptureElements('#list-box-tests')
+        .capture('list-box');
+    });
   });
 
 });

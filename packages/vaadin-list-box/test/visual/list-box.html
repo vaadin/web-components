@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-list-box.html">`);
+    document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
+  </script>
 
-  <link rel="import" href="../../../vaadin-item/vaadin-item.html">
-  <link href="../../vaadin-list-box.html" rel="import">
   <style>
     #list-box-tests {
       font-family: sans-serif;
