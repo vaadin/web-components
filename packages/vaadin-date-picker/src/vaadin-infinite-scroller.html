@@ -5,8 +5,10 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../polymer/lib/legacy/class.html">
-<link rel="import" href="../../polymer/lib/legacy/templatizer-behavior.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/debounce.html">
+<link rel="import" href="../../polymer/lib/utils/flush.html">
+<link rel="import" href="../../polymer/lib/utils/templatize.html">
 
 <dom-module id="vaadin-infinite-scroller">
   <template>
@@ -309,7 +311,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.appendChild(itemWrapper);
 
             // This is needed by IE
-            Polymer.dom.flush();
+            Polymer.flush();
 
             setTimeout(() => {
               // Only stamp the visible instances first
