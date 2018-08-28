@@ -1,7 +1,7 @@
 <!--
 @license
-Copyright (c) 2018 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
@@ -53,7 +53,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __createField(parent, path, type) {
-          let field = document.createElement('vaadin-text-field');
+          const field = document.createElement('vaadin-text-field');
           field.label = Vaadin.CrudElement.capitalize(path);
           field.path = path;
           field.required = true;

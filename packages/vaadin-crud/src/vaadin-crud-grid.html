@@ -1,7 +1,7 @@
 <!--
 @license
-Copyright (c) 2018 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
@@ -34,8 +34,9 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         static get observers() {
-          return ['__onItemsChange(items)',
-                  '__onDataProviderChange(dataprovider)'];
+          return [
+            '__onItemsChange(items)',
+            '__onDataProviderChange(dataprovider)'];
         }
 
         __onItemsChange(items) {
@@ -47,7 +48,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __createColumn(parent, path) {
-          let col = document.createElement('vaadin-grid-column');
+          const col = document.createElement('vaadin-grid-column');
           col.innerHTML = `<template>[[item${path ? '.' + path : ''}]]</template>`;
           if (path) {
             col.innerHTML += `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
@@ -64,7 +65,7 @@ This program is available under Apache License Version 2.0, available at https:/
               }
               const newPath = (path ? `${path}.` : '') + prop;
               if (typeof object[prop] === 'object') {
-                let group = this.__createGroup(parent, newPath, object[prop]);
+                const group = this.__createGroup(parent, newPath, object[prop]);
                 this.__createColumns(group, object[prop], newPath);
               } else {
                 this.__createColumn(parent, newPath);
@@ -76,7 +77,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __createGroup(parent, path, object) {
-          let grp = document.createElement('vaadin-grid-column-group');
+          const grp = document.createElement('vaadin-grid-column-group');
           grp.innerHTML = `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
           parent.appendChild(grp);
           return grp;

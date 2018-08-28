@@ -1,7 +1,7 @@
 <!--
 @license
-Copyright (c) 2018 Vaadin Ltd.
-This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
@@ -12,6 +12,8 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
 <link rel="import" href="../../vaadin-button/vaadin-button.html">
 <link rel="import" href="../../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="vaadin-crud-grid.html">
+<link rel="import" href="vaadin-crud-form.html">
 
 <dom-module id="vaadin-crud">
   <template>
@@ -27,9 +29,6 @@ This program is available under Apache License Version 2.0, available at https:/
       #form-slot,
       #editor {
         display: none !important;
-      }
-
-      :host ::slotted(vaadin-grid) {
       }
 
       vaadin-button.new {
@@ -103,7 +102,8 @@ This program is available under Apache License Version 2.0, available at https:/
             dataProvider: {
               type: Function,
               observer: '__onDataProviderChange'
-            }
+            },
+            _dirty: Boolean
           };
         }
 
@@ -147,7 +147,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
           }
-          this.__onItemsChange(this.items)
+          this.__onItemsChange(this.items);
           setTimeout(() => grid.addEventListener('active-item-changed', this.__activeListener));
         }
 
@@ -162,7 +162,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onDataProviderChange(dataProvider) {
-          throw('dataProvider feature is not yet implemented');
+          throw Error('dataProvider feature is not yet implemented');
         }
 
         __onItemsChange(items) {
@@ -184,7 +184,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __isNew(item) {
-          return item && !Object.keys(item).length
+          return item && !Object.keys(item).length;
         }
 
         __fillForm(item) {
@@ -204,7 +204,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __save() {
           if (this.__validate()) {
-            this.__isNew(this.item) && this.items.push(this.item)
+            this.__isNew(this.item) && this.items.push(this.item);
             this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
             this._grid.clearCache();
             this.__cancel();
