@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-horizontal-layout.html" rel="import">
-  <link href="../../vaadin-vertical-layout.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-horizontal-layout.html">`);
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-vertical-layout.html">`);
+  </script>
   <script>
     addEventListener('WebComponentsReady', function() {
       // Wait for the other 'WebComponentsReady' event listeners
