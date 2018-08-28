@@ -50,15 +50,13 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.__fields) {
             this.configure(item);
           }
-          this.__fields.forEach(field => {
-            field.value = Vaadin.CrudElement.getPropertyByPath(item, field.path);
-          });
         }
 
         __createField(parent, path, type) {
           let field = document.createElement('vaadin-text-field');
           field.label = Vaadin.CrudElement.capitalize(path);
           field.path = path;
+          field.required = true;
           parent.appendChild(field);
           this.__fields.push(field);
           return field;

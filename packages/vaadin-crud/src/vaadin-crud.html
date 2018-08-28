@@ -155,6 +155,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onDataProviderChange(dataProvider) {
+          throw('dataProvider feature is not yet implemented');
         }
 
         __onItemsChange(items) {
@@ -164,14 +165,23 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __onItemChange(item, old) {
-          this.__fillForm(item);
-          this.$.dialog.opened = true;
+          item && this.__fillForm(item);
+          this.$.dialog.opened = !!item;
+        }
+
+        get _fields() {
+          return this.__fields || (this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate));
         }
 
         __fillForm(item) {
           this._form = this._form || this.$.form;
           this._form.item = item;
+          this._fields.forEach(e => e.value = VaadinCrud.getPropertyByPath(item, e.path));
           this._dirty = false;
+        }
+
+        __validate() {
+          return this._fields.reduce((prev, e) => e.validate() && prev, true);
         }
 
         __new() {
@@ -179,16 +189,25 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         __save() {
+          if (this.__validate()) {
+            !Object.keys(this.item).length && this.items.push(this.item)
+            this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path, e.value));
+            this._grid.clearCache();
+            this.__cancel();
+          }
         }
 
         __cancel() {
-          this.$.dialog.opened = false;
+          this.$.dialog.opened = this.item = undefined;
         }
 
         __delete() {
+          this.items.splice(this.items.indexOf(this.item), 1);
+          this._grid.clearCache();
+          this.__cancel();
         }
 
-        /** Utility to convert json paths and hyphenized works to calitalized labels */
+        /** Utility to convert json paths and hyphenized words to capitalized labels */
         static capitalize(s) {
           return s.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
         }
