@@ -122,10 +122,9 @@
         });
 
         it('should be possible to manually invoke renderer', () => {
-          const spy = sinon.spy();
-          overlay.renderer = () => spy();
+          overlay.renderer = sinon.spy();
           overlay.render();
-          expect(spy.calledTwice).to.be.true;
+          expect(overlay.renderer.calledTwice).to.be.true;
         });
       });
 

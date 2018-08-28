@@ -782,11 +782,9 @@ This program is available under Apache License Version 2.0, available at https:/
        * Manually invoke existing renderer.
        */
       render() {
-        if (!this.renderer) {
-          return;
+        if (this.renderer) {
+          this.renderer.call(this.owner, this.content, this.owner, this.model);
         }
-
-        this.renderer.call(this.owner, this.content, this.owner, this.model);
       }
 
       _templateOrRendererChanged(template, renderer, owner, model, instanceProps) {
