@@ -49,7 +49,7 @@ This program is available under Apache License Version 2.0, available at https:/
         <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
         <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" disabled="[[!_new]]">Delete</vaadin-button>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" disabled="[[__isNew(item)]]">Delete</vaadin-button>
       </div>
     </div>
 
@@ -183,6 +183,10 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.__fields;
         }
 
+        __isNew(item) {
+          return item && !Object.keys(item).length
+        }
+
         __fillForm(item) {
           this._form = this._form || this.$.form;
           this._form.item = item;
@@ -200,7 +204,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         __save() {
           if (this.__validate()) {
-            !Object.keys(this.item).length && this.items.push(this.item)
+            this.__isNew(this.item) && this.items.push(this.item)
             this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
             this._grid.clearCache();
             this.__cancel();
