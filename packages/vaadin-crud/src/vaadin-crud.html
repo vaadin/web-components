@@ -84,20 +84,27 @@ This program is available under Apache License Version 2.0, available at https:/
 
         static get properties() {
           return {
-            _grid: HTMLElement,
-            _form: HTMLElement,
-            items: Object,
-            item: Object,
-            dataProvider: Function
+            _grid: {
+              type: HTMLElement,
+              observer: '__onGridChange'
+            },
+            _form: {
+              type: HTMLElement,
+              observer: '__onFormChange'
+            },
+            items: {
+              type: Array,
+              observer: '__onItemsChange'
+            },
+            item: {
+              type: Object,
+              observer: '__onItemChange'
+            },
+            dataProvider: {
+              type: Function,
+              observer: '__onDataProviderChange'
+            }
           };
-        }
-
-        static get observers() {
-          return ['__onGridChange(_grid)',
-                  '__onFormChange(_form)',
-                  '__onItemsChange(items)',
-                  '__onItemChange(item)',
-                  '__onDataProviderChange(dataprovider)'];
         }
 
         constructor() {
@@ -140,8 +147,8 @@ This program is available under Apache License Version 2.0, available at https:/
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
           }
-          grid.addEventListener('active-item-changed', this.__activeListener);
           this.__onItemsChange(this.items)
+          setTimeout(() => grid.addEventListener('active-item-changed', this.__activeListener));
         }
 
         __onFormChange(form, old) {
@@ -150,8 +157,8 @@ This program is available under Apache License Version 2.0, available at https:/
             old.removeEventListener('change', this.__changeListener);
           }
           this.$.editor.insertBefore(form, this.$.buttons);
-          form.addEventListener('change', this.__changeListener);
           this.$.dialog.$.overlay.appendChild(this.$.editor);
+          setTimeout(() => form.addEventListener('change', this.__changeListener));
         }
 
         __onDataProviderChange(dataProvider) {
@@ -170,13 +177,16 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         get _fields() {
-          return this.__fields || (this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate));
+          if (!this.__fields || !this.__fields.length) {
+            this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate);
+          }
+          return this.__fields;
         }
 
         __fillForm(item) {
           this._form = this._form || this.$.form;
           this._form.item = item;
-          this._fields.forEach(e => e.value = VaadinCrud.getPropertyByPath(item, e.path));
+          this._fields.forEach(e => e.value = VaadinCrud.getPropertyByPath(item, e.path || e.getAttribute('path')));
           this._dirty = false;
         }
 
@@ -191,14 +201,14 @@ This program is available under Apache License Version 2.0, available at https:/
         __save() {
           if (this.__validate()) {
             !Object.keys(this.item).length && this.items.push(this.item)
-            this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path, e.value));
+            this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
             this._grid.clearCache();
             this.__cancel();
           }
         }
 
         __cancel() {
-          this.$.dialog.opened = this.item = undefined;
+          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
         }
 
         __delete() {
