@@ -5,7 +5,6 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
@@ -74,9 +73,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * @mixes Vaadin.ComboBoxMixin
      * @mixes Vaadin.ThemableMixin
      */
-    class ComboBoxLightElement extends Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.mixinBehaviors(
-      [Polymer.IronA11yKeysBehavior], Polymer.Element
-    ))) {
+    class ComboBoxLightElement extends Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element)) {
 
       static get is() {
         return 'vaadin-combo-box-light';
@@ -100,6 +97,11 @@ This program is available under Apache License Version 2.0, available at https:/
         };
       }
 
+      constructor() {
+        super();
+        this._boundInputValueChanged = this._inputValueChanged.bind(this);
+      }
+
       ready() {
         super.ready();
         this._toggleElement = this.querySelector('.toggle-button');
@@ -115,13 +117,13 @@ This program is available under Apache License Version 2.0, available at https:/
         const cssSelector = 'vaadin-text-field,iron-input,paper-input,.paper-input-input,.input';
         this._setInputElement(this.querySelector(cssSelector));
         this._revertInputValue();
-        this.listen(this.inputElement, 'input', '_inputValueChanged');
+        this.inputElement.addEventListener('input', this._boundInputValueChanged);
         this._preventInputBlur();
       }
 
       disconnectedCallback() {
         super.disconnectedCallback();
-        this.unlisten(this.inputElement, 'input', '_inputValueChanged');
+        this.inputElement.removeEventListener('input', this._boundInputValueChanged);
         this._restoreInputBlur();
       }
 

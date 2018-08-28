@@ -4,9 +4,11 @@ Copyright (c) 2017 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
-<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../polymer/lib/utils/async.html">
+<link rel="import" href="../../polymer/lib/utils/flush.html">
 <link rel="import" href="../../polymer/lib/utils/templatize.html">
 <link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
+<link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <script>
@@ -518,7 +520,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // Pre P2 iron-list used a debouncer to render. Now that we synchronously render items,
       // we need to flush the DOM to make sure it doesn't get flushed in the middle of _render call
       // because that will cause problems to say the least.
-      Polymer.flush && Polymer.flush();
+      Polymer.flush();
 
       // With iron-list v1.3.9, calling `notifyResize()` no longer renders
       // the items synchronously. It is required to have the items rendered
@@ -778,7 +780,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.$.overlay.updateViewportBoundaries();
         this.$.overlay.ensureItemsRendered();
         this.$.overlay._selector.notifyResize();
-        Polymer.flush && Polymer.flush();
+        Polymer.flush();
       }, 1);
     }
 

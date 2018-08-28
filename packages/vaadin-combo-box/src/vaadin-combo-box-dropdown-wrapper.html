@@ -5,9 +5,7 @@ This program is available under Apache License Version 2.0, available at https:/
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../polymer/lib/utils/debounce.html">
 <link rel="import" href="../../iron-list/iron-list.html">
-<link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-combo-box-dropdown.html">
 
@@ -46,7 +44,6 @@ This program is available under Apache License Version 2.0, available at https:/
                 role$="[[_getAriaRole(index)]]"
                 aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
                 focused="[[_isItemFocused(_focusedIndex,index)]]"
-                touch-device$="[[touchDevice]]"
                 tabindex="-1">
               </vaadin-combo-box-item>
             </template>
@@ -59,6 +56,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <script>
   (function() {
+    'use strict';
+
+    const TOUCH_DEVICE = (() => {
+      try {
+        document.createEvent('TouchEvent');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    })();
+
     /**
      * Element for internal use only.
      *
@@ -77,15 +85,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           touchDevice: {
             type: Boolean,
-            reflectToAttribute: true,
-            value: () => {
-              try {
-                document.createEvent('TouchEvent');
-                return true;
-              } catch (e) {
-                return false;
-              }
-            }
+            value: TOUCH_DEVICE
           },
 
           opened: Boolean,
@@ -122,7 +122,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _focusedIndex: {
             type: Number,
-            notify: true,
             value: -1,
             observer: '_focusedIndexChanged'
           },
@@ -206,11 +205,13 @@ This program is available under Apache License Version 2.0, available at https:/
           window.ShadyCSS.getComputedStyleValue(this, '--vaadin-combo-box-overlay-max-height') :
           getComputedStyle(this).getPropertyValue('--vaadin-combo-box-overlay-max-height')) || '65vh';
 
+        const maxHeight = this._maxOverlayHeight(targetRect);
+
         // overlay max height is restrained by the #scroller max height which is set to 65vh in CSS.
-        this.$.dropdown.$.overlay.style.maxHeight = this._maxOverlayHeight(targetRect);
+        this.$.dropdown.$.overlay.style.maxHeight = maxHeight;
 
         // we need to set height for iron-list to make its `firstVisibleIndex` work correctly.
-        this._selector.style.maxHeight = this._maxOverlayHeight(targetRect);
+        this._selector.style.maxHeight = maxHeight;
 
         this.updateViewportBoundaries();
       }
