@@ -160,16 +160,22 @@ This program is available under Apache License Version 2.0, available at https:/
         __onItemsChange(items) {
           this._grid = this._grid || this.$.grid;
           this._grid.items = items;
+          items && items[0] && this.__fillForm(items[0]);
         }
 
-        __onItemChange(item) {
-          this._form = this._form || this.$.form;
-          this._form.item = item;
-          this._dirty = false;
+        __onItemChange(item, old) {
+          this.__fillForm(item);
           this.$.dialog.opened = true;
         }
 
+        __fillForm(item) {
+          this._form = this._form || this.$.form;
+          this._form.item = item;
+          this._dirty = false;
+        }
+
         __new() {
+          this.item = {};
         }
 
         __save() {
