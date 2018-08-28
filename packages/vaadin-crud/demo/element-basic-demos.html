@@ -6,11 +6,30 @@
       }
     </style>
 
-    <h3>Sample example</h3>
+    <h3>Simple example</h3>
     <vaadin-demo-snippet id="element-basic-demos-sample-example">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]>Foobar</vaadin-crud>
+        <vaadin-crud items=[[items]]></vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Providing custom grid</h3>
+    <vaadin-demo-snippet id="element-basic-demos-sample-example">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud>
+          <vaadin-grid slot="grid" items=[[items]]>
+            <vaadin-grid-column>
+              <template class="header">User</template>
+              <template>[[item.name.first]] [[item.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Email</template>
+              <template>[[item.details.email]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
