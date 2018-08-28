@@ -38,12 +38,18 @@
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]>
-          <vaadin-form-layout slot="form">
-            <vaadin-text-field path="name.first"label="First Name"></vaadin-text-field>
-            <vaadin-text-field path="name.last" label="Last Name"></vaadin-text-field>
+          <vaadin-form-layout slot="form" style="max-width: 60em">
+            <vaadin-text-field path="name.first"label="First Name" required></vaadin-text-field>
+            <vaadin-text-field path="name.last" label="Last Name" required></vaadin-text-field>
             <br>
-            <vaadin-text-field path="details.email"label="Email"></vaadin-text-field>
-            <vaadin-password-field path="password" label="Password"></vaadin-password-field>
+            <vaadin-text-field path="details.email"label="Email" required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              error-message="invalid email"
+              ></vaadin-text-field>
+            <vaadin-password-field path="password" label="Password" required
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+              error-message="min 6 upper/lower chars and digits"
+              ></vaadin-password-field>
             <br>
             <vaadin-combo-box path="role" label="Role" items='["admin", "operator", "user"]'></vaadin-combo-box>
           </vaadin-form-layout>
