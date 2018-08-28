@@ -14,25 +14,27 @@ gemini.suite('vaadin-context-menu', function(rootSuite) {
     .before(wait)
     .after(goToAboutBlank);
 
-  gemini.suite('default-tests', function(suite) {
-    suite
-      .setUrl('default.html')
-      .setCaptureElements('#default-tests')
-      .capture('default', function(actions) {
-        actions.executeJS(function(window) {
-          window.contextmenu(window.document.querySelector('#plain'));
+  ['lumo', 'material'].forEach(theme => {
+    gemini.suite(`default-tests-${theme}`, function(suite) {
+      suite
+        .setUrl(`default.html?theme=${theme}`)
+        .setCaptureElements('#default-tests')
+        .capture('default', function(actions) {
+          actions.executeJS(function(window) {
+            window.contextmenu(window.document.querySelector('#plain'));
+          });
+        })
+        .capture('long-menu', function(actions) {
+          actions.executeJS(function(window) {
+            window.contextmenu(window.document.querySelector('#long'));
+          });
+        })
+        .capture('bottom-menu', function(actions) {
+          actions.executeJS(function(window) {
+            window.contextmenu(window.document.querySelector('#bottom'));
+          });
         });
-      })
-      .capture('long-menu', function(actions) {
-        actions.executeJS(function(window) {
-          window.contextmenu(window.document.querySelector('#long'));
-        });
-      })
-      .capture('bottom-menu', function(actions) {
-        actions.executeJS(function(window) {
-          window.contextmenu(window.document.querySelector('#bottom'));
-        });
-      });
+    });
   });
 
 });

@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
 
   <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-context-menu.html" rel="import">
-  <link rel="import" href="../../../vaadin-list-box/vaadin-list-box.html">
-  <link rel="import" href="../../../vaadin-item/vaadin-item.html">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-context-menu.html">`);
+    document.write(`<link rel="import" href="../../../vaadin-list-box/theme/${theme}/vaadin-list-box.html">`);
+    document.write(`<link rel="import" href="../../../vaadin-item/theme/${theme}/vaadin-item.html">`);
+  </script>
   <style>
     /* cover all the viewport */
     #default-tests {
