@@ -45,15 +45,7 @@
             <vaadin-text-field path="details.email"label="Email"></vaadin-text-field>
             <vaadin-password-field path="password" label="Password"></vaadin-password-field>
             <br>
-            <vaadin-dropdown-menu path="role" label="Role">
-              <template>
-                <vaadin-list-box>
-                  <vaadin-item>admin</vaadin-item>
-                  <vaadin-item>operator</vaadin-item>
-                  <vaadin-item>user</vaadin-item>
-                </vaadin-list-box>
-              </template>
-            </vaadin-dropdown-menu>
+            <vaadin-combo-box path="role" label="Role" items='["admin", "operator", "user"]'></vaadin-combo-box>
           </vaadin-form-layout>
         </vaadin-crud>
       </template>
