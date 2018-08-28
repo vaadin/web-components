@@ -305,7 +305,7 @@ This program is available under Apache License Version 2.0, available at https:/
           return [
             '_updateSelectedItem(value, _items)',
             '_updateAriaExpanded(opened, _toggleElement)',
-            '_templateOrRendererChanged(_contentTemplate, renderer)'
+            '_templateOrRendererChanged(_contentTemplate, renderer, _overlayElement)'
           ];
         }
 
@@ -370,7 +370,11 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _templateOrRendererChanged(template, renderer) {
+        _templateOrRendererChanged(template, renderer, overlay) {
+          if (!overlay) {
+            return;
+          }
+
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
             throw new Error('You should only use either a renderer or a template for dropdown-menu content');
