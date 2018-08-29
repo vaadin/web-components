@@ -11,5 +11,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Data Provider",
+    "url": "crud-data-demos",
+    "src": "crud-data-demos.html",
+    "meta": {
+      "title": "vaadin-crud Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
