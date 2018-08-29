@@ -15,13 +15,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       /**
        * @memberof Vaadin
        */
-      class VaadinCrudGrid extends Vaadin.GridElement {
+      class CrudGridElement extends Vaadin.GridElement {
         static get is() {
           return 'vaadin-crud-grid';
-        }
-
-        static get version() {
-          return '0.1.0';
         }
 
         static get properties() {
@@ -84,11 +80,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
       }
 
-      customElements.define(VaadinCrudGrid.is, VaadinCrudGrid);
+      customElements.define(CrudGridElement.is, CrudGridElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.CrudGridElement = VaadinCrudGrid;
+      window.Vaadin.CrudGridElement = CrudGridElement;
     })();
   </script>

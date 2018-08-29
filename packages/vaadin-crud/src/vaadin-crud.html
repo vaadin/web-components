@@ -72,7 +72,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @mixes Vaadin.ThemableMixin
        * @demo demo/index.html
        */
-      class VaadinCrud extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
+      class CrudElement extends Vaadin.ElementMixin(Vaadin.ThemableMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-crud';
         }
@@ -189,7 +189,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __fillForm(item) {
           this._form = this._form || this.$.form;
           this._form.item = item;
-          this._fields.forEach(e => e.value = VaadinCrud.getPropertyByPath(item, e.path || e.getAttribute('path')));
+          this._fields.forEach(e => e.value = CrudElement.__getPropertyByPath(item, e.path || e.getAttribute('path')));
           this._dirty = false;
         }
 
@@ -204,7 +204,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __save() {
           if (this.__validate()) {
             this.__isNew(this.item) && this.items.push(this.item);
-            this._fields.forEach(e => VaadinCrud.setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
+            this._fields.forEach(e => CrudElement.__setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
             this._grid.clearCache();
             this.__cancel();
           }
@@ -220,38 +220,41 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__cancel();
         }
 
-        /** Utility to convert json paths and hyphenized words to capitalized labels */
-        static capitalize(s) {
-          return s.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase());
+        /**
+         * Utility to convert json paths and hyphenized words to capitalized labels
+         * @protected
+         */
+        static capitalize(path) {
+          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
 
-        /** Utility method for getting nested values in JSON objects */
-        static getPropertyByPath(o, s) {
-          s = s.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-          const a = s.replace(/^\./, '').split('.');
+        // Utility method for getting nested values in JSON objects
+        static __getPropertyByPath(obj, path) {
+          path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+          const a = path.replace(/^\./, '').split('.');
           for (let i = 0, l = a.length; i < l; i++) {
             const k = a[i];
-            if (k in o) {
-              o = o[k];
+            if (k in obj) {
+              obj = obj[k];
             } else {
               return;
             }
           }
-          return o;
+          return obj;
         }
 
-        /** Utility method for setting nested values in JSON objects */
-        static setPropertyByPath(o, s, v) {
-          s = s.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-          const a = s.replace(/^\./, '').split('.');
+        // Utility method for setting nested values in JSON objects */
+        static __setPropertyByPath(obj, path, val) {
+          path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+          const a = path.replace(/^\./, '').split('.');
           for (let i = 0, l = a.length; i < l; i++) {
             const k = a[i];
             if (i === l - 1) {
-              o[k] = v;
+              obj[k] = val;
               return;
             }
-            !(k in o) && (o[k] = {});
-            o = o[k];
+            !(k in obj) && (obj[k] = {});
+            obj = obj[k];
           }
         }
       }
@@ -259,9 +262,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.CrudElement = VaadinCrud;
+      window.Vaadin.CrudElement = CrudElement;
 
-      customElements.define(VaadinCrud.is, VaadinCrud);
+      customElements.define(CrudElement.is, CrudElement);
     })();
   </script>
 </dom-module>

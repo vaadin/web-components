@@ -8,7 +8,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
-<link rel="import" href="../../vaadin-text-field/vaadin-password-field.html">
 
   <script>
     (function() {
@@ -16,13 +15,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       /**
        * @memberof Vaadin
        */
-      class VaadinCrudForm extends Vaadin.FormLayoutElement {
+      class CrudFormElement extends Vaadin.FormLayoutElement {
         static get is() {
           return 'vaadin-crud-form';
-        }
-
-        static get version() {
-          return '0.1.0';
         }
 
         static get properties() {
@@ -81,11 +76,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
       }
 
-      customElements.define(VaadinCrudForm.is, VaadinCrudForm);
+      customElements.define(CrudFormElement.is, CrudFormElement);
 
       /**
        * @namespace Vaadin
        */
-      window.Vaadin.CrudFormElement = VaadinCrudForm;
+      window.Vaadin.CrudFormElement = CrudFormElement;
     })();
   </script>
