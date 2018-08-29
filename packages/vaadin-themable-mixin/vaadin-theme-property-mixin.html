@@ -1,0 +1,41 @@
+<script>
+  /**
+   * @namespace Vaadin
+   */
+  window.Vaadin = window.Vaadin || {};
+
+  /**
+   * @polymerMixin
+   * @memberof Vaadin
+   */
+  Vaadin.ThemePropertyMixin = superClass => class VaadinThemePropertyMixin extends superClass {
+    static get properties() {
+      return {
+        /**
+         * Helper property with theme attribute value facilitating propagation
+         * in shadow DOM. Allows using `theme$="[[theme]]"` in the template.
+         *
+         * @protected
+         */
+        theme: {
+          type: String,
+          readOnly: true
+        }
+      };
+    }
+
+    /** @protected */
+    static get observedAttributes() {
+      return ['theme'];
+    }
+
+    /** @protected */
+    attributeChangedCallback(name, oldValue, newValue) {
+      super.attributeChangedCallback(name, oldValue, newValue);
+
+      if (name === 'theme') {
+        this._setTheme(newValue);
+      }
+    }
+  };
+</script>
