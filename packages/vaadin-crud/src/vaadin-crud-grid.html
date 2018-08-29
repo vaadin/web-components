@@ -32,15 +32,31 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         static get observers() {
           return [
             '__onItemsChange(items)',
-            '__onDataProviderChange(dataprovider)'];
+            '__onDataProviderChange(dataProvider)'];
         }
 
         __onItemsChange(items) {
-          this.innerHTML = '';
-          this.__createColumns(this, items && items[0]);
+          if (!this.dataProvider) {
+            this.innerHTML = '';
+            this.__createColumns(this, items && items[0]);
+          }
+        }
+
+        __dataProviderWrapper(params, callback) {
+          this.__dataProvider(params, (items, size) => {
+            if (this.innerHTML == '' && items[0]) {
+              this.__createColumns(this, items[0]);
+            }
+            callback(items, size);
+          });
         }
 
         __onDataProviderChange(dataProvider) {
+          if (this.__dataProviderWrapper != dataProvider) {
+            this.innerHTML = '';
+            this.__dataProvider = dataProvider;
+            this.dataProvider = this.__dataProviderWrapper;
+          }
         }
 
         __createColumn(parent, path) {

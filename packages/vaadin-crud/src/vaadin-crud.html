@@ -146,7 +146,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
           }
-          this.__onItemsChange(this.items);
+          if (this.items) {
+            this.__onItemsChange(this.items);
+          }
           Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('active-item-changed', this.__activeListener));
         }
 
@@ -161,7 +163,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onDataProviderChange(dataProvider) {
-          throw Error('dataProvider feature is not yet implemented');
+          this._grid = this._grid || this.$.grid;
+          this._grid.dataProvider = dataProvider;
         }
 
         __onItemsChange(items) {
@@ -225,7 +228,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
          * @protected
          */
         static capitalize(path) {
-          return path.replace(/(^|[ -_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
+          return path.replace(/(^|[ \-_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
 
         // Utility method for getting nested values in JSON objects
