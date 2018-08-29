@@ -1,6 +1,9 @@
 gemini.suite('vaadin-crud', function(rootSuite) {
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return !!(window.WebComponents && window.WebComponents.ready);
+      }, 15000);
   }
 
   function goToAboutBlank(actions, find) {
@@ -18,8 +21,8 @@ gemini.suite('vaadin-crud', function(rootSuite) {
     gemini.suite(`default-tests-${theme}`, function(suite) {
       suite
         .setUrl(`/default.html?theme=${theme}`)
-        .setCaptureElements('#default-tests')
-        .capture(`vaadin-crud`);
+        .setCaptureElements('body')
+        .capture('vaadin-crud');
     });
   });
 
