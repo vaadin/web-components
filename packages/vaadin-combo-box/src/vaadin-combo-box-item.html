@@ -107,7 +107,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get observers() {
         return [
-          '_render(renderer, index, item.*)',
+          '_rendererOrItemChanged(renderer, index, item.*)',
           '_updateLabel(label, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("index", index, _itemTemplateInstance)',
           '_updateTemplateInstanceVariable("item", item, _itemTemplateInstance)',
@@ -133,7 +133,20 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _render(renderer, index, item) {
+      _render() {
+        if (!this.renderer) {
+          return;
+        }
+
+        const model = {
+          index: this.index,
+          item: this.item
+        };
+
+        this.renderer(this.$.content, this._comboBox, model);
+      }
+
+      _rendererOrItemChanged(renderer, index, item) {
         if (item === undefined || index === undefined) {
           return;
         }
@@ -144,12 +157,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         if (renderer) {
           this._oldRenderer = renderer;
-          const model = {
-            index: index,
-            item: item.value
-          };
-
-          this.renderer(this.$.content, this._comboBox, model);
+          this._render();
         }
       }
 
