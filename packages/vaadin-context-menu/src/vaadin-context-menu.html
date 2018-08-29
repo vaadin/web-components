@@ -406,6 +406,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this.$.overlay.opened = opened;
         }
 
+        /**
+         * Manually invoke existing renderer.
+         */
+        render() {
+          this.$.overlay.render();
+        }
+
         _removeNewRendererOrTemplate(template, oldTemplate, renderer, oldRenderer) {
           if (template !== oldTemplate) {
             this._contentTemplate = undefined;
