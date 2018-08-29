@@ -30,8 +30,7 @@
 ```
 -->
 ```html
-<vaadin-crud>
-  ...
+<vaadin-crud items='[{"name": "Juan", "surname": "Garcia"}]'>
 </vaadin-crud>
 ```
 
