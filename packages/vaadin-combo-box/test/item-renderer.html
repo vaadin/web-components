@@ -70,6 +70,16 @@
         }).to.throw(Error);
         expect(comboBox._itemTemplate).to.be.not.ok;
       });
+
+      it('should be possible to manually invoke renderer', () => {
+        comboBox.renderer = sinon.spy();
+        comboBox.opened = true;
+
+        // Number of items rendered on opening
+        const renderedCount = comboBox.renderer.callCount;
+        comboBox.render();
+        expect(comboBox.renderer.callCount).to.be.equal(renderedCount * 2);
+      });
     });
 
     describe('with template', () => {
