@@ -12,6 +12,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-grid/vaadin-grid-column-group.html">
 <link rel="import" href="../../vaadin-button/vaadin-button.html">
 <link rel="import" href="../../vaadin-dialog/vaadin-dialog.html">
+<link rel="import" href="../../vaadin-confirm-dialog/vaadin-confirm-dialog.html">
 <link rel="import" href="vaadin-crud-grid.html">
 <link rel="import" href="vaadin-crud-form.html">
 
@@ -58,6 +59,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     <vaadin-button id="new" on-click="__new">New</vaadin-button>
 
     <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
+
+    <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
+      reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
+      There are unsaved modifications to the item.
+    </vaadin-confirm-dialog>
+    <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
+      cancel confirm-text="Delete" reject-text="Cancel" header="Confirm Delete" >
+      Are you sure you want to delete the selected Item? This action cannot be undone.
+    </vaadin-confirm-dialog>
   </template>
 
   <script>
@@ -258,12 +268,20 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                 isNew && this.items.push(item);
               }
               this._grid.clearCache();
-              this.__cancel();
+              this.__confirmCancel();
             }
           }
         }
 
         __cancel() {
+          if (this._dirty) {
+            this.$.confirmCancel.opened = true;
+          } else {
+            this.__confirmCancel();
+          }
+        }
+
+        __confirmCancel() {
           /**
            * Fired when user discards edition. If the default is prevented, then
            * no action is performed, user is responsible to close dialog and reset
@@ -281,6 +299,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __delete() {
+          this.$.confirmDelete.opened = true;
+        }
+
+        __confirmDelete() {
           /**
            * Fired when user wants to delete item. If the default is prevented, then
            * no action is performed, items array is not modified nor dialog closed

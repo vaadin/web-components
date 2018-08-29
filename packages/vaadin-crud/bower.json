@@ -35,7 +35,8 @@
     "vaadin-grid": "^5.1.0",
     "vaadin-form-layout": "^2.1.0",
     "vaadin-text-field": "^2.1.1",
-    "vaadin-button": "^2.1.0"
+    "vaadin-button": "^2.1.0",
+    "vaadin-confirm-dialog": "^1.1.0"
   },
   "devDependencies": {
     "iron-component-page": "^3.0.0",
