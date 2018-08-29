@@ -83,6 +83,6 @@ gulp.task('version:update', ['version:check'], function() {
   }
   return gulp.src(['src/*.html'])
     .pipe(replace(oldversion, newversion))
-    .pipe(gulp.dest('.'))
+    .pipe(gulp.dest('src'))
     .pipe(git.add());
 });
