@@ -29,7 +29,8 @@ This program is available under Apache License Version 2.0, available at https:/
         hidden="[[_hidden(_items.*, loading)]]"
         position-target="[[positionTarget]]"
         on-template-changed="_templateChanged"
-        on-position-changed="_setOverlayHeight">
+        on-position-changed="_setOverlayHeight"
+        theme="[[theme]]">
       <template>
         <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
           <iron-list id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
@@ -44,7 +45,8 @@ This program is available under Apache License Version 2.0, available at https:/
                 role$="[[_getAriaRole(index)]]"
                 aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
                 focused="[[_isItemFocused(_focusedIndex,index)]]"
-                tabindex="-1">
+                tabindex="-1"
+                theme$="[[theme]]">
               </vaadin-combo-box-item>
             </template>
           </iron-list>
@@ -111,6 +113,11 @@ This program is available under Apache License Version 2.0, available at https:/
             reflectToAttribute: true,
             observer: '_setOverlayHeight'
           },
+
+          /**
+           * Used to propagate the `theme` attribute from the host element.
+           */
+          theme: String,
 
           _selectedItem: {
             type: Object

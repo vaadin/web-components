@@ -19,7 +19,13 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
     </style>
-    <vaadin-combo-box-overlay id="overlay" hidden$="[[hidden]]" opened="[[opened]]" template="{{template}}" style="align-items: stretch; margin: 0;">
+    <vaadin-combo-box-overlay
+        id="overlay"
+        hidden$="[[hidden]]"
+        opened="[[opened]]"
+        template="{{template}}"
+        style="align-items: stretch; margin: 0;"
+        theme$="[[theme]]">
       <slot></slot>
     </vaadin-combo-box-overlay>
   </template>
@@ -81,7 +87,12 @@ This program is available under Apache License Version 2.0, available at https:/
           alignedAbove: {
             type: Boolean,
             value: false
-          }
+          },
+
+          /**
+           * Used to propagate the `theme` attribute from the host element.
+           */
+          theme: String
         };
       }
 

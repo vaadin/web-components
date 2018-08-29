@@ -37,7 +37,17 @@
         </paper-input>
       </vaadin-combo-box-light>
     </template>
-  </demo-snippet>
+  </test-fixture>
+
+  <test-fixture id="combobox-light-theme">
+    <template>
+      <vaadin-combo-box-light attr-for-value="bind-value" theme="foo">
+        <iron-input>
+          <input>
+        </iron-input>
+      </vaadin-combo-box-light>
+    </template>
+  </test-fixture>
 
   <script>
     describe('vaadin-combo-box-light', () => {
@@ -144,6 +154,25 @@
         comboBox.checkValidity();
 
         expect(spy.called).to.be.true;
+      });
+    });
+
+    describe('theme attribute', () => {
+      let comboBox;
+
+      beforeEach(() => comboBox = fixture('combobox-light-theme'));
+
+      it('should propagate theme attribute to overlay', () => {
+        expect(comboBox.$.overlay.$.dropdown.$.overlay.getAttribute('theme')).to.equal('foo');
+      });
+
+      it('should propagate theme attribute to item', () => {
+        comboBox.items = ['bar', 'baz'];
+        comboBox.open();
+        expect(
+          comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item')
+            .getAttribute('theme')
+        ).to.equal('foo');
       });
     });
   </script>

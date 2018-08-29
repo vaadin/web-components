@@ -121,6 +121,49 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Small Text Field (Lumo Theme Variant)</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-small">
+      <template preserve-content>
+        <vaadin-combo-box label="Element" value="Carbon" theme="small"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-small', function(document) {
+            document.querySelector('vaadin-combo-box').items = elements;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Custom Theme Variant</h3>
+    <vaadin-demo-snippet id="combo-box-styling-demos-custom-theme-variant">
+      <template preserve-content>
+        <dom-module id="custom-text-field-and-item" theme-for="vaadin-text-field vaadin-combo-box-item">
+          <template>
+            <style>
+              :host([theme~="custom"]) {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+          <template>
+            <style>
+              :host([theme~="custom"]) [part="overlay"] {
+                background-image: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05));
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-combo-box label="Element" value="Carbon" theme="custom"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-styling-demos-custom-theme-variant', function(document) {
+            document.querySelector('vaadin-combo-box').items = elements;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
   </template>
   <script>
     class ComboBoxStylingDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {

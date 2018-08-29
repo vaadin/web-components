@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
@@ -74,6 +75,8 @@ This program is available under Apache License Version 2.0, available at https:/
 
         on-change="_stopPropagation"
         on-input="_inputValueChanged"
+
+        theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
 
@@ -88,7 +91,8 @@ This program is available under Apache License Version 2.0, available at https:/
       position-target="[[_getPositionTarget()]]"
       _focused-index="[[_focusedIndex]]"
       _item-label-path="[[itemLabelPath]]"
-      loading="[[loading]]">
+      loading="[[loading]]"
+      theme="[[theme]]">
     </vaadin-combo-box-dropdown-wrapper>
   </template>
 </dom-module>
@@ -200,6 +204,16 @@ This program is available under Apache License Version 2.0, available at https:/
        * `focus-ring` | Set when the element is keyboard focused | :host
        * `loading` | Set when new items are expected | :host
        *
+       * In addition to `<vaadin-combo-box>` itself, the following internal
+       * components are themable:
+       *
+       * - `<vaadin-text-field>`
+       * - `<vaadin-combo-box-overlay>`
+       * - `<vaadin-combo-box-item>`
+       *
+       * Note: the `theme` attribute value set on `<vaadin-combo-box>` is
+       * propagated to the internal themable components listed above.
+       *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
@@ -207,13 +221,22 @@ This program is available under Apache License Version 2.0, available at https:/
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ComboBoxMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class ComboBoxElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
-            Vaadin.ThemableMixin(
-              Vaadin.ComboBoxMixin(Polymer.Element)))) {
+            Vaadin.ThemePropertyMixin(
+              Vaadin.ThemableMixin(
+                Vaadin.ComboBoxMixin(Polymer.Element))))) {
+        constructor() {
+          super();
+          /**
+           * @property
+           */
+          this.theme;
+        }
 
         static get is() {
           return 'vaadin-combo-box';
