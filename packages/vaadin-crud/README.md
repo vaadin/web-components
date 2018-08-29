@@ -35,7 +35,7 @@
 </vaadin-crud>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-crud/master/screenshot.png" width="200" alt="Screenshot of vaadin-crud">](https://vaadin.com/components/vaadin-crud)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-crud/master/screenshot.gif" width="200" alt="Screenshot of vaadin-crud">](https://vaadin.com/components/vaadin-crud)
 
 
 ## Installation
