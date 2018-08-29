@@ -16,6 +16,9 @@
     "url": "https://github.com/vaadin/vaadin-themable-mixin/issues"
   },
   "homepage": "https://vaadin.com/elements",
+  "files": [
+    "vaadin-*.js"
+  ],
   "scripts": {
     "test": "wct"
   },
