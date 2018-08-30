@@ -170,11 +170,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __onItemsChange(items) {
           this._grid = this._grid || this.$.grid;
           this._grid.items = items;
-          items && items[0] && this.__fillForm(items[0]);
         }
 
         __onItemChange(item, old) {
-          item && this.__fillForm(item);
+          if (item) {
+            this._form = this._form || this.$.form;
+            if (!this._fields.length && this._form.configure) {
+              const obj = this.__isNew(item) ? this._grid._cache.items[0] : item;
+              this._form.configure(obj);
+            }
+            this.__fillForm(item);
+          }
           this.$.dialog.opened = !!item;
         }
 
