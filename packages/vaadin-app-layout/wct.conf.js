@@ -4,8 +4,17 @@ var env = envIndex ? process.argv[envIndex] : undefined;
 module.exports = {
   testTimeout: 180 * 1000,
   verbose: false,
-  // MAGI REMOVE START
   plugins: {
+    local: {
+      browserOptions: {
+        chrome: [
+          'headless',
+          'disable-gpu',
+          'no-sandbox'
+        ]
+      }
+    },
+    // MAGI REMOVE START
     istanbul: {
       dir: './coverage',
       reporters: ['text-summary', 'lcov'],
@@ -15,12 +24,12 @@ module.exports = {
       exclude: [],
       thresholds: {
         global: {
-          statements: 100
+          statements: 90
         }
       }
     }
+    // MAGI REMOVE END
   },
-  // MAGI REMOVE END
 
   registerHooks: function(context) {
     const saucelabsPlatformsMobile = [
@@ -55,7 +64,6 @@ module.exports = {
       'Windows 10/chrome@latest',
       'Windows 10/firefox@latest'
     ];
-
     if (env === 'saucelabs') {
       context.options.plugins.sauce.browsers = saucelabsPlatforms;
     } else if (env === 'saucelabs-cron') {

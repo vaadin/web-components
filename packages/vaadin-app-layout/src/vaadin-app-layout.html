@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 
 <dom-module id="vaadin-app-layout">
   <template>
@@ -139,8 +140,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * @namespace Vaadin
        */
       window.Vaadin.AppLayoutElement = AppLayoutElement;
-      if (window.Vaadin.runIfDevelopmentMode) {
-        window.Vaadin.runIfDevelopmentMode('vaadin-license-checker', AppLayoutElement);
+
+      const licenseChecker = window.Vaadin.developmentModeCallback
+        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
+      if (typeof licenseChecker === 'function') {
+        licenseChecker(AppLayoutElement);
       }
     })();
   </script>
