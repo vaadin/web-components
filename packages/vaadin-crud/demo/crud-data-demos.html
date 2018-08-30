@@ -1,0 +1,40 @@
+<dom-module id="crud-data-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Data Provider</h3>
+    <vaadin-demo-snippet id="crud-data-demos-dataprovider">
+      <template preserve-content>
+        <vaadin-crud></vaadin-crud>
+        <script>
+        window.addDemoReadyListener('#crud-data-demos-dataprovider', function(document) {
+          const crud = document.querySelector('vaadin-crud');
+
+          // Create an array of people
+          const people = [];
+          for (let i = 0; i < 200; i++) {
+            people.push({'first-name': 'First Name ' + i, 'last-name': 'Last Name ' + i});
+          }
+
+          crud.dataProvider = function(params, callback) {
+            const chunk = people.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
+            callback(chunk, people.length);
+          };
+        });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </template>
+  <script>
+    class CrudDataDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
+      static get is() {
+        return 'crud-data-demos';
+      }
+    }
+    customElements.define(CrudDataDemos.is, CrudDataDemos);
+  </script>
+</dom-module>

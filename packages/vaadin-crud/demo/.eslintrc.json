@@ -2,7 +2,7 @@
   "rules": {
   },
   "globals": {
-    "ElementDemo": false,
+    "CrudDemo": false,
     "DemoReadyEventEmitter": false
   }
 }

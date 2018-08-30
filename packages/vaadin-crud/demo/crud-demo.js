@@ -1,4 +1,4 @@
-window.ElementDemo = superClass => {
+window.CrudDemo = superClass => {
   return class extends superClass {
     static get properties() {
       return {

@@ -1,4 +1,4 @@
-<dom-module id="element-basic-demos">
+<dom-module id="crud-basic-demos">
   <template>
     <style include="vaadin-component-demo-shared-styles">
       :host {
@@ -7,7 +7,7 @@
     </style>
 
     <h3>Basics</h3>
-    <vaadin-demo-snippet id="element-basic-demos-basics">
+    <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]></vaadin-crud>
@@ -15,7 +15,7 @@
     </vaadin-demo-snippet>
 
     <h3>Providing Custom Grid</h3>
-    <vaadin-demo-snippet id="element-basic-demos-custom-grid">
+    <vaadin-demo-snippet id="crud-basic-demos-custom-grid">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]>
@@ -34,7 +34,7 @@
     </vaadin-demo-snippet>
 
     <h3>Providing Custom Editor</h3>
-    <vaadin-demo-snippet id="element-basic-demos-custom-editor">
+    <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]>
@@ -59,11 +59,11 @@
 
   </template>
   <script>
-    class ElementBasicDemos extends DemoReadyEventEmitter(ElementDemo(Polymer.Element)) {
+    class CrudBasicDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
       static get is() {
-        return 'element-basic-demos';
+        return 'crud-basic-demos';
       }
     }
-    customElements.define(ElementBasicDemos.is, ElementBasicDemos);
+    customElements.define(CrudBasicDemos.is, CrudBasicDemos);
   </script>
 </dom-module>

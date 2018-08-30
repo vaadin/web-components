@@ -30,17 +30,33 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         static get observers() {
-          return [
-            '__onItemsChange(items)',
-            '__onDataProviderChange(dataprovider)'];
+          return ['__onItemsChange(items)'];
         }
 
         __onItemsChange(items) {
-          this.innerHTML = '';
-          this.__createColumns(this, items && items[0]);
+          if (!this.dataProvider && items && items[0]) {
+            this.innerHTML = '';
+            this.__createColumns(this, items[0]);
+          }
         }
 
-        __onDataProviderChange(dataProvider) {
+        __dataProviderWrapper(params, callback) {
+          this.__dataProvider(params, (items, size) => {
+            if (this.innerHTML == '' && items[0]) {
+              this.__createColumns(this, items[0]);
+            }
+            callback(items, size);
+          });
+        }
+
+        /** @override */
+        _dataProviderChanged(dataProvider, oldDataProvider) {
+          if (this.__dataProviderWrapper != dataProvider) {
+            this.innerHTML = '';
+            this.__dataProvider = dataProvider;
+            this.dataProvider = this.__dataProviderWrapper;
+            super._dataProviderChanged(this.dataProvider, oldDataProvider);
+          }
         }
 
         __createColumn(parent, path) {

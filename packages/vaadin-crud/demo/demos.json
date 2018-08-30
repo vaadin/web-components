@@ -1,12 +1,23 @@
 {
-  "name": "Vaadin Element",
+  "name": "Vaadin Crud",
   "pages": [
   {
     "name": "Basics",
-    "url": "element-basic-demos",
-    "src": "element-basic-demos.html",
+    "url": "crud-basic-demos",
+    "src": "crud-basic-demos.html",
     "meta": {
       "title": "vaadin-crud Basic Examples",
+      "description": "",
+      "image": ""
+     }
+  }
+  ,
+  {
+    "name": "Data Provider",
+    "url": "crud-data-demos",
+    "src": "crud-data-demos.html",
+    "meta": {
+      "title": "vaadin-crud Data Provider Examples",
       "description": "",
       "image": ""
      }
