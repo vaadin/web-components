@@ -28,6 +28,11 @@ Lumo is maintained as a part of the [Vaadin platform](https://vaadin.com/).
 [Vaadin components](https://vaadin.com/components) is a collection of web components that use the Lumo design language as their default theme. The [Vaadin app starters](https://vaadin.com/start) are also based on Lumo.
 
 
+## Big Thanks
+
+Cross-browser Testing Platform and Open Source <3 Provided by [Sauce Labs](https://saucelabs.com).
+
+
 ## Contributing
 
 Reporting [issues and feature request](https://github.com/vaadin/vaadin-lumo-styles/issues/new) is a great way to help! If you have questions, join the [Vaadin components chat](https://gitter.im/vaadin/vaadin-core-elements) – we’re happy to answer Lumo related questions there.
