@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <title></title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
-  <link href="../../vaadin-upload.html" rel="import">
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write('<link rel="import" href="../../theme/' + theme + '/vaadin-upload.html">');
+  </script>
 </head>
 
 <body>
