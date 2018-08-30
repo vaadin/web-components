@@ -10,25 +10,24 @@
     <vaadin-demo-snippet id="crud-data-demos-dataprovider">
       <template preserve-content>
         <vaadin-crud></vaadin-crud>
-      </template>
-      <script>
+        <script>
         window.addDemoReadyListener('#crud-data-demos-dataprovider', function(document) {
           const crud = document.querySelector('vaadin-crud');
 
           // Create an array of people
           const people = [];
           for (let i = 0; i < 200; i++) {
-            people.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
+            people.push({'first-name': 'First Name ' + i, 'last-name': 'Last Name ' + i});
           }
 
           crud.dataProvider = function(params, callback) {
-            const chunk = people.splice(params.page * params.pageSize, params.pageSize);
+            const chunk = people.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
             callback(chunk, people.length);
           };
         });
-      </script>
+        </script>
+      </template>
     </vaadin-demo-snippet>
-
   </template>
   <script>
     class CrudDataDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {

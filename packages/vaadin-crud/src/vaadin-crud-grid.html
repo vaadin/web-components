@@ -30,15 +30,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         static get observers() {
-          return [
-            '__onItemsChange(items)',
-            '__onDataProviderChange(dataProvider)'];
+          return ['__onItemsChange(items)'];
         }
 
         __onItemsChange(items) {
-          if (!this.dataProvider) {
+          if (!this.dataProvider && items && items[0]) {
             this.innerHTML = '';
-            this.__createColumns(this, items && items[0]);
+            this.__createColumns(this, items[0]);
           }
         }
 
@@ -51,11 +49,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           });
         }
 
-        __onDataProviderChange(dataProvider) {
+        /** @override */
+        _dataProviderChanged(dataProvider, oldDataProvider) {
           if (this.__dataProviderWrapper != dataProvider) {
             this.innerHTML = '';
             this.__dataProvider = dataProvider;
             this.dataProvider = this.__dataProviderWrapper;
+            super._dataProviderChanged(this.dataProvider, oldDataProvider);
           }
         }
 

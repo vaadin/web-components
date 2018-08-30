@@ -118,6 +118,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           super.ready();
           this.__activeListener = e => this.__onActiveItemChange(e);
           this.__changeListener = e => this.__onEditChange(e);
+          this._grid = this.$.grid;
+          this._form = this.$.form;
         }
 
         __onDomChange(nodes) {
@@ -163,18 +165,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onDataProviderChange(dataProvider) {
-          this._grid = this._grid || this.$.grid;
           this._grid.dataProvider = dataProvider;
         }
 
         __onItemsChange(items) {
-          this._grid = this._grid || this.$.grid;
           this._grid.items = items;
         }
 
         __onItemChange(item, old) {
           if (item) {
-            this._form = this._form || this.$.form;
             if (!this._fields.length && this._form.configure) {
               const obj = this.__isNew(item) ? this._grid._cache.items[0] : item;
               this._form.configure(obj);
@@ -196,7 +195,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __fillForm(item) {
-          this._form = this._form || this.$.form;
           this._form.item = item;
           this._fields.forEach(e => e.value = CrudElement.__getPropertyByPath(item, e.path || e.getAttribute('path')));
           this._dirty = false;
