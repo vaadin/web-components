@@ -17,25 +17,131 @@
   </test-fixture>
 
   <script>
-    describe('crud test', function() {
-      var element;
+    function listenOnce(element, eventName, callback) {
+      const listener = e => {
+        element.removeEventListener(eventName, listener);
+        callback(e);
+      };
+      element.addEventListener(eventName, listener);
+    }
 
-      beforeEach(function() {
-        element = fixture('default');
+    describe('crud test', () => {
+      var crud;
+
+
+      beforeEach(() => crud = fixture('default'));
+
+      it('should have a correct localName', () => {
+        expect(crud.localName).to.be.equal('vaadin-crud');
       });
 
-      it('should pass', function() {
-        expect(element.localName).to.be.equal('vaadin-crud');
-      });
-
-      it('should not expose class name globally', function() {
+      it('should not expose class name globally', () => {
         expect(window.VaadinCrud).not.to.be.ok;
       });
 
-      it('should have a valid version number', function() {
+      it('should have a valid version number', () => {
         expect(customElements.get('vaadin-crud').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
       });
 
+      describe('events', () => {
+
+        beforeEach(done => {
+          crud.items = [{foo: 'bar'}];
+          Polymer.RenderStatus.afterNextRender(crud._grid, done);
+        });
+
+        afterEach(done => {
+          crud.$.dialog.opened = false;
+          setTimeout(done);
+        });
+
+        it('should fire the new event', done => {
+          listenOnce(crud, 'new', e => done());
+          crud.$.new.click();
+        });
+
+        it('on new should set the item and open dialog if not default prevented', () => {
+          expect(crud.item).not.to.be.ok;
+          crud.$.new.click();
+          expect(crud.item).to.be.ok;
+          expect(crud.$.dialog.opened).to.be.true;
+        });
+
+        it('on new should not set the item but open dialog if default prevented', () => {
+          listenOnce(crud, 'new', e => e.preventDefault());
+          crud.$.new.click();
+          expect(crud.item).not.to.be.ok;
+          expect(crud.$.dialog.opened).to.be.true;
+        });
+
+        it('should fire the edit event', done => {
+          listenOnce(crud, 'edit', e => {
+            expect(e.detail.item).to.be.equal(crud.items[0]);
+            done();
+          });
+          crud._grid.activeItem = crud.items[0];
+        });
+
+        it('on edit should set the item and open dialog if not default prevented', () => {
+          crud._grid.activeItem = crud.items[0];
+          expect(crud.item).to.be.equal(crud.items[0]);
+        });
+
+        it('on edit should not set the item nor open dialog if default prevented', () => {
+          listenOnce(crud, 'edit', e => e.preventDefault());
+          crud._grid.activeItem = crud.items[0];
+          expect(crud.item).not.to.be.ok;
+        });
+
+        it('should fire the save event', done => {
+          listenOnce(crud, 'save', e => {
+            expect(e.detail.item).to.be.equal(crud.items[0]);
+            done();
+          });
+          crud.item = crud.items[0];
+          crud._form.dispatchEvent(new Event('change'));
+          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
+        });
+
+        it('on save should close dialog if not default prevented', () => {
+          crud.item = crud.items[0];
+          crud._form.dispatchEvent(new Event('change'));
+          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
+          expect(crud.$.dialog.opened).not.to.be.ok;
+        });
+
+        it('on save should keep opened dialog if default prevented', () => {
+          listenOnce(crud, 'save', e => e.preventDefault());
+          crud.item = crud.items[0];
+          crud._form.dispatchEvent(new Event('change'));
+          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
+          expect(crud.$.dialog.opened).to.be.true;
+        });
+
+
+        it('should fire the cancel event', done => {
+          listenOnce(crud, 'cancel', e => {
+            expect(e.detail.item).to.be.equal(crud.items[0]);
+            done();
+          });
+          crud.item = crud.items[0];
+          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
+        });
+
+        it('on cancel should close dialog if not default prevented', () => {
+          crud.item = crud.items[0];
+          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
+          expect(crud.$.dialog.opened).not.to.be.ok;
+        });
+
+        it('on save should keep opened dialog if default prevented', () => {
+          listenOnce(crud, 'cancel', e => e.preventDefault());
+          crud.item = crud.items[0];
+          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
+          expect(crud.$.dialog.opened).to.be.true;
+        });
+
+      });
     });
   </script>
 </body>

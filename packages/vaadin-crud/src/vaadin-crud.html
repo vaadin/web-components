@@ -31,7 +31,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         display: none !important;
       }
 
-      vaadin-button.new {
+      #new {
         width: 40px;
       }
     </style>
@@ -52,7 +52,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       </div>
     </div>
 
-    <vaadin-button class="new" on-click="__new">New</vaadin-button>
+    <vaadin-button id="new" on-click="__new">New</vaadin-button>
 
     <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
   </template>
@@ -134,7 +134,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onActiveItemChange(e) {
-          this.__edit(e.detaul.value);
+          this.__edit(e.detail.value);
         }
 
         __onFormChanges(e) {
@@ -263,13 +263,19 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __cancel() {
           /**
-           * Fired when user discards edition
+           * Fired when user discards edition. If the default is prevented, then
+           * no action is performed, user is responsible to close dialog and reset
+           * item and grid.
            *
            * @event cancel
            * @param {Object} detail.item the item to delete
            */
-          const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: item}}));
-          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.item}, cancelable: true}));
+          if (evt) {
+            this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          } else {
+            // TODO (manolo)
+          }
         }
 
         __delete() {
@@ -280,7 +286,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
            * @event delete
            * @param {Object} detail.item the item to delete
            */
-          const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: item}, cancelable: true}));
+          const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
             if (this.items) {
               this.items.splice(this.items.indexOf(this.item), 1);
