@@ -18,11 +18,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <dom-module id="vaadin-crud">
   <template>
     <style>
+
       :host {
-        display: inline-block;
         display: flex;
         flex-direction: column;
-        flex: 1;
+        height: 400px;
+        flex: 1 1 100%;
+        align-self: stretch;
+        position: relative;
       }
 
       :host([hidden]),
