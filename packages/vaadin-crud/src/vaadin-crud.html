@@ -212,8 +212,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __save() {
           if (this.__validate()) {
-            this.__isNew(this.item) && this.items.push(this.item);
+            const isNew = this.__isNew(this.item);
             this._fields.forEach(e => CrudElement.__setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
+
+            if (this.items) {
+              isNew && this.items.push(this.item);
+            }
+
             this._grid.clearCache();
             this.__cancel();
           }
@@ -224,7 +229,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __delete() {
-          this.items.splice(this.items.indexOf(this.item), 1);
+          if (this.items) {
+            this.items.splice(this.items.indexOf(this.item), 1);
+          }
+
           this._grid.clearCache();
           this.__cancel();
         }
