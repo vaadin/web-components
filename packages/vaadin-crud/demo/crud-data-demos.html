@@ -18,13 +18,13 @@
           // Create an array of people
           const people = [];
           for (let i = 0; i < 200; i++) {
-           people.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
+            people.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
           }
 
           crud.dataProvider = function(params, callback) {
             const chunk = people.splice(params.page * params.pageSize, params.pageSize);
             callback(chunk, people.length);
-          }
+          };
         });
       </script>
     </vaadin-demo-snippet>
