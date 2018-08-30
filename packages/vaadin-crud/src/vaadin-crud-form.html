@@ -1,0 +1,86 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
+-->
+
+<link rel="import" href="../../polymer/polymer-element.html">
+<link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+
+  <script>
+    (function() {
+
+      /**
+       * @memberof Vaadin
+       */
+      class CrudFormElement extends Vaadin.FormLayoutElement {
+        static get is() {
+          return 'vaadin-crud-form';
+        }
+
+        static get properties() {
+          return {
+            excluded: {
+              type: RegExp,
+              value: /^_/i
+            },
+            item: Object
+          };
+        }
+
+        static get observers() {
+          return ['__onItemChange(item)'];
+        }
+
+        configure(object) {
+          this.innerHTML = '';
+          this.__fields = [];
+          this.__createFields(this, object);
+          this.notifyResize();
+        }
+
+        __onItemChange(item) {
+          if (!this.__fields) {
+            this.configure(item);
+          }
+        }
+
+        __createField(parent, path, type) {
+          const field = document.createElement('vaadin-text-field');
+          field.label = Vaadin.CrudElement.capitalize(path);
+          field.path = path;
+          field.required = true;
+          parent.appendChild(field);
+          this.__fields.push(field);
+          return field;
+        }
+
+        __createFields(parent, object, path) {
+          if (typeof object === 'object') {
+            Object.keys(object).forEach(prop => {
+              if (this.excluded && this.excluded.test(prop)) {
+                return;
+              }
+              const newPath = (path ? `${path}.` : '') + prop;
+              if (typeof object[prop] === 'object') {
+                this.__createFields(parent, object[prop], newPath);
+              } else {
+                this.__createField(parent, newPath);
+              }
+            });
+          } else {
+            this.__createField(parent, '');
+          }
+        }
+      }
+
+      customElements.define(CrudFormElement.is, CrudFormElement);
+
+      /**
+       * @namespace Vaadin
+       */
+      window.Vaadin.CrudFormElement = CrudFormElement;
+    })();
+  </script>
