@@ -217,6 +217,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return this._fields.reduce((prev, e) => e.validate() && prev, true);
         }
 
+        __closeEditor() {
+          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+        }
+
         __new() {
           /**
            * Fired when user wants to create a new item.
@@ -268,7 +272,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                 isNew && this.items.push(item);
               }
               this._grid.clearCache();
-              this.__confirmCancel();
+              this.__closeEditor();
             }
           }
         }
@@ -292,9 +296,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
            */
           const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
-            this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
-          } else {
-            // TODO (manolo)
+            this.__closeEditor();
           }
         }
 
@@ -316,7 +318,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               this.items.splice(this.items.indexOf(this.item), 1);
             }
             this._grid.clearCache();
-            this.__confirmCancel();
+            this.__closeEditor();
           }
         }
 
