@@ -31,7 +31,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         display: none !important;
       }
 
-      vaadin-button.new {
+      #new {
         width: 40px;
       }
     </style>
@@ -48,11 +48,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
         <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" disabled="[[__isNew(item)]]">Delete</vaadin-button>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew(item)]]">Delete</vaadin-button>
       </div>
     </div>
 
-    <vaadin-button class="new" on-click="__new">New</vaadin-button>
+    <vaadin-button id="new" on-click="__new">New</vaadin-button>
 
     <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
   </template>
@@ -117,7 +117,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         ready() {
           super.ready();
           this.__activeListener = e => this.__onActiveItemChange(e);
-          this.__changeListener = e => this.__onEditChange(e);
+          this.__changeListener = e => this.__onFormChanges(e);
           this._grid = this.$.grid;
           this._form = this.$.form;
         }
@@ -134,10 +134,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onActiveItemChange(e) {
-          this.item = e.detail.value;
+          this.__edit(e.detail.value);
         }
 
-        __onEditChange(e) {
+        __onFormChanges(e) {
           this._dirty = true;
         }
 
@@ -191,7 +191,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __isNew(item) {
-          return item && !Object.keys(item).length;
+          return !item || !Object.keys(item).length;
         }
 
         __fillForm(item) {
@@ -205,34 +205,94 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __new() {
-          this.item = {};
+          /**
+           * Fired when user wants to create a new item.
+           *
+           * @event new
+           */
+          const evt = this.dispatchEvent(new CustomEvent('new', {cancelable: true}));
+          if (evt) {
+            this.item = {};
+          } else {
+            this.$.dialog.opened = true;
+          }
+        }
+
+        __edit(item) {
+          /**
+           * Fired when user wants to edit an existing item. If the default is prevented, then
+           * a new item is not assigned to the form, giving that responsability to the app, though
+           * dialog is always opened.
+           *
+           * @event edit
+           * @param {Object} detail.item the item to edit
+           */
+          const evt = this.dispatchEvent(new CustomEvent('edit', {detail: {item: item}, cancelable: true}));
+          if (evt) {
+            this.item = item;
+          } else {
+            this.$.dialog.opened = true;
+          }
         }
 
         __save() {
           if (this.__validate()) {
+            const item = this.item || {};
             const isNew = this.__isNew(this.item);
-            this._fields.forEach(e => CrudElement.__setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
 
-            if (this.items) {
-              isNew && this.items.push(this.item);
+            this._fields.forEach(e => CrudElement.__setPropertyByPath(item, e.path || e.getAttribute('path'), e.value));
+            /**
+             * Fired when user wants to save a new or an existing item. If the default is prevented, then
+             * no action is performed, items array is not modified nor dialog closed
+             *
+             * @event save
+             * @param {Object} detail.item the item to save
+             * @param {Object} detail.new whether the item is a new one
+             */
+            const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
+            if (evt) {
+              if (this.items) {
+                isNew && this.items.push(item);
+              }
+              this._grid.clearCache();
+              this.__cancel();
             }
-
-            this._grid.clearCache();
-            this.__cancel();
           }
         }
 
         __cancel() {
-          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          /**
+           * Fired when user discards edition. If the default is prevented, then
+           * no action is performed, user is responsible to close dialog and reset
+           * item and grid.
+           *
+           * @event cancel
+           * @param {Object} detail.item the item to delete
+           */
+          const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.item}, cancelable: true}));
+          if (evt) {
+            this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          } else {
+            // TODO (manolo)
+          }
         }
 
         __delete() {
-          if (this.items) {
-            this.items.splice(this.items.indexOf(this.item), 1);
+          /**
+           * Fired when user wants to delete item. If the default is prevented, then
+           * no action is performed, items array is not modified nor dialog closed
+           *
+           * @event delete
+           * @param {Object} detail.item the item to delete
+           */
+          const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
+          if (evt) {
+            if (this.items) {
+              this.items.splice(this.items.indexOf(this.item), 1);
+            }
+            this._grid.clearCache();
+            this.__cancel();
           }
-
-          this._grid.clearCache();
-          this.__cancel();
         }
 
         /**

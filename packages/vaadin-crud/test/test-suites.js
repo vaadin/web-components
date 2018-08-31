@@ -1,3 +1,3 @@
 window.VaadinCrudSuites = [
-  'sample-test.html'
+  'crud-test.html'
 ];
