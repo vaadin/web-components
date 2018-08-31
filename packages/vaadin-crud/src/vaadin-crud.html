@@ -48,7 +48,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
         <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" disabled="[[__isNew(item)]]">Delete</vaadin-button>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew(item)]]">Delete</vaadin-button>
       </div>
     </div>
 
@@ -237,11 +237,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __save() {
           if (this.__validate()) {
+            const item = this.item || {};
             const isNew = this.__isNew(this.item);
 
-            const item = this.item ? this.item : item;
-            this._fields.forEach(e => CrudElement.__setPropertyByPath(this.item, e.path || e.getAttribute('path'), e.value));
-
+            this._fields.forEach(e => CrudElement.__setPropertyByPath(item, e.path || e.getAttribute('path'), e.value));
             /**
              * Fired when user wants to save a new or an existing item. If the default is prevented, then
              * no action is performed, items array is not modified nor dialog closed
@@ -250,10 +249,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * @param {Object} detail.item the item to save
              * @param {Object} detail.new whether the item is a new one
              */
-            const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: this.item, new: isNew}, cancelable: true}));
+            const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
             if (evt) {
               if (this.items) {
-                isNew && this.items.push(this.item);
+                isNew && this.items.push(item);
               }
               this._grid.clearCache();
               this.__cancel();
