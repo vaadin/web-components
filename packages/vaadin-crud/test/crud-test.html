@@ -28,6 +28,17 @@
     describe('crud test', () => {
       var crud;
 
+      // Buttons in the editor dialog
+      const btnSave = () => {
+        // Need to make some changes to enable Save button
+        crud._form.dispatchEvent(new Event('change'));
+        return crud.$.buttons.querySelectorAll('vaadin-button')[0];
+      };
+      const btnCancel = () => crud.$.buttons.querySelectorAll('vaadin-button')[1];
+      const btnDelete = () => crud.$.buttons.querySelectorAll('vaadin-button')[2];
+
+      // Buttons in confirm dialogs
+      const btnConfDialog = (confirDialog, id) => confirDialog.$.dialog.$.overlay.$.content.shadowRoot.querySelector(`vaadin-button#${id}`);
 
       beforeEach(() => crud = fixture('default'));
 
@@ -43,104 +54,201 @@
         expect(customElements.get('vaadin-crud').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
       });
 
-      describe('events', () => {
+      describe('items', () => {
 
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];
           Polymer.RenderStatus.afterNextRender(crud._grid, done);
         });
 
-        afterEach(done => {
-          crud.$.dialog.opened = false;
-          setTimeout(done);
-        });
+        describe('confirmation', () => {
 
-        it('should fire the new event', done => {
-          listenOnce(crud, 'new', e => done());
-          crud.$.new.click();
-        });
-
-        it('on new should set the item and open dialog if not default prevented', () => {
-          expect(crud.item).not.to.be.ok;
-          crud.$.new.click();
-          expect(crud.item).to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
-        });
-
-        it('on new should not set the item but open dialog if default prevented', () => {
-          listenOnce(crud, 'new', e => e.preventDefault());
-          crud.$.new.click();
-          expect(crud.item).not.to.be.ok;
-          expect(crud.$.dialog.opened).to.be.true;
-        });
-
-        it('should fire the edit event', done => {
-          listenOnce(crud, 'edit', e => {
-            expect(e.detail.item).to.be.equal(crud.items[0]);
-            done();
+          afterEach(done => {
+            crud.$.dialog.opened = crud.$.confirmCancel.opened = crud.$.confirmDelete.opened = false;
+            setTimeout(done);
           });
-          crud._grid.activeItem = crud.items[0];
-        });
 
-        it('on edit should set the item and open dialog if not default prevented', () => {
-          crud._grid.activeItem = crud.items[0];
-          expect(crud.item).to.be.equal(crud.items[0]);
-        });
+          describe('cancel', () => {
+            it('should not ask for confirmation on cancel when not modified', () => {
+              crud.item = crud.items[0];
+              btnCancel().click();
+              expect(crud.$.confirmCancel.opened).not.to.be.ok;
+            });
 
-        it('on edit should not set the item nor open dialog if default prevented', () => {
-          listenOnce(crud, 'edit', e => e.preventDefault());
-          crud._grid.activeItem = crud.items[0];
-          expect(crud.item).not.to.be.ok;
-        });
+            it('should ask for confirmation on cancel when modified', () => {
+              crud.item = crud.items[0];
+              crud._form.dispatchEvent(new Event('change'));
+              btnCancel().click();
+              expect(crud.$.confirmCancel.opened).to.be.true;
+            });
 
-        it('should fire the save event', done => {
-          listenOnce(crud, 'save', e => {
-            expect(e.detail.item).to.be.equal(crud.items[0]);
-            done();
+            it('should continue editing when closing confirmation with confirm', () => {
+              crud.item = crud.items[0];
+              crud._form.dispatchEvent(new Event('change'));
+              btnCancel().click();
+              btnConfDialog(crud.$.confirmCancel, 'confirm').click();
+              expect(crud.$.confirmCancel.opened).not.to.be.ok;
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+
+            it('should cancel editing when closing confirmation with reject', () => {
+              crud.item = crud.items[0];
+              crud._form.dispatchEvent(new Event('change'));
+              btnCancel().click();
+              btnConfDialog(crud.$.confirmCancel, 'reject').click();
+              expect(crud.$.confirmCancel.opened).not.to.be.ok;
+              expect(crud.$.dialog.opened).not.to.be.ok;
+            });
           });
-          crud.item = crud.items[0];
-          crud._form.dispatchEvent(new Event('change'));
-          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
-        });
 
-        it('on save should close dialog if not default prevented', () => {
-          crud.item = crud.items[0];
-          crud._form.dispatchEvent(new Event('change'));
-          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
-          expect(crud.$.dialog.opened).not.to.be.ok;
-        });
+          describe('delete', () => {
+            it('should ask for confirmation on delete', () => {
+              crud.item = crud.items[0];
+              btnDelete().click();
+              expect(crud.$.confirmDelete.opened).to.be.true;
+            });
 
-        it('on save should keep opened dialog if default prevented', () => {
-          listenOnce(crud, 'save', e => e.preventDefault());
-          crud.item = crud.items[0];
-          crud._form.dispatchEvent(new Event('change'));
-          crud.$.buttons.querySelectorAll('vaadin-button')[0].click();
-          expect(crud.$.dialog.opened).to.be.true;
-        });
+            it('should continue editing when closing confirmation with cancel', () => {
+              crud.item = crud.items[0];
+              btnDelete().click();
+              btnConfDialog(crud.$.confirmDelete, 'cancel').click();
+              expect(crud.$.confirmDelete.opened).not.to.be.ok;
+              expect(crud.$.dialog.opened).to.be.true;
+            });
 
-
-        it('should fire the cancel event', done => {
-          listenOnce(crud, 'cancel', e => {
-            expect(e.detail.item).to.be.equal(crud.items[0]);
-            done();
+            it('should delete when closing confirmation with confirm', () => {
+              crud.item = crud.items[0];
+              btnDelete().click();
+              btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+              expect(crud.$.confirmDelete.opened).not.to.be.ok;
+              expect(crud.$.dialog.opened).not.to.be.ok;
+            });
           });
-          crud.item = crud.items[0];
-          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
         });
 
-        it('on cancel should close dialog if not default prevented', () => {
-          crud.item = crud.items[0];
-          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
-          expect(crud.$.dialog.opened).not.to.be.ok;
-        });
+        describe('events', () => {
+          afterEach(done => {
+            crud.$.dialog.opened = false;
+            setTimeout(done);
+          });
 
-        it('on save should keep opened dialog if default prevented', () => {
-          listenOnce(crud, 'cancel', e => e.preventDefault());
-          crud.item = crud.items[0];
-          crud.$.buttons.querySelectorAll('vaadin-button')[1].click();
-          expect(crud.$.dialog.opened).to.be.true;
-        });
+          describe('new', () => {
+            it('should fire the new event', done => {
+              listenOnce(crud, 'new', e => done());
+              crud.$.new.click();
+            });
 
+            it('on new should set the item and open dialog if not default prevented', () => {
+              expect(crud.item).not.to.be.ok;
+              crud.$.new.click();
+              expect(crud.item).to.be.ok;
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+
+            it('on new should not set the item but open dialog if default prevented', () => {
+              listenOnce(crud, 'new', e => e.preventDefault());
+              crud.$.new.click();
+              expect(crud.item).not.to.be.ok;
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+          });
+
+          describe('edit', () => {
+            it('should fire the edit event', done => {
+              listenOnce(crud, 'edit', e => {
+                expect(e.detail.item).to.be.equal(crud.items[0]);
+                done();
+              });
+              crud._grid.activeItem = crud.items[0];
+            });
+
+            it('on edit should set the item and open dialog if not default prevented', () => {
+              crud._grid.activeItem = crud.items[0];
+              expect(crud.item).to.be.equal(crud.items[0]);
+            });
+
+            it('on edit should not set the item nor open dialog if default prevented', () => {
+              listenOnce(crud, 'edit', e => e.preventDefault());
+              crud._grid.activeItem = crud.items[0];
+              expect(crud.item).not.to.be.ok;
+            });
+          });
+
+          describe('save', () => {
+            it('should fire the save event', done => {
+              listenOnce(crud, 'save', e => {
+                expect(e.detail.item).to.be.equal(crud.items[0]);
+                done();
+              });
+              crud.item = crud.items[0];
+              btnSave().click();
+            });
+
+            it('on save should close dialog if not default prevented', () => {
+              crud.item = crud.items[0];
+              btnSave().click();
+              expect(crud.$.dialog.opened).not.to.be.ok;
+            });
+
+            it('on save should keep opened dialog if default prevented', () => {
+              listenOnce(crud, 'save', e => e.preventDefault());
+              crud.item = crud.items[0];
+              btnSave().click();
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+          });
+
+          describe('cancel', () => {
+            it('should fire the cancel event', done => {
+              listenOnce(crud, 'cancel', e => {
+                expect(e.detail.item).to.be.equal(crud.items[0]);
+                done();
+              });
+              crud.item = crud.items[0];
+              btnCancel().click();
+            });
+
+            it('on cancel should close dialog if not default prevented', () => {
+              crud.item = crud.items[0];
+              btnCancel().click();
+              expect(crud.$.dialog.opened).not.to.be.ok;
+            });
+
+            it('on cancel should keep opened dialog if default prevented', () => {
+              listenOnce(crud, 'cancel', e => e.preventDefault());
+              crud.item = crud.items[0];
+              btnCancel().click();
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+          });
+
+          describe('delete', () => {
+            it('should fire the delete event', done => {
+              listenOnce(crud, 'delete', e => {
+                expect(e.detail.item).to.be.equal(crud.items[0]);
+                done();
+              });
+              crud.item = crud.items[0];
+              btnDelete().click();
+              btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+            });
+
+            it('on delete should close dialog if not default prevented', () => {
+              crud.item = crud.items[0];
+              btnDelete().click();
+              btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+              expect(crud.$.dialog.opened).not.to.be.ok;
+            });
+
+            it('on delete should keep opened dialog if default prevented', () => {
+              listenOnce(crud, 'delete', e => e.preventDefault());
+              crud.item = crud.items[0];
+              btnDelete().click();
+              btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+              expect(crud.$.dialog.opened).to.be.true;
+            });
+          });
+        });
       });
     });
   </script>
