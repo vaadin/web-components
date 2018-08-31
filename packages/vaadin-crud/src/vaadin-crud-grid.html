@@ -63,7 +63,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           const col = document.createElement('vaadin-grid-column');
           col.innerHTML = `<template>[[item${path ? '.' + path : ''}]]</template>`;
           if (path) {
-            col.innerHTML += `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
+            col.innerHTML += `<template class="header">${this.__capitalize(path.replace(/^.*\./, ''))}</template>`;
           }
           parent.appendChild(col);
           return col;
@@ -90,9 +90,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __createGroup(parent, path, object) {
           const grp = document.createElement('vaadin-grid-column-group');
-          grp.innerHTML = `<template class="header">${Vaadin.CrudElement.capitalize(path.replace(/^.*\./, ''))}</template>`;
+          grp.innerHTML = `<template class="header">${this.__capitalize(path.replace(/^.*\./, ''))}</template>`;
           parent.appendChild(grp);
           return grp;
+        }
+
+        __capitalize(path) {
+          return path.replace(/(^|[ \-_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
       }
 
