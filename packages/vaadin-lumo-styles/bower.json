@@ -9,6 +9,7 @@
     "mixins/field-button.html",
     "mixins/menu-overlay.html",
     "mixins/overlay.html",
+    "mixins/required-field.html",
     "badge.html",
     "color.html",
     "font-icons.html",
