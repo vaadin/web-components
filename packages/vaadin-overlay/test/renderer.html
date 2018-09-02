@@ -46,6 +46,7 @@
 
         it('should use renderer when it is defined', () => {
           overlay.renderer = root => root.appendChild(rendererContent);
+          overlay.opened = true;
           expect(overlay.textContent.trim()).to.equal('renderer-content');
         });
 
@@ -62,6 +63,7 @@
 
         it('should clean the root on renderer changed', () => {
           overlay.renderer = root => root.appendChild(rendererContent);
+          overlay.opened = true;
           expect(overlay.textContent.trim()).to.equal('renderer-content');
           overlay.renderer = root => expect(root.firstChild).to.be.null;
         });
@@ -90,19 +92,20 @@
           const spy = sinon.spy();
           overlay.renderer = () => spy();
           overlay.instanceProps = {};
-          expect(spy.calledOnce).to.be.true;
+          expect(spy.notCalled).to.be.true;
         });
 
         it('should not call renderer on template change', () => {
           const spy = sinon.spy();
           overlay.renderer = () => spy();
           overlay.template = null;
-          expect(spy.calledOnce).to.be.true;
+          expect(spy.notCalled).to.be.true;
         });
 
         it('should call renderer on model change', () => {
           const spy = sinon.spy();
           overlay.renderer = () => spy();
+          overlay.opened = true;
           overlay.model = {};
           expect(spy.calledTwice).to.be.true;
         });
@@ -110,6 +113,7 @@
         it('should call renderer on owner change', () => {
           const spy = sinon.spy();
           overlay.renderer = () => spy();
+          overlay.opened = true;
           overlay.owner = {};
           expect(spy.calledTwice).to.be.true;
         });
@@ -124,7 +128,13 @@
         it('should be possible to manually invoke renderer', () => {
           overlay.renderer = sinon.spy();
           overlay.render();
-          expect(overlay.renderer.calledTwice).to.be.true;
+          expect(overlay.renderer.calledOnce).to.be.true;
+        });
+
+        it('should not render if overlay is not open', () => {
+          const spy = sinon.spy();
+          overlay.renderer = () => spy();
+          expect(spy.notCalled).to.be.true;
         });
       });
 

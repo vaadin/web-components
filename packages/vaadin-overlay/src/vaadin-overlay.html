@@ -338,14 +338,16 @@ This program is available under Apache License Version 2.0, available at https:/
 
           _oldInstanceProps: Object,
 
-          _oldRenderer: Object
+          _oldRenderer: Object,
+
+          _oldOpened: Boolean
         };
       }
 
       static get observers() {
         return [
           '_openedChanged(opened)',
-          '_templateOrRendererChanged(template, renderer, owner, model, instanceProps)'
+          '_templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened)'
         ];
       }
 
@@ -787,7 +789,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _templateOrRendererChanged(template, renderer, owner, model, instanceProps) {
+      _templateOrRendererChanged(template, renderer, owner, model, instanceProps, opened) {
         if (template && renderer) {
           this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
           throw new Error('You should only use either a renderer or a template for overlay content');
@@ -804,9 +806,12 @@ This program is available under Apache License Version 2.0, available at https:/
         const rendererChanged = this._oldRenderer !== renderer;
         this._oldRenderer = renderer;
 
-        if (template && !ownerOrModelChanged) {
+        const openedChanged = this._oldOpened !== opened;
+        this._oldOpened = opened;
+
+        if (template && !ownerOrModelChanged && !openedChanged) {
           this._stampOverlayTemplate(template, instanceProps);
-        } else if (renderer && !templateOrInstancePropsChanged) {
+        } else if (renderer && !templateOrInstancePropsChanged && opened) {
           this.content = this;
 
           if (rendererChanged) {
