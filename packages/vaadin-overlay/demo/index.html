@@ -148,9 +148,9 @@
               '<vaadin-button>vaadin-button</vaadin-button>';
           };
           btnFocusTrap.addEventListener('click', function(event) {
-            var field = overlayFocusTrapBackdrop.content.querySelector('vaadin-text-field');
-
             overlayFocusTrapBackdrop.opened = true;
+
+            var field = overlayFocusTrapBackdrop.content.querySelector('vaadin-text-field');
             field.focus();
           });
         </script>
