@@ -1,4 +1,5 @@
-[![npm version](https://badgen.net/npm/v/@vaadin/vaadin-combo-box)](https://www.npmjs.com/package/@vaadin/vaadin-combo-box)
+[![npm latest version](https://badgen.net/npm/v/@vaadin/vaadin-combo-box/latest)](https://www.npmjs.com/package/@vaadin/vaadin-combo-box)
+[![npm next version](https://badgen.net/npm/v/@vaadin/vaadin-combo-box/next)](https://www.npmjs.com/package/@vaadin/vaadin-combo-box)
 [![Bower version](https://badgen.net/github/release/vaadin/vaadin-combo-box)](https://github.com/vaadin/vaadin-combo-box/releases)
 [![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/vaadin/vaadin-combo-box)
 [![Build Status](https://travis-ci.org/vaadin/vaadin-combo-box.svg?branch=master)](https://travis-ci.org/vaadin/vaadin-combo-box)
