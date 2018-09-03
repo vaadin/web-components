@@ -119,8 +119,9 @@
 
         it('should be possible to manually invoke renderer', () => {
           fire(target, 'vaadin-contextmenu');
+          expect(menu.renderer).to.be.calledOnce;
           menu.render();
-          expect(menu.renderer.calledTwice).to.be.true;
+          expect(menu.renderer).to.be.calledTwice;
         });
       });
 
