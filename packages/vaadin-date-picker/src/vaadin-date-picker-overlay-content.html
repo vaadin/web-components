@@ -802,6 +802,15 @@ This program is available under Apache License Version 2.0, available at https:/
           return this.focusedDate || this.selectedDate || this.initialPosition || new Date();
         }
 
+        _focusDate(dateToFocus) {
+          this.focusedDate = dateToFocus;
+          this._focusedMonthDate = dateToFocus.getDate();
+        }
+
+        _focusClosestDate(focus) {
+          this._focusDate(Vaadin.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]));
+        }
+
         _moveFocusByDays(days) {
           var focus = this._currentlyFocusedDate();
           var dateToFocus = new Date(0, 0);
@@ -810,22 +819,18 @@ This program is available under Apache License Version 2.0, available at https:/
           dateToFocus.setDate(focus.getDate() + days);
 
           if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-            this.focusedDate = dateToFocus;
-            this._focusedMonthDate = this.focusedDate.getDate();
+            this._focusDate(dateToFocus);
           } else {
             if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
               // Move to min or max date
               if (days > 0) { // down or right
-                this.focusedDate = this.maxDate;
-                this._focusedMonthDate = this.maxDate.getDate();
+                this._focusDate(this.maxDate);
               } else { // up or left
-                this.focusedDate = this.minDate;
-                this._focusedMonthDate = this.minDate.getDate();
+                this._focusDate(this.minDate);
               }
             } else {
               // Move to closest allowed date
-              this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
-              this._focusedMonthDate = this.focusedDate.getDate();
+              this._focusClosestDate(focus);
             }
           }
         }
@@ -849,16 +854,13 @@ This program is available under Apache License Version 2.0, available at https:/
             if (this._dateAllowed(focus, this.minDate, this.maxDate)) {
               // Move to min or max date
               if (months > 0) { // pagedown
-                this.focusedDate = this.maxDate;
-                this._focusedMonthDate = this.maxDate.getDate();
+                this._focusDate(this.maxDate);
               } else { // pageup
-                this.focusedDate = this.minDate;
-                this._focusedMonthDate = this.minDate.getDate();
+                this._focusDate(this.minDate);
               }
             } else {
               // Move to closest allowed date
-              this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focus, [this.minDate, this.maxDate]);
-              this._focusedMonthDate = this.focusedDate.getDate();
+              this._focusClosestDate(focus);
             }
           }
         }
@@ -876,17 +878,14 @@ This program is available under Apache License Version 2.0, available at https:/
           }
 
           if (this._dateAllowed(dateToFocus, this.minDate, this.maxDate)) {
-            this.focusedDate = dateToFocus;
-            this._focusedMonthDate = this.focusedDate.getDate();
+            this._focusDate(dateToFocus);
           } else {
             if (this._dateAllowed(focusedDate, this.minDate, this.maxDate)) {
               // Move to minDate or maxDate
-              this.focusedDate = this[property];
-              this._focusedMonthDate = this[property].getDate();
+              this._focusDate(this[property]);
             } else {
               // Move to closest allowed date
-              this.focusedDate = Vaadin.DatePickerHelper._getClosestDate(focusedDate, [this.minDate, this.maxDate]);
-              this._focusedMonthDate = this.focusedDate.getDate();
+              this._focusClosestDate(focusedDate);
             }
           }
         }
