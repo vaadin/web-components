@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-combo-box-mixin.html">
 <link rel="import" href="vaadin-combo-box-dropdown-wrapper.html">
 
@@ -20,7 +21,8 @@ This program is available under Apache License Version 2.0, available at https:/
         renderer=[[renderer]]
         _focused-index="[[_focusedIndex]]"
         _item-label-path="[[itemLabelPath]]"
-        loading="[[loading]]">
+        loading="[[loading]]"
+        theme="[[theme]]">
     </vaadin-combo-box-dropdown-wrapper>
   </template>
 </dom-module>
@@ -72,8 +74,12 @@ This program is available under Apache License Version 2.0, available at https:/
      * @memberof Vaadin
      * @mixes Vaadin.ComboBoxMixin
      * @mixes Vaadin.ThemableMixin
+     * @mixes Vaadin.ThemePropertyMixin
      */
-    class ComboBoxLightElement extends Vaadin.ThemableMixin(Vaadin.ComboBoxMixin(Polymer.Element)) {
+    class ComboBoxLightElement extends
+      Vaadin.ThemePropertyMixin(
+        Vaadin.ThemableMixin(
+          Vaadin.ComboBoxMixin(Polymer.Element))) {
 
       static get is() {
         return 'vaadin-combo-box-light';
