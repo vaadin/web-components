@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
 <link rel="import" href="vaadin-date-picker-mixin.html">
@@ -30,7 +31,8 @@ This program is available under Apache License Version 2.0, available at https:/
         opened="{{opened}}"
         fullscreen$="[[_fullscreen]]"
         on-vaadin-overlay-open="_onOverlayOpened"
-        on-vaadin-overlay-close="_onOverlayClosed">
+        on-vaadin-overlay-close="_onOverlayClosed"
+        theme$="[[theme]]">
       <template>
         <vaadin-date-picker-overlay-content
           id="overlay-content" i18n="[[i18n]]"
@@ -44,7 +46,8 @@ This program is available under Apache License Version 2.0, available at https:/
           max-date="[[_maxDate]]"
           on-date-tap="_close"
           role="dialog"
-          part="overlay-content">
+          part="overlay-content"
+          theme$="[[theme]]">
         </vaadin-date-picker-overlay-content>
       </template>
     </vaadin-date-picker-overlay>
@@ -94,11 +97,25 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
+       * In addition to `<vaadin-date-picker-light>` itself, the following
+       * internal components are themable:
+       *
+       * - `<vaadin-date-picker-overlay>`
+       * - `<vaadin-date-picker-overlay-content>`
+       * - `<vaadin-month-calendar>`
+       *
+       * Note: the `theme` attribute value set on `<vaadin-date-picker-light>`
+       * is propagated to the internal themable components listed above.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @mixes Vaadin.DatePickerMixin
        */
-      class DatePickerLightElement extends Vaadin.ThemableMixin(Vaadin.DatePickerMixin(Polymer.Element)) {
+      class DatePickerLightElement extends
+        Vaadin.ThemableMixin(
+          Vaadin.ThemePropertyMixin(
+            Vaadin.DatePickerMixin(Polymer.Element))) {
         static get is() {
           return 'vaadin-date-picker-light';
         }

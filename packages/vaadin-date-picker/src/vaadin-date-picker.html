@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/mixins/gesture-event-listeners.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="vaadin-date-picker-overlay.html">
 <link rel="import" href="vaadin-date-picker-overlay-content.html">
@@ -71,6 +72,7 @@ This program is available under Apache License Version 2.0, available at https:/
         error-message="[[errorMessage]]"
         aria-label$="[[label]]"
         part="text-field"
+        theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="clear-button" slot="suffix" on-touchend="_clearTouchend" on-click="_clear" role="button" aria-label$="[[i18n.clear]]"></div>
@@ -79,9 +81,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
     <vaadin-date-picker-overlay
         id="overlay"
-        fullscreen$=[[_fullscreen]]
         opened="{{opened}}"
         fullscreen$="[[_fullscreen]]"
+        theme$="[[theme]]"
         on-vaadin-overlay-open="_onOverlayOpened"
         on-vaadin-overlay-close="_onOverlayClosed">
       <template>
@@ -97,7 +99,8 @@ This program is available under Apache License Version 2.0, available at https:/
             max-date="[[_maxDate]]"
             role="dialog"
             on-date-tap="_close"
-            part="overlay-content">
+            part="overlay-content"
+            theme$="[[theme]]">
         </vaadin-date-picker-overlay-content>
       </template>
     </vaadin-date-picker-overlay>
@@ -171,10 +174,22 @@ This program is available under Apache License Version 2.0, available at https:/
        * If you want to replace the default input field with a custom implementation, you should use the
        * [`<vaadin-date-picker-light>`](#vaadin-date-picker-light) element.
        *
+       * In addition to `<vaadin-date-picker>` itself, the following internal
+       * components are themable:
+       *
+       * - `<vaadin-text-field>`
+       * - `<vaadin-date-picker-overlay>`
+       * - `<vaadin-date-picker-overlay-content>`
+       * - `<vaadin-month-calendar>`
+       *
+       * Note: the `theme` attribute value set on `<vaadin-date-picker>` is
+       * propagated to the internal themable components listed above.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @mixes Vaadin.DatePickerMixin
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
@@ -183,8 +198,9 @@ This program is available under Apache License Version 2.0, available at https:/
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
             Vaadin.ThemableMixin(
-              Vaadin.DatePickerMixin(
-                Polymer.GestureEventListeners(Polymer.Element))))) {
+              Vaadin.ThemePropertyMixin(
+                Vaadin.DatePickerMixin(
+                  Polymer.GestureEventListeners(Polymer.Element)))))) {
 
         static get is() {
           return 'vaadin-date-picker';

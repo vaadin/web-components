@@ -11,6 +11,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-month-calendar.html">
 <link rel="import" href="vaadin-infinite-scroller.html">
 <link rel="import" href="vaadin-date-picker-helper.html">
@@ -200,7 +201,8 @@ This program is available under Apache License Version 2.0, available at https:/
             min-date="[[minDate]]"
             max-date="[[maxDate]]"
             focused$="[[_focused]]"
-            part="month">
+            part="month"
+            theme$="[[theme]]">
           </vaadin-month-calendar>
         </template>
       </vaadin-infinite-scroller>
@@ -231,7 +233,10 @@ This program is available under Apache License Version 2.0, available at https:/
        * @memberof Vaadin
        * @private
        */
-      class DatePickerOverlayContentElement extends Vaadin.ThemableMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      class DatePickerOverlayContentElement extends
+        Vaadin.ThemableMixin(
+          Vaadin.ThemePropertyMixin(
+            Polymer.GestureEventListeners(Polymer.Element))) {
 
         static get is() {
           return 'vaadin-date-picker-overlay-content';

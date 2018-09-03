@@ -49,6 +49,31 @@
       </template>
     </vaadin-demo-snippet>
 
+
+    <h3>Small Text Field</h3>
+    <vaadin-demo-snippet id="date-picker-styling-demos-small-text-field">
+      <template preserve-content>
+        <vaadin-date-picker theme="small" label="Select date"></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Custom Theme Variant</h3>
+    <vaadin-demo-snippet id="date-picker-styling-demos-small-text-field">
+      <template preserve-content>
+        <dom-module id="custom-date-picker" theme-for="vaadin-text-field vaadin-date-picker-overlay-content">
+          <template>
+            <style>
+              :host([theme~="custom"]) {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-date-picker theme="custom" label="Select date"></vaadin-date-picker>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DatePickerStylingDemos extends DemoReadyEventEmitter(DatePickerDemo(Polymer.Element)) {
