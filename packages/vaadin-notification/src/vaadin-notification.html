@@ -303,7 +303,7 @@ This program is available under Apache License Version 2.0, available at https:/
         static get observers() {
           return [
             '_durationChanged(duration, opened)',
-            '_templateOrRendererChanged(_notificationTemplate, renderer)'
+            '_templateOrRendererChanged(_notificationTemplate, renderer, opened)'
           ];
         }
 
@@ -323,6 +323,9 @@ This program is available under Apache License Version 2.0, available at https:/
          * Manually invoke existing renderer.
          */
         render() {
+          if (typeof this.renderer !== 'function') {
+            return;
+          }
           this.renderer(this._card, this);
         }
 
@@ -334,7 +337,7 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
-        _templateOrRendererChanged(template, renderer) {
+        _templateOrRendererChanged(template, renderer, opened) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
             throw new Error('You should only use either a renderer or a template for notification content');
@@ -350,7 +353,9 @@ This program is available under Apache License Version 2.0, available at https:/
               this._card.removeChild(this._card.firstChild);
             }
 
-            this.render();
+            if (opened) {
+              this.render();
+            }
           }
         }
 
