@@ -809,9 +809,9 @@ This program is available under Apache License Version 2.0, available at https:/
         const openedChanged = this._oldOpened !== opened;
         this._oldOpened = opened;
 
-        if (template && !ownerOrModelChanged && !openedChanged) {
+        if (template && templateOrInstancePropsChanged) {
           this._stampOverlayTemplate(template, instanceProps);
-        } else if (renderer && !templateOrInstancePropsChanged && opened) {
+        } else if (renderer && (rendererChanged || openedChanged || ownerOrModelChanged)) {
           this.content = this;
 
           if (rendererChanged) {
@@ -820,7 +820,9 @@ This program is available under Apache License Version 2.0, available at https:/
             }
           }
 
-          this.render();
+          if (opened) {
+            this.render();
+          }
         }
       }
 
