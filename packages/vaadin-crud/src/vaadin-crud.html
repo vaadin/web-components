@@ -18,11 +18,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <dom-module id="vaadin-crud">
   <template>
     <style>
+
       :host {
-        display: inline-block;
         display: flex;
         flex-direction: column;
-        flex: 1;
+        height: 400px;
+        flex: 1 1 100%;
+        align-self: stretch;
+        position: relative;
       }
 
       :host([hidden]),
@@ -295,14 +298,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        /**
-         * Utility to convert json paths and hyphenized words to capitalized labels
-         * @protected
-         */
-        static capitalize(path) {
-          return path.replace(/(^|[ \-_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
-        }
-
         // Utility method for getting nested values in JSON objects
         static __getPropertyByPath(obj, path) {
           path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
@@ -334,12 +329,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
       }
 
+      customElements.define(CrudElement.is, CrudElement);
+
       /**
        * @namespace Vaadin
        */
       window.Vaadin.CrudElement = CrudElement;
-
-      customElements.define(CrudElement.is, CrudElement);
     })();
   </script>
 </dom-module>
