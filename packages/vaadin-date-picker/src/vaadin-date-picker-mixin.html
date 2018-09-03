@@ -497,16 +497,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _updateAlignmentAndPosition() {
-      const inputRect = this._inputElement.getBoundingClientRect();
-
-      const bottomAlign = inputRect.top > window.innerHeight / 2;
-      const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
-
-      const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
-      const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
-
       if (!this._fullscreen) {
+        const inputRect = this._inputElement.getBoundingClientRect();
+
+        const bottomAlign = inputRect.top > window.innerHeight / 2;
+        const rightAlign = inputRect.left + this.clientWidth / 2 > window.innerWidth / 2;
+
         if (rightAlign) {
+          const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth);
           this.$.overlay.setAttribute('right-aligned', '');
           this.$.overlay.style.removeProperty('left');
           this.$.overlay.style.right = (viewportWidth - inputRect.right) + 'px';
@@ -517,6 +515,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (bottomAlign) {
+          const viewportHeight = Math.min(window.innerHeight, document.documentElement.clientHeight);
           this.$.overlay.setAttribute('bottom-aligned', '');
           this.$.overlay.style.removeProperty('top');
           this.$.overlay.style.bottom = (viewportHeight - inputRect.top) + 'px';
