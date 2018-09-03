@@ -90,32 +90,38 @@
 
         it('should not call renderer on instanceProps change', () => {
           const spy = sinon.spy();
+          overlay.opened = true;
           overlay.renderer = () => spy();
+          spy.reset();
           overlay.instanceProps = {};
           expect(spy.notCalled).to.be.true;
         });
 
         it('should not call renderer on template change', () => {
           const spy = sinon.spy();
+          overlay.opened = true;
           overlay.renderer = () => spy();
+          spy.reset();
           overlay.template = null;
           expect(spy.notCalled).to.be.true;
         });
 
         it('should call renderer on model change', () => {
           const spy = sinon.spy();
-          overlay.renderer = () => spy();
           overlay.opened = true;
+          overlay.renderer = () => spy();
+          spy.reset();
           overlay.model = {};
-          expect(spy.calledTwice).to.be.true;
+          expect(spy.calledOnce).to.be.true;
         });
 
         it('should call renderer on owner change', () => {
           const spy = sinon.spy();
-          overlay.renderer = () => spy();
           overlay.opened = true;
+          overlay.renderer = () => spy();
+          spy.reset();
           overlay.owner = {};
-          expect(spy.calledTwice).to.be.true;
+          expect(spy.calledOnce).to.be.true;
         });
 
         it('should remove template when added after renderer', () => {
