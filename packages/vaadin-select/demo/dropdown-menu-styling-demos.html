@@ -55,6 +55,39 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Theme Variant</h3>
+    <vaadin-demo-snippet id="dropdown-menu-custom-theme-variant">
+      <template preserve-content>
+        <dom-module id="custom-dropdown-menu" theme-for="vaadin-text-field vaadin-item">
+          <template>
+            <style>
+              :host([theme~="custom"]) {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <dom-module id="custom-dropdown-menu-overlay" theme-for="vaadin-text-field vaadin-dropdown-menu-overlay">
+          <template>
+            <style>
+              :host([theme~="custom"]) [part~="overlay"] {
+                background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-dropdown-menu label="Name" theme="custom">
+          <template>
+            <vaadin-list-box>
+              <vaadin-item theme="custom">Jose</vaadin-item>
+              <vaadin-item theme="custom">Manolo</vaadin-item>
+              <vaadin-item theme="custom">Pedro</vaadin-item>
+            </vaadin-list-box>
+          </template>
+        </vaadin-dropdown-menu>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DropdownMenuStylingDemos extends DemoReadyEventEmitter(DropdownMenuDemo(Polymer.Element)) {

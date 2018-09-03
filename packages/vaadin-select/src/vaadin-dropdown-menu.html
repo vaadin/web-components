@@ -7,6 +7,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../polymer/lib/elements/custom-style.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../vaadin-control-state-mixin/vaadin-control-state-mixin.html">
 <link rel="import" href="../../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../../iron-media-query/iron-media-query.html">
@@ -57,17 +58,23 @@ This program is available under Apache License Version 2.0, available at https:/
         invalid="[[invalid]]"
         error-message="[[errorMessage]]"
         readonly$="[[readonly]]"
+        theme$="[[theme]]"
       >
       <slot name="prefix" slot="prefix"></slot>
       <div part="value"></div>
       <div part="toggle-button" slot="suffix" role="button" aria-label="Toggle"></div>
     </vaadin-dropdown-menu-text-field>
-    <vaadin-dropdown-menu-overlay opened="{{opened}}" with-backdrop="[[_phone]]" phone$="[[_phone]]"></vaadin-dropdown-menu-overlay>
+    <vaadin-dropdown-menu-overlay
+      opened="{{opened}}"
+      with-backdrop="[[_phone]]"
+      phone$="[[_phone]]"
+      theme$="[[theme]]"
+    ></vaadin-dropdown-menu-overlay>
 
     <iron-media-query
       query="[[_phoneMediaQuery]]"
-      query-matches="{{_phone}}">
-    </iron-media-query>
+      query-matches="{{_phone}}"
+    ></iron-media-query>
   </template>
 
   <script>
@@ -152,17 +159,28 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
+       * In addition to `<vaadin-dropdown-menu>` itself, the following internal
+       * components are themable:
+       *
+       * - `<vaadin-dropdown-menu-text-field>`
+       * - `<vaadin-dropdown-menu-overlay>`
+       *
+       * Note: the `theme` attribute value set on `<vaadin-dropdown-menu>` is
+       * propagated to the internal themable components listed above.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class DropdownMenuElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
             Vaadin.ThemableMixin(
-              Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element)))) {
+              Vaadin.ThemePropertyMixin(
+                Polymer.mixinBehaviors(Polymer.IronResizableBehavior, Polymer.Element))))) {
 
         static get is() {
           return 'vaadin-dropdown-menu';
