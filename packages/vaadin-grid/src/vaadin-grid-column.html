@@ -338,24 +338,25 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _pathOrLabelChanged(path, label, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
-      if (!headerRenderer && !headerTemplate && label !== undefined) {
+      if (!headerRenderer && !headerTemplate && label !== undefined && headerCell) {
         headerCell._content.textContent = label;
       }
 
-      if (path !== undefined) {
+      if (path && cells.value) {
         if (!renderer && !bodyTemplate) {
           const pathRenderer = (root, owner, {item}) => root.textContent = this.get(path, item);
           cells.value.forEach(cell => cell._renderer = pathRenderer);
           this._grid._update();
         }
 
-        if (!headerRenderer && !headerTemplate && !label) {
+        if (!headerRenderer && !headerTemplate && !label && headerCell) {
           const generatedLabel = path
             .substr(path.lastIndexOf('.') + 1)
             .replace(/([A-Z])/g, '-$1').toLowerCase()
             .replace(/-/, ' ')
             .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
           headerCell._content.textContent = generatedLabel;
+          headerCell.parentElement.hidden = false;
         }
       }
     }
@@ -507,7 +508,6 @@ This program is available under Apache License Version 2.0, available at https:/
            * Path to an item sub-property whose value gets displayed in the column body cells.
            * The property name is also shown in the column header if an explicit label/renderer isn't defined.
            */
-
           path: {
             type: String
           },
