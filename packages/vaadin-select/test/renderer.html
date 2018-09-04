@@ -32,6 +32,45 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="from-props">
+    <template>
+      <x-renderer></x-renderer>
+    </template>
+  </test-fixture>
+
+  <dom-module id="x-renderer">
+    <template>
+      <vaadin-dropdown-menu renderer="[[renderer]]" opened="{{opened}}"></vaadin-dropdown-menu>
+    </template>
+    <script>
+      customElements.whenDefined('vaadin-dropdown-menu').then(() => {
+        class XRenderer extends Polymer.Element {
+          static get is() {
+            return 'x-renderer';
+          }
+          static get properties() {
+            return {
+              opened: Boolean,
+              renderer: {
+                type: Function,
+                value: function() {
+                  return function(root) {
+                    const listBox = document.createElement('vaadin-list-box');
+                    const item = document.createElement('mock-item');
+                    item.textContent = 'renderer item';
+                    listBox.appendChild(item);
+                    root.appendChild(listBox);
+                  };
+                }
+              }
+            };
+          }
+        }
+        customElements.define(XRenderer.is, XRenderer);
+      });
+    </script>
+  </dom-module>
+
   <script>
     describe('vaadin-dropdown-menu renderer', () => {
       let rendererContent;
@@ -83,6 +122,20 @@
         it('should remove renderer when added after template', () => {
           expect(() => dropdown.renderer = () => {}).to.throw(Error);
           expect(dropdown.renderer).to.be.not.ok;
+        });
+      });
+
+      describe('assigned through property binding', () => {
+        let wrapper, dropdown;
+
+        beforeEach(() => {
+          wrapper = fixture('from-props');
+          dropdown = wrapper.shadowRoot.querySelector('vaadin-dropdown-menu');
+        });
+
+        it('should render correctly when rendered assigned before shadow DOM is ready', () => {
+          wrapper.opened = true;
+          expect(dropdown._overlayElement.content.querySelector('mock-item').textContent.trim()).to.equal('renderer item');
         });
       });
     });
