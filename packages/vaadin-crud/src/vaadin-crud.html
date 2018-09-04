@@ -324,14 +324,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         // Utility method for getting nested values in JSON objects
         static __getPropertyByPath(obj, path) {
-          path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-          const a = path.replace(/^\./, '').split('.');
-          for (let i = 0, l = a.length; i < l; i++) {
-            const k = a[i];
-            if (k in obj) {
-              obj = obj[k];
-            } else {
-              return;
+          if (obj && path) {
+            path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+            const a = path.replace(/^\./, '').split('.');
+            for (let i = 0, l = a.length; i < l; i++) {
+              const k = a[i];
+              if (k in obj) {
+                obj = obj[k];
+              } else {
+                return;
+              }
             }
           }
           return obj;
@@ -339,16 +341,18 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         // Utility method for setting nested values in JSON objects */
         static __setPropertyByPath(obj, path, val) {
-          path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-          const a = path.replace(/^\./, '').split('.');
-          for (let i = 0, l = a.length; i < l; i++) {
-            const k = a[i];
-            if (i === l - 1) {
-              obj[k] = val;
-              return;
+          if (obj && path) {
+            path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
+            const a = path.replace(/^\./, '').split('.');
+            for (let i = 0, l = a.length; i < l; i++) {
+              const k = a[i];
+              if (i === l - 1) {
+                obj[k] = val;
+                return;
+              }
+              !(k in obj) && (obj[k] = {});
+              obj = obj[k];
             }
-            !(k in obj) && (obj[k] = {});
-            obj = obj[k];
           }
         }
       }
