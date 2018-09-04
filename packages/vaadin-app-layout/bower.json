@@ -16,7 +16,7 @@
     "web-component",
     "polymer"
   ],
-  "license": "Apache-2.0",
+  "license": "https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/LICENSE",
   "ignore": [
     "**/.*",
     "node_modules",
