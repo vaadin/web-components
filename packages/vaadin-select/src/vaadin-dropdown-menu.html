@@ -400,7 +400,16 @@ This program is available under Apache License Version 2.0, available at https:/
             this._menuElement.addEventListener('items-changed', e => {
               this._items = this._menuElement.items;
             });
-            this._menuElement.addEventListener('selected-changed', () => this._updateValueSlot());
+            this._menuElement.addEventListener('selected-changed', e => {
+              const selected = e.detail.value;
+              const current = this._valueElement.firstElementChild;
+              // when using renderer, event will be triggered on each re-opening,
+              // so check if it was fired for the same item and if so, do nothing
+              if (selected !== undefined && (!current || !this._items[selected].isEqualNode(current._sourceItem))) {
+                this._updateValueSlot();
+                this.opened = false;
+              }
+            });
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
           }
@@ -462,19 +471,24 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _openedChanged(opened, wasOpened) {
-          if (
-            !this._overlayElement ||
-            !this._menuElement ||
-            !this._toggleElement ||
-            !this.focusElement ||
-            this.disabled ||
-            this.readonly
-          ) {
-            this.opened = false;
-            return;
-          }
-
           if (opened) {
+            // when using renderer, menu element is created on each re-opening
+            if (this.renderer) {
+              this._assignMenuElement();
+            }
+
+            if (
+              !this._overlayElement ||
+              !this._menuElement ||
+              !this._toggleElement ||
+              !this.focusElement ||
+              this.disabled ||
+              this.readonly
+            ) {
+              this.opened = false;
+              return;
+            }
+
             this._openedWithFocusRing = this.hasAttribute('focus-ring') || this.focusElement.hasAttribute('focus-ring');
             this._menuElement.focus();
             this._setPosition();
@@ -516,6 +530,9 @@ This program is available under Apache License Version 2.0, available at https:/
             labelItem = selected.cloneNode(true);
           }
 
+          // store reference to the original item
+          labelItem._sourceItem = selected;
+
           labelItem.removeAttribute('tabindex');
 
           this._valueElement.appendChild(labelItem);
@@ -528,7 +545,6 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _updateValueSlot() {
-          this.opened = false;
           this._valueElement.innerHTML = '';
 
           const selected = this._items[this._menuElement.selected];
