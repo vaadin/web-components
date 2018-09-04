@@ -268,6 +268,37 @@
 
         });
 
+        describe('Text align', () => {
+
+          let emptyGroup;
+
+          beforeEach(() => {
+            emptyGroup = grid.querySelector('vaadin-grid-column-group');
+            emptyGroup.headerRenderer = root => root.textContent = 'header';
+            emptyGroup.footerRenderer = root => root.textContent = 'footer';
+          });
+
+          it('should align visually to right', () => {
+            emptyGroup.textAlign = 'end';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'right']);
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'right']);
+          });
+
+          it('should align visually to left', () => {
+            grid.style.direction = 'rtl';
+            emptyGroup.textAlign = 'end';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'left']);
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'left']);
+          });
+
+          it('should align visually to center', () => {
+            emptyGroup.textAlign = 'center';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.equal('center');
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.equal('center');
+          });
+
+        });
+
       });
 
       describe('1 column 1 group', () => {
