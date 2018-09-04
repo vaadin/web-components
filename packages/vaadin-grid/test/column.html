@@ -32,6 +32,8 @@
             <template class="footer">footer2</template>
           </vaadin-grid-column>
         </vaadin-grid-column-group>
+
+        <vaadin-grid-column id="emptycolumn"></vaadin-grid-column>
       </vaadin-grid>
     </template>
     <script>
@@ -168,6 +170,58 @@
             column.hidden = false;
             expect(spy.called).to.be.false;
           });
+        });
+
+        describe('path', () => {
+          let emptyColumn;
+
+          beforeEach(() => {
+            column.path = '';
+            emptyColumn = grid.querySelector('#emptycolumn');
+            emptyColumn.path = 'value';
+          });
+
+          it('should use path as the label', () => {
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
+          });
+
+          it('should format proper label from the last path token', () => {
+            emptyColumn.path = 'foo.barBaz';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar Baz');
+          });
+
+          it('should not override header renderer label', () => {
+            emptyColumn.headerRenderer = root => root.textContent = 'foo';
+            emptyColumn.path = 'foo';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should use to path label if header renderer is removed', () => {
+            emptyColumn.headerRenderer = root => root.textContent = 'foo';
+            emptyColumn.headerRenderer = null;
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
+          });
+
+          it('should use path as the content cell identifier', () => {
+            expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
+          });
+
+          it('should only render text in the cell', () => {
+            expect(getBodyCellContent(grid, 0, 2).firstElementChild).not.to.be.ok;
+          });
+
+          it('should not override renderer content', () => {
+            emptyColumn.renderer = root => root.textContent = 'foo';
+            emptyColumn.path = 'foo';
+            expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should use to path if renderer is removed', () => {
+            emptyColumn.renderer = root => root.textContent = 'foo';
+            emptyColumn.renderer = null;
+            expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
+          });
+
         });
       });
 
