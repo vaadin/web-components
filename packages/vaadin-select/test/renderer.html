@@ -33,58 +33,58 @@
   </test-fixture>
 
   <script>
-   describe('vaadin-dropdown-menu renderer', () => {
-     let rendererContent;
+    describe('vaadin-dropdown-menu renderer', () => {
+      let rendererContent;
 
-     beforeEach(function() {
-       rendererContent = document.createElement('vaadin-list-box');
-       const rendererItem = document.createElement('mock-item');
-       rendererItem.innerText = 'renderer item';
-       rendererContent.appendChild(rendererItem);
-     });
+      beforeEach(function() {
+        rendererContent = document.createElement('vaadin-list-box');
+        const rendererItem = document.createElement('mock-item');
+        rendererItem.textContent = 'renderer item';
+        rendererContent.appendChild(rendererItem);
+      });
 
-     describe('without template', () => {
-       let dropdown;
+      describe('without template', () => {
+        let dropdown;
 
-       beforeEach(() => dropdown = fixture('default'));
+        beforeEach(() => dropdown = fixture('default'));
 
-       it('should use renderer when it is defined', () => {
-         dropdown.renderer = root => root.appendChild(rendererContent);
-         expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('renderer item');
-       });
+        it('should use renderer when it is defined', () => {
+          dropdown.renderer = root => root.appendChild(rendererContent);
+          expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('renderer item');
+        });
 
-       it('should pass vaadin-dropdown-menu as owner to vaadin-overlay', () => {
-         dropdown.renderer = (root, dropdownMenu, model) => {
-           expect(dropdownMenu).to.eql(dropdown);
-         };
-       });
+        it('should pass vaadin-dropdown-menu as owner to vaadin-overlay', () => {
+          dropdown.renderer = (root, dropdownMenu, model) => {
+            expect(dropdownMenu).to.eql(dropdown);
+          };
+        });
 
-       it('should remove template when added after renderer', () => {
-         dropdown.renderer = () => {};
-         const template = document.createElement('template');
-         expect(() => dropdown._contentTemplate = template).to.throw(Error);
-         expect(dropdown._contentTemplate).to.be.not.ok;
-       });
-     });
+        it('should remove template when added after renderer', () => {
+          dropdown.renderer = () => {};
+          const template = document.createElement('template');
+          expect(() => dropdown._contentTemplate = template).to.throw(Error);
+          expect(dropdown._contentTemplate).to.be.not.ok;
+        });
+      });
 
-     describe('with template', () => {
-       let dropdown;
+      describe('with template', () => {
+        let dropdown;
 
-       beforeEach(() => dropdown = fixture('with-template'));
+        beforeEach(() => dropdown = fixture('with-template'));
 
-       it('should fallback to render content with Templatizer when renderer is not defined', () => {
-         expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
-       });
+        it('should fallback to render content with Templatizer when renderer is not defined', () => {
+          expect(dropdown.shadowRoot.querySelector('vaadin-list-box mock-item').textContent.trim()).to.equal('templatizer item');
+        });
 
-       it('should throw an error when setting a renderer if there is already a template', () => {
-         expect(() => dropdown.renderer = () => {}).to.throw(Error);
-       });
+        it('should throw an error when setting a renderer if there is already a template', () => {
+          expect(() => dropdown.renderer = () => {}).to.throw(Error);
+        });
 
-       it('should remove renderer when added after template', () => {
-         expect(() => dropdown.renderer = () => {}).to.throw(Error);
-         expect(dropdown.renderer).to.be.not.ok;
-       });
-     });
-   });
+        it('should remove renderer when added after template', () => {
+          expect(() => dropdown.renderer = () => {}).to.throw(Error);
+          expect(dropdown.renderer).to.be.not.ok;
+        });
+      });
+    });
   </script>
 </body>
