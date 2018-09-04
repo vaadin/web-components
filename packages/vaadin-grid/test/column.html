@@ -54,7 +54,7 @@
   <script>
 
     describe('column', () => {
-      let container, column, grid;
+      let container, column, grid, emptyColumn;
 
       before(done => ensureDefined('x-grid', done));
 
@@ -63,6 +63,7 @@
         grid = container.$.grid;
         grid.dataProvider = infiniteDataProvider;
         column = grid.querySelector('vaadin-grid-column');
+        emptyColumn = grid.querySelector('#emptycolumn');
         flushGrid(grid);
       });
 
@@ -173,11 +174,8 @@
         });
 
         describe('path', () => {
-          let emptyColumn;
 
           beforeEach(() => {
-            column.path = '';
-            emptyColumn = grid.querySelector('#emptycolumn');
             emptyColumn.path = 'value';
           });
 
@@ -196,7 +194,17 @@
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should use to path label if header renderer is removed', () => {
+          it('should not override header template label', () => {
+            const template =  document.createElement('template');
+            template.innerHTML = 'foo';
+            template.classList.add('header');
+            emptyColumn.appendChild(template);
+            flushColumns(grid);
+            emptyColumn.path = 'bar';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should use path label if header renderer is removed', () => {
             emptyColumn.headerRenderer = root => root.textContent = 'foo';
             emptyColumn.headerRenderer = null;
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
@@ -216,10 +224,58 @@
             expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should use to path if renderer is removed', () => {
+          it('should not override template content', () => {
+            const template =  document.createElement('template');
+            template.innerHTML = 'foo';
+            emptyColumn.path = 'foo';
+            emptyColumn.appendChild(template);
+            flushColumns(grid);
+            expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should use path if renderer is removed', () => {
             emptyColumn.renderer = root => root.textContent = 'foo';
             emptyColumn.renderer = null;
             expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
+          });
+
+        });
+
+        describe('label', () => {
+
+          beforeEach(() => {
+            emptyColumn.label = 'Label';
+          });
+
+          it('should show the label in the header cell', () => {
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Label');
+          });
+
+          it('should not override header renderer label', () => {
+            emptyColumn.headerRenderer = root => root.textContent = 'foo';
+            emptyColumn.label = 'Bar';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should not override header template label', () => {
+            const template =  document.createElement('template');
+            template.innerHTML = 'foo';
+            template.classList.add('header');
+            emptyColumn.appendChild(template);
+            flushColumns(grid);
+            emptyColumn.label = 'Bar';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
+          });
+
+          it('should override path generated label', () => {
+            emptyColumn.path = 'foo';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Label');
+          });
+
+          it('should use path label if label is removed', () => {
+            emptyColumn.path = 'foo';
+            emptyColumn.label = null;
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo');
           });
 
         });

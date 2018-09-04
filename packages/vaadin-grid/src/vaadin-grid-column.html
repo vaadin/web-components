@@ -105,7 +105,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_pathChanged(path, _headerCell, _footerCell, _cells.*, renderer, headerRenderer)',
+        '_pathChanged(path, _headerCell, _footerCell, _cells.*, renderer, headerRenderer, _bodyTemplate, _headerTemplate)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
@@ -322,18 +322,18 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _pathChanged(path, headerCell, footerCell, cells, renderer, headerRenderer) {
+    _pathChanged(path, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
       if (path === undefined) {
         return;
       }
 
-      if (!renderer) {
+      if (!renderer && !bodyTemplate) {
         const pathRenderer = (root, owner, {item}) => root.textContent = this.get(path, item);
         cells.value.forEach(cell => cell._renderer = pathRenderer);
         this._grid._update();
       }
 
-      if (!headerRenderer) {
+      if (!headerRenderer && !headerTemplate) {
         const generatedLabel = path
           .substr(path.lastIndexOf('.') + 1)
           .replace(/([A-Z])/g, '-$1').toLowerCase()
@@ -342,7 +342,6 @@ This program is available under Apache License Version 2.0, available at https:/
         headerCell._content.textContent = generatedLabel;
       }
     }
-
 
     _toggleAttribute(name, bool, node) {
       if (node.hasAttribute(name) === !bool) {
