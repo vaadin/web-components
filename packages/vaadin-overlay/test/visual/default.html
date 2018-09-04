@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+
+  <script src="../../../webcomponentsjs/webcomponents-lite.js"></script>
+  <script>
+    const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
+    document.write(`<link rel="import" href="../../theme/${theme}/vaadin-overlay.html">`);
+  </script>
+</head>
+
+<body>
+  <vaadin-overlay id="overlay" opened>
+    <template>
+      Overlay content
+    </template>
+  </vaadin-overlay>
+</body>

@@ -14,6 +14,8 @@ jobs:
     - if: type = push
       env: TEST_SUITE=desktop POLYMER=2
     - if: type = push
+      env: TEST_SUITE=visual_tests POLYMER=2
+    - if: type = push
       env: TEST_SUITE=mobile POLYMER=3
     - if: type = push
       env: TEST_SUITE=desktop POLYMER=3
@@ -35,10 +37,15 @@ script:
       npm -q i && npm i -q --no-save bower polymer-cli && bower -q i &&
       gulp lint &&
       polymer lint --rules polymer-2 --input ./src/*.html ./theme/**/*.html &&
-      if [[ "$TRAVIS_EVENT_TYPE" = "pull_request" ]]; then
-        xvfb-run -s '-screen 0 1024x768x24' wct;
+      if [[ "$TRAVIS_EVENT_TYPE" != "pull_request" && "$TRAVIS_BRANCH" != quick/* ]]; then
+        if [[ "$TEST_SUITE" = "visual_tests" ]]; then
+          npm i -q --no-save gemini@^4.0.0 gemini-sauce gemini-polyserve &&
+          gemini test test/visual;
+        else
+          wct --env saucelabs:$TEST_SUITE;
+        fi;
       else
-        wct --env saucelabs:$TEST_SUITE;
+        xvfb-run -s '-screen 0 1024x768x24' wct;
       fi;
     fi
 
