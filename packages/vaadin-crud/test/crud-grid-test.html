@@ -71,6 +71,7 @@
                 callback(items, items.length);
               };
             }
+            window.flushGrid(crudGrid);
             Polymer.RenderStatus.afterNextRender(crudGrid, done);
           });
 

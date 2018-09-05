@@ -19,7 +19,7 @@
 
   <test-fixture id="declarative">
     <template>
-      <vaadin-crud items="[1, 2, 3]" item="{}"></vaadin-crud>
+      <vaadin-crud items='[{"foo": "bar"}]' item="{}"></vaadin-crud>
     </template>
   </test-fixture>
 
@@ -82,7 +82,7 @@
 
         it('should be able to set items and item declaratively', () => {
           expect(crud._grid._columnTree.length).to.be.equal(1);
-          expect(crud._form.__fields.length).to.be.equal(1);
+          expect(crud._form._fields.length).to.be.equal(1);
         });
       });
 
@@ -299,9 +299,10 @@
       describe('custom', () => {
         let grid, form;
 
-        beforeEach(() => {
+        beforeEach(done => {
           grid = fixture('grid');
           form = fixture('form');
+          Polymer.RenderStatus.afterNextRender(grid, done);
         });
 
         afterEach(done => {
@@ -311,9 +312,11 @@
 
         it('should be able to provide a custom grid', done => {
           crud.appendChild(grid);
+          crud._observer.flush();
           crud.items = [1, 2];
 
           Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
             expect(crud._grid).to.be.equal(grid);
             expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('1');
             expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
@@ -321,11 +324,13 @@
           });
         });
 
-        it('should not customize the form without a proper slot', function(done) {
+        it('should not customize the form without a proper slot', done => {
           crud.appendChild(form);
+          crud._observer.flush();
           crud.items = [{foo: 1}];
 
           Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
             crud._grid.activeItem = crud.items[0];
 
             Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
@@ -335,12 +340,14 @@
           });
         });
 
-        it('should be able to provide a custom form', function(done) {
+        it('should be able to provide a custom form', done => {
           form.setAttribute('slot', 'form');
           crud.appendChild(form);
+          crud._observer.flush();
           crud.items = [{foo: 'bar'}];
 
           Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
             crud._grid.activeItem = crud.items[0];
 
             Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
@@ -351,7 +358,7 @@
           });
         });
 
-        it('should be able to provide a custom dataProvider', function(done) {
+        it('should be able to provide a custom dataProvider', done => {
           // FIXME: the way how template is created in crud grid does not work
           if (window.location.search.match('shadydom')) {
             done();
@@ -362,7 +369,8 @@
             callback([1, 2], 2);
           };
 
-          Polymer.RenderStatus.afterNextRender(crud, () => {
+          Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
+            window.flushGrid(grid);
             expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('1');
             expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
             done();
