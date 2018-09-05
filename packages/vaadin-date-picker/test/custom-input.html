@@ -24,6 +24,16 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="custom-input-datepicker-theme">
+    <template>
+      <vaadin-date-picker-light theme="foo">
+        <iron-input>
+          <input>
+        </iron-input>
+      </vaadin-date-picker-light>
+    </template>
+  </test-fixture>
+
   <script>
     describe('custom input', () => {
       let datepicker;
@@ -57,6 +67,45 @@
       it('should show week numbers', () => {
         datepicker.showWeekNumbers = true;
         expect(overlayContent.showWeekNumbers).to.equal(true);
+      });
+    });
+
+    describe('custom input theme attribute', () => {
+      let datepicker;
+
+      beforeEach(() => datepicker = fixture('custom-input-datepicker-theme'));
+
+      it('should propagate theme attribute to overlay', () => {
+        expect(datepicker.$.overlay.getAttribute('theme')).to.equal('foo');
+      });
+
+      it('should propagate theme attribute to overlay content', () => {
+        datepicker.open();
+        const overlayContent = datepicker.$.overlay.content
+          .querySelector('#overlay-content');
+        expect(overlayContent.getAttribute('theme')).to.equal('foo');
+      });
+
+      describe('in content', () => {
+        let overlayContent;
+
+        beforeEach(done => {
+          overlayContent = datepicker.$.overlay.content
+            .querySelector('#overlay-content');
+          overlayContent.$.yearScroller.bufferSize = 0;
+          overlayContent.$.monthScroller.bufferSize = 1;
+          open(datepicker, () => {
+            overlayContent.$.yearScroller._finishInit();
+            overlayContent.$.monthScroller._finishInit();
+            done();
+          });
+        });
+
+        it('should propagate theme attribute to month calendar', () => {
+          const monthCalendar = overlayContent.$.monthScroller
+            .querySelector('vaadin-month-calendar');
+          expect(monthCalendar.getAttribute('theme')).to.equal('foo');
+        });
       });
     });
   </script>
