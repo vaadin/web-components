@@ -6,9 +6,41 @@
       }
     </style>
 
+    <h3>Simple App Layout with brand logo </h3>
+    <vaadin-demo-snippet id="element-basic-demos-logo-example" iframe-src="iframe-lumo-styled.html">
+      <template preserve-content>
+        <style>
+          .content {
+            padding: 5px;
+          }
 
-    <h3>Basic Usage</h3>
-    <vaadin-demo-snippet id="element-basic-demos-sample-example" iframe-src="iframe-lumo-styled.html">
+          h3 {
+            text-align: center;
+          }
+        </style>
+        <vaadin-app-layout id="app">
+          <img slot="branding" referrerpolicy="no-referrer" src="https://i.imgur.com/GPpnszs.png" alt="Vaadin Logo" height="44px"/>
+
+          <vaadin-tabs slot="menu" theme="minimal">
+            <vaadin-tab>
+              <iron-icon icon="vaadin:home"></iron-icon>
+              Page 1
+            </vaadin-tab>
+            <vaadin-tab>Page 2</vaadin-tab>
+            <vaadin-tab>Page 3</vaadin-tab>
+            <vaadin-tab>Page 4</vaadin-tab>
+          </vaadin-tabs>
+
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
+        </vaadin-app-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>App Layout with text branding and large number of menu items</h3>
+    <vaadin-demo-snippet id="element-basic-demos-text-example" iframe-src="iframe-lumo-styled.html">
       <template preserve-content>
         <style>
           .content {
@@ -20,33 +52,58 @@
           }
         </style>
         <vaadin-app-layout>
-          <iron-icon slot="branding" icon="vaadin:vaadin-h"></iron-icon>  
+          <h3 slot="branding">Company Name</h3>
 
           <vaadin-tabs slot="menu" theme="minimal">
-            <vaadin-tab>Page 1</vaadin-tab>
-            <vaadin-tab>Page 2</vaadin-tab>
-            <vaadin-tab>Page 3</vaadin-tab>
-            <vaadin-tab>Page 4</vaadin-tab>
+              <vaadin-tab>Page 1</vaadin-tab>
+              <vaadin-tab>Page 2</vaadin-tab>
+              <vaadin-tab>Page 3</vaadin-tab>
+              <vaadin-tab>Page 4</vaadin-tab>
+              <vaadin-tab>Page 5</vaadin-tab>
+              <vaadin-tab>Page 6</vaadin-tab>
+              <vaadin-tab>Page 7</vaadin-tab>
+              <vaadin-tab>Page 8</vaadin-tab>
           </vaadin-tabs>
-          
+
           <div class="content">
             <h3>Page title</h3>
             <p>Page content</p>
           </div>
         </vaadin-app-layout>
       </template>
-      <script>
-        window.addDemoReadyListener('#element-basic-demos-sample-example', function(document) {
-          var renderer = document.querySelector('vaadin-demo-iframe-renderer');
-          var frame = renderer.$.demo;
-          frame.style.height = '400px';
-
-          Polymer.dom(renderer.root).querySelector('div').style.display = 'none';
-        });
-      </script>
     </vaadin-demo-snippet>
 
-    <h3>Material Theme</h3>
+    <h3>App Layout on a mobile screen with large number of menu items</h3>
+    <vaadin-demo-snippet id="element-basic-demos-mobile-example" iframe-src="iframe-lumo-styled.html" mobile>
+      <template preserve-content>
+        <style>
+          .content {
+            padding: 5px;
+          }
+
+          h3 {
+            text-align: center;
+          }
+        </style>
+        <vaadin-app-layout id="app">
+          <vaadin-tabs slot="menu" theme="minimal">
+            <vaadin-tab>Page 1</vaadin-tab>
+            <vaadin-tab>Page 2</vaadin-tab>
+            <vaadin-tab>Page 3</vaadin-tab>
+            <vaadin-tab>Page 4</vaadin-tab>
+            <vaadin-tab>Page 5</vaadin-tab>
+            <vaadin-tab>Page 6</vaadin-tab>
+          </vaadin-tabs>
+
+          <div class="content">
+            <h3>Page title</h3>
+            <p>Page content</p>
+          </div>
+        </vaadin-app-layout>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>App Layout with material theme</h3>
     <vaadin-demo-snippet id="element-basic-demos-material-example" iframe-src="iframe-material-styled.html">
       <template preserve-content>
         <style>
@@ -73,16 +130,6 @@
           </div>
         </vaadin-app-layout>
       </template>
-      <script>
-        window.addDemoReadyListener('#element-basic-demos-material-example', function(document) {
-          var renderer = document.querySelector('vaadin-demo-iframe-renderer');
-          var frame = renderer.$.demo;
-          frame.style.height = '600px';
-          frame.style.maxWidth = '340px';
-
-          Polymer.dom(renderer.root).querySelector('div').style.display = 'none';
-        });
-      </script>
     </vaadin-demo-snippet>
 
   </template>

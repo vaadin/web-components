@@ -46,6 +46,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       [part="menu"] {
         width: auto;
         overflow: hidden;
+        max-width: 100%;
       }
 
       [part="content"] {
@@ -59,11 +60,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           flex-direction: column;
         }
 
+        [part="menu"] {
+          max-width: 60%;
+        }
+
         [part="branding"] {
           display: flex;
           position: absolute;
           left: 0;
-          flex-basis: 0;
+          max-width: 20%;
+          max-height: 100%;
+        }
+
+        [part="branding"] ::slotted(*) {
+          max-width: 100%;
+          max-height: 100%;
         }
       }
     </style>

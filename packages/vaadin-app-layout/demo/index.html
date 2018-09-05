@@ -12,6 +12,15 @@
   <custom-style>
     <style include="vaadin-component-demo-shared-styles"></style>
   </custom-style>
+  <dom-module id="custom-vaadin-demo-snippet-style" theme-for="vaadin-demo-snippet">
+    <template>
+      <style>
+        :host([mobile]) #demo {
+          width: 375px;
+        }
+      </style>
+    </template>
+  </dom-module>
 </head>
 
 <body>
