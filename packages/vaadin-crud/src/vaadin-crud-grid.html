@@ -34,7 +34,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onItemsChange(items) {
-          if (!this.dataProvider && items && items[0]) {
+          if (this.dataProvider == this._arrayDataProvider && items && items[0]) {
             this.innerHTML = '';
             this.__createColumns(this, items[0]);
           }
@@ -51,11 +51,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         /** @override */
         _dataProviderChanged(dataProvider, oldDataProvider) {
-          if (this.__dataProviderWrapper != dataProvider) {
+          if (this._arrayDataProvider == dataProvider) {
+            super._dataProviderChanged(dataProvider, oldDataProvider);
+          } else if (this.__dataProviderWrapper != dataProvider) {
             this.innerHTML = '';
             this.__dataProvider = dataProvider;
             this.dataProvider = this.__dataProviderWrapper;
-            super._dataProviderChanged(this.dataProvider, oldDataProvider);
+            super._dataProviderChanged(this.__dataProviderWrapper, oldDataProvider);
           }
         }
 
@@ -96,7 +98,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __capitalize(path) {
-          return path.replace(/(^|[ \-_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
+          return path.toLowerCase().replace(/(^|[^\w])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
       }
 
