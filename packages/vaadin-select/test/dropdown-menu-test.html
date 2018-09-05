@@ -22,10 +22,10 @@
           <vaadin-list-box>
             <mock-item>Option 1</mock-item>
             <mock-item value="v2" label="o2">Option 2</mock-item>
-            <mock-item>Option 3</mock-item>
+            <mock-item value="">Option 3</mock-item>
             <mock-item></mock-item>
             <mock-item label="">Empty</mock-item>
-            <mock-item value="" disabled>Disabled</mock-item>
+            <mock-item value="v4" disabled>Disabled</mock-item>
           </vaadin-list-box>
         </template>
       </vaadin-dropdown-menu>
@@ -161,6 +161,18 @@
         dropdown.value = 'foo';
         dropdown.opened = false;
       });
+
+      it('should assign menu element if template was attached after DOM is ready', () => {
+        const template = document.createElement('template');
+        template.innerHTML = `
+          <vaadin-list-box>
+            <vaadin-item>test item</vaadin-item>
+          </vaadin-list-box>`;
+
+        dropdown.appendChild(template);
+        dropdown._observer && dropdown._observer.flush();
+        expect(dropdown._menuElement).not.to.be.undefined;
+      });
     });
 
     describe('vaadin-dropdown-menu menu-element', () => {
@@ -291,11 +303,12 @@
         });
 
         it('should select the first item with an empty value by default', () => {
-          expect(menu.selected).to.be.equal(0);
+          expect(menu.selected).to.be.equal(2);
         });
 
         it('Should close the overlay when selecting a new item', () => {
-          menu.selected = 2;
+          menu.selected = 1;
+
           expect(dropdown._overlayElement.opened).to.be.false;
         });
 
@@ -327,7 +340,7 @@
 
         it('Should set empty value if a item without `value` is selected', () => {
           menu.selected = 1;
-          menu.selected = 2;
+          menu.selected = 3;
           expect(dropdown.value).to.be.empty;
         });
 

@@ -27,14 +27,28 @@
           value: false,
           observer: '_disabledChanged'
         },
-        value: {
-          type: String,
-          value: ''
-        },
+        _value: String,
         selected: {
           type: Boolean
         }
       };
+    }
+
+    ready() {
+      super.ready();
+
+      const attrValue = this.getAttribute('value');
+      if (attrValue !== null) {
+        this.value = attrValue;
+      }
+    }
+
+    get value() {
+      return this._value !== undefined ? this._value : this.textContent.trim();
+    }
+
+    set value(value) {
+      this._value = value;
     }
 
     _disabledChanged(disabled) {
