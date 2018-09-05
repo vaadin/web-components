@@ -60,6 +60,11 @@
           e.target.blur();
         });
       });
+
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
     });
 
     function closeDatePickers() {
