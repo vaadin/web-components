@@ -116,6 +116,13 @@
           }).to.throw(Error);
           expect(menu._contentTemplate).to.be.not.ok;
         });
+
+        it('should be possible to manually invoke renderer', () => {
+          fire(target, 'vaadin-contextmenu');
+          expect(menu.renderer).to.be.calledOnce;
+          menu.render();
+          expect(menu.renderer).to.be.calledTwice;
+        });
       });
 
       describe('with template', () => {
