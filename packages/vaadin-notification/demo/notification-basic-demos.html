@@ -10,7 +10,7 @@
     <vaadin-demo-snippet id="notification-basic-demos-simple-notification">
       <template preserve-content>
         <vaadin-button>Open notification</vaadin-button>
-        <vaadin-notification duration="0"></vaadin-notification>
+        <vaadin-notification duration="4000"></vaadin-notification>
         <script>
           window.addDemoReadyListener('#notification-basic-demos-simple-notification', function(document) {
             const btn = document.querySelector('vaadin-button');
@@ -42,7 +42,7 @@
     <vaadin-demo-snippet id="notification-basic-demos-polymer-template">
       <template preserve-content>
         <vaadin-button>Open notification</vaadin-button>
-        <vaadin-notification duration="0" id="notification">
+        <vaadin-notification duration="4000" id="notification">
           <template>
             <div>
               <b>Notice</b><br>
