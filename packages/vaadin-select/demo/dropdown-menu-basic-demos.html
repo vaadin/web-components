@@ -13,6 +13,10 @@
         <script>
           window.addDemoReadyListener('#dropdown-menu-list-box-basic', function(document) {
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              // use same content, if already rendered
+              if (root.firstChild) {
+                return;
+              }
               // create the <vaadin-list-box>
               const listBox = window.document.createElement('vaadin-list-box');
               // append 3 <vaadin-item> elements
@@ -68,24 +72,36 @@
             };
 
             document.querySelector('vaadin-dropdown-menu[placeholder]').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
               const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}, {textContent: 'Option two'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[disabled]').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
               const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[readonly]').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
               const listBox = window.document.createElement('vaadin-list-box');
               appendItems(listBox, [{textContent: 'Option one'}]);
               root.appendChild(listBox);
             };
 
             document.querySelector('vaadin-dropdown-menu[required]').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
               const listBox = window.document.createElement('vaadin-list-box');
               // un-selectable <vaadin-item> to highlight required state
               const select = window.document.createElement('vaadin-item');
@@ -119,6 +135,9 @@
         <script>
           window.addDemoReadyListener('#dropdown-menu-list-box-custom-label', function(document) {
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
               const listBox = window.document.createElement('vaadin-list-box');
               const items = [
                 {label: '', textContent: 'Other'},

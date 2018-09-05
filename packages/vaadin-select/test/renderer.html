@@ -40,7 +40,7 @@
 
   <dom-module id="x-renderer">
     <template>
-      <vaadin-dropdown-menu renderer="[[renderer]]" opened="{{opened}}"></vaadin-dropdown-menu>
+      <vaadin-dropdown-menu renderer="[[renderer]]"></vaadin-dropdown-menu>
     </template>
     <script>
       customElements.whenDefined('vaadin-dropdown-menu').then(() => {
@@ -50,16 +50,17 @@
           }
           static get properties() {
             return {
-              opened: Boolean,
               renderer: {
                 type: Function,
                 value: function() {
                   return function(root) {
-                    const listBox = document.createElement('vaadin-list-box');
-                    const item = document.createElement('mock-item');
-                    item.textContent = 'renderer item';
-                    listBox.appendChild(item);
-                    root.appendChild(listBox);
+                    if (!root.firstChild) {
+                      const listBox = document.createElement('vaadin-list-box');
+                      const item = document.createElement('mock-item');
+                      item.textContent = 'renderer item';
+                      listBox.appendChild(item);
+                      root.appendChild(listBox);
+                    }
                   };
                 }
               }
@@ -136,13 +137,16 @@
       describe('assigned through property binding', () => {
         let wrapper, dropdown;
 
-        beforeEach(() => {
-          wrapper = fixture('from-props');
-          dropdown = wrapper.shadowRoot.querySelector('vaadin-dropdown-menu');
+        beforeEach(done => {
+          customElements.whenDefined('x-renderer').then(() => {
+            wrapper = fixture('from-props');
+            dropdown = wrapper.shadowRoot.querySelector('vaadin-dropdown-menu');
+            done();
+          });
         });
 
         it('should render correctly when rendered assigned before shadow DOM is ready', () => {
-          wrapper.opened = true;
+          dropdown.opened = true;
           expect(dropdown._overlayElement.content.querySelector('mock-item').textContent.trim()).to.equal('renderer item');
         });
       });
