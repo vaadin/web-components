@@ -222,6 +222,13 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         }
 
+        /**
+         * Manually invoke existing renderer.
+         */
+        render() {
+          this.$.overlay.render();
+        }
+
         _templateOrRendererChanged(template, renderer) {
           if (template && renderer) {
             this._removeNewRendererOrTemplate(template, this._oldTemplate, renderer, this._oldRenderer);
