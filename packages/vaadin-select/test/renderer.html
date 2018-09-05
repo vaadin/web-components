@@ -104,6 +104,14 @@
           expect(() => dropdown._contentTemplate = template).to.throw(Error);
           expect(dropdown._contentTemplate).to.be.not.ok;
         });
+
+        it('should be possible to manually invoke renderer', () => {
+          const spy = dropdown.renderer = sinon.spy();
+          dropdown.opened = true;
+          spy.reset();
+          dropdown.render();
+          expect(spy).to.be.calledOnce;
+        });
       });
 
       describe('with template', () => {
