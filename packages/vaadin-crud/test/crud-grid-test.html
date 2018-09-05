@@ -18,14 +18,6 @@
   </test-fixture>
 
   <script>
-    function listenOnce(element, eventName, callback) {
-      const listener = e => {
-        element.removeEventListener(eventName, listener);
-        callback(e);
-      };
-      element.addEventListener(eventName, listener);
-    }
-
     describe('crud grid test', () => {
       var crudGrid;
 
@@ -41,6 +33,15 @@
 
       it('should have a version number', () => {
         expect(customElements.get('vaadin-crud-grid').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+      });
+
+      it('should not generate any column when providing an empty item list', () => {
+        expect(crudGrid.querySelectorAll('vaadin-grid-column')).to.be.empty;
+      });
+
+      it('should generate one column when providing list of primitives', () => {
+        crudGrid.items = ['foo', 'bar'];
+        expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
       });
 
 

@@ -8,6 +8,9 @@
     "it": false,
     "expect": false,
     "gemini": false,
-    "sinon": false
+    "sinon": false,
+    "listenOnce": false,
+    "getHeaderCellContent": false,
+    "getBodyCellContent": false
   }
 }
