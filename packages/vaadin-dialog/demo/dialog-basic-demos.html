@@ -167,6 +167,44 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Overlay Theme</h3>
+    <vaadin-demo-snippet id="dialog-basic-demos-theme-attribute">
+      <template preserve-content>
+        <dom-module id="error-dialog-overlay-styles" theme-for="vaadin-dialog-overlay">
+          <template>
+            <style>
+              :host([theme~="error"]) [part="overlay"] {
+                background-color: hsl(3, 100%, 61%);
+                color: #fff;
+              }
+            </style>
+          </template>
+        </dom-module>
+
+        <dom-bind id="error-dialog-example">
+          <template>
+            <vaadin-dialog id="dialog" theme="error">
+              <template>
+                <p>White on red dialog.</p>
+              </template>
+            </vaadin-dialog>
+            <vaadin-button on-click="openDialog">Show Error Dialog</vaadin-button>
+          </template>
+        </dom-bind>
+        <script>
+          window.addDemoReadyListener('#dialog-basic-demos-theme-attribute', function(document) {
+            var dialogExample = document.querySelector('#error-dialog-example');
+            dialogExample.openDialog = function() {
+              dialogExample.$.dialog.opened = true;
+            };
+            dialogExample.closeDialog = function() {
+              dialogExample.$.dialog.opened = false;
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class DialogBasicDemos extends DemoReadyEventEmitter(DialogDemo(Polymer.Element)) {

@@ -9,6 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../vaadin-overlay/src/vaadin-overlay.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 
 <dom-module id="vaadin-dialog-overlay-styles" theme-for="vaadin-dialog-overlay">
   <template>
@@ -35,6 +36,7 @@ This program is available under Apache License Version 2.0, available at https:/
     <vaadin-dialog-overlay id="overlay"
       on-opened-changed="_onOverlayOpened"
       with-backdrop
+      theme$="[[theme]]"
       focus-trap>
     </vaadin-dialog-overlay>
   </template>
@@ -109,13 +111,17 @@ This program is available under Apache License Version 2.0, available at https:/
        * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
        * for `<vaadin-dialog-overlay>` parts.
        *
+       * Note: the `theme` attribute value set on `<vaadin-dialog>` is
+       * propagated to the internal `<vaadin-dialog-overlay>` component.
+       *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
-      class DialogElement extends Vaadin.ElementMixin(Polymer.Element) {
+      class DialogElement extends Vaadin.ThemePropertyMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-dialog';
         }
@@ -160,6 +166,11 @@ This program is available under Apache License Version 2.0, available at https:/
             ariaLabel: {
               type: String
             },
+
+            /**
+             * Theme to apply to the overlay element
+             */
+            theme: String,
 
             _contentTemplate: Object,
 

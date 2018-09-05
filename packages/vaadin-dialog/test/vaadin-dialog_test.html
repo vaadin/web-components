@@ -13,7 +13,7 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-dialog opened>
+      <vaadin-dialog opened theme="foo">
         <template>
           <div>Simple dialog</div>
         </template>
@@ -95,6 +95,10 @@
       it('overlay should close on dettach', () => {
         dialog.parentNode.removeChild(dialog);
         expect(dialog.opened).to.eql(false);
+      });
+
+      it('should propagate theme attribute to the overlay', () => {
+        expect(overlay.getAttribute('theme')).to.be.eql(dialog.getAttribute('theme'));
       });
 
       describe('no-close-on-esc', () => {
