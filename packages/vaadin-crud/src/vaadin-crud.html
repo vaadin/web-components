@@ -164,6 +164,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.items) {
             this.__onItemsChange(this.items);
           }
+          if (this.item) {
+            this.__onItemChange(this.item);
+          }
           Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('active-item-changed', this.__activeListener));
         }
 
@@ -174,19 +177,29 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
           this.$.editor.insertBefore(form, this.$.buttons);
           this.$.dialog.$.overlay.appendChild(this.$.editor);
+          if (this.items) {
+            this.__onItemsChange(this.items);
+          }
+          if (this.item) {
+            this.__onItemChange(this.item);
+          }
           Polymer.RenderStatus.afterNextRender(this, () => form.addEventListener('change', this.__changeListener));
         }
 
         __onDataProviderChange(dataProvider) {
-          this._grid.dataProvider = dataProvider;
+          if (this._grid) {
+            this._grid.dataProvider = dataProvider;
+          }
         }
 
         __onItemsChange(items) {
-          this._grid.items = items;
+          if (this._grid) {
+            this._grid.items = items;
+          }
         }
 
         __onItemChange(item, old) {
-          if (item) {
+          if (this._form && item) {
             if (!this._fields.length && this._form.configure) {
               const obj = this.__isNew(item) ? this._grid._cache.items[0] : item;
               this._form.configure(obj);

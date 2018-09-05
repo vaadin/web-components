@@ -16,6 +16,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="declarative">
+    <template>
+      <vaadin-crud items="[1, 2, 3]" item="{}"></vaadin-crud>
+    </template>
+  </test-fixture>
+
   <script>
     function listenOnce(element, eventName, callback) {
       const listener = e => {
@@ -52,6 +58,20 @@
 
       it('should have a valid version number', () => {
         expect(customElements.get('vaadin-crud').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+      });
+
+      describe('declarative', () => {
+        beforeEach(() => crud = fixture('declarative'));
+
+        it('should be able to set items and item declaratively', done => {
+          crud = fixture('declarative');
+          Polymer.RenderStatus.afterNextRender(crud._grid, () => {
+            expect(crud._grid._columnTree.length).to.be.equal(1);
+            expect(crud._form.__fields.length).to.be.equal(1);
+            crud.$.dialog.opened = false;
+            done();
+          });
+        });
       });
 
       describe('items', () => {
