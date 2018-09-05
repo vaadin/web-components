@@ -100,11 +100,48 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
     (function() {
 
       /**
-       * `<vaadin-app-layout>` is a Polymer 2 element.
+       * `<vaadin-app-layout>` is a Web Component providing a quick and easy way to get a common application layout structure done.
        *
        * ```
-       * <vaadin-app-layout></vaadin-app-layout>
+       * <vaadin-app-layout>
+       *  <h3 slot="branding">Company Name</h3>
+       *  <vaadin-tabs slot="menu">
+       *    <vaadin-tab>Menu item</vaadin-tab>
+       *  </vaadin-tabs>
+       *  <div>Page content</div>
+       * </vaadin-app-layout>
        * ```
+       *
+       * ### Styling
+       *
+       * The following Shadow DOM parts of the `<vaadin-app-layout>` are available for styling:
+       *
+       * Part name     | Description
+       * --------------|---------------------------------------------------------|
+       * `navbar`      | Container for the navigation bar
+       * `branding`    | Placeholder for the logo or for the app name. By default is invisible on small screens
+       * `menu`        | Container for an app menu. Placed in the middle of navigation bar.
+       * `content`     | Container for page content.
+       *
+       * The following custom CSS properties are available for styling:
+       *
+       * Custom CSS property | Description | Default value
+       * ---|---|---
+       * `--vaadin-app-layout-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * ### Component's slots
+       *
+       * The following slots are available to be set
+       *
+       * Slot name     | Description
+       * --------------|---------------------------------------------------|
+       * no name       | Default placeholder for the page content
+       * `branding`    | Placeholder for the logo or application name
+       * `menu`        | Placeholder for an application menu
+       *
+       * See examples of setting the content into slots in the live demos.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
@@ -116,7 +153,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return 'vaadin-app-layout';
         }
         static get version() {
-          return '0.1.0';
+          return '1.0.0-beta1';
         }
 
         constructor() {
