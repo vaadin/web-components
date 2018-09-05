@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/templatize.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 
 <dom-module id="vaadin-notification-container">
@@ -105,7 +106,7 @@ This program is available under Apache License Version 2.0, available at https:/
         display: none;
       }
     </style>
-    <vaadin-notification-card id="vaadin-notification-card">
+    <vaadin-notification-card id="vaadin-notification-card" theme$="[[theme]]">
     </vaadin-notification-card>
   </template>
 
@@ -238,10 +239,21 @@ This program is available under Apache License Version 2.0, available at https:/
        * </vaadin-notification>
        * ```
        *
+       * ### Styling
+       *
+       * `<vaadin-notification>` uses `<vaadin-notification-card>` internal
+       * themable component as the actual visible notification cards. See
+       * the stylable parts the
+       * [`<vaadin-notification-card>` API](https://vaadin.com/components/vaadin-notification/html-api/elements/Vaadin.NotificationCard).
+       *
+       * Note: the `theme` attribute value set on `<vaadin-notification>` is
+       * propagated to the internal `<vaadin-notification-card>`.
+       *
        * @memberof Vaadin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
-      class NotificationElement extends Vaadin.ElementMixin(Polymer.Element) {
+      class NotificationElement extends Vaadin.ThemePropertyMixin(Vaadin.ElementMixin(Polymer.Element)) {
         static get is() {
           return 'vaadin-notification';
         }

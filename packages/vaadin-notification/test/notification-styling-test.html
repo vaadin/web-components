@@ -97,6 +97,14 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="withTheme">
+    <template>
+      <vaadin-notification theme="foo" duration="0">
+        <template></template>
+      </vaadin-notification>
+    </template>
+  </test-fixture>
+
   <script>
     function getComputedStyleSource(element) {
       return window.getComputedStyle(element).getPropertyValue('font-family')
@@ -232,6 +240,17 @@
           });
         });
       }
+    });
+
+    describe('theme attribute', () => {
+      let notification;
+
+      beforeEach(() => notification = fixture('withTheme'));
+
+      it('should propagate theme attribute to card', () => {
+        const card = notification.shadowRoot.querySelector('vaadin-notification-card');
+        expect(card.getAttribute('theme')).to.equal('foo');
+      });
     });
   </script>
 </body>

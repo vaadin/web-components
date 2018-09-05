@@ -33,6 +33,35 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Custom Theme Variant</h3>
+    <vaadin-demo-snippet id="notification-styling-custom-theme-variant">
+      <template preserve-content="">
+        <dom-module id="custom-notification-card" theme-for="vaadin-notification-card">
+          <template>
+            <style>
+              :host([theme~="custom"]) [part~="overlay"] {
+                font-family: monospace;
+              }
+            </style>
+          </template>
+        </dom-module>
+        <vaadin-notification theme="custom" duration="0"></vaadin-notification>
+        <vaadin-checkbox>Show notification</vaadin-checkbox>
+        <script>
+          window.addDemoReadyListener('#notification-styling-custom-theme-variant', function(document) {
+            const checkbox = document.querySelector('vaadin-checkbox');
+            const notification = document.querySelector('vaadin-notification');
+            notification.renderer = function(root) {
+              root.textContent = 'Notification with a custom theme variant';
+            };
+            checkbox.addEventListener('change', function() {
+              notification.opened = checkbox.checked;
+            });
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class NotificationStylingDemos extends DemoReadyEventEmitter(NotificationDemo(Polymer.Element)) {
