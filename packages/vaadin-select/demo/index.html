@@ -27,6 +27,25 @@
 </head>
 
 <body>
+  <dom-module id="custom-dropdown-menu" theme-for="vaadin-text-field vaadin-item">
+    <template>
+      <style>
+        :host([theme~="custom"]) {
+          font-family: monospace;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <dom-module id="custom-dropdown-menu-overlay" theme-for="vaadin-text-field vaadin-dropdown-menu-overlay">
+    <template>
+      <style>
+        :host([theme~="custom"]) [part~="overlay"] {
+          background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

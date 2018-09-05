@@ -131,6 +131,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="theme">
+    <template>
+      <vaadin-dropdown-menu theme="foo"></vaadin-dropdown-menu>
+    </template>
+  </test-fixture>
+
   <script>
     function arrowUp(target) {
       MockInteractions.keyDownOn(target, 38, [], 'ArrowUp');
@@ -798,6 +804,20 @@
         it('should not validate the initial empty value', () => {
           expect(spy).not.to.have.been.called;
         });
+      });
+    });
+
+    describe('vaadin-dropdown-menu theme attribute', () => {
+      let dropdown;
+
+      beforeEach(() => dropdown = fixture('theme'));
+
+      it('should propagate theme attribute to field', () => {
+        expect(dropdown._inputElement.getAttribute('theme')).to.equal('foo');
+      });
+
+      it('should propagate theme attribute to overlay', () => {
+        expect(dropdown._overlayElement.getAttribute('theme')).to.equal('foo');
       });
     });
   </script>
