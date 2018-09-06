@@ -25,7 +25,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         position: fixed;
         bottom: var(--vaadin-app-layout-viewport-bottom);
         /* CSS API for host */
-        --vaadin-overlay-viewport-bottom: 0;
+        --vaadin-app-layout-viewport-bottom: 0;
+        --vaadin-app-layout-navbar-height: 50px;
       }
 
       :host([hidden]) {
@@ -41,6 +42,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+
+      [part="branding"],
+      [part="navbar"] {
+        height: var(--vaadin-app-layout-navbar-height);
       }
 
       [part="menu"] {
@@ -67,9 +73,11 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         [part="branding"] {
           display: flex;
           position: absolute;
+          top: 0;
           left: 0;
           max-width: 20%;
           max-height: 100%;
+          align-items: center;
         }
 
         [part="branding"] ::slotted(*) {
@@ -128,6 +136,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * Custom CSS property | Description | Default value
        * ---|---|---
        * `--vaadin-app-layout-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
+       * `--vaadin-app-layout-navbar-height` | Height of the navigation bar and branding inside | `50px`
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -153,7 +162,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           return 'vaadin-app-layout';
         }
         static get version() {
-          return '1.0.0-beta1';
+          return '1.0.0-alpha1';
         }
 
         constructor() {
