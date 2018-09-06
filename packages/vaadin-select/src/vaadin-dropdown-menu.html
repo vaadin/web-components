@@ -409,10 +409,10 @@ This program is available under Apache License Version 2.0, available at https:/
           this._oldRenderer = renderer;
 
           if (renderer) {
-            this._overlayElement.setProperties({owner: this, renderer: renderer});
+            overlay.setProperties({owner: this, renderer: renderer});
             this.render();
 
-            if (this._overlayElement.content.firstChild) {
+            if (overlay.content.firstChild) {
               this._assignMenuElement();
             }
           }
@@ -425,16 +425,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this._menuElement.addEventListener('items-changed', e => {
               this._items = this._menuElement.items;
             });
-            this._menuElement.addEventListener('selected-changed', e => {
-              const selected = e.detail.value;
-              const current = this._valueElement.firstElementChild;
-              // when using renderer, event will be triggered on each re-opening,
-              // so check if it was fired for the same item and if so, do nothing
-              if (selected !== undefined && (!current || !this._items[selected].isEqualNode(current._sourceItem))) {
-                this._updateValueSlot();
-                this.opened = false;
-              }
-            });
+            this._menuElement.addEventListener('selected-changed', e => this._updateValueSlot());
             this._menuElement.addEventListener('keydown', e => this._onKeyDownInside(e));
             this._menuElement.addEventListener('click', e => this.opened = false);
           }
@@ -497,11 +488,6 @@ This program is available under Apache License Version 2.0, available at https:/
 
         _openedChanged(opened, wasOpened) {
           if (opened) {
-            // when using renderer, menu element is created on each re-opening
-            if (this.renderer) {
-              this._assignMenuElement();
-            }
-
             if (
               !this._overlayElement ||
               !this._menuElement ||
@@ -570,6 +556,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         _updateValueSlot() {
+          this.opened = false;
           this._valueElement.innerHTML = '';
 
           const selected = this._items[this._menuElement.selected];
