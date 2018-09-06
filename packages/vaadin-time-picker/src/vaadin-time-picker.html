@@ -6,6 +6,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
 <link rel="import" href="../../polymer/polymer-element.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
 <link rel="import" href="../../vaadin-combo-box/src/vaadin-combo-box-light.html">
 <link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
@@ -31,8 +32,13 @@ This program is available under Apache License Version 2.0, available at https:/
         min-width: 0;
       }
     </style>
-    <vaadin-combo-box-light allow-custom-value item-label-path="value" filtered-items="[[__dropdownItems]]"
-        disabled="[[disabled]]" readonly="[[readonly]]">
+    <vaadin-combo-box-light
+        allow-custom-value
+        item-label-path="value"
+        filtered-items="[[__dropdownItems]]"
+        disabled="[[disabled]]"
+        readonly="[[readonly]]"
+        theme$="[[theme]]">
       <template>
         [[item.label]]
       </template>
@@ -51,7 +57,8 @@ This program is available under Apache License Version 2.0, available at https:/
           readonly="[[readonly]]"
           role="application"
           aria-live="assertive"
-          aria-label$=[[label]]>
+          aria-label$="[[label]]"
+          theme$="[[theme]]">
         <span slot="suffix" part="toggle-button" role="button" aria-label$="[[i18n.selector]]"></span>
       </vaadin-time-picker-text-field>
     </vaadin-combo-box-light>
@@ -72,16 +79,51 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * When the selected `value` is changed, a `value-changed` event is triggered.
        *
+       * ### Styling
+       *
+       * The following custom properties are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       * `toggle-button` | The toggle button
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * The following state attributes are available for styling:
+       *
+       * Attribute    | Description | Part name
+       * -------------|-------------|------------
+       * `disabled` | Set to a disabled time picker | :host
+       * `readonly` | Set to a read only time picker | :host
+       * `invalid` | Set when the element is invalid | :host
+       * `focused` | Set when the element is focused | :host
+       * `focus-ring` | Set when the element is keyboard focused | :host
+       *
+       * In addition to `<vaadin-time-picker>` itself, the following internal
+       * components are themable:
+       *
+       * - `<vaadin-time-picker-text-field>`, see
+       *   [`<vaadin-text-field>` documentation](https://vaadin.com/components/vaadin-text-field/html-api/elements/Vaadin.TextFieldElement)
+       *   for the text field parts.
+       * - `<vaadin-combo-box-light>`, see
+       *   [`<vaadin-combo-box>` documentation](https://vaadin.com/components/vaadin-combo-box/html-api/elements/Vaadin.ComboBoxElement)
+       *   for the combo box parts.
+       *
+       * Note: the `theme` attribute value set on `<vaadin-time-picker>` is
+       * propagated to the internal themable components listed above.
+       *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
        * @mixes Vaadin.ControlStateMixin
        * @mixes Vaadin.ThemableMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @demo demo/index.html
        */
       class TimePickerElement extends
         Vaadin.ElementMixin(
           Vaadin.ControlStateMixin(
-            Vaadin.ThemableMixin(Polymer.Element))) {
+            Vaadin.ThemableMixin(
+              Vaadin.ThemePropertyMixin(Polymer.Element)))) {
 
         static get is() {
           return 'vaadin-time-picker';

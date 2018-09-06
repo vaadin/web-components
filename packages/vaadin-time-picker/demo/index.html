@@ -21,6 +21,25 @@
 </head>
 
 <body>
+  <dom-module id="custom-font" theme-for="vaadin-text-field vaadin-combo-box-item">
+    <template>
+      <style>
+        :host([theme~="custom"]) {
+          font-family: monospace;
+        }
+      </style>
+    </template>
+  </dom-module>
+  <dom-module id="custom-combo-box-overlay" theme-for="vaadin-combo-box-overlay">
+    <template>
+      <style>
+        :host([theme~="custom"]) [part="overlay"] {
+          background-image: linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct));
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

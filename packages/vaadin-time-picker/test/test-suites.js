@@ -4,5 +4,6 @@ window.TimePickerElementSuites = [
   'dropdown-test.html',
   'custom-functions.html',
   'form-input.html',
-  'keyboard-navigation.html'
+  'keyboard-navigation.html',
+  'styling.html'
 ];
