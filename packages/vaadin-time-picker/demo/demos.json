@@ -22,5 +22,16 @@
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Styling",
+    "url": "time-picker-styling-demos",
+    "src": "time-picker-styling-demos.html",
+    "meta": {
+      "title": "vaadin-time-picker Styling Examples",
+      "description": "",
+      "image": ""
+     }
+  }
   ]
 }
