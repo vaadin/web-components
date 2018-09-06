@@ -57,6 +57,7 @@
 
         it('should use renderer when it is defined', () => {
           notification.renderer = root => root.appendChild(rendererContent);
+          notification.opened = true;
           expect(notification._card.textContent.trim()).to.equal('renderer-content');
         });
 
@@ -74,6 +75,14 @@
             notification._observer.flush();
           }).to.throw(Error);
           expect(notification._notificationTemplate).to.be.not.ok;
+        });
+
+        it('should be possible to manually invoke renderer', () => {
+          notification.renderer = sinon.spy();
+          notification.opened = true;
+          expect(notification.renderer).to.be.calledOnce;
+          notification.render();
+          expect(notification.renderer).to.be.calledTwice;
         });
       });
 
