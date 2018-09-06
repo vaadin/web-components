@@ -15,36 +15,6 @@
 </head>
 <body>
 
-  <dom-module id="x-grid">
-    <template>
-      <vaadin-grid id="grid" columns="{{columns}}" size="100">
-        <vaadin-grid-column>
-          <template>cell</template>
-          <template class="header">header1</template>
-          <template class="footer">footer1</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column>
-          <template>cell</template>
-          <template class="header">header3</template>
-          <template class="footer">footer2</template>
-        </vaadin-grid-column>
-      </vaadin-grid>
-    </template>
-    <script>
-      document.addEventListener('WebComponentsReady', () => {
-        Polymer({
-          is: 'x-grid'
-        });
-      });
-    </script>
-  </dom-module>
-
-  <test-fixture id="grid">
-    <template>
-      <x-grid></x-grid>
-    </template>
-  </test-fixture>
-
   <test-fixture id="group">
     <template>
       <vaadin-grid-column-group>

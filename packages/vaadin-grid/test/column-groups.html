@@ -237,6 +237,68 @@
           headerRows.forEach(row => expect(row.hidden).to.be.true);
         });
 
+        describe('label', () => {
+
+          let emptyGroup;
+
+          beforeEach(() => {
+            emptyGroup = grid.querySelector('vaadin-grid-column-group');
+            emptyGroup.label = 'Label';
+          });
+
+          it('should show the label in the header cell', () => {
+            expect(getHeaderCellContent(0, 1).trim()).to.equal('Label');
+          });
+
+          it('should not override header renderer label', () => {
+            emptyGroup.headerRenderer = root => root.textContent = 'foo';
+            emptyGroup.label = 'Bar';
+            expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
+          });
+
+          it('should not override header template label', () => {
+            const template = document.createElement('template');
+            template.innerHTML = 'foo';
+            template.classList.add('header');
+            emptyGroup.appendChild(template);
+            flushColumns(grid);
+            emptyGroup.label = 'Bar';
+            expect(getHeaderCellContent(0, 1).trim()).to.equal('foo');
+          });
+
+        });
+
+        describe('Text align', () => {
+
+          let emptyGroup;
+
+          beforeEach(() => {
+            emptyGroup = grid.querySelector('vaadin-grid-column-group');
+            emptyGroup.headerRenderer = root => root.textContent = 'header';
+            emptyGroup.footerRenderer = root => root.textContent = 'footer';
+          });
+
+          it('should align visually to right', () => {
+            emptyGroup.textAlign = 'end';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'right']);
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'right']);
+          });
+
+          it('should align visually to left', () => {
+            grid.style.direction = 'rtl';
+            emptyGroup.textAlign = 'end';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.be.oneOf(['end', 'left']);
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.be.oneOf(['end', 'left']);
+          });
+
+          it('should align visually to center', () => {
+            emptyGroup.textAlign = 'center';
+            expect(getComputedStyle(getContainerCellContent(grid.$.header, 0, 1)).textAlign).to.equal('center');
+            expect(getComputedStyle(getContainerCellContent(grid.$.footer, 1, 1)).textAlign).to.equal('center');
+          });
+
+        });
+
       });
 
       describe('1 column 1 group', () => {

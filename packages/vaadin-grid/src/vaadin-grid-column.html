@@ -63,6 +63,20 @@ This program is available under Apache License Version 2.0, available at https:/
           type: Boolean
         },
 
+        /**
+         * Shown in the header cell of the column.
+         */
+        label: {
+          type: String
+        },
+
+        /**
+         * Aligns the columns cell content horizontally to either start, center or end
+         */
+        textAlign: {
+          type: String
+        },
+
         _lastFrozen: {
           type: Boolean,
           value: false
@@ -105,6 +119,8 @@ This program is available under Apache License Version 2.0, available at https:/
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
+        '_pathOrLabelChanged(path, label, _headerCell, _footerCell, _cells.*, renderer, headerRenderer, _bodyTemplate, _headerTemplate)',
+        '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
         '_setBodyTemplateOrRenderer(_bodyTemplate, renderer, _cells, _cells.*)',
@@ -321,6 +337,30 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
+    _pathOrLabelChanged(path, label, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
+      if (!headerRenderer && !headerTemplate && label !== undefined && headerCell) {
+        headerCell._content.textContent = label;
+      }
+
+      if (path && cells.value) {
+        if (!renderer && !bodyTemplate) {
+          const pathRenderer = (root, owner, {item}) => root.textContent = this.get(path, item);
+          cells.value.forEach(cell => cell._renderer = pathRenderer);
+          this._grid._update();
+        }
+
+        if (!headerRenderer && !headerTemplate && !label && headerCell) {
+          const generatedLabel = path
+            .substr(path.lastIndexOf('.') + 1)
+            .replace(/([A-Z])/g, '-$1').toLowerCase()
+            .replace(/-/, ' ')
+            .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
+          headerCell._content.textContent = generatedLabel;
+          headerCell.parentElement.hidden = false;
+        }
+      }
+    }
+
     _toggleAttribute(name, bool, node) {
       if (node.hasAttribute(name) === !bool) {
         if (bool) {
@@ -356,6 +396,34 @@ This program is available under Apache License Version 2.0, available at https:/
           }
         });
       }
+    }
+
+    _textAlignChanged(textAlign, _cells, _headerCell, _footerCell) {
+      if (textAlign === undefined) {
+        return;
+      }
+
+      let textAlignFallback;
+      if (getComputedStyle(this._grid).direction === 'ltr') {
+        if (textAlign === 'start') {
+          textAlignFallback = 'left';
+        } else if (textAlign === 'end') {
+          textAlignFallback = 'right';
+        }
+      } else {
+        if (textAlign === 'start') {
+          textAlignFallback = 'right';
+        } else if (textAlign === 'end') {
+          textAlignFallback = 'left';
+        }
+      }
+
+      this._allCells.forEach(cell => {
+        cell._content.style.textAlign = textAlign;
+        if (getComputedStyle(cell._content).textAlign !== textAlign) {
+          cell._content.style.textAlign = textAlignFallback;
+        }
+      });
     }
 
     _hiddenChanged(hidden, headerCell, footerCell, cells) {
@@ -435,6 +503,14 @@ This program is available under Apache License Version 2.0, available at https:/
            * with the previous content.
            */
           renderer: Function,
+
+          /**
+           * Path to an item sub-property whose value gets displayed in the column body cells.
+           * The property name is also shown in the column header if an explicit label/renderer isn't defined.
+           */
+          path: {
+            type: String
+          },
 
           _bodyTemplate: {
             type: Object

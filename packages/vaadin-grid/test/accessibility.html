@@ -306,6 +306,37 @@
         });
       });
 
+      describe('path and label', () => {
+
+        let col;
+
+        beforeEach(() => {
+          grid = fixture('grid-renderer');
+          col = document.createElement('vaadin-grid-column');
+          grid.appendChild(col);
+          grid.items = [{value: 'foo'}, {value: 'bar'}];
+        });
+
+        it('should have aria-rowcount on the table (path)', () => {
+          col.path = 'value';
+          flushGrid(grid);
+
+          const rowCount = Array.from(grid.$.table.querySelectorAll('tr'))
+            .filter(tr => !tr.hidden)
+            .length;
+          expect(grid.$.table.getAttribute('aria-rowcount')).to.equal(String(rowCount));
+          expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
+        });
+
+        it('should have aria-rowcount on the table (label)', () => {
+          col.label = 'Foo';
+          flushGrid(grid);
+
+          expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
+        });
+
+      });
+
       // Most tests from here need to be run in template and renderer modes
       ['template', 'renderer'].forEach(type => {
         describe(`${type}: size`, () => {
