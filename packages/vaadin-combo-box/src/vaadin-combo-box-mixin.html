@@ -258,6 +258,14 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
+
+    /**
+     * Manually invoke existing renderer.
+     */
+    render() {
+      this.$.overlay._selector.querySelectorAll('vaadin-combo-box-item').forEach(item => item._render());
+    }
+
     _setTemplateFromNodes(nodes) {
       this._itemTemplate = nodes.filter(node => node.localName && node.localName === 'template')[0] || this._itemTemplate;
     }
