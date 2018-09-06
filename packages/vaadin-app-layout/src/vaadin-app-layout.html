@@ -87,18 +87,18 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
     </style>
 
-    <div part="navbar">
-      <div part="branding">
+    <div part="navbar" role="navigation">
+      <div part="branding" role="banner">
         <slot name="branding"></slot>
       </div>
-      <div part="menu">
+      <div part="menu" role="menu">
         <slot name="menu"></slot>
       </div>
       <div part="secondary">
         <slot name="secondary"></slot>
       </div>
     </div>
-    <div part="content">
+    <div part="content" role="main">
       <slot></slot>
     </div>
 

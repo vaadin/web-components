@@ -29,9 +29,9 @@
 </vaadin-app-layout>
 ```
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="200" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot.png" width="500" alt="Screenshot of vaadin-app-layout">](https://vaadin.com/components/vaadin-app-layout)
 
-[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot-mobile.png" width="200" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/components/vaadin-app-layout)
+[<img src="https://raw.githubusercontent.com/vaadin/vaadin-app-layout/master/screenshot-mobile.png" width="350" alt="Screenshot of vaadin-app-layout on mobile">](https://vaadin.com/components/vaadin-app-layout)
 
 
 ## Installation
