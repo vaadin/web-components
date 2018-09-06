@@ -5,9 +5,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 -->
 
 <link rel="import" href="../../polymer/polymer-element.html">
-<link rel="import" href="../../vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../../vaadin-form-layout/vaadin-form-item.html">
-<link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
+<link rel="import" href="../../vaadin-form-layout/src/vaadin-form-layout.html">
+<link rel="import" href="../../vaadin-text-field/src/vaadin-text-field.html">
 
   <script>
     (function() {
@@ -76,7 +75,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __capitalize(path) {
-          return path.replace(/(^|[ \-_])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
+          return path.replace(/(^|[^\w])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
       }
 

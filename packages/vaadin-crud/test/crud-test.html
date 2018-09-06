@@ -6,6 +6,7 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../../vaadin-grid/test/helpers.html">
   <link rel="import" href="../vaadin-crud.html">
 </head>
 
@@ -13,6 +14,12 @@
   <test-fixture id="default">
     <template>
       <vaadin-crud></vaadin-crud>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="declarative">
+    <template>
+      <vaadin-crud items="[1, 2, 3]" item="{}"></vaadin-crud>
     </template>
   </test-fixture>
 
@@ -52,6 +59,23 @@
 
       it('should have a valid version number', () => {
         expect(customElements.get('vaadin-crud').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+      });
+
+      describe('declarative', () => {
+        beforeEach(done => {
+          crud = fixture('declarative');
+          Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(crud._grid);
+            done();
+          });
+        });
+
+        afterEach(() => crud.$.dialog.opened = false);
+
+        it('should be able to set items and item declaratively', () => {
+          expect(crud._grid._columnTree.length).to.be.equal(1);
+          expect(crud._form.__fields.length).to.be.equal(1);
+        });
       });
 
       describe('items', () => {
