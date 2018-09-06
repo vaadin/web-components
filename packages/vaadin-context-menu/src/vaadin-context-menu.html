@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="vaadin-contextmenu-event.html">
 <link rel="import" href="vaadin-device-detector.html">
 <link rel="import" href="../../vaadin-element-mixin/vaadin-element-mixin.html">
+<link rel="import" href="../../vaadin-themable-mixin/vaadin-theme-property-mixin.html">
 <link rel="import" href="vaadin-context-menu-overlay.html">
 
 <dom-module id="vaadin-context-menu">
@@ -33,7 +34,8 @@ This program is available under Apache License Version 2.0, available at https:/
         on-vaadin-overlay-open="_onVaadinOverlayOpen"
         with-backdrop="[[_phone]]"
         phone$="[[_phone]]"
-        model="[[_context]]">
+        model="[[_context]]"
+        theme$="[[theme]]">
     </vaadin-context-menu-overlay>
   </template>
   <script>
@@ -199,14 +201,26 @@ This program is available under Apache License Version 2.0, available at https:/
        *
        * ### Styling
        *
+       * `<vaadin-context-menu>` uses `<vaadin-context-menu-overlay>` internal
+       * themable component as the actual visible context menu overlay. See
+       * See [`<vaadin-overlay>` documentation](https://github.com/vaadin/vaadin-overlay/blob/master/src/vaadin-overlay.html)
+       * for `<vaadin-context-menu-overlay>` parts.
+       *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
+       *
+       * Note: the `theme` attribute value set on `<vaadin-context-menu>` is
+       * propagated to the internal `<vaadin-context-menu-overlay>` component.
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
+       * @mixes Vaadin.ThemePropertyMixin
        * @mixes Polymer.GestureEventListeners
        * @demo demo/index.html
        */
-      class ContextMenuElement extends Vaadin.ElementMixin(Polymer.GestureEventListeners(Polymer.Element)) {
+      class ContextMenuElement extends
+        Vaadin.ElementMixin(
+          Vaadin.ThemePropertyMixin(
+            Polymer.GestureEventListeners(Polymer.Element))) {
 
         static get is() {
           return 'vaadin-context-menu';

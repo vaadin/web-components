@@ -25,6 +25,16 @@
 </head>
 
 <body>
+  <dom-module id="custom-context-menu-overlay" theme-for="vaadin-context-menu-overlay">
+    <template>
+      <style>
+        :host([theme~="custom"]) [part~="overlay"] {
+          background: linear-gradient(hsla(214, 61%, 25%, 0.05), hsla(214, 61%, 25%, 0.05)) #fff;
+        }
+      </style>
+    </template>
+  </dom-module>
+
   <vaadin-component-demo config-src="demos.json"></vaadin-component-demo>
 </body>
 </html>

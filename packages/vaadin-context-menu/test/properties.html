@@ -34,6 +34,14 @@
       </template>
     </test-fixture>
 
+    <test-fixture id="withTheme">
+      <template>
+        <vaadin-context-menu theme="foo">
+          <template></template>
+        </vaadin-context-menu>
+      </template>
+    </test-fixture>
+
     <script>
       describe('properties', () => {
         describe('context', () => {
@@ -172,6 +180,16 @@
               menu.listenOn = null;
               expect(menu._oldOpenOn).not.to.be.ok;
             });
+          });
+        });
+
+        describe('theme attribute', () => {
+          let menu;
+
+          beforeEach(() => menu = fixture('withTheme'));
+
+          it('should propagate theme attribute to overlay', () => {
+            expect(menu.$.overlay.getAttribute('theme')).to.equal('foo');
           });
         });
       });
