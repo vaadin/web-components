@@ -81,6 +81,7 @@ This program is available under Apache License Version 2.0, available at https:/
        * -----------|-------------|------------
        * `disabled`   | Set when the checkbox group and its children are disabled. | :host
        * `has-label` | Set when the element has a label | :host
+       * `has-value` | Set when the element has a value | :host
        * `required` | Set when the element is required | :host
        * `invalid` | Set when the element is invalid | :host
        *
@@ -254,6 +255,13 @@ This program is available under Apache License Version 2.0, available at https:/
           if (value.length === 0 && this._oldValue === undefined) {
             return;
           }
+
+          if (value.length) {
+            this.setAttribute('has-value', '');
+          } else {
+            this.removeAttribute('has-value');
+          }
+
           this._oldValue = value;
           // set a flag to avoid updating loop
           this._updatingValue = true;
