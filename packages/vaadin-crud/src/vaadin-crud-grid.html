@@ -121,7 +121,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __createGroup(parent, path, object) {
           const grp = document.createElement('vaadin-grid-column-group');
-          grp.innerHTML = `<template class="header">${this.__capitalize(path.replace(/^.*\./, ''))}</template>`;
+          grp.headerRenderer  = root => root.textContent = this.__capitalize(path.replace(/^.*\./, ''));
           parent.appendChild(grp);
           return grp;
         }
