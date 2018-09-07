@@ -286,13 +286,13 @@
       describe('objects', () => {
         it('should be possible to set nested properties to an object', () => {
           const o = {};
-          window.Vaadin.CrudElement.__setPropertyByPath(o, 'a.b.c', 'd');
+          crud.__set('a.b.c', 'd', o);
           expect(o.a.b.c).to.be.equal('d');
         });
 
         it('should be possible to get nested properties to an object', () => {
           const o = {a: {b: {c: 'd'}}};
-          expect(window.Vaadin.CrudElement.__getPropertyByPath(o, 'a.b.c')).to.be.equal('d');
+          expect(crud.get('a.b.c', o)).to.be.equal('d');
         });
       });
 
