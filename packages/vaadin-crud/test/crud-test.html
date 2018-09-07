@@ -13,25 +13,33 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-crud></vaadin-crud>
+      <vaadin-crud style="width: 300px"></vaadin-crud>
     </template>
   </test-fixture>
 
   <test-fixture id="declarative">
     <template>
-      <vaadin-crud items="[1, 2, 3]" item="{}"></vaadin-crud>
+      <vaadin-crud items='[{"foo": "bar"}]' item="{}"></vaadin-crud>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="grid">
+    <template>
+      <vaadin-grid>
+        <vaadin-grid-column><template>[[item]]</template></vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="form">
+    <template>
+      <vaadin-form-layout>
+        <vaadin-text-field path="foo"></vaadin-text-field>
+      </vaadin-form-layout>
     </template>
   </test-fixture>
 
   <script>
-    function listenOnce(element, eventName, callback) {
-      const listener = e => {
-        element.removeEventListener(eventName, listener);
-        callback(e);
-      };
-      element.addEventListener(eventName, listener);
-    }
-
     describe('crud test', () => {
       var crud;
 
@@ -74,7 +82,7 @@
 
         it('should be able to set items and item declaratively', () => {
           expect(crud._grid._columnTree.length).to.be.equal(1);
-          expect(crud._form.__fields.length).to.be.equal(1);
+          expect(crud._form._fields.length).to.be.equal(1);
         });
       });
 
@@ -271,6 +279,101 @@
               btnConfDialog(crud.$.confirmDelete, 'confirm').click();
               expect(crud.$.dialog.opened).to.be.true;
             });
+          });
+        });
+      });
+
+      describe('objects', () => {
+        it('should be possible to set nested properties to an object', () => {
+          const o = {};
+          window.Vaadin.CrudElement.__setPropertyByPath(o, 'a.b.c', 'd');
+          expect(o.a.b.c).to.be.equal('d');
+        });
+
+        it('should be possible to get nested properties to an object', () => {
+          const o = {a: {b: {c: 'd'}}};
+          expect(window.Vaadin.CrudElement.__getPropertyByPath(o, 'a.b.c')).to.be.equal('d');
+        });
+      });
+
+      describe('custom', () => {
+        let grid, form;
+
+        beforeEach(done => {
+          grid = fixture('grid');
+          form = fixture('form');
+          Polymer.RenderStatus.afterNextRender(grid, done);
+        });
+
+        afterEach(done => {
+          crud.$.dialog.opened = false;
+          setTimeout(done);
+        });
+
+        it('should be able to provide a custom grid', done => {
+          crud.appendChild(grid);
+          crud._observer.flush();
+          crud.items = [1, 2];
+
+          Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
+            expect(crud._grid).to.be.equal(grid);
+            expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('1');
+            expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
+            done();
+          });
+        });
+
+        it('should not customize the form without a proper slot', done => {
+          crud.appendChild(form);
+          crud._observer.flush();
+          crud.items = [{foo: 1}];
+
+          Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
+            crud._grid.activeItem = crud.items[0];
+
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
+              expect(crud._form).not.to.be.equal(form);
+              done();
+            });
+          });
+        });
+
+        it('should be able to provide a custom form', done => {
+          form.setAttribute('slot', 'form');
+          crud.appendChild(form);
+          crud._observer.flush();
+          crud.items = [{foo: 'bar'}];
+
+          Polymer.RenderStatus.afterNextRender(crud, () => {
+            window.flushGrid(grid);
+            crud._grid.activeItem = crud.items[0];
+
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
+              expect(crud._form).to.be.equal(form);
+              expect(form.querySelector('vaadin-text-field').value).to.be.equal('bar');
+              done();
+            });
+          });
+        });
+
+        it('should be able to provide a custom dataProvider', done => {
+          // FIXME: the way how template is created in crud grid does not work
+          if (window.location.search.match('shadydom')) {
+            done();
+            return;
+          }
+
+          crud.dataProvider = (params, callback) => {
+            callback([1, 2], 2);
+          };
+
+          Polymer.RenderStatus.afterNextRender(crud.$.dialog, () => {
+            window.flushGrid(grid);
+            expect(getBodyCellContent(crud._grid, 0, 0).textContent).to.be.equal('1');
+            expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
+            done();
           });
         });
       });

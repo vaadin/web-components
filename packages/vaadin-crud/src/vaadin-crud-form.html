@@ -35,13 +35,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         configure(object) {
           this.innerHTML = '';
-          this.__fields = [];
+          this._fields = [];
           this.__createFields(this, object);
           this.notifyResize();
         }
 
         __onItemChange(item) {
-          if (!this.__fields) {
+          if (!this._fields) {
             this.configure(item);
           }
         }
@@ -52,7 +52,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           field.path = path;
           field.required = true;
           parent.appendChild(field);
-          this.__fields.push(field);
+          this._fields.push(field);
           return field;
         }
 
@@ -69,13 +69,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                 this.__createField(parent, newPath);
               }
             });
-          } else {
-            this.__createField(parent, '');
+            if (!this._fields.length) {
+              this._fields = undefined;
+            }
           }
         }
 
         __capitalize(path) {
-          return path.replace(/(^|[^\w])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
+          return path.toLowerCase().replace(/(^|[^\w])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
         }
       }
 

@@ -22,12 +22,10 @@ jobs:
     - if: type = pull_request
       env: POLYMER=2
       addons:
-        firefox: latest
         chrome: stable
     - if: type = pull_request
       env: POLYMER=3
       addons:
-        firefox: latest
         chrome: stable
     - if: type = cron
       env: TEST_SUITE=unit_tests POLYMER=2

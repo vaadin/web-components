@@ -27,7 +27,7 @@ module.exports = {
       exclude: [],
       thresholds: {
         global: {
-          statements: 80
+          statements: 100
         }
       }
     }
@@ -46,7 +46,8 @@ module.exports = {
     ];
 
     const saucelabsPlatformsDesktop = [
-      'macOS 10.13/safari@11.1'
+      'macOS 10.13/safari@11.1',
+      'Windows 10/firefox@latest'
     ];
 
     const saucelabsPlatforms = [
