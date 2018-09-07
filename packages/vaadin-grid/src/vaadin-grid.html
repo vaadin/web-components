@@ -665,6 +665,22 @@ This program is available under Apache License Version 2.0, available at https:/
             (this._rowDetailsTemplate || this.rowDetailsRenderer) && this._isDetailsOpened(row._item)
         };
       }
+
+      /**
+       * Manually invoke existing renderers for all the columns
+       * (header, footer and body cells) and opened row details.
+       */
+      render() {
+        if (this._columnTree) {
+          // header and footer renderers
+          this._columnTree.forEach(level => {
+            level.forEach(column => column._renderHeaderAndFooter());
+          });
+
+          // body and row details renderers
+          this._update();
+        }
+      }
     }
 
     customElements.define(GridElement.is, GridElement);
