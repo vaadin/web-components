@@ -32,7 +32,7 @@
       });
 
       it('should have a version number', () => {
-        expect(customElements.get('vaadin-crud-grid').version).to.match(/^(\d+\.)?(\d+\.)?(\*|\d+)$/);
+        expect(customElements.get('vaadin-crud-grid').version).to.be.ok;
       });
 
       it('should not generate any column when providing an empty item list', () => {
@@ -93,6 +93,12 @@
           it('should automatically add sorters to columns', () => {
             [0, 1, 2].forEach(c => {
               expect(getHeaderCellContent(crudGrid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
+            });
+          });
+
+          it('should automatically add filters to columns', () => {
+            [0, 1, 2].forEach(c => {
+              expect(getHeaderCellContent(crudGrid, 1, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
             });
           });
 
