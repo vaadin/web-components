@@ -85,9 +85,15 @@
           });
 
           it('should automatically map columns from items', () => {
-            expect(getHeaderCellContent(crudGrid, 1, 0).textContent).to.be.equal('First');
-            expect(getHeaderCellContent(crudGrid, 1, 1).textContent).to.be.equal('Last');
-            expect(getHeaderCellContent(crudGrid, 1, 2).textContent).to.be.equal('Role');
+            expect(getHeaderCellContent(crudGrid, 1, 0).textContent.trim()).to.be.equal('First');
+            expect(getHeaderCellContent(crudGrid, 1, 1).textContent.trim()).to.be.equal('Last');
+            expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('Role');
+          });
+
+          it('should automatically add sorters to columns', () => {
+            [0, 1, 2].forEach(c => {
+              expect(getHeaderCellContent(crudGrid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
+            });
           });
 
           it('should automatically create body template for data', () => {

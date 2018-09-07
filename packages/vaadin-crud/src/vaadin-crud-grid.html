@@ -8,6 +8,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column-group.html">
+<link rel="import" href="../../vaadin-grid/src/vaadin-grid-sorter.html">
 
   <script>
     (function() {
@@ -65,7 +66,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           const col = document.createElement('vaadin-grid-column');
           col.innerHTML = `<template>[[item${path ? '.' + path : ''}]]</template>`;
           if (path) {
-            col.innerHTML += `<template class="header">${this.__capitalize(path.replace(/^.*\./, ''))}</template>`;
+            col.innerHTML += `
+              <template class="header">
+                <vaadin-grid-sorter path="${path}">${this.__capitalize(path.replace(/^.*\./, ''))}</vaadin-grid-sorter>
+              </template>`;
           }
           parent.appendChild(col);
           return col;
