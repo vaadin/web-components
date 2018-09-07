@@ -10,6 +10,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-button/src/vaadin-button.html">
 <link rel="import" href="../../vaadin-dialog/src/vaadin-dialog.html">
 <link rel="import" href="../../vaadin-confirm-dialog/src/vaadin-confirm-dialog.html">
+<link rel="import" href="../../vaadin-license-checker/vaadin-license-checker.html">
 <link rel="import" href="vaadin-crud-grid.html">
 <link rel="import" href="vaadin-crud-form.html">
 
@@ -373,6 +374,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * @namespace Vaadin
        */
       window.Vaadin.CrudElement = CrudElement;
+
+      const licenseChecker = window.Vaadin.developmentModeCallback
+        && window.Vaadin.developmentModeCallback['vaadin-license-checker'];
+      if (typeof licenseChecker === 'function') {
+        licenseChecker(CrudElement);
+      }
     })();
   </script>
 </dom-module>
