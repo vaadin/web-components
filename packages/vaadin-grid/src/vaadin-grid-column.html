@@ -231,6 +231,23 @@ This program is available under Apache License Version 2.0, available at https:/
       return template;
     }
 
+    _renderHeaderAndFooter() {
+      if (this.headerRenderer) {
+        this.__runRenderer(this.headerRenderer, this._headerCell);
+      }
+      if (this.footerRenderer) {
+        this.__runRenderer(this.footerRenderer, this._footerCell);
+      }
+    }
+
+    __runRenderer(renderer, cell, model) {
+      const args = [cell._content, this];
+      if (model && model.item) {
+        args.push(model);
+      }
+      renderer.apply(this, args);
+    }
+
     __setColumnTemplateOrRenderer(template, renderer, cells) {
       if (template && renderer) {
         throw new Error('You should only use either a renderer or a template');
@@ -243,7 +260,7 @@ This program is available under Apache License Version 2.0, available at https:/
           cell._renderer = renderer;
 
           if (model.item || renderer === this.headerRenderer || renderer === this.footerRenderer) {
-            renderer.call(this, cell._content, this, model);
+            this.__runRenderer(renderer, cell, model);
           }
         } else if (cell._template !== template) {
           cell._template = template;

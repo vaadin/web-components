@@ -157,6 +157,7 @@
           });
 
         });
+
       });
 
       describe('header cell', () => {
@@ -192,6 +193,23 @@
 
         it('should throw an error when setting a template if there is already a renderer', () => {
           expect(() => column._footerTemplate = {}).to.throw(Error);
+        });
+      });
+
+      describe('manual invocation', () => {
+        it('should support `render()` method to invoke all the renderers', () => {
+          column.renderer = sinon.spy();
+          column.headerRenderer = sinon.spy();
+          column.footerRenderer = sinon.spy();
+          grid.rowDetailsRenderer = sinon.spy();
+          grid.detailsOpenedItems = grid.items;
+          const renderers = [column.renderer, column.headerRenderer, column.footerRenderer, grid.rowDetailsRenderer];
+          flushGrid(grid);
+          renderers.forEach(renderer => renderer.reset());
+          grid.render();
+          renderers.forEach(renderer => {
+            expect(renderer).to.be.called;
+          });
         });
       });
     });
