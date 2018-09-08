@@ -25,22 +25,27 @@
           }
           // Helper to get the index of an item with unique `_id` in an array
           function getIdx(array, item) {
-            return array.reduce((r, obj, idx) => r < 0 && (obj._id === item._id ? idx : r, -1));
+            return array.reduce(function(r, obj, idx) {
+              return (r < 0 && obj._id === item._id) ? idx : r;
+            }, -1);
           }
           // Helper to filter an array based on the param.filters array
           function filter(array, filters) {
-            return array.filter(item =>
-              filters.reduce((r, f) =>
-                r && RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item)), true));
+            return array.filter(function(item) {
+              return filters.reduce(function(r, f) {
+                return r && RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item));
+              }, true);
+            });
           }
           // Helper to sort an array based on the param.filters array
           function sort(array, sorts) {
-            return array.slice(0).sort((item1, item2) =>
-              sorts.reduce((r, s) => {
+            return array.slice(0).sort(function(item1, item2) {
+              return sorts.reduce(function(r, s) {
                 const a = Polymer.Base.get(s.path, s.direction == 'asc' ? item1 : item2) || '';
                 const b = Polymer.Base.get(s.path, s.direction == 'asc' ? item2 : item1) || '';
                 return r > 0 || a.localeCompare(b);
-              }, 0));
+              }, 0);
+            });
           }
 
           const crud = document.querySelector('vaadin-crud');
@@ -51,17 +56,16 @@
             callback(chunk, people.length);
           };
           // Configure CRUD Create and Update
-          crud.addEventListener('save', e => {
+          crud.addEventListener('save', function(e) {
             const item = e.detail.item;
             // Set the unique id in case of a new item
             item._id = item._id || id ++;
             people[getIdx(people, item)] = item;
           });
           // Configure CRUD Delete
-          crud.addEventListener('delete', e => {
+          crud.addEventListener('delete', function(e) {
             people.splice(getIdx(people, e.detail.item), 1);
           });
-
         });
         </script>
       </template>
