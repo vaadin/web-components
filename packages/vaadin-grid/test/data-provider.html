@@ -81,6 +81,39 @@
     </template>
   </test-fixture>
 
+  <dom-module id="page-size-grid">
+    <template>
+      <vaadin-grid data-provider="[[dataProvider]]" size="[[size]]" id="grid">
+        <vaadin-grid-column>
+          <template class="header">#</template>
+          <template>[[item.value]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+    <script>
+      customElements.whenDefined('vaadin-grid').then(() => {
+        class PageSizeGrid extends Polymer.Element {
+          static get is() {
+            return 'page-size-grid';
+          }
+          ready() {
+            super.ready();
+            this.$.grid.pageSize = 10;
+            this.size = 200;
+            this.dataProvider = infiniteDataProvider;
+          }
+        }
+        customElements.define('page-size-grid', PageSizeGrid);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="page-size">
+    <template>
+      <page-size-grid></page-size-grid>
+    </template>
+  </test-fixture>
+
   <x-grid style="visibility: hidden;"></x-grid>
 
   <script>
@@ -203,6 +236,13 @@
             const page = grid.dataProvider.getCall(i).args[0].page;
             expect(page).to.be.above(-1);
           }
+        });
+
+        it('should render grid rows when setting page-size before size', () => {
+          const container = fixture('page-size');
+          const grid = container.$.grid;
+          flushGrid(grid);
+          expect(getCellContent(getFirstCell(grid)).textContent.trim()).to.equal('foo0');
         });
 
       });
