@@ -152,29 +152,26 @@ This program is available under Apache License Version 2.0, available at https:/
 
       /** @protected */
       disconnectedCallback() {
-        super.disconnectedCallback();
+        this._grid.removeEventListener('active-item-changed', this._boundOnActiveItemChanged);
+        this._grid.removeEventListener('data-provider-changed', this._boundOnDataProviderChanged);
+        this._grid.removeEventListener('filter-changed', this._boundOnSelectedItemsChanged);
+        this._grid.removeEventListener('selected-items-changed', this._boundOnSelectedItemsChanged);
 
-        if (this._grid) {
-          this._grid.removeEventListener('active-item-changed', this._boundOnActiveItemChanged);
-          this._grid.removeEventListener('data-provider-changed', this._boundOnDataProviderChanged);
-          this._grid.removeEventListener('filter-changed', this._boundOnSelectedItemsChanged);
-          this._grid.removeEventListener('selected-items-changed', this._boundOnSelectedItemsChanged);
-
-          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-          if (isSafari && window.ShadyDOM && this.parentElement) {
-            // Detach might have beem caused by order change.
-            // Shady on safari doesn't restore isAttached so we'll need to do it manually.
-            const parent = this.parentElement;
-            const nextSibling = this.nextElementSibling;
-            parent.removeChild(this);
-            if (nextSibling) {
-              parent.insertBefore(this, nextSibling);
-            } else {
-              parent.appendChild(this);
-            }
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari && window.ShadyDOM && this.parentElement) {
+          // Detach might have beem caused by order change.
+          // Shady on safari doesn't restore isAttached so we'll need to do it manually.
+          const parent = this.parentElement;
+          const nextSibling = this.nextElementSibling;
+          parent.removeChild(this);
+          if (nextSibling) {
+            parent.insertBefore(this, nextSibling);
+          } else {
+            parent.appendChild(this);
           }
-
         }
+
+        super.disconnectedCallback();
       }
 
       /** @protected */
