@@ -75,7 +75,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               const label = this.__capitalize(path.replace(/^.*\./, ''));
 
               const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'name.first');
+              sorter.setAttribute('path', path);
               sorter.textContent = label;
 
               const filter = window.document.createElement('vaadin-grid-filter');
