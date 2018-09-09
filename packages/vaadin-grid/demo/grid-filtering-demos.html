@@ -38,7 +38,7 @@
               emailColumn.headerRenderer = function(root) {
                 root.innerHTML =
                   '<vaadin-grid-filter path="email">' +
-                  '  <vaadin-text-field slot="filter" focus-target placeholder="Email">Email</vaadin-text-field>' +
+                  '  <vaadin-text-field slot="filter" focus-target placeholder="Email" style="max-width: 100%">Email</vaadin-text-field>' +
                   '</vaadin-grid-filter>';
                 root.querySelector('vaadin-text-field').addEventListener('value-changed', function(e) {
                   root.querySelector('vaadin-grid-filter').value = e.detail.value;
@@ -104,7 +104,7 @@
               lastNameColumn.headerRenderer = function(root) {
                 root.innerHTML =
                   '<vaadin-grid-filter path="lastName">' +
-                  '  <vaadin-text-field slot="filter" focus-target placeholder="Last Name"></vaadin-text-field>' +
+                  '  <vaadin-text-field slot="filter" focus-target placeholder="Last Name" style="max-width: 100%"></vaadin-text-field>' +
                   '</vaadin-grid-filter>';
                 root.querySelector('vaadin-text-field').addEventListener('value-changed', function(e) {
                   root.querySelector('vaadin-grid-filter').value = e.detail.value;
