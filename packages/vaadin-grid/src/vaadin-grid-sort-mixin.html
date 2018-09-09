@@ -72,12 +72,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._sorters.forEach((sorter, index) => sorter._order = this._sorters.length > 1 ? index : null, this);
       } else {
-        this._sorters.forEach(sorter => {
-          sorter._order = null;
-          sorter.direction = null;
-        });
-
         if (sorter.direction) {
+          this._sorters.forEach(sorter => {
+            sorter._order = null;
+            sorter.direction = null;
+          });
           this._sorters = [sorter];
         }
       }

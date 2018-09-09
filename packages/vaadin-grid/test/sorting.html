@@ -57,6 +57,29 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="multiple-sorters">
+    <template>
+      <vaadin-grid style="width: 200px; height: 200px;">
+        <vaadin-grid-column>
+          <template class="header">
+            <vaadin-grid-sorter path="first" direction="asc">
+              <span class="title">first</span>
+            </vaadin-grid-sorter>
+          </template>
+          <template>[[item.first]]</template>
+        </vaadin-grid-column>
+        <vaadin-grid-column>
+          <template class="header">
+            <span class="title">last</span>
+            <vaadin-grid-sorter path="last">
+            </vaadin-grid-sorter>
+          </template>
+          <template>[[item.last]]</template>
+        </vaadin-grid-column>
+      </vaadin-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('sorting', () => {
 
@@ -385,6 +408,13 @@
 
             expect(sorterFirst.direction).to.be.null;
             expect(sorterLast.direction).to.eql('desc');
+          });
+
+          it('should set direction to also other than last sorter', () => {
+            const grid = fixture('multiple-sorters');
+            flushGrid(grid);
+            const sorterFirst = getHeaderCellContent(grid, 0, 0).querySelector('vaadin-grid-sorter');
+            expect(sorterFirst.direction).to.eql('asc');
           });
         });
 
