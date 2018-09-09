@@ -7,7 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../../vaadin-grid/test/helpers.html">
-  <link rel="import" href="../vaadin-crud.html">
+  <link rel="import" href="../src/vaadin-crud.html">
 </head>
 
 <body>
@@ -34,6 +34,7 @@
   <test-fixture id="form">
     <template>
       <vaadin-form-layout>
+        <head>Foo Editor</head>
         <vaadin-text-field path="foo"></vaadin-text-field>
       </vaadin-form-layout>
     </template>
@@ -154,6 +155,57 @@
               btnConfDialog(crud.$.confirmDelete, 'confirm').click();
               expect(crud.$.confirmDelete.opened).not.to.be.ok;
               expect(crud.$.dialog.opened).not.to.be.ok;
+            });
+          });
+        });
+
+        describe('flags', () => {
+          afterEach(done => {
+            crud.$.dialog.opened = false;
+            setTimeout(done);
+          });
+
+          it('should configure dirty and new flags on new', () => {
+            crud.$.new.click();
+            expect(crud.__isDirty).not.to.be.true;
+            expect(crud.__isNew).to.be.true;
+          });
+
+          it('should configure dirty and new flags on edit', () => {
+            crud._grid.activeItem = crud.items[0];
+            expect(crud.__isDirty).not.to.be.true;
+            expect(crud.__isNew).not.to.be.true;
+          });
+
+          it('should set dirty on editor changes', () => {
+            crud._grid.activeItem = crud.items[0];
+            crud._form.dispatchEvent(new Event('change'));
+            expect(crud.__isDirty).to.be.true;
+          });
+
+          it('should hide delete button on new', done => {
+            crud.$.new.click();
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              expect(btnDelete().hasAttribute('hidden')).to.be.true;
+              done();
+            });
+          });
+
+          it('should show delete button and disable save button on edit', done => {
+            crud._grid.activeItem = crud.items[0];
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).to.be.true;
+              expect(btnDelete().hasAttribute('hidden')).not.to.be.true;
+              done();
+            });
+          });
+
+          it('should enable save button on change', done => {
+            crud._grid.activeItem = crud.items[0];
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              crud._form.dispatchEvent(new Event('change'));
+              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).not.to.be.true;
+              done();
             });
           });
         });
