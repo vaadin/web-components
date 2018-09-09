@@ -47,16 +47,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
     <div id="editor">
       <div id="buttons" style="margin-top: 30px; display: flex; min-width: 100%;">
-        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
+        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
         <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew(item)]]">Delete</vaadin-button>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete</vaadin-button>
       </div>
     </div>
 
     <vaadin-button id="new" on-click="__new">New</vaadin-button>
 
-    <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
+    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]]></vaadin-dialog>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
       reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
@@ -114,7 +114,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: Function,
               observer: '__onDataProviderChange'
             },
-            _dirty: Boolean
+            __isDirty: Boolean,
+            __isNew: Boolean
           };
         }
 
@@ -149,7 +150,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onFormChanges(e) {
-          this._dirty = true;
+          this.__isDirty = true;
         }
 
         __onGridChange(grid, old) {
@@ -199,10 +200,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __onItemChange(item, old) {
           if (this._form && item) {
             if (!this._fields.length && this._form.configure) {
-              const obj = this.__isNew(item) ? this._grid._cache.items[0] : item;
-              this._form.configure(obj);
+              this._form.configure(this._grid._cache.items[0]);
             }
-            this.__fillForm(item);
+            this._form.item = item;
+            this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
           }
           this.$.dialog.opened = !!item;
         }
@@ -214,16 +215,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return this.__fields;
         }
 
-        __isNew(item) {
-          return !item || !Object.keys(item).length;
-        }
-
-        __fillForm(item) {
-          this._form.item = item;
-          this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
-          this._dirty = false;
-        }
-
         __validate() {
           return this._fields.reduce((prev, e) => e.validate() && prev, true);
         }
@@ -233,20 +224,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __new() {
-          /**
-           * Fired when user wants to create a new item.
-           *
-           * @event new
-           */
-          const evt = this.dispatchEvent(new CustomEvent('new', {cancelable: true}));
-          if (evt) {
-            this.item = {};
-          } else {
-            this.$.dialog.opened = true;
-          }
+          this.__openEditor();
         }
 
         __edit(item) {
+          this.__openEditor(item);
+        }
+
+        __openEditor(item) {
           /**
            * Fired when user wants to edit an existing item. If the default is prevented, then
            * a new item is not assigned to the form, giving that responsability to the app, though
@@ -255,18 +240,24 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
            * @event edit
            * @param {Object} detail.item the item to edit
            */
-          const evt = this.dispatchEvent(new CustomEvent('edit', {detail: {item: item}, cancelable: true}));
+          /**
+           * Fired when user wants to create a new item.
+           *
+           * @event new
+           */
+          const evt = this.dispatchEvent(new CustomEvent(item ? 'edit' : 'new', {detail: {item: item}, cancelable: true}));
           if (evt) {
-            this.item = item;
+            this.item = item || {};
           } else {
             this.$.dialog.opened = true;
           }
+          this.__isDirty = false;
+          this.__isNew = !item;
         }
 
         __save() {
           if (this.__validate()) {
             const item = this.item || {};
-            const isNew = this.__isNew(this.item);
 
             this._fields.forEach(e => this.__set(e.path || e.getAttribute('path'), e.value, this.item));
             /**
@@ -280,7 +271,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
             if (evt) {
               if (this.items) {
-                isNew && this.items.push(item);
+                this.__isNew && this.items.push(item);
               }
               this._grid.clearCache();
               this.__closeEditor();
@@ -289,7 +280,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __cancel() {
-          if (this._dirty) {
+          if (this.__isDirty) {
             this.$.confirmCancel.opened = true;
           } else {
             this.__confirmCancel();
