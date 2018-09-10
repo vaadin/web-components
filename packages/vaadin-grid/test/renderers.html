@@ -110,6 +110,11 @@
             expect(getBodyCellContent(grid, 1, 1).innerHTML).to.eql('1 baz');
           });
 
+          it('should be open when renderer is set', () => {
+            grid.detailsOpenedItems = grid.items;
+            expect(getContainerCell(grid.$.items, 1, 1).hidden).to.be.false;
+          });
+
           it('should pass column as `owner` and `this` to the renderer', () => {
             grid.rowDetailsRenderer = function(root, owner, model) {
               expect(this).to.eql(owner);
@@ -130,6 +135,37 @@
           it('should throw an error when setting a template if there is already a renderer', () => {
             expect(() => grid._rowDetailsTemplate = {}).to.throw(Error);
           });
+
+          it('should not invoke body cell renderer on assign', () => {
+            column.renderer = sinon.spy();
+            column.renderer.reset();
+            grid.rowDetailsRenderer = () => {};
+            expect(column.renderer.called).to.be.false;
+          });
+
+          it('should invoke body cell renderer on assign if there are open details', () => {
+            grid.detailsOpenedItems = grid.items;
+            column.renderer = sinon.spy();
+            column.renderer.reset();
+            grid.rowDetailsRenderer = () => {};
+            expect(column.renderer.called).to.be.true;
+          });
+
+          it('should invoke only once per open details cell', () => {
+            grid.rowDetailsRenderer = sinon.spy();
+            grid.rowDetailsRenderer.reset();
+            grid.detailsOpenedItems = [grid.items[0]];
+            expect(grid.rowDetailsRenderer.calledOnce).to.be.true;
+          });
+
+          it('should not invoke body renderers on detailsOpenedItems assign', () => {
+            grid.rowDetailsRenderer = undefined;
+            column.renderer = sinon.spy();
+            column.renderer.reset();
+            grid.detailsOpenedItems = [grid.items[0]];
+            expect(column.renderer).not.to.be.called;
+          });
+
         });
 
         describe('cell-activate', () => {

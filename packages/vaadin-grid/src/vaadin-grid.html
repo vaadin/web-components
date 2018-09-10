@@ -582,7 +582,6 @@ This program is available under Apache License Version 2.0, available at https:/
         row._item = item;
         const model = this.__getRowModel(row);
 
-        this._a11yUpdateRowDetailsOpened(row, model.detailsOpened);
         this._toggleAttribute('selected', model.selected, row);
         this._a11yUpdateRowSelected(row, model.selected);
         this._a11yUpdateRowLevel(row, model.level);

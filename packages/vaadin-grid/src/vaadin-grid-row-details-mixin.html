@@ -52,14 +52,17 @@ This program is available under Apache License Version 2.0, available at https:/
 
     static get observers() {
       return [
-        '_detailsOpenedItemsChanged(detailsOpenedItems.*, dataProvider, _physicalCountVal, _rowDetailsTemplate, rowDetailsRenderer)',
+        '_detailsOpenedItemsChanged(detailsOpenedItems.*, _rowDetailsTemplate, rowDetailsRenderer)',
         '_rowDetailsTemplateOrRendererChanged(_rowDetailsTemplate, rowDetailsRenderer)'
       ];
     }
 
     _rowDetailsTemplateOrRendererChanged(rowDetailsTemplate, rowDetailsRenderer) {
+      if (rowDetailsTemplate && rowDetailsRenderer) {
+        throw new Error('You should only use either a renderer or a template for row details');
+      }
       if (rowDetailsTemplate || rowDetailsRenderer) {
-        if (rowDetailsTemplate) {
+        if (rowDetailsTemplate && !rowDetailsTemplate.templatizer) {
           var templatizer = new Vaadin.Grid.Templatizer();
           templatizer._grid = this;
           templatizer.dataHost = this.dataHost;
@@ -70,40 +73,31 @@ This program is available under Apache License Version 2.0, available at https:/
         if (this._columnTree) {
           // Only update the rows if the column tree has already been initialized
           Array.from(this.$.items.children).forEach(row => {
-            // TODO: Only update if there's no details cell
-            // Ensure the rows have a row details cell
-            this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+            if (!row.querySelector('[part~=details-cell]')) {
+              this._updateRow(row, this._columnTree[this._columnTree.length - 1]);
+              this._a11yUpdateRowDetailsOpened(row, false);
+            }
             // Clear any old template instances
             delete row.querySelector('[part~=details-cell]')._instance;
           });
         }
 
-        this._update();
+        if (this.detailsOpenedItems.length) {
+          Array.from(this.$.items.children).forEach(this._toggleDetailsCell, this);
+          this._update();
+        }
       }
     }
 
-    _detailsOpenedItemsChanged(changeRecord, dataProvider, physicalCount, rowDetailsTemplate, rowDetailsRenderer) {
-      if (rowDetailsTemplate && rowDetailsRenderer) {
-        throw new Error('You should only use either a renderer or a template for row details');
-      }
-
-      if (dataProvider === undefined || !rowDetailsTemplate && !rowDetailsRenderer) {
-        return;
-      }
-
-      if (changeRecord.path === 'detailsOpenedItems.length') {
+    _detailsOpenedItemsChanged(changeRecord, rowDetailsTemplate, rowDetailsRenderer) {
+      if (changeRecord.path === 'detailsOpenedItems.length' || !changeRecord.value) {
         // Let’s avoid duplicate work of both “.splices” and “.length” updates.
         return;
       }
-
-      this._flushItemsDebouncer();
-
-      if (this._lastDetailsOpenedItems && physicalCount) {
-        this._physicalItems.forEach(this._toggleDetailsCell, this);
-        this._render();
-      }
-
-      this._lastDetailsOpenedItems = this.detailsOpenedItems;
+      Array.from(this.$.items.children).forEach(row => {
+        this._toggleDetailsCell(row, row._item);
+        this._a11yUpdateRowDetailsOpened(row, this._isDetailsOpened(row._item));
+      });
     }
 
     _configureDetailsCell(cell) {
@@ -124,8 +118,7 @@ This program is available under Apache License Version 2.0, available at https:/
           if (this.rowDetailsRenderer) {
             cell._renderer = this.rowDetailsRenderer;
             cell._renderer.call(this, cell._content, this, {index: row.index, item: item});
-            this._updateItem(row, item);
-          } else if (!cell._instance) {
+          } else if (this._rowDetailsTemplate && !cell._instance) {
             // Stamp the template
             cell._instance = this._rowDetailsTemplate.templatizer.createInstance();
             cell._content.innerHTML = '';
@@ -137,6 +130,8 @@ This program is available under Apache License Version 2.0, available at https:/
           row.style.setProperty('padding-bottom', `${cell.offsetHeight}px`);
         }
       }
+      this._updateMetrics();
+      this._positionItems();
     }
 
     _updateDetailsCellHeights() {
