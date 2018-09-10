@@ -39,10 +39,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </style>
 
     <slot name="grid" id="grid-slot">
-      <vaadin-crud-grid id="grid"></vaadin-crud-grid>
+      <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]"></vaadin-crud-grid>
     </slot>
     <slot name="form" id="form-slot">
-      <vaadin-crud-form id="form"></vaadin-crud-form>
+      <vaadin-crud-form id="form" exclude="[[exclude]]"></vaadin-crud-form>
     </slot>
 
     <div id="editor">
@@ -200,6 +200,24 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             dataProvider: {
               type: Function,
               observer: '__onDataProviderChange'
+            },
+            /**
+             * Disable filtering when grid is autofonfigured.
+             */
+            noFilter: Boolean,
+            /**
+             * Disable sorting when grid is autofonfigured.
+             */
+            noSort: Boolean,
+            /**
+             * A regular expression string to applied to fields that will be exclude
+             * when using autoconfigured elements.
+             *
+             * Default is `/^_` meaning that all protected properties are excluded
+             */
+            exclude: {
+              type: String,
+              value: '^_'
             },
             __isDirty: Boolean,
             __isNew: Boolean

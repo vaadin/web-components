@@ -12,10 +12,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     (function() {
 
       /**
-       * `<vaadin-crud-form>` is a [`<vaadin-form-layout>`](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement) which automatically can configures all its items based
+       * `<vaadin-crud-form>` is a <vaadin-form-layout> which automatically can configures all its items based
        * on the JSON structure of the first item set.
        *
-       * You cannot manually configure fields but you can still style the layout as it's described in `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
+       * You cannot manually configure fields but you can still style the layout as it's described in
+       * `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
        *
        * @memberof Vaadin
        */
@@ -30,11 +31,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * A RegExp used to exclude properties in the item that do not need
              * to be mapped to form fields.
              *
-             * Default value is `/^_/` meaning that all protected and private properties are excluded.
+             * Default is not to exclude any property.
              */
-            excluded: {
+            exclude: {
               type: RegExp,
-              value: /^_/
+              observer: '__onExcludeChange'
             },
             /**
              * The item being edited.
@@ -59,6 +60,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.notifyResize();
         }
 
+        __onExcludeChange(exclude) {
+          if (typeof exclude == 'string') {
+            this.exclude = RegExp(exclude, 'i');
+          }
+        }
+
         __onItemChange(item) {
           if (!this._fields) {
             this.configure(item);
@@ -78,7 +85,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __createFields(parent, object, path) {
           if (typeof object === 'object') {
             Object.keys(object).forEach(prop => {
-              if (this.excluded && this.excluded.test(prop)) {
+              if (this.exclude && this.exclude.test(prop)) {
                 return;
               }
               const newPath = (path ? `${path}.` : '') + prop;

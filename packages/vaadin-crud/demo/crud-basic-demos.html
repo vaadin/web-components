@@ -11,7 +11,7 @@
     <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]></vaadin-crud>
+        <vaadin-crud items=[[items]] exclude="_id|password"></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
@@ -40,7 +40,7 @@
     <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]>
+        <vaadin-crud items=[[items]] exclude="_id|password">
           <vaadin-form-layout slot="form" style="max-width: 60em">
             <vaadin-text-field path="name.first"label="First Name" required></vaadin-text-field>
             <vaadin-text-field path="name.last" label="Last Name" required></vaadin-text-field>

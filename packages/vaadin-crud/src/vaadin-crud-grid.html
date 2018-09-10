@@ -15,10 +15,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     (function() {
 
       /**
-       * `<vaadin-crud-grid>` is a [`<vaadin-grid>`](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement) which automatically configures all its columns based
+       * `<vaadin-crud-grid>` is a `<vaadin-grid>` which automatically configures all its columns based
        * on the JSON structure of the first item received.
        *
-       * You cannot manually configure columns but you can still style the grid as it's described in `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
+       * You cannot manually configure columns but you can still style the grid as it's described in
+       * `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
        *
        * @memberof Vaadin
        */
@@ -33,13 +34,20 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * A RegExp used to exclude properties in the item that do not need
              * to be mapped to columns.
              *
-             * Default value is `/^_|password/i` meaning that all protected and private properties, as well as
-             * properties containing the word 'password' are excluded.
+             * Default is not to exclude any property.
              */
-            excluded: {
+            exclude: {
               type: RegExp,
-              value: /^_|password/i
-            }
+              observer: '__onExcludeChange'
+            },
+            /**
+             * Disable filtering in the generated columns.
+             */
+            noFilter: Boolean,
+            /**
+             * Disable sorting in the genterated columns.
+             */
+            noSort: Boolean
           };
         }
 
@@ -47,8 +55,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return ['__onItemsChange(items)'];
         }
 
+        __onExcludeChange(exclude) {
+          if (typeof exclude == 'string') {
+            this.exclude = RegExp(exclude, 'i');
+          }
+        }
+
         __onItemsChange(items) {
-          if (this.dataProvider == this._arrayDataProvider && items && items[0]) {
+          if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && items && items[0]) {
             this.innerHTML = '';
             this.__createColumns(this, items[0]);
           }
@@ -89,25 +103,34 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             col.headerRenderer = (root) => {
               const label = this.__capitalize(path.replace(/^.*\./, ''));
 
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', path);
-              sorter.textContent = label;
+              if (!this.noSort) {
+                const sorter = window.document.createElement('vaadin-grid-sorter');
+                sorter.setAttribute('path', path);
+                sorter.textContent = label;
+                root.appendChild(sorter);
+              }
 
-              const filter = window.document.createElement('vaadin-grid-filter');
-              filter.setAttribute('path', path);
-              filter.style.display = 'flex';
+              if (!this.noFilter) {
+                const filter = window.document.createElement('vaadin-grid-filter');
+                filter.setAttribute('path', path);
+                filter.style.display = 'flex';
 
-              const textField = window.document.createElement('vaadin-text-field');
-              textField.setAttribute('slot', 'filter');
-              textField.setAttribute('focus-target', true);
-              textField.style.width = '100%';
-              textField.addEventListener('value-changed', function(event) {
-                filter.value = event.detail.value;
-              });
+                const textField = window.document.createElement('vaadin-text-field');
+                textField.setAttribute('slot', 'filter');
+                textField.setAttribute('focus-target', true);
+                textField.style.width = '100%';
+                !this.noSort && (textField.placeholder = label);
+                textField.addEventListener('value-changed', function(event) {
+                  filter.value = event.detail.value;
+                });
 
-              filter.appendChild(textField);
-              root.appendChild(sorter);
-              root.appendChild(filter);
+                filter.appendChild(textField);
+                root.appendChild(filter);
+              }
+
+              if (this.noSort && this.noFilter) {
+                root.textContent = label;
+              }
             };
           }
 
@@ -118,7 +141,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __createColumns(parent, object, path) {
           if (typeof object === 'object') {
             Object.keys(object).forEach(prop => {
-              if (this.excluded && this.excluded.test(prop)) {
+              if (this.exclude && this.exclude.test(prop)) {
                 return;
               }
               const newPath = (path ? `${path}.` : '') + prop;

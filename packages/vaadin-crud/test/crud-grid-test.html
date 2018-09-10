@@ -13,107 +13,128 @@
 <body>
   <test-fixture id="default">
     <template>
-      <vaadin-crud-grid style="width: 500px"></vaadin-crud-grid>
+      <vaadin-crud-grid style="width: 500px" exclude="_id|password"></vaadin-crud-grid>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="no-sort-no-filter">
+    <template>
+      <vaadin-crud-grid style="width: 500px" no-sort no-filter></vaadin-crud-grid>
     </template>
   </test-fixture>
 
   <script>
     describe('crud grid test', () => {
+      // FIXME: the way how template is created in crud grid does not work
+      var shadyDom = window.location.search.match('shadydom');
+
       var crudGrid;
 
-      beforeEach(() => crudGrid = fixture('default'));
+      const items = [{
+        _id: 1,
+        name: {
+          first: 'Grant',
+          last: 'Andrews'
+        },
+        password: 'lorem',
+        role: 'operator'
+      }];
 
-      it('should have a correct localName', () => {
-        expect(crudGrid.localName).to.be.equal('vaadin-crud-grid');
-      });
+      describe('fixture no-sort-filter', () => {
 
-      it('should expose class name in Vaadin namespace', () => {
-        expect(window.Vaadin.CrudGridElement).to.be.ok;
-      });
+        beforeEach(done => {
+          crudGrid = fixture('default');
+          crudGrid.items = items;
+          window.flushGrid(crudGrid);
+          Polymer.RenderStatus.afterNextRender(crudGrid, done);
+        });
 
-      it('should have a version number', () => {
-        expect(customElements.get('vaadin-crud-grid').version).to.be.ok;
-      });
-
-      it('should not generate any column when providing an empty item list', () => {
-        expect(crudGrid.querySelectorAll('vaadin-grid-column')).to.be.empty;
-      });
-
-      it('should generate one column when providing list of primitives', () => {
-        crudGrid.items = ['foo', 'bar'];
-        expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
-      });
-
-
-      ['items', 'dataProvider'].forEach(type => {
-
-        const items = [{
-          _id: 1,
-          name: {
-            first: 'Grant',
-            last: 'Andrews'
-          },
-          password: 'lorem',
-          role: 'operator'
-        }];
-
-        describe(type, () => {
-          // FIXME: the way how template is created in crud grid does not work
-          if (window.location.search.match('shadydom')) {
-            return;
-          }
-
-          beforeEach(done => {
-            if (type == 'items') {
-              crudGrid.items = items;
-            } else {
-              crudGrid.dataProvider = (params, callback) => {
-                callback(items, items.length);
-              };
-            }
-            window.flushGrid(crudGrid);
-            Polymer.RenderStatus.afterNextRender(crudGrid, done);
-          });
-
-          it('should ignore excluded fields', () => {
-            expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
-          });
-
-          it('should automatically group colums from nested properties', () => {
+        !shadyDom && it('should not add sorters and filters if disabled', () => {
             expect(getHeaderCellContent(crudGrid, 0, 0).textContent).to.be.equal('Name');
-            expect(getHeaderCellContent(crudGrid, 0, 1).textContent).to.be.empty;
-          });
-
-          it('should automatically map columns from items', () => {
-            expect(getHeaderCellContent(crudGrid, 1, 0).textContent.trim()).to.be.equal('First');
-            expect(getHeaderCellContent(crudGrid, 1, 1).textContent.trim()).to.be.equal('Last');
-            expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('Role');
-          });
-
-          it('should automatically add sorters to columns', () => {
-            [0, 1, 2].forEach(c => {
-              expect(getHeaderCellContent(crudGrid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
-            });
-          });
-
-          it('should automatically add filters to columns', () => {
-            [0, 1, 2].forEach(c => {
-              expect(getHeaderCellContent(crudGrid, 1, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
-            });
-          });
-
-          it('should automatically create body template for data', () => {
-            expect(getBodyCellContent(crudGrid, 0, 0).textContent).to.be.equal('Grant');
-            expect(getBodyCellContent(crudGrid, 0, 1).textContent).to.be.equal('Andrews');
-            expect(getBodyCellContent(crudGrid, 0, 2).textContent).to.be.equal('operator');
-          });
-
-          it('should capitalize correctly', () => {
-            expect(crudGrid.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa Bb Cc Dd Ff');
-          });
-
         });
       });
+
+      describe('fixture default', () => {
+        beforeEach(() => crudGrid = fixture('default'));
+
+        it('should have a correct localName', () => {
+          expect(crudGrid.localName).to.be.equal('vaadin-crud-grid');
+        });
+
+        it('should expose class name in Vaadin namespace', () => {
+          expect(window.Vaadin.CrudGridElement).to.be.ok;
+        });
+
+        it('should have a version number', () => {
+          expect(customElements.get('vaadin-crud-grid').version).to.be.ok;
+        });
+
+        it('should not generate any column when providing an empty item list', () => {
+          expect(crudGrid.querySelectorAll('vaadin-grid-column')).to.be.empty;
+        });
+
+        it('should generate one column when providing list of primitives', () => {
+          crudGrid.items = ['foo', 'bar'];
+          expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(1);
+        });
+
+        ['items', 'dataProvider'].forEach(type => {
+
+          !shadyDom && describe(type, () => {
+
+            beforeEach(done => {
+              if (type == 'items') {
+                crudGrid.items = items;
+              } else {
+                crudGrid.dataProvider = (params, callback) => {
+                  callback(items, items.length);
+                };
+              }
+              window.flushGrid(crudGrid);
+              Polymer.RenderStatus.afterNextRender(crudGrid, done);
+            });
+
+            it('should ignore excluded fields', () => {
+              expect(crudGrid.querySelectorAll('vaadin-grid-column').length).to.be.equal(3);
+            });
+
+            it('should automatically group colums from nested properties', () => {
+              expect(getHeaderCellContent(crudGrid, 0, 0).textContent).to.be.equal('Name');
+              expect(getHeaderCellContent(crudGrid, 0, 1).textContent).to.be.empty;
+            });
+
+            it('should automatically map columns from items', () => {
+              expect(getHeaderCellContent(crudGrid, 1, 0).textContent.trim()).to.be.equal('First');
+              expect(getHeaderCellContent(crudGrid, 1, 1).textContent.trim()).to.be.equal('Last');
+              expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('Role');
+            });
+
+            it('should automatically add sorters to columns', () => {
+              [0, 1, 2].forEach(c => {
+                expect(getHeaderCellContent(crudGrid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
+              });
+            });
+
+            it('should automatically add filters to columns', () => {
+              [0, 1, 2].forEach(c => {
+                expect(getHeaderCellContent(crudGrid, 1, c).lastElementChild.localName).to.be.equal('vaadin-grid-filter');
+              });
+            });
+
+            it('should automatically create body template for data', () => {
+              expect(getBodyCellContent(crudGrid, 0, 0).textContent).to.be.equal('Grant');
+              expect(getBodyCellContent(crudGrid, 0, 1).textContent).to.be.equal('Andrews');
+              expect(getBodyCellContent(crudGrid, 0, 2).textContent).to.be.equal('operator');
+            });
+
+            it('should capitalize correctly', () => {
+              expect(crudGrid.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa Bb Cc Dd Ff');
+            });
+
+          });
+        });
+      });
+
     });
   </script>
 </body>
