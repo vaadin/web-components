@@ -79,7 +79,7 @@
           });
         });
 
-        afterEach(() => crud.$.dialog.opened = false);
+        afterEach(() => crud.opened = false);
 
         it('should be able to set items and item declaratively', () => {
           expect(crud._grid._columnTree.length).to.be.equal(1);
@@ -249,6 +249,8 @@
             it('on edit should set the item and open dialog if not default prevented', () => {
               crud._grid.activeItem = crud.items[0];
               expect(crud.item).to.be.equal(crud.items[0]);
+              expect(crud.$.dialog.opened).to.be.true;
+              expect(crud.opened).to.be.true;
             });
 
             it('on edit should not set the item nor open dialog if default prevented', () => {
@@ -296,6 +298,7 @@
               crud.item = crud.items[0];
               btnCancel().click();
               expect(crud.$.dialog.opened).not.to.be.ok;
+              expect(crud.opened).not.to.be.ok;
             });
 
             it('on cancel should keep opened dialog if default prevented', () => {

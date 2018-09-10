@@ -56,7 +56,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
     <vaadin-button id="new" on-click="__new">New</vaadin-button>
 
-    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]]></vaadin-dialog>
+    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}"></vaadin-dialog>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
       reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
@@ -219,6 +219,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: String,
               value: '^_'
             },
+            /**
+             * Reflects the opened status of the editor.
+             */
+            opened: {
+              type: Boolean,
+              notify: true
+            },
             __isDirty: Boolean,
             __isNew: Boolean
           };
@@ -249,6 +256,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             }
           });
         }
+
 
         __onActiveItemChange(e) {
           this.__edit(e.detail.value);
@@ -310,7 +318,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this._form.item = item;
             this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
           }
-          this.$.dialog.opened = !!item;
+          this.opened = !!item;
         }
 
         /** A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element */
@@ -326,7 +334,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __closeEditor() {
-          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          this.opened = this.item = this._grid.activeItem = undefined;
         }
 
         __new() {
@@ -342,7 +350,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (evt) {
             this.item = item || {};
           } else {
-            this.$.dialog.opened = true;
+            this.opened = true;
           }
           this.__isDirty = false;
           this.__isNew = !item;
