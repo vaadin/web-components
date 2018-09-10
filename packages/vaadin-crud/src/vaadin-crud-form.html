@@ -12,19 +12,33 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     (function() {
 
       /**
+       * `<vaadin-crud-form>` is a [`<vaadin-form-layout>`](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement) which automatically can configures all its items based
+       * on the JSON structure of the first item set.
+       *
+       * You cannot manually configure fields but you can still style the layout as it's described in `<vaadin-form-layout>` [Documentation](https://vaadin.com/components/vaadin-form-layout/html-api/elements/Vaadin.FormLayoutElement)
+       *
        * @memberof Vaadin
        */
-      class CrudFormElement extends Vaadin.FormLayoutElement {
+      class CrudFormElement extends (class extends Vaadin.FormLayoutElement {}) {
         static get is() {
           return 'vaadin-crud-form';
         }
 
         static get properties() {
           return {
+            /**
+             * A RegExp used to exclude properties in the item that do not need
+             * to be mapped to form fields.
+             *
+             * Default value is `/^_/` meaning that all protected and private properties are excluded.
+             */
             excluded: {
               type: RegExp,
-              value: /^_/i
+              value: /^_/
             },
+            /**
+             * The item being edited.
+             */
             item: Object
           };
         }
@@ -33,6 +47,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           return ['__onItemChange(item)'];
         }
 
+        /**
+         * Autogenerate fields for edition based on the JSON structure of the object provided.
+         *
+         * If not already called, the method will be executed the first time an item is assigned.
+         */
         configure(object) {
           this.innerHTML = '';
           this._fields = [];

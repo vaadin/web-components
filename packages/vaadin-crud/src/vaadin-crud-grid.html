@@ -15,15 +15,27 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     (function() {
 
       /**
+       * `<vaadin-crud-grid>` is a [`<vaadin-grid>`](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement) which automatically configures all its columns based
+       * on the JSON structure of the first item received.
+       *
+       * You cannot manually configure columns but you can still style the grid as it's described in `<vaadin-grid>` [Documentation](https://vaadin.com/components/vaadin-grid/html-api/elements/Vaadin.GridElement)
+       *
        * @memberof Vaadin
        */
-      class CrudGridElement extends Vaadin.GridElement {
+      class CrudGridElement extends (class extends Vaadin.GridElement {}) {
         static get is() {
           return 'vaadin-crud-grid';
         }
 
         static get properties() {
           return {
+            /**
+             * A RegExp used to exclude properties in the item that do not need
+             * to be mapped to columns.
+             *
+             * Default value is `/^_|password/i` meaning that all protected and private properties, as well as
+             * properties containing the word 'password' are excluded.
+             */
             excluded: {
               type: RegExp,
               value: /^_|password/i
@@ -51,7 +63,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           });
         }
 
-        /** @override */
+        /**
+         * @override
+         * @private
+         */
         _dataProviderChanged(dataProvider, oldDataProvider) {
           if (this._arrayDataProvider == dataProvider) {
             super._dataProviderChanged(dataProvider, oldDataProvider);
