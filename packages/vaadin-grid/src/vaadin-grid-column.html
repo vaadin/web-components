@@ -367,15 +367,19 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (!headerRenderer && !headerTemplate && !label && headerCell) {
-          const generatedLabel = path
-            .substr(path.lastIndexOf('.') + 1)
-            .replace(/([A-Z])/g, '-$1').toLowerCase()
-            .replace(/-/, ' ')
-            .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
+          const generatedLabel = this._generateLabel(path);
           headerCell._content.textContent = generatedLabel;
           headerCell.parentElement.hidden = false;
         }
       }
+    }
+
+    _generateLabel(path) {
+      return path
+        .substr(path.lastIndexOf('.') + 1)
+        .replace(/([A-Z])/g, '-$1').toLowerCase()
+        .replace(/-/, ' ')
+        .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
     }
 
     _toggleAttribute(name, bool, node) {
