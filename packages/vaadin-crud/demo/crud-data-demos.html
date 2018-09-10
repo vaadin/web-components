@@ -32,9 +32,9 @@
           // Helper to filter an array based on the param.filters array
           function filter(array, filters) {
             return array.filter(function(item) {
-              return filters.reduce(function(r, f) {
-                return r && RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item));
-              }, true);
+              return filters.every(function(f) {
+                return RegExp(f.value, 'i').test(Polymer.Base.get(f.path, item));
+              });
             });
           }
           // Helper to sort an array based on the param.filters array
