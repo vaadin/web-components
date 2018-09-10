@@ -220,7 +220,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __fillForm(item) {
           this._form.item = item;
-          this._fields.forEach(e => e.value = CrudElement.__getPropertyByPath(item, e.path || e.getAttribute('path')));
+          this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
           this._dirty = false;
         }
 
@@ -268,7 +268,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             const item = this.item || {};
             const isNew = this.__isNew(this.item);
 
-            this._fields.forEach(e => CrudElement.__setPropertyByPath(item, e.path || e.getAttribute('path'), e.value));
+            this._fields.forEach(e => this.__set(e.path || e.getAttribute('path'), e.value, this.item));
             /**
              * Fired when user wants to save a new or an existing item. If the default is prevented, then
              * no action is performed, items array is not modified nor dialog closed
@@ -333,37 +333,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        // Utility method for getting nested values in JSON objects
-        static __getPropertyByPath(obj, path) {
+        // Utility method for setting nested values in JSON objects but initialising empty keys unless polymer `this.set`
+        __set(path, val, obj) {
           if (obj && path) {
-            path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-            const a = path.replace(/^\./, '').split('.');
-            for (let i = 0, l = a.length; i < l; i++) {
-              const k = a[i];
-              if (k in obj) {
-                obj = obj[k];
-              } else {
-                return;
-              }
-            }
-          }
-          return obj;
-        }
-
-        // Utility method for setting nested values in JSON objects */
-        static __setPropertyByPath(obj, path, val) {
-          if (obj && path) {
-            path = path.replace(/\[["']?(\w+)["']?\]/g, '.$1');
-            const a = path.replace(/^\./, '').split('.');
-            for (let i = 0, l = a.length; i < l; i++) {
-              const k = a[i];
-              if (i === l - 1) {
-                obj[k] = val;
-                return;
-              }
-              !(k in obj) && (obj[k] = {});
-              obj = obj[k];
-            }
+            path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
+            this.set(path, val, obj);
           }
         }
       }
