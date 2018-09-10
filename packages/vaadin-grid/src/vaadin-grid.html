@@ -78,7 +78,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
     /**
      *
-     * `<vaadin-grid>` is a free, high quality data grid / data table Polymer element. The content of the
+     * `<vaadin-grid>` is a free, high quality data grid / data table Web Component. The content of the
      * the grid can be populated in two ways: imperatively by using renderer callback function and
      * declaratively by using Polymer's Templates.
      *
@@ -86,8 +86,19 @@ This program is available under Apache License Version 2.0, available at https:/
      *
      * Start with an assigning an array to the [`items`](#/elements/vaadin-grid#property-items) property to visualize your data.
      *
-     * Use the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns.
-     * `vaadin-grid-column` element provides you with three types of `renderer` callback functions: `headerRenderer`,
+     * Use the [`<vaadin-grid-column>`](#/elements/vaadin-grid-column) element to configure the grid columns. Set `path` and `label`
+     * shorthand properties for the columns to define what gets rendered in the cells of the column.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid>
+     *   <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
+     *   <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+     *   <vaadin-grid-column path="email"></vaadin-grid-column>
+     * </vaadin-grid>
+     * ```
+     *
+     * For custom content `vaadin-grid-column` element provides you with three types of `renderer` callback functions: `headerRenderer`,
      * `renderer` and `footerRenderer`.
      *
      * Each of those renderer functions provides `root`, `column`, `model` arguments when applicable.

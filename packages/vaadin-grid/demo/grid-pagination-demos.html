@@ -51,12 +51,10 @@
           }
         </style>
 
-        <x-array-data-provider></x-array-data-provider>
-
         <vaadin-grid page-size="10" height-by-rows>
-          <vaadin-grid-column name="First"></vaadin-grid-column>
-          <vaadin-grid-column name="Last"></vaadin-grid-column>
-          <vaadin-grid-column width="200px" name="Email"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column width="200px" path="email"></vaadin-grid-column>
         </vaadin-grid>
 
         <div id="pages"></div>
@@ -66,34 +64,10 @@
             const grid = document.querySelector('vaadin-grid');
             let pages;
 
-            const columns = grid.querySelectorAll('vaadin-grid-column');
-
-            columns.forEach(function(column, index) {
-              column.headerRenderer = function(root) {
-                root.textContent = column.getAttribute('name');
-              };
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.item.name.first;
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.name.last;
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.name.first + '.' + model.item.name.last + '@example.com';
-            };
-
             updateItemsFromPage(1);
 
-
             function updateItemsFromPage(page) {
-              const dataProvider = document.querySelector('x-array-data-provider');
-              const items = dataProvider.items;
-
-              if (items === undefined || page === undefined) {
+              if (page === undefined) {
                 return;
               }
 
@@ -106,7 +80,7 @@
               });
 
               if (!pages) {
-                pages = Array.apply(null, {length: Math.ceil(items.length / grid.pageSize)}).map(function(item, index) {
+                pages = Array.apply(null, {length: Math.ceil(Vaadin.GridDemo.users.length / grid.pageSize)}).map(function(item, index) {
                   return index + 1;
                 });
 
@@ -144,7 +118,7 @@
 
               var start = page * grid.pageSize;
               var end = (page + 1) * grid.pageSize;
-              grid.items = items.slice(start, end);
+              grid.items = Vaadin.GridDemo.users.slice(start, end);
             }
           });
         </script>

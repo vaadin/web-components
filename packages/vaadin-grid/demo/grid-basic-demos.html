@@ -6,57 +6,106 @@
       }
     </style>
 
-    <h3>Content Renderer Function</h3>
+    <h3>Defining Simple Content</h3>
+    <p>
+      Each item in the <code>items</code> array assigned to the <code>&lt;vaadin-grid&gt;</code> represents a single row in the grid.
+    </p>
+    <p>
+      The <code>&lt;vaadin-grid-column&gt;</code> elements inside the <code>&lt;vaadin-grid&gt;</code> define the number of
+      columns the grid has and also what gets rendered inside the cells of each column. Setting the <code>path</code> property for
+      a <code>&lt;vaadin-grid-column&gt;</code> makes it render a simple text representation of the specified sub-property of the row's item.
+    </p>
+    <p>
+      By default, the label in the column header would also be derived from the <code>path</code> property automatically.
+      To change that, an explicit <code>label</code> can be set to the column elements.
+    </p>
+    <vaadin-demo-snippet id='grid-basic-demos-simple-columns'>
+      <template preserve-content>
+        <vaadin-grid>
+          <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="location.city"></vaadin-grid-column>
+          <vaadin-grid-column path="visitCount" text-align="end" width="100px" flex-grow="0"></vaadin-grid-column>
+        </vaadin-grid>
+
+        <script>
+          window.addDemoReadyListener('#grid-basic-demos-simple-columns', function(document) {
+            // Assign an array of user objects as the grid's items
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            /*
+             * Each object in the above "users" array follows the same structure:
+             * {
+             *   "name": {
+             *     "first": "Laura",
+             *     "last": "Arnaud",
+             *     ...
+             *   },
+             *   "location": {
+             *     "city": "Perpignan"
+             *     ...
+             *   }
+             *   ...
+             * }
+             */
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Defining Content with Renderer Functions</h3>
+    <p>
+      The column renderer functions (<code>renderer</code>, <code>headerRenderer</code> and <code>footerRenderer</code>) can
+      alternativaly be used for defining content for the column cells. They're especially useful when the columns should display
+      custom content that can't be defined with just the shorthand properties.
+    </p>
     <vaadin-demo-snippet id='grid-columns-demos-renderer-functions'>
       <template preserve-content>
-        <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200"></iron-ajax>
 
         <vaadin-grid aria-label="Content Renderer Function">
-          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column width="60px" flex-grow="0" text-align="end"></vaadin-grid-column>
           <vaadin-grid-column></vaadin-grid-column>
           <vaadin-grid-column></vaadin-grid-column>
           <vaadin-grid-column width="8em"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-columns-demos-renderer-functions', function(document) {
-            const ajax = document.querySelector('iron-ajax');
             const grid = document.querySelector('vaadin-grid');
+            grid.items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
 
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
+            // Use renderers to populate the cell content
             columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.index;
+              root.textContent = model.index;
             };
             columns[0].headerRenderer = columns[0].footerRenderer = function(root, column) {
-              root.innerHTML = '#';
+              root.textContent = '#';
             };
 
             columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
+              root.textContent = model.item.name.first;
             };
             columns[1].headerRenderer = columns[1].footerRenderer = function(root, column) {
-              root.innerHTML = 'First Name';
+              root.textContent = 'First Name';
             };
 
             columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.lastName;
+              root.textContent = model.item.name.last;
             };
             columns[2].headerRenderer = columns[2].footerRenderer = function(root, column) {
-              root.innerHTML = 'Last Name';
+              root.textContent = 'Last Name';
             };
 
             columns[3].renderer = function(root, column, model) {
-              root.innerHTML =
-                '<div style="white-space: normal">' +
-                model.item.address.street + ', ' + model.item.address.city +
-                '</div>';
+              if (!root.firstElementChild) {
+                root.innerHTML = '<div style="white-space: normal"></div>';
+              }
+              root.firstElementChild.textContent = model.item.location.street + ', ' + model.item.location.city;
             };
             columns[3].headerRenderer = columns[3].footerRenderer = function(root, column) {
-              root.innerHTML = 'Address';
+              root.textContent = 'Address';
             };
           });
         </script>
@@ -67,21 +116,17 @@
     <p>
       Cells contents can be defined using <code>&lt;template&gt;</code> elements.
       Inside templates, variables like <code>[[index]]</code> and <code>[[item.prop]]</code>
-      can be used to add dynamic content.
-    </p>
-    <p>
-      <b>Note:</b> By default, the height of a row is determined by the height of its cell contents,
-      as seen in this example.
+      can be used with Polymer's binding syntax to add dynamic content.
     </p>
     <vaadin-demo-snippet id='grid-basic-demos-basic-binding'>
       <template preserve-content>
         <dom-bind>
           <template>
-            <!-- Fetch an array of users to be shown in the grid -->
-            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
+            <!-- Extract an array of users to be shown in the grid -->
+            <x-array-data-provider items="{{users}}"></x-array-data-provider>
 
             <!-- The array is set as the <vaadin-grid>'s "items" property -->
-            <vaadin-grid aria-label="Basic Binding Example" items="[[users.result]]">
+            <vaadin-grid aria-label="Basic Binding Example" items="[[users]]">
 
               <vaadin-grid-column width="60px" flex-grow="0">
                 <template class="header">#</template>
@@ -92,74 +137,24 @@
 
               <vaadin-grid-column>
                 <template class="header">First Name</template>
-                <template>[[item.firstName]]</template>
+                <template>[[item.name.first]]</template>
                 <template class="footer">First Name</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column>
                 <template class="header">Last Name</template>
-                <template>[[item.lastName]]</template>
+                <template>[[item.name.last]]</template>
                 <template class="footer">Last Name</template>
               </vaadin-grid-column>
 
               <vaadin-grid-column width="8em">
                 <template class="header">Address</template>
                 <template>
-                  <div style="white-space: normal">[[item.address.street]], [[item.address.city]]</div>
+                  <div style="white-space: normal">[[item.location.street]], [[item.location.city]]</div>
                 </template>
                 <template class="footer">Address</template>
               </vaadin-grid-column>
 
-            </vaadin-grid>
-          </template>
-        </dom-bind>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Two-Way Binding</h3>
-    <p>
-      Some template variables, like the item properties, can be modified using Polymer's two-way binding.
-    </p>
-    <vaadin-demo-snippet id='grid-basic-demos-two-way-binding'>
-      <template preserve-content>
-        <dom-bind>
-          <template>
-            <style>
-              .vaadin-demo-input[readonly] {
-                border: 2px solid transparent;
-                pointer-events: none;
-              }
-
-              .vaadin-demo-input {
-                font: inherit;
-                width: 100%;
-              }
-            </style>
-
-            <iron-ajax auto url="https://demo.vaadin.com/demo-data/1.0/people?count=200" handle-as="json" last-response="{{users}}"></iron-ajax>
-
-            <vaadin-checkbox checked="{{editing}}" style="margin-bottom: 20px">Enable Editing</vaadin-checkbox>
-
-            <vaadin-grid aria-label="Two-way Binding Example" items="[[users.result]]">
-              <vaadin-grid-column>
-                <template class="header">First Name</template>
-                <template>
-                  <input class="vaadin-demo-input" value="{{item.firstName::input}}" readonly$="[[!editing]]">
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column>
-                <template class="header">Last Name</template>
-                <template>
-                  <input class="vaadin-demo-input" value="{{item.lastName::input}}" readonly$="[[!editing]]">
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column width="200px">
-                <template class="header">Email</template>
-                <template>[[item.firstName]].[[item.lastName]]@example.com</template>
-              </vaadin-grid-column>
             </vaadin-grid>
           </template>
         </dom-bind>
