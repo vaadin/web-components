@@ -201,7 +201,6 @@
           window.addDemoReadyListener('#grid-selection-demos-space-key-action-and-click-to-activate', function(document) {
             const grid = document.querySelector('vaadin-grid');
 
-            const dataProvider = document.querySelector('x-data-provider');
             grid.items = Array.from(new Array(200)).map(function(item, index) {
               return {index: index};
             });
