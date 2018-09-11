@@ -22,6 +22,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-compact', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
@@ -41,6 +48,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-bordered', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
@@ -60,6 +74,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-row-borders', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
@@ -79,6 +100,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-column-borders', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
@@ -98,6 +126,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-row-stripes', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
@@ -118,6 +153,13 @@
         <script>
           window.addDemoReadyListener('#grid-theme-demos-wrap-cell-content', function(document) {
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
+
+            Array.from(document.querySelectorAll('vaadin-grid-column'))
+              .forEach(function(column) {
+                column.headerRenderer = function(root) {
+                  root.innerHTML = '<vaadin-grid-sorter path='+ column.path +'>' + column.label + '</vaadin-grid-sorter>';
+                };
+              });
           });
         </script>
       </template>
