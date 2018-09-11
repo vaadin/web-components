@@ -278,6 +278,12 @@
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo');
           });
 
+          it('should not hide the header row', () => {
+            grid.removeChild(grid.querySelector('vaadin-grid-column-group'));
+            flushGrid(grid);
+            expect(grid.$.header.children[0].hidden).not.to.be.ok;
+          });
+
         });
 
         describe('Text align', () => {
