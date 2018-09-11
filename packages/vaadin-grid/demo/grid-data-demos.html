@@ -7,59 +7,15 @@
     </style>
 
     <h3>Assigning Array Data</h3>
-    <p>An array of objects can be assigned to the <code>items</code> property.</p>
-    <vaadin-demo-snippet id='grid-data-demos-assigning-array-data'>
-      <template preserve-content>
-        <vaadin-grid aria-label="Array Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
-        </vaadin-grid>
-        <script>
-          window.addDemoReadyListener('#grid-data-demos-assigning-array-data', function(document) {
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.firstName;
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.lastName;
-            };
-
-            columns[0].headerRenderer = function(root) {
-              root.textContent = '#';
-            };
-
-            columns[1].headerRenderer = function(root) {
-              root.textContent = 'First Name';
-            };
-
-            columns[2].headerRenderer = function(root) {
-              root.textContent = 'Last Name';
-            };
-
-            const items = [];
-            for (var i = 0; i < 100; i++) {
-              items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
-            }
-
-            grid.items = items;
-          });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
-
-    <h3>Dynamic Array Data</h3>
     <p>
-      The <code>items</code> property can be modified using array manipulations.
+      An array of data objects can be assigned as the grid's <code>items</code> property.
+      Each object in the array represents a row in the grid's body.
     </p>
+    <p>
+      The <code>items</code> array can be dynamically modified with Polymer's array mutation methods or by
+      reassigning the <code>items</code> property with a new array instance.
+    </p>
+
     <vaadin-demo-snippet id='grid-data-demos-dynamic-array-data'>
       <template preserve-content>
         <style>
@@ -71,60 +27,25 @@
         <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-dynamic-array-data', function(document) {
             const grid = document.querySelector('vaadin-grid');
+
             const addBtn = document.querySelector('#add-btn');
-            const removeBtn = document.querySelector('#remove-btn');
-
             addBtn.addEventListener('click', function() {
-              const newItemsArray = grid.items.slice(0);
-              newItemsArray.push({firstName: 'First Name ' + newItemsArray.length, lastName: 'Last Name ' + newItemsArray.length});
-              grid.items = newItemsArray;
+              grid.push('items', Vaadin.GridDemo.users[grid.items.length]);
             });
 
+            const removeBtn = document.querySelector('#remove-btn');
             removeBtn.addEventListener('click', function() {
-              const newItemsArray = grid.items.slice(0);
-              newItemsArray.pop();
-              grid.items = newItemsArray;
+              grid.pop('items');
             });
 
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.firstName;
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.lastName;
-            };
-
-            columns[0].headerRenderer = function(root) {
-              root.textContent = '#';
-            };
-
-            columns[1].headerRenderer = function(root) {
-              root.textContent = 'First Name';
-            };
-
-            columns[2].headerRenderer = function(root) {
-              root.textContent = 'Last Name';
-            };
-
-            const items = [];
-            for (var i = 0; i < 100; i++) {
-              items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
-            }
-
-            grid.items = items;
+            grid.items = Vaadin.GridDemo.users.slice(0, 6);
           });
         </script>
       </template>
@@ -147,60 +68,25 @@
         <vaadin-button raised id="remove-btn">Remove Item</vaadin-button>
 
         <vaadin-grid aria-label="Dynamic Data Example" height-by-rows>
-          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-dynamic-height', function(document) {
             const grid = document.querySelector('vaadin-grid');
+
             const addBtn = document.querySelector('#add-btn');
-            const removeBtn = document.querySelector('#remove-btn');
-
             addBtn.addEventListener('click', function() {
-              const newItemsArray = grid.items.slice(0);
-              newItemsArray.push({firstName: 'First Name ' + newItemsArray.length, lastName: 'Last Name ' + newItemsArray.length});
-              grid.items = newItemsArray;
+              grid.push('items', Vaadin.GridDemo.users[grid.items.length]);
             });
 
+            const removeBtn = document.querySelector('#remove-btn');
             removeBtn.addEventListener('click', function() {
-              const newItemsArray = grid.items.slice(0);
-              newItemsArray.pop();
-              grid.items = newItemsArray;
+              grid.pop('items');
             });
 
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.firstName;
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.lastName;
-            };
-
-            columns[0].headerRenderer = function(root) {
-              root.textContent = '#';
-            };
-
-            columns[1].headerRenderer = function(root) {
-              root.textContent = 'First Name';
-            };
-
-            columns[2].headerRenderer = function(root) {
-              root.textContent = 'Last Name';
-            };
-
-            const items = [];
-            for (var i = 0; i < 5; i++) {
-              items.push({firstName: 'First Name ' + i, lastName: 'Last Name ' + i});
-            }
-
-            grid.items = items;
+            grid.items = Vaadin.GridDemo.users.slice(0, 4);
           });
         </script>
       </template>
@@ -209,23 +95,22 @@
 
     <h3>Assigning Remote/Function Data</h3>
     <p>
-      A function can be assigned to the <code>dataProvider</code> property to provide
+      The <code>dataProvider</code> property can be assigend a function to provide
       data from a remote source.
     </p>
     <p>
-      <b>Note:</b> the total number of items must be set to the grid. The example
-      below sets the total number of items using the <code>size</code> property.
+      <b>Note:</b> the total number of items must be set as the grid's <code>size</code>.
     </p>
     <p>
-      Alternatively, the total size can be provided in the second argument of the
-      data provider <code>callback</code>, see tree demo example.
+      Size can be provided as the second argument of the data provider <code>callback</code> also.
+      See the "Tree Drid" demo for example.
     </p>
     <vaadin-demo-snippet id='grid-data-demos-assigning-remotefunction-data'>
       <template preserve-content>
         <vaadin-grid aria-label="Remote Data Example">
-          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
-          <vaadin-grid-column></vaadin-grid-column>
+          <vaadin-grid-column path="firstName"></vaadin-grid-column>
+          <vaadin-grid-column path="lastName"></vaadin-grid-column>
+          <vaadin-grid-column path="email"></vaadin-grid-column>
         </vaadin-grid>
         <script>
           window.addDemoReadyListener('#grid-data-demos-assigning-remotefunction-data', function(document) {
@@ -240,32 +125,6 @@
               var index = params.page * params.pageSize;
               xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
               xhr.send();
-            };
-
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.firstName;
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.lastName;
-            };
-
-            columns[0].headerRenderer = function(root) {
-              root.textContent = '#';
-            };
-
-            columns[1].headerRenderer = function(root) {
-              root.textContent = 'First Name';
-            };
-
-            columns[2].headerRenderer = function(root) {
-              root.textContent = 'Last Name';
             };
           });
         </script>

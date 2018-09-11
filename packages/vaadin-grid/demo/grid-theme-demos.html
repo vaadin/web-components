@@ -12,58 +12,16 @@
     <p><code>&lt;vaadin-grid <b>theme="compact"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-theme-demos-compact'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
         <vaadin-grid theme="compact" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-compact', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-compact', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -73,59 +31,16 @@
     <p><code>&lt;vaadin-grid <b>theme="no-border"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-theme-demos-bordered'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
         <vaadin-grid theme="no-border" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-bordered', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-bordered', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -135,59 +50,16 @@
     <p><code>&lt;vaadin-grid <b>theme="no-row-borders"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-theme-demos-row-borders'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
-        <vaadin-grid theme="no-row-border" column-reordering-allowed multi-sort>
+        <vaadin-grid theme="no-row-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-row-borders', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-row-borders', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -197,59 +69,16 @@
     <p><code>&lt;vaadin-grid <b>theme="column-borders"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-theme-demos-column-borders'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
         <vaadin-grid theme="column-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-column-borders', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-column-borders', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -259,59 +88,16 @@
     <p><code>&lt;vaadin-grid <b>theme="row-stripes"</b>&gt;</code></p>
     <vaadin-demo-snippet id='grid-theme-demos-row-stripes'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
         <vaadin-grid theme="row-stripes" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-row-stripes', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-row-stripes', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
@@ -322,59 +108,16 @@
     <p>By default, cell contents don’t wrap and all overflowing content is either clipped or truncated. Apply the <code>wrap-cell-content</code> theme to make the cell content wrap instead.</p>
     <vaadin-demo-snippet id='grid-theme-demos-wrap-cell-content'>
       <template preserve-content>
-        <iron-ajax url="https://demo.vaadin.com/demo-data/1.0/people?count=20"></iron-ajax>
-
         <vaadin-grid theme="wrap-cell-content" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="9em"></vaadin-grid-column>
-          <vaadin-grid-column width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" label="Address" width="9em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
+
         <script>
-          window.addDemoReadyListener('#grid-lumo-theme-demos-wrap-cell-content', function(document) {
-            const ajax = document.querySelector('iron-ajax');
-
-            const grid = document.querySelector('vaadin-grid');
-            const columns = document.querySelectorAll('vaadin-grid-column');
-
-
-            ajax.generateRequest();
-            ajax.addEventListener('last-response-changed', function(e) {
-              grid.items = e.target.lastResponse.result;
-            });
-
-            columns[0].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[0].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'firstName');
-              sorter.textContent = 'First Name';
-              root.appendChild(sorter);
-            };
-
-            columns[1].renderer = function(root, column, model) {
-              root.innerHTML = model.item.firstName;
-            };
-            columns[1].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'lastName');
-              sorter.textContent = 'Last Name';
-              root.appendChild(sorter);
-            };
-
-            columns[2].renderer = function(root, column, model) {
-              root.innerHTML = model.item.address.street + ', ' + model.item.address.city;
-            };
-            columns[2].headerRenderer = function(root, column) {
-              root.innerHTML = '';
-              const sorter = window.document.createElement('vaadin-grid-sorter');
-              sorter.setAttribute('path', 'address.streest');
-              sorter.textContent = 'Address';
-              root.appendChild(sorter);
-            };
+          window.addDemoReadyListener('#grid-theme-demos-wrap-cell-content', function(document) {
+            document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
           });
         </script>
       </template>
