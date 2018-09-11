@@ -326,7 +326,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               this._form.configure(this._grid._cache.items[0]);
             }
             this._form.item = item;
-            this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
+            this._fields.forEach(e => {
+              const path = e.path || e.getAttribute('path');
+              path && (e.value = this.get(path, item));
+            });
           }
           this.opened = !!item;
         }
@@ -370,7 +373,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.__validate()) {
             const item = this.item || {};
 
-            this._fields.forEach(e => this.__set(e.path || e.getAttribute('path'), e.value, this.item));
+            this._fields.forEach(e => {
+              const path = e.path || e.getAttribute('path');
+              path && this.__set(path, e.value, this.item);
+            });
             const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
             if (evt) {
               if (this.items) {
