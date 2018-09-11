@@ -40,17 +40,18 @@
         role: 'operator'
       }];
 
-      describe('fixture no-sort-filter', () => {
+      describe('fixture no-sort-no-filter', () => {
 
         beforeEach(done => {
-          crudGrid = fixture('default');
+          crudGrid = fixture('no-sort-no-filter');
           crudGrid.items = items;
           window.flushGrid(crudGrid);
           Polymer.RenderStatus.afterNextRender(crudGrid, done);
         });
 
         !shadyDom && it('should not add sorters and filters if disabled', () => {
-          expect(getHeaderCellContent(crudGrid, 0, 0).textContent).to.be.equal('Name');
+          expect(getHeaderCellContent(crudGrid, 1, 1).firstElementChild).not.to.be.ok;
+          expect(getHeaderCellContent(crudGrid, 1, 1).textContent).to.be.equal('First');
         });
       });
 
