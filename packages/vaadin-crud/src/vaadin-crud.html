@@ -46,7 +46,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </slot>
 
     <div id="editor">
-      <h3>[[__editorHeader(item)]]</h3>
+      <h3>[[__editorHeader]]</h3>
       <div id="buttons" style="margin-top: 30px; display: flex; min-width: 100%;">
         <vaadin-button on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
@@ -228,7 +228,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             opened: {
               type: Boolean,
-              notify: true
+              notify: true,
+              observer: '__onOpenedChanged'
             },
             /**
              * The description of the entity associated with this CRUD.
@@ -257,6 +258,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._form = this.$.form;
         }
 
+        __onOpenedChanged(opened) {
+          if (!opened) {
+            this.__closeEditor();
+          }
+        }
+
         __onDomChange(nodes) {
           nodes.forEach(node => {
             if (node instanceof Vaadin.GridElement) {
@@ -269,7 +276,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onActiveItemChange(e) {
-          this.__edit(e.detail.value);
+          if (e.detail.value) {
+            this.__edit(e.detail.value);
+            this._grid.activeItem = null;
+          }
         }
 
         __onFormChanges(e) {
@@ -347,7 +357,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __closeEditor() {
-          this.opened = this.item = this._grid.activeItem = undefined;
+          this.opened = this.item = undefined;
         }
 
         __new() {
@@ -359,6 +369,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __openEditor(item) {
+          this.__isNew = !item;
+          this.__editorHeader = `${item ? 'Edit' : 'New'} ${this.entityName}`
           const evt = this.dispatchEvent(new CustomEvent(item ? 'edit' : 'new', {detail: {item: item}, cancelable: true}));
           if (evt) {
             this.item = item || {};
@@ -366,7 +378,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.opened = true;
           }
           this.__isDirty = false;
-          this.__isNew = !item;
         }
 
         __save() {
@@ -424,10 +435,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
             this.set(path, val, obj);
           }
-        }
-
-        __editorHeader(item) {
-          return `${this.__isNew ? 'New' : 'Edit'} ${this.entityName}`;
         }
 
         /**
