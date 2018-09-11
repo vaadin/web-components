@@ -24,8 +24,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
       static get properties() {
         return {
-          size: Number,
-
+          size: {
+            type: Number,
+            notify: true
+          },
           _vidxOffset: {
             value: 0
           }

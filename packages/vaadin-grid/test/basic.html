@@ -82,6 +82,16 @@
         });
       });
 
+      it('should notify `size` property', done => {
+        expect(grid.size).not.equal(10);
+
+        listenOnce(grid, 'size-changed', () => {
+          expect(grid.size).equal(10);
+          done();
+        });
+        grid.size = 10;
+      });
+
       it('should not warn on init', done => {
         const warn = sinon.stub(console, 'warn');
         const func = grid._warnPrivateAPIAccess;
