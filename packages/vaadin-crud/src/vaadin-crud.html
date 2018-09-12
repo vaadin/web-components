@@ -239,7 +239,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               value: 'Item'
             },
             __isDirty: Boolean,
-            __isNew: Boolean
+            __isNew: Boolean,
+            __editorHeader: String
           };
         }
 
@@ -353,7 +354,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __validate() {
-          return this._fields.reduce((prev, e) => e.validate() && prev, true);
+          return this._fields.every(e => e.validate());
         }
 
         __closeEditor() {
@@ -361,41 +362,42 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __new() {
-          this.__openEditor();
+          this.__openEditor('new');
         }
 
         __edit(item) {
-          this.__openEditor(item);
+          this.__openEditor('edit', item);
         }
 
-        __openEditor(item) {
-          this.__isNew = !item;
-          this.__editorHeader = `${item ? 'Edit' : 'New'} ${this.entityName}`
-          const evt = this.dispatchEvent(new CustomEvent(item ? 'edit' : 'new', {detail: {item: item}, cancelable: true}));
+        __openEditor(type, item) {
+          this.__isDirty = false;
+          this.__isNew = !item || (typeof item == 'object' && !Object.keys(item).length);
+          this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
+          const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
             this.item = item || {};
           } else {
             this.opened = true;
           }
-          this.__isDirty = false;
         }
 
         __save() {
-          if (this.__validate()) {
-            const item = this.item || {};
+          if (!this.__validate()) {
+            return;
+          }
 
-            this._fields.forEach(e => {
-              const path = e.path || e.getAttribute('path');
-              path && this.__set(path, e.value, this.item);
-            });
-            const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
-            if (evt) {
-              if (this.items) {
-                this.__isNew && this.items.push(item);
-              }
-              this._grid.clearCache();
-              this.__closeEditor();
+          const item = this.item || {};
+          this._fields.forEach(e => {
+            const path = e.path || e.getAttribute('path');
+            path && this.__set(path, e.value, this.item);
+          });
+          const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
+          if (evt) {
+            if (this.__isNew && this.items) {
+              this.items.push(item);
             }
+            this._grid.clearCache();
+            this.__closeEditor();
           }
         }
 

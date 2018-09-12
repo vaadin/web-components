@@ -94,6 +94,29 @@
           Polymer.RenderStatus.afterNextRender(crud._grid, done);
         });
 
+        describe('actions', () => {
+          it('should save an edited item', () => {
+            crud.item = crud.items[0];
+            crud._form._fields[0].value = 'baz';
+            btnSave().click();
+            expect(crud.items[0].foo).to.be.equal('baz');
+          });
+
+          it('should save a new item', () => {
+            crud.$.new.click();
+            crud._form._fields[0].value = 'baz';
+            btnSave().click();
+            expect(crud.items[1].foo).to.be.equal('baz');
+          });
+
+          it('should delete a item', () => {
+            crud.item = crud.items[0];
+            btnDelete().click();
+            btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+            expect(crud.items.length).to.be.equal(0);
+          });
+        });
+
         describe('confirmation', () => {
 
           afterEach(done => {
