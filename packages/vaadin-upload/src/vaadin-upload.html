@@ -735,7 +735,9 @@ This program is available under Apache License Version 2.0, available at https:/
          * @param {File} file File to remove
          */
         _removeFile(file) {
-          this.splice('files', this.files.indexOf(file), 1);
+          if (this.files.indexOf(file) > -1) {
+            this.splice('files', this.files.indexOf(file), 1);
+          }
         }
 
         _onAddFilesTouchEnd(e) {
