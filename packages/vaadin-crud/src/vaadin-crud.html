@@ -33,50 +33,121 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         display: none !important;
       }
 
-      #new {
-        width: 40px;
+      #toolbar {
+        display: flex;
       }
     </style>
 
     <slot name="grid" id="grid-slot">
-      <vaadin-crud-grid id="grid"></vaadin-crud-grid>
+      <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]"></vaadin-crud-grid>
     </slot>
     <slot name="form" id="form-slot">
-      <vaadin-crud-form id="form"></vaadin-crud-form>
+      <vaadin-crud-form id="form" exclude="[[exclude]]"></vaadin-crud-form>
     </slot>
 
     <div id="editor">
+      <h3>[[__editorHeader]]</h3>
       <div id="buttons" style="margin-top: 30px; display: flex; min-width: 100%;">
-        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!_dirty]]">Save</vaadin-button>
+        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
         <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
         <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew(item)]]">Delete</vaadin-button>
+        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete</vaadin-button>
       </div>
     </div>
 
-    <vaadin-button id="new" on-click="__new">New</vaadin-button>
+    <div id="toolbar">
+      <div style="flex: 1"></div>
+      <vaadin-button id="new" on-click="__new">New [[entityName]]</vaadin-button>
+    </div>
 
-    <vaadin-dialog id="dialog" no-close-on-outside-click=[[_dirty]] no-close-on-esc=[[_dirty]]></vaadin-dialog>
+    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}"></vaadin-dialog>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
       reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
-      There are unsaved modifications to the item.
+      There are unsaved modifications to the [[entityName]].
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
       cancel confirm-text="Delete" reject-text="Cancel" header="Confirm Delete" >
-      Are you sure you want to delete the selected Item? This action cannot be undone.
+      Are you sure you want to delete the selected [[entityName]]? This action cannot be undone.
     </vaadin-confirm-dialog>
   </template>
 
   <script>
     (function() {
-
       /**
-       * `<vaadin-crud>`A Web component for crud operations
+       * `<vaadin-crud>` is a Web Component for [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
        *
+       * ### Quick Start
+       *
+       * Assign an array to the [`items`](#/elements/vaadin-crud#property-items) property.
+       *
+       * A grid and an editor will be automatically generated and configured based on the data structure provided.
+       *
+       * #### Example:
+       * ```html
+       * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
+       *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
+       * </vaadin-crud>
        * ```
+       *
+       * ### Data Provider Function
+       *
+       * Otherwise, you can provide a [`dataProvider`](#/elements/vaadin-crud#property-dataProvider) function.
+       * #### Example:
+       * ```html
        * <vaadin-crud></vaadin-crud>
        * ```
+       * ```js
+       * const crud = document.querySelector('vaadin-crud');
+       * const users = [{'name': 'John', 'surname': 'Lennon', 'role': 'singer'}, ...];
+       * crud.dataProvider = function(params, callback) {
+       *   const chunk = users.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
+       *   callback(chunk, people.length);
+       * };
+       * ```
+       *
+       * ### Grid and Form Customization
+       *
+       * Alternatively you can fully configure the component by providing your own Grid and Editor.
+       * #### Example:
+       * ```html
+       * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
+       *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
+       *  <vaadin-grid slot="grid">
+       *   <vaadin-grid-column>
+       *    <template class="header">Name</template><template>[[item.name]]</template>
+       *   </vaadin-grid-column>
+       *   <vaadin-grid-column>
+       *    <template class="header">Surname</template><template>[[item.surname]]</template>
+       *   </vaadin-grid-column>
+       *  </vaadin-grid>
+       *  <vaadin-form-layout>
+       *   <vaadin-text-field label="First" path="name"></vaadin-text-field>
+       *   <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
+       *  </vaadin-form-layout>
+       * </vaadin-crud>
+       * ```
+       * ```js
+       * const crud = document.querySelector('vaadin-crud');
+       * const users = [{'name': 'John', 'surname': 'Lennon', 'role': 'singer'}, ...];
+       * crud.dataProvider = function(params, callback) {
+       *   const chunk = users.slice(params.page * params.pageSize, params.page * params.pageSize + params.pageSize);
+       *   callback(chunk, people.length);
+       * };
+       * ```
+       *
+       * The following helper elements are used to autofonfigure CRUD grid and editor
+       * - [`<vaadin-crud-grid>`](#/elements/vaadin-crud-grid)
+       * - [`<vaadin-crud-form>`](#/elements/vaadin-crud-form)
+       *
+       * ### Styling
+       *
+       * The following shadow DOM parts are available for styling:
+       *
+       * Part name | Description
+       * ----------------|----------------
+       *
+       * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
        * @memberof Vaadin
        * @mixes Vaadin.ElementMixin
@@ -94,27 +165,82 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         static get properties() {
           return {
+            /** A reference to the grid used for displaying the item list */
             _grid: {
               type: HTMLElement,
               observer: '__onGridChange'
             },
+            /** A reference to the editor component which will be teleported to the dialog */
             _form: {
               type: HTMLElement,
               observer: '__onFormChange'
             },
+            /**
+             * An array containing the items which will be stamped to the column template instances.
+             */
             items: {
               type: Array,
               observer: '__onItemsChange'
             },
+            /**
+             * The item being edited in the dialog.
+             */
             item: {
               type: Object,
               observer: '__onItemChange'
             },
+            /**
+             * Function that provides items lazily. Receives arguments `params`, `callback`
+             *
+             * `params.page` Requested page index
+             * `params.pageSize` Current page size
+             * `params.filters` Currently applied filters
+             * `params.sortOrders` Currently applied sorting orders
+             *
+             * `callback(items, size)` Callback function with arguments:
+             *   - `items` Current page of items
+             *   - `size` Total number of items
+             */
             dataProvider: {
               type: Function,
               observer: '__onDataProviderChange'
             },
-            _dirty: Boolean
+            /**
+             * Disable filtering when grid is autofonfigured.
+             */
+            noFilter: Boolean,
+            /**
+             * Disable sorting when grid is autofonfigured.
+             */
+            noSort: Boolean,
+            /**
+             * A regular expression string to applied to fields that will be exclude
+             * when using autoconfigured elements.
+             *
+             * Default is `/^_` meaning that all protected properties are excluded
+             */
+            exclude: {
+              type: String,
+              value: '^_'
+            },
+            /**
+             * Reflects the opened status of the editor.
+             */
+            opened: {
+              type: Boolean,
+              notify: true,
+              observer: '__onOpenedChanged'
+            },
+            /**
+             * The description of the entity associated with this CRUD.
+             */
+            entityName: {
+              type: String,
+              value: 'Item'
+            },
+            __isDirty: Boolean,
+            __isNew: Boolean,
+            __editorHeader: String
           };
         }
 
@@ -133,6 +259,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._form = this.$.form;
         }
 
+        __onOpenedChanged(opened) {
+          if (!opened) {
+            this.__closeEditor();
+          } else {
+            this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
+          }
+        }
+
         __onDomChange(nodes) {
           nodes.forEach(node => {
             if (node instanceof Vaadin.GridElement) {
@@ -145,11 +279,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onActiveItemChange(e) {
-          this.__edit(e.detail.value);
+          if (e.detail.value) {
+            this.__edit(e.detail.value);
+            this._grid.activeItem = null;
+          }
         }
 
         __onFormChanges(e) {
-          this._dirty = true;
+          this.__isDirty = true;
         }
 
         __onGridChange(grid, old) {
@@ -199,97 +336,75 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __onItemChange(item, old) {
           if (this._form && item) {
             if (!this._fields.length && this._form.configure) {
-              const obj = this.__isNew(item) ? this._grid._cache.items[0] : item;
-              this._form.configure(obj);
+              this._form.configure(this._grid._cache.items[0]);
             }
-            this.__fillForm(item);
+            this._form.item = item;
+            this._fields.forEach(e => {
+              const path = e.path || e.getAttribute('path');
+              path && (e.value = this.get(path, item));
+            });
           }
-          this.$.dialog.opened = !!item;
+
+          this.opened = !!item;
         }
 
+        /** A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element */
         get _fields() {
           if (!this.__fields || !this.__fields.length) {
-            this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate);
+            this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate || e.checkValidity);
           }
           return this.__fields;
         }
 
-        __isNew(item) {
-          return !item || !Object.keys(item).length;
-        }
-
-        __fillForm(item) {
-          this._form.item = item;
-          this._fields.forEach(e => e.value = this.get(e.path || e.getAttribute('path'), item));
-          this._dirty = false;
-        }
-
         __validate() {
-          return this._fields.reduce((prev, e) => e.validate() && prev, true);
+          return this._fields.every(e => (e.validate || e.checkValidity).call(e));
         }
 
         __closeEditor() {
-          this.$.dialog.opened = this.item = this._grid.activeItem = undefined;
+          this.opened = this.item = undefined;
         }
 
         __new() {
-          /**
-           * Fired when user wants to create a new item.
-           *
-           * @event new
-           */
-          const evt = this.dispatchEvent(new CustomEvent('new', {cancelable: true}));
-          if (evt) {
-            this.item = {};
-          } else {
-            this.$.dialog.opened = true;
-          }
+          this.__openEditor('new');
         }
 
         __edit(item) {
-          /**
-           * Fired when user wants to edit an existing item. If the default is prevented, then
-           * a new item is not assigned to the form, giving that responsability to the app, though
-           * dialog is always opened.
-           *
-           * @event edit
-           * @param {Object} detail.item the item to edit
-           */
-          const evt = this.dispatchEvent(new CustomEvent('edit', {detail: {item: item}, cancelable: true}));
+          this.__openEditor('edit', item);
+        }
+
+        __openEditor(type, item) {
+          this.__isDirty = false;
+          this.__isNew = !item || (typeof item == 'object' && !Object.keys(item).length);
+          const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
-            this.item = item;
+            this.item = item || {};
           } else {
-            this.$.dialog.opened = true;
+            this.opened = true;
           }
         }
 
         __save() {
-          if (this.__validate()) {
-            const item = this.item || {};
-            const isNew = this.__isNew(this.item);
+          if (!this.__validate()) {
+            return;
+          }
 
-            this._fields.forEach(e => this.__set(e.path || e.getAttribute('path'), e.value, this.item));
-            /**
-             * Fired when user wants to save a new or an existing item. If the default is prevented, then
-             * no action is performed, items array is not modified nor dialog closed
-             *
-             * @event save
-             * @param {Object} detail.item the item to save
-             * @param {Object} detail.new whether the item is a new one
-             */
-            const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
-            if (evt) {
-              if (this.items) {
-                isNew && this.items.push(item);
-              }
-              this._grid.clearCache();
-              this.__closeEditor();
+          const item = this.item || {};
+          this._fields.forEach(e => {
+            const path = e.path || e.getAttribute('path');
+            path && this.__set(path, e.value, this.item);
+          });
+          const evt = this.dispatchEvent(new CustomEvent('save', {detail: {item: item}, cancelable: true}));
+          if (evt) {
+            if (this.__isNew && this.items) {
+              this.items.push(item);
             }
+            this._grid.clearCache();
+            this.__closeEditor();
           }
         }
 
         __cancel() {
-          if (this._dirty) {
+          if (this.__isDirty) {
             this.$.confirmCancel.opened = true;
           } else {
             this.__confirmCancel();
@@ -297,14 +412,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __confirmCancel() {
-          /**
-           * Fired when user discards edition. If the default is prevented, then
-           * no action is performed, user is responsible to close dialog and reset
-           * item and grid.
-           *
-           * @event cancel
-           * @param {Object} detail.item the item to delete
-           */
           const evt = this.dispatchEvent(new CustomEvent('cancel', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
             this.__closeEditor();
@@ -316,13 +423,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __confirmDelete() {
-          /**
-           * Fired when user wants to delete item. If the default is prevented, then
-           * no action is performed, items array is not modified nor dialog closed
-           *
-           * @event delete
-           * @param {Object} detail.item the item to delete
-           */
           const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
             if (this.items) {
@@ -333,13 +433,50 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           }
         }
 
-        // Utility method for setting nested values in JSON objects but initialising empty keys unless polymer `this.set`
+        // Utility method for setting nested values in JSON objects but initialising empty keys unless `Polymer.Base.set`
         __set(path, val, obj) {
           if (obj && path) {
             path.split('.').slice(0, -1).reduce((o, p) => (o[p] = o[p] || {}), obj);
             this.set(path, val, obj);
           }
         }
+
+        /**
+         * Fired when user wants to edit an existing item. If the default is prevented, then
+         * a new item is not assigned to the form, giving that responsability to the app, though
+         * dialog is always opened.
+         *
+         * @event edit
+         * @param {Object} detail.item the item to edit
+         */
+        /**
+         * Fired when user wants to create a new item.
+         *
+         * @event new
+         */
+        /**
+         * Fired when user wants to delete item. If the default is prevented, then
+         * no action is performed, items array is not modified nor dialog closed
+         *
+         * @event delete
+         * @param {Object} detail.item the item to delete
+         */
+        /**
+         * Fired when user discards edition. If the default is prevented, then
+         * no action is performed, user is responsible to close dialog and reset
+         * item and grid.
+         *
+         * @event cancel
+         * @param {Object} detail.item the item to delete
+         */
+        /**
+         * Fired when user wants to save a new or an existing item. If the default is prevented, then
+         * no action is performed, items array is not modified nor dialog closed
+         *
+         * @event save
+         * @param {Object} detail.item the item to save
+         * @param {Object} detail.new whether the item is a new one
+         */
       }
 
       customElements.define(CrudElement.is, CrudElement);

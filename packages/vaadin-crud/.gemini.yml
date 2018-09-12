@@ -15,8 +15,8 @@ browsers:
       version: "66.0"
       platform: "Windows 10"
 
-  firefox:
-    desiredCapabilities:
-      browserName: "firefox"
-      version: "47.0"
-      platform: "Windows 10"
+#  firefox:
+#    desiredCapabilities:
+#      browserName: "firefox"
+#      version: "47.0"
+#      platform: "Windows 10"

@@ -6,8 +6,8 @@
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
-  <link rel="import" href="../../vaadin-grid/test/helpers.html">
-  <link rel="import" href="../vaadin-crud.html">
+  <link rel="import" href="helpers.html">
+  <link rel="import" href="../src/vaadin-crud.html">
 </head>
 
 <body>
@@ -34,7 +34,9 @@
   <test-fixture id="form">
     <template>
       <vaadin-form-layout>
-        <vaadin-text-field path="foo"></vaadin-text-field>
+        <head>Foo Editor</head>
+        <vaadin-text-field path="foo" required></vaadin-text-field>
+        <input type="number" path="bar" required>
       </vaadin-form-layout>
     </template>
   </test-fixture>
@@ -78,7 +80,7 @@
           });
         });
 
-        afterEach(() => crud.$.dialog.opened = false);
+        afterEach(() => crud.opened = false);
 
         it('should be able to set items and item declaratively', () => {
           expect(crud._grid._columnTree.length).to.be.equal(1);
@@ -87,10 +89,32 @@
       });
 
       describe('items', () => {
-
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];
           Polymer.RenderStatus.afterNextRender(crud._grid, done);
+        });
+
+        describe('actions', () => {
+          it('should save an edited item', () => {
+            crud.item = crud.items[0];
+            crud._form._fields[0].value = 'baz';
+            btnSave().click();
+            expect(crud.items[0].foo).to.be.equal('baz');
+          });
+
+          it('should save a new item', () => {
+            crud.$.new.click();
+            crud._form._fields[0].value = 'baz';
+            btnSave().click();
+            expect(crud.items[1].foo).to.be.equal('baz');
+          });
+
+          it('should delete a item', () => {
+            crud.item = crud.items[0];
+            btnDelete().click();
+            btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+            expect(crud.items.length).to.be.equal(0);
+          });
         });
 
         describe('confirmation', () => {
@@ -158,6 +182,57 @@
           });
         });
 
+        describe('flags', () => {
+          afterEach(done => {
+            crud.$.dialog.opened = false;
+            setTimeout(done);
+          });
+
+          it('should configure dirty and new flags on new', () => {
+            crud.$.new.click();
+            expect(crud.__isDirty).not.to.be.true;
+            expect(crud.__isNew).to.be.true;
+          });
+
+          it('should configure dirty and new flags on edit', () => {
+            crud._grid.activeItem = crud.items[0];
+            expect(crud.__isDirty).not.to.be.true;
+            expect(crud.__isNew).not.to.be.true;
+          });
+
+          it('should set dirty on editor changes', () => {
+            crud._grid.activeItem = crud.items[0];
+            crud._form.dispatchEvent(new Event('change'));
+            expect(crud.__isDirty).to.be.true;
+          });
+
+          it('should hide delete button on new', done => {
+            crud.$.new.click();
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              expect(btnDelete().hasAttribute('hidden')).to.be.true;
+              done();
+            });
+          });
+
+          it('should show delete button and disable save button on edit', done => {
+            crud._grid.activeItem = crud.items[0];
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).to.be.true;
+              expect(btnDelete().hasAttribute('hidden')).not.to.be.true;
+              done();
+            });
+          });
+
+          it('should enable save button on change', done => {
+            crud._grid.activeItem = crud.items[0];
+            Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
+              crud._form.dispatchEvent(new Event('change'));
+              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).not.to.be.true;
+              done();
+            });
+          });
+        });
+
         describe('events', () => {
           afterEach(done => {
             crud.$.dialog.opened = false;
@@ -197,6 +272,8 @@
             it('on edit should set the item and open dialog if not default prevented', () => {
               crud._grid.activeItem = crud.items[0];
               expect(crud.item).to.be.equal(crud.items[0]);
+              expect(crud.$.dialog.opened).to.be.true;
+              expect(crud.opened).to.be.true;
             });
 
             it('on edit should not set the item nor open dialog if default prevented', () => {
@@ -244,6 +321,7 @@
               crud.item = crud.items[0];
               btnCancel().click();
               expect(crud.$.dialog.opened).not.to.be.ok;
+              expect(crud.opened).not.to.be.ok;
             });
 
             it('on cancel should keep opened dialog if default prevented', () => {
@@ -375,6 +453,44 @@
             expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
             done();
           });
+        });
+      });
+
+      describe('validation', () => {
+        let form;
+
+        beforeEach(done => {
+          form = fixture('form');
+          form.setAttribute('slot', 'form');
+          crud.appendChild(form);
+          crud._observer.flush();
+          crud.items = [{foo: 1, bar: 2}];
+          Polymer.RenderStatus.afterNextRender(crud, done);
+        });
+
+        afterEach(() => crud.opened = false);
+
+        it('should be able to validate fields', () => {
+          crud.item = crud.items[0];
+          expect(crud.__validate()).to.be.true;
+
+          crud.__fields[0].value = '';
+          expect(crud.__validate()).to.be.false;
+
+          crud.__fields[1].value = '1';
+          crud.__fields[1].value = '';
+          expect(crud.__validate()).to.be.false;
+        });
+
+        it('should not save if invalid', () => {
+          crud.item = crud.items[0];
+          crud.__fields[1].value = '';
+
+          listenOnce(crud, 'save', e => {
+            throw Error('Error save event thrown in an invalid form');
+          });
+
+          crud.__save();
         });
       });
     });
