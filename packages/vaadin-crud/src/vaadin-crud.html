@@ -79,7 +79,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *
        * ### Quick Start
        *
-       * Assig an array to the [`items`](#/elements/vaadin-crud#property-items) property.
+       * Assign an array to the [`items`](#/elements/vaadin-crud#property-items) property.
        *
        * A grid and an editor will be automatically generated and configured based on the data structure provided.
        *
@@ -262,6 +262,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __onOpenedChanged(opened) {
           if (!opened) {
             this.__closeEditor();
+          } else {
+            this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
           }
         }
 
@@ -342,19 +344,20 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               path && (e.value = this.get(path, item));
             });
           }
+
           this.opened = !!item;
         }
 
         /** A reference to all fields inside the [`_form`](#/elements/vaadin-crud#property-_form) element */
         get _fields() {
           if (!this.__fields || !this.__fields.length) {
-            this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate);
+            this.__fields = Array.from(this._form.querySelectorAll('*')).filter(e => e.validate || e.checkValidity);
           }
           return this.__fields;
         }
 
         __validate() {
-          return this._fields.every(e => e.validate());
+          return this._fields.every(e => (e.validate || e.checkValidity).call(e));
         }
 
         __closeEditor() {
@@ -372,7 +375,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __openEditor(type, item) {
           this.__isDirty = false;
           this.__isNew = !item || (typeof item == 'object' && !Object.keys(item).length);
-          this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
           const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
             this.item = item || {};

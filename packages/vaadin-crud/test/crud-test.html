@@ -35,7 +35,8 @@
     <template>
       <vaadin-form-layout>
         <head>Foo Editor</head>
-        <vaadin-text-field path="foo"></vaadin-text-field>
+        <vaadin-text-field path="foo" required></vaadin-text-field>
+        <input type="number" path="bar" required>
       </vaadin-form-layout>
     </template>
   </test-fixture>
@@ -88,7 +89,6 @@
       });
 
       describe('items', () => {
-
         beforeEach(done => {
           crud.items = [{foo: 'bar'}];
           Polymer.RenderStatus.afterNextRender(crud._grid, done);
@@ -453,6 +453,44 @@
             expect(getBodyCellContent(crud._grid, 1, 0).textContent).to.be.equal('2');
             done();
           });
+        });
+      });
+
+      describe('validation', () => {
+        let form;
+
+        beforeEach(done => {
+          form = fixture('form');
+          form.setAttribute('slot', 'form');
+          crud.appendChild(form);
+          crud._observer.flush();
+          crud.items = [{foo: 1, bar: 2}];
+          Polymer.RenderStatus.afterNextRender(crud, done);
+        });
+
+        afterEach(() => crud.opened = false);
+
+        it('should be able to validate fields', () => {
+          crud.item = crud.items[0];
+          expect(crud.__validate()).to.be.true;
+
+          crud.__fields[0].value = '';
+          expect(crud.__validate()).to.be.false;
+
+          crud.__fields[1].value = '1';
+          crud.__fields[1].value = '';
+          expect(crud.__validate()).to.be.false;
+        });
+
+        it('should not save if invalid', () => {
+          crud.item = crud.items[0];
+          crud.__fields[1].value = '';
+
+          listenOnce(crud, 'save', e => {
+            throw Error('Error save event thrown in an invalid form');
+          });
+
+          crud.__save();
         });
       });
     });
