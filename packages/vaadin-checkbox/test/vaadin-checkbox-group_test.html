@@ -179,6 +179,18 @@
       expect(vaadinCheckboxGroup.label).to.be.equal('foo');
     });
 
+    it('should not have has-value attribute by default', () => {
+      expect(vaadinCheckboxGroup.hasAttribute('has-value')).to.be.false;
+    });
+
+    it('should toggle has-value attribute on value change', () => {
+      vaadinCheckboxGroup.value = ['2'];
+      expect(vaadinCheckboxGroup.hasAttribute('has-value')).to.be.true;
+
+      vaadinCheckboxGroup.value = [];
+      expect(vaadinCheckboxGroup.hasAttribute('has-value')).to.be.false;
+    });
+
     it('should add label to checkbox group when a label is dynamically set', () => {
       vaadinCheckboxGroup.label = 'foo';
 
