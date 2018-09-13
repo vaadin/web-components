@@ -29,25 +29,20 @@
 -->
 ```html
   <vaadin-grid theme="row-dividers" column-reordering-allowed multi-sort>
-
-    <vaadin-grid-selection-column auto-select frozen> </vaadin-grid-selection-column>
-
+    <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
     <vaadin-grid-column width="9em" path="firstName"></vaadin-grid-column>
-
     <vaadin-grid-column width="9em" path="lastName"></vaadin-grid-column>
-
-    <vaadin-grid-column id="address-column" width="15em" flex-grow="2" path="address.street" label="Address"></vaadin-grid-column>
-
+    <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" label="Address"></vaadin-grid-column>
   </vaadin-grid>
 
   <script>
-    const grid = document.querySelector('vaadin-grid');
     // Customize the "Address" column's renderer
-    document.querySelector('#address-column').renderer = (root, grid, model) => {
+    document.querySelector('#addresscolumn').renderer = (root, grid, model) => {
       root.textContent = `${model.item.address.street}, ${model.item.address.city}`;
     };
 
     // Populate the grid with data
+    const grid = document.querySelector('vaadin-grid');
     fetch('https://demo.vaadin.com/demo-data/1.0/people?count=200')
       .then(res => res.json())
       .then(json => grid.items = json.result);
