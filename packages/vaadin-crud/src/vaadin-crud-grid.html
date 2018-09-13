@@ -10,7 +10,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-column-group.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-sorter.html">
 <link rel="import" href="../../vaadin-grid/src/vaadin-grid-filter.html">
-
+<link rel="import" href="vaadin-crud-grid-edit-column.html">
   <script>
     (function() {
 
@@ -64,14 +64,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __onItemsChange(items) {
           if ((!this.dataProvider || this.dataProvider == this._arrayDataProvider) && items && items[0]) {
             this.innerHTML = '';
-            this.__createColumns(this, items[0]);
+            this.__configure(items[0]);
           }
         }
 
         __dataProviderWrapper(params, callback) {
           this.__dataProvider(params, (items, size) => {
             if (this.innerHTML == '' && items[0]) {
-              this.__createColumns(this, items[0]);
+              this.__configure(items[0]);
             }
             callback(items, size);
           });
@@ -90,6 +90,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.dataProvider = this.__dataProviderWrapper;
             super._dataProviderChanged(this.__dataProviderWrapper, oldDataProvider);
           }
+        }
+
+        __configure(item) {
+          this.__createColumns(this, item);
+          this.appendChild(document.createElement('vaadin-crud-grid-edit-column'));
         }
 
         __createColumn(parent, path) {

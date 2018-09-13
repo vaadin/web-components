@@ -253,7 +253,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         ready() {
           super.ready();
-          this.__activeListener = e => this.__onActiveItemChange(e);
+          this.__editListener = e => this.__onCrudGridEdit(e);
           this.__changeListener = e => this.__onFormChanges(e);
           this._grid = this.$.grid;
           this._form = this.$.form;
@@ -278,11 +278,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           });
         }
 
-        __onActiveItemChange(e) {
-          if (e.detail.value) {
-            this.__edit(e.detail.value);
-            this._grid.activeItem = null;
-          }
+        __onCrudGridEdit(e) {
+          e.stopPropagation();
+          this.__edit(e.detail.item);
         }
 
         __onFormChanges(e) {
@@ -291,7 +289,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __onGridChange(grid, old) {
           if (old) {
-            old.removeEventListener('active-item-changed', this.__activeListener);
+            old.removeEventListener('edit', this.__editListener);
           }
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
@@ -302,7 +300,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.item) {
             this.__onItemChange(this.item);
           }
-          Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('active-item-changed', this.__activeListener));
+          Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('edit', this.__editListener));
         }
 
         __onFormChange(form, old) {

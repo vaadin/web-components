@@ -1,0 +1,136 @@
+<!--
+@license
+Copyright (c) 2017 Vaadin Ltd.
+This program is available under Commercial Vaadin Add-On License 3.0, available at http://vaadin.com/license/cval-3.
+-->
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../../vaadin-grid/src/vaadin-grid-column.html">
+
+<dom-module id="vaadin-crud-grid-edit">
+  <template>
+    <style>
+      :host {
+        cursor: pointer;
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        text-align: center;
+        line-height: 40px;
+        font-size: 20px;
+      }
+
+      :host::after {
+        font-family: serif;
+        content: '✎';
+      }
+    </style>
+  </template>
+
+  <script>
+    /**
+     * `<vaadin-crud-grid-edit>` is a helper element for the `<vaadin-crud-grid-edit-column>` that provides
+     * a button that can be easily themed.
+     */
+    class CrudGridEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      static get is() {
+        return 'vaadin-crud-grid-edit';
+      }
+    }
+    window.customElements.define(CrudGridEditElement.is, CrudGridEditElement);
+  </script>
+</dom-module>
+
+<dom-module id="vaadin-crud-grid-edit-column">
+  <template>
+    <template class="header" id="defaultHeaderTemplate">
+    </template>
+    <template id="defaultBodyTemplate">
+      <div id="edit">Edit</div>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    /**
+     * `<vaadin-crud-grid-edit-column>` is a helper element for the `<vaadin-grid>`
+     * that provides an edit icon which will fire an `edit` event when clicked.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid items="[[items]]">
+     *  <vaadin-crud-grid-edit-column frozen></vaadin-crud-grid-edit-column>
+     *
+     *  <vaadin-grid-column>
+     *    ...
+     * ```
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.GridColumnElement
+     */
+    class CrudGridEditColumnElement extends Vaadin.GridColumnElement {
+
+      static get is() {
+        return 'vaadin-crud-grid-edit-column';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * Width of the cells for this column.
+           */
+          width: {
+            type: String,
+            value: '40px'
+          },
+
+          /**
+           * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+           */
+          flexGrow: {
+            type: Number,
+            value: 0
+          },
+        };
+      }
+
+
+      ready() {
+        super.ready();
+        this.renderer = (root, column, model) => {
+          if (!root.firstElementChild) {
+            const elm = document.createElement('vaadin-crud-grid-edit');
+            elm.addEventListener('click', e => this.__onClick(e));
+            this.hasAttribute('theme') && elm.setAttribute('theme', this.getAttribute('theme'));
+            root.appendChild(elm);
+          }
+        };
+      }
+
+      __onClick(e) {
+        const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+        tr.dispatchEvent(
+          new CustomEvent('edit', {detail: {item: tr._item, index: tr.index}, bubbles: true, composed: true}));
+      }
+
+      /**
+       * Fired when user clicks on the new item button.
+       *
+       * @event edit
+       * @param {Object} detail.item the item to edit
+       * @param {Object} detail.item the index of the item in the data set
+       */
+    }
+
+    customElements.define(CrudGridEditColumnElement.is, CrudGridEditColumnElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.CrudGridEditColumnElement = CrudGridEditColumnElement;
+  })();
+  </script>
+</dom-module>

@@ -22,6 +22,11 @@
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
         <vaadin-crud items=[[items]]>
           <vaadin-grid slot="grid">
+            <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
+
+            <vaadin-grid-column width="60px" flex-grow="0">
+              <template><img src="[[item.details.picture]]" style="width: 40px; border-radius: 50%;"></template>
+            </vaadin-grid-column>
             <vaadin-grid-column>
               <template class="header">User</template>
               <template>[[item.name.first]] [[item.name.last]]</template>

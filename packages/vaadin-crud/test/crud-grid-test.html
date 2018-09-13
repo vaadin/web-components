@@ -110,6 +110,10 @@
               expect(getHeaderCellContent(crudGrid, 1, 2).textContent.trim()).to.be.equal('Role');
             });
 
+            it('should automatically add the edit column', () => {
+              expect(getBodyCellContent(crudGrid, 0, 3).firstElementChild.localName).to.be.equal('vaadin-crud-grid-edit');
+            });
+
             it('should automatically add sorters to columns', () => {
               [0, 1, 2].forEach(c => {
                 expect(getHeaderCellContent(crudGrid, 1, c).firstElementChild.localName).to.be.equal('vaadin-grid-sorter');
@@ -126,6 +130,15 @@
               expect(getBodyCellContent(crudGrid, 0, 0).textContent).to.be.equal('Grant');
               expect(getBodyCellContent(crudGrid, 0, 1).textContent).to.be.equal('Andrews');
               expect(getBodyCellContent(crudGrid, 0, 2).textContent).to.be.equal('operator');
+            });
+
+            it('should fire edit event when the button in the edit column is clicked', done => {
+              listenOnce(crudGrid, 'edit', e => {
+                expect(e.detail.item).to.be.equal(items[0]);
+                expect(e.detail.index).to.be.equal(0);
+                done();
+              });
+              getBodyCellContent(crudGrid, 0, 3).firstElementChild.click();
             });
 
             it('should capitalize correctly', () => {
