@@ -1,6 +1,8 @@
+<link rel="import" href="../../../vaadin-material-styles/mixins/required-field.html">
+
 <dom-module id="material-radio-group" theme-for="vaadin-radio-group">
   <template>
-    <style>
+    <style include="material-required-field">
       :host {
         display: inline-flex;
         position: relative;
@@ -40,48 +42,6 @@
       :host([disabled]) [part="label"] {
         color: var(--material-disabled-text-color);
         -webkit-text-fill-color: var(--material-disabled-text-color);
-      }
-
-      [part="label"] {
-        display: block;
-        position: absolute;
-        top: 8px;
-        font-size: 1em;
-        line-height: 1;
-        height: 20px;
-        margin-bottom: -4px;
-        white-space: nowrap;
-        overflow-x: hidden;
-        text-overflow: ellipsis;
-        color: var(--material-secondary-text-color);
-        transform-origin: 0 75%;
-        transform: scale(0.75);
-      }
-
-      :host([required]) [part="label"]::after {
-        content: " *";
-        color: inherit;
-      }
-
-      :host([invalid]) [part="label"] {
-        color: var(--material-error-text-color);
-      }
-
-      [part="error-message"] {
-        font-size: .75em;
-        line-height: 1;
-        color: var(--material-error-text-color);
-        margin-top: 6px;
-      }
-
-      :host(:not([invalid])) [part="error-message"] {
-        margin-top: 0;
-        max-height: 0;
-        overflow: hidden;
-      }
-
-      :host([invalid]) [part="error-message"] {
-        animation: reveal 0.2s;
       }
     </style>
   </template>
