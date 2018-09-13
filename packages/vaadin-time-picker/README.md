@@ -5,9 +5,9 @@
 
 # &lt;vaadin-time-picker&gt;
 
-[Live Demo ↗](https://vaadin.com/components/vaadin-time-picker/html-examples)
+[Live Demo ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0/demo/)
 |
-[API documentation ↗](https://vaadin.com/components/vaadin-time-picker/html-api)
+[API documentation ↗](https://cdn.vaadin.com/vaadin-time-picker/1.0.0)
 
 
 [&lt;vaadin-time-picker&gt;](https://vaadin.com/components/vaadin-time-picker) is a [Web Component](http://webcomponents.org) providing a time-selection field, part of the [Vaadin components](https://vaadin.com/components).
