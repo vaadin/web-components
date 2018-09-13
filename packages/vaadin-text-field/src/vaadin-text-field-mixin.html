@@ -306,6 +306,7 @@ This program is available under Apache License Version 2.0, available at https:/
       this._errorId = `${this.constructor.is}-error-${uniqueId}`;
       this._labelId = `${this.constructor.is}-label-${uniqueId}`;
 
+      /* istanbul ignore if */
       if (navigator.userAgent.match(/Trident/)) {
         this._addIEListeners();
       }
@@ -354,6 +355,7 @@ This program is available under Apache License Version 2.0, available at https:/
     attributeChangedCallback(prop, oldVal, newVal) {
       super.attributeChangedCallback(prop, oldVal, newVal);
       // Needed until Edge has CSS Custom Properties (present in Edge Preview)
+      /* istanbul ignore if */
       if (!(window.ShadyCSS && window.ShadyCSS.nativeCss) &&
         /^(focused|focus-ring|invalid|disabled|placeholder|has-value)$/.test(prop)) {
         this.updateStyles();
@@ -362,6 +364,7 @@ This program is available under Apache License Version 2.0, available at https:/
       // Safari has an issue with repainting shadow root element styles when a host attribute changes.
       // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      /* istanbul ignore if */
       if (isSafari && this.root) {
         const WEBKIT_PROPERTY = '-webkit-backface-visibility';
         this.root.querySelectorAll('*').forEach(el => {
