@@ -109,11 +109,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * ### Grid and Form Customization
        *
        * Alternatively you can fully configure the component by providing your own Grid and Editor.
+       *
+       * NOTE: that you need to provide a `vaadin-crud-grid-edit-column`.
+       *
        * #### Example:
        * ```html
        * <vaadin-crud items='[{"name": "John", "surname": "Lennon", "role": "singer"},
        *                      {"name": "Ringo", "surname": "Starr", "role": "drums"}]'>
        *  <vaadin-grid slot="grid">
+       *   <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
        *   <vaadin-grid-column>
        *    <template class="header">Name</template><template>[[item.name]]</template>
        *   </vaadin-grid-column>

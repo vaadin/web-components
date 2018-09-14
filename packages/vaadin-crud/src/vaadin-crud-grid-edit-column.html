@@ -33,8 +33,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     /**
      * `<vaadin-crud-grid-edit>` is a helper element for the `<vaadin-crud-grid-edit-column>` that provides
      * a button that can be easily themed.
+     *
+     * @private
      */
     class CrudGridEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
+      /** @private */
       static get is() {
         return 'vaadin-crud-grid-edit';
       }
@@ -58,6 +61,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      * `<vaadin-crud-grid-edit-column>` is a helper element for the `<vaadin-grid>`
      * that provides an edit icon which will fire an `edit` event when clicked.
      *
+     * Typical usage is when using a customized `<vaadin-grid>` in a `<vaadin-crud>`
+     * because you need to provide to the grid a way to fire the `edit` event.
+     *
      * #### Example:
      * ```html
      * <vaadin-grid items="[[items]]">
@@ -68,9 +74,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
      * ```
      *
      * @memberof Vaadin
-     * @extends Vaadin.GridColumnElement
      */
-    class CrudGridEditColumnElement extends Vaadin.GridColumnElement {
+    class CrudGridEditColumnElement extends (class extends Vaadin.GridColumnElement {}) {
 
       static get is() {
         return 'vaadin-crud-grid-edit-column';
@@ -80,6 +85,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         return {
           /**
            * Width of the cells for this column.
+           * @private
            */
           width: {
             type: String,
@@ -88,6 +94,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
           /**
            * Flex grow ratio for the cell widths. When set to 0, cell width is fixed.
+           * @private
            */
           flexGrow: {
             type: Number,
@@ -96,7 +103,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         };
       }
 
-
+      /** @private */
       ready() {
         super.ready();
         this.renderer = (root, column, model) => {
