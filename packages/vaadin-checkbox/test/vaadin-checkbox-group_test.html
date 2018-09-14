@@ -276,6 +276,14 @@
       expect(spy).to.be.not.called;
     });
 
+    it('should not run validation while user is tabbing between checkboxes and focus moves to native checkbox', () => {
+      vaadinCheckboxGroup.required = true;
+      const spy = sinon.spy(vaadinCheckboxGroup, 'validate');
+      blur(vaadinCheckboxGroup, vaadinCheckboxList[1].focusElement);
+
+      expect(spy).to.be.not.called;
+    });
+
     it('should prevent submitting form when value of required checkbox group is empty', () => {
       vaadinCheckboxGroup.required = true;
 
