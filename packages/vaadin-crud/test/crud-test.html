@@ -19,7 +19,9 @@
 
   <test-fixture id="declarative">
     <template>
-      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}"></vaadin-crud>
+      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}">
+        <div slot="footer">Footer content</div>
+      </vaadin-crud>
     </template>
   </test-fixture>
 
@@ -92,6 +94,10 @@
         it('should have a column with editor buttons', () => {
           expect(crud._grid._columnTree[0].length).to.be.equal(2);
           expect(crud._grid._columnTree[0][1].localName).to.be.equal('vaadin-crud-grid-edit-column');
+        });
+
+        it('should have a slot for footer content', () => {
+          expect(crud.$.toolbar.querySelector('slot').assignedNodes()[0].textContent).to.be.equal('Footer content')
         });
       });
 

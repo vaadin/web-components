@@ -17,7 +17,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <dom-module id="vaadin-crud">
   <template>
     <style>
-
       :host {
         display: flex;
         flex-direction: column;
@@ -35,6 +34,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
       #toolbar {
         display: flex;
+        align-items: baseline;
+        padding: 0 10px;
       }
     </style>
 
@@ -56,7 +57,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </div>
 
     <div id="toolbar">
-      <div style="flex: 1"></div>
+      <div style="flex: 1"><slot name="footer"></slot></div>
       <vaadin-button id="new" on-click="__new">New [[entityName]]</vaadin-button>
     </div>
 
@@ -106,9 +107,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * };
        * ```
        *
-       * ### Grid and Form Customization
+       * ### Customization
        *
-       * Alternatively you can fully configure the component by providing your own Grid and Editor.
+       * Alternatively you can fully configure the component by providing your own Grid and Editor and Footer content.
        *
        * NOTE: that you need to provide a `vaadin-crud-grid-edit-column`.
        *
@@ -125,10 +126,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *    <template class="header">Surname</template><template>[[item.surname]]</template>
        *   </vaadin-grid-column>
        *  </vaadin-grid>
-       *  <vaadin-form-layout>
+       *  <vaadin-form-layout slot="form">
        *   <vaadin-text-field label="First" path="name"></vaadin-text-field>
        *   <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
        *  </vaadin-form-layout>
+       *  <div slot="footer">Total Users: [[size]]</div>
        * </vaadin-crud>
        * ```
        * ```js
