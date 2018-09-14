@@ -18,7 +18,7 @@
         <template preserve-content>
           <vaadin-grid aria-label="Filtering Example">
             <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
-            <vaadin-grid-column id="lastname" path="name.last" label="Last Name"></vaadin-grid-column>
+            <vaadin-grid-column id="lastname" path="name.last"></vaadin-grid-column>
             <vaadin-grid-column id="email" path="email"></vaadin-grid-column>
           </vaadin-grid>
 
@@ -30,7 +30,7 @@
               // Last Name column configured with <vaadin-grid-filter>
               const lastNameColumn = document.querySelector('#lastname');
               lastNameColumn.headerRenderer = function(root) {
-                root.innerHTML = '<vaadin-grid-filter path="name.last">Last Name</vaadin-grid-filter>';
+                root.innerHTML = '<vaadin-grid-filter path="name.last"></vaadin-grid-filter>';
               };
 
               // Email column filter is assigned a custom input field
@@ -104,7 +104,7 @@
               lastNameColumn.headerRenderer = function(root) {
                 root.innerHTML =
                   '<vaadin-grid-filter path="lastName">' +
-                  '  <vaadin-text-field slot="filter" focus-target placeholder="Last Name">Last Name</vaadin-text-field>' +
+                  '  <vaadin-text-field slot="filter" focus-target placeholder="Last Name"></vaadin-text-field>' +
                   '</vaadin-grid-filter>';
                 root.querySelector('vaadin-text-field').addEventListener('value-changed', function(e) {
                   root.querySelector('vaadin-grid-filter').value = e.detail.value;
