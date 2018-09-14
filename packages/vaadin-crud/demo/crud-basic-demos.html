@@ -70,8 +70,7 @@
     <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]] entity-name="user">
-          <vaadin-crud-grid slot="grid" size="{{size}}" exclude="_id|password|picture"></vaadin-crud-grid>
+        <vaadin-crud items=[[items]] entity-name="user" size="{{size}}" exclude="_id|password|picture">
           <div slot="footer">There are [[size]] users in the Database</div>
         </vaadin-crud>
       </template>

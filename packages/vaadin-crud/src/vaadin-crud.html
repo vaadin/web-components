@@ -244,6 +244,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: String,
               value: 'Item'
             },
+            /**
+             * Number of items in the data set which is reported by the grid.
+             */
+            size: {
+              type: Number,
+              readOnly: true,
+              notify: true
+            },
             __isDirty: Boolean,
             __isNew: Boolean,
             __editorHeader: String
@@ -261,6 +269,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           super.ready();
           this.__editListener = e => this.__onCrudGridEdit(e);
           this.__changeListener = e => this.__onFormChanges(e);
+          this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
           this._grid = this.$.grid;
           this._form = this.$.form;
         }
@@ -293,9 +302,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__isDirty = true;
         }
 
+        __onGridSizeChanges(e) {
+          this._setSize(this._grid.size);
+        }
+
         __onGridChange(grid, old) {
           if (old) {
             old.removeEventListener('edit', this.__editListener);
+            old.removeEventListener('size-changed', this.__gridSizeListener);
           }
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
@@ -306,7 +320,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.item) {
             this.__onItemChange(this.item);
           }
-          Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('edit', this.__editListener));
+          grid.addEventListener('edit', this.__editListener);
+          grid.addEventListener('size-changed', this.__gridSizeListener);
+          this.__onGridSizeChanges();
         }
 
         __onFormChange(form, old) {
@@ -322,7 +338,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.item) {
             this.__onItemChange(this.item);
           }
-          Polymer.RenderStatus.afterNextRender(this, () => form.addEventListener('change', this.__changeListener));
+          form.addEventListener('change', this.__changeListener);
         }
 
         __onDataProviderChange(dataProvider) {
