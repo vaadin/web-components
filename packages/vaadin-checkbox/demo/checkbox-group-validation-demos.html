@@ -9,50 +9,50 @@
     <h3>Checkbox Group with validation message</h3>
     <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-validation-message">
     <template preserve-content>
-        <vaadin-checkbox-group required label="Preferred language of contact:" error-message="Please choose a language.">
-            <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
-            <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
-            <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
-        </vaadin-checkbox-group>
-        <vaadin-button id="submit-button-validation-message">Validate</vaadin-button>
-        <script>
-          window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-validation-message', function(document) {
-            const checkboxGroup = document.querySelector('vaadin-checkbox-group');
-            const submitButton = document.getElementById('submit-button-validation-message');
+      <vaadin-checkbox-group required label="Preferred language of contact:" error-message="Please choose a language.">
+        <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
+        <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
+        <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
+      </vaadin-checkbox-group>
+      <vaadin-button>Validate</vaadin-button>
+      <script>
+        window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-validation-message', function(document) {
+          const checkboxGroup = document.querySelector('vaadin-checkbox-group');
+          const submitButton = document.querySelector('vaadin-button');
 
-            submitButton.addEventListener('click', function(event) {
-              checkboxGroup.validate();
-            });
+          submitButton.addEventListener('click', function(event) {
+            checkboxGroup.validate();
           });
-        </script>
+        });
+      </script>
     </template>
     </vaadin-demo-snippet>
 
     <h3>Checkbox Group with Iron Form validation</h3>
     <vaadin-demo-snippet id="checkbox-group-demos-checkbox-group-with-iron-form-validation">
       <template preserve-content>
-        <iron-form id="test-form-validation">
+        <iron-form>
           <form>
             <vaadin-checkbox-group required label="Preferred language of contact:">
               <vaadin-checkbox name="language" value="en">English</vaadin-checkbox>
               <vaadin-checkbox name="language" value="fr">Français</vaadin-checkbox>
               <vaadin-checkbox name="language" value="de">Deutsch</vaadin-checkbox>
             </vaadin-checkbox-group>
-            <vaadin-button id="submit-button-validation">Submit</vaadin-button>
+            <vaadin-button>Submit</vaadin-button>
           </form>
-          <div id="iron-form-output-validation"></div>
+          <div id="form-output"></div>
         </iron-form>
         <script>
           window.addDemoReadyListener('#checkbox-group-demos-checkbox-group-with-iron-form-validation', function(document) {
-            const testForm = document.getElementById('test-form-validation');
-            const submitButton = document.getElementById('submit-button-validation');
+            const testForm = document.querySelector('iron-form');
+            const submitButton = document.querySelector('vaadin-button');
 
             submitButton.addEventListener('click', function(event) {
               testForm.submit();
             });
 
             testForm.addEventListener('iron-form-submit', function(event) {
-              this.querySelector('#iron-form-output-validation').innerHTML = JSON.stringify(event.detail);
+              document.querySelector('#form-output').textContent = JSON.stringify(event.detail);
             });
           });
         </script>
