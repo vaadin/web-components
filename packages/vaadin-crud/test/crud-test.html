@@ -19,7 +19,7 @@
 
   <test-fixture id="declarative">
     <template>
-      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}">
+      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}" entity-name="entity">
         <div slot="footer">Footer content</div>
       </vaadin-crud>
     </template>
@@ -99,6 +99,11 @@
         it('should have a slot for footer content', () => {
           expect(crud.$.toolbar.querySelector('slot').assignedNodes()[0].textContent).to.be.equal('Footer content');
         });
+
+        it('should open the new item editor if item is provided declarativelly', () => {
+          expect(crud.opened).to.be.true;
+          expect(crud.__editorHeader).to.be.equal('New entity');
+        });
       });
 
       describe('items', () => {
@@ -135,6 +140,20 @@
               done();
             });
             crud.items = [{foo: 'bar'}, {foo: 'baz'}];
+          });
+
+          it('should save a new pre-filled item', () => {
+            crud.item = {foo: 'baz'};
+            crud._form._fields[0].value = 'baz';
+            btnSave().click();
+            expect(crud.items[1].foo).to.be.equal('baz');
+          });
+
+          it('should not delete any item if item was not in items array', () => {
+            crud.item = {foo: 'baz'};
+            btnDelete().click();
+            btnConfDialog(crud.$.confirmDelete, 'confirm').click();
+            expect(crud.items.length).to.be.equal(1);
           });
         });
 

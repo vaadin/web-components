@@ -274,8 +274,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this._form = this.$.form;
         }
 
-        __onOpenedChanged(opened) {
-          if (!opened) {
+        __onOpenedChanged(opened, old) {
+          if (!opened && old) {
             this.__closeEditor();
           } else {
             this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
@@ -354,7 +354,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onItemChange(item, old) {
-          if (this._form && item) {
+          if (!this._form) {
+            return;
+          }
+          if (item) {
             if (!this._fields.length && this._form.configure) {
               this._form.configure(this._grid._cache.items[0]);
             }
@@ -365,6 +368,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             });
           }
 
+          this.__isNew = this.__isNew || this.items && this.items.indexOf(item) < 0;
           this.opened = !!item;
         }
 
@@ -394,7 +398,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __openEditor(type, item) {
           this.__isDirty = false;
-          this.__isNew = !item || (typeof item == 'object' && !Object.keys(item).length);
+          this.__isNew = !item;
           const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
             this.item = item || {};
@@ -445,7 +449,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __confirmDelete() {
           const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
-            if (this.items) {
+            if (this.items && this.items.indexOf(this.item) >= 0) {
               this.items.splice(this.items.indexOf(this.item), 1);
             }
             this._grid.clearCache();
