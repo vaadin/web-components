@@ -31,6 +31,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         static get properties() {
           return {
             /**
+             * Disable filtering in the genterated columns.
+             */
+            noFilter: Boolean,
+            /**
+             * Disable sorting in the genterated columns.
+             */
+            noSort: Boolean,
+            /**
              * A RegExp used to exclude properties in the item that do not need
              * to be mapped to columns.
              *
@@ -40,14 +48,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: RegExp,
               observer: '__onExcludeChange'
             },
-            /**
-             * Disable filtering in the generated columns.
-             */
-            noFilter: Boolean,
-            /**
-             * Disable sorting in the genterated columns.
-             */
-            noSort: Boolean
           };
         }
 
