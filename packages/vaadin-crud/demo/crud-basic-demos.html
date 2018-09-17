@@ -66,6 +66,16 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Providing Custom Footer</h3>
+    <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]] entity-name="user" size="{{size}}" exclude="_id|password|picture">
+          <div slot="footer">There are [[size]] users in the Database</div>
+        </vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class CrudBasicDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {

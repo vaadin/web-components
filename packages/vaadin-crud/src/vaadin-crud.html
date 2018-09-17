@@ -17,7 +17,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 <dom-module id="vaadin-crud">
   <template>
     <style>
-
       :host {
         display: flex;
         flex-direction: column;
@@ -35,6 +34,8 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
       #toolbar {
         display: flex;
+        align-items: baseline;
+        padding: 0 10px;
       }
     </style>
 
@@ -56,7 +57,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </div>
 
     <div id="toolbar">
-      <div style="flex: 1"></div>
+      <div style="flex: 1"><slot name="footer"></slot></div>
       <vaadin-button id="new" on-click="__new">New [[entityName]]</vaadin-button>
     </div>
 
@@ -106,9 +107,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        * };
        * ```
        *
-       * ### Grid and Form Customization
+       * ### Customization
        *
-       * Alternatively you can fully configure the component by providing your own Grid and Editor.
+       * Alternatively you can fully configure the component by providing your own Grid and Editor and Footer content.
        *
        * NOTE: that you need to provide a `vaadin-crud-grid-edit-column`.
        *
@@ -125,10 +126,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *    <template class="header">Surname</template><template>[[item.surname]]</template>
        *   </vaadin-grid-column>
        *  </vaadin-grid>
-       *  <vaadin-form-layout>
+       *  <vaadin-form-layout slot="form">
        *   <vaadin-text-field label="First" path="name"></vaadin-text-field>
        *   <vaadin-text-field label="Surname" path="surname"></vaadin-text-field>
        *  </vaadin-form-layout>
+       *  <div slot="footer">Total Users: [[size]]</div>
        * </vaadin-crud>
        * ```
        * ```js
@@ -242,6 +244,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: String,
               value: 'Item'
             },
+            /**
+             * Number of items in the data set which is reported by the grid.
+             */
+            size: {
+              type: Number,
+              readOnly: true,
+              notify: true
+            },
             __isDirty: Boolean,
             __isNew: Boolean,
             __editorHeader: String
@@ -259,12 +269,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           super.ready();
           this.__editListener = e => this.__onCrudGridEdit(e);
           this.__changeListener = e => this.__onFormChanges(e);
+          this.__gridSizeListener = this.__onGridSizeChanges.bind(this);
           this._grid = this.$.grid;
           this._form = this.$.form;
         }
 
-        __onOpenedChanged(opened) {
-          if (!opened) {
+        __onOpenedChanged(opened, old) {
+          if (!opened && old) {
             this.__closeEditor();
           } else {
             this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
@@ -291,9 +302,14 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.__isDirty = true;
         }
 
+        __onGridSizeChanges(e) {
+          this._setSize(this._grid.size);
+        }
+
         __onGridChange(grid, old) {
           if (old) {
             old.removeEventListener('edit', this.__editListener);
+            old.removeEventListener('size-changed', this.__gridSizeListener);
           }
           if (grid != this.$.grid) {
             grid.setAttribute('slot', 'grid');
@@ -304,7 +320,9 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.item) {
             this.__onItemChange(this.item);
           }
-          Polymer.RenderStatus.afterNextRender(this, () => grid.addEventListener('edit', this.__editListener));
+          grid.addEventListener('edit', this.__editListener);
+          grid.addEventListener('size-changed', this.__gridSizeListener);
+          this.__onGridSizeChanges();
         }
 
         __onFormChange(form, old) {
@@ -320,7 +338,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (this.item) {
             this.__onItemChange(this.item);
           }
-          Polymer.RenderStatus.afterNextRender(this, () => form.addEventListener('change', this.__changeListener));
+          form.addEventListener('change', this.__changeListener);
         }
 
         __onDataProviderChange(dataProvider) {
@@ -336,7 +354,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __onItemChange(item, old) {
-          if (this._form && item) {
+          if (!this._form) {
+            return;
+          }
+          if (item) {
             if (!this._fields.length && this._form.configure) {
               this._form.configure(this._grid._cache.items[0]);
             }
@@ -347,6 +368,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             });
           }
 
+          this.__isNew = this.__isNew || this.items && this.items.indexOf(item) < 0;
           this.opened = !!item;
         }
 
@@ -376,7 +398,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
 
         __openEditor(type, item) {
           this.__isDirty = false;
-          this.__isNew = !item || (typeof item == 'object' && !Object.keys(item).length);
+          this.__isNew = !item;
           const evt = this.dispatchEvent(new CustomEvent(this.__isNew ? 'new' : 'edit', {detail: {item: item}, cancelable: true}));
           if (evt) {
             this.item = item || {};
@@ -427,7 +449,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         __confirmDelete() {
           const evt = this.dispatchEvent(new CustomEvent('delete', {detail: {item: this.item}, cancelable: true}));
           if (evt) {
-            if (this.items) {
+            if (this.items && this.items.indexOf(this.item) >= 0) {
               this.items.splice(this.items.indexOf(this.item), 1);
             }
             this._grid.clearCache();
