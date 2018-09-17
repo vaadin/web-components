@@ -64,8 +64,12 @@
           crud.addEventListener('save', function(e) {
             const item = e.detail.item;
             // Set the unique id in case of a new item
-            item._id = item._id || id ++;
-            people[getIdx(people, item)] = item;
+            if (item._id) {
+              people[getIdx(people, item)] = item;
+            } else {
+              item._id = id++;
+              people.push(item);
+            }
           });
           // Configure CRUD Delete
           crud.addEventListener('delete', function(e) {
