@@ -1,0 +1,9 @@
+{
+  "files": ["package.json"],
+  "from": [
+    "\"resolutions\": {"
+  ],
+  "to": [
+    "\"resolutions\": {\n\"@vaadin/vaadin-dialog\": \"2.2.0-alpha2\",\n\"@vaadin/vaadin-overlay\": \"3.2.0-alpha3\","
+  ]
+}

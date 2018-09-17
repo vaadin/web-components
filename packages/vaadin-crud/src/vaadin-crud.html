@@ -331,7 +331,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             old.removeEventListener('change', this.__changeListener);
           }
           this.$.editor.insertBefore(form, this.$.buttons);
-          this.$.dialog.$.overlay.appendChild(this.$.editor);
+          this.$.dialog.renderer = root => root.appendChild(this.$.editor);
           if (this.items) {
             this.__onItemsChange(this.items);
           }
