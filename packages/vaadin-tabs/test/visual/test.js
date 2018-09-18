@@ -1,7 +1,10 @@
 gemini.suite('vaadin-tabs', function(rootSuite) {
 
   function wait(actions, find) {
-    actions.wait(5000);
+    return actions
+      .waitForJSCondition(function(window) {
+        return !!(window.WebComponents && window.WebComponents.ready);
+      }, 15000);
   }
 
   function goToAboutBlank(actions, find) {

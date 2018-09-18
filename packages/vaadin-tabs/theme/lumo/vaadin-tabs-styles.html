@@ -18,7 +18,7 @@
         min-height: var(--lumo-size-l);
       }
 
-      :host([orientation="horizontal"]) [part="tabs"] ::slotted(vaadin-tab) {
+      :host([orientation="horizontal"]) [part="tabs"] ::slotted(vaadin-tab:not([theme~="icon-on-top"])) {
         justify-content: center;
       }
 
@@ -27,8 +27,13 @@
         display: inline-flex;
       }
 
+      :host([orientation="horizontal"]) [part="tabs"] {
+        margin: 0 0.75rem;
+      }
+
       :host([orientation="vertical"]) [part="tabs"] {
         width: 100%;
+        margin: 0.5rem 0;
       }
 
       [part="forward-button"],

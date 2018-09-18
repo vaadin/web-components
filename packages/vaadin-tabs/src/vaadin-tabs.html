@@ -213,6 +213,7 @@ This program is available under Apache License Version 2.0, available at https:/
         _repaintShadowNodesHack() {
           // Safari 10 has an issue with repainting shadow root element styles when a host attribute changes.
           // Need this workaround (toggle any inline css property on and off) until the issue gets fixed.
+          /* istanbul ignore if */
           if (safari10 && this.root) {
             const WEBKIT_PROPERTY = '-webkit-backface-visibility';
             this.root.querySelectorAll('*').forEach(el => {
