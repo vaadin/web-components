@@ -1,0 +1,64 @@
+<!doctype html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-overlay tests</title>
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="../vaadin-overlay.html">
+</head>
+
+<body>
+
+  <test-fixture id="default">
+    <template>
+      <vaadin-overlay>
+        <template>
+          overlay-content
+        </template>
+      </vaadin-overlay>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('animated overlay', () => {
+      let overlay;
+
+      beforeEach(() => {
+        overlay = fixture('default');
+
+        sinon.stub(overlay, '_shouldAnimate', () => true);
+
+        sinon.stub(overlay, '_enqueueAnimation', type => {
+          const handler = `__${type}Handler`;
+          overlay[handler] = Polymer.Debouncer.debounce(overlay[handler], Polymer.Async.timeOut, () => {
+            overlay.removeAttribute(type);
+          });
+        });
+
+        sinon.stub(overlay, '_flushAnimation', type => {
+          const handler = `__${type}Handler`;
+          overlay[handler].flush();
+        });
+      });
+
+      it('should flush closing overlay when re-opened while closing animation is in progress', () => {
+        overlay.opened = true;
+        overlay._flushAnimation('opening');
+
+        overlay.opened = false;
+        overlay.opened = true;
+
+        expect(overlay.hasAttribute('closing')).to.be.false;
+      });
+
+      it('should flush opening overlay when closed while opening animation is in progress', () => {
+        overlay.opened = true;
+        overlay.opened = false;
+
+        expect(overlay.hasAttribute('opening')).to.be.false;
+      });
+    });
+  </script>
+</body>
