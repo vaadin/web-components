@@ -9,9 +9,14 @@
     <h3>Simple App Layout with brand logo </h3>
     <vaadin-demo-snippet id="element-basic-demos-logo-example" iframe-src="iframe-lumo-styled.html">
       <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
+        <custom-style>
+          <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
         <style>
           .content {
-            padding: 5px;
+            padding: 16px;
           }
 
           h3 {
@@ -19,16 +24,25 @@
           }
         </style>
         <vaadin-app-layout>
-          <img slot="branding" referrerpolicy="no-referrer" src="https://i.imgur.com/GPpnszs.png" alt="Vaadin Logo"/>
+          <img slot="branding" referrerpolicy="no-referrer" src="https://i.imgur.com/GPpnszs.png" alt="Vaadin Logo" width="100" height="31" />
 
-          <vaadin-tabs slot="menu" theme="minimal">
-            <vaadin-tab>
+          <vaadin-tabs slot="menu">
+            <vaadin-tab theme="icon-on-top">
               <iron-icon icon="vaadin:home"></iron-icon>
               Page 1
             </vaadin-tab>
-            <vaadin-tab>Page 2</vaadin-tab>
-            <vaadin-tab>Page 3</vaadin-tab>
-            <vaadin-tab>Page 4</vaadin-tab>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="vaadin:list"></iron-icon>
+              Page 2
+            </vaadin-tab>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="vaadin:options"></iron-icon>
+              Page 3
+            </vaadin-tab>
+            <vaadin-tab theme="icon-on-top">
+              <iron-icon icon="vaadin:question"></iron-icon>
+              Page 4
+            </vaadin-tab>
           </vaadin-tabs>
 
           <div class="content">
@@ -42,9 +56,14 @@
     <h3>App Layout with text branding and large number of menu items</h3>
     <vaadin-demo-snippet id="element-basic-demos-text-example" iframe-src="iframe-lumo-styled.html">
       <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
+        <custom-style>
+          <style include="lumo-typography lumo-color">
+          </style>
+        </custom-style>
         <style>
           .content {
-            padding: 5px;
+            padding: 16px;
           }
 
           h3 {
@@ -52,9 +71,9 @@
           }
         </style>
         <vaadin-app-layout>
-          <h3 slot="branding">Company Name</h3>
+          <h3 slot="branding" style="margin: 0;">Company</h3>
 
-          <vaadin-tabs slot="menu" theme="minimal">
+          <vaadin-tabs slot="menu">
               <vaadin-tab>Page 1</vaadin-tab>
               <vaadin-tab>Page 2</vaadin-tab>
               <vaadin-tab>Page 3</vaadin-tab>
@@ -76,9 +95,11 @@
     <h3>App Layout on a mobile screen with large number of menu items</h3>
     <vaadin-demo-snippet id="element-basic-demos-mobile-example" iframe-src="iframe-lumo-styled.html" mobile>
       <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-lumo-styles` -->
+        <custom-style><style include="lumo-typography lumo-color"></style></custom-style>
         <style>
           .content {
-            padding: 5px;
+            padding: 16px;
           }
 
           h3 {
@@ -86,7 +107,7 @@
           }
         </style>
         <vaadin-app-layout id="app">
-          <vaadin-tabs slot="menu" theme="minimal">
+          <vaadin-tabs slot="menu">
             <vaadin-tab>Page 1</vaadin-tab>
             <vaadin-tab>Page 2</vaadin-tab>
             <vaadin-tab>Page 3</vaadin-tab>
@@ -106,9 +127,11 @@
     <h3>App Layout with material theme</h3>
     <vaadin-demo-snippet id="element-basic-demos-material-example" iframe-src="iframe-material-styled.html">
       <template preserve-content>
+        <!-- Apply typography and color theme modules globally from `vaadin-material-styles` -->
+        <custom-style><style include="material-typography material-color-dark"></style></custom-style>
         <style>
           .content {
-            padding: 5px;
+            padding: 16px;
           }
 
           h3 {

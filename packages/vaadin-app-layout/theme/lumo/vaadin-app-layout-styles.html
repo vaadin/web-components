@@ -7,23 +7,26 @@
     <style>
       :host {
         background-color: var(--lumo-base-color);
-        font-family: var(--lumo-font-family);
-        color: var(--lumo-secondary-text-color);
       }
 
       [part="navbar"] {
-        background-color: var(--lumo-base-color);
-        box-shadow: 0 0 0 1px var(--lumo-contrast-20pct);
-        padding: 0 var(--lumo-space-xs);
+        background: var(--vaadin-app-layout-navbar-background, linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct)) var(--lumo-base-color));
+      }
+
+      [part="menu"] ::slotted(vaadin-tabs) {
+        box-shadow: none;
+        --lumo-font-size-m: var(--lumo-font-size-s);
+        --lumo-icon-size-m: 1.5rem;
       }
 
       @media (min-width: 700px) {
-        [part="branding"] {
-          padding-left: var(--lumo-space-m);
-        }
-
         [part="navbar"] {
           padding: 0 var(--lumo-space-m);
+        }
+
+        [part="menu"] ::slotted(vaadin-tabs) {
+          --lumo-font-size-m: unset;
+          --lumo-icon-size-m: unset;
         }
       }
     </style>

@@ -1,4 +1,5 @@
 <link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../../../vaadin-material-styles/shadow.html">
 <link rel="import" href="../../../vaadin-material-styles/typography.html">
 
 
@@ -6,20 +7,18 @@
   <template>
     <style>
       :host {
-        background-color: var(--material-base-color);
-        font-family: var(--material-font-family);
-        font-size: var(--material-button-font-size);
-        color: var(--material-secondary-text-color);
+        background-color: var(--material-background-color);
       }
 
       [part="navbar"] {
-        background-color: var(--material-base-color);
-        padding: 0 1em;
+        background: var(--vaadin-app-layout-navbar-background, var(--material-secondary-background-color));
+        box-shadow: var(--material-shadow-elevation-8dp);
       }
 
       @media (min-width: 700px) {
-        [part="branding"] {
-          padding-left: 1em;
+        [part="navbar"] {
+          padding: 0 1em;
+          box-shadow: var(--material-shadow-elevation-4dp);
         }
       }
     </style>

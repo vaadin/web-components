@@ -18,22 +18,21 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       :host {
         display: flex;
         flex-direction: column-reverse;
-        height: 100%;
-        width: 100%;
+        position: fixed;
         top: 0;
         left: 0;
-        position: fixed;
+        right: 0;
         bottom: var(--vaadin-app-layout-viewport-bottom);
         /* CSS API for host */
         --vaadin-app-layout-viewport-bottom: 0;
-        --vaadin-app-layout-navbar-height: 50px;
       }
 
       :host([hidden]) {
         display: none !important;
       }
 
-      [part="branding"] {
+      [part="branding"],
+      [part="secondary"] {
         display: none;
       }
 
@@ -41,17 +40,33 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         flex: none;
         display: flex;
         align-items: center;
-        justify-content: center;
+        height: var(--vaadin-app-layout-navbar-height, auto);
+        background: var(--vaadin-app-layout-navbar-background, #eee);
       }
 
       [part="branding"],
-      [part="navbar"] {
-        height: var(--vaadin-app-layout-navbar-height);
+      [part="secondary"] {
+        /*
+          Makes the menu part horizontally centered on wide viewports,
+          regardless of the size of contents inside the branding
+          and the secondary parts. Prevents unnecessary menu shrinking.
+
+          NOTE: IE requires a unit for the flex-basis value.
+
+          NOTE: `0px` might confuse linters and minifiers.
+        */
+        flex: 1 0 0.001px;
       }
 
       [part="menu"] {
-        width: auto;
+        flex: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         overflow: hidden;
+      }
+
+      [part="menu"] ::slotted(*) {
         max-width: 100%;
       }
 
@@ -67,22 +82,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         }
 
         [part="menu"] {
-          max-width: 60%;
+          flex: initial;
         }
 
-        [part="branding"] {
+        [part="branding"],
+        [part="secondary"] {
           display: flex;
-          position: absolute;
-          top: 0;
-          left: 0;
-          max-width: 20%;
-          max-height: 100%;
-          align-items: center;
-        }
-
-        [part="branding"] ::slotted(*) {
-          max-width: 100%;
-          max-height: 100%;
         }
       }
     </style>
@@ -136,7 +141,8 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        * Custom CSS property | Description | Default value
        * ---|---|---
        * `--vaadin-app-layout-viewport-bottom` | Bottom offset of the visible viewport area | `0` or detected offset
-       * `--vaadin-app-layout-navbar-height` | Height of the navigation bar and branding inside | `50px`
+       * `--vaadin-app-layout-navbar-height` | Height of the navigation bar and branding inside | `auto`, depends on the navbar content
+       * `--vaadin-app-layout-navbar-background` | Background of the navigation bar | slightly gray, depends on the theme
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
