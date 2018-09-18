@@ -482,6 +482,9 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _valueChanged(value, oldValue) {
+      if (oldValue === undefined) {
+        return;
+      }
       if (this.__dispatchChange) {
         this.dispatchEvent(new CustomEvent('change', {bubbles: true}));
       }

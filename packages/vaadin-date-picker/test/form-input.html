@@ -37,6 +37,12 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="datepicker-required">
+    <template>
+      <vaadin-date-picker required></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
   <test-fixture id="datepicker-in-form">
     <template>
       <iron-form>
@@ -215,6 +221,24 @@
           done();
         });
         datepicker.close();
+      });
+    });
+
+    describe('required', () => {
+      let datepicker;
+
+      beforeEach(done => {
+        datepicker = fixture('datepicker-required');
+        setTimeout(done);
+      });
+
+      it('should not be invalid without user interactions', () => {
+        expect(datepicker.invalid).to.be.false;
+      });
+
+      it('should be invalid after validate() if value is not set', () => {
+        datepicker.validate();
+        expect(datepicker.invalid).to.be.true;
       });
     });
 
