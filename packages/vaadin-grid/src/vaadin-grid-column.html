@@ -64,9 +64,9 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * Shown in the header cell of the column.
+         * Text content to display in the header cell of the column.
          */
-        label: {
+        header: {
           type: String
         },
 
@@ -119,7 +119,7 @@ This program is available under Apache License Version 2.0, available at https:/
         '_widthChanged(width, _headerCell, _footerCell, _cells.*)',
         '_frozenChanged(frozen, _headerCell, _footerCell, _cells.*)',
         '_flexGrowChanged(flexGrow, _headerCell, _footerCell, _cells.*)',
-        '_pathOrLabelChanged(path, label, _headerCell, _footerCell, _cells.*, renderer, headerRenderer, _bodyTemplate, _headerTemplate)',
+        '_pathOrHeaderChanged(path, header, _headerCell, _footerCell, _cells.*, renderer, headerRenderer, _bodyTemplate, _headerTemplate)',
         '_textAlignChanged(textAlign, _cells.*, _headerCell, _footerCell)',
         '_orderChanged(_order, _headerCell, _footerCell, _cells.*)',
         '_lastFrozenChanged(_lastFrozen)',
@@ -354,9 +354,9 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _pathOrLabelChanged(path, label, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
-      if (!headerRenderer && !headerTemplate && label !== undefined && headerCell) {
-        headerCell._content.textContent = label;
+    _pathOrHeaderChanged(path, header, headerCell, footerCell, cells, renderer, headerRenderer, bodyTemplate, headerTemplate) {
+      if (!headerRenderer && !headerTemplate && header !== undefined && headerCell) {
+        headerCell._content.textContent = header;
         headerCell.parentElement.hidden = false;
       }
 
@@ -367,13 +367,13 @@ This program is available under Apache License Version 2.0, available at https:/
           this._grid._update();
         }
 
-        if (!headerRenderer && !headerTemplate && !label && headerCell) {
-          const generatedLabel = path
+        if (!headerRenderer && !headerTemplate && !header && headerCell) {
+          const generatedHeader = path
             .substr(path.lastIndexOf('.') + 1)
             .replace(/([A-Z])/g, '-$1').toLowerCase()
             .replace(/-/, ' ')
             .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
-          headerCell._content.textContent = generatedLabel;
+          headerCell._content.textContent = generatedHeader;
           headerCell.parentElement.hidden = false;
         }
       }
@@ -516,7 +516,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
           /**
            * Path to an item sub-property whose value gets displayed in the column body cells.
-           * The property name is also shown in the column header if an explicit label/renderer isn't defined.
+           * The property name is also shown in the column header if an explicit header or renderer isn't defined.
            */
           path: {
             type: String

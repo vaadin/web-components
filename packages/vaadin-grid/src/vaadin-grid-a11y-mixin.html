@@ -19,7 +19,7 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _a11yGetHeaderRowCount(_columnTree) {
-      return _columnTree.filter(level => level.some(col => col._headerTemplate || col.headerRenderer || col.path || col.label)).length;
+      return _columnTree.filter(level => level.some(col => col._headerTemplate || col.headerRenderer || col.path || col.header)).length;
     }
 
     _a11yGetFooterRowCount(_columnTree) {

@@ -16,14 +16,14 @@
       a <code>&lt;vaadin-grid-column&gt;</code> makes it render a simple text representation of the specified sub-property of the row's item.
     </p>
     <p>
-      By default, the label in the column header would also be derived from the <code>path</code> property automatically.
-      To change that, an explicit <code>label</code> can be set to the column elements.
+      By default, the header text in the column header would also be derived from the <code>path</code> property automatically.
+      To change that, an explicit <code>header</code> can be set to the column elements.
     </p>
     <vaadin-demo-snippet id='grid-basic-demos-simple-columns'>
       <template preserve-content>
         <vaadin-grid>
-          <vaadin-grid-column path="name.first" label="First Name"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
           <vaadin-grid-column path="location.city"></vaadin-grid-column>
           <vaadin-grid-column path="visitCount" text-align="end" width="100px" flex-grow="0"></vaadin-grid-column>
         </vaadin-grid>
