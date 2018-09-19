@@ -7,6 +7,13 @@
   <script>
     const theme = window.location.search.replace(/.*theme=(\w+).*/, '$1') || 'lumo';
     document.write(`<link rel="import" href="../../../theme/${theme}/vaadin-text-field.html">`);
+
+    window.addEventListener('WebComponentsReady', function() {
+      setTimeout(function() {
+        window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
+        window.webComponentsAreReady = true; // Checked in gemini before capture callback
+      });
+    });
   </script>
   <link href="../common.html" rel="import">
 </head>
