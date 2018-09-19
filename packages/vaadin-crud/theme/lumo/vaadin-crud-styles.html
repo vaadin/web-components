@@ -1,10 +1,48 @@
 <link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
-<dom-module id="crud-grid-edit" theme-for="vaadin-crud-grid-edit">
+<dom-module id="lumo-crud-grid-edit" theme-for="vaadin-crud-grid-edit">
   <template>
     <style>
       :host::after {
         font-family: "lumo-icons";
         content: var(--lumo-icons-edit);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="lumo-crud" theme-for="vaadin-crud">
+  <template>
+    <style>
+      [part~="toolbar"] {
+        padding: var(--lumo-space-xs) var(--lumo-space-m);
+        background-color: var(--lumo-contrast-5pct);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="crud-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      :host([theme~="crud"]) [part~="content"] {
+        max-width: 65em;
+        min-width: 35em:
+      }
+
+      @media (max-width: 600px), (max-height: 600px) {
+        :host([theme~="crud"]) {
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+        }
+
+        :host([theme]) [part="overlay"] {
+          flex: 1;
+          width: 100%;
+          border-radius: 0 !important;
+        }
       }
     </style>
   </template>
