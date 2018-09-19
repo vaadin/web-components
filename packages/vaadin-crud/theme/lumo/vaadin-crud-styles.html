@@ -17,6 +17,10 @@
         padding: var(--lumo-space-xs) var(--lumo-space-m);
         background-color: var(--lumo-contrast-5pct);
       }
+
+      [part~="buttons"] {
+        margin-top: var(--lumo-space-l);
+      }
     </style>
   </template>
 </dom-module>
@@ -24,6 +28,16 @@
 <dom-module id="crud-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
   <template>
     <style>
+      :host([theme~="crud"]) [part~="overlay"],
+      :host([theme~="crud"]) [part~="content"] {
+        display: flex;
+        flex-direction: column;
+      }
+
+      :host([theme~="crud"]) [part~="content"] {
+        flex: 1;
+      }
+
       :host([theme~="crud"]) [part~="content"] {
         max-width: 65em;
         min-width: 35em:

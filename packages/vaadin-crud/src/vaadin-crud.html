@@ -27,8 +27,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       }
 
       :host([hidden]),
-      :host #form-slot,
-      :host [part=editor] {
+      :host slot[name=form] {
         display: none !important;
       }
 
@@ -37,31 +36,51 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         flex-shrink: 0;
         align-items: baseline;
       }
+
+      [part=editor] {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+
+      [part=editor] [slot=form],
+      [part=editor] #form,
+      [part=footer] {
+        flex: 1;
+      }
+
+      [part=buttons] {
+        display: flex;
+        width: 100%;
+      }
     </style>
 
-    <slot name="grid" id="grid-slot">
+    <slot name="grid">
       <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]"></vaadin-crud-grid>
     </slot>
-    <slot name="form" id="form-slot">
+
+    <slot name="form">
       <vaadin-crud-form id="form" exclude="[[exclude]]"></vaadin-crud-form>
     </slot>
 
-    <div part="editor">
-      <h3>[[__editorHeader]]</h3>
-      <div id="buttons" style="margin-top: 30px; display: flex; min-width: 100%;">
-        <vaadin-button on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
-        <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
-        <div style="flex: 1"></div>
-        <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete</vaadin-button>
-      </div>
-    </div>
-
     <div part="toolbar">
-      <div style="flex: 1"><slot name="footer"></slot></div>
+      <div part="footer"><slot name="footer"></slot></div>
       <vaadin-button id="new" on-click="__new">New [[entityName]]</vaadin-button>
     </div>
 
-    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud"></vaadin-dialog>
+    <vaadin-dialog id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud">
+      <template>
+        <div part="editor">
+          <h3 part="header">[[__editorHeader]]</h3>
+          <div part="buttons">
+            <vaadin-button on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
+            <vaadin-button on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
+            <div style="flex: 1"></div>
+            <vaadin-button on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete</vaadin-button>
+          </div>
+        </div>
+      </template>
+    </vaadin-dialog>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
       reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
@@ -152,8 +171,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
        *
        * Part name | Description
        * ----------------|----------------
-       * `editor` | Editor container
-       * `toolbar` | Toolbar container
+       * `editor` | Editor container.
+       * `toolbar` | Toolbar container.
+       * `footer` | The footer container in the toolbar.
+       * `header` | The header in the editor dialog.
+       * `buttons` | The buttons-bar in the editor dialog.
        *
        * See [ThemableMixin – how to apply styles for shadow parts](https://github.com/vaadin/vaadin-themable-mixin/wiki)
        *
@@ -281,6 +303,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.__closeEditor();
           } else {
             this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
+            this.__onFormChange(this._form);
           }
         }
 
@@ -332,9 +355,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             old.parentElement && old.parentElement.removeChild(old);
             old.removeEventListener('change', this.__changeListener);
           }
-          const editor = this.shadowRoot.querySelector('[part="editor"]')
-          editor.insertBefore(form, this.$.buttons);
-          this.$.dialog.renderer = root => root.appendChild(editor);
+          if (!this.opened) {
+            return;
+          }
+          const editor = this.$.dialog.$.overlay.$.content.shadowRoot.querySelector('[part=editor]')
+          const buttons = this.$.dialog.$.overlay.$.content.shadowRoot.querySelector('[part=buttons]')
+          editor.insertBefore(form, buttons);
           if (this.items) {
             this.__onItemsChange(this.items);
           }
