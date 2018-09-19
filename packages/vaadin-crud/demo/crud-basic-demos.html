@@ -11,68 +11,25 @@
     <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud entity-name="User" items=[[items]] exclude="_id|password"></vaadin-crud>
+        <vaadin-crud entity-name="user" items=[[items]]></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Providing Custom Grid</h3>
-    <p>Customize the grid by replacing the default one with your own.</p>
-    <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-grid-edit-column</code> in order to be able to edit the item</p>
-    <vaadin-demo-snippet id="crud-basic-demos-custom-grid">
+    <h3>Exclude fields</h3>
+    <p>Fields can be excluded by providing a regular expression to the <code>exclude</code> property.</p>
+    <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]]>
-          <vaadin-grid slot="grid">
-            <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
-
-            <vaadin-grid-column width="60px" flex-grow="0">
-              <template><img src="[[item.details.picture]]" style="width: 40px; border-radius: 50%;"></template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">User</template>
-              <template>[[item.name.first]] [[item.name.last]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column>
-              <template class="header">Email</template>
-              <template>[[item.details.email]]</template>
-            </vaadin-grid-column>
-          </vaadin-grid>
-        </vaadin-crud>
+        <vaadin-crud exclude="_id|password|picture" entity-name="user" items=[[items]]></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Providing Custom Editor</h3>
-    <p>Provide an element with the form content to customize the editor</p>
-    <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
+    <h3>Disable sorting and filtering</h3>
+    <p>Built-in sorting and filtering can be disabled by setting the properties <code>no-sort</code> and <code>no-filter</code> respectively</p>
+    <vaadin-demo-snippet id="crud-basic-demos-basics">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]] exclude="_id|password">
-          <vaadin-form-layout slot="form" style="max-width: 60em">
-            <vaadin-text-field path="name.first"label="First Name" required></vaadin-text-field>
-            <vaadin-text-field path="name.last" label="Last Name" required></vaadin-text-field>
-            <br>
-            <vaadin-text-field path="details.email"label="Email" required
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-              error-message="invalid email"
-              ></vaadin-text-field>
-            <vaadin-password-field path="password" label="Password" required
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
-              error-message="min 6 upper/lower chars and digits"
-              ></vaadin-password-field>
-            <br>
-            <vaadin-combo-box path="role" label="Role" items='["admin", "operator", "user"]'></vaadin-combo-box>
-          </vaadin-form-layout>
-        </vaadin-crud>
-      </template>
-    </vaadin-demo-snippet>
-
-    <h3>Providing Custom Footer</h3>
-    <vaadin-demo-snippet id="crud-basic-demos-custom-editor">
-      <template preserve-content>
-        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]] entity-name="user" size="{{size}}" exclude="_id|password|picture">
-          <div slot="footer">There are [[size]] users in the Database</div>
-        </vaadin-crud>
+        <vaadin-crud no-sort no-filter exclude="_id|password|picture" entity-name="user" items=[[items]]></vaadin-crud>
       </template>
     </vaadin-demo-snippet>
 

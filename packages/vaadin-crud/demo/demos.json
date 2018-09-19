@@ -6,21 +6,43 @@
     "url": "crud-basic-demos",
     "src": "crud-basic-demos.html",
     "meta": {
-      "title": "vaadin-crud Basic Examples",
+      "title": "vaadin-crud Basic examples",
       "description": "",
       "image": ""
      }
   }
   ,
   {
-    "name": "Data Provider",
-    "url": "crud-data-demos",
-    "src": "crud-data-demos.html",
+    "name": "Custom content",
+    "url": "crud-custom-demos",
+    "src": "crud-custom-demos.html",
     "meta": {
-      "title": "vaadin-crud Data Provider Examples",
+      "title": "vaadin-crud Customization examples",
       "description": "",
       "image": ""
      }
   }
+  ,
+  {
+    "name": "Data provider",
+    "url": "crud-data-demos",
+    "src": "crud-data-demos.html",
+    "meta": {
+      "title": "vaadin-crud Data provider examples",
+      "description": "",
+      "image": ""
+     }
+   }
+   ,
+   {
+     "name": "Advanced",
+     "url": "crud-advanced-demos",
+     "src": "crud-advanced-demos.html",
+     "meta": {
+       "title": "vaadin-crud Advanced examples",
+       "description": "",
+       "image": ""
+      }
+    }
   ]
 }

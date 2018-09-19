@@ -1,0 +1,80 @@
+<dom-module id="crud-custom-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Grid</h3>
+    <p>Customize the grid by replacing the default one with your own.</p>
+    <p><i>NOTE: </i>That you need to add a <code>vaadin-crud-grid-edit-column</code> in order to have a mecanism to edit the item</p>
+    <vaadin-demo-snippet id="crud-custom-demos-custom-grid">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]]>
+          <vaadin-grid slot="grid">
+            <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
+
+            <vaadin-grid-column width="60px" flex-grow="0">
+              <template><img src="[[item.details.picture]]" style="width: 40px; border-radius: 50%;"></template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">User</template>
+              <template>[[item.name.first]] [[item.name.last]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template class="header">Email</template>
+              <template>[[item.details.email]]</template>
+            </vaadin-grid-column>
+          </vaadin-grid>
+        </vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Form</h3>
+    <p>Provide an element with the form content to customize the editor</p>
+    <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]] exclude="_id|password">
+          <vaadin-form-layout slot="form" style="max-width: 60em">
+            <vaadin-text-field path="name.first"label="First Name" required></vaadin-text-field>
+            <vaadin-text-field path="name.last" label="Last Name" required></vaadin-text-field>
+            <br>
+            <vaadin-text-field path="details.email"label="Email" required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+              error-message="invalid email"
+              ></vaadin-text-field>
+            <vaadin-password-field path="password" label="Password" required
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}"
+              error-message="min 6 upper/lower chars and digits"
+              ></vaadin-password-field>
+            <br>
+            <vaadin-combo-box path="role" label="Role" items='["admin", "operator", "user"]'></vaadin-combo-box>
+          </vaadin-form-layout>
+        </vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
+    <h3>Footer</h3>
+    <p>You can add some content to the footer, as well as binding to the size of the data.</p>
+    <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
+      <template preserve-content>
+        <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
+        <vaadin-crud items=[[items]] entity-name="user" size="{{size}}" exclude="_id|password|picture">
+          <div slot="footer">There are <b>[[size]]</b> users in the database</div>
+        </vaadin-crud>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class CrudCustomDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
+      static get is() {
+        return 'crud-custom-demos';
+      }
+    }
+    customElements.define(CrudCustomDemos.is, CrudCustomDemos);
+  </script>
+</dom-module>

@@ -124,7 +124,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                 textField.setAttribute('slot', 'filter');
                 textField.setAttribute('focus-target', true);
                 textField.style.width = '100%';
-                !this.noSort && (textField.placeholder = label);
+                this.noSort && (textField.placeholder = label);
                 textField.addEventListener('value-changed', function(event) {
                   filter.value = event.detail.value;
                 });

@@ -1,0 +1,172 @@
+<dom-module id="crud-advanced-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Custom search</h3>
+    <p>This demo defines an input field that filters content based on a custom search algorithm.</p>
+    <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
+      <template preserve-content>
+        <vaadin-crud entity-name="user" size="{{size}}">
+          <vaadin-grid slot="grid">
+            <vaadin-grid-column-group id="group">
+              <template class="header">
+                <vaadin-text-field style="width: 100%" placeholder="Search users by first or last name">
+                  <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+                </vaadin-text-field>
+              </template>
+
+              <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
+
+              <vaadin-grid-column>
+                <template class="header">First</template>
+                <template>[[item.first]]</template>
+              </vaadin-grid-column>
+              <vaadin-grid-column>
+                <template class="header">Last</template>
+                <template>[[item.last]]</template>
+              </vaadin-grid-column>
+            </vaadin-grid-column-group>
+          </vaadin-grid>
+          <div slot="footer"><b>[[size]]</b> users</div>
+        </vaadin-crud>
+        <vaadin-notification>
+          <template>Save and Delete operations are no implemented</template>
+        </vaadin-notification>
+
+        <script>
+          window.addDemoReadyListener('#crud-advanced-demos-custom-search', function(document) {
+            // Generates an array of people
+            for (var people = [], id = 0; id <= 200; id++) {
+              people.push({
+                'first': ['James', 'Mary', 'John', 'Patricia', 'Robert', 'Jennifer'][id % 6] + id,
+                'last': ['Smith', 'Johnson', 'Williams', 'Brown'][id % 4]});
+            }
+
+            // Query de DOM to get UI elements
+            const crud = document.querySelector('vaadin-crud');
+            const search = document.querySelector('vaadin-text-field');
+            const notification = document.querySelector('vaadin-notification');
+
+            crud.items = people.slice(0);
+
+            // Configure custom search
+            search.addEventListener('input', function(e) {
+              const regex = RegExp(search.value, 'i');
+              // reasign to the crud a copy of the data with the filtered items
+              crud.items = people.slice(0).filter(function(item) {
+                return regex.test(item.first) || regex.test(item.last);
+              });
+            });
+
+            // saving is not implemented, showing a notification instead
+            function save(e) {
+              e.preventDefault();
+              notification.open();
+            }
+            crud.addEventListener('save', save);
+            crud.addEventListener('delete', save);
+
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
+
+    <h3>Remote data with custom sort and search</h3>
+    <p>This demo shows remote data displayed in a grid with customized search and sort controls.</p>
+    <p>It uses <code>vaadin-grid-filter</code> and <code>vaadin-grid-sorter</code> helpers.</p>
+    <vaadin-demo-snippet id="crud-advanced-demos-remote-data">
+      <template preserve-content>
+        <vaadin-crud entity-name="user">
+          <vaadin-grid slot="grid" multi-sort>
+            <vaadin-grid-column width="150px" flex-grow="0">
+              <template class="header">
+                <vaadin-grid-filter path="firstName" value="[[_filterFirstName]]">
+                  <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target style="width: 130px">
+                    <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+                    <vaadin-grid-sorter path="firstName" slot="suffix"></vaadin-grid-sorter>
+                  </vaadin-text-field>
+                </vaadin-grid-filter>
+              </template>
+              <template>[[item.firstName]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="150px" flex-grow="0">
+              <template class="header">
+                <vaadin-grid-filter path="lastName" value="[[_filterLastName]]">
+                  <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target style="width: 130px">
+                    <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+                    <vaadin-grid-sorter path="lastName" slot="suffix"></vaadin-grid-sorter>
+                  </vaadin-text-field>
+                </vaadin-grid-filter>
+              </template>
+              <template>[[item.lastName]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template>[[item.address.state]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column>
+              <template>[[item.email]]</template>
+            </vaadin-grid-column>
+
+            <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
+          </vaadin-grid>
+        </vaadin-crud>
+
+        <vaadin-notification position="top-end">
+          <template>Save and Delete operations are no implemented</template>
+        </vaadin-notification>
+        <script>
+          window.addDemoReadyListener('#crud-advanced-demos-remote-data', function(document) {
+            const crud = document.querySelector('vaadin-crud');
+            const notification = document.querySelector('vaadin-notification');
+
+            function doGet(url, callback) {
+              var xhr = new XMLHttpRequest();
+              xhr.onload = function() {
+                callback(JSON.parse(xhr.responseText));
+              };
+              xhr.open('GET', url, true);
+              xhr.send();
+            }
+
+            crud.dataProvider = function(params, callback) {
+              let url = 'https://demo.vaadin.com/demo-data/1.0/people';
+              url += '?index=' + (params.page * params.pageSize);
+              url += '&count=' + params.pageSize;
+
+              params.filters.forEach(function(filter) {
+                url += '&filters[' + filter.path + ']=' + encodeURIComponent(filter.value);
+              });
+              params.sortOrders.forEach(function(sort) {
+                url += '&orders[]=' + sort.path + ' ' + sort.direction;
+              });
+
+              doGet(url, function(json) {
+                callback(json.result, json.size);
+              });
+            };
+
+            function save(e) {
+              e.preventDefault();
+              notification.open();
+            }
+            crud.addEventListener('save', save);
+            crud.addEventListener('delete', save);
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+  </template>
+  <script>
+    class CrudAdvancedDemos extends DemoReadyEventEmitter(CrudDemo(Polymer.Element)) {
+      static get is() {
+        return 'crud-advanced-demos';
+      }
+    }
+    customElements.define(CrudAdvancedDemos.is, CrudAdvancedDemos);
+  </script>
+</dom-module>

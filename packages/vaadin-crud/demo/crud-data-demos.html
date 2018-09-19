@@ -7,11 +7,12 @@
     </style>
 
     <h3>Data Provider</h3>
-    <p>A function can be assigned to the <code>dataProvider</code> property to provide data from a remote source.</p>
-    <p>Note that is responsability of the function to execute the <code>callback</code> providing the appropriate
+    <p>A function can be assigned to the <code>dataProvider</code> property in order to set a custom data source.</p>
+    <p>NOTE: it is responsability of this dataProvider function to execute the <code>callback</code> providing the appropriate
       filtered and sorted chunk of items, as well as the total size of the data set.</p>
-    <p>This example utilises an item array as its data storage. Though the <code>dataProvider</code> function handles how to take
-      chunks based on the <code>params</code> argument</p>
+    <p>This example utilises an item array as its data storage. The <code>dataProvider</code> function is able to extract
+      chunks from the array based on the <code>params</code> argument</p>
+    <p>Listen to <code>save</code> and <code>delete</code> events to persist changes in the database</p>
     <vaadin-demo-snippet id="crud-data-demos-dataprovider">
       <template preserve-content>
         <vaadin-crud entity-name="user"></vaadin-crud>
