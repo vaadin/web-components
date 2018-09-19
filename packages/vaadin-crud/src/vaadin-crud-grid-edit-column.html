@@ -32,15 +32,34 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
   <script>
     /**
      * `<vaadin-crud-grid-edit>` is a helper element for the `<vaadin-crud-grid-edit-column>` that provides
-     * a button that can be easily themed.
+     * a button that can be easily themed, and that fires an `edit` event with the row item as detail when
+     * the user clicks on it.
      *
-     * @private
      */
     class CrudGridEditElement extends Vaadin.ThemableMixin(Polymer.Element) {
       /** @private */
       static get is() {
         return 'vaadin-crud-grid-edit';
       }
+
+      ready() {
+        super.ready();
+        this.addEventListener('click', this.__onClick);
+      }
+
+      __onClick(e) {
+        const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
+        tr.dispatchEvent(
+          new CustomEvent('edit', {detail: {item: tr._item, index: tr.index}, bubbles: true, composed: true}));
+      }
+
+      /**
+       * Fired when user on the icon.
+       *
+       * @event edit
+       * @param {Object} detail.item the item to edit
+       * @param {Object} detail.index the index of the item in the data set
+       */
     }
     window.customElements.define(CrudGridEditElement.is, CrudGridEditElement);
   </script>
@@ -109,26 +128,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         this.renderer = (root, column, model) => {
           if (!root.firstElementChild) {
             const elm = document.createElement('vaadin-crud-grid-edit');
-            elm.addEventListener('click', e => this.__onClick(e));
             this.hasAttribute('theme') && elm.setAttribute('theme', this.getAttribute('theme'));
             root.appendChild(elm);
           }
         };
       }
-
-      __onClick(e) {
-        const tr = e.target.parentElement.assignedSlot.parentElement.parentElement;
-        tr.dispatchEvent(
-          new CustomEvent('edit', {detail: {item: tr._item, index: tr.index}, bubbles: true, composed: true}));
-      }
-
-      /**
-       * Fired when user clicks on the new item button.
-       *
-       * @event edit
-       * @param {Object} detail.item the item to edit
-       * @param {Object} detail.item the index of the item in the data set
-       */
     }
 
     customElements.define(CrudGridEditColumnElement.is, CrudGridEditColumnElement);
