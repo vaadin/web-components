@@ -121,9 +121,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
        *  <vaadin-tabs slot="menu">
        *    <vaadin-tab>Menu item</vaadin-tab>
        *  </vaadin-tabs>
-       *  <div>Page content</div>
+       *  <!-- Everything else will be the page content -->
+       *  <div>
+       *    <h3>Page title</h3>
+       *    <p>Page content</p>
+       *  </div>
        * </vaadin-app-layout>
        * ```
+       *
+       * For best results, the component should be added to the root level of your application (i.e., as a direct child of `<body>`)
        *
        * ### Styling
        *
@@ -179,6 +185,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           }
         }
 
+        /** @private */
         connectedCallback() {
           super.connectedCallback();
           if (this._boundIosResizeListener) {
