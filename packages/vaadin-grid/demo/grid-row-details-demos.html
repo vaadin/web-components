@@ -40,7 +40,7 @@
             const grid = document.querySelector('vaadin-grid');
             grid.items = Vaadin.GridDemo.users;
 
-            grid.rowDetailsRenderer = function(root, grid, model) {
+            grid.rowDetailsRenderer = function(root, grid, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML =
                 '<div class="details">' +
@@ -48,13 +48,13 @@
                 '<small></small></p>' +
                 '</div>';
               }
-              root.firstElementChild.querySelector('img').src = model.item.picture.large;
-              root.firstElementChild.querySelector('span').textContent = 'Hi! My name is ' + model.item.name.first + '!';
-              root.firstElementChild.querySelector('small').textContent = model.item.email;
+              root.firstElementChild.querySelector('img').src = rowData.item.picture.large;
+              root.firstElementChild.querySelector('span').textContent = 'Hi! My name is ' + rowData.item.name.first + '!';
+              root.firstElementChild.querySelector('small').textContent = rowData.item.email;
             };
 
             const detailsToggleColumn = document.querySelector('#details');
-            detailsToggleColumn.renderer = function(root, column, model) {
+            detailsToggleColumn.renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<vaadin-checkbox>Show Details</vaadin-checkbox>';
                 root.firstElementChild.addEventListener('checked-changed', function(e) {
@@ -65,7 +65,7 @@
                   }
                 });
               }
-              root.item = model.item;
+              root.item = rowData.item;
               root.firstElementChild.checked = grid.detailsOpenedItems.indexOf(root.item) > -1;
             };
           });

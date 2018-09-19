@@ -207,11 +207,11 @@
 
             const columns = document.querySelectorAll('vaadin-grid-column');
 
-            columns[0].renderer = function(root, column, model) {
+            columns[0].renderer = function(root, column, rowData) {
               root.textContent = 'Space activates';
             };
 
-            columns[1].renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, rowData) {
               root.innerHTML = '';
               const alertBtn = window.document.createElement('button');
               alertBtn.textContent = 'Button';
@@ -224,7 +224,7 @@
               root.appendChild(textNode);
             };
 
-            columns[2].renderer = function(root, column, model) {
+            columns[2].renderer = function(root, column, rowData) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div';
@@ -237,7 +237,7 @@
               root.appendChild(textNode);
             };
 
-            columns[3].renderer = function(root, column, model) {
+            columns[3].renderer = function(root, column, rowData) {
               root.innerHTML = '';
               const alertBlock = window.document.createElement('div');
               alertBlock.textContent = 'Div with preventDefault';

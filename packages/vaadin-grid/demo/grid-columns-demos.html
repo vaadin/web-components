@@ -40,23 +40,23 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
+            columns[0].renderer = function(root, column, rowData) {
+              root.textContent = rowData.index;
             };
 
-            columns[1].renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
-              root.firstElementChild.src = model.item.picture.thumbnail;
+              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
+              root.firstElementChild.src = rowData.item.picture.thumbnail;
             };
 
             const groups = document.querySelectorAll('vaadin-grid-column-group');
-            groups[0].headerRenderer = function(root, column, model) {
+            groups[0].headerRenderer = function(root, column, rowData) {
               root.textContent = 'Name';
             };
-            groups[1].headerRenderer = function(root, column, model) {
+            groups[1].headerRenderer = function(root, column, rowData) {
               root.textContent = 'Location';
             };
 
@@ -100,16 +100,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
+            columns[0].renderer = function(root, column, rowData) {
+              root.textContent = rowData.index;
             };
 
-            columns[1].renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
-              root.firstElementChild.src = model.item.picture.thumbnail;
+              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
+              root.firstElementChild.src = rowData.item.picture.thumbnail;
             };
           });
         </script>
@@ -146,16 +146,16 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
+            columns[0].renderer = function(root, column, rowData) {
+              root.textContent = rowData.index;
             };
 
-            columns[1].renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
-              root.firstElementChild.src = model.item.picture.thumbnail;
+              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
+              root.firstElementChild.src = rowData.item.picture.thumbnail;
             };
           });
         </script>
@@ -198,23 +198,23 @@
             document.querySelector('vaadin-grid').items = Vaadin.GridDemo.users;
 
             const columns = document.querySelectorAll('vaadin-grid-column');
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
+            columns[0].renderer = function(root, column, rowData) {
+              root.textContent = rowData.index;
             };
 
-            columns[1].renderer = function(root, column, model) {
+            columns[1].renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<iron-image width="30" height="30" sizing="cover"></iron-image>';
               }
-              root.firstElementChild.alt = model.item.name.first + ' ' + model.item.name.last;
-              root.firstElementChild.src = model.item.picture.thumbnail;
+              root.firstElementChild.alt = rowData.item.name.first + ' ' + rowData.item.name.last;
+              root.firstElementChild.src = rowData.item.picture.thumbnail;
             };
 
             const groups = document.querySelectorAll('vaadin-grid-column-group');
-            groups[0].headerRenderer = function(root, column, model) {
+            groups[0].headerRenderer = function(root, column, rowData) {
               root.textContent = 'Name';
             };
-            groups[1].headerRenderer = function(root, column, model) {
+            groups[1].headerRenderer = function(root, column, rowData) {
               root.textContent = 'Location';
             };
           });

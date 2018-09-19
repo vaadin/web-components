@@ -77,32 +77,32 @@
             const columns = document.querySelectorAll('vaadin-grid-column');
 
             // Use renderers to populate the cell content
-            columns[0].renderer = function(root, column, model) {
-              root.textContent = model.index;
+            columns[0].renderer = function(root, column, rowData) {
+              root.textContent = rowData.index;
             };
             columns[0].headerRenderer = columns[0].footerRenderer = function(root, column) {
               root.textContent = '#';
             };
 
-            columns[1].renderer = function(root, column, model) {
-              root.textContent = model.item.name.first;
+            columns[1].renderer = function(root, column, rowData) {
+              root.textContent = rowData.item.name.first;
             };
             columns[1].headerRenderer = columns[1].footerRenderer = function(root, column) {
               root.textContent = 'First Name';
             };
 
-            columns[2].renderer = function(root, column, model) {
-              root.textContent = model.item.name.last;
+            columns[2].renderer = function(root, column, rowData) {
+              root.textContent = rowData.item.name.last;
             };
             columns[2].headerRenderer = columns[2].footerRenderer = function(root, column) {
               root.textContent = 'Last Name';
             };
 
-            columns[3].renderer = function(root, column, model) {
+            columns[3].renderer = function(root, column, rowData) {
               if (!root.firstElementChild) {
                 root.innerHTML = '<div style="white-space: normal"></div>';
               }
-              root.firstElementChild.textContent = model.item.location.street + ', ' + model.item.location.city;
+              root.firstElementChild.textContent = rowData.item.location.street + ', ' + rowData.item.location.city;
             };
             columns[3].headerRenderer = columns[3].footerRenderer = function(root, column) {
               root.textContent = 'Address';

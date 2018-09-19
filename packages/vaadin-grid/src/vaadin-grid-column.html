@@ -240,10 +240,10 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    __runRenderer(renderer, cell, model) {
+    __runRenderer(renderer, cell, rowData) {
       const args = [cell._content, this];
-      if (model && model.item) {
-        args.push(model);
+      if (rowData && rowData.item) {
+        args.push(rowData);
       }
       renderer.apply(this, args);
     }
@@ -504,10 +504,10 @@ This program is available under Apache License Version 2.0, available at https:/
            *
            * - `root` The cell content DOM element. Append your content to it.
            * - `column` The `<vaadin-grid-column>` element.
-           * - `model` The object with the properties related with
+           * - `rowData` The object with the properties related with
            *   the rendered item, contains:
-           *   - `model.index` The index of the item.
-           *   - `model.item` The item.
+           *   - `rowData.index` The index of the item.
+           *   - `rowData.item` The item.
            *
            * **NOTE:** The renderer callback can be called multiple times
            * with the previous content.
