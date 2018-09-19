@@ -306,7 +306,7 @@
         });
       });
 
-      describe('path and label', () => {
+      describe('path and header', () => {
 
         let col;
 
@@ -328,8 +328,8 @@
           expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');
         });
 
-        it('should have aria-rowcount on the table (label)', () => {
-          col.label = 'Foo';
+        it('should have aria-rowcount on the table (header)', () => {
+          col.header = 'Foo';
           flushGrid(grid);
 
           expect(grid.$.table.getAttribute('aria-rowcount')).to.equal('3');

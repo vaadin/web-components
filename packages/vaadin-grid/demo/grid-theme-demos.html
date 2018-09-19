@@ -14,9 +14,9 @@
       <template preserve-content>
         <vaadin-grid theme="compact" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -26,7 +26,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });
@@ -40,9 +40,9 @@
       <template preserve-content>
         <vaadin-grid theme="no-border" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -52,7 +52,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });
@@ -66,9 +66,9 @@
       <template preserve-content>
         <vaadin-grid theme="no-row-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -78,7 +78,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });
@@ -92,9 +92,9 @@
       <template preserve-content>
         <vaadin-grid theme="column-borders" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -104,7 +104,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });
@@ -118,9 +118,9 @@
       <template preserve-content>
         <vaadin-grid theme="row-stripes" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="15em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="15em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -130,7 +130,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });
@@ -145,9 +145,9 @@
       <template preserve-content>
         <vaadin-grid theme="wrap-cell-content" column-reordering-allowed multi-sort>
           <vaadin-grid-selection-column auto-select></vaadin-grid-selection-column>
-          <vaadin-grid-column path="name.first" label="First Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="name.last" label="Last Name" width="9em"></vaadin-grid-column>
-          <vaadin-grid-column path="location.street" label="Address" width="9em" flex-grow="2"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name" width="9em"></vaadin-grid-column>
+          <vaadin-grid-column path="location.street" header="Address" width="9em" flex-grow="2"></vaadin-grid-column>
         </vaadin-grid>
 
         <script>
@@ -157,7 +157,7 @@
             Array.from(document.querySelectorAll('vaadin-grid-column'))
               .forEach(function(column) {
                 column.headerRenderer = function(root) {
-                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.label + '</vaadin-grid-sorter>';
+                  root.innerHTML = '<vaadin-grid-sorter path=' + column.path + '>' + column.header + '</vaadin-grid-sorter>';
                 };
               });
           });

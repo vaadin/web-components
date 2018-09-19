@@ -32,7 +32,7 @@
     <vaadin-grid-selection-column auto-select frozen></vaadin-grid-selection-column>
     <vaadin-grid-column width="9em" path="firstName"></vaadin-grid-column>
     <vaadin-grid-column width="9em" path="lastName"></vaadin-grid-column>
-    <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" label="Address"></vaadin-grid-column>
+    <vaadin-grid-column id="addresscolumn" width="15em" flex-grow="2" header="Address"></vaadin-grid-column>
   </vaadin-grid>
 
   <script>

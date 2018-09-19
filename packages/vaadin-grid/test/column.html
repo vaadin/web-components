@@ -179,22 +179,22 @@
             emptyColumn.path = 'value';
           });
 
-          it('should use path as the label', () => {
+          it('should use path as the header', () => {
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
           });
 
-          it('should format proper label from the last path token', () => {
+          it('should format proper header from the last path token', () => {
             emptyColumn.path = 'foo.barBaz';
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar Baz');
           });
 
-          it('should not override header renderer label', () => {
+          it('should not override header renderer content', () => {
             emptyColumn.headerRenderer = root => root.textContent = 'foo';
             emptyColumn.path = 'foo';
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should not override header template label', () => {
+          it('should not override header template content', () => {
             const template = document.createElement('template');
             template.innerHTML = 'foo';
             template.classList.add('header');
@@ -204,7 +204,7 @@
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should use path label if header renderer is removed', () => {
+          it('should use path generated header if header renderer is removed', () => {
             emptyColumn.headerRenderer = root => root.textContent = 'foo';
             emptyColumn.headerRenderer = null;
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Value');
@@ -241,40 +241,40 @@
 
         });
 
-        describe('label', () => {
+        describe('header', () => {
 
           beforeEach(() => {
-            emptyColumn.label = 'Label';
+            emptyColumn.header = 'Header';
           });
 
-          it('should show the label in the header cell', () => {
-            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Label');
+          it('should show the header text in the header cell', () => {
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Header');
           });
 
-          it('should not override header renderer label', () => {
+          it('should not override header renderer text content', () => {
             emptyColumn.headerRenderer = root => root.textContent = 'foo';
-            emptyColumn.label = 'Bar';
+            emptyColumn.header = 'Bar';
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should not override header template label', () => {
+          it('should not override header template text content', () => {
             const template = document.createElement('template');
             template.innerHTML = 'foo';
             template.classList.add('header');
             emptyColumn.appendChild(template);
             flushColumns(grid);
-            emptyColumn.label = 'Bar';
+            emptyColumn.header = 'Bar';
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('foo');
           });
 
-          it('should override path generated label', () => {
+          it('should override path generated header', () => {
             emptyColumn.path = 'foo';
-            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Label');
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Header');
           });
 
-          it('should use path label if label is removed', () => {
+          it('should use path generated header if header is removed', () => {
             emptyColumn.path = 'foo';
-            emptyColumn.label = null;
+            emptyColumn.header = null;
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo');
           });
 
