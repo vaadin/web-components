@@ -30,7 +30,7 @@
               columns[0].headerRenderer = function(root, col) {
                 root.textContent = 'Name';
               };
-              columns[0].renderer = function(root, col, model) {
+              columns[0].renderer = function(root, col, rowData) {
                 let toggler = root.firstElementChild;
                 if (!toggler) {
                   toggler = window.document.createElement('vaadin-grid-tree-toggle');
@@ -40,11 +40,11 @@
                   root.appendChild(toggler);
                 }
 
-                toggler.item = model.item;
-                toggler.leaf = !model.item.hasChildren;
-                toggler.expanded = model.expanded;
-                toggler.level = model.level;
-                toggler.textContent = model.item.name;
+                toggler.item = rowData.item;
+                toggler.leaf = !rowData.item.hasChildren;
+                toggler.expanded = rowData.expanded;
+                toggler.level = rowData.level;
+                toggler.textContent = rowData.item.name;
               };
 
               grid.dataProvider = function(params, callback) {
