@@ -548,18 +548,44 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
+      _shouldAnimate() {
+        const name = getComputedStyle(this).getPropertyValue('animation-name');
+        return name && name != 'none';
+      }
+
+      _enqueueAnimation(type, callback) {
+        const handler = `__${type}Handler`;
+        const listener = () => {
+          callback();
+          this.removeEventListener('animationend', listener);
+          delete this[handler];
+        };
+        this[handler] = listener;
+        this.addEventListener('animationend', listener);
+      }
+
+      _flushAnimation(type) {
+        const handler = `__${type}Handler`;
+        if (typeof this[handler] === 'function') {
+          this[handler]();
+        }
+      }
+
       _animatedOpening() {
+        if (this.parentNode === document.body && this.hasAttribute('closing')) {
+          this._flushAnimation('closing');
+        }
         this._attachOverlay();
         this.setAttribute('opening', '');
-        const name = getComputedStyle(this).getPropertyValue('animation-name');
-        if (name && name != 'none') {
-          const listener = () => {
-            this.removeEventListener('animationend', listener);
-            this.removeAttribute('opening');
-          };
-          this.addEventListener('animationend', listener);
-        } else {
+
+        const finishOpening = () => {
           this.removeAttribute('opening');
+        };
+
+        if (this._shouldAnimate()) {
+          this._enqueueAnimation('opening', finishOpening);
+        } else {
+          finishOpening();
         }
       }
 
@@ -570,19 +596,21 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       _animatedClosing() {
+        if (this.hasAttribute('opening')) {
+          this._flushAnimation('opening');
+        }
         if (this._placeholder) {
           this.setAttribute('closing', '');
-          const name = getComputedStyle(this).getPropertyValue('animation-name');
-          if (name && name != 'none') {
-            const listener = () => {
-              this._detachOverlay();
-              this.removeAttribute('closing');
-              this.removeEventListener('animationend', listener);
-            };
-            this.addEventListener('animationend', listener);
-          } else {
+
+          const finishClosing = () => {
             this._detachOverlay();
             this.removeAttribute('closing');
+          };
+
+          if (this._shouldAnimate()) {
+            this._enqueueAnimation('closing', finishClosing);
+          } else {
+            finishClosing();
           }
         }
       }

@@ -8,5 +8,7 @@ window.VaadinOverlaySuites = [
   'styling.html',
   'styling.html?wc-shadydom=true',
   'templating.html',
-  'templating.html?wc-shadydom=true'
+  'templating.html?wc-shadydom=true',
+  'animations.html',
+  'animations.html?wc-shadydom=true',
 ];
