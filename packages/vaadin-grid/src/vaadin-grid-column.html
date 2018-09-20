@@ -266,6 +266,7 @@ This program is available under Apache License Version 2.0, available at https:/
           cell._template = template;
 
           cell._content.innerHTML = '';
+          template.templatizer._grid = template.templatizer._grid || this._grid;
           const inst = template.templatizer.createInstance();
           cell._content.appendChild(inst.root);
           cell._instance = inst;
