@@ -34,6 +34,10 @@
           window.addDemoReadyListener('#dialog-basic-demos-confirm-dialog', function(document) {
             const dialog = document.querySelector('vaadin-dialog');
             dialog.renderer = function(root, dialog) {
+              if (root.firstElementChild) {
+                // The dialog content is already rendered so no action needed.
+                return;
+              }
               const div = window.document.createElement('div');
               div.textContent = 'Are you sure?';
 
@@ -74,45 +78,59 @@
         <vaadin-button>Show dialog</vaadin-button>
         <script>
           window.addDemoReadyListener('#dialog-basic-demos-scrollable-dialog', function(document) {
-            const API_URL = 'https://baconipsum.com/api/?type=all-meat&paras=20';
-            const ajax = document.querySelector('iron-ajax');
-            ajax.url = API_URL;
-
             const dialog = document.querySelector('vaadin-dialog');
+
+            const ajax = document.querySelector('iron-ajax');
+            let content = [];
+            ajax.addEventListener('last-response-changed', function(e) {
+              content = e.target.lastResponse;
+              dialog.render();
+            });
+            ajax.url = 'https://baconipsum.com/api/?type=all-meat&paras=20';
+
+
             dialog.renderer = function(root, dialog) {
-              const section = window.document.createElement('section');
-              section.setAttribute('style', 'display: flex; flex-direction: column; max-height: calc(100vh - 80px);');
+              if (!root.firstElementChild) {
+                // Initialize the content structure
+                const section = window.document.createElement('section');
+                section.style.display = 'flex';
+                section.style.flexDirection = 'column';
 
-              const header = window.document.createElement('header');
-              header.textContent = 'Alice in Wornderland';
+                const header = window.document.createElement('header');
+                header.textContent = 'Alice in Wonderland';
 
-              const main = window.document.createElement('main');
-              ajax.addEventListener('last-response-changed', function(e) {
-                e.target.lastResponse.forEach(function(paragraph) {
-                  const p = window.document.createElement('p');
-                  p.textContent = paragraph;
-                  main.appendChild(p);
+                const main = window.document.createElement('main');
+                main.style.overflow = 'auto';
+                main.style.maxHeight = '500px';
+
+                const footer = window.document.createElement('footer');
+                const btn = window.document.createElement('vaadin-button');
+                btn.textContent = 'Close';
+                btn.addEventListener('click', function() {
+                  dialog.opened = false;
                 });
-              });
-              main.setAttribute('style', 'overflow-y: scroll');
+                footer.appendChild(btn);
 
-              const footer = window.document.createElement('footer');
-              const btn = window.document.createElement('vaadin-button');
-              btn.textContent = 'Close';
-              btn.addEventListener('click', function() {
-                dialog.opened = false;
-              });
-              footer.appendChild(btn);
+                section.appendChild(header);
+                section.appendChild(main);
+                section.appendChild(footer);
+                root.appendChild(section);
+              }
 
-              section.appendChild(header);
-              section.appendChild(main);
-              section.appendChild(footer);
-              root.appendChild(section);
-
-              document.querySelector('vaadin-button').addEventListener('click', function() {
-                dialog.opened = true;
+              // Update the main content
+              const main = root.querySelector('main');
+              main.innerHTML = '';
+              content.forEach(function(paragraph) {
+                const p = window.document.createElement('p');
+                p.textContent = paragraph;
+                main.appendChild(p);
               });
+
             };
+
+            document.querySelector('vaadin-button').addEventListener('click', function() {
+              dialog.opened = true;
+            });
           });
         </script>
       </template>
