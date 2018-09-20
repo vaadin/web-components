@@ -116,7 +116,16 @@
         flushGrid(grid);
 
         expect(grid._physicalCount).to.be.above(26);
-        expect(grid._physicalCount).to.be.below(87);
+        expect(grid._physicalCount).to.be.below(60);
+      });
+
+      it('should minimize pool increase rounds', () => {
+        grid = fixture('default');
+        grid.style.height = '1000px';
+        const spy = sinon.spy(grid, '_createScrollerRows');
+        grid.dataProvider = infiniteDataProvider;
+        flushGrid(grid);
+        expect(spy.callCount).to.equal(2);
       });
 
 

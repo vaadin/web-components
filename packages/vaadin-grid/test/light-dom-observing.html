@@ -467,6 +467,7 @@
 
           it('should not invoke on row reorder', done => {
             grid.size = 100;
+            flushGrid(grid);
             flush(() => {
               const spy = sinon.spy(grid._observer, 'callback');
               scrollToEnd(grid, () => {

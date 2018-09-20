@@ -244,6 +244,16 @@
             expect(getBodyCellContent(grid, 0, 2).textContent.trim()).to.equal('foo0');
           });
 
+          it('should not invoke body renderers of other columns', () => {
+            const newColumn = document.createElement('vaadin-grid-column');
+            grid.appendChild(newColumn);
+            flushGrid(grid);
+            emptyColumn.renderer = sinon.spy();
+            emptyColumn.renderer.reset();
+            newColumn.path = 'foo';
+            expect(emptyColumn.renderer).not.to.be.called;
+          });
+
         });
 
         describe('header', () => {
