@@ -14,12 +14,26 @@
   <template>
     <style>
       [part~="toolbar"] {
-        padding: var(--lumo-space-xs) var(--lumo-space-m);
+        padding: var(--lumo-space-xs);
         background-color: var(--lumo-contrast-5pct);
       }
 
+      [part~="header"] {
+        font-size: var(--lumo-font-size-xxl);
+        margin: 0;
+      }
+
       [part~="buttons"] {
-        margin-top: var(--lumo-space-l);
+        flex: none;
+        padding: var(--lumo-space-s) var(--lumo-space-l);
+        margin: calc((var(--lumo-space-l)) * -1);
+        margin-top: 0;
+        background-color: var(--lumo-contrast-5pct);
+      }
+
+      [part=editor] [slot=form],
+      [part=editor] #form {
+        margin-bottom: var(--lumo-space-l);
       }
     </style>
   </template>
@@ -35,7 +49,7 @@
       }
 
       :host([theme~="crud"]) [part~="content"] {
-        flex: 1;
+        flex: auto;
       }
 
       :host([theme~="crud"]) [part~="content"] {
