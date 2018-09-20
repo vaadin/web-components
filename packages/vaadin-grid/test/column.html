@@ -188,6 +188,11 @@
             expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Bar Baz');
           });
 
+          it('should format three part header text', () => {
+            emptyColumn.path = 'fooBarBaz';
+            expect(getHeaderCellContent(grid, 1, 2).textContent.trim()).to.equal('Foo Bar Baz');
+          });
+
           it('should not override header renderer content', () => {
             emptyColumn.headerRenderer = root => root.textContent = 'foo';
             emptyColumn.path = 'foo';

@@ -371,7 +371,7 @@ This program is available under Apache License Version 2.0, available at https:/
           const generatedHeader = path
             .substr(path.lastIndexOf('.') + 1)
             .replace(/([A-Z])/g, '-$1').toLowerCase()
-            .replace(/-/, ' ')
+            .replace(/-/g, ' ')
             .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
           headerCell._content.textContent = generatedHeader;
           headerCell.parentElement.hidden = false;
