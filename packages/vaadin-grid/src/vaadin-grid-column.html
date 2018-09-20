@@ -254,7 +254,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       cells.forEach(cell => {
-        const model = {item: cell.parentElement._item, index: cell.parentElement.index};
+        const model = this._grid.__getRowModel(cell.parentElement);
 
         if (renderer) {
           cell._renderer = renderer;

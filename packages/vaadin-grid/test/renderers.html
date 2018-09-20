@@ -98,6 +98,15 @@
           expect(() => column._bodyTemplate = {}).to.throw(Error);
         });
 
+        it('should initialize with instance properties', () => {
+          column.renderer = function(root, owner, model) {
+            expect(model.selected).to.be.false;
+            expect(model.expanded).to.be.false;
+            expect(model.detailsOpened).to.be.false;
+            expect(model.level).to.equal(0);
+          };
+        });
+
         describe('row details', () => {
           beforeEach(() => {
             grid.rowDetailsRenderer = column.renderer;
