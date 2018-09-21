@@ -3,20 +3,13 @@
 
 <head>
   <meta charset="utf-8">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-date-picker.html">
   <link rel="import" href="not-animated-styles.html">
   <script src="common.js"></script>
-  <script>
-    HTMLImports.whenReady(() => {
-      Polymer({
-        is: 'vaadin-date-picker-wrapper'
-      });
-    });
-  </script>
 </head>
 
 <body>
@@ -37,6 +30,13 @@
     <template>
       <vaadin-date-picker id="datepicker" label="foo"></vaadin-date-picker>
     </template>
+    <script>
+      customElements.whenDefined('vaadin-date-picker').then(() => {
+        Polymer({
+          is: 'vaadin-date-picker-wrapper'
+        });
+      });
+    </script>
   </dom-module>
 
   <script>
