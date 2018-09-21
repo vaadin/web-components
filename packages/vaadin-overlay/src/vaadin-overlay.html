@@ -136,6 +136,30 @@ This program is available under Apache License Version 2.0, available at https:/
       return document.createElement(is);
     };
 
+    Polymer.IronFocusablesHelper._collectTabbableNodes = function(node, result) {
+      if (node.nodeType !== Node.ELEMENT_NODE || !this._isVisible(node)) {
+        return false;
+      }
+      var element = /** @type {!HTMLElement} */ (node);
+      var tabIndex = this._normalizedTabIndex(element);
+      var needsSort = tabIndex > 0;
+      if (tabIndex >= 0) {
+        result.push(element);
+      }
+      var children;
+      if (element.localName === 'slot') {
+        children = element.assignedNodes({flatten: true});
+      } else {
+        // Use shadow root if possible, will check for distributed nodes.
+        children = (element.shadowRoot || element).children;
+      }
+      for (var i = 0; i < children.length; i++) {
+        // Ensure method is always invoked to collect tabbable children.
+        needsSort = this._collectTabbableNodes(children[i], result) || needsSort;
+      }
+      return needsSort;
+    };
+
     /**
      *
      * `<vaadin-overlay>` is a Web Component for creating overlays. The content of the overlay
@@ -750,8 +774,6 @@ This program is available under Apache License Version 2.0, available at https:/
         if (_isScoped) {
           if (!this.$.content.shadowRoot) {
             this.$.content.attachShadow({mode: 'open'});
-            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-            this.$.content.root = this.$.content.shadowRoot;
           }
 
           let scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
