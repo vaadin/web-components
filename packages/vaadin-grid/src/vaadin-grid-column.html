@@ -71,7 +71,8 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
-         * Aligns the columns cell content horizontally to either start, center or end
+         * Aligns the columns cell content horizontally.
+         * Supported values: "start", "center" and "end".
          */
         textAlign: {
           type: String
@@ -418,6 +419,10 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _textAlignChanged(textAlign, _cells, _headerCell, _footerCell) {
       if (textAlign === undefined) {
+        return;
+      }
+      if (['start', 'end', 'center'].indexOf(textAlign) === -1) {
+        console.warn('textAlign can only be set as "start", "end" or "center"');
         return;
       }
 
