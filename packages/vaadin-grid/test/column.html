@@ -325,6 +325,31 @@
             expect(getComputedStyle(getContainerCellContent(grid.$.footer, 0, 2)).textAlign).to.equal('center');
           });
 
+          it('should warn about invalid text-align value', () => {
+            const _warn = console.warn;
+            const spy = console.warn = sinon.spy();
+
+            emptyColumn.textAlign = 'right';
+            console.warn = _warn;
+
+            expect(spy.called).to.be.true;
+          });
+
+          it('should not warn about valid text-align value', () => {
+            const _warn = console.warn;
+            const spy = console.warn = sinon.spy();
+
+            emptyColumn.textAlign = 'center';
+            console.warn = _warn;
+
+            expect(spy.called).not.to.be.true;
+          });
+
+          it('invalid value should not change the effective value', () => {
+            emptyColumn.textAlign = 'right';
+            expect(getComputedStyle(getBodyCellContent(grid, 0, 2)).textAlign).not.to.equal('right');
+          });
+
         });
 
       });
