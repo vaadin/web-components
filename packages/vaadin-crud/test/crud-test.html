@@ -47,14 +47,13 @@
     describe('crud test', () => {
       var crud;
 
+
       // Buttons in the editor dialog
-      const btnSave = () => {
-        // Need to make some changes to enable Save button
-        crud._form.dispatchEvent(new Event('change'));
-        return crud.$.buttons.querySelectorAll('vaadin-button')[0];
-      };
-      const btnCancel = () => crud.$.buttons.querySelectorAll('vaadin-button')[1];
-      const btnDelete = () => crud.$.buttons.querySelectorAll('vaadin-button')[2];
+      const change = () => crud._form.dispatchEvent(new Event('change', {bubbles: true}));
+      const buttons = () => crud.$.dialog.$.dialog.$.overlay.shadowRoot.querySelectorAll('vaadin-button');
+      const btnSave = () => buttons()[0];
+      const btnCancel = () => buttons()[1];
+      const btnDelete = () => buttons()[2];
 
       // Buttons in confirm dialogs
       const btnConfDialog = (confirDialog, id) => confirDialog.$.dialog.$.overlay.$.content.shadowRoot.querySelector(`vaadin-button#${id}`);
@@ -97,7 +96,7 @@
         });
 
         it('should have a slot for footer content', () => {
-          expect(crud.$.toolbar.querySelector('slot').assignedNodes()[0].textContent).to.be.equal('Footer content');
+          expect(crud.querySelector('[slot=footer]').textContent).to.be.equal('Footer content');
         });
 
         it('should open the new item editor if item is provided declarativelly', () => {
@@ -116,6 +115,7 @@
           it('should save an edited item', () => {
             edit(crud.items[0]);
             crud._form._fields[0].value = 'baz';
+            change();
             btnSave().click();
             expect(crud.items[0].foo).to.be.equal('baz');
           });
@@ -123,6 +123,7 @@
           it('should save a new item', () => {
             crud.$.new.click();
             crud._form._fields[0].value = 'baz';
+            change();
             btnSave().click();
             expect(crud.items[1].foo).to.be.equal('baz');
           });
@@ -145,6 +146,7 @@
           it('should save a new pre-filled item', () => {
             crud.item = {foo: 'baz'};
             crud._form._fields[0].value = 'baz';
+            change();
             btnSave().click();
             expect(crud.items[1].foo).to.be.equal('baz');
           });
@@ -173,14 +175,14 @@
 
             it('should ask for confirmation on cancel when modified', () => {
               edit(crud.items[0]);
-              crud._form.dispatchEvent(new Event('change'));
+              change();
               btnCancel().click();
               expect(crud.$.confirmCancel.opened).to.be.true;
             });
 
             it('should continue editing when closing confirmation with confirm', () => {
               edit(crud.items[0]);
-              crud._form.dispatchEvent(new Event('change'));
+              change();
               btnCancel().click();
               btnConfDialog(crud.$.confirmCancel, 'confirm').click();
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
@@ -189,7 +191,7 @@
 
             it('should cancel editing when closing confirmation with reject', () => {
               edit(crud.items[0]);
-              crud._form.dispatchEvent(new Event('change'));
+              change();
               btnCancel().click();
               btnConfDialog(crud.$.confirmCancel, 'reject').click();
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
@@ -242,7 +244,7 @@
 
           it('should set dirty on editor changes', () => {
             edit(crud.items[0]);
-            crud._form.dispatchEvent(new Event('change'));
+            change();
             expect(crud.__isDirty).to.be.true;
           });
 
@@ -257,7 +259,7 @@
           it('should show delete button and disable save button on edit', done => {
             edit(crud.items[0]);
             Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
-              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).to.be.true;
+              expect(btnSave().hasAttribute('disabled')).to.be.true;
               expect(btnDelete().hasAttribute('hidden')).not.to.be.true;
               done();
             });
@@ -266,8 +268,8 @@
           it('should enable save button on change', done => {
             edit(crud.items[0]);
             Polymer.RenderStatus.afterNextRender(crud.$.dialog.$.overlay, () => {
-              crud._form.dispatchEvent(new Event('change'));
-              expect(crud.$.buttons.querySelectorAll('vaadin-button')[0].hasAttribute('disabled')).not.to.be.true;
+              change();
+              expect(btnSave().hasAttribute('disabled')).not.to.be.true;
               done();
             });
           });
@@ -330,11 +332,13 @@
                 done();
               });
               edit(crud.items[0]);
+              change();
               btnSave().click();
             });
 
             it('on save should close dialog if not default prevented', () => {
               edit(crud.items[0]);
+              change();
               btnSave().click();
               expect(crud.$.dialog.opened).not.to.be.ok;
             });

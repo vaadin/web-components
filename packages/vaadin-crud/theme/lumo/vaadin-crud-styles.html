@@ -1,3 +1,4 @@
+<link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 <link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
 <dom-module id="lumo-crud-grid-edit" theme-for="vaadin-crud-grid-edit">
   <template>
@@ -13,52 +14,59 @@
 <dom-module id="lumo-crud" theme-for="vaadin-crud">
   <template>
     <style>
-      [part~="toolbar"] {
+      :host {
+        font-family: var(--lumo-font-family);
+      }
+
+      [part="toolbar"] {
         padding: var(--lumo-space-xs);
         background-color: var(--lumo-contrast-5pct);
-      }
-
-      [part~="header"] {
-        font-size: var(--lumo-font-size-xxl);
-        margin: 0;
-      }
-
-      [part~="buttons"] {
-        flex: none;
-        padding: var(--lumo-space-s) var(--lumo-space-l);
-        margin: calc((var(--lumo-space-l)) * -1);
-        margin-top: 0;
-        background-color: var(--lumo-contrast-5pct);
-      }
-
-      [part=editor] [slot=form],
-      [part=editor] #form {
-        margin-bottom: var(--lumo-space-l);
       }
     </style>
   </template>
 </dom-module>
 
-<dom-module id="crud-dialog-overlay-theme" theme-for="vaadin-dialog-overlay">
+<dom-module id="dialog-layout-theme" theme-for="vaadin-dialog-layout">
   <template>
     <style>
-      :host([theme~="crud"]) [part~="overlay"],
-      :host([theme~="crud"]) [part~="content"] {
-        display: flex;
-        flex-direction: column;
+      [part="header"] ::slotted(*) {
+        font-size: var(--lumo-font-size-xl);
+        margin: 0;
       }
 
-      :host([theme~="crud"]) [part~="content"] {
+      [part="scroller"] {
+        padding: var(--lumo-space-m);
+      }
+
+      [part="footer"] {
+        background-color: var(--lumo-contrast-5pct);
+        padding: var(--lumo-space-xs) var(--lumo-space-m);
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="dialog-layout-overlay-theme" theme-for="vaadin-dialog-overlay">
+  <template>
+    <style>
+      :host([theme~="layout"]) [part="overlay"],
+      :host([theme~="layout"]) [part="content"] {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+      }
+
+      :host([theme~="layout"]) [part="content"] {
         flex: auto;
       }
 
-      :host([theme~="crud"]) [part~="content"] {
+      :host([theme~="layout"]) [part="content"] {
         max-width: 65em;
-        min-width: 35em:
+        min-width: 20em;
       }
 
       @media (max-width: 600px), (max-height: 600px) {
-        :host([theme~="crud"]) {
+        :host([theme~="layout"]) {
           top: 0;
           left: 0;
           right: 0;
@@ -66,7 +74,7 @@
           padding: 0;
         }
 
-        :host([theme]) [part="overlay"] {
+        :host([theme~="layout"]) [part="overlay"] {
           flex: 1;
           width: 100%;
           border-radius: 0 !important;
