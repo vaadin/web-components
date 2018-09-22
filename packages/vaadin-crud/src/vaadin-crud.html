@@ -46,9 +46,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]"></vaadin-crud-grid>
     </slot>
 
-    <div part="toolbar">
+    <div part="toolbar" on-click="__new">
       <div part="footer"><slot name="footer"></slot></div>
-      <vaadin-button id="new" on-click="__new">New [[entityName]]</vaadin-button>
+      <slot name="new">
+        <vaadin-button id="new">New [[entityName]]</vaadin-button>
+      </slot>
     </div>
 
     <vaadin-dialog-layout id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud">
@@ -398,8 +400,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           this.opened = this.item = undefined;
         }
 
-        __new() {
-          this.__openEditor('new');
+        __new(event) {
+          // This allows listening to parent element and fire only when clicking on default or custom new-button.
+          if (event.composedPath().filter(e => e.nodeType == 1 && (e.getAttribute('slot') || e.id) == 'new')[0]) {
+            this.__openEditor('new');
+          }
         }
 
         __edit(item) {
