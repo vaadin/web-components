@@ -12,9 +12,9 @@
       <template preserve-content>
         <vaadin-context-menu>
           <vaadin-grid>
-            <vaadin-grid-column name="Name"></vaadin-grid-column>
-            <vaadin-grid-column name="Surname"></vaadin-grid-column>
-            <vaadin-grid-column name="Effort"></vaadin-grid-column>
+            <vaadin-grid-column header="Name"></vaadin-grid-column>
+            <vaadin-grid-column header="Surname"></vaadin-grid-column>
+            <vaadin-grid-column header="Effort"></vaadin-grid-column>
           </vaadin-grid>
         </vaadin-context-menu>
         <script>
@@ -24,9 +24,13 @@
             const columns = grid.querySelectorAll('vaadin-grid-column');
 
             contextMenu.renderer = function(root, contextMenu, context) {
-              root.innerHTML = '';
-
-              const listBox = window.document.createElement('vaadin-list-box');
+              let listBox = root.firstElementChild;
+              if (listBox) {
+                listBox.innerHTML = '';
+              } else {
+                listBox = window.document.createElement('vaadin-list-box');
+                root.appendChild(listBox);
+              }
 
               const addItem = window.document.createElement('vaadin-item');
               addItem.textContent = 'Add';
@@ -49,29 +53,24 @@
                 });
                 listBox.appendChild(removeItem);
               }
-
-              root.appendChild(listBox);
             };
 
             grid.items = getItems();
 
             columns.forEach(function(column) {
-              const columnName = column.getAttribute('name');
+              const columnName = column.getAttribute('header');
               const propertyName = columnName.toLowerCase();
 
               column.renderer = function(root, column, context) {
-                root.innerHTML = '';
-
-                const contentWrapper = window.document.createElement('div');
-                contentWrapper.className = 'body-content';
-                contentWrapper.setAttribute('data-index', context.index);
-                contentWrapper.textContent = context.item[propertyName];
-
-                root.appendChild(contentWrapper);
+                if (!root.firstElementChild) {
+                  root.innerHTML = '<div class="body-content"></div>';
+                }
+                root.firstElementChild.setAttribute('data-index', context.index);
+                root.firstElementChild.textContent = context.item[propertyName];
               };
 
               column.headerRenderer = function(root) {
-                root.innerHTML = columnName;
+                root.textContent = columnName;
               };
             });
           });
