@@ -624,7 +624,6 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
         this._placeholder.parentNode.insertBefore(this, this._placeholder);
-        this._processPendingMutationObserversFor(document.body);
         this._placeholder.parentNode.removeChild(this._placeholder);
       }
 
@@ -884,12 +883,6 @@ This program is available under Apache License Version 2.0, available at https:/
       _getFocusableElements() {
         // collect all focusable elements
         return Vaadin.FocusablesHelper.getTabbableNodes(this.$.overlay);
-      }
-
-      _processPendingMutationObserversFor(node) {
-        if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
-          CustomElements.takeRecords(node);
-        }
       }
     }
 
