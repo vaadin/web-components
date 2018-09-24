@@ -1,5 +1,7 @@
 <link rel="import" href="../../../vaadin-lumo-styles/typography.html">
 <link rel="import" href="../../../vaadin-lumo-styles/font-icons.html">
+<link rel="import" href="../vaadin-dialog-layout-overlay-styles.html">
+
 <dom-module id="lumo-crud-grid-edit" theme-for="vaadin-crud-grid-edit">
   <template>
     <style>
@@ -22,6 +24,10 @@
         padding: var(--lumo-space-xs) var(--lumo-space-s);
         background-color: var(--lumo-contrast-5pct);
       }
+
+      vaadin-grid-cell-content {
+        text-overflow: ellipsis;
+      }
     </style>
   </template>
 </dom-module>
@@ -30,55 +36,17 @@
   <template>
     <style>
       [part="header"] ::slotted(*) {
-        font-size: var(--lumo-font-size-xl);
-        margin: 0;
+        margin-top: var(--lumo-space-s);
+        margin-bottom: var(--lumo-space-s);
       }
 
       [part="scroller"] {
-        padding: var(--lumo-space-m);
+        padding: var(--lumo-space-l);
       }
 
       [part="footer"] {
         background-color: var(--lumo-contrast-5pct);
         padding: var(--lumo-space-xs) var(--lumo-space-m);
-      }
-    </style>
-  </template>
-</dom-module>
-
-<dom-module id="dialog-layout-overlay-theme" theme-for="vaadin-dialog-overlay">
-  <template>
-    <style>
-      :host([theme~="layout"]) [part="overlay"],
-      :host([theme~="layout"]) [part="content"] {
-        display: flex;
-        flex-direction: column;
-        padding: 0;
-      }
-
-      :host([theme~="layout"]) [part="content"] {
-        flex: auto;
-      }
-
-      :host([theme~="layout"]) [part="content"] {
-        max-width: 65em;
-        min-width: 20em;
-      }
-
-      @media (max-width: 600px), (max-height: 600px) {
-        :host([theme~="layout"]) {
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 0;
-        }
-
-        :host([theme~="layout"]) [part="overlay"] {
-          flex: 1;
-          width: 100%;
-          border-radius: 0 !important;
-        }
       }
     </style>
   </template>

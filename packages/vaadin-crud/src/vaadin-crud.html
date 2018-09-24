@@ -64,7 +64,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-button slot="footer" on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
       <vaadin-button slot="footer" on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
       <div slot="footer" style="flex: auto"></div>
-      <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete</vaadin-button>
+      <vaadin-button slot="footer" on-click="__delete" theme="primary error" hidden="[[__isNew]]">Delete...</vaadin-button>
     </vaadin-dialog-layout>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
