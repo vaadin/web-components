@@ -9,7 +9,7 @@
     document.write(`<link rel="import" href="../../theme/${theme}/vaadin-date-picker.html">`);
 
     window.addEventListener('WebComponentsReady', function() {
-      setTimeout(function() {
+      customElements.whenDefined('vaadin-date-picker').then(() => {
         window.ShadyDOM && window.ShadyDOM.flush(); // Force DOM composition
         window.webComponentsAreReady = true; // Checked in gemini before capture callback
       });
