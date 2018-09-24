@@ -124,9 +124,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.shadowRoot) {
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(document.importNode(styledTemplate.content, true));
-
-            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-            this.root = this.shadowRoot;
           }
         }
       })();
