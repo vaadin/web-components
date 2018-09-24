@@ -439,8 +439,11 @@ This program is available under Apache License Version 2.0, available at https:/
         this.__dispatchChange = true;
       }
       const inputValue = selectedDate && formatDate(Vaadin.DatePickerHelper._extractDateParts(selectedDate));
-      this.validate(inputValue);
-      this.value = this._formatISO(selectedDate);
+      const value = this._formatISO(selectedDate);
+      if (value !== this.value) {
+        this.validate(inputValue);
+        this.value = value;
+      }
       this.__userInputOccurred = false;
       this.__dispatchChange = false;
       this._focusedDate = selectedDate;

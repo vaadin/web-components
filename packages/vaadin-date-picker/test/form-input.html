@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8">
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
   <script src="common.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
 
@@ -34,6 +34,12 @@
   <test-fixture id="datepicker">
     <template>
       <vaadin-date-picker></vaadin-date-picker>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="datepicker-required">
+    <template>
+      <vaadin-date-picker required></vaadin-date-picker>
     </template>
   </test-fixture>
 
@@ -215,6 +221,24 @@
           done();
         });
         datepicker.close();
+      });
+    });
+
+    describe('required', () => {
+      let datepicker;
+
+      beforeEach(done => {
+        datepicker = fixture('datepicker-required');
+        setTimeout(done);
+      });
+
+      it('should not be invalid without user interactions', () => {
+        expect(datepicker.invalid).to.be.false;
+      });
+
+      it('should be invalid after validate() if value is not set', () => {
+        datepicker.validate();
+        expect(datepicker.invalid).to.be.true;
       });
     });
 
