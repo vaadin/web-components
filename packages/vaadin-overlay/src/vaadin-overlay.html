@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../iron-overlay-behavior/iron-focusables-helper.html">
+<link rel="import" href="vaadin-focusables-helper.html">
 
 <dom-module id="vaadin-overlay">
   <template>
@@ -124,9 +124,6 @@ This program is available under Apache License Version 2.0, available at https:/
           if (!this.shadowRoot) {
             this.attachShadow({mode: 'open'});
             this.shadowRoot.appendChild(document.importNode(styledTemplate.content, true));
-
-            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-            this.root = this.shadowRoot;
           }
         }
       })();
@@ -624,7 +621,6 @@ This program is available under Apache License Version 2.0, available at https:/
           return;
         }
         this._placeholder.parentNode.insertBefore(this, this._placeholder);
-        this._processPendingMutationObserversFor(document.body);
         this._placeholder.parentNode.removeChild(this._placeholder);
       }
 
@@ -750,8 +746,6 @@ This program is available under Apache License Version 2.0, available at https:/
         if (_isScoped) {
           if (!this.$.content.shadowRoot) {
             this.$.content.attachShadow({mode: 'open'});
-            // FIXME(platosha): IronFocusablesHelper does only use legacy .root
-            this.$.content.root = this.$.content.shadowRoot;
           }
 
           let scopeCssText = Array.from(templateRoot.querySelectorAll('style'))
@@ -885,13 +879,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _getFocusableElements() {
         // collect all focusable elements
-        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.overlay);
-      }
-
-      _processPendingMutationObserversFor(node) {
-        if (window.CustomElements && !Polymer.Settings.useNativeCustomElements) {
-          CustomElements.takeRecords(node);
-        }
+        return Vaadin.FocusablesHelper.getTabbableNodes(this.$.overlay);
       }
     }
 

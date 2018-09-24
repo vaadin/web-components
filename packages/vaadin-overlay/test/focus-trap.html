@@ -5,10 +5,10 @@
   <title>vaadin-overlay focus-trap tests</title>
   <script src="../../web-component-tester/browser.js"></script>
   <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <script src="../../iron-test-helpers/mock-interactions.js"></script>
   <link rel="import" href="../../test-fixture/test-fixture.html">
   <link rel="import" href="../vaadin-overlay.html">
   <link rel="import" href="../../polymer/polymer-element.html">
+  <link rel="import" href="../../iron-test-helpers/mock-interactions.html">
   <link rel="import" href="../../vaadin-button/vaadin-button.html">
   <link rel="import" href="../../vaadin-text-field/vaadin-text-field.html">
   <link rel="import" href="../../vaadin-radio-button/vaadin-radio-button.html">
@@ -87,17 +87,25 @@
     </template>
   </test-fixture>
 
-  <dom-module id="container-with-shadow">
-    <template>
-      <input type="text" id="text">
-      <vaadin-text-field></vaadin-text-field>
-    </template>
-  </dom-module>
   <script>
     document.addEventListener('WebComponentsReady', () => {
-      window.customElements.define('container-with-shadow', class extends Polymer.Element {
-        static get is() {
-          return 'container-with-shadow';
+      const shadowTemplate = document.createElement('template');
+      shadowTemplate.innerHTML = `
+        <input type="text" id="text">
+        <vaadin-text-field></vaadin-text-field>
+      `;
+
+      window.ShadyCSS && window.ShadyCSS.prepareTemplate(shadowTemplate, 'vaadin-license-box');
+
+      window.customElements.define('container-with-shadow', class extends HTMLElement {
+        constructor() {
+          super();
+
+          this.attachShadow({mode: 'open'});
+          this.shadowRoot.appendChild(document.importNode(shadowTemplate.content, true));
+        }
+        connectedCallback() {
+          window.ShadyCSS && window.ShadyCSS.styleElement(this);
         }
       });
     });
@@ -243,7 +251,7 @@
           it('should properly detect multiple focusables in web component shadowRoots', () => {
             expect(focusableElements.length).to.eql(5);
             expect(focusableElements[1]).to.eql(
-              overlay.content.querySelector('container-with-shadow').$.text);
+              overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'));
           });
 
           it('should focus the overlay part on open', (done) => {
@@ -450,7 +458,7 @@
           it('should properly detect multiple focusables in web component shadowRoots', () => {
             expect(focusableElements.length).to.eql(5);
             expect(focusableElements[1]).to.eql(
-              overlay.content.querySelector('container-with-shadow').$.text);
+              overlay.content.querySelector('container-with-shadow').shadowRoot.getElementById('text'));
           });
 
           it('should focus the overlay part on open', (done) => {
