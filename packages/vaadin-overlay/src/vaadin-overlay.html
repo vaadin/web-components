@@ -9,7 +9,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../polymer/lib/utils/render-status.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
 <link rel="import" href="../../vaadin-themable-mixin/vaadin-themable-mixin.html">
-<link rel="import" href="../../iron-overlay-behavior/iron-focusables-helper.html">
+<link rel="import" href="vaadin-focusables-helper.html">
 
 <dom-module id="vaadin-overlay">
   <template>
@@ -134,30 +134,6 @@ This program is available under Apache License Version 2.0, available at https:/
       customElements.define(klass.is, klass);
 
       return document.createElement(is);
-    };
-
-    Polymer.IronFocusablesHelper._collectTabbableNodes = function(node, result) {
-      if (node.nodeType !== Node.ELEMENT_NODE || !this._isVisible(node)) {
-        return false;
-      }
-      var element = /** @type {!HTMLElement} */ (node);
-      var tabIndex = this._normalizedTabIndex(element);
-      var needsSort = tabIndex > 0;
-      if (tabIndex >= 0) {
-        result.push(element);
-      }
-      var children;
-      if (element.localName === 'slot') {
-        children = element.assignedNodes({flatten: true});
-      } else {
-        // Use shadow root if possible, will check for distributed nodes.
-        children = (element.shadowRoot || element).children;
-      }
-      for (var i = 0; i < children.length; i++) {
-        // Ensure method is always invoked to collect tabbable children.
-        needsSort = this._collectTabbableNodes(children[i], result) || needsSort;
-      }
-      return needsSort;
     };
 
     /**
@@ -907,7 +883,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
       _getFocusableElements() {
         // collect all focusable elements
-        return Polymer.IronFocusablesHelper.getTabbableNodes(this.$.overlay);
+        return Vaadin.FocusablesHelper.getTabbableNodes(this.$.overlay);
       }
 
       _processPendingMutationObserversFor(node) {
