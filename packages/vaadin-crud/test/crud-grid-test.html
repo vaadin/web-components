@@ -25,6 +25,13 @@
     </template>
   </test-fixture>
 
+  <test-fixture id="no-head">
+    <template>
+      <vaadin-crud-grid style="width: 500px" no-head>
+      </vaadin-crud-grid>
+    </template>
+  </test-fixture>
+
   <test-fixture id="grid">
     <template>
       <vaadin-grid style="width: 500px">
@@ -78,6 +85,20 @@
         !shadyDom && it('should not add sorters and filters if disabled', () => {
           expect(getHeaderCellContent(crudGrid, 1, 1).firstElementChild).not.to.be.ok;
           expect(getHeaderCellContent(crudGrid, 1, 1).textContent).to.be.equal('First');
+        });
+      });
+
+      describe('fixture crud-grid nohead', () => {
+        beforeEach(done => {
+          crudGrid = fixture('no-head');
+          crudGrid.items = items;
+          window.flushGrid(crudGrid);
+          Polymer.RenderStatus.afterNextRender(crudGrid, done);
+        });
+
+        !shadyDom && it('should not add headers', () => {
+          expect(getHeaderCellContent(crudGrid, 0, 0).firstElementChild).not.to.be.ok;
+          expect(getHeaderCellContent(crudGrid, 1, 0)).not.to.be.ok;
         });
       });
 

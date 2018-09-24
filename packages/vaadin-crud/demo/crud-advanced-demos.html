@@ -11,7 +11,7 @@
     <p>Note that search field has been added to the crud toolbar in the footer, but moved to the top using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
-        <vaadin-crud entity-name="user" no-filter style="flex-direction: column-reverse">
+        <vaadin-crud entity-name="user" no-head style="flex-direction: column-reverse">
           <vaadin-text-field slot="footer" style="width: calc(100% - 0.5em)" placeholder="Search users by first or last name">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-field>

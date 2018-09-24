@@ -43,7 +43,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </style>
 
     <slot name="grid">
-      <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]"></vaadin-crud-grid>
+      <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
     </slot>
 
     <div part="toolbar" on-click="__new">
@@ -225,6 +225,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * Disable sorting when grid is autofonfigured.
              */
             noSort: Boolean,
+            /**
+             * Remove grid headers when it is autoconfigured.
+             */
+            noHead: Boolean,
             /**
              * A regular expression string to applied to fields that will be exclude
              * when using autoconfigured elements.
