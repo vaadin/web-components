@@ -17,9 +17,14 @@
           // NOTE: elementsJson is an Array of `{name: 'Hydrogen', symbol: 'H', number: 1}` Objects
           comboBox.items = elementsJson;
           comboBox.renderer = function(root, owner, model) {
-            root.innerHTML =
-              '<b>' + model.item.name + ', <sub>' + model.item.number + '</sub>' + model.item.symbol + '</b>' +
-              '<br> array index: ' + model.index;
+            if (!root.firstElementChild) {
+              root.innerHTML = '<b><span class="name"></span>, <sub class="number"></sub><span class="symbol"></span></b>'
+               + '<br> array index: <span class="index"></span>';
+            }
+            root.querySelector('.name').textContent = model.item.name;
+            root.querySelector('.number').textContent = model.item.number;
+            root.querySelector('.symbol').textContent = model.item.symbol;
+            root.querySelector('.index').textContent = model.index;
           };
         });
         </script>
