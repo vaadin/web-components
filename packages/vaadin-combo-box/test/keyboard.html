@@ -236,7 +236,7 @@
         expect(comboBox.opened).to.equal(false);
       });
 
-      it('should remove focus with espace', () => {
+      it('should remove focus with escape', () => {
         comboBox._focusedIndex = 0;
 
         esc();
@@ -355,7 +355,7 @@
         }, 1);
       });
 
-      it('should revert back to filter with espace', done => {
+      it('should revert back to filter with escape', done => {
         filter('b');
 
         arrowDown();
@@ -384,6 +384,13 @@
         esc();
 
         expect(comboBox.inputElement.value).to.eql('bar');
+      });
+
+      it('should keep selected item on escape when custom value allowed', () => {
+        comboBox.allowCustomValue = true;
+        esc();
+        esc();
+        expect(comboBox.selectedItem).to.eql('bar');
       });
 
       it('should remove selection from the input value selecting value', done => {
