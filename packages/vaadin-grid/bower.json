@@ -26,6 +26,7 @@
     "vaadin-grid-sorter.html",
     "vaadin-grid-sort-column.html",
     "vaadin-grid-tree-toggle.html",
+    "vaadin-grid-tree-column.html",
     "all-imports.html",
     "theme/material/vaadin-grid.html",
     "theme/material/vaadin-grid-column.html",
@@ -36,6 +37,7 @@
     "theme/material/vaadin-grid-sorter.html",
     "theme/material/vaadin-grid-sort-column.html",
     "theme/material/vaadin-grid-tree-toggle.html",
+    "theme/material/vaadin-grid-tree-column.html",
     "theme/material/all-imports.html"
   ],
   "ignore": [

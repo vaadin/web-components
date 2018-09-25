@@ -1,0 +1,85 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="vaadin-grid-tree-toggle.html">
+
+<dom-module id="vaadin-grid-tree-column">
+  <template>
+    <template id="template">
+      <vaadin-grid-tree-toggle leaf="[[__isLeafItem(item, itemHasChildrenPath)]]" expanded="{{expanded}}" level="[[level]]">
+        [[__getToggleContent(path, item)]]
+      </vaadin-grid-tree-toggle>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    /**
+     * `<vaadin-grid-tree-column>` is a helper element for the `<vaadin-grid>`
+     * that provides default template and functionality for toggling tree/hierarchical items.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid items="[[items]]">
+     *  <vaadin-grid-tree-column path="name.first"></vaadin-grid-tree-column>
+     *
+     *  <vaadin-grid-column>
+     *    ...
+     * ```
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.GridColumnElement
+     */
+    class GridTreeColumnElement extends Vaadin.GridColumnElement {
+
+      static get is() {
+        return 'vaadin-grid-tree-column';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * JS Path of the property in the item used as text content for the tree toggle.
+           */
+          path: String,
+
+          /**
+           * JS Path of the property in the item that indicates whether the item has child items.
+           */
+          itemHasChildrenPath: {
+            type: String,
+            value: 'children'
+          }
+        };
+      }
+
+      _prepareBodyTemplate() {
+        const template = this._prepareTemplatizer(this.$.template);
+        // needed to override the dataHost correctly in case internal template is used.
+        template.templatizer.dataHost = this;
+        return template;
+      }
+
+      __isLeafItem(item, itemHasChildrenPath) {
+        return !(item && item[itemHasChildrenPath]);
+      }
+
+      __getToggleContent(path, item) {
+        return path && this.get(path, item);
+      }
+    }
+
+    customElements.define(GridTreeColumnElement.is, GridTreeColumnElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridTreeColumnElement = GridTreeColumnElement;
+  })();
+  </script>
+</dom-module>
