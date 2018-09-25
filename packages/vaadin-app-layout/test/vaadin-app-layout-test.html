@@ -23,7 +23,7 @@
           <vaadin-tab>Page 3</vaadin-tab>
           <vaadin-tab>Page 4</vaadin-tab>
         </vaadin-tabs>
-    
+
         <h3>Title</h3>
         <p>
           Content
@@ -48,7 +48,7 @@
       });
 
       it('should inject menu', function() {
-        var children = Polymer.dom(layout.root.querySelector('div[part="menu"]')).getEffectiveChildNodes();
+        var children = Polymer.dom(layout.root.querySelector('[name="menu"]')).getEffectiveChildNodes();
         var tabsNode = Array.from(children).filter(n => n.tagName && n.tagName.toUpperCase() === 'VAADIN-TABS');
         expect(tabsNode.length).to.be.equal(1);
         expect(tabsNode[0].childElementCount).to.be.equal(4);

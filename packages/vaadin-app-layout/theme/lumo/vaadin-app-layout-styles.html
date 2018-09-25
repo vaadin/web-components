@@ -13,7 +13,7 @@
         background: var(--vaadin-app-layout-navbar-background, linear-gradient(var(--lumo-shade-5pct), var(--lumo-shade-5pct)) var(--lumo-base-color));
       }
 
-      [part="menu"] ::slotted(vaadin-tabs) {
+      [part="navbar"] > ::slotted(vaadin-tabs[slot="menu"]) {
         box-shadow: none;
         --lumo-font-size-m: var(--lumo-font-size-s);
         --lumo-icon-size-m: 1.5rem;
@@ -24,7 +24,7 @@
           padding: 0 var(--lumo-space-m);
         }
 
-        [part="menu"] ::slotted(vaadin-tabs) {
+        [part="navbar"] > ::slotted(vaadin-tabs[slot="menu"]) {
           --lumo-font-size-m: unset;
           --lumo-icon-size-m: unset;
         }

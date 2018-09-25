@@ -32,7 +32,7 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
       }
 
       [part="branding"],
-      [part="secondary"] {
+      [part="navbar"]::after {
         display: none;
       }
 
@@ -44,8 +44,12 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
         background: var(--vaadin-app-layout-navbar-background, #eee);
       }
 
+      [part="navbar"]::after {
+        content: '';
+      }
+
       [part="branding"],
-      [part="secondary"] {
+      [part="navbar"]::after {
         /*
           Makes the menu part horizontally centered on wide viewports,
           regardless of the size of contents inside the branding
@@ -55,19 +59,15 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
 
           NOTE: `0px` might confuse linters and minifiers.
         */
-        flex: 1 0 0.001px;
+        flex: 1 0 0;
       }
 
-      [part="menu"] {
-        flex: auto;
+      [part=navbar] > ::slotted([slot="menu"]) {
         display: flex;
         align-items: center;
-        justify-content: center;
         overflow: hidden;
-      }
-
-      [part="menu"] ::slotted(*) {
         max-width: 100%;
+        margin: auto;
       }
 
       [part="content"] {
@@ -81,28 +81,23 @@ See <a href="https://vaadin.com/license/cval-3">the website</a> for the complete
           flex-direction: column;
         }
 
-        [part="menu"] {
+        ::slotted([slot="menu"]) {
           flex: initial;
         }
 
         [part="branding"],
-        [part="secondary"] {
+        [part="navbar"]::after {
           display: flex;
         }
       }
     </style>
 
-    <div part="navbar" role="navigation">
+    <nav part="navbar">
       <div part="branding" role="banner">
         <slot name="branding"></slot>
       </div>
-      <div part="menu" role="menu">
-        <slot name="menu"></slot>
-      </div>
-      <div part="secondary">
-        <slot name="secondary"></slot>
-      </div>
-    </div>
+      <slot name="menu"></slot>
+      </nav>
     <div part="content" role="main">
       <slot></slot>
     </div>
