@@ -19,6 +19,7 @@
             const contextMenu = document.querySelector('vaadin-context-menu');
             contextMenu.renderer = function(root) {
               let listBox = root.firstElementChild;
+              // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
               if (listBox) {
                 listBox.innerHTML = '';
               } else {
