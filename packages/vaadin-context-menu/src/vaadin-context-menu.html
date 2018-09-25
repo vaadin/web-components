@@ -81,6 +81,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * You can access the menu context inside the renderer using
        * `context.target` and `context.detail`.
        *
+       * Renderer is called on the opening of the context-menu and each time the related context is updated.
+       * DOM generated during the renderer call can be reused
+       * in the next renderer call and will be provided with the `root` argument.
+       * On first call it will be empty.
+       *
        * **NOTE:** when the `renderer` function is defined, the template content
        * is not in use.
        *
@@ -291,9 +296,6 @@ This program is available under Apache License Version 2.0, available at https:/
              * - `context` The object with the menu context, contains:
              *   - `context.target`  the target of the menu opening event,
              *   - `context.detail` the menu opening event detail.
-             *
-             * **NOTE:** The renderer callback can be called multiple times
-             * with the previous content.
              */
             renderer: {
               type: Function
