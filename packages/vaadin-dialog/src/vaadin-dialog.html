@@ -92,6 +92,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * };
        * ```
        *
+       * Renderer is called on the opening of the dialog.
+       * DOM generated during the renderer call can be reused
+       * in the next renderer call and will be provided with the `root` argument.
+       * On first call it will be empty.
+       *
        * ### Polymer Templates
        *
        * Alternatively, the content can be provided with Polymer's Template.
@@ -180,8 +185,6 @@ This program is available under Apache License Version 2.0, available at https:/
              *
              * - `root` The root container DOM element. Append your content to it.
              * - `dialog` The reference to the `<vaadin-dialog>` element.
-             *
-             * **NOTE:** The renderer callback can be called multiple times with the previous content.
              */
             renderer: Function,
 
