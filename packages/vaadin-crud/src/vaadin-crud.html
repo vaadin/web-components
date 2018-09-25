@@ -64,15 +64,15 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-button slot="footer" on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
       <vaadin-button slot="footer" on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
       <div slot="footer" style="flex: auto"></div>
-      <vaadin-button slot="footer" on-click="__delete" theme="primary error" hidden="[[__isNew]]">Delete...</vaadin-button>
+      <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete...</vaadin-button>
     </vaadin-dialog-layout>
 
     <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
-      reject reject-text="Discard Changes" confirm-text="Continue Editing" header="Unsaved Changes">
+      reject reject-text="Discard changes" confirm-text="Continue editing" header="Unsaved changes">
       There are unsaved modifications to the [[entityName]].
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
-      cancel confirm-text="Delete" reject-text="Cancel" header="Confirm Delete" >
+      cancel confirm-text="Delete" reject-text="Cancel" header="Confirm delete" confirm-theme="error">
       Are you sure you want to delete the selected [[entityName]]? This action cannot be undone.
     </vaadin-confirm-dialog>
   </template>
@@ -252,7 +252,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             entityName: {
               type: String,
-              value: 'Item'
+              value: 'item'
             },
             /**
              * Number of items in the data set which is reported by the grid.
