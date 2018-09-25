@@ -103,6 +103,12 @@
           expect(crud.opened).to.be.true;
           expect(crud.__editorHeader).to.be.equal('New entity');
         });
+
+        it('should be able to internationalise via `i18n` property', () => {
+          expect(crud.$.new.textContent).to.be.equal('New entity');
+          crud.i18n = Object.assign({}, crud.i18n, {new: 'Nueva'});
+          expect(crud.$.new.textContent).to.be.equal('Nueva entity');
+        });
       });
 
       describe('items', () => {

@@ -49,7 +49,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     <div part="toolbar" on-click="__new">
       <div part="footer"><slot name="footer"></slot></div>
       <slot name="new">
-        <vaadin-button id="new">New [[entityName]]</vaadin-button>
+        <vaadin-button id="new">[[i18n.new]] [[entityName]]</vaadin-button>
       </slot>
     </div>
 
@@ -61,19 +61,23 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         </slot>
       </div>
 
-      <vaadin-button slot="footer" on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">Save</vaadin-button>
-      <vaadin-button slot="footer" on-click="__cancel" theme="raised" style="margin-left: 1em">Cancel</vaadin-button>
+      <vaadin-button slot="footer" on-click="__save" theme="raised primary" disabled="[[!__isDirty]]">[[i18n.save]]</vaadin-button>
+      <vaadin-button slot="footer" on-click="__cancel" theme="raised" style="margin-left: 1em">[[i18n.cancel]]</vaadin-button>
       <div slot="footer" style="flex: auto"></div>
-      <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">Delete...</vaadin-button>
+      <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">[[i18n.delete]]</vaadin-button>
     </vaadin-dialog-layout>
 
-    <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel"
-      reject reject-text="Discard changes" confirm-text="Continue editing" header="Unsaved changes">
-      There are unsaved modifications to the [[entityName]].
+    <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel" reject
+      reject-text="[[i18n.confirm.cancel.button.continue]]"
+      confirm-text="[[i18n.confirm.cancel.button.cancel]]"
+      header="[[i18n.confirm.cancel.header]]">
+      [[i18n.confirm.cancel.prefix]] [[entityName]] [[i18n.confirm.cancel.suffix]].
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
-      cancel confirm-text="Delete" reject-text="Cancel" header="Confirm delete" confirm-theme="error">
-      Are you sure you want to delete the selected [[entityName]]? This action cannot be undone.
+      cancel confirm-text="[[i18n.confirm.delete.button.continue]]"
+      reject-text="[[i18n.confirm.delete.button.cancel]]"
+      header="[[i18n.confirm.delete.header]]" confirm-theme="error">
+      [[i18n.confirm.delete.prefix]] [[entityName]] [[i18n.confirm.delete.suffix]].
     </vaadin-confirm-dialog>
   </template>
 
@@ -262,6 +266,74 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               readOnly: true,
               notify: true
             },
+            /**
+             * The object used to localize this component.
+             * For changing the default localization, change the entire
+             * _i18n_ object or just the property you want to modify.
+             *
+             * The object has the following JSON structure and default values:
+              {
+                new: 'New',
+                edit: 'Edit',
+                save: 'Save',
+                cancel: 'Cancel',
+                delete: 'Delete...',
+                confirm: {
+                  delete: {
+                    header: 'Confirm delete',
+                    prefix: 'Are you sure you want to delete the selected',
+                    suffix: '? This action cannot be undone.',
+                    button: {
+                      continue: 'Delete',
+                      cancel: 'Cancel'
+                    }
+                  },
+                  cancel: {
+                    header: 'Unsaved changes',
+                    title: 'Continue editing',
+                    prefix: 'There are unsaved modifications to the',
+                    suffix: '',
+                    button: {
+                      continue: 'Discard changes',
+                      cancel: 'Continue editing'
+                    }
+                  }
+                }
+              }
+             */
+            i18n: {
+              type: Object,
+              value: function() {
+                return {
+                  new: 'New',
+                  edit: 'Edit',
+                  save: 'Save',
+                  cancel: 'Cancel',
+                  delete: 'Delete...',
+                  confirm: {
+                    delete: {
+                      header: 'Confirm delete',
+                      prefix: 'Are you sure you want to delete the selected',
+                      suffix: '? This action cannot be undone.',
+                      button: {
+                        continue: 'Delete',
+                        cancel: 'Cancel'
+                      }
+                    },
+                    cancel: {
+                      header: 'Unsaved changes',
+                      title: 'Continue editing',
+                      prefix: 'There are unsaved modifications to the',
+                      suffix: '',
+                      button: {
+                        continue: 'Discard changes',
+                        cancel: 'Continue editing'
+                      }
+                    },
+                  }
+                };
+              }
+            },
             __isDirty: Boolean,
             __isNew: Boolean,
             __editorHeader: String
@@ -288,7 +360,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (!opened && old) {
             this.__closeEditor();
           } else {
-            this.__editorHeader = (this.__isNew ? 'New' : 'Edit') + ' ' + this.entityName;
+            this.__editorHeader = (this.__isNew ? this.i18n.new : this.i18n.edit) + ' ' + this.entityName;
             this.__onFormChange(this._form);
           }
         }
