@@ -106,6 +106,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * of the host element by accessing `column`. Before generating new content,
      * users are able to check if there is already content in `root` for reusing it.
      *
+     * Renderers are called on initialization of new column cells and each time the
+     * related row data is updated. DOM generated during the renderer call can be reused
+     * in the next renderer call and will be provided with the `root` argument.
+     * On first call it will be empty.
+     *
      * #### Example:
      * ```html
      * <vaadin-grid>
