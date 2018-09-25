@@ -147,6 +147,11 @@ This program is available under Apache License Version 2.0, available at https:/
        * };
        * ```
        *
+       * Renderer is called on the opening of the combo-box and each time the related model is updated.
+       * DOM generated during the renderer call can be reused
+       * in the next renderer call and will be provided with the `root` argument.
+       * On first call it will be empty.
+       *
        * ### Item Template
        *
        * Alternatively, the content of the `<vaadin-combo-box-item>` can be populated by using
