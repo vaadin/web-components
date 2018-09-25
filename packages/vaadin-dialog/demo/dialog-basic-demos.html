@@ -34,8 +34,8 @@
           window.addDemoReadyListener('#dialog-basic-demos-confirm-dialog', function(document) {
             const dialog = document.querySelector('vaadin-dialog');
             dialog.renderer = function(root, dialog) {
+              // Check if there is a DOM generated with the previous renderer call to update its content instead of recreation
               if (root.firstElementChild) {
-                // The dialog content is already rendered so no action needed.
                 return;
               }
               const div = window.document.createElement('div');
