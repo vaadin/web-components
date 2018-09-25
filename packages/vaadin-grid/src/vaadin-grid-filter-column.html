@@ -1,0 +1,78 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+
+<link rel="import" href="vaadin-grid-column.html">
+<link rel="import" href="vaadin-grid-filter.html">
+
+<dom-module id="vaadin-grid-filter-column">
+  <template>
+    <template class="header" id="headerTemplate">
+      <vaadin-grid-filter path="[[path]]" value="[[_filterValue]]">
+        <vaadin-text-field theme="small" focus-target style="max-width: 100%" slot="filter" value="{{_filterValue}}" label="[[_getHeader(header, path)]]"></vaadin-text-field>
+      </vaadin-grid-filter>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    /**
+     * `<vaadin-grid-filter-column>` is a helper element for the `<vaadin-grid>`
+     * that provides default header template and functionality for filtering.
+     *
+     * #### Example:
+     * ```html
+     * <vaadin-grid items="[[items]]">
+     *  <vaadin-grid-filter-column path="name.first"></vaadin-grid-filter-column>
+     *
+     *  <vaadin-grid-column>
+     *    ...
+     * ```
+     *
+     * @memberof Vaadin
+     * @extends Vaadin.GridColumnElement
+     */
+    class GridFilterColumnElement extends Vaadin.GridColumnElement {
+
+      static get is() {
+        return 'vaadin-grid-filter-column';
+      }
+
+      static get properties() {
+        return {
+          /**
+           * JS Path of the property in the item used for filtering the data.
+           */
+          path: String,
+
+          /**
+           * Text to display as the label of the column filter text-field.
+           */
+          header: String
+        };
+      }
+
+      _prepareHeaderTemplate() {
+        const headerTemplate = this._prepareTemplatizer(this.$.headerTemplate);
+        // needed to override the dataHost correctly in case internal template is used.
+        headerTemplate.templatizer.dataHost = this;
+        return headerTemplate;
+      }
+
+      _getHeader(header, path) {
+        return header || this._generateHeader(path);
+      }
+    }
+
+    customElements.define(GridFilterColumnElement.is, GridFilterColumnElement);
+
+    /**
+     * @namespace Vaadin
+     */
+    window.Vaadin = window.Vaadin || {};
+    Vaadin.GridFilterColumnElement = GridFilterColumnElement;
+  })();
+  </script>
+</dom-module>

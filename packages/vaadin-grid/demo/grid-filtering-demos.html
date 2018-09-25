@@ -8,18 +8,23 @@
 
       <h3>Filtering</h3>
       <p>
-        <code>&lt;vaadin-grid-filter&gt;</code> can be used for filtering the grid data.
+        Use <code>&lt;vaadin-grid-filter-column&gt;</code> for simple filtering. The column's <code>path</code> property
+        is used as a pointer to the item sub-property that the items get filtered by.
       </p>
       <p>
-        <b>NOTE: You must explicitly import the <code>vaadin-grid-filter</code> in order to use it.</b>
+        For custom setup, a <code>&lt;vaadin-grid-filter&gt;</code> element can be added to the column header
+        manually with a <code>headerRenderer</code>.
+      </p>
+      <p>
+        <b>NOTE: You must explicitly import the <code>vaadin-grid-filter-column</code> or <code>vaadin-grid-filter</code> in order to use them.</b>
       </p>
 
       <vaadin-demo-snippet id='grid-filtering-demos-filtering'>
         <template preserve-content>
           <vaadin-grid aria-label="Filtering Example">
             <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
-            <vaadin-grid-column id="lastname" path="name.last"></vaadin-grid-column>
-            <vaadin-grid-column id="email" path="email"></vaadin-grid-column>
+            <vaadin-grid-filter-column path="name.last"></vaadin-grid-filter-column>
+            <vaadin-grid-column path="email" id="email"></vaadin-grid-column>
           </vaadin-grid>
 
           <script>
@@ -27,18 +32,12 @@
               const grid = document.querySelector('vaadin-grid');
               grid.items = Vaadin.GridDemo.users;
 
-              // Last Name column configured with <vaadin-grid-filter>
-              const lastNameColumn = document.querySelector('#lastname');
-              lastNameColumn.headerRenderer = function(root) {
-                root.innerHTML = '<vaadin-grid-filter path="name.last"></vaadin-grid-filter>';
-              };
-
               // Email column filter is assigned a custom input field
               const emailColumn = document.querySelector('#email');
               emailColumn.headerRenderer = function(root) {
                 root.innerHTML =
                   '<vaadin-grid-filter path="email">' +
-                  '  <vaadin-text-field slot="filter" focus-target placeholder="Email" style="max-width: 100%">Email</vaadin-text-field>' +
+                  '  <vaadin-text-field slot="filter" focus-target label="Email" style="max-width: 100%" theme="small"></vaadin-text-field>' +
                   '</vaadin-grid-filter>';
                 root.querySelector('vaadin-text-field').addEventListener('value-changed', function(e) {
                   root.querySelector('vaadin-grid-filter').value = e.detail.value;
@@ -52,23 +51,19 @@
       <h3>Filtering with Data Provider</h3>
       <p>
         While filtering works with array data providers out-of-the-box, custom data
-        providers need to provide pre-filtered data to the vaadin-grid.
+        providers need to hand pre-filtered data to the vaadin-grid.
       </p>
       <p>
         Whenever the value of a vaadin-grid-filter changes, for example, when
         a user types something, the dataProvider is asked for fresh data with
         the <code>filters</code> included as one of the request parameters.
       </p>
-      <p>
-        <b>Hint: </b>When using a data provider, <code>path</code> on the filter element
-        can be customized to be any string, instead of a property on the item object.
-      </p>
 
       <vaadin-demo-snippet id='grid-filtering-demos-filtering-with-data-provider'>
         <template preserve-content>
           <vaadin-grid aria-label="Filtering with Data Provider Example">
-            <vaadin-grid-column path="firstName"></vaadin-grid-column>
-            <vaadin-grid-column id="lastname" path="lastName"></vaadin-grid-column>
+            <vaadin-grid-filter-column path="firstName"></vaadin-grid-filter-column>
+            <vaadin-grid-filter-column path="lastName"></vaadin-grid-filter-column>
             <vaadin-grid-column path="email"></vaadin-grid-column>
           </vaadin-grid>
           <script>
@@ -98,17 +93,6 @@
 
                 xhr.open('GET', url, true);
                 xhr.send();
-              };
-
-              const lastNameColumn = document.querySelector('#lastname');
-              lastNameColumn.headerRenderer = function(root) {
-                root.innerHTML =
-                  '<vaadin-grid-filter path="lastName">' +
-                  '  <vaadin-text-field slot="filter" focus-target placeholder="Last Name" style="max-width: 100%"></vaadin-text-field>' +
-                  '</vaadin-grid-filter>';
-                root.querySelector('vaadin-text-field').addEventListener('value-changed', function(e) {
-                  root.querySelector('vaadin-grid-filter').value = e.detail.value;
-                });
               };
             });
           </script>

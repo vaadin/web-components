@@ -1,6 +1,6 @@
 <!--
 @license
-Copyright (c) 2017 Vaadin Ltd.
+Copyright (c) 2018 Vaadin Ltd.
 This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
 -->
 
@@ -369,15 +369,18 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         if (!headerRenderer && !headerTemplate && !header && headerCell) {
-          const generatedHeader = path
-            .substr(path.lastIndexOf('.') + 1)
-            .replace(/([A-Z])/g, '-$1').toLowerCase()
-            .replace(/-/g, ' ')
-            .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
-          headerCell._content.textContent = generatedHeader;
+          headerCell._content.textContent = this._generateHeader(path);
           headerCell.parentElement.hidden = false;
         }
       }
+    }
+
+    _generateHeader(path) {
+      return path
+        .substr(path.lastIndexOf('.') + 1)
+        .replace(/([A-Z])/g, '-$1').toLowerCase()
+        .replace(/-/g, ' ')
+        .replace(/\w\S*/g, str => str.charAt(0).toUpperCase() + str.substr(1));
     }
 
     _toggleAttribute(name, bool, node) {
