@@ -161,6 +161,11 @@ This program is available under Apache License Version 2.0, available at https:/
      * };
      * ```
      *
+     * Renderer is called on the opening of the overlay and each time the related model is updated.
+     * DOM generated during the renderer call can be reused
+     * in the next renderer call and will be provided with the `root` argument.
+     * On first call it will be empty.
+     *
      * **NOTE:** when the renderer property is defined, the `<template>` content is not used.
      *
      * ### Templating
@@ -250,9 +255,6 @@ This program is available under Apache License Version 2.0, available at https:/
            * - `root` The root container DOM element. Append your content to it.
            * - `owner` The host element of the renderer function.
            * - `model` The object with the properties related with rendering.
-           *
-           * **NOTE:** The renderer callback can be called multiple times
-           * with the previous content.
            */
           renderer: Function,
 
