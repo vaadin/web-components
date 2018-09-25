@@ -99,6 +99,7 @@
             };
 
             columns[3].renderer = function(root, column, rowData) {
+              // Check if there is a container generated with the previous renderer call to update its content instead of recreation
               if (!root.firstElementChild) {
                 root.innerHTML = '<div style="white-space: normal"></div>';
               }
