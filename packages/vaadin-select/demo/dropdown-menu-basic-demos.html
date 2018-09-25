@@ -13,7 +13,7 @@
         <script>
           window.addDemoReadyListener('#dropdown-menu-list-box-basic', function(document) {
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
-              // use same content, if already rendered
+              // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
               if (root.firstChild) {
                 return;
               }
