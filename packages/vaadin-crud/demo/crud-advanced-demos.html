@@ -7,31 +7,14 @@
     </style>
 
     <h3>Custom search</h3>
-    <p>This demo defines an input field that filters content based on a custom search algorithm.</p>
+    <p>This demo has an input field that filters data based on a custom search algorithm.</p>
+    <p>Note that search field has been added to the crud toolbar in the footer, but moved up using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
-        <vaadin-crud entity-name="user" size="{{size}}">
-          <vaadin-grid slot="grid">
-            <vaadin-grid-column-group id="group">
-              <template class="header">
-                <vaadin-text-field style="width: 100%" placeholder="Search users by first or last name">
-                  <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
-                </vaadin-text-field>
-              </template>
-
-              <vaadin-crud-grid-edit-column></vaadin-crud-grid-edit-column>
-
-              <vaadin-grid-column>
-                <template class="header">First</template>
-                <template>[[item.first]]</template>
-              </vaadin-grid-column>
-              <vaadin-grid-column>
-                <template class="header">Last</template>
-                <template>[[item.last]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid-column-group>
-          </vaadin-grid>
-          <div slot="footer"><b>[[size]]</b> users</div>
+        <vaadin-crud entity-name="user" no-head style="flex-direction: column-reverse">
+          <vaadin-text-field slot="footer" style="width: calc(100% - 0.5em)" placeholder="Search users by first or last name">
+            <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
+          </vaadin-text-field>
         </vaadin-crud>
         <vaadin-notification>
           <template>Save and Delete operations are no implemented</template>
@@ -76,9 +59,10 @@
     </vaadin-demo-snippet>
 
 
-    <h3>Remote data with custom sort and search</h3>
-    <p>This demo shows remote data displayed in a grid with customized search and sort controls.</p>
-    <p>It uses <code>vaadin-grid-filter</code> and <code>vaadin-grid-sorter</code> helpers.</p>
+    <h3>Remote data</h3>
+    <p>In this example remote data is displayed in a personalized grid with custom filter and sort controls.</p>
+    <p>For filtering and ordering it uses <code>vaadin-grid-filter</code> and <code>vaadin-grid-sorter</code> helpers
+      that automatically add appropriate paramters to the <code>dataProvicer</code> callback.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-remote-data">
       <template preserve-content>
         <vaadin-crud entity-name="user">

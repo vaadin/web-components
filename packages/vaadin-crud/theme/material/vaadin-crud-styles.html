@@ -1,0 +1,40 @@
+<link rel="import" href="../../../vaadin-material-styles/typography.html">
+<link rel="import" href="../../../vaadin-material-styles/color.html">
+<link rel="import" href="../vaadin-dialog-layout-overlay-styles.html">
+
+<dom-module id="lumo-crud" theme-for="vaadin-crud">
+  <template>
+    <style>
+      :host {
+        font-family: var(--material-font-family);
+      }
+
+      [part="toolbar"] {
+        padding: 4px 16px;
+        background-color: var(--material-secondary-background-color);
+      }
+
+      vaadin-text-field[theme~="small"] {
+        height: 24px;
+        font-size: var(--material-small-font-size);
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </template>
+</dom-module>
+
+<dom-module id="dialog-layout-theme" theme-for="vaadin-dialog-layout">
+  <template>
+    <style>
+      [part="scroller"] {
+        padding: 16px;
+      }
+
+      [part="footer"] {
+        background-color: var(--material-secondary-background-color);
+        padding: 8px 16px;
+      }
+    </style>
+  </template>
+</dom-module>

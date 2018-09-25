@@ -39,6 +39,10 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              */
             noSort: Boolean,
             /**
+             * Do not add headers to columns.
+             */
+            noHead: Boolean,
+            /**
              * A RegExp used to exclude properties in the item that do not need
              * to be mapped to columns.
              *
@@ -104,7 +108,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             root.textContent = path ? this.get(path, model.item) : model.item;
           };
 
-          if (path) {
+          if (!this.noHead && path) {
             col.headerRenderer = (root) => {
               const label = this.__capitalize(path.replace(/^.*\./, ''));
 
@@ -121,6 +125,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                 filter.style.display = 'flex';
 
                 const textField = window.document.createElement('vaadin-text-field');
+                textField.setAttribute('theme', 'small');
                 textField.setAttribute('slot', 'filter');
                 textField.setAttribute('focus-target', true);
                 textField.style.width = '100%';
@@ -151,7 +156,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               }
               const newPath = (path ? `${path}.` : '') + prop;
               if (typeof object[prop] === 'object') {
-                const group = this.__createGroup(parent, newPath, object[prop]);
+                const group = this.noHead ? parent : this.__createGroup(parent, newPath, object[prop]);
                 this.__createColumns(group, object[prop], newPath);
               } else {
                 this.__createColumn(parent, newPath);
