@@ -11,7 +11,7 @@
     <p>Note that search field has been added to the crud toolbar in the footer, but moved up using CSS.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-custom-search">
       <template preserve-content>
-        <vaadin-crud entity-name="user" no-head style="flex-direction: column-reverse">
+        <vaadin-crud  no-head style="flex-direction: column-reverse">
           <vaadin-text-field slot="footer" style="width: calc(100% - 0.5em)" placeholder="Search users by first or last name">
             <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
           </vaadin-text-field>
@@ -65,7 +65,7 @@
       that automatically add appropriate paramters to the <code>dataProvicer</code> callback.</p>
     <vaadin-demo-snippet id="crud-advanced-demos-remote-data">
       <template preserve-content>
-        <vaadin-crud entity-name="user">
+        <vaadin-crud >
           <vaadin-grid slot="grid" multi-sort>
             <vaadin-grid-column width="150px" flex-grow="0">
               <template class="header">

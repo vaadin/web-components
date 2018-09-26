@@ -10,7 +10,7 @@
     <p>Set the <code>i18n</code> object to localize the component</p>
     <vaadin-demo-snippet id="crud-i18n-demos-internationalization">
       <template preserve-content>
-        <vaadin-crud exclude="_id|password|picture" entity-name="usuario"></vaadin-crud>
+        <vaadin-crud entity-name="usuario"></vaadin-crud>
         <script>
           window.addDemoReadyListener('#crud-i18n-demos-internationalization', function(document) {
             const crud = document.querySelector('vaadin-crud');
@@ -19,26 +19,23 @@
               {nombre: 'María', apellidos: 'Pérez Jiménez'}
             ];
             crud.i18n = {
-              new: 'Nuevo',
-              edit: 'Editar',
+              new: 'Nuevo usuario',
+              edit: 'Editar usuario',
               save: 'Guardar',
               cancel: 'Cancelar',
               delete: 'Borrar...',
               confirm: {
                 delete: {
                   header: 'Confirmar borrado',
-                  prefix: 'Estás seguro de borrar el',
-                  suffix: 'seleccionado? La acción no es reversible.',
+                  message: '¿Estás seguro de querer borrar el usuario seleccionado? La acción no es reversible.',
                   button: {
                     continue: 'Borrar',
                     cancel: 'Cancelar'
                   }
                 },
                 cancel: {
-                  header: 'Hay cambios sin guardar',
-                  title: 'Cancelar la edición',
-                  prefix: 'Se han hecho cambios en el',
-                  suffix: '',
+                  header: 'Cancelar la edición',
+                  message: 'Se han hecho cambios en el usuario que no se han guardado.',
                   button: {
                     continue: 'Descartar cambios',
                     cancel: 'Continuar editando'

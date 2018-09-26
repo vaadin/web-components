@@ -62,7 +62,7 @@
     <vaadin-demo-snippet id="crud-custom-demos-custom-editor">
       <template preserve-content>
         <iron-ajax auto url="users.json" last-response="{{items}}"></iron-ajax>
-        <vaadin-crud items=[[items]] entity-name="user" size="{{size}}" exclude="_id|password|picture">
+        <vaadin-crud items=[[items]]  size="{{size}}" exclude="_id|password|picture">
           <div slot="footer">There are <b>[[size]]</b> users in the database</div>
           <a slot="new" href="javascript:">Add a new user</a>
         </vaadin-crud>

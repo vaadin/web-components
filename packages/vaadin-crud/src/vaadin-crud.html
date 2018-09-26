@@ -49,7 +49,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     <div part="toolbar" on-click="__new">
       <div part="footer"><slot name="footer"></slot></div>
       <slot name="new">
-        <vaadin-button id="new">[[i18n.new]] [[entityName]]</vaadin-button>
+        <vaadin-button id="new">[[i18n.new]]</vaadin-button>
       </slot>
     </div>
 
@@ -71,13 +71,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       reject-text="[[i18n.confirm.cancel.button.continue]]"
       confirm-text="[[i18n.confirm.cancel.button.cancel]]"
       header="[[i18n.confirm.cancel.header]]">
-      [[i18n.confirm.cancel.prefix]] [[entityName]] [[i18n.confirm.cancel.suffix]].
+      [[i18n.confirm.cancel.message]]
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
       cancel confirm-text="[[i18n.confirm.delete.button.continue]]"
       reject-text="[[i18n.confirm.delete.button.cancel]]"
       header="[[i18n.confirm.delete.header]]" confirm-theme="error">
-      [[i18n.confirm.delete.prefix]] [[entityName]] [[i18n.confirm.delete.suffix]].
+      [[i18n.confirm.delete.message]]
     </vaadin-confirm-dialog>
   </template>
 
@@ -252,13 +252,6 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               observer: '__onOpenedChanged'
             },
             /**
-             * The description of the entity associated with this CRUD.
-             */
-            entityName: {
-              type: String,
-              value: 'item'
-            },
-            /**
              * Number of items in the data set which is reported by the grid.
              */
             size: {
@@ -272,17 +265,17 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
              * _i18n_ object or just the property you want to modify.
              *
              * The object has the following JSON structure and default values:
+
               {
-                new: 'New',
-                edit: 'Edit',
+                new: 'New item',
+                edit: 'Edit item',
                 save: 'Save',
                 cancel: 'Cancel',
                 delete: 'Delete...',
                 confirm: {
                   delete: {
                     header: 'Confirm delete',
-                    prefix: 'Are you sure you want to delete the selected',
-                    suffix: '? This action cannot be undone.',
+                    message: 'Are you sure you want to delete the selected item? This action cannot be undone.',
                     button: {
                       continue: 'Delete',
                       cancel: 'Cancel'
@@ -290,9 +283,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                   },
                   cancel: {
                     header: 'Unsaved changes',
-                    title: 'Continue editing',
-                    prefix: 'There are unsaved modifications to the',
-                    suffix: '',
+                    prefix: 'There are unsaved modifications to the item.',
                     button: {
                       continue: 'Discard changes',
                       cancel: 'Continue editing'
@@ -300,21 +291,23 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                   }
                 }
               }
+
+             *
+             * @default {English/US}
              */
             i18n: {
               type: Object,
               value: function() {
                 return {
-                  new: 'New',
-                  edit: 'Edit',
+                  new: 'New item',
+                  edit: 'Edit item',
                   save: 'Save',
                   cancel: 'Cancel',
                   delete: 'Delete...',
                   confirm: {
                     delete: {
                       header: 'Confirm delete',
-                      prefix: 'Are you sure you want to delete the selected',
-                      suffix: '? This action cannot be undone.',
+                      message: 'Are you sure you want to delete the selected item? This action cannot be undone.',
                       button: {
                         continue: 'Delete',
                         cancel: 'Cancel'
@@ -322,14 +315,12 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                     },
                     cancel: {
                       header: 'Unsaved changes',
-                      title: 'Continue editing',
-                      prefix: 'There are unsaved modifications to the',
-                      suffix: '',
+                      prefix: 'There are unsaved modifications to the item.',
                       button: {
                         continue: 'Discard changes',
                         cancel: 'Continue editing'
                       }
-                    },
+                    }
                   }
                 };
               }
@@ -360,7 +351,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (!opened && old) {
             this.__closeEditor();
           } else {
-            this.__editorHeader = (this.__isNew ? this.i18n.new : this.i18n.edit) + ' ' + this.entityName;
+            this.__editorHeader = this.__isNew ? this.i18n.new : this.i18n.edit;
             this.__onFormChange(this._form);
           }
         }

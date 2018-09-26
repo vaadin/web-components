@@ -19,7 +19,7 @@
 
   <test-fixture id="declarative">
     <template>
-      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}" entity-name="entity">
+      <vaadin-crud style="width: 300px" items='[{"foo": "bar"}]' item="{}">
         <div slot="footer">Footer content</div>
       </vaadin-crud>
     </template>
@@ -101,13 +101,13 @@
 
         it('should open the new item editor if item is provided declarativelly', () => {
           expect(crud.opened).to.be.true;
-          expect(crud.__editorHeader).to.be.equal('New entity');
+          expect(crud.__editorHeader).to.be.equal('New item');
         });
 
         it('should be able to internationalise via `i18n` property', () => {
-          expect(crud.$.new.textContent).to.be.equal('New entity');
-          crud.i18n = Object.assign({}, crud.i18n, {new: 'Nueva'});
-          expect(crud.$.new.textContent).to.be.equal('Nueva entity');
+          expect(crud.$.new.textContent).to.be.equal('New item');
+          crud.i18n = Object.assign({}, crud.i18n, {new: 'Nueva entidad'});
+          expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
         });
       });
 
