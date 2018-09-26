@@ -28,41 +28,33 @@
 
     <vaadin-demo-snippet id="grid-sorting-demos-sort-column">
       <template preserve-content>
-        <dom-bind>
-          <template>
+        <vaadin-checkbox>Enable Multi-Sorting</vaadin-checkbox>
 
-            <x-array-data-provider items="{{items}}"></x-array-data-provider>
+        <vaadin-grid aria-label="Sorting Example">
+          <vaadin-grid-sort-column path="name.first" header="First Name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="name.last" header="Last Name"></vaadin-grid-sort-column>
+          <vaadin-grid-sort-column path="email"></vaadin-grid-sort-column>
+        </vaadin-grid>
 
-            <vaadin-checkbox checked="{{multiSort}}">Enable Multi-Sorting</vaadin-checkbox>
+        <script>
+          window.addDemoReadyListener('#grid-sorting-demos-sort-column', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            grid.items = Vaadin.GridDemo.users;
 
-            <vaadin-grid aria-label="Sorting Example" items="[[items]]" multi-sort="[[multiSort]]">
-
-              <vaadin-grid-column width="60px" flex-grow="0">
-                <template class="header">#</template>
-                <template>[[index]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-sort-column path="name.first" header="First Name">
-              </vaadin-grid-sort-column>
-
-              <vaadin-grid-sort-column path="name.last" header="Last Name">
-              </vaadin-grid-sort-column>
-
-              <vaadin-grid-sort-column path="email">
-              </vaadin-grid-sort-column>
-
-            </vaadin-grid>
-          </template>
-        </dom-bind>
+            const checkBox = document.querySelector('vaadin-checkbox');
+            checkBox.addEventListener('checked-changed', function(event) {
+              grid.multiSort = event.detail.value;
+            });
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
 
-<h3>Sorting with Sorter</h3>
-
+    <h3>Sorting with Sorter</h3>
     <p>
-      <code>&lt;vaadin-grid-sorter&gt;</code> can be used to define sorting for a column.
-      The users in the example are sorted by last name initially.
+      <code>&lt;vaadin-grid-sorter&gt;</code> together with a <code>renderer</code> can be used to enable
+      sorting for any type of column. The users in the example are sorted by last name initially.
     </p>
     <p>
       <b>NOTE: You must explicitly import the <code>vaadin-grid-sorter</code> in order to use it.</b>
