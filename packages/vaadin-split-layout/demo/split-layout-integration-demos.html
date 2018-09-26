@@ -25,34 +25,6 @@
       </template>
     </vaadin-demo-snippet>
 
-    <h3>Resize Notification for the Nested Elements</h3>
-    <vaadin-demo-snippet id="split-layout-basic-integration-resize-notification-for-the-nested-elements">
-      <template preserve-content>
-        <vaadin-split-layout>
-          <div>First</div>
-          <custom-resizable>Second</custom-resizable>
-        </vaadin-split-layout>
-        <script>
-        window.addDemoReadyListener('#split-layout-basic-integration-resize-notification-for-the-nested-elements', function(document) {
-          if (!window.customElements.get('custom-resizable')) {
-            Polymer({
-              is: 'custom-resizable',
-              behaviors: [
-                Polymer.IronResizableBehavior
-              ],
-              listeners: {
-                'iron-resize': '_onIronResize'
-              },
-              _onIronResize: function() {
-                console.log('Resized');
-              }
-            });
-          }
-        });
-        </script>
-      </template>
-    </vaadin-demo-snippet>
-
   </template>
   <script>
     class SplitLayoutIntegrationDemos extends DemoReadyEventEmitter(SplitLayoutDemo(Polymer.Element)) {
