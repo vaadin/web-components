@@ -20,7 +20,9 @@
           window.addDemoReadyListener('#date-picker-validation-demos-using-as-a-form-field', function(document) {
             var form = document.querySelector('iron-form');
 
-            form.addEventListener('iron-form-submit', function() {
+            form.addEventListener('iron-form-presubmit', function(e) {
+              // prevent actual form submission
+              e.preventDefault();
               alert('Form submitted with date: ' + form.serializeForm().date);
               return false;
             });
@@ -37,8 +39,8 @@
 
     <h3>Custom Validator</h3>
     <p>Extend <code>Vaadin.DatePickerElement</code> to create your own custom element,
-       then override the <code>checkValidity(value)</code> method to validate the input.
-    <vaadin-demo-snippet id="date-picker-validation-demos-custom-validator">
+       then override the <code>checkValidity(value)</code> method to validate the input.</p>
+    <vaadin-demo-snippet id="date-picker-validation-demos-custom-validator" ignore-ie>
       <template preserve-content>
         <vaadin-date-picker-current-year></vaadin-date-picker-current-year>
 
