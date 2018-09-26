@@ -20,7 +20,9 @@
           window.addDemoReadyListener('#dropdown-menu-validation', function(document) {
             var form = document.querySelector('iron-form');
 
-            form.addEventListener('iron-form-submit', function() {
+            form.addEventListener('iron-form-presubmit', function(e) {
+              // Prevent actual form submission
+              e.preventDefault();
               alert('Form submitted with title: ' + form.serializeForm().title);
               return false;
             });
@@ -38,6 +40,10 @@
             ];
 
             document.querySelector('vaadin-dropdown-menu').renderer = function(root) {
+              if (root.firstChild) {
+                return;
+              }
+
               const listBox = window.document.createElement('vaadin-list-box');
 
               const select = window.document.createElement('vaadin-item');
