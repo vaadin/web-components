@@ -32,7 +32,7 @@
     "vaadin-lumo-styles": "vaadin/vaadin-lumo-styles#^1.1.0-beta1",
     "vaadin-material-styles": "vaadin/vaadin-material-styles#^1.1.0-beta1",
     "vaadin-dialog": "^2.2.0-alpha1",
-    "vaadin-grid": "^5.2.0-alpha1",
+    "vaadin-grid": "5.2.0-alpha2",
     "vaadin-form-layout": "^2.1.0",
     "vaadin-text-field": "^2.1.1",
     "vaadin-button": "^2.1.0",
