@@ -102,7 +102,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
         }
 
         __capitalize(path) {
-          return path.toLowerCase().replace(/(^|[^\w])([a-z])/g, ($0, $1, $2) => ' ' + $2.toUpperCase()).trim();
+          return path.toLowerCase().replace(/([^\w]+)/g, ' ').trim().replace(/^./, c => c.toUpperCase());
         }
       }
 

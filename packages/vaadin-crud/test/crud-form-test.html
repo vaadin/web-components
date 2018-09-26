@@ -82,19 +82,19 @@
         });
 
         it('should generate valid labels', () => {
-          expect(crudForm.querySelectorAll('vaadin-text-field')[0].label).to.be.equal('Name First');
-          expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('Name Last');
+          expect(crudForm.querySelectorAll('vaadin-text-field')[0].label).to.be.equal('Name first');
+          expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('Name last');
           expect(crudForm.querySelectorAll('vaadin-text-field')[2].label).to.be.equal('Role');
         });
 
         it('should set labels appropriatelly', () => {
-          expect(crudForm.querySelectorAll('vaadin-text-field')[0].label).to.be.equal('Name First');
-          expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('Name Last');
+          expect(crudForm.querySelectorAll('vaadin-text-field')[0].label).to.be.equal('Name first');
+          expect(crudForm.querySelectorAll('vaadin-text-field')[1].label).to.be.equal('Name last');
           expect(crudForm.querySelectorAll('vaadin-text-field')[2].label).to.be.equal('Role');
         });
 
         it('should capitalize correctly', () => {
-          expect(crudForm.__capitalize('aa.bb cc-dd FF')).to.be.equal('Aa Bb Cc Dd Ff');
+          expect(crudForm.__capitalize('-aa.bb cc-dd FF')).to.be.equal('Aa bb cc dd ff');
         });
       });
     });

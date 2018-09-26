@@ -70,7 +70,7 @@
             <vaadin-grid-column width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="firstName" value="[[_filterFirstName]]">
-                  <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target style="width: 130px">
+                  <vaadin-text-field slot="filter" value="{{_filterFirstName}}" placeholder="Name" focus-target theme="small" style="width: 124px">
                     <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
                     <vaadin-grid-sorter path="firstName" slot="suffix"></vaadin-grid-sorter>
                   </vaadin-text-field>
@@ -81,7 +81,7 @@
             <vaadin-grid-column width="150px" flex-grow="0">
               <template class="header">
                 <vaadin-grid-filter path="lastName" value="[[_filterLastName]]">
-                  <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target style="width: 130px">
+                  <vaadin-text-field slot="filter" value="{{_filterLastName}}" placeholder="Surname" focus-target theme="small" style="width: 124px">
                     <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
                     <vaadin-grid-sorter path="lastName" slot="suffix"></vaadin-grid-sorter>
                   </vaadin-text-field>
