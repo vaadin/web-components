@@ -44,5 +44,16 @@
        "image": ""
       }
     }
+    ,
+    {
+      "name": "I18n",
+      "url": "crud-i18n-demos",
+      "src": "crud-i18n-demos.html",
+      "meta": {
+        "title": "vaadin-crud Internationalized examples",
+        "description": "",
+        "image": ""
+       }
+     }
   ]
 }
