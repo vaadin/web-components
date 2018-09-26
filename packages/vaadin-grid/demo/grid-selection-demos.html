@@ -317,6 +317,52 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Selection using Renderers</h3>
+    <p>
+      The <code>selected</code> property of <code>rowData</code> renderer parameter can be used
+      in order to reflect the changes of the selected state in the DOM.
+    </p>
+    <vaadin-demo-snippet id='grid-selection-demos-selection-using-renderer'>
+      <template preserve-content>
+        <x-data-provider></x-data-provider>
+
+        <vaadin-grid aria-label="Selection using Renderers Example" id="grid" size="200">
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-selection-demos-selection-using-renderer', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+
+            grid.querySelector('vaadin-grid-column').headerRenderer = function(root, column) {
+              root.innerHTML = '<vaadin-checkbox aria-label="Select All"></vaadin-checkbox>';
+              root.firstElementChild.addEventListener('checked-changed', function(e) {
+                grid.selectedItems = e.detail.value ? grid.items : [];
+              });
+            };
+
+            grid.querySelector('vaadin-grid-column').renderer = function(root, column, rowData) {
+              if (!root.firstElementChild) {
+                root.innerHTML = '<vaadin-checkbox aria-label="Select Row"></vaadin-checkbox>';
+                root.firstElementChild.addEventListener('checked-changed', function(e) {
+                  if (e.detail.value) {
+                    grid.selectItem(rowData.item);
+                  } else {
+                    grid.deselectItem(rowData.item);
+                  }
+                });
+              }
+
+              root.firstElementChild.checked = rowData.selected;
+            };
+
+            grid.items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class GridSelectionDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
