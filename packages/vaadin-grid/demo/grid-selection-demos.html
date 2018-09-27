@@ -88,81 +88,67 @@
     </p>
     <vaadin-demo-snippet id='grid-selection-demos-custom-select-all-with-data-provider'>
       <template preserve-content>
-        <dataprovider-select-all></dataprovider-select-all>
-        <dom-module id="dataprovider-select-all">
-          <template preserve-content>
-            <x-data-provider data-provider="{{dataProvider}}"></x-data-provider>
-
-            <vaadin-grid  aria-label="Select All with Data Example" id="grid" data-provider="[[dataProvider]]" inverted$="[[inverted]]" size="200">
-              <vaadin-grid-column width="60px" flex-grow="0" >
-                <template class="header">
-                  <input aria-label="Select All" type="checkbox" on-click="_invert" checked="[[_isChecked(inverted, indeterminate)]]" indeterminate="[[indeterminate]]"/>
-                </template>
-                <template>
-                  <input aria-label="Select Row" type="checkbox" on-change="_selectItem" checked="[[_isSelected(inverted, selected)]]"/>
-                </template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column>
-                <template class="header">First Name</template>
-                <template>[[item.name.first]]</template>
-              </vaadin-grid-column>
-
-              <vaadin-grid-column>
-                <template class="header">Last Name</template>
-                <template>[[item.name.last]]</template>
-              </vaadin-grid-column>
-            </vaadin-grid>
-          </template>
-          <script>
+        <vaadin-grid aria-label="Select All with Data Example">
+          <vaadin-grid-column width="60px" flex-grow="0"></vaadin-grid-column>
+          <vaadin-grid-column path="firstName" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="lastName" header="Last Name"></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
           window.addDemoReadyListener('#grid-selection-demos-custom-select-all-with-data-provider', function(document) {
-            Polymer({
-              is: 'dataprovider-select-all',
+            let inverted = false, indeterminate = false;
 
-              properties: {
-                inverted: {
-                  type: Boolean,
-                  value: false
-                },
-                indeterminate: {
-                  type: Boolean,
-                  value: false
-                }
-              },
+            const grid = document.querySelector('vaadin-grid');
+            grid.size = 200;
+            grid.dataProvider = function(params, callback) {
+              var xhr = new XMLHttpRequest();
+              xhr.onload = function() {
+                callback(JSON.parse(xhr.responseText).result);
+              };
+              var index = params.page * params.pageSize;
+              xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index + '&count=' + params.pageSize, true);
+              xhr.send();
+            };
 
-              observers: ['_resetSelection(inverted)'],
+            const column = grid.querySelector('vaadin-grid-column');
 
-              _resetSelection: function(inverted) {
-                this.$.grid.selectedItems = [];
-                this.updateStyles();
-                this.indeterminate = false;
-              },
-
-              _invert: function(e) {
-                this.inverted = !this.inverted;
-              },
-
-              // iOS needs indeterminate + checked at the same time
-              _isChecked: function(inverted, indeterminate) {
-                return indeterminate || inverted;
-              },
-
-              _selectItem: function(e) {
-                if (e.target.checked === this.inverted) {
-                  this.$.grid.deselectItem(e.model.item);
-                } else {
-                  this.$.grid.selectItem(e.model.item);
-                }
-                this.indeterminate = this.$.grid.selectedItems.length > 0;
-              },
-
-              _isSelected: function(inverted, selected) {
-                return inverted != selected;
+            column.headerRenderer = function(cell) {
+              var checkbox = cell.firstElementChild;
+              if (!checkbox) {
+                checkbox = window.document.createElement('vaadin-checkbox');
+                checkbox.setAttribute('aria-label', 'Select All');
+                checkbox.addEventListener('change', function(e) {
+                  grid.selectedItems = [];
+                  inverted = !inverted;
+                  indeterminate = false;
+                  grid.render();
+                });
+                cell.appendChild(checkbox);
               }
-            });
+              checkbox.checked = indeterminate || inverted;
+              checkbox.indeterminate = indeterminate;
+            };
+
+            column.renderer = function(cell, column, rowData) {
+              var checkbox = cell.firstElementChild;
+              if (!checkbox) {
+                checkbox = window.document.createElement('vaadin-checkbox');
+                checkbox.setAttribute('aria-label', 'Select Row');
+                checkbox.addEventListener('change', function(e) {
+                  if (e.target.checked === inverted) {
+                    grid.deselectItem(checkbox.__item);
+                  } else {
+                    grid.selectItem(checkbox.__item);
+                  }
+                  indeterminate = grid.selectedItems.length > 0;
+                  grid.render();
+                });
+                cell.appendChild(checkbox);
+              }
+              checkbox.__item = rowData.item;
+              checkbox.checked = inverted !== rowData.selected;
+            };
           });
-          </script>
-        </dom-module>
+        </script>
       </template>
     </vaadin-demo-snippet>
 
