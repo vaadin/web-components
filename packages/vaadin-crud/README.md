@@ -16,7 +16,9 @@
 [API documentation ↗](https://vaadin.com/components/vaadin-crud/html-api)
 
 
-[&lt;vaadin-crud&gt;](https://vaadin.com/components/vaadin-crud) is a Web Component providing &lt;element-functionality&gt;, part of the [Vaadin components](https://vaadin.com/components).
+[&lt;vaadin-crud&gt;](https://vaadin.com/components/vaadin-crud) is a Web Component for
+[CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) operations.
+It is part of the [Vaadin components](https://vaadin.com/components).
 
 <!--
 ```
@@ -57,7 +59,7 @@ bower i vaadin/vaadin-crud --save
 Once installed, import it in your application:
 
 ```html
-<link rel="import" href="bower_components/vaadin-button/vaadin-button.html">
+<link rel="import" href="bower_components/vaadin-crud/vaadin-crud.html">
 ```
 ### Polymer 3 and ES Modules compatible version
 
@@ -84,15 +86,15 @@ To use the Material theme, import the correspondent file from the `theme/materia
 
 - The component with the Lumo theme:
 
-  `theme/lumo/component-name.html`
+  `theme/lumo/vaadin-crud.html`
 
 - The component with the Material theme:
 
-  `theme/material/component-name.html`
+  `theme/material/vaadin-crud.html`
 
-- Alias for `theme/lumo/component-name.html`:
+- Alias for `theme/lumo/vaadin-crud.html`:
 
-  `component-name.html`
+  `vaadin-crud.html`
 
 
 ## Running demos and tests in browser
