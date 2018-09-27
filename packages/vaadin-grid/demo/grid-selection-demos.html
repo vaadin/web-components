@@ -317,6 +317,40 @@
       </template>
     </vaadin-demo-snippet>
 
+    <h3>Selection using Renderer</h3>
+    <p>
+      The <code>selected</code> property of <code>rowData</code> renderer parameter can be used
+      in order to reflect the changes of the selected state in the DOM.
+    </p>
+    <vaadin-demo-snippet id='grid-selection-demos-selection-using-renderer'>
+      <template preserve-content>
+        <vaadin-grid aria-label="Selection using Renderer Example" id="grid">
+          <vaadin-grid-column path="name.first" header="First Name"></vaadin-grid-column>
+          <vaadin-grid-column path="name.last" header="Last Name"></vaadin-grid-column>
+          <vaadin-grid-column></vaadin-grid-column>
+        </vaadin-grid>
+        <script>
+          window.addDemoReadyListener('#grid-selection-demos-selection-using-renderer', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+
+            grid.querySelector('vaadin-grid-column:last-of-type').renderer = function(root, column, rowData) {
+              if (!root.firstElementChild) {
+                root.innerHTML = '<vaadin-checkbox aria-label="Select Row">Selected</vaadin-checkbox>';
+                root.firstElementChild.addEventListener('checked-changed', function(e) {
+                  grid[e.detail.value ? 'selectItem' : 'deselectItem'](root.firstElementChild.__item);
+                });
+              }
+
+              root.firstElementChild.__item = rowData.item;
+              root.firstElementChild.checked = rowData.selected;
+            };
+
+            grid.items = Vaadin.GridDemo.users;
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class GridSelectionDemos extends DemoReadyEventEmitter(GridDemo(Polymer.Element)) {
