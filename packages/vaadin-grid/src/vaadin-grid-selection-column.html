@@ -12,12 +12,10 @@ This program is available under Apache License Version 2.0, available at https:/
   <template>
     <template class="header" id="defaultHeaderTemplate">
       <vaadin-checkbox class="vaadin-grid-select-all-checkbox" aria-label="Select All" hidden$="[[_selectAllHidden]]" on-checked-changed="_onSelectAllCheckedChanged"
-        checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]">
-      </vaadin-checkbox>
+        checked="[[_isChecked(selectAll, _indeterminate)]]" indeterminate="[[_indeterminate]]"></vaadin-checkbox>
     </template>
     <template id="defaultBodyTemplate">
-      <vaadin-checkbox aria-label="Select Row" checked="{{selected}}">
-      </vaadin-checkbox>
+      <vaadin-checkbox aria-label="Select Row" checked="{{selected}}"></vaadin-checkbox>
     </template>
   </template>
 
@@ -61,7 +59,7 @@ This program is available under Apache License Version 2.0, available at https:/
            */
           width: {
             type: String,
-            value: '56px'
+            value: '58px'
           },
 
           /**
