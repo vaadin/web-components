@@ -406,7 +406,7 @@
         it('should update last-column attribute (details open)', () => {
           grid.openItemDetails(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
-          const  cell = getCellByCellContent(headerContent[2]);
+          const cell = getCellByCellContent(headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 
