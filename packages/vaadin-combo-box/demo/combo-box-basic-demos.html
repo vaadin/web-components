@@ -74,24 +74,29 @@
 
 
     <h3>Lazy Loading</h3>
-
+    <p>
+      The <code>dataProvider</code> property can be assigend a function to provide
+      data from a remote source.
+    </p>
+    <p>
+      <b>Note:</b> the total number of items must be provided as the second argument of the data provider <code>callback</code>.
+    </p>
     <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading">
       <template preserve-content>
-        <vaadin-combo-box label="Element"></vaadin-combo-box>
+        <vaadin-combo-box label="Country"></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
             const combo = document.querySelector('vaadin-combo-box');
-            combo.size = elements.length;
+
             combo.dataProvider = function(params, callback) {
-              setTimeout(function() {
-                const filter = (params.filter || '').toLowerCase();
-                const filteredElements = elements.filter(function(element) {
-                  return element.toLowerCase().indexOf(filter) > -1;
-                });
-                const index = params.page * params.pageSize;
-                const slice = filteredElements.slice(index, index + params.pageSize);
-                callback(slice, filteredElements.length);
-              }, 1000);
+              var xhr = new XMLHttpRequest();
+              xhr.onload = function() {
+                // 249 is the total number of countries
+                callback(JSON.parse(xhr.responseText), 249);
+              };
+              var index = params.page * params.pageSize;
+              xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/countries?index=' + index + '&count=' + params.pageSize, true);
+              xhr.send();
             };
           });
         </script>
