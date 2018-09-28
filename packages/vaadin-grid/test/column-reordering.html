@@ -370,6 +370,26 @@
           expectVisualOrder(grid, [2, 4, 3, 1]);
         });
 
+        it('should update first-column attribute', () => {
+          let cell = getCellByCellContent(headerContent[0]);
+          expect(cell.hasAttribute('first-column')).to.be.true;
+          cell = getContainerCell(grid.$.items, 0, 0);
+          expect(cell.hasAttribute('first-column')).to.be.true;
+        });
+
+        it('should update first-column attribute', () => {
+          dragOver(headerContent[2], headerContent[0]);
+          const cell = getCellByCellContent(headerContent[2]);
+          expect(cell.hasAttribute('first-column')).to.be.true;
+        });
+
+        it('should update first-column attribute (details open)', () => {
+          grid.openItemDetails(getRows(grid.$.items)[0].item);
+          dragOver(headerContent[2], headerContent[0]);
+          const cell = getCellByCellContent(headerContent[2]);
+          expect(cell.hasAttribute('first-column')).to.be.true;
+        });
+
         it('should update last-column attribute', () => {
           let cell = getCellByCellContent(headerContent[3]);
           expect(cell.hasAttribute('last-column')).to.be.true;
@@ -386,8 +406,7 @@
         it('should update last-column attribute (details open)', () => {
           grid.openItemDetails(getRows(grid.$.items)[0].item);
           dragOver(headerContent[2], headerContent[3]);
-          let cell = getCellByCellContent(headerContent[2]);
-          cell = getCellByCellContent(headerContent[2]);
+          const cell = getCellByCellContent(headerContent[2]);
           expect(cell.hasAttribute('last-column')).to.be.true;
         });
 

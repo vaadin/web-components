@@ -123,15 +123,16 @@ This program is available under Apache License Version 2.0, available at https:/
       });
     }
 
-    _updateLastColumn() {
-      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach(row => this._updateLastColumnForRow(row));
+    _updateFirstAndLastColumn() {
+      Array.from(this.shadowRoot.querySelectorAll('tr')).forEach(row => this._updateFirstAndLastColumnForRow(row));
     }
 
-    _updateLastColumnForRow(row) {
+    _updateFirstAndLastColumnForRow(row) {
       Array.from(row.querySelectorAll('[part~="cell"]:not([part~="details-cell"])'))
         .sort((a, b) => {
           return a._column._order - b._column._order;
         }).forEach((cell, cellIndex, children) => {
+          this._toggleAttribute('first-column', cellIndex === 0, cell);
           this._toggleAttribute('last-column', cellIndex === children.length - 1, cell);
         });
     }

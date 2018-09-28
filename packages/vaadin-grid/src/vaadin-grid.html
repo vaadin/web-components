@@ -273,6 +273,7 @@ This program is available under Apache License Version 2.0, available at https:/
      * `reorder-status` | Reflects the status of a cell while columns are being reordered | cell
      * `frozen` | Frozen cell | cell
      * `last-frozen` | Last frozen cell | cell
+   * * `first-column` | First visible cell on a row | cell
      * `last-column` | Last visible cell on a row | cell
      * `selected` | Selected row | row
      * `expanded` | Expanded row | row
@@ -409,7 +410,7 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         Polymer.RenderStatus.beforeNextRender(this, () => {
-          this._updateLastColumn();
+          this._updateFirstAndLastColumn();
           this._resetKeyboardNavigation();
         });
         return rows;
@@ -541,7 +542,7 @@ This program is available under Apache License Version 2.0, available at https:/
         this.appendChild(contentsFragment);
 
         this._frozenCellsChanged();
-        this._updateLastColumnForRow(row);
+        this._updateFirstAndLastColumnForRow(row);
       }
 
       _updateScrollerItem(row, index) {
@@ -588,7 +589,7 @@ This program is available under Apache License Version 2.0, available at https:/
 
         this._resizeHandler();
         this._frozenCellsChanged();
-        this._updateLastColumn();
+        this._updateFirstAndLastColumn();
         this._resetKeyboardNavigation();
         this._a11yUpdateHeaderRows();
         this._a11yUpdateFooterRows();
