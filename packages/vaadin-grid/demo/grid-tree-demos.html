@@ -21,44 +21,43 @@
     </p>
     <vaadin-demo-snippet id="grid-tree-demos-renderer-data-provider">
       <template preserve-content>
-          <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
-            <vaadin-grid-tree-column path="name" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
-            <vaadin-grid-column path="size" width="8em" flex-grow="0"></vaadin-grid-column>
-          </vaadin-grid>
+        <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
+          <vaadin-grid-tree-column path="name" item-has-children-path="hasChildren"></vaadin-grid-tree-column>
+          <vaadin-grid-column path="size" width="8em" flex-grow="0"></vaadin-grid-column>
+        </vaadin-grid>
 
-          <script>
-            window.addDemoReadyListener('#grid-tree-demos-renderer-data-provider', function(document) {
-              const grid = document.querySelector('vaadin-grid');
-              grid.dataProvider = function(params, callback) {
-                // If the data request concerns a tree sub-level, `params` has an additional
-                // `parentItem` property that refers to the sub-level's parent item
-                const parentUuid = params.parentItem ? params.parentItem.uuid : null;
+        <script>
+          window.addDemoReadyListener('#grid-tree-demos-renderer-data-provider', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            grid.dataProvider = function(params, callback) {
+              // If the data request concerns a tree sub-level, `params` has an additional
+              // `parentItem` property that refers to the sub-level's parent item
+              const parentUuid = params.parentItem ? params.parentItem.uuid : null;
 
-                // Demo helper API that fetches filesystem data
-                Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
-                  // Here `fsItems` is an array consisting of items with the following structure:
-                  // {
-                  //   hasChildren: false
-                  //   name: "foo.txt",
-                  //   size: "1 MB",
-                  //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
-                  //   parentUuid: null
-                  // }
-                  // This demo uses the `hasChildren` flag as an indicator of the item having child items.
-                  // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
-                  // the template above.
+              // Demo helper API that fetches filesystem data
+              Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
+                // Here `fsItems` is an array consisting of items with the following structure:
+                // {
+                //   hasChildren: false
+                //   name: "foo.txt",
+                //   size: "1 MB",
+                //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
+                //   parentUuid: null
+                // }
+                // This demo uses the `hasChildren` flag as an indicator of the item having child items.
+                // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
+                // the template above.
 
-                  // Slice out only the requested items
-                  const startIndex = params.page * params.pageSize;
-                  const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
-                  // Inform grid of the requested tree level's full size
-                  const treeLevelSize = fsItems.length;
-                  callback(pageItems, treeLevelSize);
-                });
-              };
-            });
-          </script>
-        </dom-module>
+                // Slice out only the requested items
+                const startIndex = params.page * params.pageSize;
+                const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
+                // Inform grid of the requested tree level's full size
+                const treeLevelSize = fsItems.length;
+                callback(pageItems, treeLevelSize);
+              });
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
@@ -73,63 +72,62 @@
     </p>
     <vaadin-demo-snippet id="grid-tree-demos-tree-toggle">
       <template preserve-content>
-          <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
-            <vaadin-grid-column header="Name"></vaadin-grid-column>
-            <vaadin-grid-column path="size" width="8em" flex-grow="0"></vaadin-grid-column>
-          </vaadin-grid>
+        <vaadin-grid aria-label="Tree Data Grid Example" data-provider="[[_dataProvider]]">
+          <vaadin-grid-column header="Name"></vaadin-grid-column>
+          <vaadin-grid-column path="size" width="8em" flex-grow="0"></vaadin-grid-column>
+        </vaadin-grid>
 
-          <script>
-            window.addDemoReadyListener('#grid-tree-demos-tree-toggle', function(document) {
-              const grid = document.querySelector('vaadin-grid');
-              const column = grid.querySelector('vaadin-grid-column');
+        <script>
+          window.addDemoReadyListener('#grid-tree-demos-tree-toggle', function(document) {
+            const grid = document.querySelector('vaadin-grid');
+            const column = grid.querySelector('vaadin-grid-column');
 
-              column.renderer = function(root, col, rowData) {
-                let toggler = root.firstElementChild;
-                if (!toggler) {
-                  toggler = window.document.createElement('vaadin-grid-tree-toggle');
-                  toggler.addEventListener('expanded-changed', function(e) {
-                    grid[toggler.expanded ? 'expandItem' : 'collapseItem'](toggler.item);
-                  });
-                  root.appendChild(toggler);
-                }
-
-                toggler.item = rowData.item;
-                toggler.leaf = !rowData.item.hasChildren;
-                toggler.expanded = rowData.expanded;
-                toggler.level = rowData.level;
-                toggler.textContent = rowData.item.name;
-              };
-
-              grid.dataProvider = function(params, callback) {
-                // If the data request concerns a tree sub-level, `params` has an additional
-                // `parentItem` property that refers to the sub-level's parent item
-                const parentUuid = params.parentItem ? params.parentItem.uuid : null;
-
-                // Demo helper API that fetches filesystem data
-                Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
-                  // Here `fsItems` is an array consisting of items with the following structure:
-                  // {
-                  //   hasChildren: false
-                  //   name: "foo.txt",
-                  //   size: "1 MB",
-                  //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
-                  //   parentUuid: null
-                  // }
-                  // This demo uses the `hasChildren` flag as an indicator of the item having child items.
-                  // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
-                  // the template above.
-
-                  // Slice out only the requested items
-                  const startIndex = params.page * params.pageSize;
-                  const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
-                  // Inform grid of the requested tree level's full size
-                  const treeLevelSize = fsItems.length;
-                  callback(pageItems, treeLevelSize);
+            column.renderer = function(root, col, rowData) {
+              let toggler = root.firstElementChild;
+              if (!toggler) {
+                toggler = window.document.createElement('vaadin-grid-tree-toggle');
+                toggler.addEventListener('expanded-changed', function(e) {
+                  grid[toggler.expanded ? 'expandItem' : 'collapseItem'](toggler.item);
                 });
-              };
-            });
-          </script>
-        </dom-module>
+                root.appendChild(toggler);
+              }
+
+              toggler.item = rowData.item;
+              toggler.leaf = !rowData.item.hasChildren;
+              toggler.expanded = rowData.expanded;
+              toggler.level = rowData.level;
+              toggler.textContent = rowData.item.name;
+            };
+
+            grid.dataProvider = function(params, callback) {
+              // If the data request concerns a tree sub-level, `params` has an additional
+              // `parentItem` property that refers to the sub-level's parent item
+              const parentUuid = params.parentItem ? params.parentItem.uuid : null;
+
+              // Demo helper API that fetches filesystem data
+              Vaadin.GridDemo._fetchFilesystem(parentUuid, function(fsItems) {
+                // Here `fsItems` is an array consisting of items with the following structure:
+                // {
+                //   hasChildren: false
+                //   name: "foo.txt",
+                //   size: "1 MB",
+                //   uuid: "4e5563ec-43a2-4f08-9bd0-a8dacc2d1bef"
+                //   parentUuid: null
+                // }
+                // This demo uses the `hasChildren` flag as an indicator of the item having child items.
+                // The property is bound to `<vaadin-grid-tree-toggle>`'s `leaf` property in
+                // the template above.
+
+                // Slice out only the requested items
+                const startIndex = params.page * params.pageSize;
+                const pageItems = fsItems.slice(startIndex, startIndex + params.pageSize);
+                // Inform grid of the requested tree level's full size
+                const treeLevelSize = fsItems.length;
+                callback(pageItems, treeLevelSize);
+              });
+            };
+          });
+        </script>
       </template>
     </vaadin-demo-snippet>
 
