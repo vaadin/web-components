@@ -1,13 +1,13 @@
 {
-  "name": "Vaadin Element",
+  "name": "Vaadin Item",
   "pages": [{
-    "name": "Basic Examples",
+    "name": "Basics",
     "url": "item-basic-demos",
     "src": "item-basic-demos.html",
     "meta": {
-      "title": "vaadin-item Basic Examples",
+      "title": "Vaadin Item Basics",
       "description": "",
       "image": ""
-     }
+    }
   }]
 }
