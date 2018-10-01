@@ -34,6 +34,24 @@
     </template>
   </test-fixture>
 
+  <dom-module id="vaadin-custom-grid">
+    <script>
+      document.addEventListener('WebComponentsReady', () => {
+        class MyGridElement extends Vaadin.GridElement {
+        }
+        customElements.define('vaadin-custom-grid', MyGridElement);
+      });
+    </script>
+  </dom-module>
+
+  <test-fixture id="extended">
+    <template>
+      <vaadin-custom-grid items='[{"foo": "bar"}]'>
+        <vaadin-grid-column path="foo" header="Foo"></vaadin-grid-column>
+      </vaadin-custom-grid>
+    </template>
+  </test-fixture>
+
   <script>
     describe('basic features', () => {
       let grid;
@@ -397,6 +415,16 @@
             expect(grid.$.scroller.getBoundingClientRect().height).to.be.closeTo(200 - 2, 1);
           });
         });
+      });
+    });
+
+    describe('extended', () => {
+      let grid;
+
+      beforeEach(() => grid = fixture('extended'));
+
+      it('child column should be able to find host grid', () => {
+        expect(grid.querySelector('vaadin-grid-column')._grid).to.be.equal(grid);
       });
     });
   </script>
