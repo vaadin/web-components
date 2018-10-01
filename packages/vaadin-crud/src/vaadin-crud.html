@@ -408,6 +408,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
           if (old && old.parentElement) {
             old.parentElement && old.parentElement.removeChild(old);
             old.removeEventListener('change', this.__changeListener);
+            old.removeEventListener('input', this.__changeListener);
           }
           if (!form) {
             return;
@@ -423,6 +424,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
             this.$.dialog.$.dialog.$.overlay.appendChild(form);
           }
           form.addEventListener('change', this.__changeListener);
+          form.addEventListener('input', this.__changeListener);
         }
 
         __onDataProviderChange(dataProvider) {
