@@ -1,0 +1,32 @@
+{
+  "name": "@vaadin/vaadin-rich-text-editor",
+  "version": "0.1.0",
+  "description": "vaadin-rich-text-editor",
+  "main": "vaadin-rich-text-editor.html",
+  "repository": "vaadin/vaadin-rich-text-editor",
+  "keywords": [
+    "Vaadin",
+    "vaadin-rich-text-editor",
+    "web-components",
+    "web-component",
+    "polymer"
+  ],
+  "author": "Vaadin Ltd",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/vaadin/vaadin-rich-text-editor/issues"
+  },
+  "homepage": "https://vaadin.com/components",
+  "files": [
+    "vaadin-*.js",
+    "src",
+    "theme"
+  ],
+  "scripts": {
+    "test": "wct",
+    "preversion": "gulp version:update"
+  },
+  "devDependencies": {
+    "@vaadin/vaadin-component-dev-dependencies": "^1.0.0"
+  }
+}

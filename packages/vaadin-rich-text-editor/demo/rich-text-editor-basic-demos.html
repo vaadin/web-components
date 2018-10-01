@@ -1,0 +1,25 @@
+<dom-module id="rich-text-editor-basic-demos">
+  <template>
+    <style include="vaadin-component-demo-shared-styles">
+      :host {
+        display: block;
+      }
+    </style>
+
+    <h3>Rich Text Editor</h3>
+    <vaadin-demo-snippet id="rich-text-editor-basic-demos-sample-example">
+      <template preserve-content>
+        <vaadin-rich-text-editor>Foobar</vaadin-rich-text-editor>
+      </template>
+    </vaadin-demo-snippet>
+
+  </template>
+  <script>
+    class RichTextEditorBasicDemos extends DemoReadyEventEmitter(RichTextEditorDemo(Polymer.Element)) {
+      static get is() {
+        return 'rich-text-editor-basic-demos';
+      }
+    }
+    customElements.define(RichTextEditorBasicDemos.is, RichTextEditorBasicDemos);
+  </script>
+</dom-module>

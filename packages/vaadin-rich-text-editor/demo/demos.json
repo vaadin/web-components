@@ -1,0 +1,15 @@
+{
+  "name": "Vaadin Rich Text Editor",
+  "pages": [
+    {
+      "name": "Basics",
+      "url": "rich-text-editor-basic-demos",
+      "src": "rich-text-editor-basic-demos.html",
+      "meta": {
+        "title": "Vaadin Rich Text Editor Basics",
+        "description": "",
+        "image": ""
+      }
+    }
+  ]
+}
