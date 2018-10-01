@@ -43,7 +43,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
     </style>
 
     <slot name="grid">
-      <vaadin-crud-grid id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
+      <vaadin-crud-grid theme$="[[theme]]" id="grid" exclude="[[exclude]]" no-sort="[[noSort]]" no-filter="[[noFilter]]" no-head="[[noHead]]"></vaadin-crud-grid>
     </slot>
 
     <div part="toolbar" on-click="__new">
@@ -53,11 +53,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       </slot>
     </div>
 
-    <vaadin-dialog-layout id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud">
+    <vaadin-dialog-layout theme$="[[theme]]" id="dialog" no-close-on-outside-click=[[__isDirty]] no-close-on-esc=[[__isDirty]] opened="{{opened}}" theme="crud">
       <h3 slot="header">[[__editorHeader]]</h3>
       <div id="editor">
         <slot name="form">
-          <vaadin-crud-form id="form" exclude="[[exclude]]"></vaadin-crud-form>
+          <vaadin-crud-form theme$="[[theme]]" id="form" exclude="[[exclude]]"></vaadin-crud-form>
         </slot>
       </div>
 
@@ -67,13 +67,13 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">[[i18n.delete]]</vaadin-button>
     </vaadin-dialog-layout>
 
-    <vaadin-confirm-dialog id="confirmCancel" on-reject="__confirmCancel" reject
+    <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-reject="__confirmCancel" reject
       reject-text="[[i18n.confirm.cancel.button.continue]]"
       confirm-text="[[i18n.confirm.cancel.button.cancel]]"
       header="[[i18n.confirm.cancel.header]]">
       [[i18n.confirm.cancel.message]]
     </vaadin-confirm-dialog>
-    <vaadin-confirm-dialog id="confirmDelete" on-confirm="__confirmDelete"
+    <vaadin-confirm-dialog theme$="[[theme]]" id="confirmDelete" on-confirm="__confirmDelete"
       cancel confirm-text="[[i18n.confirm.delete.button.continue]]"
       reject-text="[[i18n.confirm.delete.button.cancel]]"
       header="[[i18n.confirm.delete.header]]" confirm-theme="error">
@@ -191,6 +191,11 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
               type: HTMLElement,
               observer: '__onFormChange'
             },
+            /** The theme to use and to apply to generated elements */
+            theme: {
+              type: String,
+              reflectToAttribute: true
+            },
             /**
              * An array containing the items which will be stamped to the column template instances.
              */
@@ -283,7 +288,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                   },
                   cancel: {
                     header: 'Unsaved changes',
-                    prefix: 'There are unsaved modifications to the item.',
+                    message: 'There are unsaved modifications to the item.',
                     button: {
                       continue: 'Discard changes',
                       cancel: 'Continue editing'
@@ -315,7 +320,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                     },
                     cancel: {
                       header: 'Unsaved changes',
-                      prefix: 'There are unsaved modifications to the item.',
+                      message: 'There are unsaved modifications to the item.',
                       button: {
                         continue: 'Discard changes',
                         cancel: 'Continue editing'

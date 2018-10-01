@@ -109,6 +109,12 @@
           crud.i18n = Object.assign({}, crud.i18n, {new: 'Nueva entidad'});
           expect(crud.$.new.textContent).to.be.equal('Nueva entidad');
         });
+
+        it('should propagate theme to internal themable components', () => {
+          crud.theme = 'foo';
+          [crud, crud._grid, crud._form, crud.$.dialog, crud.$.dialog.$.dialog, crud.$.confirmCancel, crud.$.confirmDelete]
+            .forEach(e => expect(e.getAttribute('theme')).to.be.match(/foo/));
+        });
       });
 
       describe('items', () => {
