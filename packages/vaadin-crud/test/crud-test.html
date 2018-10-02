@@ -196,7 +196,7 @@
               edit(crud.items[0]);
               change();
               btnCancel().click();
-              btnConfDialog(crud.$.confirmCancel, 'confirm').click();
+              btnConfDialog(crud.$.confirmCancel, 'cancel').click();
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
               expect(crud.$.dialog.opened).to.be.true;
             });
@@ -205,7 +205,7 @@
               edit(crud.items[0]);
               change();
               btnCancel().click();
-              btnConfDialog(crud.$.confirmCancel, 'reject').click();
+              btnConfDialog(crud.$.confirmCancel, 'confirm').click();
               expect(crud.$.confirmCancel.opened).not.to.be.ok;
               expect(crud.$.dialog.opened).not.to.be.ok;
             });

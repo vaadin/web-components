@@ -67,16 +67,16 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
       <vaadin-button slot="footer" on-click="__delete" theme="raised tertiary error" hidden="[[__isNew]]">[[i18n.delete]]</vaadin-button>
     </vaadin-dialog-layout>
 
-    <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-reject="__confirmCancel" reject
-      reject-text="[[i18n.confirm.cancel.button.continue]]"
-      confirm-text="[[i18n.confirm.cancel.button.cancel]]"
-      header="[[i18n.confirm.cancel.header]]">
+    <vaadin-confirm-dialog theme$="[[theme]]" id="confirmCancel" on-confirm="__confirmCancel"
+      cancel confirm-text="[[i18n.confirm.cancel.button.continue]]"
+      cancel-text="[[i18n.confirm.cancel.button.cancel]]"
+      header="[[i18n.confirm.cancel.header]]" confirm-theme="primary error">
       [[i18n.confirm.cancel.message]]
     </vaadin-confirm-dialog>
     <vaadin-confirm-dialog theme$="[[theme]]" id="confirmDelete" on-confirm="__confirmDelete"
       cancel confirm-text="[[i18n.confirm.delete.button.continue]]"
       reject-text="[[i18n.confirm.delete.button.cancel]]"
-      header="[[i18n.confirm.delete.header]]" confirm-theme="error">
+      header="[[i18n.confirm.delete.header]]" confirm-theme="primary error">
       [[i18n.confirm.delete.message]]
     </vaadin-confirm-dialog>
   </template>
@@ -322,7 +322,7 @@ This program is available under Commercial Vaadin Add-On License 3.0, available 
                       header: 'Unsaved changes',
                       message: 'There are unsaved modifications to the item.',
                       button: {
-                        continue: 'Discard changes',
+                        continue: 'Discard',
                         cancel: 'Continue editing'
                       }
                     }
