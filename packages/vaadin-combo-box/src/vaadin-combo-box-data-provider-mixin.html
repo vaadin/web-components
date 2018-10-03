@@ -24,11 +24,27 @@ This program is available under Apache License Version 2.0, available at https:/
           observer: '_pageSizeChanged'
         },
 
+        /**
+         * Total number of items.
+         */
         size: {
           type: Number,
           observer: '_sizeChanged'
         },
 
+        /**
+         * Function that provides items lazily. Receives arguments `params`, `callback`
+         *
+         * `params.page` Requested page index
+         *
+         * `params.pageSize` Current page size
+         *
+         * `params.filter` Currently applied filter
+         *
+         * `callback(items, size)` Callback function with arguments:
+         *   - `items` Current page of items
+         *   - `size` Total number of items.
+         */
         dataProvider: {
           type: Object,
           observer: '_dataProviderChanged'

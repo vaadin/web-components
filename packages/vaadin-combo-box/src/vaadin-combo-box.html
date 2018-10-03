@@ -176,6 +176,40 @@ This program is available under Apache License Version 2.0, available at https:/
        * `selected` | Boolean | True when item is selected
        * `focused` | Boolean | True when item is focused
        *
+       * ### Lazy Loading with Function Data Provider
+       *
+       * In addition to assigning an array to the items property, you can alternatively
+       * provide the `<vaadin-combo-box>` data through the
+       * [`dataProvider`](#/elements/vaadin-combo-box#property-dataProvider) function property.
+       * The `<vaadin-combo-box>` calls this function lazily, only when it needs more data
+       * to be displayed.
+       *
+       * See the [`dataProvider`](#/elements/vaadin-combo-box#property-dataProvider) in
+       * the API reference below for the detailed data provider arguments description,
+       * and the “Lazy Loading“ example on “Basics” page in the demos.
+       *
+       * __Note that when using function data providers, the total number of items
+       * needs to be set manually. The total number of items can be returned
+       * in the second argument of the data provider callback:__
+       *
+       * ```javascript
+       * comboBox.dataProvider = function(params, callback) {
+       *   var url = 'https://api.example/data' +
+       *       '?page=' + params.page +        // the requested page index
+       *       '&per_page=' + params.pageSize; // number of items on the page
+       *   var xhr = new XMLHttpRequest();
+       *   xhr.onload = function() {
+       *     var response = JSON.parse(xhr.responseText);
+       *     callback(
+       *       response.employees, // requested page of items
+       *       response.totalSize  // total number of items
+       *     );
+       *   };
+       *   xhr.open('GET', url, true);
+       *   xhr.send();
+       * };
+       * ```
+       *
        * ### Styling
        *
        * The following custom properties are available for styling:
