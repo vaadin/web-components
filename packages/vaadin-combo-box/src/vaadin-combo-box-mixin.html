@@ -10,6 +10,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../iron-a11y-announcer/iron-a11y-announcer.html">
 <link rel="import" href="../../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 <link rel="import" href="../../polymer/lib/utils/flattened-nodes-observer.html">
+<link rel="import" href="vaadin-combo-box-placeholder.html">
 
 <script>
   window.Vaadin = window.Vaadin || {};
@@ -69,7 +70,8 @@ This program is available under Apache License Version 2.0, available at https:/
          * The items can be of either `String` or `Object` type.
          */
         items: {
-          type: Array
+          type: Array,
+          observer: '_itemsChanged'
         },
 
         /**
@@ -174,6 +176,14 @@ This program is available under Apache License Version 2.0, available at https:/
         },
 
         /**
+         * Path for the id of the item. If `items` is an array of objects,
+         * the `itemIdPath` is used to compare and identify the same item
+         * in `selectedItem` and `filteredItems` (items given by the
+         * `dataProvider` callback).
+         */
+        itemIdPath: String,
+
+        /**
          * The name of this element.
          */
         name: {
@@ -206,7 +216,7 @@ This program is available under Apache License Version 2.0, available at https:/
     static get observers() {
       return [
         '_filterChanged(filter, itemValuePath, itemLabelPath)',
-        '_itemsChanged(items.*, itemValuePath, itemLabelPath)',
+        '_itemsOrPathsChanged(items.*, itemValuePath, itemLabelPath)',
         '_filteredItemsChanged(filteredItems.*, itemValuePath, itemLabelPath)',
         '_templateOrRendererChanged(_itemTemplate, renderer)',
         '_loadingChanged(loading)',
@@ -574,7 +584,7 @@ This program is available under Apache License Version 2.0, available at https:/
             this.value = customValue;
           }
         } else {
-          this._inputElementValue = this._getItemLabel(this.selectedItem);
+          this._inputElementValue = this.selectedItem ? this._getItemLabel(this.selectedItem) : '';
         }
       }
 
@@ -582,7 +592,9 @@ This program is available under Apache License Version 2.0, available at https:/
 
       this._clearSelectionRange();
 
-      this.filter = '';
+      if (!this.dataProvider) {
+        this.filter = '';
+      }
     }
 
     /**
@@ -723,7 +735,13 @@ This program is available under Apache License Version 2.0, available at https:/
       }
     }
 
-    _itemsChanged(e, itemValuePath, itemLabelPath) {
+    _itemsChanged(items, oldItems) {
+      this._ensureItemsOrDataProvider(() => {
+        this.items = oldItems;
+      });
+    }
+
+    _itemsOrPathsChanged(e, itemValuePath, itemLabelPath) {
       if (e.value === undefined || itemValuePath === undefined || itemLabelPath === undefined) {
         return;
       }
@@ -771,7 +789,11 @@ This program is available under Apache License Version 2.0, available at https:/
 
     _selectItemForValue(value) {
       const valueIndex = this._indexOfValue(value, this.filteredItems);
-      this.selectedItem = valueIndex > -1 ? this.filteredItems[valueIndex] : null;
+      this.selectedItem = valueIndex >= 0
+        ? this.filteredItems[valueIndex]
+        : (this.dataProvider && this.selectedItem === undefined)
+          ? undefined
+          : null;
     }
 
     _setOverlayItems(items) {
@@ -816,6 +838,14 @@ This program is available under Apache License Version 2.0, available at https:/
     }
 
     _overlaySelectedItemChanged(e) {
+      // stop this private event from leaking outside.
+      e.stopPropagation();
+
+      if (e.detail.item instanceof Vaadin.ComboBoxPlaceholder) {
+        // Placeholder items should not be selectable.
+        return;
+      }
+
       if (this.selectedItem !== e.detail.item) {
         this.selectedItem = e.detail.item;
       }
@@ -823,9 +853,6 @@ This program is available under Apache License Version 2.0, available at https:/
       if (this.opened) {
         this.close();
       }
-
-      // stop this private event from leaking outside.
-      e.stopPropagation();
     }
 
 

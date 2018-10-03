@@ -1,0 +1,656 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>vaadin-combo basic tests</title>
+
+  <script src="../../web-component-tester/browser.js"></script>
+  <script src='../../webcomponentsjs/webcomponents-lite.js'></script>
+  <link rel="import" href="../../test-fixture/test-fixture.html">
+  <link rel="import" href="common-imports.html">
+  <script src="common.js"></script>
+  <link rel="import" href="../vaadin-combo-box-light.html">
+  <link rel="import" href="../src/vaadin-combo-box-placeholder.html">
+  <link rel="import" href="../../iron-input/iron-input.html">
+</head>
+
+<body>
+
+  <test-fixture id="comboBox">
+    <template>
+      <vaadin-combo-box></vaadin-combo-box>
+    </template>
+  </test-fixture>
+
+  <test-fixture id="comboBoxLight">
+    <template>
+      <vaadin-combo-box-light attr-for-value="bind-value">
+        <iron-input>
+          <input>
+        </iron-input>
+      </vaadin-combo-box-light>
+    </template>
+  </test-fixture>
+
+  <script>
+    describe('lazy loading', () => {
+      const DEFAULT_PAGE_SIZE = 50;
+      const SIZE = 200;
+      let dataProviderItems;
+
+      const dataProvider = (params, callback) => {
+        const offset = params.page * params.pageSize;
+        const n = Math.min(offset + params.pageSize, SIZE) - offset;
+        dataProviderItems = Array(...new Array(n)).map((_, i) => `item ${offset + i}`);
+        callback(dataProviderItems, SIZE);
+      };
+
+      const objectDataProvider = (params, callback) => {
+        const offset = params.page * params.pageSize;
+        const n = Math.min(offset + params.pageSize, SIZE) - offset;
+        dataProviderItems = Array(...new Array(n)).map((_, i) => {
+          return {id: i, value: `value ${i}`, label: `label ${i}`};
+        });
+        callback(dataProviderItems, SIZE);
+      };
+
+      const spyDataProvider = sinon.spy(dataProvider);
+
+      const spyAsyncDataProvider = sinon.spy((params, callback) => {
+        setTimeout(() => dataProvider(params, callback));
+      });
+
+      beforeEach(() => {
+        spyDataProvider.reset();
+        spyAsyncDataProvider.reset();
+      });
+
+      let comboBox;
+
+      const describeLazyLoading = () => {
+        describe('dataProvider', () => {
+          it('should not be invoked when set', () => {
+            comboBox.dataProvider = spyDataProvider;
+            expect(spyDataProvider).to.be.notCalled;
+          });
+
+          it('should be invoked on open', () => {
+            comboBox.dataProvider = spyDataProvider;
+            comboBox.opened = true;
+            expect(spyDataProvider).to.be.calledOnce;
+          });
+
+          it('should be invoked with size set', () => {
+            comboBox.size = SIZE;
+            comboBox.dataProvider = spyDataProvider;
+            comboBox.opened = true;
+            expect(spyDataProvider).to.be.calledOnce;
+          });
+
+          it('should throw if set after items', () => {
+            comboBox.items = ['foo'];
+            function setDataProvider() {
+              comboBox.dataProvider = spyDataProvider;
+            }
+            expect(setDataProvider).to.throw('not supported');
+            expect(spyDataProvider).to.be.notCalled;
+            expect(comboBox.dataProvider).to.be.undefined;
+          });
+
+          it('should throw if items are set after', () => {
+            comboBox.dataProvider = spyDataProvider;
+            function setItems() {
+              comboBox.items = ['foo'];
+            }
+            expect(setItems).to.throw('not supported');
+            expect(comboBox.items).to.be.undefined;
+          });
+
+          describe('when open', () => {
+            beforeEach(() => comboBox.opened = true);
+
+            it('should be invoked when set', () => {
+              comboBox.dataProvider = spyDataProvider;
+              expect(spyDataProvider).to.be.calledOnce;
+            });
+
+            it('should receive params argument', () => {
+              comboBox.dataProvider = spyDataProvider;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(typeof params).to.equal('object');
+            });
+
+            it('should have filter param', () => {
+              comboBox.dataProvider = spyDataProvider;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.filter).to.equal('');
+            });
+
+            it('should receive callback argument', () => {
+              comboBox.dataProvider = spyDataProvider;
+              const callback = spyDataProvider.lastCall.args[1];
+              expect(typeof callback).to.equal('function');
+            });
+
+            it('should request page 0', () => {
+              comboBox.dataProvider = spyDataProvider;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.page).to.equal(0);
+            });
+
+            it('should request page 1 on scroll', () => {
+              comboBox.dataProvider = spyDataProvider;
+              spyDataProvider.reset();
+              comboBox.$.overlay._scrollIntoView(75);
+              expect(spyDataProvider).to.be.called;
+              const pages = spyDataProvider.getCalls().map(call => call.args[0].page);
+              expect(pages).to.contain(1);
+            });
+
+            it('should request page 2 on scroll', () => {
+              comboBox.dataProvider = spyDataProvider;
+              spyDataProvider.reset();
+              comboBox.$.overlay._scrollIntoView(125);
+              expect(spyDataProvider).to.be.called;
+              const pages = spyDataProvider.getCalls().map(call => call.args[0].page);
+              expect(pages).to.contain(2);
+            });
+
+            it('should request with empty filter', () => {
+              comboBox.dataProvider = spyDataProvider;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.filter).to.equal('');
+            });
+
+            it('should request on filter change with user’s filter', () => {
+              comboBox.dataProvider = spyDataProvider;
+              spyDataProvider.reset();
+              comboBox.filter = 'item 1';
+              expect(spyDataProvider).to.be.called;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.filter).to.equal('item 1');
+            });
+
+            it('should clear filter on value change', () => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.filter = 'item 1';
+              spyDataProvider.reset();
+              comboBox.value = 'foo';
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.filter).to.equal('');
+            });
+
+            it('should clear filter on value clear', () => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.filter = 'item 1';
+              comboBox.value = 'item 1';
+              spyDataProvider.reset();
+              comboBox.value = '';
+              Polymer.flush();
+              const params = spyDataProvider.lastCall.args[0];
+              expect(comboBox.filter).to.equal('');
+            });
+
+            it('should clear filter on opened change', () => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.filter = 'item 1';
+              spyDataProvider.reset();
+              comboBox.opened = false;
+              Polymer.flush();
+              expect(comboBox.filter).to.equal('');
+            });
+
+            it('should not request on value change', done => {
+              comboBox.dataProvider = spyDataProvider;
+              flush(() => {
+                spyDataProvider.reset();
+                comboBox.value = 'item 1';
+                expect(spyDataProvider).not.to.be.called;
+                done();
+              });
+            });
+
+            it('should populate filteredItems', () => {
+              expect(comboBox.filteredItems).to.be.undefined;
+              comboBox.dataProvider = spyDataProvider;
+              expect(comboBox.filteredItems).to.be.instanceof(Array);
+              expect(comboBox.filteredItems).to.have.lengthOf(SIZE);
+              const filteredItemsFirstPage = comboBox.filteredItems.slice(0, comboBox.pageSize);
+              expect(filteredItemsFirstPage).to.eql(dataProviderItems);
+            });
+
+            it('should toggle loading', done => {
+              expect(comboBox.loading).to.be.false;
+              comboBox.dataProvider = (params, callback) => {
+                expect(comboBox.loading).to.be.true;
+                callback([], 0);
+                expect(comboBox.loading).to.be.false;
+                done();
+              };
+            });
+
+            it('should request page after partial filter & cancel & reopen', () => {
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.filter = 'it';
+              spyDataProvider.reset();
+              comboBox.cancel();
+              Polymer.flush();
+              comboBox.opened = true;
+              const params = spyDataProvider.lastCall.args[0];
+              expect(params.filter).to.equal('');
+            });
+          });
+
+          describe('async', () => {
+            it('should be invoked on open', () => {
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+              expect(spyAsyncDataProvider).to.be.calledOnce;
+            });
+
+            it('should be invoked on open with pre-defined size', () => {
+              comboBox.size = SIZE;
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+              expect(spyAsyncDataProvider).to.be.calledOnce;
+            });
+
+            it('should request page 1 on scroll', () => {
+              comboBox.size = SIZE;
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+              spyAsyncDataProvider.reset();
+              comboBox.$.overlay._scrollIntoView(75);
+              expect(spyAsyncDataProvider).to.be.called;
+              const pages = spyAsyncDataProvider.getCalls().map(call => call.args[0].page);
+              expect(pages).to.contain(1);
+            });
+
+            it('should request page 2 on scroll', () => {
+              comboBox.size = SIZE;
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+              spyAsyncDataProvider.reset();
+              comboBox.$.overlay._scrollIntoView(125);
+              expect(spyAsyncDataProvider).to.be.called;
+              const pages = spyAsyncDataProvider.getCalls().map(call => call.args[0].page);
+              expect(pages).to.contain(2);
+            });
+
+            it('should not select placeholder items', () => {
+              comboBox.size = SIZE;
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.opened = true;
+              const itemElement = comboBox.$.overlay._selector.querySelector('vaadin-combo-box-item');
+              expect(itemElement.item).to.be.instanceof(Vaadin.ComboBoxPlaceholder);
+              itemElement.click();
+              expect(comboBox.opened).to.equal(true);
+              expect(comboBox.selectedItem).to.not.be.instanceOf(Vaadin.ComboBoxPlaceholder);
+            });
+          });
+        });
+
+        describe('pageSize', () => {
+          it('should have default value', () => {
+            expect(typeof comboBox.pageSize).to.equal('number');
+            expect(comboBox.pageSize).to.equal(DEFAULT_PAGE_SIZE);
+          });
+
+          it('should use default value in dataProvider', () => {
+            comboBox.opened = true;
+            comboBox.dataProvider = spyDataProvider;
+            const params = spyDataProvider.lastCall.args[0];
+            expect(typeof comboBox.pageSize).to.equal('number');
+            expect(params.pageSize).to.equal(DEFAULT_PAGE_SIZE);
+          });
+
+          it('should use a custom value in dataProvider', () => {
+            comboBox.opened = true;
+            comboBox.pageSize = 123;
+            comboBox.dataProvider = spyDataProvider;
+            const params = spyDataProvider.lastCall.args[0];
+            expect(params.pageSize).to.equal(123);
+          });
+
+          it('should throw when set to zero', () => {
+            comboBox.pageSize = 123;
+            expect(() => comboBox.pageSize = 0).to.throw('pageSize');
+            expect(comboBox.pageSize).to.equal(123);
+          });
+
+          it('should throw when set to non-integer', () => {
+            comboBox.pageSize = 123;
+            expect(() => comboBox.pageSize = undefined).to.throw('pageSize');
+            expect(() => comboBox.pageSize = null).to.throw('pageSize');
+            expect(() => comboBox.pageSize = NaN).to.throw('pageSize');
+            expect(() => comboBox.pageSize = 10.5).to.throw('pageSize');
+            expect(() => comboBox.pageSize = '10').to.throw('pageSize');
+            expect(comboBox.pageSize).to.equal(123);
+          });
+        });
+
+        describe('size', () => {
+          it('should not have default value', () => {
+            expect(comboBox.size).to.be.undefined;
+          });
+
+          it('should be set from dataProvider callback', () => {
+            comboBox.opened = true;
+            comboBox.dataProvider = spyDataProvider;
+            expect(comboBox.size).to.equal(SIZE);
+          });
+        });
+
+        /* eslint-disable no-console */
+        describe('value (string items)', () => {
+          before(() => sinon.spy(console, 'warn'));
+          after(() => console.warn.restore());
+          beforeEach(() => comboBox.dataProvider = dataProvider);
+
+          it('should allow setting initial value', () => {
+            comboBox.value = 'foo';
+            expect(comboBox.value).to.equal('foo');
+          });
+
+          it('should allow setting initial value when size present', () => {
+            comboBox.size = SIZE;
+            comboBox.value = 'foo';
+            expect(comboBox.value).to.equal('foo');
+          });
+
+          it('should warn if used without selectedItem', () => {
+            console.warn.reset();
+            comboBox.value = 'foo';
+            expect(console.warn).to.be.calledOnce;
+            expect(console.warn.firstCall.args[0]).to.contain('selectedItem');
+          });
+
+          it('should not warn if used with selectedItem', () => {
+            console.warn.reset();
+            comboBox.selectedItem = 'foo';
+            comboBox.value = 'foo';
+            expect(console.warn).to.be.notCalled;
+          });
+
+          it('should not set selectedItem when matching value item is not loaded', () => {
+            comboBox.value = 'item 0';
+            expect(comboBox.selectedItem).to.be.undefined;
+          });
+
+          it('should set selectedItem matching value when items are loading', () => {
+            comboBox.value = 'item 0';
+            comboBox.opened = true; // loads first page of dataProvider items
+            expect(comboBox.selectedItem).to.equal('item 0');
+          });
+
+          it('should set selectedItem matching value when items are loaded', () => {
+            comboBox.opened = true; // loads first page of dataProvider items
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            comboBox.value = 'item 0';
+            expect(comboBox.selectedItem).to.equal('item 0');
+          });
+        });
+
+        describe('value (object items)', () => {
+          before(() => sinon.spy(console, 'warn'));
+          after(() => console.warn.restore());
+          beforeEach(() => {
+            comboBox.itemIdPath = 'id';
+            comboBox.dataProvider = objectDataProvider;
+          });
+
+          it('should allow setting initial value', () => {
+            comboBox.value = 'foo';
+            expect(comboBox.value).to.equal('foo');
+          });
+
+          it('should allow setting initial value when size present', () => {
+            comboBox.size = SIZE;
+            comboBox.value = 'foo';
+            expect(comboBox.value).to.equal('foo');
+          });
+
+          it('should warn if used without selectedItem', () => {
+            console.warn.reset();
+            comboBox.value = 'foo';
+            expect(console.warn).to.be.calledOnce;
+            expect(console.warn.firstCall.args[0]).to.contain('selectedItem');
+          });
+
+          it('should not warn if used with selectedItem', () => {
+            console.warn.reset();
+            comboBox.selectedItem = {value: 'foo', label: 'foo'};
+            comboBox.value = 'foo';
+            expect(console.warn).to.be.notCalled;
+          });
+
+          it('should not set selectedItem when matching item is not loaded', () => {
+            comboBox.value = 'value 0';
+            expect(comboBox.selectedItem).to.be.undefined;
+          });
+
+          it('should set matching selectedItem when items are loading', () => {
+            comboBox.value = 'value 0';
+            comboBox.opened = true; // loads first page of dataProvider items
+            expect(comboBox.selectedItem).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+          });
+
+          it('should set matching selectedItem when items are loaded', () => {
+            comboBox.opened = true; // loads first page of dataProvider items
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            comboBox.value = 'value 0';
+            expect(comboBox.selectedItem).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+          });
+        });
+        /* eslint-enable no-console */
+
+        describe('selectedItem (string items)', () => {
+          beforeEach(() => comboBox.dataProvider = dataProvider);
+
+          it('should allow setting initial selectedItem', () => {
+            comboBox.selectedItem = 'item 0';
+            expect(comboBox.selectedItem).to.equal('item 0');
+          });
+
+          it('should assign selectedItem', () => {
+            comboBox.selectedItem = 'item 0';
+            expect(comboBox.value).to.equal('item 0');
+          });
+
+          it('should select value matching selectedItem when items are loading', () => {
+            comboBox.selectedItem = 'item 0';
+            comboBox.opened = true;
+            expect(comboBox.value).to.equal('item 0');
+            const selectedRenderedItemElements = Array.from(
+              comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+            ).filter(itemEl => itemEl.selected);
+            expect(selectedRenderedItemElements).to.have.lengthOf(1);
+            expect(selectedRenderedItemElements[0].item).to.equal('item 0');
+          });
+
+          it('should select value matching selectedItem when items are loaded', done => {
+            comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            comboBox.selectedItem = 'item 0';
+            expect(comboBox.value).to.equal('item 0');
+            flush(() => {
+              const selectedRenderedItemElements = Array.from(
+                comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+              ).filter(itemEl => itemEl.selected);
+              // doesn't work when run on SauceLabs, work locally
+              // expect(selectedRenderedItemElements).to.have.lengthOf(1);
+              expect(selectedRenderedItemElements[0].item).to.equal('item 0');
+              done();
+            });
+          });
+        });
+
+        describe('selectedItem (object items)', () => {
+          beforeEach(() => {
+            comboBox.itemIdPath = 'id';
+            comboBox.dataProvider = objectDataProvider;
+          });
+
+          it('should allow setting initial selectedItem', () => {
+            comboBox.selectedItem = {id: 0, value: 'value 0', label: 'label 0'};
+            expect(comboBox.selectedItem).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+          });
+
+          it('should assign selectedItem', () => {
+            comboBox.selectedItem = {id: 0, value: 'value 0', label: 'label 0'};
+            expect(comboBox.value).to.equal('value 0');
+          });
+
+          it('should select value matching selectedItem when items are loading', () => {
+            comboBox.selectedItem = {id: 0, value: 'value 0', label: 'label 0'};
+            comboBox.opened = true;
+            expect(comboBox.value).to.equal('value 0');
+            const selectedRenderedItemElements = Array.from(
+              comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+            ).filter(itemEl => itemEl.selected);
+            expect(selectedRenderedItemElements).to.have.lengthOf(1);
+            expect(selectedRenderedItemElements[0].item).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+          });
+
+          it('should select value matching selectedItem when items are loaded', done => {
+            comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            comboBox.selectedItem = {id: 0, value: 'value 0', label: 'label 0'};
+            expect(comboBox.value).to.equal('value 0');
+            flush(() => {
+              const selectedRenderedItemElements = Array.from(
+                comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+              ).filter(itemEl => itemEl.selected);
+              // doesn't work when run on SauceLabs, work locally
+              // expect(selectedRenderedItemElements).to.have.lengthOf(1);
+              expect(selectedRenderedItemElements[0].item).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+              done();
+            });
+          });
+        });
+
+        describe('itemIdPath', () => {
+          it('should not have default value', () => {
+            expect(comboBox.itemIdPath).to.be.undefined;
+          });
+
+          it('should support shallow paths', done => {
+            comboBox.itemIdPath = 'id';
+            comboBox.selectedItem = {id: 0};
+            comboBox.dataProvider = objectDataProvider;
+            comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            flush(() => {
+              const selectedRenderedItemElements = Array.from(
+                comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+              ).filter(itemEl => itemEl.selected);
+              // doesn't work when run on SauceLabs, work locally
+              // expect(selectedRenderedItemElements).to.have.lengthOf(1);
+              expect(selectedRenderedItemElements[0].item).to.eql({id: 0, value: 'value 0', label: 'label 0'});
+              done();
+            });
+          });
+
+          it('should support deep paths', done => {
+            comboBox.itemIdPath = 'db.key';
+            comboBox.selectedItem = {db: {key: '#0'}};
+            comboBox.dataProvider = (params, callback) => {
+              objectDataProvider(params, (items, size) => callback(items.map(i => {
+                i.db = {key: `#${i.id}`};
+                return i;
+              }), size));
+            };
+            comboBox.opened = true;
+            comboBox.$.overlay.updateViewportBoundaries();
+            comboBox.$.overlay.ensureItemsRendered();
+            flush(() => {
+              const selectedRenderedItemElements = Array.from(
+                comboBox.$.overlay._selector.querySelectorAll('vaadin-combo-box-item')
+              ).filter(itemEl => itemEl.selected);
+              // doesn't work when run on SauceLabs, work locally
+              // expect(selectedRenderedItemElements).to.have.lengthOf(1);
+              expect(selectedRenderedItemElements[0].item)
+                .to.eql({id: 0, value: 'value 0', label: 'label 0', db: {key: '#0'}});
+              done();
+            });
+          });
+        });
+
+        describe('clearCache', () => {
+          describe('before open', () => {
+            beforeEach(() => comboBox.dataProvider = spyDataProvider);
+
+            it('should not request first page', () => {
+              comboBox.clearCache();
+              expect(spyDataProvider).to.be.not.called;
+            });
+          });
+
+          describe('when open', () => {
+            beforeEach(() => comboBox.opened = true);
+
+            it('should replace filteredItems with placeholders', () => {
+              comboBox.dataProvider = spyAsyncDataProvider;
+              comboBox.size = SIZE;
+              comboBox.filteredItems = ['item 0', 'item 1'];
+              comboBox.clearCache();
+              expect(comboBox.filteredItems.length).to.equal(SIZE);
+              comboBox.filteredItems.forEach(item => {
+                expect(item).to.be.instanceOf(Vaadin.ComboBoxPlaceholder);
+              });
+            });
+
+            it('should request first page', () => {
+              comboBox.dataProvider = spyDataProvider;
+              spyDataProvider.reset();
+              comboBox.clearCache();
+              expect(spyDataProvider).to.be.called;
+              const params = spyDataProvider.firstCall.args[0];
+              expect(params.page).to.equal(0);
+            });
+          });
+
+          describe('after closed', () => {
+            beforeEach(() => {
+              comboBox.opened = true;
+              comboBox.dataProvider = spyDataProvider;
+              comboBox.opened = false;
+              spyDataProvider.reset();
+            });
+
+            it('should not request first page', () => {
+              comboBox.clearCache();
+              expect(spyDataProvider).to.be.not.called;
+            });
+
+            it('should request page 1 on scroll after reopen', () => {
+              comboBox.clearCache();
+              comboBox.opened = true;
+              comboBox.$.overlay._scrollIntoView(75);
+              expect(spyDataProvider).to.be.called;
+              const pages = spyDataProvider.getCalls().map(call => call.args[0].page);
+              expect(pages).to.contain(1);
+            });
+          });
+        });
+      };
+
+      describe('combo-box', () => {
+        beforeEach(() => comboBox = fixture('comboBox'));
+
+        describeLazyLoading();
+      });
+
+      describe('combo-box-light', () => {
+        beforeEach(() => comboBox = fixture('comboBoxLight'));
+
+        describeLazyLoading();
+      });
+    });
+  </script>

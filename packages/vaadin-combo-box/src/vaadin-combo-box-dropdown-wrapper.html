@@ -8,6 +8,7 @@ This program is available under Apache License Version 2.0, available at https:/
 <link rel="import" href="../../iron-list/iron-list.html">
 <link rel="import" href="vaadin-combo-box-item.html">
 <link rel="import" href="vaadin-combo-box-dropdown.html">
+<link rel="import" href="vaadin-combo-box-placeholder.html">
 
 <dom-module id="vaadin-combo-box-dropdown-wrapper">
   <template>
@@ -32,15 +33,15 @@ This program is available under Apache License Version 2.0, available at https:/
         on-position-changed="_setOverlayHeight"
         theme="[[theme]]">
       <template>
-        <div id="scroller" on-click="_stopPropagation" hidden$="[[loading]]">
-          <iron-list id="selector" role="listbox" items="[[_items]]" scroll-target="[[_scroller]]">
+        <div id="scroller" on-click="_stopPropagation">
+          <iron-list id="selector" role="listbox" items="[[_getItems(opened, _items)]]" scroll-target="[[_scroller]]">
             <template>
               <vaadin-combo-box-item
                 on-click="_onItemClick"
-                index="[[index]]"
+                index="[[__requestItemByIndex(item, index)]]"
                 item="[[item]]"
                 label="[[getItemLabel(item)]]"
-                selected="[[_isItemSelected(item, _selectedItem)]]"
+                selected="[[_isItemSelected(item, _selectedItem, _itemIdPath)]]"
                 renderer="[[renderer]]"
                 role$="[[_getAriaRole(index)]]"
                 aria-selected$="[[_getAriaSelected(_focusedIndex,index)]]"
@@ -148,7 +149,9 @@ This program is available under Apache License Version 2.0, available at https:/
             value: 'value'
           },
 
-          _selector: Object
+          _selector: Object,
+
+          _itemIdPath: String
         };
       }
 
@@ -160,6 +163,10 @@ This program is available under Apache License Version 2.0, available at https:/
         this.dispatchEvent(new CustomEvent('vaadin-overlay-touch-action', {
           detail: {sourceEvent: sourceEvent}
         }));
+      }
+
+      _getItems(opened, items) {
+        return opened ? items : [];
       }
 
       _openedChanged(opened, items) {
@@ -241,8 +248,12 @@ This program is available under Apache License Version 2.0, available at https:/
         }
       }
 
-      _isItemSelected(item, selectedItem) {
-        return item === selectedItem;
+      _isItemSelected(item, selectedItem, itemIdPath) {
+        if (itemIdPath && item !== undefined && selectedItem !== undefined) {
+          return this.get(itemIdPath, item) === this.get(itemIdPath, selectedItem);
+        } else {
+          return item === selectedItem;
+        }
       }
 
       _onItemClick(e) {
@@ -268,6 +279,20 @@ This program is available under Apache License Version 2.0, available at https:/
         }
 
         return -1;
+      }
+
+      /**
+       * If dataProvider is used, dispatch a request for the item’s index if
+       * the item is a placeholder object.
+       *
+       * @return {Number}
+       */
+      __requestItemByIndex(item, index) {
+        if ((item instanceof Vaadin.ComboBoxPlaceholder) && index !== undefined) {
+          this.dispatchEvent(new CustomEvent('index-requested', {detail: {index}}));
+        }
+
+        return index;
       }
 
       /**
@@ -338,7 +363,7 @@ This program is available under Apache License Version 2.0, available at https:/
       }
 
       adjustScrollPosition() {
-        if (this._items) {
+        if (this.opened && this._items) {
           this._scrollIntoView(this._focusedIndex);
         }
       }
@@ -415,8 +440,8 @@ This program is available under Apache License Version 2.0, available at https:/
         e.stopPropagation();
       }
 
-      _hidden(itemsChange, loading) {
-        return !loading && (!this._items || !this._items.length);
+      _hidden(itemsChange) {
+        return !this.loading && (!this._items || !this._items.length);
       }
     }
 

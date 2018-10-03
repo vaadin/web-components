@@ -10,6 +10,7 @@
     "linux": false,
     "getItemArray": false,
     "before": false,
+    "after": false,
     "beforeEach": false,
     "afterEach": false,
     "describe": false,
@@ -28,6 +29,7 @@
     "touchDevice": false,
     "hackIE11Focus": false,
     "_fixture": false,
-    "gemini": false
+    "gemini": false,
+    "flush": false
   }
 }

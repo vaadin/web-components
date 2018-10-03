@@ -65,11 +65,13 @@
         });
 
         it('should be bound to items list', () => {
+          comboBox.opened = true;
           comboBox.items = ['qux'];
           expect(comboBox.$.overlay._selector.items).to.eql(['qux']);
         });
 
         it('should update items list on mutation', () => {
+          comboBox.opened = true;
           comboBox.items = [];
           comboBox.push('items', 'foo');
           expect(comboBox.$.overlay._selector._virtualCount).to.eql(1);
@@ -209,7 +211,7 @@
 
         beforeEach(() => comboBox.items = ['foo']);
 
-        it('should have undefined by default', () => {
+        it('should have null by default', () => {
           expect(comboBox.selectedItem).to.be.undefined;
         });
 

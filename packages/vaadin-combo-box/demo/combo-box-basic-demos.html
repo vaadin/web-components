@@ -72,6 +72,32 @@
       </template>
     </vaadin-demo-snippet>
 
+
+    <h3>Lazy Loading</h3>
+
+    <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading">
+      <template preserve-content>
+        <vaadin-combo-box label="Element"></vaadin-combo-box>
+        <script>
+          window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
+            const combo = document.querySelector('vaadin-combo-box');
+            combo.size = elements.length;
+            combo.dataProvider = function(params, callback) {
+              setTimeout(function() {
+                const filter = (params.filter || '').toLowerCase();
+                const filteredElements = elements.filter(function(element) {
+                  return element.toLowerCase().indexOf(filter) > -1;
+                });
+                const index = params.page * params.pageSize;
+                const slice = filteredElements.slice(index, index + params.pageSize);
+                callback(slice, filteredElements.length);
+              }, 1000);
+            };
+          });
+        </script>
+      </template>
+    </vaadin-demo-snippet>
+
   </template>
   <script>
     class ComboBoxBasicDemos extends DemoReadyEventEmitter(ComboBoxDemo(Polymer.Element)) {

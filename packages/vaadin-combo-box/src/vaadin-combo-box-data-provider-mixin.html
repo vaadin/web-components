@@ -1,0 +1,208 @@
+<!--
+@license
+Copyright (c) 2018 Vaadin Ltd.
+This program is available under Apache License Version 2.0, available at https://vaadin.com/license/
+-->
+<link rel="import" href="vaadin-combo-box-placeholder.html">
+
+<script>
+  window.Vaadin = window.Vaadin || {};
+  /**
+   * @polymerMixin
+   */
+  Vaadin.ComboBoxDataProviderMixin = superClass => class DataProviderMixin extends superClass {
+
+    static get properties() {
+      return {
+
+        /**
+         * Number of items fetched at a time from the dataprovider.
+         */
+        pageSize: {
+          type: Number,
+          value: 50,
+          observer: '_pageSizeChanged'
+        },
+
+        size: {
+          type: Number,
+          observer: '_sizeChanged'
+        },
+
+        dataProvider: {
+          type: Object,
+          observer: '_dataProviderChanged'
+        },
+
+        _pendingRequests: {
+          value: () => {
+            return {};
+          }
+        }
+
+      };
+    }
+
+    static get observers() {
+      return [
+        '_dataProviderFilterChanged(filter, dataProvider)',
+        '_dataProviderClearFilter(dataProvider, opened, value)',
+        '_warnDataProviderValue(dataProvider, value)',
+        '_ensureFirstPage(opened)',
+      ];
+    }
+
+    _dataProviderClearFilter(dataProvider, opened, value) {
+      // Can't depend on filter in this obsever as we don't want
+      // to clear the filter whenever it's set
+      if (dataProvider && this.filter) {
+        this.size = undefined;
+        this._pendingRequests = {};
+        this.filter = '';
+        this.clearCache();
+      }
+    }
+
+    ready() {
+      super.ready();
+      this.clearCache();
+      this.$.overlay.addEventListener('index-requested', e => {
+        const index = e.detail.index;
+        if (index !== undefined) {
+          const page = this._getPageForIndex(index);
+          if (!this._hasPage(page)) {
+            this._loadPage(page);
+          }
+        }
+      });
+    }
+
+    _dataProviderFilterChanged() {
+      if (this.dataProvider && this.opened) {
+        this.size = undefined;
+        this._pendingRequests = {};
+        this.clearCache();
+      }
+    }
+
+    _ensureFirstPage(opened) {
+      if (opened && !this._hasPage(0)) {
+        this._loadPage(0);
+      }
+    }
+
+    _hasPage(page) {
+      if (!this.filteredItems) {
+        return false;
+      }
+      const loadedItem = this.filteredItems[page * this.pageSize];
+      return loadedItem !== undefined && !(loadedItem instanceof Vaadin.ComboBoxPlaceholder);
+    }
+
+    _loadPage(page) {
+      // make sure same page isn't requested multiple times.
+      if (!this._pendingRequests[page] && this.dataProvider) {
+        this.loading = true;
+
+        const params = {
+          page,
+          pageSize: this.pageSize,
+          filter: this.filter
+        };
+
+        const callback = (items, size) => {
+          if (this._pendingRequests[page] === callback) {
+            if (!this.filteredItems) {
+              const filteredItems = [];
+              filteredItems.splice(params.page * params.pageSize, items.length, ...items);
+              this.filteredItems = filteredItems;
+            } else {
+              this.splice('filteredItems', params.page * params.pageSize, items.length, ...items);
+            }
+            // Update selectedItem from filteredItems if value is set
+            if (this._isValidValue(this.value) && this._getItemValue(this.selectedItem) !== this.value) {
+              this._selectItemForValue(this.value);
+            }
+            this.size = size;
+
+            delete this._pendingRequests[page];
+
+            if (Object.keys(this._pendingRequests).length === 0) {
+              this.loading = false;
+            }
+          }
+        };
+        this._pendingRequests[page] = callback;
+        this.dataProvider(params, callback);
+      }
+    }
+
+    _getPageForIndex(index) {
+      return Math.floor(index / this.pageSize);
+    }
+
+    /**
+     * Clears the cached pages and reloads data from dataprovider when needed.
+     */
+    clearCache() {
+      if (!this.dataProvider) {
+        return;
+      }
+      const filteredItems = [];
+      filteredItems.length = this.size || 0;
+      this.filteredItems = new Array(...filteredItems).map(item => {
+        return new Vaadin.ComboBoxPlaceholder();
+      });
+      if (this.opened) {
+        this._loadPage(0);
+      }
+    }
+
+    _sizeChanged(size) {
+      const filteredItems = this.filteredItems || [];
+      filteredItems.length = size || 0;
+      this.filteredItems = new Array(...filteredItems).map(item => {
+        return item !== undefined ? item : new Vaadin.ComboBoxPlaceholder();
+      });
+    }
+
+    _pageSizeChanged(pageSize, oldPageSize) {
+      if (Math.floor(pageSize) !== pageSize || pageSize === 0) {
+        this.pageSize = oldPageSize;
+        throw new Error('`pageSize` value must be an integer > 0');
+      }
+      this.clearCache();
+    }
+
+    _dataProviderChanged(dataProvider, oldDataProvider) {
+      this._ensureItemsOrDataProvider(() => {
+        this.dataProvider = oldDataProvider;
+      });
+    }
+
+    _ensureItemsOrDataProvider(restoreOldValueCallback) {
+      if (this.items !== undefined && this.dataProvider !== undefined) {
+        restoreOldValueCallback();
+        throw new Error('Using `items` and `dataProvider` together is not supported');
+      }
+    }
+
+    _warnDataProviderValue(dataProvider, value) {
+      if (dataProvider && value !== '' && (this.selectedItem === undefined || this.selectedItem === null)) {
+        const valueIndex = this._indexOfValue(value, this.filteredItems);
+        if (valueIndex < 0 || !this._getItemLabel(this.filteredItems[valueIndex])) {
+          /* eslint-disable no-console */
+          console.warn(
+            'Warning: unable to determine the label for the provided `value`. ' +
+            'Nothing to display in the text field. This usually happens when ' +
+            'setting an initial `value` before any items are returned from ' +
+            'the `dataProvider` callback. Consider setting `selectedItem` ' +
+            'instead of `value`'
+          );
+          /* eslint-enable no-console */
+        }
+      }
+    }
+
+  };
+</script>

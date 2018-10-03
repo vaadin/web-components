@@ -15,7 +15,8 @@ window.VaadinComboBoxSuites = [
   'vaadin-combo-box-light.html',
   'item-renderer.html',
   'item-template.html',
-  'vaadin-combo-box-dropdown.html'
+  'vaadin-combo-box-dropdown.html',
+  'lazy-loading.html'
 ];
 
 if (isPolymer2) {
