@@ -83,7 +83,7 @@
     </p>
     <vaadin-demo-snippet id="combo-box-basic-demos-lazy-loading">
       <template preserve-content>
-        <vaadin-combo-box label="Country"></vaadin-combo-box>
+        <vaadin-combo-box item-value-path="lastName" item-label-path="lastName" label="Person"></vaadin-combo-box>
         <script>
           window.addDemoReadyListener('#combo-box-basic-demos-lazy-loading', function(document) {
             const combo = document.querySelector('vaadin-combo-box');
@@ -91,11 +91,14 @@
             combo.dataProvider = function(params, callback) {
               var xhr = new XMLHttpRequest();
               xhr.onload = function() {
-                // 249 is the total number of countries
-                callback(JSON.parse(xhr.responseText), 249);
+                const response = JSON.parse(xhr.responseText);
+                callback(response.result, response.size);
               };
               var index = params.page * params.pageSize;
-              xhr.open('GET', 'https://demo.vaadin.com/demo-data/1.0/countries?index=' + index + '&count=' + params.pageSize, true);
+              const url = 'https://demo.vaadin.com/demo-data/1.0/people?index=' + index +
+                          '&count=' + params.pageSize +
+                          '&filters[lastName]=' + params.filter;
+              xhr.open('GET', url, true);
               xhr.send();
             };
           });
